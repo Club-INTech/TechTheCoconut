@@ -213,7 +213,6 @@ class Strategie():
                 #temps_action = actionAtester[2] + math.sqrt((positionRobot.x - positionObjectif.x)**2 + (positionRobot.y - positionObjectif.y)**2)/400
             
             print self.timerStrat.getTimeRemaining()
-            log.logger.debug(self.timerStrat.getTimeRemaining())
             # Éliminé si il ne reste pas assez de temps.
             if temps_action >= self.timerStrat.getTimeRemaining():
                 poids_action = -2
@@ -248,7 +247,6 @@ class Strategie():
                 
         meilleureAction = poids[maxID][0]
         
-        log.logger.debug("Position : " + str(positionRobot))
         print ("Position : " + str(positionRobot))
         
         # Lancement d'une preAction sur le passage de la zone courante à la zone d'action :

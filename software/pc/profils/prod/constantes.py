@@ -39,7 +39,7 @@ constantes = \
 		# le :: est volontaire, le nom du module sera inséré par la suite du programme
 		"logs_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
 		"stderr": True,
-		"stderr_level": "INFO",
+		"stderr_level": "DEBUG",
                 # le :: est volontaire, le nom du module sera inséré par la suite du programme
 		"stderr_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
 		"dossier": "logs"
