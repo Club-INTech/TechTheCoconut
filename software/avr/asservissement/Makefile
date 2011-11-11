@@ -1,25 +1,32 @@
-all: asserv
+CROSS_COMPILE=avr-
+CC=$(CROSS_COMPILE)gcc
+CPP=$(CROSS_COMPILE)g++
+LD=$(CROSS_COMPILE)ld
+AS=$(CROSS_COMPILE)as
+AR=$(CROSS_COMPILE)ar
+OBJ=$(CROSS_COMPILE)objcopy
 
-asserv: main.o asservissement.o i2c.o rotation.o serie.o translation.o
-	g++ main.o asservissement.o i2c.o rotation.o serie.o translation.o -o asserv
+SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
+
+F_CPU=16000000
+LDFLAGS=
+CFLAGS=-Wall -O2 -DF_CPU=$(F_CPU)
+CPPFLAGS=-Iinclude
+
+
+all: asservissement.hex
+
+asservissement.hex: asservissement.out
+	$(OBJ) -O ihex -R .eeprom asservissement.out asservissement.hex
+
+asservissement.out: main.o $(SRC)
+	$(LD) $(LDFLAGS) -o asservissement.out $(SRC)  main.o
 
 main.o: main.cpp
-	g++ -c main.cpp
+	$(CPP) $(CFLAGS) $(CPPFLAGS) -c main.cpp
 
-asservissement.o: ./src/asservissement.cpp
-	g++ -c ./src/asservissement.cpp
-
-i2c.o: ./src/i2c.cpp
-	g++ -c ./src/i2c.cpp
-
-serie.o: ./src/serie.cpp
-	g++ -c ./src/serie.cpp
-
-translation.o: ./src/i2c.cpp
-	g++ -c ./src/translation.cpp
-
-rotation.o: ./src/rotation.cpp
-	g++ -c ./src/rotation.cpp
+$(SRC):
+	make -C src/
 
 clean:
-	rm -rf *o asserv
+	rm -rf *.o *.out *.hex src/*.o
