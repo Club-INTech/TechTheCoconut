@@ -1,1 +1,3 @@
 Microcontrôleur d'asservissement
+
+Le Makefile est pour l'instant configurer pour un PC et non un AVR
