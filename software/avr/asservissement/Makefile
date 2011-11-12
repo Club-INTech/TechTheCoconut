@@ -6,13 +6,16 @@ AS=$(CROSS_COMPILE)as
 AR=$(CROSS_COMPILE)ar
 OBJ=$(CROSS_COMPILE)objcopy
 
-SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
-
+MMCU=atmega328p
 F_CPU=16000000
 LDFLAGS=
-CFLAGS=-Wall -O2 -DF_CPU=$(F_CPU)
-CPPFLAGS=-Iinclude
+CFLAGS=-Wall -O2 -mmcu=$(MMCU)
+CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
+CPPFLAGS=-Iinclude -I. -DF_CPU=$(F_CPU)
 
+SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
+
+export CROSS_COMPILE CC CPP LD AS AR OBJ F_CPU LDFLAGS CFLAGS SRC
 
 all: asservissement.hex
 
@@ -20,13 +23,15 @@ asservissement.hex: asservissement.out
 	$(OBJ) -O ihex -R .eeprom asservissement.out asservissement.hex
 
 asservissement.out: main.o $(SRC)
-	$(LD) $(LDFLAGS) -o asservissement.out $(SRC)  main.o
+	$(LD) $(LDFLAGS) -o asservissement.out $(SRC) main.o
 
 main.o: main.cpp
-	$(CPP) $(CFLAGS) $(CPPFLAGS) -c main.cpp
+	$(CPP) $(CXXFLAGS) $(CPPFLAGS) -c main.cpp
 
 $(SRC):
-	make -C src/
+	$(MAKE) -C src/
 
 clean:
 	rm -rf *.o *.out *.hex src/*.o
+
+.PHONY: all clean
