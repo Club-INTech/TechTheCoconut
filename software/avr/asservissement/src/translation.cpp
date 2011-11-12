@@ -1,5 +1,5 @@
-#include "../include/translation.h"
-#include "../include/asservissement.h"
+#include "translation.h"
+#include "asservissement.h"
 #include <stdio.h>
 
 Translation::Translation()

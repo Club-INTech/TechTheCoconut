@@ -1,5 +1,5 @@
-#include "../include/rotation.h"
-#include "../include/asservissement.h"
+#include "rotation.h"
+#include "asservissement.h"
 
 Rotation::Rotation()
 {
