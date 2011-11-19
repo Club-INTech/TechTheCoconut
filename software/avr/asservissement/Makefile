@@ -32,6 +32,7 @@ $(SRC):
 	$(MAKE) -C src/
 
 clean:
-	rm -rf *.o *.out *.hex src/*.o
+	rm -rf *.o *.out *.hex
+	$(MAKE) clean -C src/
 
 .PHONY: all clean
