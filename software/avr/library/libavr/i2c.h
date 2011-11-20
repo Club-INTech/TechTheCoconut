@@ -64,7 +64,9 @@
 
 #ifndef I2C_H
 #define I2C_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "global.h"
 
 // include project-specific configuration
@@ -173,4 +175,7 @@ u08 i2cMasterReceiveNI(u08 deviceAddr, u08 length, u08 *data);
 //! Get the current high-level state of the I2C interface
 eI2cStateType i2cGetState(void);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
