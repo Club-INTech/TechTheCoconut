@@ -1,4 +1,7 @@
 #include "adc.h"
+#ifdef __cplusplus
+extern "C" {
+#endif 
 
 #ifdef __ADC_INTERRUPT__
 struct adcRingBuffer adcBuffer = { { { 0 , 0 } }, 0, 0 };
@@ -128,4 +131,8 @@ struct adcValeur adcReadBuffer()
 	}
 	return valeur;
 }
+
+#ifdef __cplusplus
+}
+#endif
 #endif

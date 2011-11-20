@@ -25,7 +25,9 @@
 
 #ifndef I2CEEPROM_H
 #define I2CEEPROM_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "global.h"
 
 // functions
@@ -39,4 +41,7 @@ u08 i2ceepromReadByte(u08 i2cAddr, u32 memAddr);
 //! In the I2C EEPROM at [i2cAddr], write a byte [data] to the memory location [memAddr]
 void i2ceepromWriteByte(u08 i2cAddr, u32 memAddr, u08 data);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

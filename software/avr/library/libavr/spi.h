@@ -31,7 +31,9 @@
 
 #ifndef SPI_H
 #define SPI_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "global.h"
 
 // function prototypes
@@ -52,5 +54,7 @@ u08 spiTransferByte(u08 data);
 // spiTransferWord(u08 data) works just like spiTransferByte but
 // operates on a whole word (16-bits of data).
 u16 spiTransferWord(u16 data);
-
+#ifdef __cplusplus
+}
+#endif
 #endif

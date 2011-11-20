@@ -1,6 +1,8 @@
 #ifndef _USART_H_
 #define _USART_H_
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * Librairie C avr pour atmega 168 et 328 pour l'utilisation de liaison série 
  * @file usart.h
@@ -339,4 +341,7 @@ inline long readLongNumber( void );
 inline uint32_t readULongNumber( void );
 
 
+#ifdef __cplusplus
+}
+#endif 
 #endif

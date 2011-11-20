@@ -33,7 +33,9 @@
 
 #ifndef I2CSW_H
 #define I2CSW_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "global.h"
 
 // include project-dependent settings
@@ -53,4 +55,7 @@ void i2cSend(BYTE device, BYTE sub, BYTE length, BYTE *data);
 // receive I2C data from <device> register <sub>
 void i2cReceive(BYTE device, BYTE sub, BYTE length, BYTE *data);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
