@@ -10,7 +10,7 @@ MMCU=atmega328p
 F_CPU=16000000
 LDFLAGS=
 CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
-CPPFLAGS=-Iinclude -I. -I../library/intech -I../library/libavr -DF_CPU=$(F_CPU)
+CPPFLAGS=-Iinclude -I. -I../library/intech -I../library/libavr -I../library/libavr/conf -DF_CPU=$(F_CPU)
 
 SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
 LIB_INTECH_OBJ=../library/intech/adc.o ../library/intech/usart.o
@@ -23,7 +23,7 @@ all: asservissement.hex
 asservissement.hex: asservissement.out
 	$(OBJ) -O ihex -R .eeprom asservissement.out asservissement.hex
 
-asservissement.out: main.o $(SRC) $(LIB_INTECH_OBJ)
+asservissement.out: main.o $(SRC) $(LIB_INTECH_OBJ) $(LIB_AVR_OBJ)
 	$(LD) $(LDFLAGS) -o asservissement.out $(SRC) main.o
 
 main.o: main.cpp
@@ -35,8 +35,8 @@ $(SRC):
 $(LIB_INTECH_OBJ):
 	$(MAKE) -C ../library/intech/
 
-# $(LIB_AVR_OBJ):
-# 	$(MAKE) -C ../library/libavr/
+$(LIB_AVR_OBJ):
+	$(MAKE) -C ../library/libavr/
 
 clean:
 	rm -rf *.o *.out *.hex
