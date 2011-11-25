@@ -11,5 +11,5 @@ Serie::Serie()
 
 bool Serie::traiter()
 {
-	return FALSE;
+	return false;
 }

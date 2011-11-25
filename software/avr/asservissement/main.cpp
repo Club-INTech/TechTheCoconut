@@ -4,14 +4,11 @@
  * Fichier principal qui sert juste à appeler les fichiers, créer la structure Robot et faire le traitement du port série
  */
 
-#include "asservissement.h"
 #include "i2c.h"
-#include "rotation.h"
 #include "serie.h"
-#include "translation.h"
 
 //Structure permettant d'instancier les classes
-struct Robot { Serie serie; I2c i2c; Translation translation; Rotation rotation; };
+struct Robot { Serie serie; I2c i2c; };
 
 /**
  * Fonction principale

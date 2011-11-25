@@ -9,9 +9,16 @@
 Translation::Translation()
 {
 	Asservissement asservissement_;
+	
+	uint32_t distanceCourante = 0;
+}
+
+uint32_t Translation::recupererDistance()
+{
+	return distanceCourante;
 }
 
 bool Translation::reset()
 {
-	return FALSE;
+	return false;
 }
