@@ -1,3 +1,7 @@
+/**
+ * \file translation.cpp
+ */
+
 #include "translation.h"
 #include "asservissement.h"
 #include <stdio.h>
@@ -7,7 +11,7 @@ Translation::Translation()
 	Asservissement asservissement_;
 }
 
-int8_t Translation::reset()
+bool Translation::reset()
 {
-	return 0;
+	return FALSE;
 }

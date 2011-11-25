@@ -1,3 +1,7 @@
+/**
+ * \file translation.h
+ */
+
 #ifndef Translation_h
 #define Translation_h
 
@@ -9,7 +13,12 @@ class Translation {
 	public:
 		Translation();
 		
-		int8_t reset();
+		/**
+		 * Remet à zéro l'asservissement en translation en réinitialisant les données
+		 * 
+		 * \return bool FALSE si reset réussi, TRUE sinon
+		 */
+		bool reset();
 		
 	private:
 		Asservissement asservissement_;

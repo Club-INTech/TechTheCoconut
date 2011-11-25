@@ -1,3 +1,7 @@
+/**
+ * \file rotation.cpp
+ */
+
 #include "rotation.h"
 #include "asservissement.h"
 
@@ -6,7 +10,7 @@ Rotation::Rotation()
 	Asservissement asservissement_;
 }
 
-int8_t Rotation::reset()
+bool Rotation::reset()
 {
-	return 0;
+	return FALSE;
 }

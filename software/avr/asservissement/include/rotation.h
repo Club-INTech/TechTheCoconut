@@ -1,3 +1,7 @@
+/**
+ * \file rotation.h
+ */
+
 #ifndef Rotation_h
 #define Rotation_h
 
@@ -9,7 +13,12 @@ class Rotation {
 	public:
 		Rotation();
 		
-		int8_t reset();
+		/**
+		 * Remet à zéro l'asservissement en rotation en réinitialisant les données
+		 * 
+		 * \return bool FALSE si reset réussi, TRUE sinon
+		 */
+		bool reset();
 		
 	private:
 		Asservissement asservissement_;

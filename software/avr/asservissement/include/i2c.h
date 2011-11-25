@@ -1,3 +1,7 @@
+/**
+ * \file i2c.h
+ */
+
 #ifndef I2c_h
 #define I2c_h
 

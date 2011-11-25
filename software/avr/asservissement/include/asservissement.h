@@ -1,3 +1,7 @@
+/**
+ * \file asservissement.h
+ */
+
 #ifndef Asservissement_h
 #define Asservissement_h
 
