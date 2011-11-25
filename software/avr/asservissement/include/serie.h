@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+#include "asservissement.h"
+
 class Serie {
 	public:
 		Serie();

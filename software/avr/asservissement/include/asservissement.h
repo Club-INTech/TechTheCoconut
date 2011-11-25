@@ -11,8 +11,17 @@ class Asservissement {
 	public:
 		Asservissement();
 	private:
-		// Consignes
+		/**
+		 * Consigne actuelle donnée à par l'asservissement à la liaison série
+		 */
 		unsigned char consigneActuelle;
+		
+		/**
+		 * Getter pour la consigne actuelle
+		 * 
+		 * \return unsigned char consigneActuelle
+		 */
+		unsigned char recupererConsigne();
 };
 
 

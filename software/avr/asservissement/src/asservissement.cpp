@@ -7,5 +7,10 @@
 Asservissement::Asservissement()
 {
 	//Bug si =''
-	consigneActuelle = '\0';
+	unsigned char consigneActuelle = '\0';
+}
+
+unsigned char Asservissement::recupererConsigne()
+{
+	return consigneActuelle;
 }

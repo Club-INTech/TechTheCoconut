@@ -7,6 +7,9 @@
 
 #include <stdint.h>
 
+#include "rotation.h"
+#include "translation.h"
+
 class I2c {
 	public:
 		I2c();
