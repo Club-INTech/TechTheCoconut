@@ -1,8 +1,9 @@
-#ifndef _USART_H_
-#define _USART_H_
 #ifdef __cplusplus
 extern "C" {
 #endif
+#ifndef _USART_H_
+#define _USART_H_
+
 /**
  * Librairie C avr pour atmega 168 et 328 pour l'utilisation de liaison série 
  * @file usart.h
@@ -272,7 +273,7 @@ void printlnUInt( unsigned int );
  * @fn void printlnLong( long )
  * @brief Permet d'envoyer un long
  * @param entier Le nombre à envoyer
- * Cette fonction permet d'envoyer un ombre codé sur 4 octet, signé et avec retour automatique à la ligne.
+ * Cette fonction permet d'envoyer un nombre codé sur 4 octet, signé et avec retour automatique à la ligne.
  */
 void printlnLong( long );
 
@@ -341,7 +342,8 @@ inline long readLongNumber( void );
 inline uint32_t readULongNumber( void );
 
 
+
+#endif
 #ifdef __cplusplus
 }
 #endif 
-#endif
