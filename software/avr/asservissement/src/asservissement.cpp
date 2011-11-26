@@ -1,10 +1,16 @@
-#include "asservissement.h"
-
 /**
- * 
+ * \file asservissement.cpp
  */
+
+#include "asservissement.h"
 
 Asservissement::Asservissement()
 {
-	consigneActuelle = '\0';
+	//Bug si =''
+	unsigned char consigneActuelle = '\0';
+}
+
+unsigned char Asservissement::recupererConsigne()
+{
+	return consigneActuelle;
 }

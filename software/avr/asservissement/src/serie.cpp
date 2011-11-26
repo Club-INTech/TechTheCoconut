@@ -1,3 +1,7 @@
+/**
+ * \file serie.cpp
+ */
+
 #include "serie.h"
 
 Serie::Serie()
@@ -5,7 +9,7 @@ Serie::Serie()
 	
 }
 
-int8_t Serie::traiter()
+bool Serie::traiter()
 {
-	return 0;
+	return false;
 }

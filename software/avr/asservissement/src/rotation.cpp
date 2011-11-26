@@ -1,12 +1,23 @@
+/**
+ * \file rotation.cpp
+ */
+
 #include "rotation.h"
 #include "asservissement.h"
 
 Rotation::Rotation()
 {
 	Asservissement asservissement_;
+
+	int32_t angleCourant = 0;
 }
 
-int8_t Rotation::reset()
+int32_t Rotation::recupererAngle()
 {
-	return 0;
+	return angleCourant;
+}
+
+bool Rotation::reset()
+{
+	return false;
 }

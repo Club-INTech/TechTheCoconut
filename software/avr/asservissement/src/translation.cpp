@@ -1,3 +1,7 @@
+/**
+ * \file translation.cpp
+ */
+
 #include "translation.h"
 #include "asservissement.h"
 #include <stdio.h>
@@ -5,9 +9,16 @@
 Translation::Translation()
 {
 	Asservissement asservissement_;
+	
+	uint32_t distanceCourante = 0;
 }
 
-int8_t Translation::reset()
+uint32_t Translation::recupererDistance()
 {
-	return 0;
+	return distanceCourante;
+}
+
+bool Translation::reset()
+{
+	return false;
 }
