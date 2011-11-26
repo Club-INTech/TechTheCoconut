@@ -6,7 +6,7 @@
 
 Serie::Serie()
 {
-	
+
 }
 
 bool Serie::traiter()

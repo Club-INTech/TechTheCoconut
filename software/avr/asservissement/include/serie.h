@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+#include "usart.h"
+
 #include "asservissement.h"
 
 class Serie {

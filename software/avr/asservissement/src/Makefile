@@ -1,5 +1,5 @@
 PROJECT_FILE=$(subst src/,,$(SRC))
-CPPFLAGS=-I../include -I. -I../../library/intech -I../../library/libavr
+CPPFLAGS=-I../include -I. -I../../library/intech
 
 
 all: $(PROJECT_FILE)
