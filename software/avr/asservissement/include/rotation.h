@@ -12,16 +12,6 @@
 class Rotation {
 	public:
 		Rotation();
-		
-	private:
-		/**
-		 * Angle courant en degrés*10
-		 * 
-		 * \Warning 32 bits sont-ils suffisants (= 1024) ??
-		 */
-		int32_t angleCourant;
-		
-		Asservissement asservissement_;
 
 		/**
 		 * Getter pour l'angle courant
@@ -36,6 +26,15 @@ class Rotation {
 		 * \return bool FALSE si reset réussi, TRUE sinon
 		 */
 		bool reset();
+	private:
+		/**
+		 * Angle courant en degrés*10
+		 * 
+		 * \Warning 32 bits sont-ils suffisants (= 1024) ??
+		 */
+		int32_t angleCourant;
+		
+		Asservissement asservissement_;
 };
 
 
