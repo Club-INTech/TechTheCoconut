@@ -7,6 +7,7 @@
 Serie::Serie()
 {
 	uart_init();
+	printlnString("debut");
 }
 
 Serie::~Serie()
@@ -55,7 +56,8 @@ void Serie::traiterCaractere(unsigned char caractereLu)
 	switch (caractereLu)
 	{
 		case '?':
-			
+			// Ping de la liason serie
+			printUShort(0);
 			break;
 		case 'a':
 			
@@ -64,7 +66,7 @@ void Serie::traiterCaractere(unsigned char caractereLu)
 			
 			break;
 		case 'c':
-			traiterCaractereC(lireCaractere());
+			Serie::traiterCaractereC(lireCaractere());
 			break;
 		case 'g':
 			
@@ -82,10 +84,10 @@ void Serie::traiterCaractere(unsigned char caractereLu)
 			
 			break;
 		case 'o':
-			
+			Serie::desactiverOverflowInterruptTimerTIMSK1();
 			break;
 		case 'p':
-			traiterCaractereP(lireCaractere());
+			Serie::traiterCaractereP(lireCaractere());
 			break;
 		case 'q':
 			
@@ -103,10 +105,10 @@ void Serie::traiterCaractere(unsigned char caractereLu)
 			
 			break;
 		case 'x':
-			traiterCaractereX(lireCaractere());
+			Serie::traiterCaractereX(lireCaractere());
 			break;
 		case 'y':
-			traiterCaractereY(lireCaractere());
+			Serie::traiterCaractereY(lireCaractere());
 			break;
 		case 'z':
 		
@@ -121,10 +123,10 @@ void Serie::traiterCaractereC(unsigned char caractereLu)
 	switch (caractereLu)
 	{
 		case 't':
-			traiterCaractereCT(lireCaractere());
+			Serie::traiterCaractereCT(lireCaractere());
 			break;
 		case 'r':
-			traiterCaractereCR(lireCaractere());
+			Serie::traiterCaractereCR(lireCaractere());
 			break;
 		default:
 			break;
@@ -211,4 +213,9 @@ void Serie::traiterCaractereY(unsigned char caractereLu)
 		default:
 			break;
 	}
+}
+
+void Serie::desactiverOverflowInterruptTimerTIMSK1()
+{
+	TIMSK1 &= ~(1 << TOIE1);
 }

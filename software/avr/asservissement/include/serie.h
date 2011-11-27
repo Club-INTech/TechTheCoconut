@@ -82,18 +82,24 @@ class Serie {
 		void traiterCaractereP(unsigned char caractereLu);
 		
 		/**
-		 * Traite le caractère donné après avoir donné le 'x', pour afficher ou assigner un long dans une variable temporaire x
+		 * Traite le caractère donné après avoir donné le 'x', pour afficher ou assigner un long en variable x (position en abscisse)
 		 * 
 		 * \param unsigned char caractère en entrée de la série
 		 */
 		void traiterCaractereX(unsigned char caractereLu);
 		
 		/**
-		 * Traite le caractère donné après avoir donné le 'y', pour afficher ou assigner un long dans une variable temporaire y
+		 * Traite le caractère donné après avoir donné le 'y', pour afficher ou assigner un long en variable y (position en ordonnée)
 		 * 
 		 * \param unsigned char caractère en entrée de la série
 		 */
 		void traiterCaractereY(unsigned char caractereLu);
+		
+		/**
+		 * Désactive l'interupt overflow pour le timer TIMSK1 en mettant TOIE1 à 0.
+		 * C'est-à-dire désactive les interruptions pour le timer 1
+		 */
+		void desactiverOverflowInterruptTimerTIMSK1();
 };
 
 
