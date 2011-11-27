@@ -1,3 +1,2 @@
-/software/avr/asservissement/include/.asservissement.h.kate-swp
-/software/avr/asservissement/src/.asservissement.cpp.kate-swp
-/software/avr/library/intech/.Makefile.kate-swp
+*.swp
+*.kate-swp
