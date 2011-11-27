@@ -13,7 +13,7 @@ CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
 SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
-LIB_OBJ=../library/intech/adc.o ../library/intech/usart.o ../library/intech/twi_master.o
+LIB_OBJ=../library/intech/adc.a ../library/intech/usart.a ../library/intech/twi_master.a
 
 export CROSS_COMPILE CC CPP LD AS AR OBJ F_CPU LDFLAGS CFLAGS CXXFLAGS SRC LIB_OBJ
 
