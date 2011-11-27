@@ -6,5 +6,13 @@
 
 I2c::I2c()
 {
+	TWI_init();
+	
+	// Met à zéro la liaison
+	send_reset();
+}
+
+I2c::~I2c()
+{
 	
 }

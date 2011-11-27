@@ -1,5 +1,7 @@
 /**
  * \file i2c.h
+ * 
+ * Classe permettant de gérer la liaison I2c
  */
 
 #ifndef I2c_h
@@ -14,7 +16,15 @@
 
 class I2c {
 	public:
+		/**
+		 * Constructeur
+		 */
 		I2c();
+		
+		/**
+		 * Destructeur
+		 */
+		~I2c();
 };
 
 

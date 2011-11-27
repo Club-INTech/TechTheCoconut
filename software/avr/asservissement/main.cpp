@@ -18,6 +18,7 @@ struct Robot { Serie serie; I2c i2c; };
 int main()
 {
 	Robot robot;
+	
 	while(1)
 	{
 		robot.serie.traiter();
