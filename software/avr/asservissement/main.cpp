@@ -6,9 +6,11 @@
 
 #include "i2c.h"
 #include "serie.h"
+#include "rotation.h"
+#include "translation.h"
 
 //Structure permettant d'instancier les classes
-struct Robot { Serie serie; I2c i2c; };
+struct Robot { Serie serie; I2c i2c; Translation translation; Rotation rotation;};
 
 /**
  * Fonction principale

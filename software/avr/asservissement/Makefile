@@ -9,7 +9,7 @@ OBJ=$(CROSS_COMPILE)objcopy
 MMCU=atmega328p
 F_CPU=16000000
 LDFLAGS=
-CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
+CXXFLAGS=-Wall -Werror -O2 -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
 SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
