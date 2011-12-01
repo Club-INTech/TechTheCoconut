@@ -9,10 +9,10 @@ OBJ=$(CROSS_COMPILE)objcopy
 MMCU=atmega328p
 F_CPU=16000000
 LDFLAGS=
-CXXFLAGS=-Wall -Werror -O2 -mmcu=$(MMCU)
+CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
-SRC=src/asservissement.o src/i2c.o src/rotation.o src/serie.o src/translation.o
+SRC=src/asservissement.o src/i2c.o src/rotation.o src/communication.o src/translation.o
 LIB_OBJ=../library/intech/adc.a ../library/intech/usart.a ../library/intech/twi_master.a
 
 export CROSS_COMPILE CC CPP LD AS AR OBJ F_CPU LDFLAGS CFLAGS CXXFLAGS SRC LIB_OBJ

@@ -32,7 +32,7 @@ class Rotation {
 		 * 
 		 * \Warning 32 bits sont-ils suffisants (= 1024) ??
 		 */
-		int32_t angleCourant;
+		int32_t angleCourant_;
 		
 		Asservissement asservissement_;
 };

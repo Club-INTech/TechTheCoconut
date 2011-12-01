@@ -3,12 +3,20 @@
  */
 
 #include "translation.h"
-#include "asservissement.h"
 #include <stdio.h>
 
 Translation::Translation()
 {
-	Asservissement asservissement_;
+	asservissement_.activationKd(1);
+	
+	// initialisation des constantes
+	asservissement_.kp(3);
+	asservissement_.pwm(PWM_MAX);
+	asservissement_.kd(200);
+	asservissement_.ki(0);
+	asservissement_.vMax(0);
+	asservissement_.kpVitesse(0);
+
 	
 	uint32_t distanceCourante = 0;
 }

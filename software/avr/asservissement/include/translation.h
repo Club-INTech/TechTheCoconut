@@ -26,6 +26,7 @@ class Translation {
 		 * \return bool FALSE si reset réussi, TRUE sinon
 		 */
 		bool reset();
+		
 	private:
 		Asservissement asservissement_;
 		
