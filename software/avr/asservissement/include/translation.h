@@ -39,6 +39,7 @@
 	private:
 		Asservissement asservissement_;
 		int32_t consigne_;
+		int32_t vitesse_;
 };
 
 

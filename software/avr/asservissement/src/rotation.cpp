@@ -23,6 +23,16 @@ void Rotation::consigne(int32_t consigne)
 	consigne_ = consigne;
 }
 
+int32_t Rotation::vitesse()
+{
+	return vitesse_;
+}
+
+void Rotation::vitesse(int32_t vitesse)
+{
+	vitesse_ = vitesse;
+}
+
 void Rotation::reset()
 {
 }

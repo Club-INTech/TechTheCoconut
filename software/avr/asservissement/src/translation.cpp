@@ -23,6 +23,16 @@ void Translation::consigne(int32_t consigne)
 	consigne_ = consigne;
 }
 
+int32_t Translation::vitesse()
+{
+	return vitesse_;
+}
+
+void Translation::vitesse(int32_t vitesse)
+{
+	vitesse_ = vitesse;
+}
+
 void Translation::reset()
 {
 }

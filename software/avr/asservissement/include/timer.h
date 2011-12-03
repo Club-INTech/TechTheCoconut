@@ -39,6 +39,8 @@ public:
 	void seuil(uint16_t seuil);
 	
 private:
+	Timer(const Timer&);
+	
 	TimerId id_;
 };
 

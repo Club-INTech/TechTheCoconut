@@ -18,14 +18,10 @@ class Asservissement {
 		
 		/**
 		 * [Ronald:] 
-		 * Supprimé la fonction inutile activationKd (il suffit d'avoir kd=0)
-		 * Supprimé tout ce qui se rattache à kpVitesse (on n'asservit que en position)
-		 * Supprimé méthodes concernant la puissance max
-		 * La puissance max des moteurs sera dans la classe Moteur.
-		 * Pour vitesse moteur, elle ne devrait jamais servir.
-		 * (on asservit en position pas en vitesse)
-		 * Suppression de variables publique (erreur,erreurBkp)
-		 * Qui devraient être locale aux fonctions (eventuellement static)
+		 * Supprimé tout ce qui se rattache à kpVitesse. (L'année dernière il y a eu une tentative ratée d'asservissement en vitesse que nous ne réintérons pas cette année. Désolé de ne pas l'avoir précisé)
+		 * Bougé les méthodes concernant la puissance max dans la classe Moteur
+		 * Rajouté attribut vitesse dans les classes Rotation, Translation plutôt que Asservissement
+		 * les variables ereurs,erreursBkp... ont plus de sens en local dans la méthode asservir()
 		**/
 		
 		
