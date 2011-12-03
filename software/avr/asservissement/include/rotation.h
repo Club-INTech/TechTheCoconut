@@ -18,14 +18,19 @@ class Rotation {
 		 * 
 		 * \return int32_t angleCourant
 		 */
-		int32_t recupererAngle();
+		int32_t angleCourant();
+	
+		 /**
+		 * Setter pour l'angle courant
+		 */
+		void angleCourant(int32_t);
 		
 		/**
 		 * Remet à zéro l'asservissement en rotation en réinitialisant les données
-		 * 
-		 * \return bool FALSE si reset réussi, TRUE sinon
+		 * Enlevé la valeur de retour :
+		 * 	Ca ne devrait jamais rater. Et si jamais ça rate, on aura aucun moyen de faire remonter ça dans le code.
 		 */
-		bool reset();
+		void reset();
 	private:
 		/**
 		 * Angle courant en degrés*10

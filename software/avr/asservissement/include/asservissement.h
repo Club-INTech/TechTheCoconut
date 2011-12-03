@@ -13,10 +13,20 @@
 
 class Asservissement {
 	public:
+
+		Asservissement(int16_t kp=0, int16_t kd=0, int16_t ki=0);
+		
 		/**
-		 * Constructeur
-		 */
-		Asservissement();
+		 * [Ronald:] 
+		 * Supprimé la fonction inutile activationKd (il suffit d'avoir kd=0)
+		 * Supprimé tout ce qui se rattache à kpVitesse (on n'asservit que en position)
+		 * Supprimé méthodes concernant la puissance max
+		 * La puissance max des moteurs sera dans la classe Moteur.
+		 * Pour vitesse moteur, elle ne devrait jamais servir.
+		 * (on asservit en position pas en vitesse)
+		 * Suppression de variables publique (erreur,erreurBkp)
+		 * Qui devraient être locale aux fonctions (eventuellement static)
+		**/
 		
 		/**
 		 * Getter pour la consigne actuelle
@@ -27,6 +37,13 @@ class Asservissement {
 		 * 		- 8 bits ne seraient pas suffisants
 		 */
 		int32_t consigne();
+		
+		/**
+		 * Setter pour la consigne actuelle
+		 * 
+		 */
+		void consigne(int32_t);
+		
 		
 		/**
 		 * \brief Arret
@@ -42,8 +59,9 @@ class Asservissement {
 		 * \return int32_t pwm puissance à appliquer
 		 * 
 		 * Je n'ai pas compris la différence entre le premier paramètre et l'attribut maxPwm_
+		 * J'ai aussi renommé la fonction
 		 */
-		int32_t	calculePwm(int32_t);
+		int32_t	pwm(int32_t);
 		
 		/**
 		 * accesseurs des variables PID (kp,ki,kp)
@@ -92,62 +110,13 @@ class Asservissement {
 		 */
 		uint16_t kp(void);
 		
-		/**
-		 * Supprimé la fonction inutile activationKd (il suffit d'avoir kd=0)
-		
-		/**
-		 * Supprimé tout ce qui se rattache à kpVitesse (on n'asservit que en position)
-		
-		/**
-		 * Setter pour la variable vmax vitesse max
-		 * 
-		 * \param int32_t vMaxDonne vitesse max
-		 */
-		void vMax(int32_t);
-		
-		/**
-		 * Getter pour la variable vmax vitesse max
-		 * 
-		 * \return int32_t vMax vitesse max
-		 */
-		int32_t vMax(void);
-		
-		/**
-		 * Setter pour la puissance max du moteur
-		 * 
-		 * \param int16_t ou int maxPwmDonne puissance max du moteur
-		 */
-		void pwm(int);
-		
-		/**
-		 * Getter puissance max du moteur
-		 * 
-		 * \return int16_t ou int maxPWM puissance max du moteur
-		 */
-		int pwm(void);
-		
-		/**
-		 * Setter vitesse moteur
-		 * 
-		 * \param int16_t vitesseDonnee vitesse moteur
-		 */
-		void vitesse(int32_t);	
-		
-		/**
-		 * Getter vitesse moteur
-		 * 
-		 * \return int16_t vitesse   vitesse moteur
-		 */
-		int32_t vitesse(void);	
 
-		//Suppression de variables publique (erreur,erreurBkp)
-		//Qui devraient être locale aux fonctions (eventuellement static)
 		
 	private:
 		/**
 		 * Consigne actuelle donnée à par l'asservissement à la liaison série
 		 */
-		uint32_t consigne_;
+		int32_t consigne_;
 		
 		/**
 		 * Constantes de l'asservissement et du moteur PID (kp;ki;kd)
@@ -155,14 +124,11 @@ class Asservissement {
 		int32_t kp_; 
 		int32_t	kd_;
 		int32_t	ki_;
-		int32_t	kpVitesse_;
 		
 		/**
 		 * Variables gérant la vitesse & la puissance moteur
+		 * [Ronald:] Ceci sera dans la classe moteur.
 		 */
-		int32_t vMax_;
-		int32_t maxPWM_; 
-		int32_t	vitesse_;
 };
 
 
