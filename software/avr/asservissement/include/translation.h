@@ -16,9 +16,11 @@ class Translation {
 		/**
 		 * Getter pour la distance courante
 		 * 
-		 * \return uint32_t distanceCourante
+		 * \return uint32_t distanceCourante_
+		 * 
+		 * J'ai mis un nom plus conventionnel
 		 */
-		uint32_t recupererDistance();
+		uint32_t translationCourante();
 		
 		/**
 		 * Remet à zéro l'asservissement en translation en réinitialisant les données
@@ -34,8 +36,9 @@ class Translation {
 		 * Contient la distance courante en mm*10
 		 * 
 		 * \Warning 32 bits sont-ils suffisants (= 1024) ??
+		 * 2^32 = 4 294 967 296 :p
 		 */
-		uint32_t distanceCourante;		
+		uint32_t translationCourante_;		
 };
 
 

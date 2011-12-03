@@ -9,20 +9,7 @@
 
 #include <stdint.h>
 
-/**
-  * Constante de puissance moteur
-  */
-#define PWM_MAX 255
-  
-/**
-  * Constante de d'asservissement
-  */
-#define KP		30
-#define VMAX	50000
-#define ACC		22
-#define KD		35
-
-#define TRIGGER_BLOCAGE	15
+//Suppression des #define qui ne servent plus
 
 class Asservissement {
 	public:
@@ -34,9 +21,12 @@ class Asservissement {
 		/**
 		 * Getter pour la consigne actuelle
 		 * 
-		 * \return unsigned char consigneActuelle
+		 * \return int32_t  consigne
+		 * Changé le type de retour:
+		 * 		- La consigne est signée
+		 * 		- 8 bits ne seraient pas suffisants
 		 */
-		unsigned char recupererConsigne();
+		int32_t consigne();
 		
 		/**
 		 * \brief Arret
@@ -48,51 +38,18 @@ class Asservissement {
 		/**
 		 * Calcule de la puissance moteur
 		 *
-		 * \param int32_t puissance moteur ,  int32_t positionRelle 
+		 * \param int32_t positionRelle 
 		 * \return int32_t pwm puissance à appliquer
+		 * 
+		 * Je n'ai pas compris la différence entre le premier paramètre et l'attribut maxPwm_
 		 */
-		int32_t	calculePwm(int32_t,int32_t);
+		int32_t	calculePwm(int32_t);
 		
 		/**
 		 * accesseurs des variables PID (kp,ki,kp)
 		 */
-		 
-		/**
-		 * Setter pour la variable proportionnel kp
-		 * 
-		 * \param uint16_t kpDonne
-		 */
-		void kp(uint16_t);
 		
-		/**
-		 * Getter pour la variable proportionnel kp
-		 * 
-		 * \return uint16_t variable proportionnel kp
-		 */
-		uint16_t kp(void);
-		
-		/**
-		 * Setter activation du correcteur proportionnel
-		 * 
-		 * \param unsigned char etatDonne 1 actif ou 0 inactif
-		 */
-		void activationKd(unsigned char);
-		
-		/**
-		 * Setter pour la variable vitesse 
-		 * 
-		 * \param uint16_t kpVitesseDonne
-		 */
-		void kpVitesse(uint16_t);
-		
-		/**
-		 * Getter pour la variable proportionnel kp
-		 * 
-		 * \return uint16_t variable kpvitesse
-		 */
-		uint16_t kpVitesse(void);
-		
-		/**
+				/**
 		 * Setter pour la variable intégral ki
 		 * 
 		 * \param uint16_t kiDonne
@@ -119,6 +76,27 @@ class Asservissement {
 		 * \return uint16_t variable dérivé kd
 		 */
 		uint16_t kd(void);
+		
+		 
+		/**
+		 * Setter pour la variable proportionnel kp
+		 * 
+		 * \param uint16_t kpDonne
+		 */
+		void kp(uint16_t);
+		
+		/**
+		 * Getter pour la variable proportionnel kp
+		 * 
+		 * \return uint16_t variable proportionnel kp
+		 */
+		uint16_t kp(void);
+		
+		/**
+		 * Supprimé la fonction inutile activationKd (il suffit d'avoir kd=0)
+		
+		/**
+		 * Supprimé tout ce qui se rattache à kpVitesse (on n'asservit que en position)
 		
 		/**
 		 * Setter pour la variable vmax vitesse max
@@ -162,22 +140,14 @@ class Asservissement {
 		 */
 		int32_t vitesse(void);	
 
-		// erreur
-		int32_t	erreur;
-		int32_t	erreurBkp;
-		int32_t	integraleErreur;
-
-		unsigned char activationKd_;
-
-		// Vaut 1 ou -1 si le moteur est bloqué
-		int16_t blocageDetecte;
-		int blocageTemp;
+		//Suppression de variables publique (erreur,erreurBkp)
+		//Qui devraient être locale aux fonctions (eventuellement static)
 		
 	private:
 		/**
 		 * Consigne actuelle donnée à par l'asservissement à la liaison série
 		 */
-		unsigned char consigneActuelle;
+		uint32_t consigne_;
 		
 		/**
 		 * Constantes de l'asservissement et du moteur PID (kp;ki;kd)

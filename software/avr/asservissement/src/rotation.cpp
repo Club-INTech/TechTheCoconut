@@ -7,7 +7,6 @@
 Rotation::Rotation() : angleCourant_(0)
 {
 	asservissement_.activationKd(1);
-	
 	// initialisation des constantes
 	asservissement_.kp(5);
 	asservissement_.pwm(PWM_MAX);

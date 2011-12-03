@@ -16,14 +16,13 @@ Translation::Translation()
 	asservissement_.ki(0);
 	asservissement_.vMax(0);
 	asservissement_.kpVitesse(0);
-
 	
 	uint32_t distanceCourante = 0;
 }
 
-uint32_t Translation::recupererDistance()
+uint32_t Translation::translationCourante()
 {
-	return distanceCourante;
+	return translationCourante_;
 }
 
 bool Translation::reset()
