@@ -4,18 +4,23 @@
 
 #include "translation.h"
 
-Translation::Translation() : asservissement_(3,200,0), distanceCourante_(0)
+Translation::Translation() : asservissement_(3,200,0), consigne_(0)
 {
 }
 
-int32_t Translation::distanceCourante()
+int16_t Translation::pwm(int32_t distanceCourante)
 {
-	return distanceCourante_;
+	return asservissement_.pwm(consigne_,distanceCourante);
 }
 
-void Translation::distanceCourante(int32_t distanceCourante)
+int32_t Translation::consigne()
 {
-	distanceCourante_ = distanceCourante;
+	return consigne_;
+}
+
+void Translation::consigne(int32_t consigne)
+{
+	consigne_ = consigne;
 }
 
 void Translation::reset()

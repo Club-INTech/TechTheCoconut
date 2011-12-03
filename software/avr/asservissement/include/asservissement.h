@@ -14,7 +14,7 @@
 class Asservissement {
 	public:
 
-		Asservissement(int16_t kp=0, int16_t kd=0, int16_t ki=0);
+		Asservissement(int16_t kp, int16_t kd=0, int16_t ki=0);
 		
 		/**
 		 * [Ronald:] 
@@ -27,22 +27,6 @@ class Asservissement {
 		 * Suppression de variables publique (erreur,erreurBkp)
 		 * Qui devraient être locale aux fonctions (eventuellement static)
 		**/
-		
-		/**
-		 * Getter pour la consigne actuelle
-		 * 
-		 * \return int32_t  consigne
-		 * Changé le type de retour:
-		 * 		- La consigne est signée
-		 * 		- 8 bits ne seraient pas suffisants
-		 */
-		int32_t consigne();
-		
-		/**
-		 * Setter pour la consigne actuelle
-		 * 
-		 */
-		void consigne(int32_t);
 		
 		
 		/**
@@ -61,7 +45,7 @@ class Asservissement {
 		 * Je n'ai pas compris la différence entre le premier paramètre et l'attribut maxPwm_
 		 * J'ai aussi renommé la fonction
 		 */
-		int32_t	pwm(int32_t);
+		int16_t	pwm(int32_t, int32_t);
 		
 		/**
 		 * accesseurs des variables PID (kp,ki,kp)
@@ -113,10 +97,6 @@ class Asservissement {
 
 		
 	private:
-		/**
-		 * Consigne actuelle donnée à par l'asservissement à la liaison série
-		 */
-		int32_t consigne_;
 		
 		/**
 		 * Constantes de l'asservissement et du moteur PID (kp;ki;kd)
@@ -124,11 +104,6 @@ class Asservissement {
 		int32_t kp_; 
 		int32_t	kd_;
 		int32_t	ki_;
-		
-		/**
-		 * Variables gérant la vitesse & la puissance moteur
-		 * [Ronald:] Ceci sera dans la classe moteur.
-		 */
 };
 
 

@@ -8,24 +8,28 @@
 #include <stdint.h>
 
 #include "asservissement.h"
+#include "moteur.h"
 
-class Translation {
+ class Translation {
 	public:
 	
 		Translation();
 		
+		int16_t pwm(int32_t distanceCourante);
+		
 		/**
-		 * Getter pour la distance courante
+		 * Getter pour la consigne courante
 		 * 
-		 * \return int32_t distanceCourante_
+		 * \return int32_t consigne
 		 */
-		int32_t distanceCourante();
+		int32_t consigne();
 
 		/**
-		 * Setter pour la distance courante
+		 * Setter pour la consigne courante
+		 * 
 		 */
-		void distanceCourante(int32_t);
-		
+		void consigne(int32_t);	
+				
 		/**
 		 * Remet à zéro l'asservissement en translation en réinitialisant les données
 		 * [Ronald: ] Enlevé valeur de retour, voir Rotation.
@@ -34,14 +38,7 @@ class Translation {
 		
 	private:
 		Asservissement asservissement_;
-		
-		/**
-		 * Contient la distance courante en tics
-		 * 
-		 * \Warning 32 bits sont-ils suffisants (= 1024) ??
-		 * [Ronald:] 2^32 = 4 294 967 296 :p
-		 */
-		int32_t distanceCourante_;		
+		int32_t consigne_;
 };
 
 

@@ -6,6 +6,7 @@
 
 #include "robot.h"
 #include "communication.h"
+
 Robot robot;
 
 /**
@@ -20,4 +21,8 @@ int main()
 		Communication::traiter(robot);
 	}
 	return 0;
+}
+
+ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
+	robot.asservir();
 }

@@ -10,25 +10,13 @@
 #define MIN(a,b)    ((a) < (b) ? (a) : (b)) 
 
 
-Asservissement::Asservissement(int16_t kp, int16_t kd, int16_t ki) : kp_(kp), kd_(kd), ki_(ki), consigne_(0)
+Asservissement::Asservissement(int16_t kp, int16_t kd, int16_t ki) : kp_(kp), kd_(kd), ki_(ki)
 {
 }
 
-
-int32_t Asservissement::consigne()
+int16_t Asservissement::pwm(int32_t consigne, int32_t positionReelle)
 {
-	return consigne_;
-}
-
-void Asservissement::consigne(int32_t consigne)
-{
-	consigne_ = consigne;
-}
-
-int32_t Asservissement::pwm(int32_t positionReelle)
-{
-    int32_t erreur = positionReelle - consigne_;
-    
+    int32_t erreur = positionReelle - consigne;
     // Pour l'instant, que kp ; on incrémentera après.  
     return kp_ * erreur/5;
 }

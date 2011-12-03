@@ -4,18 +4,23 @@
 
 #include "rotation.h"
 
-Rotation::Rotation() : angleCourant_(0), asservissement_(5,300,0)
+Rotation::Rotation() : asservissement_(5,300,0), consigne_(0)
 {
 }
 
-int32_t Rotation::angleCourant()
+int16_t Rotation::pwm(int32_t distanceCourante)
 {
-	return angleCourant_;
+	return asservissement_.pwm(consigne_,distanceCourante);
 }
 
-void Rotation::angleCourant(int32_t angleCourant)
+int32_t Rotation::consigne()
 {
-	angleCourant_ = angleCourant;
+	return consigne_;
+}
+
+void Rotation::consigne(int32_t consigne)
+{
+	consigne_ = consigne;
 }
 
 void Rotation::reset()

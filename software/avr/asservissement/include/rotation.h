@@ -8,38 +8,40 @@
 #include <stdint.h>
 
 #include "asservissement.h"
+#include "moteur.h"
 
 class Rotation {
 	public:
 		Rotation();
 
 		/**
-		 * Getter pour l'angle courant
+		 * Asservir la rotation du robot
+		 **/
+		 
+		int16_t pwm(int32_t angleCourant);
+		 
+		/**
+		 * Getter pour la consigne courante
 		 * 
-		 * \return int32_t angleCourant
+		 * \return int32_t consigne
 		 */
-		int32_t angleCourant();
-	
-		 /**
-		 * Setter pour l'angle courant
+		int32_t consigne();
+
+		/**
+		 * Setter pour la consigne courante
+		 * 
 		 */
-		void angleCourant(int32_t);
+		void consigne(int32_t);	
 		
 		/**
 		 * Remet à zéro l'asservissement en rotation en réinitialisant les données
-		 * Enlevé la valeur de retour :
-		 * 	Ca ne devrait jamais rater. Et si jamais ça rate, on aura aucun moyen de faire remonter ça dans le code.
+		 * Enlevé la valeur de retour car ca ne devrait jamais rater. Et si jamais ça rate, on aura aucun moyen de faire remonter ça dans le code.
 		 */
 		void reset();
-	private:
-		/**
-		 * Angle courant en degrés*10
-		 * 
-		 * \Warning 32 bits sont-ils suffisants (= 1024) ??
-		 */
-		int32_t angleCourant_;
 		
+	private:
 		Asservissement asservissement_;
+		int32_t consigne_;
 };
 
 
