@@ -9,7 +9,7 @@ OBJ=$(CROSS_COMPILE)objcopy
 MMCU=atmega328p
 F_CPU=16000000
 LDFLAGS=
-CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
+CXXFLAGS=-Wall -O -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
 SRC= src/robot.cpp src/moteur.cpp src/timer.cpp src/asservissement.o src/i2c.o src/rotation.o src/communication.o src/translation.o
@@ -34,6 +34,9 @@ $(SRC):
 $(LIB_OBJ):
 	$(MAKE) -C ../library/intech/
 
+upload: all
+	sudo avrdude -c usbasp -p m328p -U flash:w:asservissement.hex
+	
 clean:
 	rm -rf *.o *.out *.hex
 	$(MAKE) clean -C src/
