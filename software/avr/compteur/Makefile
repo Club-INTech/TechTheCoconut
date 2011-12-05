@@ -26,10 +26,10 @@ serial.o: serial.c serial.h
 clean:
 	rm -rf *.o *.hex *.out
 
-upload: all
+upload2: all
 	sudo avrdude -P /dev/ttyUSB0 -c stk500v1 -p m328p -b 57600 -D -U flash:w:main.hex
 
-upload2: all
+upload: all
 	sudo avrdude -c usbasp -p m328p -U flash:w:main.hex
 
 upload3: all

@@ -1,11 +1,12 @@
 
 #include "robot.h"
-#include "i2c.h"
+#include "twi_master.h"
 
 Robot::Robot() : moteurGauche_(TimerId::T0,Prescaler::NO_PRESCAL)
 				, moteurDroit_(TimerId::T2,Prescaler::NO_PRESCAL)
 				, compteur_(TimerId::T1,Prescaler::P8)
 { 
+    TWI_init();
 	uart_init();
 	printlnString("debut");
 }
