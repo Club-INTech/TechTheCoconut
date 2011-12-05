@@ -34,6 +34,19 @@ class Rotation {
 		void consigne(int32_t);	
 		
 		/**
+		 * Getter pour la vitesse
+		 * 
+		 * \return int32_t consigne
+		 */
+		int32_t vitesse();
+
+		/**
+		 * Setter pour la vitesse
+		 * 
+		 */
+		void vitesse(int32_t);	
+		
+		/**
 		 * Remet à zéro l'asservissement en rotation en réinitialisant les données
 		 * Enlevé la valeur de retour car ca ne devrait jamais rater. Et si jamais ça rate, on aura aucun moyen de faire remonter ça dans le code.
 		 */

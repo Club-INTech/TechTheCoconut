@@ -47,7 +47,7 @@ class Asservissement {
 		 * accesseurs des variables PID (kp,ki,kp)
 		 */
 		
-				/**
+		/**
 		 * Setter pour la variable intégral ki
 		 * 
 		 * \param uint16_t kiDonne

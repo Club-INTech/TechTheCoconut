@@ -1,6 +1,6 @@
 #include "moteur.h"
 
-Moteur::Moteur(TimerId id, Prescaler ratio) : timerPwm_(id,ratio) : maxPWM_(1024)
+Moteur::Moteur(TimerId id, Prescaler ratio) : timerPwm_(id,ratio), maxPWM_(1024)
 {
 }
 

@@ -29,6 +29,19 @@
 		 * 
 		 */
 		void consigne(int32_t);	
+		
+		/**
+		 * Getter pour la vitesse
+		 * 
+		 * \return int32_t consigne
+		 */
+		int32_t vitesse();
+
+		/**
+		 * Setter pour la vitesse
+		 * 
+		 */
+		void vitesse(int32_t);	
 				
 		/**
 		 * Remet à zéro l'asservissement en translation en réinitialisant les données
