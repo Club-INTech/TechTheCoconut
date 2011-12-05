@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef ADC_H
 #define ADC_H
 
@@ -83,4 +87,9 @@ struct adcValeur adcReadBuffer();
 #endif
 
 
+
+#endif
+
+#ifdef __cplusplus
+}
 #endif

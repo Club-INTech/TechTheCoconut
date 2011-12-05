@@ -6,8 +6,8 @@
 
 #include "robot.h"
 #include "communication.h"
+#include <util/delay.h>
 
-Robot robot;
 
 /**
  * Fonction principale
@@ -16,13 +16,17 @@ Robot robot;
  */
 int main()
 {
+	//Robot robot;
+	uart_init();
 	while(1)
 	{
-		Communication::traiter(robot);
+		_delay_ms(1000);
+		printlnLong(50);
+		//Communication::traiter(robot);
 	}
 	return 0;
 }
 
-ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
-	robot.asservir();
-}
+//ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
+	//robot.asservir();
+//}
