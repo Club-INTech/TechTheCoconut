@@ -7,9 +7,9 @@ AR=$(CROSS_COMPILE)ar
 OBJ=$(CROSS_COMPILE)objcopy
 
 MMCU=atmega328p
-F_CPU=16000000
+F_CPU=20000000
 LDFLAGS=
-CXXFLAGS=-Wall -O -mmcu=$(MMCU)
+CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
 SRC= src/robot.cpp src/moteur.cpp src/timer.cpp src/asservissement.o src/i2c.o src/rotation.o src/communication.o src/translation.o

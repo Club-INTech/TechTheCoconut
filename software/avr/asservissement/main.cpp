@@ -14,19 +14,18 @@
  * 
  * \return int 0 si aucune erreur, 1 si erreur
  */
+ 
+
 int main()
 {
-	//Robot robot;
-	uart_init();
+	Robot & robot = Robot::Instance();
 	while(1)
 	{
-		_delay_ms(1000);
-		printlnLong(50);
-		//Communication::traiter(robot);
 	}
 	return 0;
 }
 
-//ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
-	//robot.asservir();
-//}
+ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
+	Robot & robot = Robot::Instance();
+	robot.asservir();
+}
