@@ -43,7 +43,7 @@ void Timer::direction(Direction dir)
 	if(id_==TimerId::T0)
 	{
 		if(dir == Direction::RECULER){
-		  PORTD &=  (1 << PORTD4);
+		  PORTD &=  ~(1 << PORTD4);
 		}
 		else if(dir == Direction::AVANCER){
 		  PORTD |=  (1 << PORTD4);
@@ -52,7 +52,7 @@ void Timer::direction(Direction dir)
 	else if(id_==TimerId::T2)
 	{
 		if(dir == Direction::RECULER){
-		  PORTB &=  (1 << PORTB0);
+		  PORTB &=  ~(1 << PORTB0);
 		}
 		else if(dir == Direction::AVANCER){
 		  PORTB |=  (1 << PORTB0);
