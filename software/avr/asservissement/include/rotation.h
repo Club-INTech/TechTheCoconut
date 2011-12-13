@@ -8,7 +8,6 @@
 #include <stdint.h>
 
 #include "asservissement.h"
-#include "moteur.h"
 
 class Rotation: public Asservissement {
     public:
