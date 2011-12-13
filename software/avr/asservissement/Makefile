@@ -12,7 +12,7 @@ LDFLAGS=
 CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
-SRC= src/robot.cpp src/moteur.cpp src/timer.cpp src/asservissement.o src/i2c.o src/rotation.o src/communication.o src/translation.o
+SRC= src/robot.cpp src/moteur.cpp src/timer.cpp src/asservissement.o src/i2c.o src/communication.o
 LIB_OBJ=../library/intech/adc.a ../library/intech/usart.a ../library/intech/twi_master.a
 
 export CROSS_COMPILE CC CPP LD AS AR OBJ F_CPU LDFLAGS CFLAGS CXXFLAGS SRC LIB_OBJ
@@ -36,7 +36,7 @@ $(LIB_OBJ):
 
 upload: all
 	sudo avrdude -c usbasp -p m328p -U flash:w:asservissement.hex
-	
+
 clean:
 	rm -rf *.o *.out *.hex
 	$(MAKE) clean -C src/

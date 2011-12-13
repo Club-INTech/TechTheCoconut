@@ -1,6 +1,6 @@
 /**
  * \file main.cpp
- * 
+ *
  * Fichier principal qui sert juste à appeler les fichiers, créer la structure Robot et faire le traitement du port série
  */
 
@@ -11,14 +11,14 @@
 
 /**
  * Fonction principale
- * 
+ *
  * \return int 0 si aucune erreur, 1 si erreur
  */
- 
+
 
 int main()
 {
-	Robot & robot = Robot::Instance();
+    Robot & robot = Robot::Instance();
 	while(1)
 	{
 	}

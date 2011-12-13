@@ -1,6 +1,6 @@
 /**
  * \file i2c.h
- * 
+ *
  * Classe permettant de gérer la liaison I2c
  */
 
@@ -8,9 +8,6 @@
 #define I2c_h
 
 #include <stdint.h>
-
-#include "rotation.h"
-#include "translation.h"
 
 #include "twi_master.h"
 
@@ -20,7 +17,7 @@ class I2c {
 		 * Constructeur
 		 */
 		I2c();
-		
+
 		/**
 		 * Destructeur
 		 */

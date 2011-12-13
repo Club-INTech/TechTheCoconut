@@ -5,8 +5,7 @@
 #include "usart.h"
 
 #include "i2c.h"
-#include "rotation.h"
-#include "translation.h"
+#include "asservissement.h"
 #include "moteur.h"
 #include "timer.h"
 
@@ -20,17 +19,17 @@ public:
 private:
 	Robot();
 	Robot(const Robot&);
-	Translation translation_; 
-	Rotation rotation_;
+	Asservissement translation_;
+	Asservissement rotation_;
 	Moteur moteurGauche_;
 	Moteur moteurDroit_;
 	Timer compteur_;
 };
 
-__extension__ typedef int __guard __attribute__((mode (__DI__))); 
+__extension__ typedef int __guard __attribute__((mode (__DI__)));
 
-extern "C" int __cxa_guard_acquire(__guard *); 
-extern "C" void __cxa_guard_release (__guard *); 
-extern "C" void __cxa_guard_abort (__guard *); 
+extern "C" int __cxa_guard_acquire(__guard *);
+extern "C" void __cxa_guard_release (__guard *);
+extern "C" void __cxa_guard_abort (__guard *);
 
 #endif
