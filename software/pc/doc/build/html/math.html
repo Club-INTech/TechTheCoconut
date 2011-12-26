@@ -1,0 +1,199 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Math &mdash; Tech The Coconut 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tech The Coconut 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="Périphérique" href="peripherique.html" />
+    <link rel="prev" title="Log" href="log.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="peripherique.html" title="Périphérique"
+             accesskey="N">suivant</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             accesskey="P">précédent</a> |</li>
+        <li><a href="index.html">Tech The Coconut 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="math">
+<h1>Math<a class="headerlink" href="#math" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="module-lib.math.point">
+<span id="point"></span><h2>Point<a class="headerlink" href="#module-lib.math.point" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="lib.math.point.Point">
+<em class="property">class </em><tt class="descclassname">lib.math.point.</tt><tt class="descname">Point</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="reference internal" href="_modules/lib/math/point.html#Point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.math.point.Point" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Classe permettant de définir un point mathématique dans R^2 et les opérations usuelles sur les points dans R^2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; abscisse</li>
+<li><strong>y</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; ordonnée</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lib.math.vecteur">
+<span id="vecteur"></span><h2>Vecteur<a class="headerlink" href="#module-lib.math.vecteur" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="lib.math.vecteur.Vecteur">
+<em class="property">class </em><tt class="descclassname">lib.math.vecteur.</tt><tt class="descname">Vecteur</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="_modules/lib/math/vecteur.html#Vecteur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.math.vecteur.Vecteur" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Classe permettant de définir un vecteur mathématique dans R^2 et les opérations usuelles sur les vecteurs dans R^2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a</strong> (<em>Point</em>) &#8211; 1er point</li>
+<li><strong>b</strong> (<em>Point</em>) &#8211; 2ème point</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="lib.math.vecteur.Vecteur.angle">
+<tt class="descname">angle</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lib/math/vecteur.html#Vecteur.angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.math.vecteur.Vecteur.angle" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">float</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body">angle orienté en radians entre le vecteur et l&#8217;axe des abscisses</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="lib.math.vecteur.Vecteur.norme">
+<tt class="descname">norme</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/lib/math/vecteur.html#Vecteur.norme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lib.math.vecteur.Vecteur.norme" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body">float</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body">norme euclidienne du vecteur</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table des matières</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Math</a><ul>
+<li><a class="reference internal" href="#module-lib.math.point">Point</a></li>
+<li><a class="reference internal" href="#module-lib.math.vecteur">Vecteur</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Sujet précédent</h4>
+  <p class="topless"><a href="log.html"
+                        title="Chapitre précédent">Log</a></p>
+  <h4>Sujet suivant</h4>
+  <p class="topless"><a href="peripherique.html"
+                        title="Chapitre suivant">Périphérique</a></p>
+  <h3>Cette page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/math.txt"
+           rel="nofollow">Montrer la source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Recherche rapide</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Index général"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="peripherique.html" title="Périphérique"
+             >suivant</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             >précédent</a> |</li>
+        <li><a href="index.html">Tech The Coconut 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Club INTech.
+      Créé avec <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
