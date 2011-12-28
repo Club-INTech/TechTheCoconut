@@ -17,11 +17,6 @@ class I2c {
 		 * Constructeur
 		 */
 		I2c();
-
-		/**
-		 * Destructeur
-		 */
-		~I2c();
 };
 
 

@@ -1,6 +1,6 @@
 /**
- * \file asservissement.cpp
- */
+* \file asservissement.cpp
+*/
 
 #include "asservissement.h"
 
@@ -10,56 +10,66 @@
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 
 
-Asservissement::Asservissement(int16_t kp, int16_t kd, int16_t ki) : kp_(kp), kd_(kd), ki_(ki), consigne_(0)
+Asservissement::Asservissement(uint16_t kp, uint16_t kd, uint16_t ki) : kp_(kp), kd_(kd), ki_(ki), consigne_(0)
 {
 }
 
 int16_t Asservissement::pwm(int32_t positionReelle)
 {
-    int32_t erreur = positionReelle - consigne_;
-    // Pour l'instant, que kp ; on incrémentera après.
-    return kp_ * erreur/5;
+	int32_t erreur = positionReelle - consigne_;
+	// Pour l'instant, que kp ; on incrémentera après.
+	return kp_ * erreur/5;
 }
 
 /*
- * Arrêt progressif du moteur
- */
+* Arrêt progressif du moteur
+*/
 void Asservissement::stop()
 {
 
 }
 
 /*
- * Définition dynamique des constantes
- */
+* Définition dynamique des constantes
+*/
 void Asservissement::kp(uint16_t kp)
 {
-    kp_ = kp;
+	kp_ = kp;
 }
 
 uint16_t Asservissement::kp(void)
 {
-   return kp_;
+return kp_;
 }
 
 void Asservissement::ki(uint16_t ki)
 {
-    ki_ = ki;
+	ki_ = ki;
 }
 
 uint16_t Asservissement::ki(void)
 {
-    return ki_;
+	return ki_;
 }
 
 void Asservissement::kd(uint16_t kd)
 {
-    kd_ = kd;
+	kd_ = kd;
 }
 
 uint16_t Asservissement::kd(void)
 {
-    return kd_;
+	return kd_;
+}
+
+void Asservissement::pwmMax(uint16_t pwmMax)
+{
+	pwmMax_ = pwmMax;
+}
+
+uint16_t Asservissement::pwmMax(void)
+{
+	return pwmMax_;
 }
 
 int32_t Asservissement::consigne()
@@ -84,4 +94,10 @@ void Asservissement::vitesse(int32_t vitesse)
 
 void Asservissement::reset()
 {
+}
+
+
+void Asservissement::resetConsignes()
+{
+	42;
 }

@@ -11,8 +11,3 @@ I2c::I2c()
 	// Met à zéro la liaison
 	send_reset();
 }
-
-I2c::~I2c()
-{
-	
-}
