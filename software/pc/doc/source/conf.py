@@ -13,12 +13,12 @@
 
 import sys, os
 
-paths = ['bin', 'conf', 'tests', 'visualisation']
+#paths = ['bin', 'conf', 'tests', 'visualisation']
 old_path = os.getcwd()
 os.chdir("../../")
 sys.path.insert(0, os.getcwd())
-for p in paths:
-    sys.path.insert(0, os.getcwd()+"/"+p)
+#for p in paths:
+    #sys.path.insert(0, os.getcwd()+"/"+p)
 os.chdir(old_path)
 
 # If extensions (or modules to document with autodoc) are in another directory,
