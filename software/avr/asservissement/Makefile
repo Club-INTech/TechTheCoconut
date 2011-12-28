@@ -12,23 +12,23 @@ LDFLAGS=
 CXXFLAGS=-Wall -O2 -mmcu=$(MMCU)
 CPPFLAGS=-Iinclude -I. -I../library/intech -DF_CPU=$(F_CPU)
 
-SRC= src/robot.cpp src/moteur.cpp src/timer.cpp src/asservissement.o src/i2c.o src/communication.o
+SRC_OBJ=src/robot.o src/moteur.o src/timer.o src/asservissement.o src/i2c.o src/communicationPC.o
 LIB_OBJ=../library/intech/adc.a ../library/intech/usart.a ../library/intech/twi_master.a
 
-export CROSS_COMPILE CC CPP LD AS AR OBJ F_CPU LDFLAGS CFLAGS CXXFLAGS SRC LIB_OBJ
+export CROSS_COMPILE CC CPP LD AS AR OBJ F_CPU LDFLAGS CFLAGS CXXFLAGS SRC_OBJ LIB_OBJ
 
 all: asservissement.hex
 
 asservissement.hex: asservissement.out
 	$(OBJ) -O ihex -R .eeprom asservissement.out asservissement.hex
 
-asservissement.out: main.o $(SRC) $(LIB_OBJ)
-	$(CPP) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) -o asservissement.out $(SRC) $(LIB_OBJ) main.o
+asservissement.out: main.o $(SRC_OBJ) $(LIB_OBJ)
+	$(CPP) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) -o asservissement.out $(SRC_OBJ) $(LIB_OBJ) main.o
 
 main.o: main.cpp
 	$(CPP) $(CXXFLAGS) $(CPPFLAGS) -c main.cpp
 
-$(SRC):
+$(SRC_OBJ):
 	$(MAKE) -C src/
 
 $(LIB_OBJ):

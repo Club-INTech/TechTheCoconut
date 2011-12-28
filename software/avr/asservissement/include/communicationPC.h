@@ -1,15 +1,15 @@
 /**
- * \file serie.h
+ * \file communicationPC.h
  * 
  * Namespace permettant de gérer les différentes communications
  */
 
-#ifndef Communication_h
-#define Communication_h
+#ifndef CommunicationPC_h
+#define CommunicationPC_h
 
 #include "robot.h"
 
-namespace Communication
+namespace CommunicationPC
 {
 	/**
 	 * Traite l'information reçue par l'AVR par port série

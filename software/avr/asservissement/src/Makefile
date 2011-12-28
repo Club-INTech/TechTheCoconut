@@ -1,4 +1,4 @@
-PROJECT_FILE=$(subst src/,,$(SRC))
+PROJECT_FILE=$(subst src/,,$(SRC_OBJ))
 CPPFLAGS=-I../include -I. -I../../library/intech
 
 

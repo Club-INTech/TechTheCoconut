@@ -1,10 +1,10 @@
 /**
- * \file serie.cpp
+ * \file communicationPC.cpp
  */
 
-#include "communication.h"
+#include "communicationPC.h"
 
-namespace Communication
+namespace CommunicationPC
 {
 	int32_t lireEntierLong()
 	{

@@ -5,7 +5,7 @@
  */
 
 #include "robot.h"
-#include "communication.h"
+#include "communicationPC.h"
 #include <util/delay.h>
 
 

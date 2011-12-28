@@ -11,6 +11,6 @@ all: $(PROJECT_FILE)
 	$(AR) $(ARFLAGS) $@ $<
 
 clean:
-	rm *.o *.a
+	rm *.a
 
 .PHONY: all clean
