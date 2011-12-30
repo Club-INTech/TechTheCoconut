@@ -13,3 +13,6 @@ Pour installer les dépendances nécessaires sur ubuntu :
 
 Pour nettoyer les fichiers de cache python
 'make clean'
+
+Pour générer une documentation
+'cd doc/ ; make html'

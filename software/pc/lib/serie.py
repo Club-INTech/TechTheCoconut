@@ -8,7 +8,7 @@ class Serie(object):
     :TODO: Fermer proprement la liaison série dans le destructeur
     """
     def __init__(self):
-        print "coucou"
+        pass
     
     def __del__(self):
         pass

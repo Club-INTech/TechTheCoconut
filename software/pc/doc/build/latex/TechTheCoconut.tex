@@ -13,7 +13,7 @@
 
 
 \title{Tech The Coconut Documentation}
-\date{26 December 2011}
+\date{30 December 2011}
 \release{0.0.1}
 \author{Club INTech}
 \newcommand{\sphinxlogo}{}
@@ -256,17 +256,6 @@ Classe permettant de gérer l'aire de jeu
 
 
 
-\chapter{Conf}
-\label{conf::doc}\label{conf:module-lib.conf}\label{conf:conf}\index{lib.conf (module)}\index{Conf (classe dans lib.conf)}
-
-\begin{fulllineitems}
-\phantomsection\label{conf:lib.conf.Conf}\pysigline{\strong{class }\code{lib.conf.}\bfcode{Conf}}
-Classe permettant de gérer les profils de configuration
-
-\end{fulllineitems}
-
-
-
 \chapter{Décision}
 \label{decision:module-lib.decision}\label{decision:decision}\label{decision::doc}\index{lib.decision (module)}\index{Decision (classe dans lib.decision)}
 
@@ -480,6 +469,95 @@ Permettre la découverte de périphériques
 
 
 
+\chapter{Conf}
+\label{profils::doc}\label{profils:conf}
+
+\section{Profils}
+\label{profils:profils}
+
+\subsection{Constantes}
+\label{profils:constantes}
+
+\subsubsection{develop}
+\label{profils:develop}\label{profils:module-profils.develop.constantes}\index{profils.develop.constantes (module)}\begin{itemize}
+\item {} 
+constantes{[}''Coconut''{]}{[}''largeur''{]} Largeur en mm
+
+\item {} 
+constantes{[}''Coconut''{]}{[}''longueur''{]} Longueur en mm
+
+\end{itemize}
+\index{constantes (attribut profils.develop.constantes)}
+
+\begin{fulllineitems}
+\phantomsection\label{profils:profils.develop.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Anna': \{\}\}}}
+\end{fulllineitems}
+
+
+
+\subsubsection{developSimulUc}
+\label{profils:developsimuluc}\label{profils:module-profils.developSimulUc.constantes}\index{profils.developSimulUc.constantes (module)}\begin{itemize}
+\item {} 
+constantes{[}''Coconut''{]}{[}''largeur''{]} Largeur en mm
+
+\item {} 
+constantes{[}''Coconut''{]}{[}''longueur''{]} Longueur en mm
+
+\end{itemize}
+\index{constantes (attribut profils.developSimulUc.constantes)}
+
+\begin{fulllineitems}
+\phantomsection\label{profils:profils.developSimulUc.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Anna': \{\}\}}}
+\end{fulllineitems}
+
+
+
+\subsubsection{prod}
+\label{profils:prod}\label{profils:module-profils.prod.constantes}\index{profils.prod.constantes (module)}\begin{itemize}
+\item {} 
+constantes{[}''Coconut''{]}{[}''largeur''{]} Largeur en mm
+
+\item {} 
+constantes{[}''Coconut''{]}{[}''longueur''{]} Longueur en mm
+
+\end{itemize}
+\index{constantes (attribut profils.prod.constantes)}
+
+\begin{fulllineitems}
+\phantomsection\label{profils:profils.prod.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Anna': \{\}\}}}
+\end{fulllineitems}
+
+
+
+\section{Librairie}
+\label{profils:librairie}\label{profils:module-lib.conf}\index{lib.conf (module)}\index{Conf (classe dans lib.conf)}
+
+\begin{fulllineitems}
+\phantomsection\label{profils:lib.conf.Conf}\pysiglinewithargsret{\strong{class }\code{lib.conf.}\bfcode{Conf}}{\emph{profil}}{}
+Classe permettant de gérer les profils de configuration
+\begin{quote}\begin{description}
+\item[{Paramètres}] \leavevmode
+\textbf{profil} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Profil de configuration
+
+\end{description}\end{quote}
+\index{importer\_profil() (méthode lib.conf.Conf)}
+
+\begin{fulllineitems}
+\phantomsection\label{profils:lib.conf.Conf.importer_profil}\pysiglinewithargsret{\bfcode{importer\_profil}}{\emph{profil}}{}
+Charge un profil de configuration
+\begin{quote}\begin{description}
+\item[{Paramètres}] \leavevmode
+\textbf{profil} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Profil de configuration
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
 \chapter{Recherche de chemin}
 \label{recherche_chemin::doc}\label{recherche_chemin:recherche-de-chemin}
 
@@ -624,7 +702,7 @@ Classe permettant de visualiser les différents threads utilisés pour aider à 
 \item {\texttt{lib.asservissement}}, \pageref{asservissement:module-lib.asservissement}
 \item {\texttt{lib.capteur}}, \pageref{capteur:module-lib.capteur}
 \item {\texttt{lib.carte}}, \pageref{carte:module-lib.carte}
-\item {\texttt{lib.conf}}, \pageref{conf:module-lib.conf}
+\item {\texttt{lib.conf}}, \pageref{profils:module-lib.conf}
 \item {\texttt{lib.decision}}, \pageref{decision:module-lib.decision}
 \item {\texttt{lib.elements\_jeu}}, \pageref{elements_jeu:module-lib.elements_jeu}
 \item {\texttt{lib.evenement}}, \pageref{evenement:module-lib.evenement}
@@ -644,6 +722,11 @@ Classe permettant de visualiser les différents threads utilisés pour aider à 
 \item {\texttt{lib.visualisation.visu\_serie}}, \pageref{visualisation:module-lib.visualisation.visu_serie}
 \item {\texttt{lib.visualisation.visu\_table}}, \pageref{visualisation:module-lib.visualisation.visu_table}
 \item {\texttt{lib.visualisation.visu\_threads}}, \pageref{visualisation:module-lib.visualisation.visu_threads}
+\indexspace
+\bigletter{p}
+\item {\texttt{profils.develop.constantes}}, \pageref{profils:module-profils.develop.constantes}
+\item {\texttt{profils.developSimulUc.constantes}}, \pageref{profils:module-profils.developSimulUc.constantes}
+\item {\texttt{profils.prod.constantes}}, \pageref{profils:module-profils.prod.constantes}
 \end{theindex}
 
 \renewcommand{\indexname}{Index}

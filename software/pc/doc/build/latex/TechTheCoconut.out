@@ -5,17 +5,19 @@
 \BOOKMARK [0][-]{chapter.3}{Asservissement}{}
 \BOOKMARK [0][-]{chapter.4}{Capteur}{}
 \BOOKMARK [0][-]{chapter.5}{Carte}{}
-\BOOKMARK [0][-]{chapter.6}{Conf}{}
-\BOOKMARK [0][-]{chapter.7}{D\351cision}{}
-\BOOKMARK [0][-]{chapter.8}{\311l\351ments de jeu}{}
-\BOOKMARK [0][-]{chapter.9}{\311v\350nement}{}
-\BOOKMARK [0][-]{chapter.10}{I2c}{}
-\BOOKMARK [0][-]{chapter.11}{Jeu}{}
-\BOOKMARK [0][-]{chapter.12}{Log}{}
-\BOOKMARK [0][-]{chapter.13}{Math}{}
-\BOOKMARK [1][-]{section.13.1}{Point}{chapter.13}
-\BOOKMARK [1][-]{section.13.2}{Vecteur}{chapter.13}
-\BOOKMARK [0][-]{chapter.14}{P\351riph\351rique}{}
+\BOOKMARK [0][-]{chapter.6}{D\351cision}{}
+\BOOKMARK [0][-]{chapter.7}{\311l\351ments de jeu}{}
+\BOOKMARK [0][-]{chapter.8}{\311v\350nement}{}
+\BOOKMARK [0][-]{chapter.9}{I2c}{}
+\BOOKMARK [0][-]{chapter.10}{Jeu}{}
+\BOOKMARK [0][-]{chapter.11}{Log}{}
+\BOOKMARK [0][-]{chapter.12}{Math}{}
+\BOOKMARK [1][-]{section.12.1}{Point}{chapter.12}
+\BOOKMARK [1][-]{section.12.2}{Vecteur}{chapter.12}
+\BOOKMARK [0][-]{chapter.13}{P\351riph\351rique}{}
+\BOOKMARK [0][-]{chapter.14}{Conf}{}
+\BOOKMARK [1][-]{section.14.1}{Profils}{chapter.14}
+\BOOKMARK [1][-]{section.14.2}{Librairie}{chapter.14}
 \BOOKMARK [0][-]{chapter.15}{Recherche de chemin}{}
 \BOOKMARK [1][-]{section.15.1}{Graph}{chapter.15}
 \BOOKMARK [1][-]{section.15.2}{A*}{chapter.15}
@@ -29,5 +31,5 @@
 \BOOKMARK [1][-]{section.20.2}{Table}{chapter.20}
 \BOOKMARK [1][-]{section.20.3}{Threads}{chapter.20}
 \BOOKMARK [0][-]{chapter.21}{Indices and tables}{}
-\BOOKMARK [0][-]{section*.42}{Python Module Index}{}
-\BOOKMARK [0][-]{section*.43}{Index}{}
+\BOOKMARK [0][-]{section*.49}{Python Module Index}{}
+\BOOKMARK [0][-]{section*.50}{Index}{}

@@ -18,33 +18,40 @@
 \indexentry{Capteur (classe dans lib.capteur)|hyperpage}{9}
 \indexentry{lib.carte (module)|hyperpage}{11}
 \indexentry{Carte (classe dans lib.carte)|hyperpage}{11}
-\indexentry{lib.conf (module)|hyperpage}{13}
-\indexentry{Conf (classe dans lib.conf)|hyperpage}{13}
-\indexentry{lib.decision (module)|hyperpage}{15}
-\indexentry{Decision (classe dans lib.decision)|hyperpage}{15}
-\indexentry{lib.elements\_jeu (module)|hyperpage}{17}
-\indexentry{Carte\_tresor (classe dans lib.elements\_jeu)|hyperpage}{17}
-\indexentry{Disque (classe dans lib.elements\_jeu)|hyperpage}{17}
-\indexentry{Lingot (classe dans lib.elements\_jeu)|hyperpage}{17}
-\indexentry{Poussoir (classe dans lib.elements\_jeu)|hyperpage}{17}
-\indexentry{Totem (classe dans lib.elements\_jeu)|hyperpage}{17}
-\indexentry{Zone (classe dans lib.elements\_jeu)|hyperpage}{17}
-\indexentry{lib.evenement (module)|hyperpage}{19}
-\indexentry{Evenement (classe dans lib.evenement)|hyperpage}{19}
-\indexentry{lib.i2c (module)|hyperpage}{21}
-\indexentry{I2c (classe dans lib.i2c)|hyperpage}{21}
-\indexentry{lib.jeu (module)|hyperpage}{23}
-\indexentry{Jeu (classe dans lib.jeu)|hyperpage}{23}
-\indexentry{lib.log (module)|hyperpage}{25}
-\indexentry{Log (classe dans lib.log)|hyperpage}{25}
-\indexentry{lib.math.point (module)|hyperpage}{27}
-\indexentry{Point (classe dans lib.math.point)|hyperpage}{27}
-\indexentry{lib.math.vecteur (module)|hyperpage}{27}
-\indexentry{Vecteur (classe dans lib.math.vecteur)|hyperpage}{27}
-\indexentry{angle() (m\IeC {\'e}thode lib.math.vecteur.Vecteur)|hyperpage}{27}
-\indexentry{norme() (m\IeC {\'e}thode lib.math.vecteur.Vecteur)|hyperpage}{27}
-\indexentry{lib.peripherique (module)|hyperpage}{29}
-\indexentry{Peripherique (classe dans lib.peripherique)|hyperpage}{29}
+\indexentry{lib.decision (module)|hyperpage}{13}
+\indexentry{Decision (classe dans lib.decision)|hyperpage}{13}
+\indexentry{lib.elements\_jeu (module)|hyperpage}{15}
+\indexentry{Carte\_tresor (classe dans lib.elements\_jeu)|hyperpage}{15}
+\indexentry{Disque (classe dans lib.elements\_jeu)|hyperpage}{15}
+\indexentry{Lingot (classe dans lib.elements\_jeu)|hyperpage}{15}
+\indexentry{Poussoir (classe dans lib.elements\_jeu)|hyperpage}{15}
+\indexentry{Totem (classe dans lib.elements\_jeu)|hyperpage}{15}
+\indexentry{Zone (classe dans lib.elements\_jeu)|hyperpage}{15}
+\indexentry{lib.evenement (module)|hyperpage}{17}
+\indexentry{Evenement (classe dans lib.evenement)|hyperpage}{17}
+\indexentry{lib.i2c (module)|hyperpage}{19}
+\indexentry{I2c (classe dans lib.i2c)|hyperpage}{19}
+\indexentry{lib.jeu (module)|hyperpage}{21}
+\indexentry{Jeu (classe dans lib.jeu)|hyperpage}{21}
+\indexentry{lib.log (module)|hyperpage}{23}
+\indexentry{Log (classe dans lib.log)|hyperpage}{23}
+\indexentry{lib.math.point (module)|hyperpage}{25}
+\indexentry{Point (classe dans lib.math.point)|hyperpage}{25}
+\indexentry{lib.math.vecteur (module)|hyperpage}{25}
+\indexentry{Vecteur (classe dans lib.math.vecteur)|hyperpage}{25}
+\indexentry{angle() (m\IeC {\'e}thode lib.math.vecteur.Vecteur)|hyperpage}{25}
+\indexentry{norme() (m\IeC {\'e}thode lib.math.vecteur.Vecteur)|hyperpage}{25}
+\indexentry{lib.peripherique (module)|hyperpage}{27}
+\indexentry{Peripherique (classe dans lib.peripherique)|hyperpage}{27}
+\indexentry{profils.develop.constantes (module)|hyperpage}{29}
+\indexentry{constantes (attribut profils.develop.constantes)|hyperpage}{29}
+\indexentry{profils.developSimulUc.constantes (module)|hyperpage}{29}
+\indexentry{constantes (attribut profils.developSimulUc.constantes)|hyperpage}{29}
+\indexentry{profils.prod.constantes (module)|hyperpage}{29}
+\indexentry{constantes (attribut profils.prod.constantes)|hyperpage}{29}
+\indexentry{lib.conf (module)|hyperpage}{29}
+\indexentry{Conf (classe dans lib.conf)|hyperpage}{29}
+\indexentry{importer\_profil() (m\IeC {\'e}thode lib.conf.Conf)|hyperpage}{29}
 \indexentry{lib.recherche\_chemin.graph (module)|hyperpage}{31}
 \indexentry{Graph (classe dans lib.recherche\_chemin.graph)|hyperpage}{31}
 \indexentry{lib.recherche\_chemin.astar (module)|hyperpage}{31}

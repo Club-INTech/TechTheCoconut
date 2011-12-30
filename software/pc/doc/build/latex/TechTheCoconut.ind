@@ -5,7 +5,7 @@
   \item Actionneur (classe dans lib.actionneur), \hyperpage{3}
   \item Actionneurs\_in (classe dans lib.actions\_in.actionneurs\_in), \hyperpage{5}
   \item Actionneurs\_out (classe dans lib.actions\_out.actionneurs\_out), \hyperpage{5}
-  \item angle() (m\IeC {\'e}thode lib.math.vecteur.Vecteur), \hyperpage{27}
+  \item angle() (m\IeC {\'e}thode lib.math.vecteur.Vecteur), \hyperpage{25}
   \item Asservissement (classe dans lib.asservissement), \hyperpage{7}
   \item Asservissement\_in (classe dans lib.actions\_in.asservissement\_in), \hyperpage{5}
   \item Asservissement\_out (classe dans lib.actions\_out.asservissement\_out), \hyperpage{6}
@@ -17,17 +17,20 @@
   \item Capteurs\_in (classe dans lib.actions\_in.capteurs\_in), \hyperpage{5}
   \item Capteurs\_out (classe dans lib.actions\_out.capteurs\_out), \hyperpage{6}
   \item Carte (classe dans lib.carte), \hyperpage{11}
-  \item Carte\_tresor (classe dans lib.elements\_jeu), \hyperpage{17}
-  \item Conf (classe dans lib.conf), \hyperpage{13}
+  \item Carte\_tresor (classe dans lib.elements\_jeu), \hyperpage{15}
+  \item Conf (classe dans lib.conf), \hyperpage{29}
+  \item constantes (attribut profils.develop.constantes), \hyperpage{29}
+  \item constantes (attribut profils.developSimulUc.constantes), \hyperpage{29}
+  \item constantes (attribut profils.prod.constantes), \hyperpage{29}
 
   \indexspace
   \bigletter D
-  \item Decision (classe dans lib.decision), \hyperpage{15}
-  \item Disque (classe dans lib.elements\_jeu), \hyperpage{17}
+  \item Decision (classe dans lib.decision), \hyperpage{13}
+  \item Disque (classe dans lib.elements\_jeu), \hyperpage{15}
 
   \indexspace
   \bigletter E
-  \item Evenement (classe dans lib.evenement), \hyperpage{19}
+  \item Evenement (classe dans lib.evenement), \hyperpage{17}
 
   \indexspace
   \bigletter G
@@ -35,11 +38,12 @@
 
   \indexspace
   \bigletter I
-  \item I2c (classe dans lib.i2c), \hyperpage{21}
+  \item I2c (classe dans lib.i2c), \hyperpage{19}
+  \item importer\_profil() (m\IeC {\'e}thode lib.conf.Conf), \hyperpage{29}
 
   \indexspace
   \bigletter J
-  \item Jeu (classe dans lib.jeu), \hyperpage{23}
+  \item Jeu (classe dans lib.jeu), \hyperpage{21}
 
   \indexspace
   \bigletter L
@@ -53,16 +57,16 @@
   \item lib.asservissement (module), \hyperpage{7}
   \item lib.capteur (module), \hyperpage{9}
   \item lib.carte (module), \hyperpage{11}
-  \item lib.conf (module), \hyperpage{13}
-  \item lib.decision (module), \hyperpage{15}
-  \item lib.elements\_jeu (module), \hyperpage{17}
-  \item lib.evenement (module), \hyperpage{19}
-  \item lib.i2c (module), \hyperpage{21}
-  \item lib.jeu (module), \hyperpage{23}
-  \item lib.log (module), \hyperpage{25}
-  \item lib.math.point (module), \hyperpage{27}
-  \item lib.math.vecteur (module), \hyperpage{27}
-  \item lib.peripherique (module), \hyperpage{29}
+  \item lib.conf (module), \hyperpage{29}
+  \item lib.decision (module), \hyperpage{13}
+  \item lib.elements\_jeu (module), \hyperpage{15}
+  \item lib.evenement (module), \hyperpage{17}
+  \item lib.i2c (module), \hyperpage{19}
+  \item lib.jeu (module), \hyperpage{21}
+  \item lib.log (module), \hyperpage{23}
+  \item lib.math.point (module), \hyperpage{25}
+  \item lib.math.vecteur (module), \hyperpage{25}
+  \item lib.peripherique (module), \hyperpage{27}
   \item lib.recherche\_chemin.astar (module), \hyperpage{31}
   \item lib.recherche\_chemin.graph (module), \hyperpage{31}
   \item lib.recherche\_chemin.thetastar (module), \hyperpage{31}
@@ -73,18 +77,21 @@
   \item lib.visualisation.visu\_serie (module), \hyperpage{41}
   \item lib.visualisation.visu\_table (module), \hyperpage{41}
   \item lib.visualisation.visu\_threads (module), \hyperpage{41}
-  \item Lingot (classe dans lib.elements\_jeu), \hyperpage{17}
-  \item Log (classe dans lib.log), \hyperpage{25}
+  \item Lingot (classe dans lib.elements\_jeu), \hyperpage{15}
+  \item Log (classe dans lib.log), \hyperpage{23}
 
   \indexspace
   \bigletter N
-  \item norme() (m\IeC {\'e}thode lib.math.vecteur.Vecteur), \hyperpage{27}
+  \item norme() (m\IeC {\'e}thode lib.math.vecteur.Vecteur), \hyperpage{25}
 
   \indexspace
   \bigletter P
-  \item Peripherique (classe dans lib.peripherique), \hyperpage{29}
-  \item Point (classe dans lib.math.point), \hyperpage{27}
-  \item Poussoir (classe dans lib.elements\_jeu), \hyperpage{17}
+  \item Peripherique (classe dans lib.peripherique), \hyperpage{27}
+  \item Point (classe dans lib.math.point), \hyperpage{25}
+  \item Poussoir (classe dans lib.elements\_jeu), \hyperpage{15}
+  \item profils.develop.constantes (module), \hyperpage{29}
+  \item profils.developSimulUc.constantes (module), \hyperpage{29}
+  \item profils.prod.constantes (module), \hyperpage{29}
 
   \indexspace
   \bigletter R
@@ -98,17 +105,17 @@
   \indexspace
   \bigletter T
   \item Thetastar (classe dans lib.recherche\_chemin.thetastar), \hyperpage{31}
-  \item Totem (classe dans lib.elements\_jeu), \hyperpage{17}
+  \item Totem (classe dans lib.elements\_jeu), \hyperpage{15}
 
   \indexspace
   \bigletter V
-  \item Vecteur (classe dans lib.math.vecteur), \hyperpage{27}
+  \item Vecteur (classe dans lib.math.vecteur), \hyperpage{25}
   \item Visu\_serie (classe dans lib.visualisation.visu\_serie), \hyperpage{41}
   \item Visu\_table (classe dans lib.visualisation.visu\_table), \hyperpage{41}
   \item Visu\_threads (classe dans lib.visualisation.visu\_threads), \hyperpage{41}
 
   \indexspace
   \bigletter Z
-  \item Zone (classe dans lib.elements\_jeu), \hyperpage{17}
+  \item Zone (classe dans lib.elements\_jeu), \hyperpage{15}
 
 \end{theindex}

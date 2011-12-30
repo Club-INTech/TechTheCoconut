@@ -9,28 +9,28 @@ Welcome to Tech The Coconut's documentation!
 Contents:
 
 .. toctree::
-    :maxdepth: 5
+	:maxdepth: 5
 
-    actionneur
-    actions
-    asservissement
-    capteur
-    carte
-    conf
-    decision
-    elements_jeu
-    evenement
-    i2c
-    jeu
-    log
-    math
-    peripherique
-    recherche_chemin
-    robot
-    serie
-    simul_uc
-    strategie
-    visualisation
+	actionneur
+	actions
+	asservissement
+	capteur
+	carte
+	decision
+	elements_jeu
+	evenement
+	i2c
+	jeu
+	log
+	math
+	peripherique
+	profils
+	recherche_chemin
+	robot
+	serie
+	simul_uc
+	strategie
+	visualisation
 
 Indices and tables
 ==================

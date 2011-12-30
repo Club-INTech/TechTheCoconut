@@ -51,12 +51,35 @@
   <h1>Code source de lib.conf</h1><div class="highlight"><pre>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
-<div class="viewcode-block" id="Conf"><a class="viewcode-back" href="../../conf.html#lib.conf.Conf">[docs]</a><span class="k">class</span> <span class="nc">Conf</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Classe permettant de gérer les profils de configuration</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c"># Ajout de ../ au path python</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))))</span>
+
+<div class="viewcode-block" id="Conf"><a class="viewcode-back" href="../../profils.html#lib.conf.Conf">[docs]</a><span class="k">class</span> <span class="nc">Conf</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Classe permettant de gérer les profils de configuration</span>
+<span class="sd">	</span>
+<span class="sd">	:param profil: Profil de configuration</span>
+<span class="sd">	:type profil: string</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profil</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">importer_profil</span><span class="p">(</span><span class="n">profil</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Conf.importer_profil"><a class="viewcode-back" href="../../profils.html#lib.conf.Conf.importer_profil">[docs]</a>	<span class="k">def</span> <span class="nf">importer_profil</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profil</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Charge un profil de configuration</span>
+<span class="sd">		</span>
+<span class="sd">		:param profil: Profil de configuration</span>
+<span class="sd">		:type profil: string</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="k">exec</span><span class="p">(</span><span class="s">&quot;import profils.&quot;</span><span class="o">+</span><span class="n">profil</span><span class="p">)</span>
+			<span class="k">return</span> <span class="bp">True</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="k">print</span> <span class="s">&quot;Erreur : profil de configuration &quot;</span><span class="o">+</span><span class="n">profil</span><span class="o">+</span><span class="s">&quot; inconnu&quot;</span>
+			<span class="k">return</span> <span class="bp">False</span></div></div>
 </pre></div>
 
           </div>
