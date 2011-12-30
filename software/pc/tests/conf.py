@@ -17,8 +17,6 @@ class TestConf:
 		"""
 		Teste le chargement d'un profil de configuration effectué avec lib.conf.importer_profil
 		"""
-		#self.setUp()
-		
 		def importer_profil_aux(profil):
 			obj = lib.conf.Conf(profil)
 			return obj.importation
