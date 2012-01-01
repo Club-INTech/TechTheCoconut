@@ -41,21 +41,7 @@ __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
 #include "_LPC17xx.h"
 #include "uart.h"
 
-#define TEMPO 5000
-#define TEMPO2 50
-#define TEMPS 1000
-
-#define HUMAIN
-
 int debug_endpoint = 0;
-
-unsigned long currentTime,previousTime;
-extern unsigned char etat;
-extern unsigned long gpio_etat;
-extern int pwm_rouge, pwm_bleu, pwm_vert;
-extern unsigned char uart1_etat;
-
-void usbPrintEtat( );
 
 //#include "lcd.h"
 //uint32_t SystemFrequency;
