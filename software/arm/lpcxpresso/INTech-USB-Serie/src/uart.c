@@ -153,12 +153,7 @@ int initUart0(int baudRate) {
 	float 	divAddVal, mulVal;
 
 	// PCLK_UART0 is being set = SystemCoreClock
-#ifdef __V2__
-	pclk = SystemCoreClock;
-#endif
-#ifndef __V2__
 	pclk = SystemFrequency;
-#endif
 
 	//Get the correct fractional values for the given pclk and required baud rate
 	if( getFractionValues(pclk, baudRate, &dlEest, &divAddVal, &mulVal) == -1 ) {
@@ -188,12 +183,6 @@ int initUart0(int baudRate) {
 	LPC_UART0->FCR = 0x07;		// Enable and reset TX and RX FIFO
 
 	LPC_UART0->IER = 0x03;                          // Enable TX/RX interrupts
-
-	//Debug code
-	//Calc actual baud rate achieved
-	//int uartBaudRate = pclk/( 16*dlEest*(1+(divAddVal/mulVal)) );
-	//printf("\ndlEest         =%d\n\rSystemCoreClock=%d\nuartBaudRate=%d\n\rpclk=%d\n\r",dlEest,SystemCoreClock,uartBaudRate,pclk);
-
 	return 0;
 }
 
@@ -264,12 +253,7 @@ int initUart1(int baudRate) {
 	float 	divAddVal, mulVal;
 
 	// PCLK_UART0 is being set = SystemCoreClock
-#ifdef __V2__
-	pclk = SystemCoreClock;
-#endif
-#ifndef __V2__
 	pclk = SystemFrequency;
-#endif
 
 	//Get the correct fractional values for the given pclk and required baud rate
 	if( getFractionValues(pclk, baudRate, &dlEest, &divAddVal, &mulVal) == -1 ) {
@@ -307,137 +291,7 @@ int initUart1(int baudRate) {
 	LPC_UART1->FCR = 0x07;		// Enable and reset TX and RX FIFO
 
 	LPC_UART1->IER = 0x03;                          // Enable TX/RX interrupts
-
-	//Debug code
-	//Calc actual baud rate achieved
-	//int uartBaudRate = pclk/( 16*dlEest*(1+(divAddVal/mulVal)) );
-	//printf("\ndlEest         =%d\n\rSystemCoreClock=%d\nuartBaudRate=%d\n\rpclk=%d\n\r",dlEest,SystemCoreClock,uartBaudRate,pclk);
-
-	uart1_etat = 0xc4;
 	return 0;
-}
-
-
-int UART1_SetBaud( unsigned char baudrate)
-{
-	int debit;
-	int 	pclk;
-	int 	dlEest;
-	float 	divAddVal, mulVal;
-#ifdef __V2__
-	pclk = SystemCoreClock;
-#endif
-#ifndef __V2__
-	pclk = SystemFrequency;
-#endif
-	switch(baudrate)
-	{
-	case UART1_9600:
-		debit = 9600;
-		uart1_etat &= ~(0x7);
-		break;
-	case UART1_19200:
-		uart1_etat &= ~(0x7);
-		uart1_etat |= (0x1);
-		debit = 19200;
-		break;
-	case UART1_38400:
-		uart1_etat &= ~(0x7);
-		uart1_etat |= (0x2);
-		debit = 38400;
-		break;
-	case UART1_57600:
-		uart1_etat &= ~(0x7);
-		uart1_etat |= (0x3);
-		debit = 57600;
-		break;
-	case UART1_115200:
-		uart1_etat &= ~(0x7);
-		uart1_etat |= (0x4);
-		debit = 115200;
-		break;
-	}
-	if( getFractionValues(pclk, debit, &dlEest, &divAddVal, &mulVal) == -1 )
-	{
-		return -1;
-	}
-	unsigned long lcr = LPC_UART1->LCR;
-	LPC_UART1->LCR = 0x83;
-	LPC_UART1->DLM = dlEest / 256;
-	LPC_UART1->DLL = dlEest % 256;
-	LPC_UART1->FDR = (((int)mulVal)<<4)|(int)divAddVal;
-	LPC_UART1->LCR = lcr;
-	LPC_UART1->FCR = 0x07;		// Enable and reset TX and RX FIFO
-	return 0;
-}
-
-void UART1_SetParity( unsigned char parity)
-{
-	switch (parity)
-	{
-	case UART1_NONE:
-		uart1_etat &= ~(0x3 << 4);
-		LPC_UART1->LCR &= ~(1<<3);
-		break;
-	case UART1_EVEN:
-		uart1_etat &= ~(0x3 << 4);
-		uart1_etat |= (0x1 << 4);
-		LPC_UART1->LCR &= ~(1<<5);
-		LPC_UART1->LCR |= (1<<4);
-		LPC_UART1->LCR |= (1<<3);
-		break;
-	case UART1_ODD:
-		uart1_etat &= ~(0x3 << 4);
-		uart1_etat |= (0x2 << 4);
-		LPC_UART1->LCR &= ~(1<<5);
-		LPC_UART1->LCR &= ~(1<<4);
-		LPC_UART1->LCR |= (1<<3);
-		break;
-	}
-}
-
-void UART1_SetStop( unsigned char stop)
-{
-	switch( stop )
-	{
-	case UART1_STOP1:
-		uart1_etat &= ~(1 << 3);
-		LPC_UART1->LCR &= ~(1<<2);
-		break;
-	case UART1_STOP2:
-		uart1_etat |= (1 << 3);
-		LPC_UART1->LCR |= (1<<2);
-		break;
-	}
-}
-
-void UART1_SetLenght( unsigned char lenght)
-{
-	switch( lenght )
-	{
-	case UART1_LENGHT_5:
-		uart1_etat &= ~(0x3 << 6);
-		LPC_UART1->LCR &= ~(1<<0);
-		LPC_UART1->LCR &= ~(1<<1);
-		break;
-	case UART1_LENGHT_6:
-		uart1_etat &= ~(0x3 << 6);
-		uart1_etat |= (0x1 << 6);
-		LPC_UART1->LCR |= (1<<0);
-		LPC_UART1->LCR &= ~(1<<1);
-		break;
-	case UART1_LENGHT_7:
-		uart1_etat &= ~(0x3 << 6);
-		uart1_etat |= (0x2 << 6);
-		LPC_UART1->LCR &= ~(1<<0);
-		LPC_UART1->LCR |= (1<<1);
-		break;
-	case UART1_LENGHT_8:
-		uart1_etat |= (0x3 << 6);
-		LPC_UART1->LCR |= (1<<0);
-		LPC_UART1->LCR |= (1<<1);
-		break;
-	}
 }
 
 // ***********************
@@ -506,12 +360,7 @@ int initUart2(int baudRate) {
 	float 	divAddVal, mulVal;
 
 	// PCLK_UART2 is being set = SystemCoreClock
-#ifdef __V2__
-	pclk = SystemCoreClock;
-#endif
-#ifndef __V2__
 	pclk = SystemFrequency;
-#endif
 
 	//Get the correct fractional values for the given pclk and required baud rate
 	if( getFractionValues(pclk, baudRate, &dlEest, &divAddVal, &mulVal) == -1 ) {
@@ -542,12 +391,6 @@ int initUart2(int baudRate) {
 	LPC_UART2->FCR = 0x07;		// Enable and reset TX and RX FIFO
 
 	LPC_UART2->IER = 0x03;                          // Enable TX/RX interrupts
-
-
-	//Debug code
-	//Calc actual baud rate achieved
-	//int uartBaudRate = pclk/( 16*dlEest*(1+(divAddVal/mulVal)) );
-	//printf("\ndlEest         =%d\n\rSystemCoreClock=%d\nuartBaudRate=%d\n\rpclk=%d\n\r",dlEest,SystemCoreClock,uartBaudRate,pclk);
 
 	return 0;
 }
@@ -619,12 +462,7 @@ int initUart3(int baudRate) {
 	float 	divAddVal, mulVal;
 
 	// PCLK_UART3 is being set = SystemCoreClock
-#ifdef __V2__
-	pclk = SystemCoreClock;
-#endif
-#ifndef __V2__
 	pclk = SystemFrequency;
-#endif
 
 	//Get the correct fractional values for the given pclk and required baud rate
 	if( getFractionValues(pclk, baudRate, &dlEest, &divAddVal, &mulVal) == -1 ) {
@@ -638,20 +476,10 @@ int initUart3(int baudRate) {
 	LPC_SC->PCLKSEL1 &= ~(PCLK_UART3_MASK);
 	LPC_SC->PCLKSEL1 |=  (1 << PCLK_UART3);     // PCLK_periph = CCLK
 
-#ifndef __JEREM__
 	// Set PINSEL0 so that P4.28 = TXD3
 	LPC_PINCON->PINSEL9 |= ( 0x3 << 24);
 	// Set PINSEL0 so that P4.29 = RXD3
 	LPC_PINCON->PINSEL9 |= ( 0x3 << 26);
-#endif
-#ifdef __JEREM__
-	// Set PINSEL0 so that P4.28 = TXD3
-	LPC_PINCON->PINSEL0 &= ~( 0x3 << 0);
-	LPC_PINCON->PINSEL0 |= ( 0x2 << 0);
-	// Set PINSEL0 so that P4.29 = RXD3
-	LPC_PINCON->PINSEL0 &= ~( 0x3 << 2);
-	LPC_PINCON->PINSEL0 |= ( 0x2 << 2);
-#endif
 
 	LPC_UART3->LCR = 0x83;		// 8 bits, no Parity, 1 Stop bit, DLAB=1
 	LPC_UART3->DLM = dlEest / 256;
@@ -662,11 +490,6 @@ int initUart3(int baudRate) {
 	LPC_UART3->FCR = 0x07;		// Enable and reset TX and RX FIFO
 
 	LPC_UART3->IER = 0x03;                          // Enable TX/RX interrupts
-
-	//Debug code
-	//Calc actual baud rate achieved
-	//int uartBaudRate = pclk/( 16*dlEest*(1+(divAddVal/mulVal)) );
-	//printf("\ndlEest         =%d\n\rSystemCoreClock=%d\nuartBaudRate=%d\n\rpclk=%d\n\r",dlEest,SystemCoreClock,uartBaudRate,pclk);
 
 	return 0;
 }
