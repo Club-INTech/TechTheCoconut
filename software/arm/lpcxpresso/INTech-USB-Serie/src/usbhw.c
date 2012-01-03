@@ -28,7 +28,7 @@
 #include "usbuser.h"
 
 
-#pragma diag_suppress 1441
+//#pragma diag_suppress 1441
 
 extern int debug_endpoint;
 

@@ -16,39 +16,27 @@ float MULVALList[BR_LOOKUP_SIZE] = {1.0,15.0,14.0,13.0,12.0,11.0,10.0,9.0,8.0,15
 	14.0,11.0,8.0,13.0,5.0,12.0,7.0,9.0,11.0,13.0,15.0,2.0,15.0,13.0,11.0,9.0,7.0,12.0,5.0,13.0,8.0,11.0,14.0,3.0,13.0,10.0,7.0,11.0,15.0,
 	4.0,13.0,9.0,14.0,5.0,11.0,6.0,13.0,7.0,15.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0};
 
-unsigned char uart1_etat = 0;
-
 /**
  * Convert a float value to an ascii string.
  * Gives six decimal places resolution.
  */
-static int ftoa(float v, char *ftoaBuf, int ftoaBufLen) {
+/*static int ftoa(float v, char *ftoaBuf, int ftoaBufLen) {
 	memset(ftoaBuf,0,ftoaBufLen);
 	int intV = (int)v;
 	int fractV = ((v-intV)*1000000);
 	sprintf(ftoaBuf,"%d.%d",intV, fractV);
 	return 0;
-}
+}*/
 
 /**
  * Print a float value. For use when scanf lib function does not support floats.
  */
-static int printfFloat(float v) {
+/*static int printfFloat(float v) {
 	char fBuf[40];
 	ftoa(v, fBuf, 40);
 	printf("%s",fBuf);
 	return 0;
-}
-
-/**
- * Print a debug message of a float value.
- */
-static int debugPrintFloat(char *msg, float v) {
-	printf(msg);
-	printfFloat(v);
-	printf("\n\r");
-	return 0;
-}
+}*/
 
 /**
  * Return 1 if the double is an int value, 0 if not
