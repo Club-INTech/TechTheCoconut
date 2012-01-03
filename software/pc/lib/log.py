@@ -29,13 +29,13 @@ class Log:
 	:param logs_level: Enregistrer à partir de quel niveau de log ?
 	:type logs_level: string 'DEBUG'|'INFO'|'WARNING'|'ERROR'|'CRITICAL'
 	:param logs_format: Format des logs (voir http://docs.python.org/library/logging.html#logrecord-attributes). Ex : '%(asctime)s:%(name)s:%(levelname)s:%(message)s'
-	:type string: string
+	:type logs_format: string
 	:param stderr: Afficher les erreur dans le stderr ? (ie à l'écran)
 	:type stderr: bool
 	:param stderr_level: Afficher sur l'écran à partir de quel niveau de log ?
 	:type stderr_level: string 'DEBUG'|'INFO'|'WARNING'|'ERROR'|'CRITICAL'
 	:param stderr_format: Format d'affiche à l'écran (voir http://docs.python.org/library/logging.html#logrecord-attributes). Ex : '%(asctime)s:%(name)s:%(levelname)s:%(message)s'
-	:type string: string
+	:type stderr_format: string
 	:param dossier: Dossier où mettre les logs (à partir de la racine du code, c'est-à-dire le dossier contenant lanceur.py). Ex : 'logs'
 	:type dossier: string
 	:TODO: Mettre les valeurs qui vont bien dans les profils de configuration
@@ -66,13 +66,13 @@ class Log:
 		:param logs_level: Enregistrer à partir de quel niveau de log ?
 		:type logs_level: string 'DEBUG'|'INFO'|'WARNING'|'ERROR'|'CRITICAL'
 		:param logs_format: Format des logs (voir http://docs.python.org/library/logging.html#logrecord-attributes). Ex : '%(asctime)s:%(name)s:%(levelname)s:%(message)s'
-		:type string: string
+		:type logs_format: string
 		:param stderr: Afficher les erreur dans le stderr ? (ie à l'écran)
 		:type stderr: bool
 		:param stderr_level: Afficher sur l'écran à partir de quel niveau de log ?
 		:type stderr_level: string 'DEBUG'|'INFO'|'WARNING'|'ERROR'|'CRITICAL'
 		:param stderr_format: Format d'affiche à l'écran (voir http://docs.python.org/library/logging.html#logrecord-attributes). Ex : '%(asctime)s:%(name)s:%(levelname)s:%(message)s'
-		:type string: string
+		:type stderr_format: string
 		:param dossier: Dossier où mettre les logs (à partir de la racine du code, c'est-à-dire le dossier contenant lanceur.py). Ex : 'logs'
 		:type dossier: string
 		:return: Statut de l'initialisation. True si réussite, False si échec

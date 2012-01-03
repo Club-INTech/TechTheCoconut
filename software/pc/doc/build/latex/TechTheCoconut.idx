@@ -35,6 +35,12 @@
 \indexentry{Jeu (classe dans lib.jeu)|hyperpage}{21}
 \indexentry{lib.log (module)|hyperpage}{23}
 \indexentry{Log (classe dans lib.log)|hyperpage}{23}
+\indexentry{configurer\_logs() (m\IeC {\'e}thode lib.log.Log)|hyperpage}{23}
+\indexentry{configurer\_stderr() (m\IeC {\'e}thode lib.log.Log)|hyperpage}{23}
+\indexentry{creer\_dossier() (m\IeC {\'e}thode lib.log.Log)|hyperpage}{23}
+\indexentry{ecrire\_entete() (m\IeC {\'e}thode lib.log.Log)|hyperpage}{24}
+\indexentry{initialisation() (m\IeC {\'e}thode lib.log.Log)|hyperpage}{24}
+\indexentry{revision\_disponible() (m\IeC {\'e}thode lib.log.Log)|hyperpage}{24}
 \indexentry{lib.math.point (module)|hyperpage}{25}
 \indexentry{Point (classe dans lib.math.point)|hyperpage}{25}
 \indexentry{lib.math.vecteur (module)|hyperpage}{25}

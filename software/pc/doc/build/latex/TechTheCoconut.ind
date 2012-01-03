@@ -19,9 +19,12 @@
   \item Carte (classe dans lib.carte), \hyperpage{11}
   \item Carte\_tresor (classe dans lib.elements\_jeu), \hyperpage{15}
   \item Conf (classe dans lib.conf), \hyperpage{29}
+  \item configurer\_logs() (m\IeC {\'e}thode lib.log.Log), \hyperpage{23}
+  \item configurer\_stderr() (m\IeC {\'e}thode lib.log.Log), \hyperpage{23}
   \item constantes (attribut profils.develop.constantes), \hyperpage{29}
   \item constantes (attribut profils.developSimulUc.constantes), \hyperpage{29}
   \item constantes (attribut profils.prod.constantes), \hyperpage{29}
+  \item creer\_dossier() (m\IeC {\'e}thode lib.log.Log), \hyperpage{23}
 
   \indexspace
   \bigletter D
@@ -30,6 +33,7 @@
 
   \indexspace
   \bigletter E
+  \item ecrire\_entete() (m\IeC {\'e}thode lib.log.Log), \hyperpage{24}
   \item Evenement (classe dans lib.evenement), \hyperpage{17}
 
   \indexspace
@@ -40,6 +44,7 @@
   \bigletter I
   \item I2c (classe dans lib.i2c), \hyperpage{19}
   \item importer\_profil() (m\IeC {\'e}thode lib.conf.Conf), \hyperpage{29}
+  \item initialisation() (m\IeC {\'e}thode lib.log.Log), \hyperpage{24}
 
   \indexspace
   \bigletter J
@@ -95,6 +100,7 @@
 
   \indexspace
   \bigletter R
+  \item revision\_disponible() (m\IeC {\'e}thode lib.log.Log), \hyperpage{24}
   \item Robot (classe dans lib.robot), \hyperpage{33}
 
   \indexspace

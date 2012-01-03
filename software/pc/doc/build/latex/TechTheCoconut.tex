@@ -13,7 +13,7 @@
 
 
 \title{Tech The Coconut Documentation}
-\date{30 December 2011}
+\date{03 January 2012}
 \release{0.0.1}
 \author{Club INTech}
 \newcommand{\sphinxlogo}{}
@@ -371,8 +371,167 @@ Classe de gérer le déroulement d'une partie
 \label{log:module-lib.log}\label{log::doc}\label{log:log}\index{lib.log (module)}\index{Log (classe dans lib.log)}
 
 \begin{fulllineitems}
-\phantomsection\label{log:lib.log.Log}\pysigline{\strong{class }\code{lib.log.}\bfcode{Log}}
+\phantomsection\label{log:lib.log.Log}\pysiglinewithargsret{\strong{class }\code{lib.log.}\bfcode{Log}}{\emph{logs=None}, \emph{logs\_level=None}, \emph{logs\_format=None}, \emph{stderr=None}, \emph{stderr\_level=None}, \emph{stderr\_format=None}, \emph{dossier=None}}{}
 Classe permettant de gérer les logs
+
+Pour utiliser les logs dans vos fichiers (sauf dans le lanceur où il faut préciser les paramètres) :
+
+Pour charger le système de log correctement, en début de fichier ajoutez :
+
+import lib.log
+
+log = lib.log.Log()
+
+Puis vous pouvez logguer des messages avec (dans ordre croissant de niveau) :
+
+log.logger.debug(`mon message')
+
+log.logger.info(`mon message')
+
+log.logger.warning(`mon message')
+
+log.logger.error(`mon message')
+
+log.logger.critical(`mon message')
+
+L'arborescence des fichiers de logs est : {[}annee{]}-{[}mois{]}-{[}jour{]}/{[}revision{]}.log
+\begin{quote}\begin{description}
+\item[{Paramètres}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{logs} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- Enregistrer dans les fichiers de log ?
+
+\item {} 
+\textbf{logs\_level} (\emph{string `DEBUG'\textbar{}'INFO'\textbar{}'WARNING'\textbar{}'ERROR'\textbar{}'CRITICAL'}) -- Enregistrer à partir de quel niveau de log ?
+
+\item {} 
+\textbf{logs\_format} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Format des logs (voir \href{http://docs.python.org/library/logging.html\#logrecord-attributes}{http://docs.python.org/library/logging.html\#logrecord-attributes}). Ex : `\%(asctime)s:\%(name)s:\%(levelname)s:\%(message)s'
+
+\item {} 
+\textbf{stderr} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- Afficher les erreur dans le stderr ? (ie à l'écran)
+
+\item {} 
+\textbf{stderr\_level} (\emph{string `DEBUG'\textbar{}'INFO'\textbar{}'WARNING'\textbar{}'ERROR'\textbar{}'CRITICAL'}) -- Afficher sur l'écran à partir de quel niveau de log ?
+
+\item {} 
+\textbf{stderr\_format} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Format d'affiche à l'écran (voir \href{http://docs.python.org/library/logging.html\#logrecord-attributes}{http://docs.python.org/library/logging.html\#logrecord-attributes}). Ex : `\%(asctime)s:\%(name)s:\%(levelname)s:\%(message)s'
+
+\item {} 
+\textbf{dossier} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Dossier où mettre les logs (à partir de la racine du code, c'est-à-dire le dossier contenant lanceur.py). Ex : `logs'
+
+\end{itemize}
+
+\item[{Todo }] \leavevmode
+Mettre les valeurs qui vont bien dans les profils de configuration
+
+\end{description}\end{quote}
+\index{configurer\_logs() (méthode lib.log.Log)}
+
+\begin{fulllineitems}
+\phantomsection\label{log:lib.log.Log.configurer_logs}\pysiglinewithargsret{\bfcode{configurer\_logs}}{}{}
+Configure les logs (handler)
+
+\end{fulllineitems}
+
+\index{configurer\_stderr() (méthode lib.log.Log)}
+
+\begin{fulllineitems}
+\phantomsection\label{log:lib.log.Log.configurer_stderr}\pysiglinewithargsret{\bfcode{configurer\_stderr}}{}{}
+Configure la sortie stderr (handler)
+
+\end{fulllineitems}
+
+\index{creer\_dossier() (méthode lib.log.Log)}
+
+\begin{fulllineitems}
+\phantomsection\label{log:lib.log.Log.creer_dossier}\pysiglinewithargsret{\bfcode{creer\_dossier}}{\emph{dossier}}{}
+Crée un dossier si il n'existe pas déjà
+\begin{quote}\begin{description}
+\item[{Paramètres}] \leavevmode
+\textbf{dossier} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- chemin vers le dossier à créer
+
+\item[{Retourne}] \leavevmode
+True si on a eu besoin de créer le dossier, False si il existait déjà
+
+\item[{Type retourné}] \leavevmode
+bool
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{ecrire\_entete() (méthode lib.log.Log)}
+
+\begin{fulllineitems}
+\phantomsection\label{log:lib.log.Log.ecrire_entete}\pysiglinewithargsret{\bfcode{ecrire\_entete}}{}{}
+Crée l'entête dans les logs au niveau INFO
+
+\end{fulllineitems}
+
+\index{initialisation() (méthode lib.log.Log)}
+
+\begin{fulllineitems}
+\phantomsection\label{log:lib.log.Log.initialisation}\pysiglinewithargsret{\bfcode{initialisation}}{\emph{logs}, \emph{logs\_level}, \emph{logs\_format}, \emph{stderr}, \emph{stderr\_level}, \emph{stderr\_format}, \emph{dossier}}{}
+Initialise le système de log
+\begin{quote}\begin{description}
+\item[{Paramètres}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{logs} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- Enregistrer dans les fichiers de log ?
+
+\item {} 
+\textbf{logs\_level} (\emph{string `DEBUG'\textbar{}'INFO'\textbar{}'WARNING'\textbar{}'ERROR'\textbar{}'CRITICAL'}) -- Enregistrer à partir de quel niveau de log ?
+
+\item {} 
+\textbf{logs\_format} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Format des logs (voir \href{http://docs.python.org/library/logging.html\#logrecord-attributes}{http://docs.python.org/library/logging.html\#logrecord-attributes}). Ex : `\%(asctime)s:\%(name)s:\%(levelname)s:\%(message)s'
+
+\item {} 
+\textbf{stderr} (\href{http://docs.python.org/library/functions.html\#bool}{\emph{bool}}) -- Afficher les erreur dans le stderr ? (ie à l'écran)
+
+\item {} 
+\textbf{stderr\_level} (\emph{string `DEBUG'\textbar{}'INFO'\textbar{}'WARNING'\textbar{}'ERROR'\textbar{}'CRITICAL'}) -- Afficher sur l'écran à partir de quel niveau de log ?
+
+\item {} 
+\textbf{stderr\_format} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Format d'affiche à l'écran (voir \href{http://docs.python.org/library/logging.html\#logrecord-attributes}{http://docs.python.org/library/logging.html\#logrecord-attributes}). Ex : `\%(asctime)s:\%(name)s:\%(levelname)s:\%(message)s'
+
+\item {} 
+\textbf{dossier} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- Dossier où mettre les logs (à partir de la racine du code, c'est-à-dire le dossier contenant lanceur.py). Ex : `logs'
+
+\end{itemize}
+
+\item[{Retourne}] \leavevmode
+Statut de l'initialisation. True si réussite, False si échec
+
+\item[{Type retourné}] \leavevmode
+bool
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{revision\_disponible() (méthode lib.log.Log)}
+
+\begin{fulllineitems}
+\phantomsection\label{log:lib.log.Log.revision_disponible}\pysiglinewithargsret{\bfcode{revision\_disponible}}{\emph{dossier}, \emph{dossier\_date}}{}
+Donne la prochaine révision à créer dans les logs
+\begin{quote}\begin{description}
+\item[{Paramètres}] \leavevmode\begin{itemize}
+\item {} 
+\textbf{dossier} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- dossier principal des logs
+
+\item {} 
+\textbf{dossier\_date} (\href{http://docs.python.org/library/string.html\#module-string}{\emph{string}}) -- dossier de la date actuelle
+
+\end{itemize}
+
+\item[{Retourne}] \leavevmode
+révision à créer
+
+\item[{Type retourné}] \leavevmode
+int
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 
 \end{fulllineitems}
 
@@ -490,7 +649,7 @@ constantes{[}''Coconut''{]}{[}''longueur''{]} Longueur en mm
 \index{constantes (attribut profils.develop.constantes)}
 
 \begin{fulllineitems}
-\phantomsection\label{profils:profils.develop.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Anna': \{\}\}}}
+\phantomsection\label{profils:profils.develop.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Logs': \{`logs\_level': `DEBUG', `logs': True, `logs\_format': `\%(asctime)s:\%(name)s:\%(levelname)s:\%(threadName)s:l\%(lineno)d:\%(message)s', `dossier': `logs', `stderr\_format': `\%(asctime)s:\%(name)s:\%(levelname)s:\%(threadName)s:l\%(lineno)d:\%(message)s', `stderr': True, `stderr\_level': `DEBUG'\}, `Anna': \{\}\}}}
 \end{fulllineitems}
 
 
@@ -507,7 +666,7 @@ constantes{[}''Coconut''{]}{[}''longueur''{]} Longueur en mm
 \index{constantes (attribut profils.developSimulUc.constantes)}
 
 \begin{fulllineitems}
-\phantomsection\label{profils:profils.developSimulUc.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Anna': \{\}\}}}
+\phantomsection\label{profils:profils.developSimulUc.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Logs': \{`logs\_level': `DEBUG', `logs': True, `logs\_format': `\%(asctime)s:\%(name)s:\%(levelname)s:\%(threadName)s:l\%(lineno)d:\%(message)s', `dossier': `logs', `stderr\_format': `\%(asctime)s:\%(name)s:\%(levelname)s:\%(threadName)s:l\%(lineno)d:\%(message)s', `stderr': True, `stderr\_level': `DEBUG'\}, `Anna': \{\}\}}}
 \end{fulllineitems}
 
 
@@ -524,7 +683,7 @@ constantes{[}''Coconut''{]}{[}''longueur''{]} Longueur en mm
 \index{constantes (attribut profils.prod.constantes)}
 
 \begin{fulllineitems}
-\phantomsection\label{profils:profils.prod.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Anna': \{\}\}}}
+\phantomsection\label{profils:profils.prod.constantes.constantes}\pysigline{\code{constantes.}\bfcode{constantes}\strong{ = \{`Table': \{\}, `Coconut': \{`longueur': 350, `largeur': 150\}, `Logs': \{`logs\_level': `DEBUG', `logs': True, `logs\_format': `\%(asctime)s:\%(name)s:\%(levelname)s:\%(threadName)s:l\%(lineno)d:\%(message)s', `dossier': `logs', `stderr\_format': `\%(asctime)s:\%(name)s:\%(levelname)s:\%(threadName)s:l\%(lineno)d:\%(message)s', `stderr': True, `stderr\_level': `INFO'\}, `Anna': \{\}\}}}
 \end{fulllineitems}
 
 
