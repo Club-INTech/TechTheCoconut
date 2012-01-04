@@ -1,0 +1,1167 @@
+Downloading/unpacking sphinx
+  Getting page http://pypi.python.org/simple/sphinx
+  URLs to search for versions for sphinx:
+  * http://pypi.python.org/simple/sphinx
+  Getting page http://sphinx.pocoo.org/
+  Analyzing links from page http://pypi.python.org/simple/Sphinx/
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.4-py2.6.egg#md5=81bce271bc540628af466c3d51f1a603 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.5-py2.6.egg#md5=b40aced6f1d0f9394e08337e578b0ae3 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.2.tar.gz#md5=c8f79e171addc73342cc2e775dc78880 (from http://pypi.python.org/simple/Sphinx/), version: 0.6.2
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0-py2.4.egg#md5=3eb52d3e43c79fc526701a68f737a15d (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.1.61945-py2.5.egg#md5=8139b5a66e41202b362bac270eef26ad (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.4.2-py2.4.egg#md5=5705b30e6e7f72988eaab91d99575ec2 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.1.61798-py2.5.egg#md5=9e1125b9c905ab5ce6a3d23429e90a4e (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.7-py2.4.egg#md5=1a1de68fa04879c6df051bd0376af32d (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.2-py2.5.egg#md5=2ab5663b74eb7c654311696529e7b708 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.3.tar.gz#md5=98550d222aec91a029c0921819c4c49f (from http://pypi.python.org/simple/Sphinx/), version: 0.3
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6b1-py2.6.egg#md5=b7cc5643888d75152979e8a35630a3ff (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.3-py2.5.egg#md5=534d17b92cd0f4983d9689baec56effd (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.1-py2.5.egg#md5=97b2b41115ba6825e5a9908b43cdf518 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.1-py2.5.egg#md5=dc1ec6c5250b4d1d2df8a54098d5cdf6 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.4-py2.5.egg#md5=a01eec63f91ebfe381cf18fc082d015b (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.tar.gz#md5=b385027619d9042c98eebc8b352d9d48 (from http://pypi.python.org/simple/Sphinx/), version: 0.6
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.1.61945.tar.gz#md5=6609629c809ce807b6d29733b2b09d55 (from http://pypi.python.org/simple/Sphinx/), version: 0.1.61945
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.5.2b1-py2.6.egg#md5=d2850a73f7cf6984c94aa94471b8c71b (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.5.2-py2.6.egg#md5=b52b3cd0cb23bad3517e65e6a8df13fd (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.1.61945-py2.4.egg#md5=07a09e91c8db83764964ad3592fc1637 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.2-py2.4.egg#md5=86a524cc49128315b0f51337690e9406 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.4.3-py2.4.egg#md5=bd8bc15701c86f49b70861f514f430bc (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.1.61611-py2.5.egg#md5=87126910df4e7a790466edbb0722a8f2 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.6-py2.6.egg#md5=0954c9dbff760571eb324f24ff01a52c (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.5-py2.5.egg#md5=cc0008f8b7db3f40c759b25d38dabf02 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0b2-py2.6.egg#md5=df36b39be3840ffc0fdda601ccda88bc (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0b2.tar.gz#md5=6bf13da4fd0542cc85705d1c4abd3c0a (from http://pypi.python.org/simple/Sphinx/), version: 1.0b2
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.4-py2.6.egg#md5=acb1cc638ef1d66c4f769309c6f8f735 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.8.tar.gz#md5=6f9aace3f7e523ce55514eafa2764c6f (from http://pypi.python.org/simple/Sphinx/), version: 1.0.8
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.8-py2.6.egg#md5=e4d1d208ed1941734daaaa22d552971e (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.5-py2.4.egg#md5=a3128d88b4426daeb069e74bcec3476a (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.3-py2.4.egg#md5=4a1a2499e55f73937a1e28313135dda0 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.5.2-py2.5.egg#md5=6cc769347999dd5be4d4a25a09a8c01f (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.5.2b1-py2.5.egg#md5=9713d0277a54174b74ea6f23195bfcc2 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.4.tar.gz#md5=a65e0bcff6f79a7c013220d00ea137ad (from http://pypi.python.org/simple/Sphinx/), version: 0.6.4
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.4.2-py2.5.egg#md5=19aa1e7adc360f920c6eda3eadfe99aa (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.5-py2.6.egg#md5=151b2af3a2964cfc683334599eccd057 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.5.1-py2.6.egg#md5=59194e8a28268fce3ee8e6a0d5dd1cf8 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.5.1.tar.gz#md5=11456e362d75c1a4c5a5847921d3f4c7 (from http://pypi.python.org/simple/Sphinx/), version: 0.5.1
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.1.61843-py2.4.egg#md5=bd516211c5b5dabc002af66a5815af49 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6b1.tar.gz#md5=c2518f36c78edf87009897a9778ec36a (from http://pypi.python.org/simple/Sphinx/), version: 0.6b1
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6b1-py2.4.egg#md5=da658fcefcbcbbf28c1933e6ed2e08f5 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.1.1-py2.7.egg#md5=bb1c45e99fa2a74d9d631d3c2f31b608 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.0.6-py2.7.egg#md5=c856ea4f72c59404a85973acc58be3ab (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.1.61798-py2.4.egg#md5=ad6311e637912afd315be2833b2e69f3 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.5.tar.gz#md5=55a33cc13b5096c8763cd4a933b30ddc (from http://pypi.python.org/simple/Sphinx/), version: 0.5
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.1.tar.gz#md5=fa1a32c406232a96a776de7dfae15032 (from http://pypi.python.org/simple/Sphinx/), version: 0.6.1
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.5-py2.6.egg#md5=d1230f6d317a35770365f62225069259 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.1.1.tar.gz#md5=aee8d7afcbae569c96811aa692d1af2d (from http://pypi.python.org/simple/Sphinx/), version: 1.1.1
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.4-py2.4.egg#md5=243a3b65eed4b105b12920024d24a772 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.3-py2.5.egg#md5=e6af92a03efb5409b5200f94c2690962 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.4-py2.5.egg#md5=b9e637ba15a27b31b7f94b8809cdebe3 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.5-py2.4.egg#md5=3d5583eaa051928e775907b6d62d5507 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.5.1-py2.4.egg#md5=c9618937bd0e59013075415bf374d55b (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.0.8-py2.7.egg#md5=57abc468af9746be933c3bcca0264d19 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.2-py2.4.egg#md5=8ac6338e4361bdde100ae11974f3299a (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.3-py2.4.egg#md5=3dc44613251d5bcf6232107ff28167a4 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.4-py2.4.egg#md5=106a11fe6539dc1cd2246442ce208e91 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.4-py2.5.egg#md5=1ad7a6b7e53759ab0fdeb576ebed411c (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0-py2.5.egg#md5=13b1565f0c9c0bb681d0144f43a9dd45 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.1.61950-py2.4.egg#md5=349c59f4f815e97067f7eb0137d9ad36 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.7-py2.5.egg#md5=bc4bc8b2d2299d0221fc1ec0ab62c891 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.6.tar.gz#md5=840f6dbbecbb4979a204909f5656c723 (from http://pypi.python.org/simple/Sphinx/), version: 0.6.6
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.6.tar.gz#md5=4cdb86c7bb7fa2498ac12db844784769 (from http://pypi.python.org/simple/Sphinx/), version: 1.0.6
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.1-py2.4.egg#md5=8b5d93be6d4f76e1c3d8c3197f84526f (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.2.tar.gz#md5=004e475ba0efa56c5b51c69d7170881a (from http://pypi.python.org/simple/Sphinx/), version: 1.0.2
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.4.1-py2.5.egg#md5=a56928df371c489819a7c13a0db6cd3b (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0-py2.6.egg#md5=6a031fc2efd61088ae23f2a337e324e6 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.5.tar.gz#md5=86dd5dbd55cb44d1f8091a4a1c3743b2 (from http://pypi.python.org/simple/Sphinx/), version: 0.6.5
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.4.tar.gz#md5=d4067e42e75525ecf108ece471ce97bb (from http://pypi.python.org/simple/Sphinx/), version: 1.0.4
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6-py2.4.egg#md5=96a121ee9fddb4d86417cc329e5770e6 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.3.tar.gz#md5=b8ba063eeeaf818a7ea07fd28d9614a9 (from http://pypi.python.org/simple/Sphinx/), version: 0.6.3
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.1.tar.gz#md5=909927a2c0fe62e7ff5794387c8af34e (from http://pypi.python.org/simple/Sphinx/), version: 1.1
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.1-py2.4.egg#md5=c2d457595a405d42dcd67522b6959bd6 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.1.61950-py2.5.egg#md5=d13e2199a1fd0b68a7b54498f3ef5d38 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.1.61843.tar.gz#md5=69ab7befe60af790d24e22b4b46e8392 (from http://pypi.python.org/simple/Sphinx/), version: 0.1.61843
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.2-py2.6.egg#md5=ad7d9bac0a74de6b375603ef65bd182e (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.1-py2.6.egg#md5=b7d667a665adb45bcf89cd5396343dfc (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.4.1-py2.4.egg#md5=3ed6e7a69a992427d090175f12f8cad0 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.1.2.tar.gz#md5=b65a5d5d6172f3dcfefb4770ec63926e (from http://pypi.python.org/simple/Sphinx/), version: 1.1.2
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.5.1-py2.5.egg#md5=c2bd07c30778948fb405dbe222f4231d (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.0.7-py2.7.egg#md5=1321a3888d4fad656a5ede5838686e12 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.4.tar.gz#md5=1ae14fab44f4bbb0f8d10b17e18be36b (from http://pypi.python.org/simple/Sphinx/), version: 0.4
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.3-py2.6.egg#md5=5a3e6f4b5d972eb38968f91bf232265d (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.7.tar.gz#md5=42c722d48e52d4888193965dd473adb5 (from http://pypi.python.org/simple/Sphinx/), version: 1.0.7
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.4.3.tar.gz#md5=b3c17f1b5be0b76c373a2474488f1662 (from http://pypi.python.org/simple/Sphinx/), version: 0.4.3
+    Skipping link http://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.1.2-py2.7.egg#md5=14696ed66febb8ee3f12257a5f2e5973 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6-py2.6.egg#md5=20b277f865da261a7e297f3eb34fe94a (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6b1-py2.5.egg#md5=b877f156e5c4b22257c47873021da3d2 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.7-py2.4.egg#md5=f77624e49a3a2bf45d7262722cf51bbb (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.7-py2.6.egg#md5=a002502c36bc43fa58d14a7c4cb092c4 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.7-py2.6.egg#md5=a547658740040dd87ef71fbf723e7962 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.2-py2.4.egg#md5=e6350b7f96b2583c8d9a6645c9f7c808 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.4.2.tar.gz#md5=5fb591961e1d834f726b3e5d29bec924 (from http://pypi.python.org/simple/Sphinx/), version: 0.4.2
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6-py2.5.egg#md5=e1d327ab9524a006179aef4155a0d7a0 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.1.61798.tar.gz#md5=d13c140bfd3db95d229d14b81fc4ec43 (from http://pypi.python.org/simple/Sphinx/), version: 0.1.61798
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.3-py2.4.egg#md5=c49c04553445e1aaa01219b0f5a92dd8 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.1-py2.6.egg#md5=0c5baac650e48792124f71eabb0eb029 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.1.61950.tar.gz#md5=80524e9b55e016b61533aaf53eb88c88 (from http://pypi.python.org/simple/Sphinx/), version: 0.1.61950
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.2.tar.gz#md5=da32f97bb4f30d7e9e3afb50017072e0 (from http://pypi.python.org/simple/Sphinx/), version: 0.2
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.5-py2.4.egg#md5=1bed30adc42b8b22d82c87be354f9016 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.1.2-py2.6.egg#md5=d35db7a8ee62dd55522bca523954baa9 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.6.7.tar.gz#md5=54c3e4045ee4a4997a50c225f36e92fd (from http://pypi.python.org/simple/Sphinx/), version: 0.6.7
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0b1-py2.4.egg#md5=9aa988d8c46c7c82a5718a94c0320e8d (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.1.61843-py2.5.egg#md5=607908a9693266fab3600a724961e0de (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.5.2b1.tar.gz#md5=1e97cd2bfa26a8079c3513493faf8b35 (from http://pypi.python.org/simple/Sphinx/), version: 0.5.2b1
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.2-py2.6.egg#md5=d476b596c2cdcfbfd1988a3d55d3bd16 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.3.tar.gz#md5=5ba14b33f74ac7bec558cfd842ca7437 (from http://pypi.python.org/simple/Sphinx/), version: 1.0.3
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0b2-py2.4.egg#md5=33e874c6ce6f3a7b2f347d0aac0e0cd7 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0b1-py2.5.egg#md5=1be1de1c62193f90651a444d5f09cb85 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-1.0.6-py2.4.egg#md5=24febe083f05c4b5405c8955123247a0 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.2-py2.5.egg#md5=9ce78ce5207bad754cbcaf366098a583 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.6-py2.4.egg#md5=eb1c7dac25c5502a486e29159eb17d71 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.5.2-py2.4.egg#md5=be03fd445499b2c52235232f6408d15a (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.4.3-py2.5.egg#md5=23d2e03f93bb53c8ce33b2ed09c8129b (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.6-py2.5.egg#md5=72f4365e790eda127234257646232451 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0b1-py2.6.egg#md5=57f87ae87972a6c18b79460e657b9882 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.5.tar.gz#md5=9c2cbfb4f520c49cedd10d0b26196832 (from http://pypi.python.org/simple/Sphinx/), version: 1.0.5
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.1.tar.gz#md5=d3a57ffcf2592da494aeca4b62e815ef (from http://pypi.python.org/simple/Sphinx/), version: 1.0.1
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.1.61611-py2.4.egg#md5=75a92f44d07307212bb8cc202b67d649 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0b2-py2.5.egg#md5=6dc18901db3750c8cd1bfa732b21c982 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.6-py2.5.egg#md5=d5b88b5c62feed95db3032bede5df580 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-0.6.6-py2.6.egg#md5=0c2e0d69172423a8c19a677c15824db0 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.5.2.tar.gz#md5=277343796ca265942fec3baeefb14d3f (from http://pypi.python.org/simple/Sphinx/), version: 0.5.2
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.2-py2.5.egg#md5=2cebef2fe2f0da53b2e1087645ab1be2 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.6.5-py2.5.egg#md5=b172e22f617ad8a0d179a528c52812d8 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.4.1.tar.gz#md5=45eba5dcfc909241c7bce9d9bf96f2af (from http://pypi.python.org/simple/Sphinx/), version: 0.4.1
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.7-py2.5.egg#md5=f1607f94e0431bad74fabd18366fdbbf (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.6.4-py2.4.egg#md5=3576185a22631454fc303cdf6a9e1cc9 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-0.5-py2.5.egg#md5=265cd3a988309dd10c48347eff751b0f (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.0.3-py2.6.egg#md5=a7a9dfe6216269c94ce172e1269e885c (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-0.1.61611.tar.gz#md5=24585c5dfcd3e7ea323eca0fe7e61a61 (from http://pypi.python.org/simple/Sphinx/), version: 0.1.61611
+    Skipping link http://pypi.python.org/packages/2.7/S/Sphinx/Sphinx-1.1-py2.7.egg#md5=a80656d0fff7eaee79883baa67874d12 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.4/S/Sphinx/Sphinx-0.5.2b1-py2.4.egg#md5=0dcc31232215b247e5a0c6b64ea5d076 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://pypi.python.org/packages/2.5/S/Sphinx/Sphinx-1.0.3-py2.5.egg#md5=aa933c45d57ec6b7c9cfd22cde508e2d (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0.tar.gz#md5=173baed4a71355fc3c908da1f6ab4156 (from http://pypi.python.org/simple/Sphinx/), version: 1.0
+    Found link http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.0b1.tar.gz#md5=efe4e95ea02e1a7fbb19969632454f3f (from http://pypi.python.org/simple/Sphinx/), version: 1.0b1
+    Skipping link http://pypi.python.org/packages/2.6/S/Sphinx/Sphinx-1.1-py2.6.egg#md5=cda477d5ebdcb4c7a09a99d18e44b2f7 (from http://pypi.python.org/simple/Sphinx/); unknown archive format: .egg
+    Skipping link http://sphinx.pocoo.org/ (from http://pypi.python.org/simple/Sphinx/); not a file
+    Found link http://bitbucket.org/birkenfeld/sphinx/get/tip.gz#egg=Sphinx-dev (from http://pypi.python.org/simple/Sphinx/), version: dev
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Analyzing links from page http://sphinx.pocoo.org/
+    Skipping link http://sphinx.pocoo.org/_static/sphinxdoc.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/pygments.css (from http://sphinx.pocoo.org/); unknown archive format: .css
+    Skipping link http://sphinx.pocoo.org/_static/opensearch.xml (from http://sphinx.pocoo.org/); unknown archive format: .xml
+    Skipping link http://sphinx.pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/genindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/py-modindex.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/contents.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://pocoo.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pypi.python.org/pypi/Sphinx (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/latest/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://groups.google.com/group/sphinx-dev (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://www.bitbucket.org/birkenfeld/sphinx/issues/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docs.python.org/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://pygments.org (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://docutils.sf.net/rst.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://docutils.sf.net/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx.pocoo.org/tutorial.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/search.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://sphinx.pocoo.org/sphinx.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/sphinx-rst2pdf.pdf (from http://sphinx.pocoo.org/); unknown archive format: .pdf
+    Skipping link http://sphinx.pocoo.org/examples.html (from http://sphinx.pocoo.org/); unknown archive format: .html
+    Skipping link http://matplotlib.sourceforge.net/sampledoc/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://sphinx-users.jp/doc10/ (from http://sphinx.pocoo.org/); not a file
+    Skipping link http://peak.telecommunity.com/DevCenter/EasyInstall (from http://sphinx.pocoo.org/); not a file
+  Using version 1.1.2 (newest of versions: 1.1.2, 1.1.1, 1.1, 1.0.8, 1.0.7, 1.0.6, 1.0.5, 1.0.4, 1.0.3, 1.0.2, 1.0.1, 1.0, 1.0b2, 1.0b1, 0.6.7, 0.6.6, 0.6.5, 0.6.4, 0.6.3, 0.6.2, 0.6.1, 0.6, 0.6b1, 0.5.2, 0.5.2b1, 0.5.1, 0.5, 0.4.3, 0.4.2, 0.4.1, 0.4, 0.3, 0.2, 0.1.61950, 0.1.61945, 0.1.61843, 0.1.61798, 0.1.61611, dev)
+  Downloading from URL http://pypi.python.org/packages/source/S/Sphinx/Sphinx-1.1.2.tar.gz#md5=b65a5d5d6172f3dcfefb4770ec63926e (from http://pypi.python.org/simple/Sphinx/)
+  Running setup.py egg_info for package sphinx
+    running egg_info
+    creating pip-egg-info/Sphinx.egg-info
+    writing requirements to pip-egg-info/Sphinx.egg-info/requires.txt
+    writing pip-egg-info/Sphinx.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/Sphinx.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/Sphinx.egg-info/dependency_links.txt
+    writing entry points to pip-egg-info/Sphinx.egg-info/entry_points.txt
+    writing manifest file 'pip-egg-info/Sphinx.egg-info/SOURCES.txt'
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/Sphinx.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    no previously-included directories found matching 'doc/_build'
+    writing manifest file 'pip-egg-info/Sphinx.egg-info/SOURCES.txt'
+  Source in ./build/sphinx has version 1.1.2, which satisfies requirement sphinx
+Requirement already satisfied: Pygments>=1.2 in /usr/lib/pymodules/python2.6 (from sphinx)
+Requirement already satisfied: Jinja2>=2.3 in /usr/lib/pymodules/python2.6 (from sphinx)
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (docutils 0.6 (/usr/lib/pymodules/python2.6), Requirement.parse('docutils>=0.7'))
+------------------------------------------------------------
+/usr/bin/pip run on Wed Jan  4 21:25:58 2012
+Downloading/unpacking sphinx
+  Running setup.py egg_info for package sphinx
+    running egg_info
+    writing requirements to pip-egg-info/Sphinx.egg-info/requires.txt
+    writing pip-egg-info/Sphinx.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/Sphinx.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/Sphinx.egg-info/dependency_links.txt
+    writing entry points to pip-egg-info/Sphinx.egg-info/entry_points.txt
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/Sphinx.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    no previously-included directories found matching 'doc/_build'
+    writing manifest file 'pip-egg-info/Sphinx.egg-info/SOURCES.txt'
+  Source in ./build/sphinx has version 1.1.2, which satisfies requirement sphinx
+Requirement already satisfied: Pygments>=1.2 in /usr/lib/pymodules/python2.6 (from sphinx)
+Requirement already satisfied: Jinja2>=2.3 in /usr/lib/pymodules/python2.6 (from sphinx)
+Exception:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 408, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1721, in install_files
+    if req_to_install.check_if_exists():
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1583, in check_if_exists
+    dist = pkg_resources.get_distribution(self.req)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 292, in get_distribution
+    if isinstance(dist,Requirement): dist = get_provider(dist)
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 176, in get_provider
+    return working_set.find(moduleOrReq) or require(str(moduleOrReq))[0]
+  File "/usr/lib/python2.6/dist-packages/pkg_resources.py", line 436, in find
+    raise VersionConflict(dist,req)     # XXX add more info
+VersionConflict: (docutils 0.6 (/usr/lib/pymodules/python2.6), Requirement.parse('docutils>=0.7'))
