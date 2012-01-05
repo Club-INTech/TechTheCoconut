@@ -14,7 +14,9 @@ constantes = \
 		"longueur": 350
 	},
 	"Anna": {},
-	"Table": {},
+	"Table": {
+        "rayon_disque" = 150 #:TODO: Changer la valeur numérique
+        },
 	"Logs":
 	{
 		"logs": True,
