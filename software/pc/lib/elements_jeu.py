@@ -1,6 +1,25 @@
 # -*- coding: utf-8 -*-
 
+class ElementARamener :
+    """
+    :param position: position de l'objet à ramener
+    :type position: Point
+    
+    :param orientation: orientation de l'objet à ramener
+    :type orientation: float
+    
+    :param 
+    """
+    
+    def __init__(self, position, orientation) :
+        self.position = position
+        self.orientation = orientation
+        self.type = "SURLETERRAIN"        # Cette variable peut être égale à SURLETERRAIN, PROTEGEE
+        
+        
 class Disque:
+    
+    
     """
     Classe de créer l'élément de jeu disque
     """
@@ -34,7 +53,7 @@ class Totem:
       :type position: Point
       """
         self.position = position
-        self.couleur = "ROUGE" # cet attribut correspond au joueur à qui appartient le todo
+        self.couleur = "ROUGE" # cet attribut correspond au joueur à qui appartient le totem
         #			 TODO gérer l'assignation de cet attibut
         self.longueur = 5 #TODO changer la valeur numérique
         self.largeur = self.longueur #cette variable est inutile mais au moins on peut l'utiliser
