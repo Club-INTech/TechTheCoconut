@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+# Log
+import log
+log = log.Log()
+
+
 class ElementARamener :
     """
     Cette classe contient tous les objets à ramener au camp (i.e. disques et lingots)
@@ -16,6 +21,7 @@ class ElementARamener :
     """
     
     def __init__(self, position, orientation) :
+        log.logger.info("Création d'un objet ElementARamener en cours...\n")
         self.position = position
         self.orientation = orientation
         self.etat = "SURLETERRAIN"        # Cette variable peut être égale à SURLETERRAIN, PROTEGEE, CHEZLADVERSAIRE
@@ -34,6 +40,7 @@ class ElementInfranchissable :
     """
     
     def __init__(self, position, orientation) :
+        log.logger.info("Création d'un objet ElementInfranchissable en cours...\n")
         self.position = position
         self.orientation = orientation
         
@@ -52,6 +59,7 @@ class Disque(ElementARamener):
     
     """
     def __init__(self, position):
+        log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(position, orientation)
         self.rayon = 90 #:TODO: changer la valeur numérique
 
@@ -73,6 +81,7 @@ class Lingot(ElementARamener):
     
     """
     def __init__(self, position, orientation):
+        log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(position, orientation)
         self.largeur = 90       #:TODO: changer la valeur numérique
         self.longueur = 160     #:TODO: changer la valeur numérique
@@ -95,16 +104,14 @@ class Totem:
     :param hauteur: Hauteur du Totem en mm
     :type hauteur: int
     
-    :param couleur: Zone où le Totem réside ( "ROUGE" ou "VIOLET" )
-    :type couleur: string
+    :param enemy: [OPTIONEL : mis à 0 en cas de non renseignement] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
+    :type enemy: boolean
     """
-    def __init__(self, position):
-      """
-      :param position: Position du disque
-      :type position: Point
-      """
+    
+    def __init__(self, position, enemy = False):
+        log.logger.info("Création d'un objet Totem en cours...\n")
         self.position = position
-        self.couleur = "ROUGE"    #:TODO: Gérer l'assignation de cet élement en fonction de la position
+        self.enemy = enemy    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
         
         self.longueur = 5 #:TODO: changer la valeur numérique
         self.largeur = self.longueur #cette variable est inutile mais au moins on peut l'utiliser
@@ -128,6 +135,7 @@ class RegletteEnBois :
     :type longueur: float
     """
     def __init__(self, position, orientation) :
+        log.logger.info("Création d'un objet RegletteEnBois en cours...\n")
         ElementInfranchissable.__init__(position, orientation)
         self.largeur = 20               #:TODO: changer la valeur numérique
         self.longueur = 200             #:TODO: changer la valeur numérique
@@ -135,29 +143,57 @@ class RegletteEnBois :
 class Poussoir:
     """
     Classe de créer l'élément de jeu poussoir
+    
+    :param position: Position du poussoir
+    :type position: Point
+    
+    :param orientation: Orientation du poussoir (toujours égale à Pi/2)
+    :type orientation: float
+    
     """
     def __init__(self, position):
-      """
-      :param position: Position du disque
-      :type position: Point
-      """
+        log.logger.info("Création d'un objet Poussoir en cours...\n")
         self.position = position
+        self.orientation = 3.1415/2    #Pi/2
 
 class Carte_tresor:
     """
     Classe de créer l'élément de jeu carte au trésor
     """
     def __init__(self):
-        pass
+        log.logger.info("Création d'un objet Carte_tresor en cours...\n")
+        self.position = position
+        self.orientation = -3.1415/2
 
 class Zone:
     """
     Classe de créer l'élément de jeu zone
     
-    :TODO: Différencier les différents types de zone (départ, cale, pont, ...) avec leurs propriétés
+    :param nomZone: Nom de la zone ( "CALE", "CALEPROTEGEE", "BUREAUCAPITAINE", "AIREDEJEU" )
+    :type nomZone: string
+    
+    :param angleSG: Position de l'angle supérieur gauche de la zone
+    :type angleSG: Point
+    
+    :param angleID: Position de l'angle inférieur droit de la zone
+    :type angleID: Point
+    
+    :param enemy: [OPTIONEL : mis à 0 en cas de non renseignement] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
+    :type enemy: boolean
+    
+    :param self.protectionCale: Est à 1 si le cadre protégeant le dessous de la cale est fermé, à 0 sinon.
+    :type self.protectionCale: boolean
     """
-    def __init__(self):
-        pass
+    def __init__(self, nomZone, angleSG, angleID, enemy=0):
+        log.logger.info("Création d'un objet Zone en cours...\n")
+        self.nomZone = nomZone
+        self.angleSG = angleSG
+        self.angleID = angleID
+        self.enemy = enemy
+        
+        if nomZone == "CALEPROTEGEE" :
+            self.nomZone = nomZone
+            self.protectionCale = True
 
 
         
