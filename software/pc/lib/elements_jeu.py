@@ -26,7 +26,8 @@ Ce fichier crée les classes des différents objets présents sur le terrain, ob
 
 class ElementARamener :
     """
-    Cette classe contient tous les objets à ramener au camp (i.e. disques et lingots)
+    Cette classe permet de créer tous les objets à ramener au camp (i.e. Diques et Lingots)
+    :note: Les classes Disque et Lingot sont mieux appropriées pour la création d'objets
     
     :param position: position de l'objet à ramener
     :type position: Point
@@ -48,7 +49,8 @@ class ElementARamener :
         
 class ElementInfranchissable :
     """
-    Cette classe contient tous les objets infranchissables (i.e. totem et règlettes en bois)
+    Cette classe permet de créer tous les objets infranchissables (i.e. totem et règlettes en bois)
+    :note: Les classes RegletteEnBois et Totem sont mieux appropriées pour la création d'objets
     
     :param position: position de l'objet à ramener
     :type position: Point
@@ -66,7 +68,7 @@ class ElementInfranchissable :
         
 class Disque(ElementARamener):
     """
-    Classe de créer l'élément de jeu disque
+    Classe permettant de créer l'élément de jeu disque
     :param position: Position du disque
     :type position: Point
     
@@ -84,7 +86,7 @@ class Disque(ElementARamener):
 
 class Lingot(ElementARamener):
     """
-    Classe gérant l'élement de jeu Lingot
+    Classe permettant de créer l'élement de jeu Lingot
     
     :param position: Position du disque
     :type position: Point
@@ -107,7 +109,7 @@ class Lingot(ElementARamener):
         
 class Totem(ElementInfranchissable):
     """
-    Classe gérant l'élement de jeu Totem
+    Classe permettant de créer l'élement de jeu Totem
     :param position: Position du disque
     :type position: Point
     
@@ -139,7 +141,7 @@ class Totem(ElementInfranchissable):
 
 class RegletteEnBois(ElementInfranchissable) :
     """
-    Classe pour les règlettes en bois
+    Classe permettant de créer l'élément de jeu pour les règlettes en bois
     
     :param position: Position de la règlette
     :type position: Point
@@ -161,7 +163,7 @@ class RegletteEnBois(ElementInfranchissable) :
         
 class Poussoir:
     """
-    Classe de créer l'élément de jeu poussoir
+    Classe permettant de créer l'élément de jeu poussoir
     
     :param position: Position du poussoir
     :type position: Point
@@ -181,7 +183,7 @@ class Poussoir:
 
 class Carte_tresor:
     """
-    Classe de créer l'élément de jeu carte au trésor
+    Classe permettant de créer l'élément de jeu carte au trésor
     
     :param position: Position de la carte au trésor
     :type position: Point
@@ -200,7 +202,7 @@ class Carte_tresor:
 
 class Zone:
     """
-    Classe de créer l'élément de jeu zone
+    Classe permettant de créer l'élément de jeu Zone
     
     :param nomZone: Nom de la zone (La casse n'a pas d'importance)
     :type nomZone: string 'CALE'|'CALEPROTEGEE'|'BUREAUCAPITAINE'|'AIREDEJEU'
@@ -214,8 +216,8 @@ class Zone:
     :param enemy: [OPTIONEL : mis à 0 en cas de non renseignement] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
     :type enemy: boolean
     
-    :param self.protectionCale: Est à 1 si le cadre protégeant le dessous de la cale est fermé, à 0 sinon.
-    :type self.protectionCale: boolean
+    :param protectionCale: Est à 1 si le cadre protégeant le dessous de la cale est fermé, à 0 sinon.
+    :type protectionCale: boolean
     """
     def __init__(self, nomZone, angleSG, angleID, enemy=0):
         nomZone = nomZone.upper()
