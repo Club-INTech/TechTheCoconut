@@ -66,9 +66,35 @@ class ElementInfranchissable :
         self.orientation = orientation
         
         
+class ElementQueteAnnexe :
+    """
+    Cette classe permet de créer tous les objets de quête annexe (i.e. carte au trésor et bouton poussoir)
+    
+    :param position: position de l'objet de quête annexe
+    :type position: Point   (voir lib/math/point.py)
+    
+    :param orientation: orientation de l'objet quête annexe
+    :type orientation: float
+    
+    :param etat: Etat de l'objet quête annexe (à False si la quête n'est pas remplie, à True sinon)
+    :type etat: boolean
+    
+    :param enemy: Appartenance de l'objet (à True si il est à nous, à False sinon)
+    :type enemy: boolean
+    
+    """
+    
+    def __init__(self, position, orientation, etat) :
+        self.position = position
+        self.orientation = orientation
+        self.etat = etat
+        self.enemy = enemy
+        
+        
 class Disque(ElementARamener):
     """
     Classe permettant de créer l'élément de jeu disque
+    
     :param position: Position du disque
     :type position: Point
     
@@ -78,11 +104,27 @@ class Disque(ElementARamener):
     :param rayon: Rayon du disque, en mm
     :type rayon: float
     
+    
     """
     def __init__(self, position, orientation):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
         self.rayon = 90 #:TODO: changer la valeur numérique
+        
+    def actualiser(self, position, orientation = 0) :
+        """
+        Fonction permettant d'actualiser les attributs de l'élement Disque
+        
+        :param position: Nouvelle position du disque
+        :type position: Point
+        
+        :param orientation: [OPTIONEL] Nouvelle orientation du disque
+        :type orientation: float
+        
+        :TODO: actualiser l'élement self.etat (de la classe ElementARamener)
+        """
+        self.position = position  
+        self.orientation = orientation
 
 class Lingot(ElementARamener):
     """
@@ -106,6 +148,22 @@ class Lingot(ElementARamener):
         ElementARamener.__init__(self, position, orientation)
         self.largeur = 90       #:TODO: changer la valeur numérique
         self.longueur = 160     #:TODO: changer la valeur numérique
+    
+    def actualiser(self, position, orientation = 0) :
+        """
+        Fonction permettant d'actualiser les attributs de l'élement Lingot
+        
+        :param position: Nouvelle position du lingot
+        :type position: Point
+        
+        :param orientation: [OPTIONEL] Nouvelle orientation du lingot
+        :type orientation: float
+        
+        :TODO: Actualiser l'élement self.etat (de la classe ElementARamener)
+        
+        """
+        self.position = position
+        self.orientation = orientation
         
 class Totem(ElementInfranchissable):
     """
@@ -125,7 +183,7 @@ class Totem(ElementInfranchissable):
     :param hauteur: Hauteur du Totem en mm
     :type hauteur: int
     
-    :param enemy: [OPTIONEL : mis à 0 en cas de non renseignement] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
+    :param enemy: [OPTIONEL] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
     :type enemy: boolean
     """
     
@@ -138,6 +196,7 @@ class Totem(ElementInfranchissable):
         self.largeur = self.longueur #cette variable est inutile mais au moins on peut l'utiliser
         
         self.hauteur = 5 #:TODO: changer la valeur numérique
+        
 
 class RegletteEnBois(ElementInfranchissable) :
     """
@@ -161,7 +220,7 @@ class RegletteEnBois(ElementInfranchissable) :
         self.largeur = 20               #:TODO: changer la valeur numérique
         self.longueur = 200             #:TODO: changer la valeur numérique
         
-class Poussoir:
+class Poussoir(ElementQueteAnnexe):
     """
     Classe permettant de créer l'élément de jeu poussoir
     
@@ -176,12 +235,25 @@ class Poussoir:
     
     """
     def __init__(self, position):
+        """
+        :TODO: Gerer l'assignation de la variable 'enemy' en fonction de la position du poussoir et de notre couleur
+        """
+        
         #log.logger.info("Création d'un objet Poussoir en cours...\n")
-        self.position = position
-        self.etat     = False
-        self.orientation = 3.1415/2    #Pi/2
+        enemy = True  ##
+        ElementQueteAnnexe.__init__(self, position, 3.1415/2, False, enemy)
+        
+    def setEtatOK(self, etat = True) :
+        """
+        Fonction permettant d'actualiser l'état du poussoir
+        
+        :param etat: [OPTIONEL] Mettre False si le bouton se désactive (cas rare)
+        :type etat: boolean
+        
+        """
+        self.etat = etat
 
-class Carte_tresor:
+class Carte_tresor(ElementQueteAnnexe):
     """
     Classe permettant de créer l'élément de jeu carte au trésor
     
@@ -195,10 +267,12 @@ class Carte_tresor:
     :type etat: boolean
     """
     def __init__(self, position):
+        """
+        :TODO: Gerer l'assignation de la variable 'enemy' en fonction de la position du poussoir et de notre couleur
+        """
         #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
-        self.position = position
-        self.etat = False
-        self.orientation = -3.1415/2
+        enemy = True
+        ElementQueteAnnexe.__init__(self, position, -3.1415/2, False, enemy)
 
 class Zone:
     """
@@ -213,7 +287,7 @@ class Zone:
     :param angleID: Position de l'angle inférieur droit de la zone
     :type angleID: Point
     
-    :param enemy: [OPTIONEL : mis à 0 en cas de non renseignement] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
+    :param enemy: [OPTIONEL] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
     :type enemy: boolean
     
     :param protectionCale: Est à 1 si le cadre protégeant le dessous de la cale est fermé, à 0 sinon.
@@ -238,6 +312,4 @@ class Zone:
             self.protectionCale = True
             
 
-        
-    
     
