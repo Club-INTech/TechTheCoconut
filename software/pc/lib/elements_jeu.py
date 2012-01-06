@@ -1,8 +1,27 @@
 # -*- coding: utf-8 -*-
 
+
+
+# Classe Point
+#import math.point
+
+# Ajout de ../ au path python
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Log
 import log
-log = log.Log()
+#log = log.Log()
+
+"""
+Ce fichier crée les classes des différents objets présents sur le terrain, obstacles et zone.
+
+:TODO: Utiliser les constantes définies dans ../profils/prod/constante.py
+
+
+
+
+"""
 
 
 class ElementARamener :
@@ -16,12 +35,12 @@ class ElementARamener :
     :type orientation: float
     
     :param etat: Type actuel de l'objet : A Ramener, Protégée ou Chez l'adversaire
-    :type etat: string (prends les valeurs de "SURLETERRAIN", "PROTEGEE" ou "CHEZLADVERSAIRE"
+    :type etat: string 'SURLETERRAIN' | 'PROTEGEE' | 'CHEZLADVERSAIRE'
     :TODO: Est-ce une bonne manière de faire ?
     """
     
     def __init__(self, position, orientation) :
-        log.logger.info("Création d'un objet ElementARamener en cours...\n")
+        #log.logger.info("Création d'un objet ElementARamener en cours...\n")
         self.position = position
         self.orientation = orientation
         self.etat = "SURLETERRAIN"        # Cette variable peut être égale à SURLETERRAIN, PROTEGEE, CHEZLADVERSAIRE
@@ -40,7 +59,7 @@ class ElementInfranchissable :
     """
     
     def __init__(self, position, orientation) :
-        log.logger.info("Création d'un objet ElementInfranchissable en cours...\n")
+        #log.logger.info("Création d'un objet ElementInfranchissable en cours...\n")
         self.position = position
         self.orientation = orientation
         
@@ -58,9 +77,9 @@ class Disque(ElementARamener):
     :type rayon: float
     
     """
-    def __init__(self, position):
-        log.logger.info("Création d'un objet disque en cours...\n")
-        ElementARamener.__init__(position, orientation)
+    def __init__(self, position, orientation):
+        #log.logger.info("Création d'un objet disque en cours...\n")
+        ElementARamener.__init__(self, position, orientation)
         self.rayon = 90 #:TODO: changer la valeur numérique
 
 class Lingot(ElementARamener):
@@ -81,12 +100,12 @@ class Lingot(ElementARamener):
     
     """
     def __init__(self, position, orientation):
-        log.logger.info("Création d'un objet Lingot en cours...\n")
-        ElementARamener.__init__(position, orientation)
+        #log.logger.info("Création d'un objet Lingot en cours...\n")
+        ElementARamener.__init__(self, position, orientation)
         self.largeur = 90       #:TODO: changer la valeur numérique
         self.longueur = 160     #:TODO: changer la valeur numérique
         
-class Totem:
+class Totem(ElementInfranchissable):
     """
     Classe gérant l'élement de jeu Totem
     :param position: Position du disque
@@ -109,8 +128,8 @@ class Totem:
     """
     
     def __init__(self, position, enemy = False):
-        log.logger.info("Création d'un objet Totem en cours...\n")
-        self.position = position
+        #log.logger.info("Création d'un objet Totem en cours...\n")
+        ElementInfranchissable.__init__(self, position, 0)
         self.enemy = enemy    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
         
         self.longueur = 5 #:TODO: changer la valeur numérique
@@ -118,7 +137,7 @@ class Totem:
         
         self.hauteur = 5 #:TODO: changer la valeur numérique
 
-class RegletteEnBois :
+class RegletteEnBois(ElementInfranchissable) :
     """
     Classe pour les règlettes en bois
     
@@ -135,8 +154,8 @@ class RegletteEnBois :
     :type longueur: float
     """
     def __init__(self, position, orientation) :
-        log.logger.info("Création d'un objet RegletteEnBois en cours...\n")
-        ElementInfranchissable.__init__(position, orientation)
+        #log.logger.info("Création d'un objet RegletteEnBois en cours...\n")
+        ElementInfranchissable.__init__(self, position, orientation)
         self.largeur = 20               #:TODO: changer la valeur numérique
         self.longueur = 200             #:TODO: changer la valeur numérique
         
@@ -150,27 +169,41 @@ class Poussoir:
     :param orientation: Orientation du poussoir (toujours égale à Pi/2)
     :type orientation: float
     
+    :param etat: Etat du poussoir (True si enfoncé, False sinon)
+    :type etat: boolean
+    
     """
     def __init__(self, position):
-        log.logger.info("Création d'un objet Poussoir en cours...\n")
+        #log.logger.info("Création d'un objet Poussoir en cours...\n")
         self.position = position
+        self.etat     = False
         self.orientation = 3.1415/2    #Pi/2
 
 class Carte_tresor:
     """
     Classe de créer l'élément de jeu carte au trésor
+    
+    :param position: Position de la carte au trésor
+    :type position: Point
+    
+    :param orientation: Orientation de la carte au trésor (toujours égale à -Pi/2)
+    :type orientation: float
+    
+    :param etat: Etat de la carte au trésor (True si dévoilée, False sinon)
+    :type etat: boolean
     """
-    def __init__(self):
-        log.logger.info("Création d'un objet Carte_tresor en cours...\n")
+    def __init__(self, position):
+        #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
         self.position = position
+        self.etat = False
         self.orientation = -3.1415/2
 
 class Zone:
     """
     Classe de créer l'élément de jeu zone
     
-    :param nomZone: Nom de la zone ( "CALE", "CALEPROTEGEE", "BUREAUCAPITAINE", "AIREDEJEU" )
-    :type nomZone: string
+    :param nomZone: Nom de la zone (La casse n'a pas d'importance)
+    :type nomZone: string 'CALE'|'CALEPROTEGEE'|'BUREAUCAPITAINE'|'AIREDEJEU'
     
     :param angleSG: Position de l'angle supérieur gauche de la zone
     :type angleSG: Point
@@ -185,16 +218,23 @@ class Zone:
     :type self.protectionCale: boolean
     """
     def __init__(self, nomZone, angleSG, angleID, enemy=0):
-        log.logger.info("Création d'un objet Zone en cours...\n")
+        nomZone = nomZone.upper()
+        #log.logger.info("Création d'un objet Zone en cours...\n")
+        if nomZone not in ["CALE", "CALEPROTEGEE", "BUREAUCAPITAINE", "AIREDEJEU"] :
+            #log.logger.warning("Attention : nom de la Zone non valide\n")
+            print("Attention")
+            pass
+        
         self.nomZone = nomZone
         self.angleSG = angleSG
         self.angleID = angleID
         self.enemy = enemy
         
         if nomZone == "CALEPROTEGEE" :
+            #log.logger.info("Création d'un objet CALEPROTEGEE en cours\n")
             self.nomZone = nomZone
             self.protectionCale = True
-
+            
 
         
     
