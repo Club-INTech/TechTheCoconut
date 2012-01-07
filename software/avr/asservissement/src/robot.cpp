@@ -3,8 +3,8 @@
 #include "twi_master.h"
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : translation(3, 200, 0),
-				rotation(5, 300, 0),
+Robot::Robot() : translation(0.2,0.2,0.2),
+				rotation(0.2,0.2,0.2),
 				moteurGauche(TimerId::T0,Prescaler::NO_PRESCAL),
 				moteurDroit(TimerId::T2,Prescaler::NO_PRESCAL),
 				compteur(TimerId::T1,Prescaler::P8),
@@ -35,8 +35,9 @@ void Robot::asservir()
 	get_all(infos);
 	int16_t pwmTranslation = translation.pwm(infos[0]);
 	int16_t pwmRotation = rotation.pwm(infos[1]);
-	moteurDroit.envoyerPwm(pwmTranslation - pwmRotation);
-	moteurGauche.envoyerPwm(pwmTranslation + pwmRotation);
+printlnLong(pwmTranslation);
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 }
 
 void Robot::couleur(unsigned char couleur)
