@@ -144,7 +144,7 @@ class Asservissement {
 		uint16_t enm1_;
 		uint16_t enm2_;
 		
-		uint16_t pwmCourant_;
+		int16_t pwmCourant_;
 		uint16_t pwmMax_;
 
 		int32_t consigne_;
