@@ -5,6 +5,8 @@
 """
 Ce module set à placer tous les élements de jeu
 
+:TODO: Finir le module
+:TODO: Faire la doc
 
 """
 # ../../../
