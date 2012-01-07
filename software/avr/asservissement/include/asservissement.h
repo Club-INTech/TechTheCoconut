@@ -136,13 +136,13 @@ class Asservissement {
 		/**
 		* Constantes de l'asservissement et du moteur PID (kp;ki;kd)
 		*/
-		uint16_t kp_;
-		uint16_t kd_;
-		uint16_t ki_;
+		float kp_;
+		float kd_;
+		float ki_;
 		
-		uint16_t en_;
-		uint16_t enm1_;
-		uint16_t enm2_;
+		float en_;
+		float enm1_;
+		float enm2_;
 		
 		int16_t pwmCourant_;
 		uint16_t pwmMax_;
