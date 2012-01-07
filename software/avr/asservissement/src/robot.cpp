@@ -83,12 +83,10 @@ return typeAsservissement_;
 
 bool Robot::translater(uint16_t distance)
 {
-	42;
 	return true;
 }
 
 bool Robot::tourner(uint16_t angle)
 {
-	42;
 	return true;
 }

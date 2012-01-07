@@ -10,15 +10,17 @@
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 
 
-Asservissement::Asservissement(uint16_t kp, uint16_t kd, uint16_t ki) : kp_(kp), kd_(kd), ki_(ki), consigne_(0)
+Asservissement::Asservissement(uint16_t kp, uint16_t kd, uint16_t ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0),consigne_(0)
 {
 }
 
 int16_t Asservissement::pwm(int32_t positionReelle)
-{
-	int32_t erreur = positionReelle - consigne_;
-	// Pour l'instant, que kp ; on incrémentera après.
-	return kp_ * erreur/5;
+{	
+	enm2_ = enm1_;
+	enm1_ = en_;
+	en_=positionReelle - consigne_;
+	pwmCourant_+=kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_);
+	return (pwmCourant_ > pwmMax_)? pwmMax_ : pwmCourant_;
 }
 
 /*
@@ -99,5 +101,4 @@ void Asservissement::reset()
 
 void Asservissement::resetConsignes()
 {
-	42;
 }
