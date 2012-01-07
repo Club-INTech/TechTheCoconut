@@ -20,13 +20,13 @@ int16_t Asservissement::pwm(int32_t positionReelle)
 	enm1_ = en_;
 	en_=consigne_ - positionReelle;
 	pwmCourant_+=kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_);
-	if(pwmCourant_ > pwmMax_){
-		pwmCourant_ = pwmMax_;
+	if(pwmCourant_ > (int16_t)pwmMax_){
+		return pwmMax_;
 	}
-	else if(pwmCourant_ < -pwmMax_){
-		pwmCourant_ = -pwmMax_;
+	else if(pwmCourant_ < (-1)*(int16_t)pwmMax_){
+		return (-1)*pwmMax_;
 	}
-	return pwmCourant_;
+		return pwmCourant_;
 }
 
 /*

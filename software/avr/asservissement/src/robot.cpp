@@ -3,8 +3,8 @@
 #include "twi_master.h"
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : translation(3, 2, 0),
-				rotation(0,0, 0),
+Robot::Robot() : translation(1,1, 1),
+				rotation(1,1, 1),
 				moteurGauche(TimerId::T0,Prescaler::NO_PRESCAL),
 				moteurDroit(TimerId::T2,Prescaler::NO_PRESCAL),
 				compteur(TimerId::T1,Prescaler::P8),
