@@ -18,7 +18,7 @@ int16_t Asservissement::pwm(int32_t positionReelle)
 {	
 	enm2_ = enm1_;
 	enm1_ = en_;
-	en_=positionReelle - consigne_;
+	en_=consigne_ - positionReelle;
 	pwmCourant_+=kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_);
 	return kp_*en_;
 }
