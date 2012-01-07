@@ -3,10 +3,11 @@
 
 
 # Classe Point
-#import math.point
+import outils_math.point
 
 # Ajout de ../ au path python
 import sys, os
+import math
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Log
@@ -16,11 +17,7 @@ import log
 """
 Ce fichier crée les classes des différents objets présents sur le terrain, obstacles et zone.
 
-:TODO: Utiliser les constantes définies dans ../profils/prod/constante.py
-
-
-
-
+:TODO: Utiliser les constantes de profil
 """
 
 
@@ -35,16 +32,15 @@ class ElementARamener :
     :param orientation: orientation de l'objet à ramener
     :type orientation: float
     
-    :param etat: Type actuel de l'objet : A Ramener, Protégée ou Chez l'adversaire
-    :type etat: string 'SURLETERRAIN' | 'PROTEGEE' | 'CHEZLADVERSAIRE'
-    :TODO: Est-ce une bonne manière de faire ?
+    :param etat: Type actuel de l'objet : A Ramener, En déplacement, Protégée ou Chez l'adversaire
+    :type etat: string 'SURLETERRAIN' | 'ENDEPLACEMENT' | 'PROTEGEE' | 'CHEZLADVERSAIRE'
     """
     
-    def __init__(self, position, orientation) :
+    def __init__(self, position, orientation, etat = "SURLETERRAIN") :
         #log.logger.info("Création d'un objet ElementARamener en cours...\n")
         self.position = position
         self.orientation = orientation
-        self.etat = "SURLETERRAIN"        # Cette variable peut être égale à SURLETERRAIN, PROTEGEE, CHEZLADVERSAIRE
+        self.etat = etat
         
         
 class ElementInfranchissable :
@@ -71,7 +67,7 @@ class ElementQueteAnnexe :
     Cette classe permet de créer tous les objets de quête annexe (i.e. carte au trésor et bouton poussoir)
     
     :param position: position de l'objet de quête annexe
-    :type position: Point   (voir lib/math/point.py)
+    :type position: Point   (voir lib/outils_math/point.py)
     
     :param orientation: orientation de l'objet quête annexe
     :type orientation: float
@@ -79,16 +75,16 @@ class ElementQueteAnnexe :
     :param etat: Etat de l'objet quête annexe (à False si la quête n'est pas remplie, à True sinon)
     :type etat: boolean
     
-    :param enemy: Appartenance de l'objet (à True si il est à nous, à False sinon)
-    :type enemy: boolean
+    :param ennemi: Appartenance de l'objet (à True si il est à nous, à False sinon)
+    :type ennemi: boolean
     
     """
     
-    def __init__(self, position, orientation, etat) :
+    def __init__(self, position, orientation, ennemi, etat = False) :
         self.position = position
         self.orientation = orientation
         self.etat = etat
-        self.enemy = enemy
+        self.ennemi = ennemi
         
         
 class Disque(ElementARamener):
@@ -183,14 +179,14 @@ class Totem(ElementInfranchissable):
     :param hauteur: Hauteur du Totem en mm
     :type hauteur: int
     
-    :param enemy: [OPTIONEL] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
-    :type enemy: boolean
+    :param ennemi: [OPTIONEL] Est à True si le totem appartient à l'ennemi, à False sinon
+    :type ennemi: boolean
     """
     
-    def __init__(self, position, enemy = False):
+    def __init__(self, position, ennemi):
         #log.logger.info("Création d'un objet Totem en cours...\n")
         ElementInfranchissable.__init__(self, position, 0)
-        self.enemy = enemy    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
+        self.ennemi = ennemi    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
         
         self.longueur = 5 #:TODO: changer la valeur numérique
         self.largeur = self.longueur #cette variable est inutile mais au moins on peut l'utiliser
@@ -230,18 +226,20 @@ class Poussoir(ElementQueteAnnexe):
     :param orientation: Orientation du poussoir (toujours égale à Pi/2)
     :type orientation: float
     
-    :param etat: Etat du poussoir (True si enfoncé, False sinon)
+    :param ennemi: Est à True si le poussoir appartient à l'ennemi, à False sinon
+    :type ennemi: boolean
+    
+    :param etat: [OPTIONEL] Etat du poussoir (True si enfoncé, False sinon)
     :type etat: boolean
     
     """
-    def __init__(self, position):
+    def __init__(self, position, ennemi, etat = False):
         """
         :TODO: Gerer l'assignation de la variable 'enemy' en fonction de la position du poussoir et de notre couleur
         """
         
         #log.logger.info("Création d'un objet Poussoir en cours...\n")
-        enemy = True  ##
-        ElementQueteAnnexe.__init__(self, position, 3.1415/2, False, enemy)
+        ElementQueteAnnexe.__init__(self, position, math.pi/2, ennemi, etat)
         
     def setEtatOK(self, etat = True) :
         """
@@ -263,16 +261,19 @@ class Carte_tresor(ElementQueteAnnexe):
     :param orientation: Orientation de la carte au trésor (toujours égale à -Pi/2)
     :type orientation: float
     
+    :param ennemi: Est à True si la carte au trésor appartient à l'ennemi, à False sinon
+    :type ennemi: boolean
+    
     :param etat: Etat de la carte au trésor (True si dévoilée, False sinon)
     :type etat: boolean
     """
-    def __init__(self, position):
+    def __init__(self, position, ennemi, etat = False):
         """
         :TODO: Gerer l'assignation de la variable 'enemy' en fonction de la position du poussoir et de notre couleur
+        Je ne pense pas que ça soit important (Anthony V.)
         """
         #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
-        enemy = True
-        ElementQueteAnnexe.__init__(self, position, -3.1415/2, False, enemy)
+        ElementQueteAnnexe.__init__(self, position, -math.pi/2, ennemi, False)
 
 class Zone:
     """
@@ -287,13 +288,13 @@ class Zone:
     :param angleID: Position de l'angle inférieur droit de la zone
     :type angleID: Point
     
-    :param enemy: [OPTIONEL] Est à 1 si le totem appartient à l'ennemi, à 0 sinon
-    :type enemy: boolean
+    :param ennemi: Est à True si le totem appartient à l'ennemi, à False sinon
+    :type ennemi: boolean
     
-    :param protectionCale: Est à 1 si le cadre protégeant le dessous de la cale est fermé, à 0 sinon.
+    :param protectionCale: Est à True si le cadre protégeant le dessous de la cale est fermé, à False sinon.
     :type protectionCale: boolean
     """
-    def __init__(self, nomZone, angleSG, angleID, enemy=0):
+    def __init__(self, nomZone, angleSG, angleID, ennemi):
         nomZone = nomZone.upper()
         #log.logger.info("Création d'un objet Zone en cours...\n")
         if nomZone not in ["CALE", "CALEPROTEGEE", "BUREAUCAPITAINE", "AIREDEJEU"] :
@@ -310,6 +311,3 @@ class Zone:
             #log.logger.info("Création d'un objet CALEPROTEGEE en cours\n")
             self.nomZone = nomZone
             self.protectionCale = True
-            
-
-    
