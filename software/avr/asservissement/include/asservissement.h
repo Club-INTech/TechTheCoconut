@@ -9,20 +9,11 @@
 
 #include <stdint.h>
 
-//Suppression des #define qui ne servent plus
 
 class Asservissement {
 	public:
 
-		Asservissement(uint16_t kp, uint16_t kd=0, uint16_t ki=0);
-
-		/**
-		* [Ronald:]
-		* Supprimé tout ce qui se rattache à kpVitesse. (L'année dernière il y a eu une tentative ratée d'asservissement en vitesse que nous ne réintérons pas cette année. Désolé de ne pas l'avoir précisé)
-		* Bougé les méthodes concernant la puissance max dans la classe Moteur
-		* Rajouté attribut vitesse dans les classes Rotation, Translation plutôt que Asservissement
-		* les variables ereurs,erreursBkp... ont plus de sens en local dans la méthode asservir()
-		**/
+		Asservissement(uint16_t kp, uint16_t kd, uint16_t ki);
 
 
 		/**
@@ -37,9 +28,6 @@ class Asservissement {
 		*
 		* \param int32_t positionRelle
 		* \return int32_t pwm puissance à appliquer
-		*
-		* Je n'ai pas compris la différence entre le premier paramètre et l'attribut maxPwm_
-		* J'ai aussi renommé la fonction
 		*/
 		int16_t	pwm(int32_t);
 
@@ -152,6 +140,11 @@ class Asservissement {
 		uint16_t kd_;
 		uint16_t ki_;
 		
+		uint16_t en_;
+		uint16_t enm1_;
+		uint16_t enm2_;
+		
+		uint16_t pwmCourant_;
 		uint16_t pwmMax_;
 
 		int32_t consigne_;
