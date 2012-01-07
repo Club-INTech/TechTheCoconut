@@ -10,7 +10,7 @@
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 
 
-Asservissement::Asservissement(uint16_t kp, uint16_t kd, uint16_t ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0),consigne_(0), pwmMax_(255)
+Asservissement::Asservissement(float kp, float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0),consigne_(0), pwmMax_(255)
 {
 }
 
@@ -19,7 +19,7 @@ int16_t Asservissement::pwm(int32_t positionReelle)
 	enm2_ = enm1_;
 	enm1_ = en_;
 	en_=consigne_ - positionReelle;
-	pwmCourant_+=static_cast<int16_t>(kp_*(float)(en_ - enm1_) + ki_*(float)en_ + kd_*(float)(en_ - 2*enm1_ + enm2_));
+	pwmCourant_+=static_cast<int16_t>(kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_));
 	if(pwmCourant_ > (int16_t)pwmMax_){
 		return pwmMax_;
 	}

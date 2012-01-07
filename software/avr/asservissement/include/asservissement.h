@@ -13,7 +13,7 @@
 class Asservissement {
 	public:
 
-		Asservissement(uint16_t kp, uint16_t kd, uint16_t ki);
+		Asservissement(float kp,float kd,float ki);
 
 
 		/**
