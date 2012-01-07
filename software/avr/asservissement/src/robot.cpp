@@ -35,8 +35,8 @@ void Robot::asservir()
 	get_all(infos);
 	int16_t pwmTranslation = translation.pwm(infos[0]);
 	int16_t pwmRotation = rotation.pwm(infos[1]);
-	moteurDroit.envoyerPwm(pwmTranslation - pwmRotation);
-	moteurGauche.envoyerPwm(pwmTranslation + pwmRotation);
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 }
 
 void Robot::couleur(unsigned char couleur)
