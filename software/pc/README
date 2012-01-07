@@ -8,6 +8,12 @@
 * tests/ : tests unitaires
 * lanceur.py : Lance les programmes dans bin/ avec les bons paramètres
 
+Dépendances :
+python-nose
+python-sphinx
+python-serial
+python-pygame
+
 Pour installer les dépendances nécessaires sur ubuntu :
 'make install-ubuntu'
 
@@ -16,3 +22,6 @@ Pour nettoyer les fichiers de cache python
 
 Pour générer une documentation
 'cd doc/ ; make html'
+
+Pour accéder à la documentation, ouvrez votre navigateur web et mettez en url :
+[A COMPLETER]/techthecoconut/software/pc/doc/build/html/index.html
