@@ -6,6 +6,7 @@ import os
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+
 class Conf:
 	"""
 	Classe permettant de gérer les profils de configuration
