@@ -198,23 +198,16 @@ class RegletteEnBois(ElementInfranchissable) :
     """
     Classe permettant de créer l'élément de jeu pour les règlettes en bois
     
-    :param position: Position de la règlette
-    :type position: Point
+    :param angleID: Angle inférieur droit de la règlette.
+    :type angleID: Point    (voir lib/outils_math/point.py)
     
-    :param orientation: Orientation de la règlette
-    :type orientation: float
-    
-    :param largeur: Largeur de la règlette, en mm
-    :type largeur: float
-    
-    :param longueur: Longueur de la règlette, en mm
-    :type longueur: float
+    :param angleSG: Angle supérieur gauche de la règlette
+    :type angleSG: Point    (voir lib/outils_math/point.py)
     """
-    def __init__(self, position, orientation) :
+    def __init__(self, angleSG, angleID) :
         #log.logger.info("Création d'un objet RegletteEnBois en cours...\n")
-        ElementInfranchissable.__init__(self, position, orientation)
-        self.largeur = 20               #:TODO: changer la valeur numérique
-        self.longueur = 200             #:TODO: changer la valeur numérique
+        self.angleID = angleID
+        self.angleSG = angleSG
         
 class Poussoir(ElementQueteAnnexe):
     """

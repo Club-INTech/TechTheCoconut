@@ -5,10 +5,16 @@
 """
 Ce module set à placer tous les élements de jeu
 
-:TODO: Finir le module
-:TODO: Faire la doc
+:param totems: Tableau de totems, recensant les 2 totems du jeu
+:type totem: list of Totem
+
+:param reglettes: Tableau de reglettes, recensant les 4 reglettes du jeu
+:type reglettes: list of RegletteEnBois
+
+:TODO: Disques, Lingots, Cartes aux trésor, Poussoir, zones.
 
 """
+
 # ../../../
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath("../"))))
@@ -16,7 +22,59 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath("../"))))
 import lib.elements_jeu as elements_jeu
 import lib.math.point as point
 
-point1 = point.Point(5,2)
+
+"""
+Totems
+
+"""
+pointTotem1 = point.Point(640+477,1000)
+pointTotem2 = point.Point(3000 - (640+477), 1000)
 
 totem1 = elements_jeu.Totem(point1)
+totem2 = elements_jeu.Totem(point2)
 
+
+totems = [totem1, totem2]
+
+"""
+Règlettes en bois
+
+"""
+
+pointReglette1SG = point.Point(0,500)
+pointReglette1ID = point.Point(400, 500+18)
+
+pointReglette2SG = point.Point(3000-400, 500)
+pointReglette2ID = point.Point(3000, 500+18)
+
+pointReglette3SG = point.Point(337,2000-740)
+pointReglette3ID = point.Point(337+18, 2000)
+
+pointReglette4SG = point.Point(3000 - 337, 2000 - 740)
+pointReglette4ID = point.Point(3000 - 337 - 18, 2000)
+
+reglette1 = elements_jeu.RegletteEnBois(pointReglette1SG, pointReglette1ID)
+reglette2 = elements_jeu.RegletteEnBois(pointReglette2SG, pointReglette2ID)
+reglette3 = elements_jeu.RegletteEnBois(pointReglette3SG, pointReglette3ID)
+reglette4 = elements_jeu.RegletteEnBois(pointReglette4SG, pointReglette4ID)
+
+reglettes = [reglette1, reglette2, reglette3, reglette4]
+
+"""
+Boutons poussoir
+:TODO: Gerer l'assignation de la variable enemy
+"""
+
+pointPoussoir1 = point.Point(640, 2000)
+pointPoussoir2 = point.Point(640 + 477, 2000)
+pointPoussoir3 = point.Point(3000 - 640 - 477, 2000)
+pointPoussoir4 = point.Point(3000 - 640, 2000)
+
+enemy = False     # :TODO:
+
+poussoir1 = elements_jeu.Poussoir(pointPoussoir1, enemy)
+poussoir2 = elements_jeu.Poussoir(pointPoussoir2, enemy)
+poussoir3 = elements_jeu.Poussoir(pointPoussoir3, enemy)
+poussoir4 = elements_jeu.Poussoir(pointPoussoir4, enemy)
+
+poussoirs = [poussoir1, poussoir2, poussoir3, poussoir4]
