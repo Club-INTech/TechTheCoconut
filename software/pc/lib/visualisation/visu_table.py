@@ -18,7 +18,7 @@ class Visu_table:
     tailleTablePx = [600,400]
     caption = "Visualisation Table - INTech 2012"
     srcImageTable = "table_3000_2000.png"
-    fps = 2
+    fps = 1
     
     def __init__(self):
 	
@@ -53,11 +53,14 @@ class Visu_table:
 	done=False
 	
 	while done==False:
-	    for event in pygame.event.get(): # User did something
-		if event.type == pygame.QUIT: # If user clicked close
-		    done=True # Flag that we are done so we exit this loop
+	    #On parcours la liste des évènements depuis le dernier appel à get()
+	    for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+		    done=True
 	    
-	    #Rafraîchie l'écran
+	    #Evite la surchage du processeur
+	    time.sleep(1/self.fps)
+	    
 	    self.majTable()
 
     def quit(self):
