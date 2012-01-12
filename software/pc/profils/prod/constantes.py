@@ -9,9 +9,9 @@ constantes = \
 	"Coconut":
 	{
 		#: Largeur en mm
-		"largeur": 150,
+		"largeur": 2000,
 		#: Longueur en mm
-		"longueur": 350
+		"longueur": 3000
 	},
 	"Anna": {},
     "Objets_Table": {
@@ -21,8 +21,9 @@ constantes = \
         "hauteur_totem":            150,       #:TODO: Changer la valeur numérique
         "longueur_lingot":          150,       #:TODO: Changer la valeur numérique
         "largeur_lingot":           150,       #:TODO: Changer la valeur numérique
-        "regletteEnBois_largeur":   200,  #:TODO: Changer la valeur numérique
-        "regletteEnBois_longueur":  200   #:TODO: Changer la valeur numérique    
+        "regletteEnBois_largeur":   200,       #:TODO: Changer la valeur numérique
+        "regletteEnBois_longueur":  200,       #:TODO: Changer la valeur numérique
+        "rayon_palmier":            200        #TODO
     },
 	"Logs":
 	{

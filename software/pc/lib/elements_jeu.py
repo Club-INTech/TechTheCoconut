@@ -107,6 +107,9 @@ class Disque(ElementARamener):
     :param couleur: Couleur du disque
     :type couleur: string  'NOIR' | 'BLANC'
     
+    :param hauteur: Hauteur du disque en mm (nul si au sol)
+    :type hauteur: int
+    
     
     """
     def __init__(self, position, orientation, couleur):
@@ -199,6 +202,12 @@ class Totem(ElementInfranchissable):
         self.longueur = constantes['Objets_table']['longueur_totem']
         self.largeur = constantes['Objets_table']['largeur_totem']
         self.hauteur = constantes['Objets_table']['hauteur_totem']
+        
+class Palmier(ElementInfranchissable) :
+    
+    def __init__(self, position) :
+        ElementInfranchissable.__init__(self, position, 0)
+        self.rayon = constantes['Objets_table']['rayon_palmier']
         
 
 class RegletteEnBois(ElementInfranchissable) :

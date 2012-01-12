@@ -11,7 +11,7 @@ Ce module set à placer tous les élements de jeu
 :param reglettes: Tableau de reglettes, recensant les 4 reglettes du jeu
 :type reglettes: list of RegletteEnBois
 
-:TODO: Disques, Lingots, Cartes aux trésor, Poussoir, zones.
+:TODO: Disques, Cartes aux trésor, Poussoir, zones.
 
 """
 
@@ -102,3 +102,36 @@ lingot2 = elements_jeu.Lingot(pointLingot2, oriLingot2)
 lingot3 = elements_jeu.Lingot(pointLingot3, oriLingot3)
 
 Lingots = [lingot1, lingot2, lingot3]
+
+
+"""
+Palmier
+
+"""
+
+pointPalmier = point.Point(1500,1000)
+palmier = elements_jeu.Palmier(pointPalmier)
+
+"""
+Disques
+
+"""
+
+hauteur = 0
+couleur = "BLANC"
+
+ptDisque1 = point.Point(500+500, 500)
+ptDisque2 = point.Point(3000 - 1000, 500)
+ptDisque3 = point.Point(450, 2000-300)
+ptDisque4 = point.Point(3000 - 450, 2000-300)
+
+ptDisque5 = point.Point(1100 + 170, 1000 - 170)
+ptDisque6 = point.Point(1100, 1000 - 230)
+ptDisque7 = point.Point(1100 - 170, 1000 - 170)
+ptDisque8 = point.Point(1100 - 230, 1000)
+ptDisque9 = point.Point(1100 - 170, 1000 + 170)
+ptDisque10 =point.Point(1100, 1000 + 230)
+
+for i in range(1, 10) :
+    exec("disque"+str(i)+" = elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur")
+
