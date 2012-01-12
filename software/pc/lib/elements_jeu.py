@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
-
 # Classe Point
 import outils_math.point
 
@@ -10,6 +8,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import math
+import __builtin__
 
 # Log
 import log
@@ -21,6 +20,10 @@ Ce fichier crée les classes des différents objets présents sur le terrain, ob
 :TODO: Utiliser les constantes de profil
 """
 
+# Ajout de constantes de develop si on ne passe pas par la console INTech
+if not hasattr(__builtin__, "constantes"):
+    import profils.develop.constantes
+    __builtin__.constantes = profils.develop.constantes.constantes
 
 class ElementARamener :
     """
@@ -109,7 +112,7 @@ class Disque(ElementARamener):
     def __init__(self, position, orientation, couleur):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
-        self.rayon = 90 #:TODO: changer la valeur numérique
+        self.rayon = constantes['Objets_table']['rayon_disque']
         self.couleur = couleur
         
     def actualiser(self, position, orientation = 0) :
@@ -147,8 +150,8 @@ class Lingot(ElementARamener):
     def __init__(self, position, orientation):
         #log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(self, position, orientation)
-        self.largeur = 90       #:TODO: changer la valeur numérique
-        self.longueur = 160     #:TODO: changer la valeur numérique
+        self.largeur = constantes['Objets_table']['largeur_lingot']
+        self.longueur = constantes['Objets_table']['longueur_disque']
     
     def actualiser(self, position, orientation = 0) :
         """
@@ -193,10 +196,9 @@ class Totem(ElementInfranchissable):
         ElementInfranchissable.__init__(self, position, 0)
         self.ennemi = ennemi    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
         
-        self.longueur = 5 #:TODO: changer la valeur numérique
-        self.largeur = self.longueur #cette variable est inutile mais au moins on peut l'utiliser
-        
-        self.hauteur = 5 #:TODO: changer la valeur numérique
+        self.longueur = constantes['Objets_table']['longueur_totem']
+        self.largeur = constantes['Objets_table']['largeur_totem']
+        self.hauteur = constantes['Objets_table']['hauteur_totem']
         
 
 class RegletteEnBois(ElementInfranchissable) :
@@ -233,7 +235,7 @@ class Poussoir(ElementQueteAnnexe):
     """
     def __init__(self, position, ennemi, etat = False):
         """
-        :TODO: Gerer l'assignation de la variable 'enemy' en fonction de la position du poussoir et de notre couleur
+        :TODO: Gerer l'assignation de la variable 'ennemi' en fonction de la position du poussoir et de notre couleur
         """
         
         #log.logger.info("Création d'un objet Poussoir en cours...\n")
@@ -267,14 +269,14 @@ class Carte_tresor(ElementQueteAnnexe):
     """
     def __init__(self, position, ennemi, etat = False):
         """
-        :TODO: Gerer l'assignation de la variable 'enemy' en fonction de la position du poussoir et de notre couleur
+        :TODO: Gerer l'assignation de la variable 'ennemi' en fonction de la position du poussoir et de notre couleur
         Je ne pense pas que ça soit important (Anthony V.)
         """
         #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
         ElementQueteAnnexe.__init__(self, position, -math.pi/2, ennemi, False)
         
         
-    def setEtatOK(self, etat = TRUE):
+    def setEtatOK(self, etat = True):
         """
         Fonction permettant d'actualiser l'état de la carte au trésor
         
@@ -312,12 +314,11 @@ class Zone:
         if nomZone not in ["CALE", "CALEPROTEGEE", "BUREAUCAPITAINE", "AIREDEJEU"] :
             #log.logger.warning("Attention : nom de la Zone non valide\n")
             print("Attention")
-            pass
         
         self.nomZone = nomZone
         self.angleSG = angleSG
         self.angleID = angleID
-        self.enemy = enemy
+        self.ennemi = ennemi
         
         if nomZone == "CALEPROTEGEE" :
             #log.logger.info("Création d'un objet CALEPROTEGEE en cours\n")
