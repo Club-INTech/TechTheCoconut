@@ -21,8 +21,11 @@ class Conf:
     def __init__(self, profil):
         self.importation = self.importer_profil(profil)
         if (self.importation):
-            exec("import profils."+profil+".constantes")
-            exec("self.constantes = profils.prod.constantes.constantes")
+            try:
+                exec("import profils."+profil+".constantes")
+                exec("self.constantes = profils."+profil+".constantes.constantes")
+            except:
+                self.importation = False
 
     def importer_profil(self, profil):
         """
