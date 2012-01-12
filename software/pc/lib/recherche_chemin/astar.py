@@ -5,7 +5,7 @@ import os
 import sys
 
 # Ajout de ../ au path python
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 class Astar(graph.Graph):
     """

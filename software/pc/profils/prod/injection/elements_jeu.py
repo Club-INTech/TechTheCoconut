@@ -17,7 +17,7 @@ Ce module set à placer tous les élements de jeu
 
 # ../../../
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath("../"))))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 
 import lib.elements_jeu as elements_jeu
 import lib.math.point as point
