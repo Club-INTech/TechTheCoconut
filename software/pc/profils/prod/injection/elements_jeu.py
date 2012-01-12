@@ -11,6 +11,11 @@ Ce module set à placer tous les élements de jeu
 :param reglettes: Tableau de reglettes, recensant les 4 reglettes du jeu
 :type reglettes: list of RegletteEnBois
 
+:param poussoirs: Tableau de poussoirs, recensant les 4 poussoirs du jeu
+:type poussoir: list of Poussoir
+
+:param Lingots
+
 :TODO: Disques, Cartes aux trésor, Poussoir, zones.
 
 """
@@ -21,6 +26,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 
 import lib.elements_jeu as elements_jeu
 import lib.math.point as point
+import lib.carte as carte
 
 
 """
@@ -30,9 +36,8 @@ Totems
 pointTotem1 = point.Point(640+477,1000)
 pointTotem2 = point.Point(3000 - (640+477), 1000)
 
-totem1 = elements_jeu.Totem(point1)
-totem2 = elements_jeu.Totem(point2)
-
+totem1 = carte.ajouter_totem(point1)
+totem2 = carte.ajouter_totem(point2)
 
 totems = [totem1, totem2]
 
@@ -53,10 +58,10 @@ pointReglette3ID = point.Point(337+18, 2000)
 pointReglette4SG = point.Point(3000 - 337, 2000 - 740)
 pointReglette4ID = point.Point(3000 - 337 - 18, 2000)
 
-reglette1 = elements_jeu.RegletteEnBois(pointReglette1SG, pointReglette1ID)
-reglette2 = elements_jeu.RegletteEnBois(pointReglette2SG, pointReglette2ID)
-reglette3 = elements_jeu.RegletteEnBois(pointReglette3SG, pointReglette3ID)
-reglette4 = elements_jeu.RegletteEnBois(pointReglette4SG, pointReglette4ID)
+reglette1 = carte.ajouter_regletteEnBois(pointReglette1SG, pointReglette1ID)
+reglette2 = carte.ajouter_regletteEnBois(pointReglette2SG, pointReglette2ID)
+reglette3 = carte.ajouter_regletteEnBois(pointReglette3SG, pointReglette3ID)
+reglette4 = carte.ajouter_regletteEnBois(pointReglette4SG, pointReglette4ID)
 
 reglettes = [reglette1, reglette2, reglette3, reglette4]
 
@@ -72,10 +77,10 @@ pointPoussoir4 = point.Point(3000 - 640, 2000)
 
 enemy = False     # :TODO:
 
-poussoir1 = elements_jeu.Poussoir(pointPoussoir1, enemy)
-poussoir2 = elements_jeu.Poussoir(pointPoussoir2, enemy)
-poussoir3 = elements_jeu.Poussoir(pointPoussoir3, enemy)
-poussoir4 = elements_jeu.Poussoir(pointPoussoir4, enemy)
+poussoir1 = carte.ajouter_poussoir(pointPoussoir1, enemy)
+poussoir2 = carte.ajouter_poussoir(pointPoussoir2, enemy)
+poussoir3 = carte.ajouter_poussoir(pointPoussoir3, enemy)
+poussoir4 = carte.ajouter_poussoir(pointPoussoir4, enemy)
 
 poussoirs = [poussoir1, poussoir2, poussoir3, poussoir4]
 
@@ -97,11 +102,11 @@ oriLingot3 = 3.1415/2    #TODO - un petit truc
 
 enemy = False  #TODO
 
-lingot1 = elements_jeu.Lingot(pointLingot1, oriLingot1)
-lingot2 = elements_jeu.Lingot(pointLingot2, oriLingot2)
-lingot3 = elements_jeu.Lingot(pointLingot3, oriLingot3)
+lingot1 = carte.ajouter_lingot(pointLingot1, oriLingot1)
+lingot2 = carte.ajouter_lingot(pointLingot2, oriLingot2)
+lingot3 = carte.ajouter_lingot(pointLingot3, oriLingot3)
 
-Lingots = [lingot1, lingot2, lingot3]
+lingots = [lingot1, lingot2, lingot3]
 
 
 """
@@ -110,7 +115,10 @@ Palmier
 """
 
 pointPalmier = point.Point(1500,1000)
-palmier = elements_jeu.Palmier(pointPalmier)
+
+palmier1 = carte.ajouter_palmier(pointPalmier)
+
+palmier = [palmier1]
 
 """
 Disques
@@ -132,6 +140,14 @@ ptDisque8 = point.Point(1100 - 230, 1000)
 ptDisque9 = point.Point(1100 - 170, 1000 + 170)
 ptDisque10 =point.Point(1100, 1000 + 230)
 
+# On crée les variables disque1, disque2, disque3....
 for i in range(1, 10) :
-    exec("disque"+str(i)+" = elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur")
+    exec("disque"+str(i)+" = carte.ajouter_disque(ptDisque"+str(i)+", 0, couleur, hauteur")
+    
+# On rempli le tableau disques[] :
+disques = []
+for i in range(1,10) :
+    exec("disques.append(disque"+str(i)+")")
+    
+# TODO pas fini.
 

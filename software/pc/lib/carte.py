@@ -22,7 +22,22 @@ class Carte:
     def enlever_lingot(self, pos, orientation):
         pass
     
+    def ajouter_totem(self, pos) :
+        pass
+    
+    def ajouter_regletteEnBois(self, pos, ori) :
+        pass
+    
+    def ajouter_palmier(self, pos) :
+        pass
+    
+    def ajouter_poussoir(self, pos) :
+        pass
+    
     def enfoncer_poussoir(self, pos):
+        pass
+    
+    def ajouter_carte_tresor(self, pos) :
         pass
     
     def arracher_carte_tresor(self, pos):
