@@ -100,12 +100,16 @@ class Disque(ElementARamener):
     :param rayon: Rayon du disque, en mm
     :type rayon: float
     
+    :param couleur: Couleur du disque
+    :type couleur: string  'NOIR' | 'BLANC'
+    
     
     """
-    def __init__(self, position, orientation):
+    def __init__(self, position, orientation, couleur):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
         self.rayon = 90 #:TODO: changer la valeur numérique
+        self.couleur = couleur
         
     def actualiser(self, position, orientation = 0) :
         """
@@ -126,10 +130,10 @@ class Lingot(ElementARamener):
     """
     Classe permettant de créer l'élement de jeu Lingot
     
-    :param position: Position du disque
+    :param position: Position du lingot
     :type position: Point
     
-    :param orientation: Orientation du disque
+    :param orientation: Orientation du lingot
     :type orientation: float
     
     :param largeur: Largeur du lingot en mm
@@ -238,7 +242,7 @@ class Poussoir(ElementQueteAnnexe):
         """
         Fonction permettant d'actualiser l'état du poussoir
         
-        :param etat: [OPTIONEL] Mettre False si le bouton se désactive (cas rare)
+        :param etat: [OPTIONEL] Mettre False si le bouton se désactive (cas rare et potentiellement indétectable)
         :type etat: boolean
         
         """
@@ -267,6 +271,18 @@ class Carte_tresor(ElementQueteAnnexe):
         """
         #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
         ElementQueteAnnexe.__init__(self, position, -math.pi/2, ennemi, False)
+        
+        
+    def setEtatOK(self, etat = TRUE):
+        """
+        Fonction permettant d'actualiser l'état de la carte au trésor
+        
+        :param etat: [OPTIONEL] Mettre False si la carte se recouvre (cas rare et potentiellement indétectable)
+        :type etat: boolean
+        
+        """
+        self.etat = etat
+        
 
 class Zone:
     """
@@ -286,6 +302,8 @@ class Zone:
     
     :param protectionCale: Est à True si le cadre protégeant le dessous de la cale est fermé, à False sinon.
     :type protectionCale: boolean
+    
+    :TODO: Prévoir une adaptation pour la zone trapézoïdale (bas de la cale)
     """
     def __init__(self, nomZone, angleSG, angleID, ennemi):
         nomZone = nomZone.upper()

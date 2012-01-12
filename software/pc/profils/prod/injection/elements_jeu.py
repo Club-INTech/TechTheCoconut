@@ -78,3 +78,27 @@ poussoir3 = elements_jeu.Poussoir(pointPoussoir3, enemy)
 poussoir4 = elements_jeu.Poussoir(pointPoussoir4, enemy)
 
 poussoirs = [poussoir1, poussoir2, poussoir3, poussoir4]
+
+"""
+Lingots
+TODO gerer l'assignation de la variable enemy
+"""
+
+
+pointLingot1 = point.Point(1500, 3000-647) #en bas au milieu
+pointLingot2 = point.Point(3000 - 450, 518 + 280) #droite
+pointLingot3 = point.Point(450, 518 + 280) #gauche
+
+oriLingot1 = 0
+oriLingot2 = 3.1415/2    #TODO + un petit truc
+oriLingot3 = 3.1415/2    #TODO - un petit truc
+
+#TODO Les deux autres lingots dans les totems
+
+enemy = False  #TODO
+
+lingot1 = elements_jeu.Lingot(pointLingot1, oriLingot1)
+lingot2 = elements_jeu.Lingot(pointLingot2, oriLingot2)
+lingot3 = elements_jeu.Lingot(pointLingot3, oriLingot3)
+
+Lingots = [lingot1, lingot2, lingot3]
