@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import pygame, time, sys
+import pygame, time, sys, os
 
 #:TODO: Import et utilisation des logs
 
@@ -17,7 +17,7 @@ class Visu_table:
     #Nota: Utiliser des Setters/Getters pour les propriétés suivantes ?
     tailleTablePx = [600,400]
     caption = "Visualisation Table - INTech 2012"
-    srcImageTable = "table_3000_2000.png"
+    srcImageTable = os.path.join(os.path.dirname(__file__), "../../donnees/images/table_3000_2000.png")
     fps = 1
     
     def __init__(self):
