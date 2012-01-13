@@ -26,15 +26,21 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 
 import lib.elements_jeu as elements_jeu
 import lib.math.point as point
-import lib.carte as carte
+import lib.carte as mod_carte
+
+import math
+
+# Création de la carte
+carte = mod_carte.Carte()
+
 
 
 """
 Totems
 
 """
-pointTotem1 = point.Point(640+477,1000)
-pointTotem2 = point.Point(3000 - (640+477), 1000)
+pointTotem1 = point.Point(-400,1000)
+pointTotem2 = point.Point(400, 1000)
 
 totem1 = carte.ajouter_totem(point1)
 totem2 = carte.ajouter_totem(point2)
@@ -46,22 +52,26 @@ Règlettes en bois
 
 """
 
-pointReglette1SG = point.Point(0,500)
-pointReglette1ID = point.Point(400, 500+18)
+pointReglette1 = point.Point(-1500 + 200, 500 + 6)
+oriReglette1   = 0
+longueurReglette1 = 400
 
-pointReglette2SG = point.Point(3000-400, 500)
-pointReglette2ID = point.Point(3000, 500+18)
+pointReglette2 = point.Point(1500 - 200, 500 + 6)
+oriReglette2   = 0
+longueurReglette2 = 400
 
-pointReglette3SG = point.Point(337,2000-740)
-pointReglette3ID = point.Point(337+18, 2000)
+pointReglette3 = point.Point(-1500 + 345, 2000 - 375)
+oriReglette3   = math.pi - math.atan((3000-500.)/(400-325.))
+longueurReglette3 = 750
 
-pointReglette4SG = point.Point(3000 - 337, 2000 - 740)
-pointReglette4ID = point.Point(3000 - 337 - 18, 2000)
+pointReglette4 = point.Point(1500 - 345, 2000 - 375)
+oriReglette4   = math.atan((3000-500.)/(400-325.))
+longueurReglette4 = 750
 
-reglette1 = carte.ajouter_regletteEnBois(pointReglette1SG, pointReglette1ID)
-reglette2 = carte.ajouter_regletteEnBois(pointReglette2SG, pointReglette2ID)
-reglette3 = carte.ajouter_regletteEnBois(pointReglette3SG, pointReglette3ID)
-reglette4 = carte.ajouter_regletteEnBois(pointReglette4SG, pointReglette4ID)
+reglette1 = carte.ajouter_regletteEnBois(pointReglette1, oriReglette1, longueurReglette1)
+reglette2 = carte.ajouter_regletteEnBois(pointReglette2, oriReglette2, longueurReglette2)
+reglette3 = carte.ajouter_regletteEnBois(pointReglette3, oriReglette3, longueurReglette3)
+reglette4 = carte.ajouter_regletteEnBois(pointReglette4, oriReglette4, longueurReglette4)
 
 reglettes = [reglette1, reglette2, reglette3, reglette4]
 
