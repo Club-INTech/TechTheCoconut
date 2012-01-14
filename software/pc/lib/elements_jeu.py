@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Classe Point
-import outils_math.point
+#import outils_math.point
 
 # Ajout de ../ au path python
 import sys, os
@@ -115,7 +115,7 @@ class Disque(ElementARamener):
     def __init__(self, position, orientation, couleur):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
-        self.rayon = constantes['Objets_table']['rayon_disque']
+        self.rayon = constantes['Objets_Table']['rayon_disque']
         self.couleur = couleur
         
     def actualiser(self, position, orientation = 0) :
@@ -153,8 +153,8 @@ class Lingot(ElementARamener):
     def __init__(self, position, orientation):
         #log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(self, position, orientation)
-        self.largeur = constantes['Objets_table']['largeur_lingot']
-        self.longueur = constantes['Objets_table']['longueur_disque']
+        self.largeur = constantes['Objets_Table']['largeur_lingot']
+        self.longueur = constantes['Objets_Table']['longueur_disque']
     
     def actualiser(self, position, orientation = 0) :
         """
@@ -199,15 +199,15 @@ class Totem(ElementInfranchissable):
         ElementInfranchissable.__init__(self, position, 0)
         self.ennemi = ennemi    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
         
-        self.longueur = constantes['Objets_table']['longueur_totem']
-        self.largeur = constantes['Objets_table']['largeur_totem']
-        self.hauteur = constantes['Objets_table']['hauteur_totem']
+        self.longueur = constantes['Objets_Table']['longueur_totem']
+        self.largeur = constantes['Objets_Table']['largeur_totem']
+        self.hauteur = constantes['Objets_Table']['hauteur_totem']
         
 class Palmier(ElementInfranchissable) :
     
     def __init__(self, position) :
         ElementInfranchissable.__init__(self, position, 0)
-        self.rayon = constantes['Objets_table']['rayon_palmier']
+        self.rayon = constantes['Objets_Table']['rayon_palmier']
         
 
 class RegletteEnBois(ElementInfranchissable) :
@@ -234,7 +234,7 @@ class RegletteEnBois(ElementInfranchissable) :
         self.position = position
         self.orientation = orientation
         self.longueur = longueur
-        self.largeur = constantes['Objets_table']['largeur_regletteEnBois']
+        self.largeur = constantes["Objets_Table"]['largeur_regletteEnBois']
     
     
         

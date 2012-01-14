@@ -15,15 +15,14 @@ constantes = \
 	},
 	"Anna": {},
     "Objets_Table": {
-        "rayon_disque":             150,       #:TODO: Changer la valeur numérique
-        "longueur_totem":           150,       #:TODO: Changer la valeur numérique
-        "largeur_totem":            150,       #:TODO: Changer la valeur numérique
-        "hauteur_totem":            150,       #:TODO: Changer la valeur numérique
-        "longueur_lingot":          150,       #:TODO: Changer la valeur numérique
-        "largeur_lingot":           150,       #:TODO: Changer la valeur numérique
-        "regletteEnBois_largeur":   200,       #:TODO: Changer la valeur numérique
-        "regletteEnBois_longueur":  200,       #:TODO: Changer la valeur numérique
-        "rayon_palmier":            200        #TODO
+        "rayon_disque":             60,
+        "longueur_totem":           250,
+        "largeur_totem":            250,
+        "hauteur_totem":            163,
+        "longueur_lingot":          150,
+        "largeur_lingot":           70,
+        "largeur_regletteEnBois":   18,
+        "rayon_palmier":            20
     },
 	"Logs":
 	{

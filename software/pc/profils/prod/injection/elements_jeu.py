@@ -41,9 +41,9 @@ Totems
 """
 pointTotem1 = point.Point(-400,1000)
 pointTotem2 = point.Point(400, 1000)
-
-totem1 = carte.ajouter_totem(elements_jeu.Totem(point1))
-totem2 = carte.ajouter_totem(elements_jeu.Totem(point2))
+enemy = True    #TODO
+totem1 = carte.ajouter_totem(elements_jeu.Totem(pointTotem1, enemy))
+totem2 = carte.ajouter_totem(elements_jeu.Totem(pointTotem2, enemy))
 
 """
 Règlettes en bois
@@ -77,10 +77,10 @@ Boutons poussoir
 :TODO: Gerer l'assignation de la variable enemy
 """
 
-pointPoussoir1 = point.Point(640, 2000)
-pointPoussoir2 = point.Point(640 + 477, 2000)
-pointPoussoir3 = point.Point(3000 - 640 - 477, 2000)
-pointPoussoir4 = point.Point(3000 - 640, 2000)
+pointPoussoir1 = point.Point(-150 + 640, 2000)
+pointPoussoir2 = point.Point(-1500 + 640 + 477, 2000)
+pointPoussoir3 = point.Point(1500 - 640 - 477, 2000)
+pointPoussoir4 = point.Point(1500 - 640, 2000)
 
 enemy = False     # :TODO:
 
@@ -96,13 +96,13 @@ TODO gerer l'assignation de la variable enemy
 """
 
 
-pointLingot1 = point.Point(1500, 3000-647) #en bas au milieu
-pointLingot2 = point.Point(3000 - 450, 518 + 280) #droite
-pointLingot3 = point.Point(450, 518 + 280) #gauche
+pointLingot1 = point.Point(0, 3000-647) #en bas au milieu
+pointLingot2 = point.Point(1500 - 450, 518 + 280) #droite
+pointLingot3 = point.Point(1500 + 450, 518 + 280) #gauche
 
 oriLingot1 = 0
-oriLingot2 = 3.1415/2    #TODO + un petit truc
-oriLingot3 = 3.1415/2    #TODO - un petit truc
+oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
+oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
 #TODO Les deux autres lingots dans les totems
 
@@ -131,17 +131,17 @@ Disques
 hauteur = 0
 couleur = "BLANC"
 
-ptDisque1 = point.Point(500+500, 500)
-ptDisque2 = point.Point(3000 - 1000, 500)
-ptDisque3 = point.Point(450, 2000-300)
-ptDisque4 = point.Point(3000 - 450, 2000-300)
+ptDisque1 = point.Point(-500, 500)
+ptDisque2 = point.Point(500, 500)
+ptDisque3 = point.Point(-1500 + 450, 2000-300)
+ptDisque4 = point.Point(1500 - 450, 2000-300)
 
-ptDisque5 = point.Point(1100 + 170, 1000 - 170)
-ptDisque6 = point.Point(1100, 1000 - 230)
-ptDisque7 = point.Point(1100 - 170, 1000 - 170)
-ptDisque8 = point.Point(1100 - 230, 1000)
-ptDisque9 = point.Point(1100 - 170, 1000 + 170)
-ptDisque10 =point.Point(1100, 1000 + 230)
+ptDisque5 = point.Point(-400 + 170, 1000 - 170)
+ptDisque6 = point.Point(-400, 1000 - 230)
+ptDisque7 = point.Point(-400 - 170, 1000 - 170)
+ptDisque8 = point.Point(-400 - 230, 1000)
+ptDisque9 = point.Point(-400 - 170, 1000 + 170)
+ptDisque10 =point.Point(-400, 1000 + 230)
 
 # On crée les variables disque1, disque2, disque3....
 for i in range(1, 10) :
