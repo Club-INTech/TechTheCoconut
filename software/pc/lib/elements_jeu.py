@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+"""
+Ce fichier crée les classes des différents objets présents sur le terrain, obstacles et zone.
+
+:TODO: Utiliser les constantes de profil
+"""
+
+
 # Classe Point
 #import outils_math.point
 
@@ -12,13 +19,8 @@ import __builtin__
 
 # Log
 import log
-#log = log.Log()
+log = log.Log()
 
-"""
-Ce fichier crée les classes des différents objets présents sur le terrain, obstacles et zone.
-
-:TODO: Utiliser les constantes de profil
-"""
 
 # Ajout de constantes de develop si on ne passe pas par la console INTech
 if not hasattr(__builtin__, "constantes"):
@@ -110,13 +112,18 @@ class Disque(ElementARamener):
     :param hauteur: Hauteur du disque en mm (nul si au sol)
     :type hauteur: int
     
+    :param enemy: Est à True si le disque est en terrain ennemi au début du jeu
+    :type enemy: bool
+    
     
     """
-    def __init__(self, position, orientation, couleur):
+    def __init__(self, position, orientation, couleur, hauteur, enemy):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
         self.rayon = constantes['Objets_Table']['rayon_disque']
         self.couleur = couleur
+        self.hauteur = hauteur
+        self.enemy = enemy
         
     def actualiser(self, position, orientation = 0) :
         """
@@ -149,10 +156,14 @@ class Lingot(ElementARamener):
     :param longueur: Longueur du lingot en mm
     :type longueur: int
     
+    :param enemy: Est à True si le lingot est en terrain ennemi au début du jeu
+    :type enemy: bool
+    
     """
-    def __init__(self, position, orientation):
+    def __init__(self, position, orientation, enemy):
         #log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(self, position, orientation)
+        self.enemy = enemy
         self.largeur = constantes['Objets_Table']['largeur_lingot']
         self.longueur = constantes['Objets_Table']['longueur_disque']
     
@@ -274,7 +285,7 @@ class Poussoir(ElementQueteAnnexe):
         """
         self.etat = etat
 
-class Carte_tresor(ElementQueteAnnexe):
+class CarteAuTresor(ElementQueteAnnexe):
     """
     Classe permettant de créer l'élément de jeu carte au trésor
     
@@ -320,6 +331,12 @@ class Zone:
     :param angleSG: Position de l'angle supérieur gauche de la zone
     :type angleSG: Point
     
+    :param angleSD: Position de l'angle sopérieur droit de la zone
+    :type angleID: Point
+    
+    :param angleIG: Position de l'angle inférieur gauche de la zone
+    :type angleSG: Point
+    
     :param angleID: Position de l'angle inférieur droit de la zone
     :type angleID: Point
     
@@ -331,7 +348,7 @@ class Zone:
     
     :TODO: Prévoir une adaptation pour la zone trapézoïdale (bas de la cale)
     """
-    def __init__(self, nomZone, angleSG, angleID, ennemi):
+    def __init__(self, nomZone, angleSG, angleSD, angleIG, angleID, ennemi):
         nomZone = nomZone.upper()
         #log.logger.info("Création d'un objet Zone en cours...\n")
         if nomZone not in ["CALE", "CALEPROTEGEE", "BUREAUCAPITAINE", "AIREDEJEU"] :
@@ -340,6 +357,8 @@ class Zone:
         
         self.nomZone = nomZone
         self.angleSG = angleSG
+        self.angleSD = angleSD
+        self.angleIG = angleIG
         self.angleID = angleID
         self.ennemi = ennemi
         
