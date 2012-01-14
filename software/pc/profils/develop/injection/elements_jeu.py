@@ -16,7 +16,7 @@ Ce module set à placer tous les élements de jeu
 
 :param Lingots
 
-:TODO: Disques, Cartes aux trésor, zones.
+:TODO: Disques, zones.
 
 """
 
@@ -41,9 +41,11 @@ Totems
 """
 pointTotem1 = point.Point(400,1000)
 pointTotem2 = point.Point(-400, 1000)
+
 enemy = True    #TODO
-totem1 = carte.ajouter_totem(elements_jeu.Totem(pointTotem1, enemy))
-totem2 = carte.ajouter_totem(elements_jeu.Totem(pointTotem2, enemy))
+
+carte.ajouter_totem(elements_jeu.Totem(pointTotem1, enemy))
+carte.ajouter_totem(elements_jeu.Totem(pointTotem2, enemy))
 
 """
 Règlettes en bois
@@ -66,10 +68,10 @@ pointReglette4 = point.Point(-1500 + 345, 2000 - 375)
 oriReglette4   = math.atan((3000-500.)/(400-325.))
 longueurReglette4 = 750
 
-reglette1 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette1, oriReglette1, longueurReglette1))
-reglette2 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette2, oriReglette2, longueurReglette2))
-reglette3 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette3, oriReglette3, longueurReglette3))
-reglette4 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette4, oriReglette4, longueurReglette4))
+carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette1, oriReglette1, longueurReglette1))
+carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette2, oriReglette2, longueurReglette2))
+carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette3, oriReglette3, longueurReglette3))
+carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette4, oriReglette4, longueurReglette4))
 
 
 """
@@ -84,10 +86,24 @@ pointPoussoir4 = point.Point(-1500 + 640, 2000)
 
 enemy = False     # :TODO:
 
-poussoir1 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir1, enemy))
-poussoir2 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir2, enemy))
-poussoir3 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir3, enemy))
-poussoir4 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir4, enemy))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir1, enemy))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir2, enemy))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir3, enemy))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir4, enemy))
+
+
+"""
+Cartes au trésor
+
+"""
+
+pointCarte1 = point.Point(100,0)
+pointCarte2 = point.Point(-100,0)
+
+enemy = False   #TODO
+
+carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte1))
+carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte2)
 
 
 """
@@ -104,13 +120,13 @@ oriLingot1 = 0
 oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
-#TODO Les deux autres lingots dans les totems
+                #TODO Les deux autres lingots dans les totems
 
 enemy = False  #TODO
 
-lingot1 = carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1))
-lingot2 = carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2))
-lingot3 = carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3))
 
 
 """
@@ -120,7 +136,7 @@ Palmier
 
 pointPalmier = point.Point(0,1000)
 
-palmier1 = carte.ajouter_palmier(elements_jeu.Palmier(pointPalmier))
+carte.ajouter_palmier(elements_jeu.Palmier(pointPalmier))
 
 
 """
@@ -150,10 +166,88 @@ ptDisque13 = point.Point(-400 - 170, 1000 - 170)
 ptDisque14 = point.Point(-400 - 230, 1000)
 ptDisque15 = point.Point(-400 - 170, 1000 + 170)
 ptDisque16 = point.Point(-400 + 170, 1000 + 230)
-# On crée les variables disque1, disque2, disque3....
-for i in range(1, 17) :
+
+ptDisque17 = point.Point(0, 240+120+30)
+ptDisque18 = point.Point(0, 240 - 30)
+
+# On rentre les variables disques dans la Carte.
+for i in range(1, 19) :
     exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
 
-    
-# TODO pas fini.
 
+
+couleur = "NOIR"
+
+ptDisque19 = point.Point(400, 1000 + 230)
+ptDisque20 = point.Point(-400, 1000 + 230)
+ptDisque21 = point.Point(90, 2000 - 300)
+ptDisque22 = point.Point(-90, 2000 - 300)
+
+# On rentre les disques noirs dans la Carte
+for i in range (19, 23):
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+
+
+    
+# TODO pas fini : Il reste les disques qui sont dans les totems
+
+
+
+"""
+Zones de jeu
+
+"""
+
+# Bureau du capitaine violet
+angleSD = point.Point(1000, 500)
+angleSG = point.Point(1500, 500)
+angleID = point.Point(1000, 0  )
+angleIG = point.Point(1500, 0  )
+
+enemy = True
+carte.ajouter_zone(elements_jeu.Zone("BUREAUCAPITAINE", angleSD, angleSG, angleID, angleIG, enemy))
+
+# Bureau du capitaine rouge
+angleSD = point.Point(-1500, 500)
+angleSG = point.Point(-1000, 500)
+angleID = point.Point(-1500, 0  )
+angleIG = point.Point(-1000, 0  )
+
+enemy = True
+carte.ajouter_zone(elements_jeu.Zone("BUREAUCAPITAINE", angleSD, angleSG, angleID, angleIG, enemy))
+
+# Zone du pont violet
+angleSD = point.Point(1500 - 350, 2000 - 630)
+angleSG = point.Point(1500, 2000 - 630)
+angleID = point.Point(1500 - 400, 518)
+angleIG = point.Point(1500, 518)
+
+enemy = True
+carte.ajouter_zone(elements_jeu.Zone("CALE", angleSD, angleSG, angleID, angleIG, enemy))
+
+# Zone du pont rouge
+angleSD = point.Point(-1500, 2000 - 630)
+angleSG = point.Point(-1500 + 350, 2000 - 630)
+angleID = point.Point(-1500, 518)
+angleIG = point.Point(-1500 + 400, 518)
+
+enemy = True
+carte.ajouter_zone(elements_jeu.Zone("CALE", angleSD, angleSG, angleID, angleIG, enemy))
+
+# Zone de la cale violette
+angleSD = point.Point(1500 - 325, 2000)
+angleSG = point.Point(1500, 2000)
+angleID = point.Point(1500 - 325, 2000 - 630)
+angleIG = point.Point(1500, 2000 - 630)
+
+enemy = True
+carte.ajouter_zone(elements_jeu.Zone("CALEPROTEGEE", angleSD, angleSG, angleID, angleIG, enemy))
+
+# Zone de la cale violette
+angleSD = point.Point(-1500, 2000)
+angleSG = point.Point(-1500 + 325, 2000)
+angleID = point.Point(-1500, 2000 - 630)
+angleIG = point.Point(-1500 + 325, 2000 - 630)
+
+enemy = True
+carte.ajouter_zone(elements_jeu.Zone("CALEPROTEGEE", angleSD, angleSG, angleID, angleIG, enemy))
