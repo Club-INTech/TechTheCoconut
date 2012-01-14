@@ -110,13 +110,18 @@ class Disque(ElementARamener):
     :param hauteur: Hauteur du disque en mm (nul si au sol)
     :type hauteur: int
     
+    :param enemy: Est à True si le disque est en terrain ennemi au début du jeu
+    :type enemy: bool
+    
     
     """
-    def __init__(self, position, orientation, couleur):
+    def __init__(self, position, orientation, couleur, hauteur, enemy):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
         self.rayon = constantes['Objets_Table']['rayon_disque']
         self.couleur = couleur
+        self.hauteur = hauteur
+        self.enemy = enemy
         
     def actualiser(self, position, orientation = 0) :
         """
@@ -149,10 +154,14 @@ class Lingot(ElementARamener):
     :param longueur: Longueur du lingot en mm
     :type longueur: int
     
+    :param enemy: Est à True si le lingot est en terrain ennemi au début du jeu
+    :type enemy: bool
+    
     """
-    def __init__(self, position, orientation):
+    def __init__(self, position, orientation, enemy):
         #log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(self, position, orientation)
+        self.enemy = enemy
         self.largeur = constantes['Objets_Table']['largeur_lingot']
         self.longueur = constantes['Objets_Table']['longueur_disque']
     

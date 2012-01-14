@@ -16,7 +16,7 @@ Ce module set à placer tous les élements de jeu
 
 :param Lingots
 
-:TODO: Disques, Cartes aux trésor, Poussoir, zones.
+:TODO: Disques, Cartes aux trésor, zones.
 
 """
 
@@ -39,8 +39,8 @@ carte = mod_carte.Carte()
 Totems
 
 """
-pointTotem1 = point.Point(-400,1000)
-pointTotem2 = point.Point(400, 1000)
+pointTotem1 = point.Point(400,1000)
+pointTotem2 = point.Point(-400, 1000)
 enemy = True    #TODO
 totem1 = carte.ajouter_totem(elements_jeu.Totem(pointTotem1, enemy))
 totem2 = carte.ajouter_totem(elements_jeu.Totem(pointTotem2, enemy))
@@ -50,19 +50,19 @@ Règlettes en bois
 
 """
 
-pointReglette1 = point.Point(-1500 + 200, 500 + 6)
+pointReglette1 = point.Point(1500 - 200, 500 + 6)
 oriReglette1   = 0
 longueurReglette1 = 400
 
-pointReglette2 = point.Point(1500 - 200, 500 + 6)
+pointReglette2 = point.Point(-1500 + 200, 500 + 6)
 oriReglette2   = 0
 longueurReglette2 = 400
 
-pointReglette3 = point.Point(-1500 + 345, 2000 - 375)
+pointReglette3 = point.Point(1500 - 345, 2000 - 375)
 oriReglette3   = math.pi - math.atan((3000-500.)/(400-325.))
 longueurReglette3 = 750
 
-pointReglette4 = point.Point(1500 - 345, 2000 - 375)
+pointReglette4 = point.Point(-1500 + 345, 2000 - 375)
 oriReglette4   = math.atan((3000-500.)/(400-325.))
 longueurReglette4 = 750
 
@@ -77,10 +77,10 @@ Boutons poussoir
 :TODO: Gerer l'assignation de la variable enemy
 """
 
-pointPoussoir1 = point.Point(-150 + 640, 2000)
-pointPoussoir2 = point.Point(-1500 + 640 + 477, 2000)
-pointPoussoir3 = point.Point(1500 - 640 - 477, 2000)
-pointPoussoir4 = point.Point(1500 - 640, 2000)
+pointPoussoir1 = point.Point(150 - 640, 2000)
+pointPoussoir2 = point.Point(1500 - 640 + 477, 2000)
+pointPoussoir3 = point.Point(-1500 + 640 - 477, 2000)
+pointPoussoir4 = point.Point(-1500 + 640, 2000)
 
 enemy = False     # :TODO:
 
@@ -97,8 +97,8 @@ TODO gerer l'assignation de la variable enemy
 
 
 pointLingot1 = point.Point(0, 3000-647) #en bas au milieu
-pointLingot2 = point.Point(1500 - 450, 518 + 280) #droite
-pointLingot3 = point.Point(1500 + 450, 518 + 280) #gauche
+pointLingot2 = point.Point(-1500 + 400, 518 + 280) #droite
+pointLingot3 = point.Point(+1500 - 400, 518 + 280) #gauche
 
 oriLingot1 = 0
 oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
@@ -118,7 +118,7 @@ Palmier
 
 """
 
-pointPalmier = point.Point(1500,1000)
+pointPalmier = point.Point(0,1000)
 
 palmier1 = carte.ajouter_palmier(elements_jeu.Palmier(pointPalmier))
 
@@ -130,22 +130,29 @@ Disques
 
 hauteur = 0
 couleur = "BLANC"
+enemy = False                # TODO
 
-ptDisque1 = point.Point(-500, 500)
-ptDisque2 = point.Point(500, 500)
-ptDisque3 = point.Point(-1500 + 450, 2000-300)
-ptDisque4 = point.Point(1500 - 450, 2000-300)
+ptDisque1 = point.Point(500, 500)
+ptDisque2 = point.Point(-500, 500)
+ptDisque3 = point.Point(1500 - 450, 2000-300)
+ptDisque4 = point.Point(-1500 + 450, 2000-300)
 
-ptDisque5 = point.Point(-400 + 170, 1000 - 170)
-ptDisque6 = point.Point(-400, 1000 - 230)
-ptDisque7 = point.Point(-400 - 170, 1000 - 170)
-ptDisque8 = point.Point(-400 - 230, 1000)
-ptDisque9 = point.Point(-400 - 170, 1000 + 170)
-ptDisque10 =point.Point(-400, 1000 + 230)
+ptDisque5 = point.Point(400 - 170, 1000 - 170)
+ptDisque6 = point.Point(400, 1000 - 230)
+ptDisque7 = point.Point(400 + 170, 1000 - 170)
+ptDisque8 = point.Point(400 + 230, 1000)
+ptDisque9 = point.Point(400 + 170, 1000 + 170)
+ptDisque10 = point.Point(400 - 170, 1000 + 230)
 
+ptDisque11 = point.Point(-400 + 170, 1000 - 170)
+ptDisque12 = point.Point(-400, 1000 - 230)
+ptDisque13 = point.Point(-400 - 170, 1000 - 170)
+ptDisque14 = point.Point(-400 - 230, 1000)
+ptDisque15 = point.Point(-400 - 170, 1000 + 170)
+ptDisque16 = point.Point(-400 + 170, 1000 + 230)
 # On crée les variables disque1, disque2, disque3....
-for i in range(1, 10) :
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur)")
+for i in range(1, 17) :
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
 
     
 # TODO pas fini.
