@@ -42,10 +42,8 @@ Totems
 pointTotem1 = point.Point(-400,1000)
 pointTotem2 = point.Point(400, 1000)
 
-totem1 = carte.ajouter_totem(point1)
-totem2 = carte.ajouter_totem(point2)
-
-totems = [totem1, totem2]
+totem1 = carte.ajouter_totem(elements_jeu.Totem(point1))
+totem2 = carte.ajouter_totem(elements_jeu.Totem(point2))
 
 """
 Règlettes en bois
@@ -68,12 +66,11 @@ pointReglette4 = point.Point(1500 - 345, 2000 - 375)
 oriReglette4   = math.atan((3000-500.)/(400-325.))
 longueurReglette4 = 750
 
-reglette1 = carte.ajouter_regletteEnBois(pointReglette1, oriReglette1, longueurReglette1)
-reglette2 = carte.ajouter_regletteEnBois(pointReglette2, oriReglette2, longueurReglette2)
-reglette3 = carte.ajouter_regletteEnBois(pointReglette3, oriReglette3, longueurReglette3)
-reglette4 = carte.ajouter_regletteEnBois(pointReglette4, oriReglette4, longueurReglette4)
+reglette1 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette1, oriReglette1, longueurReglette1))
+reglette2 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette2, oriReglette2, longueurReglette2))
+reglette3 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette3, oriReglette3, longueurReglette3))
+reglette4 = carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette4, oriReglette4, longueurReglette4))
 
-reglettes = [reglette1, reglette2, reglette3, reglette4]
 
 """
 Boutons poussoir
@@ -87,12 +84,11 @@ pointPoussoir4 = point.Point(3000 - 640, 2000)
 
 enemy = False     # :TODO:
 
-poussoir1 = carte.ajouter_poussoir(pointPoussoir1, enemy)
-poussoir2 = carte.ajouter_poussoir(pointPoussoir2, enemy)
-poussoir3 = carte.ajouter_poussoir(pointPoussoir3, enemy)
-poussoir4 = carte.ajouter_poussoir(pointPoussoir4, enemy)
+poussoir1 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir1, enemy))
+poussoir2 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir2, enemy))
+poussoir3 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir3, enemy))
+poussoir4 = carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir4, enemy))
 
-poussoirs = [poussoir1, poussoir2, poussoir3, poussoir4]
 
 """
 Lingots
@@ -112,11 +108,9 @@ oriLingot3 = 3.1415/2    #TODO - un petit truc
 
 enemy = False  #TODO
 
-lingot1 = carte.ajouter_lingot(pointLingot1, oriLingot1)
-lingot2 = carte.ajouter_lingot(pointLingot2, oriLingot2)
-lingot3 = carte.ajouter_lingot(pointLingot3, oriLingot3)
-
-lingots = [lingot1, lingot2, lingot3]
+lingot1 = carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1))
+lingot2 = carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2))
+lingot3 = carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3))
 
 
 """
@@ -126,9 +120,8 @@ Palmier
 
 pointPalmier = point.Point(1500,1000)
 
-palmier1 = carte.ajouter_palmier(pointPalmier)
+palmier1 = carte.ajouter_palmier(elements_jeu.Palmier(pointPalmier))
 
-palmier = [palmier1]
 
 """
 Disques
@@ -152,12 +145,8 @@ ptDisque10 =point.Point(1100, 1000 + 230)
 
 # On crée les variables disque1, disque2, disque3....
 for i in range(1, 10) :
-    exec("disque"+str(i)+" = carte.ajouter_disque(ptDisque"+str(i)+", 0, couleur, hauteur")
-    
-# On rempli le tableau disques[] :
-disques = []
-for i in range(1,10) :
-    exec("disques.append(disque"+str(i)+")")
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur)")
+
     
 # TODO pas fini.
 
