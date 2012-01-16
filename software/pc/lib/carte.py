@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import log as mod_log
-log = mod_log.Log()
-
 
 class Carte:
     """
     Classe permettant de gérer l'aire de jeu
     """
     def __init__(self):
+        log = mod_log.Log()
         log.logger.info("Création de la table en cours...\n")
         Carte.lingots = []
         Carte.disques = []

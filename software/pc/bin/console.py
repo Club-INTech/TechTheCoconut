@@ -16,5 +16,3 @@ try:
 except:
     log.logger.error("La dépendance Ipython n'est pas installée. Taper sudo apt-get install ipython") 
     print '##########################################################################################'
-
-print constantes
