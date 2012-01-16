@@ -9,6 +9,7 @@
 * lanceur.py : Lance les programmes dans bin/ avec les bons paramètres
 
 Dépendances :
+ipython
 python-nose
 python-sphinx
 python-serial
