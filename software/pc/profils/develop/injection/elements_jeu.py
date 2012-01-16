@@ -186,6 +186,31 @@ ptDisque22 = point.Point(-90, 2000 - 300)
 # On rentre les disques noirs dans la Carte
 for i in range (19, 23):
     exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+    
+
+# Niveau 1 des totems
+hauteur = 18
+couleur = "BLANC"
+ptDisque23 = point.Point(400 - 100, 1000 - 100)
+ptDisque24 = point.Point(400 + 100, 1000 - 100)
+ptDisque25 = point.Point(400 + 100, 1000 + 100)
+ptDisque26 = point.Point(400 - 100, 1000 + 100)
+ptDisque27 = point.Point(-400 +100, 1000 - 100)
+ptDisque28 = point.Point(-400 - 100, 1000 - 100)
+ptDisque29 = point.Point(-400 - 100, 1000 + 100)
+ptDisque30 = point.Point(-400 + 100, 1000 + 100)
+
+# On rentre les disques du niveau 1 dans la Carte
+for i in range (23, 31):
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+
+    
+# Niveau 3 des totems :
+hauteur = 18 + 18 + 18 + 2* 54.5
+
+# On rentre les disques du niveau 3 dans la Carte
+for i in range (23, 31):
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
 
 
     
