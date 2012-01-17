@@ -13,14 +13,10 @@ import lib
 log = lib.log.Log()
 
 try:
-    ipshell('')
+    ipshell()
     
 except:
-    log.logger.error("La dépendance Ipython n'est pas installée. Taper sudo apt-get install ipython") 
-<<<<<<< Updated upstream
-    print '##########################################################################################'
-=======
-    print '##########################################################################################'
+    log.logger.error("La dépendance Ipython n'est pas installée. Taper sudo apt-get install ipython")
 
-#print constantes
->>>>>>> Stashed changes
+print constantes
+
