@@ -7,7 +7,7 @@ ip = IPython.ipapi.get()
 
 
 print """
-Bienvenue dans la console IPython qu\'elle est belle.
+Bienvenue dans la console IPython.
 Pour voir la liste des commandes faites pour INTech, taper %commandes.
 Pour voir le tutoriel pour débuter, taper %tuto.
 """
@@ -26,22 +26,22 @@ ip.expose_magic('readme', readme)
 
 def commandes(self, arg):
     """
-    Fonction utilisée pour afficher la liste des commandes INTech
+    Fonction utilisée pour afficher la liste des commandes INTech.
     """
-
-    print """
-    Liste des commandes conçues pour INTech :
-        - %readme : Affiche le README du dossier software/pc qui décrit l'organisation du code PC.
-        - %tuto : Affiche un tutoriel qui permet une première prise en main de Ipython.
-    """
+    text = open('../ipython/commandes', 'r')
+    print text.read()
+    text.close()
     
 ip.expose_magic('commandes', commandes)
 
 def aide(self, arg):
     """
-    Affiche une aide pour utiliser la fonction
+    Fonction utilisée pour afficher l'aide sur une lsite de fonctions.
     """
-    print arg
+
+    fonction = raw_input('Entrer le nom de la fonction qui vous pose problème')
+    
+    
 ip.expose_magic('aide', aide)
 
 def tuto(self, arg):
