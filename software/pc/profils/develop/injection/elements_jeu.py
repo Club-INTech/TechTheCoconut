@@ -111,6 +111,7 @@ Lingots
 TODO gerer l'assignation de la variable enemy
 """
 
+hauteur = 0
 
 pointLingot1 = point.Point(0, 3000-647) #en bas au milieu
 pointLingot2 = point.Point(-1500 + 400, 518 + 280) #droite
@@ -120,13 +121,27 @@ oriLingot1 = 0
 oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
-                #TODO Les deux autres lingots dans les totems
+
 
 enemy = False  #TODO
 
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3, hauteur, enemy))
+
+# Lingots des totems
+oriLingotsTotem = math.pi /2
+hauteur = 18 + 54.5
+
+pointLingot4 = point.Point(400 + 125, 1000)
+pointLingot5 = point.Point(400 - 125, 1000)
+pointLingot6 = point.Point(-400 + 125, 1000)
+pointLingot7 = point.Point(-400 - 125, 1000)
+
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot4, oriLingot4, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot5, oriLingot5, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot6, oriLingot6, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot7, oriLingot7, hauteur, enemy))
 
 
 """
