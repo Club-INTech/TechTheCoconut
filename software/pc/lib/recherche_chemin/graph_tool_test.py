@@ -40,12 +40,14 @@ def AStar(debut,fin):
     #case=Rectangle(posX[n],posY[n],0,pas,pas)
     #print collision(case,objet)
     
-    l=listerNoeuds(objet,[n],[n])
+    listeNoeuds=[(posX[n]+posY[n]*longueur)/pas]
+    
+    #itération sur les objets
+    l=listerNoeuds(objet,[n],[n],listeNoeuds)
+    l=sorted(l)
     print l
-    supprimerNoeuds(l)
+    #supprimerNoeuds(l)
     
-    
-    #TODO : suppression des noeuds inaccessibles (triangulation de Delaunay)
     #TODO : algorithme A* sur le graphe obtenu
     #TODO : retour de la structure cheminObtenu
     graph_draw(g, vprops={"label": g.vertex_index}, output="map_suppr.pdf", splines='false',vsize=0.11, elen=1)
@@ -56,21 +58,27 @@ def supprimerNoeuds(listeNoeuds):
     for n in listeNoeuds:
         g.remove_vertex(n)
     
-def NoeudsVoisins(noeud,listeVoisins):
+def NoeudsVoisins(noeud,registreVoisins):
     nouveaux=[]
     for v in noeud.out_neighbours():
-        if not (v in listeVoisins):
-            nouveaux.append(v)
+        if not (v in registreVoisins):
+            print (posX[v]+posY[v]*longueur)/pas
+            nouveaux.append((posX[v]+posY[v]*longueur)/pas)
+            #nouveaux.append(v)
     return nouveaux   
     
-def listerNoeuds(objet,listeVoisins,aParcourir):
+def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
     while aParcourir!=[]:
         noeud=aParcourir.pop()
         case=Rectangle(posX[noeud],posY[noeud],0,pas,pas)
         if collision(case,objet):
-            listeVoisins.extend(NoeudsVoisins(noeud,listeVoisins))
-            aParcourir.extend(NoeudsVoisins(noeud,listeVoisins))
-    return listeVoisins
+            nouveaux = NoeudsVoisins(noeud,registreVoisins)
+            listeNoeuds.extend(nouveaux)
+            nouveaux = map(lambda v: g.vertex(v),nouveaux)
+            registreVoisins.extend(nouveaux)
+            aParcourir.extend(nouveaux)
+            
+    return listeNoeuds
         
 def selectNoeudProche(x,y):
     """
