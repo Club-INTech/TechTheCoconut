@@ -4,7 +4,8 @@ import os
 import sys
 from graph_tool.all import *
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../outils_math"))
-from collisionRectangles import Rectangle,collision
+#from collisionRectangles import Rectangle,collision
+from collisionRectangles import *
 
 
 g = Graph(directed=False)
@@ -14,13 +15,14 @@ poids = g.new_edge_property("double")
 poidsDirect = 1.
 poidsDiag = 1.41
 pas = 10 # pas en mm
-largeur = int(40.001/pas)#TODO largeur = int(constantes["Coconut"]["largeur"]/pas)
-longueur = int(62./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/pas)
+largeur = int(400./pas)#TODO largeur = int(constantes["Coconut"]["largeur"]/pas)
+longueur = int(600./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/pas)
 #décalage des axes
 axeX=0
 axeY=0
 
-objet=Rectangle(20.,15.,0,19.,4.)
+#objet=Rectangle(20.,15.,0,19.,4.)
+objet=Rectangle(100.,300.,0.785398163,19.,100.)
 
 def rechercheChemin(debut,fin):
     """
@@ -69,7 +71,7 @@ def NoeudsVoisins(noeud,registreVoisins):
 def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
     while aParcourir!=[]:
         noeud=aParcourir.pop()
-        case=Rectangle(posX[noeud],posY[noeud],0,pas,pas)
+        case=Rectangle(posX[noeud],posY[noeud],0.,pas,pas)
         if collision(case,objet):
             listeNoeuds.append((posX[noeud]+posY[noeud]*longueur)/pas)
             nouveaux = NoeudsVoisins(noeud,registreVoisins)
@@ -152,7 +154,7 @@ def tracePDF():
     etiq = g.new_vertex_property("int")
     for v in g.vertices() :
         etiq[v]=(posX[v]+posY[v]*longueur)/pas
-    graph_draw(g, vprops={"label": etiq}, output="map_suppr_.pdf", splines='false',vsize=0.11, elen=1)
+    graph_draw(g, vprops={"label": etiq}, output="map_inclinéPis4.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
 
 rechercheChemin(0,0)
       
