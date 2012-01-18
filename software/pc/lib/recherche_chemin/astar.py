@@ -3,11 +3,11 @@
 import os
 import sys
 # Ajout de ../ au path python
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../math"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../profils/develop/injection/"))
 
-import elements_jeu
+import lib.elements_jeu
 from collisionRectangles import collision
 from graph_tool.all import *
 

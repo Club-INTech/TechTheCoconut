@@ -15,12 +15,12 @@ poidsDirect = 1.
 poidsDiag = 1.41
 pas = 10 # pas en mm
 largeur = int(40.001/pas)#TODO largeur = int(constantes["Coconut"]["largeur"]/pas)
-longueur = int(64./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/pas)
+longueur = int(62./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/pas)
 #décalage des axes
 axeX=0
 axeY=0
 
-objet=Rectangle(20.,15.,-0.7853,10.,20.)
+objet=Rectangle(20.,15.,0,19.,4.)
 
 def rechercheChemin(debut,fin):
     """
@@ -32,29 +32,30 @@ def AStar(debut,fin):
     """
     algorithme A*, sur une table de jeu discrétisée "par cases"
     """
-    
+    print "discretiseTable -->"
     discretiseTable()
     
-    n=selectNoeudProche(objet.x,objet.y)
+    print "listeNoeuds -->"
     
-    #case=Rectangle(posX[n],posY[n],0,pas,pas)
-    #print collision(case,objet)
+    n=selectNoeudProche(objet.x,objet.y) #TODO élire directement le noeud en arrondissant les coordonnées de l'objet
     
-    listeNoeuds=[(posX[n]+posY[n]*longueur)/pas]
+    listeNoeuds=[]
     
     #itération sur les objets
     l=listerNoeuds(objet,[n],[n],listeNoeuds)
-    l=sorted(l)
+    l=sorted(l,reverse=True)
     print l
-    #supprimerNoeuds(l)
+    print "supprimerNoeuds -->"
+    supprimerNoeuds(l)
     
     #TODO : algorithme A* sur le graphe obtenu
     #TODO : retour de la structure cheminObtenu
-    graph_draw(g, vprops={"label": g.vertex_index}, output="map_suppr.pdf", splines='false',vsize=0.11, elen=1)
-    
-    
+    print "tracePDF -->"
+    tracePDF()
+
     
 def supprimerNoeuds(listeNoeuds):
+    listeNoeuds = map(lambda v: g.vertex(v),listeNoeuds)
     for n in listeNoeuds:
         g.remove_vertex(n)
     
@@ -62,9 +63,7 @@ def NoeudsVoisins(noeud,registreVoisins):
     nouveaux=[]
     for v in noeud.out_neighbours():
         if not (v in registreVoisins):
-            print (posX[v]+posY[v]*longueur)/pas
-            nouveaux.append((posX[v]+posY[v]*longueur)/pas)
-            #nouveaux.append(v)
+            nouveaux.append(v)
     return nouveaux   
     
 def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
@@ -72,9 +71,8 @@ def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
         noeud=aParcourir.pop()
         case=Rectangle(posX[noeud],posY[noeud],0,pas,pas)
         if collision(case,objet):
+            listeNoeuds.append((posX[noeud]+posY[noeud]*longueur)/pas)
             nouveaux = NoeudsVoisins(noeud,registreVoisins)
-            listeNoeuds.extend(nouveaux)
-            nouveaux = map(lambda v: g.vertex(v),nouveaux)
             registreVoisins.extend(nouveaux)
             aParcourir.extend(nouveaux)
             
@@ -147,16 +145,14 @@ def discretiseTable():
         g.add_edge(g.vertex(longueur*i-2),g.vertex(longueur*(i+1)-1))
         poids[g.edge(g.vertex(longueur*i-2),g.vertex(longueur*(i+1)-1))]=poidsDiag
         
-    """
-    trace
-    for i in range(1,largeur):
-        for j in range(longueur):
-            print str(longueur*i+j) + " :\t" + str(posX[g.vertex(longueur*i+j)]) + ',\t' + str(posY[g.vertex(longueur*i+j)]) + " :\t" + str(poids[g.edge(g.vertex(longueur*i+j),g.vertex(longueur*(i-1)+j))])
-    """
     
-    #g.remove_vertex(g.vertex(longueur*(largeur/2)-(longueur/2)))
-    
-    
+def tracePDF():
+    #tracé pdf
+    #graph_draw(g, vprops={"label": g.vertex_index}, output="map_suppr.pdf", splines='false',vsize=0.11, elen=1)
+    etiq = g.new_vertex_property("int")
+    for v in g.vertices() :
+        etiq[v]=(posX[v]+posY[v]*longueur)/pas
+    graph_draw(g, vprops={"label": etiq}, output="map_suppr_.pdf", splines='false',vsize=0.11, elen=1)
 
 rechercheChemin(0,0)
       
