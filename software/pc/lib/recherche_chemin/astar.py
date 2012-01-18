@@ -10,11 +10,23 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../profils/develo
 import lib.elements_jeu
 from collisionRectangles import collision
 from graph_tool.all import *
+from carte import Carte
+
+"""
+carte=Carte()
+carte.reglettesEnBois.rectangle. #3
+carte.totems.rectangle. #1
+carte.palmiers.rectangle. #0
+.x
+.y
+.t
+.wx
+.wy
 
 carte = elements_jeu.carte
-carte.totems[0] #1
+carte.totems[0] 
 carte.palmiers[0]
-carte.reglettesEnBois[0] #3
+carte.reglettesEnBois[0] 
 
 .position.x
 .position.y
@@ -22,9 +34,9 @@ carte.reglettesEnBois[0] #3
 .longueur
 .largeur
 
-"""
 
 """
+
 class carteDiscrete():
     """
     Classe implémentant la carte du jeu discrétisée pour la recherche de chemin
