@@ -2,12 +2,10 @@
 #include "robot.h"
 #include "twi_master.h"
 
+
 // Constructeur avec assignation des attributs
 Robot::Robot() : translation(2,0.5,0),
 				rotation(2,4,0),
-				moteurGauche(Prescaler<0,0>()),
-				moteurDroit(Prescaler<2,0>()),
-				compteur(Prescaler<1,8>()),
 				couleur_('r'),
 				x_(0),
 				y_(0),

@@ -6,12 +6,16 @@
 
 #include "i2c.h"
 #include "asservissement.h"
-#include "moteur.h"
-#include "timer.h"
+#include "timer.hpp"
+#include "pwm.hpp"
+#include "moteur.hpp"
 
 /**
 * Structure principale Robot
 */
+
+
+
 struct Robot {
 // Par défaut les attributs sont publics dans une struct
 	static Robot& Instance();
@@ -19,9 +23,9 @@ struct Robot {
 
 	Asservissement translation;
 	Asservissement rotation;
-	Moteur moteurGauche;
-	Moteur moteurDroit;
-	Timer compteur;
+	Moteur<0,1,ModeFastPwm> moteurGauche;
+	Moteur<2,1,ModeFastPwm> moteurDroit;
+	Timer<1,8,ModeCounter> compteur;
 	
 	/**
 	* Setter pour la variable couleur

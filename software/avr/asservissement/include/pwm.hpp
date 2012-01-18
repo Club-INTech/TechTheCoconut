@@ -2,14 +2,14 @@
 #define PWM_HPP
 
 template<uint8_t timer_id>
-struct ModeFastPwm{
-  static const uint8_t seuil;
-  static void set();
-};
+struct ModeFastPwm;
 
 template<>
 struct ModeFastPwm<0>{
-  static const uint8_t top = OCR0A;
+  static void seuil(uint16_t seuil){
+    OCR0A = seuil;
+  }
+  
   static void set(){
     	// Initialisation pin 12
 	DDRD |= ( 1 << PORTD6 );
@@ -17,7 +17,7 @@ struct ModeFastPwm<0>{
 	sbi(TCCR0A,COM0A1);
 	
 	// Fast PWM
-	sbi(TCCR0A,WGM00)
+	sbi(TCCR0A,WGM00);
 	sbi(TCCR0A,WGM01);
 	cbi(TCCR0B,WGM02);
   }
@@ -25,7 +25,9 @@ struct ModeFastPwm<0>{
 
 template<>
 struct ModeFastPwm<1>{
-  static const uint8_t top = OCR1A;
+  static void seuil(uint16_t seuil){
+    OCR1A = seuil;
+  }
   static void set(){
     	// Initialisation pin 12
 	sbi(DDRB,PORTB1);
@@ -42,7 +44,9 @@ struct ModeFastPwm<1>{
 
 template<>
 struct ModeFastPwm<2>{
-  static const uint8_t top = OCR2B;
+  static void seuil(uint16_t seuil){
+    OCR2B = seuil;
+  }
   static void set(){
 	// Initialisation pin 6
 	DDRD |= ( 1 << PORTD3 );
@@ -62,7 +66,10 @@ struct ModeCounter{
 
 template<>
 struct ModeCounter<0>{
-  static const uint8_t top = OCR0A;
+  static void seuil(uint16_t seuil){
+    OCR0A = seuil;
+  }
+  
   static void set(){
     sbi(TIMSK0,TOIE0);
   }
@@ -70,14 +77,21 @@ struct ModeCounter<0>{
 
 template<>
 struct ModeCounter<1>{
-  static const uint8_t top = OCR1A;
+  static void seuil(uint16_t seuil){
+    OCR1A = seuil;
+  }
+  
   static void set(){
     sbi(TIMSK1,TOIE1);
   }
 };
 
+template<>
 struct ModeCounter<2>{
-  static const uint8_t top = OCR2A;
+  static void seuil(uint16_t seuil){
+    OCR2A = seuil;
+  }
+  
   static void set(){
     sbi(TIMSK2,TOIE2);
   }
