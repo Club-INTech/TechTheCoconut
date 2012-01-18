@@ -1,9 +1,10 @@
 #include "timer.h"
+#include "utils.h"
 
-
-Timer::Timer(TimerId id, Prescaler ratio) : id_(id)
+template<uint8_t id,uint16_t  PrescalerVal>
+Timer::Timer(Prescaler<id,PrescalerVal> prescal) : id_(id)
 {
-		if(id_==TimerId::T0)
+		if(id_==0)
 		{
 			// Initialisation pin 12
 			DDRD |= ( 1 << PORTD6 );
@@ -14,16 +15,16 @@ Timer::Timer(TimerId id, Prescaler ratio) : id_(id)
 			TCCR0A |= ( 1 << WGM01 );
 			TCCR0B &= ~( 1 << WGM02 );
 			// Prescaler
-			TCCR0B |= ratio.underlying();
+			Prescaler<id,PrescalerVal>::set();
 		}
-		else if(id_==TimerId::T1)
+		else if(id_==1)
 		{
 			//Initialisation du comptage
 			TIMSK1 |= (1 << TOIE1);
 			//Prescaler
-			TCCR1B |= ratio.underlying();
+			Prescaler<id,PrescalerVal>::set();
 		}
-		else if(id_==TimerId::T2)
+		else if(id_==2)
 		{
 			// Initialisation pin 6
 			DDRD |= ( 1 << PORTD3 );
@@ -34,13 +35,13 @@ Timer::Timer(TimerId id, Prescaler ratio) : id_(id)
 			TCCR2A |= ( 1 << WGM21 );
 			TCCR2B &= ~( 1 << WGM22 );
 			// Prescaler
-			TCCR2B |= ratio.underlying();
+			Prescaler<id,PrescalerVal>::set();
 		}
 }
 
 void Timer::direction(Direction dir)
 {
-	if(id_==TimerId::T0)
+	if(id_==0)
 	{
 		if(dir == Direction::AVANCER){
 		  PORTD &=  ~(1 << PORTD4);
@@ -49,7 +50,7 @@ void Timer::direction(Direction dir)
 		  PORTD |=  (1 << PORTD4);
 		}
 	}
-	else if(id_==TimerId::T2)
+	else if(id_==2)
 	{
 		if(dir == Direction::AVANCER){
 		  PORTB &=  ~(1 << PORTB0);
@@ -62,11 +63,11 @@ void Timer::direction(Direction dir)
 	
 void Timer::seuil(uint16_t seuil)
 {
-	if(id_ == TimerId::T0)
+	if(id_ == 0)
 	{
 		OCR0A = seuil;
 	}
-	else if(id_ == TimerId::T2)
+	else if(id_ == 2)
 	{
 		OCR2B = seuil;
 	}

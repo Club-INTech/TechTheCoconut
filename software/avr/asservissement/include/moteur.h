@@ -5,7 +5,8 @@
 
 class Moteur{
 public:
-  Moteur(TimerId id, Prescaler ratio);
+  template<uint8_t timer_id, uint16_t prescalerVal>
+  Moteur(Prescaler<timer_id,prescalerVal> prescaler);
   void envoyerPwm(int16_t pwm);
   void maxPWM(uint16_t);
   uint16_t maxPWM();

@@ -1,6 +1,6 @@
 #include "moteur.h"
-
-Moteur::Moteur(TimerId id, Prescaler ratio) : timerPwm_(id,ratio), maxPWM_(1024)
+template<uint8_t timer_id, uint16_t prescalerVal>
+Moteur::Moteur(Prescaler<timer_id,prescalerVal> prescaler) : timerPwm_(prescaler), maxPWM_(1024)
 {
 }
 
@@ -16,7 +16,7 @@ uint16_t Moteur::maxPWM(void)
 
 void Moteur::envoyerPwm(int16_t pwm)
 {
-	if (pwm>0) {
+    if (pwm>0) {
       timerPwm_.direction(Direction::AVANCER);
       timerPwm_.seuil(pwm);
     }
