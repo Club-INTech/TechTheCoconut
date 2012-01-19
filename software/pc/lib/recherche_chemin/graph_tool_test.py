@@ -3,10 +3,11 @@
 import os
 import sys
 from graph_tool.all import *
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../outils_math"))
-#from collisionRectangles import Rectangle,collision
-from collisionRectangles import *
-
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../"))
+#from collisionRectangles import *
+from outils_math.collisionRectangleCase import collisionRectangleCase
+from outils_math.point import Point
+from outils_math.rectangle import Rectangle
 
 g = Graph(directed=False)
 posX = g.new_vertex_property("int")
@@ -15,14 +16,14 @@ poids = g.new_edge_property("double")
 poidsDirect = 1.
 poidsDiag = 1.41
 pas = 10 # pas en mm
-largeur = int(400./pas)#TODO largeur = int(constantes["Coconut"]["largeur"]/pas)
-longueur = int(600./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/pas)
+largeur = int(200./pas)#TODO largeur = int(constantes["Coconut"]["largeur"]/pas)
+longueur = int(300./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/pas)
 #décalage des axes
 axeX=0
 axeY=0
 
 #objet=Rectangle(20.,15.,0,19.,4.)
-objet=Rectangle(100.,300.,0.785398163,19.,100.)
+objet=Rectangle(100.,120.,1.178,19.,200.)
 
 def rechercheChemin(debut,fin):
     """
@@ -71,8 +72,7 @@ def NoeudsVoisins(noeud,registreVoisins):
 def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
     while aParcourir!=[]:
         noeud=aParcourir.pop()
-        case=Rectangle(posX[noeud],posY[noeud],0.,pas,pas)
-        if collision(case,objet):
+        if collisionRectangleCase(objet,Point(posX[noeud],posY[noeud]),pas):
             listeNoeuds.append((posX[noeud]+posY[noeud]*longueur)/pas)
             nouveaux = NoeudsVoisins(noeud,registreVoisins)
             registreVoisins.extend(nouveaux)
@@ -154,7 +154,7 @@ def tracePDF():
     etiq = g.new_vertex_property("int")
     for v in g.vertices() :
         etiq[v]=(posX[v]+posY[v]*longueur)/pas
-    graph_draw(g, vprops={"label": etiq}, output="map_inclinéPis4.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
+    graph_draw(g, vprops={"label": etiq}, output="map_rotation.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
 
 rechercheChemin(0,0)
       
