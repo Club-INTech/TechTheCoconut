@@ -22,40 +22,41 @@ longueur = int(300./pas)#TODO longueur = int(constantes["Coconut"]["longueur"]/p
 axeX=0
 axeY=0
 
-#objet=Rectangle(20.,15.,0,19.,4.)
-objet=Rectangle(100.,120.,1.178,19.,200.)
+listeObjets=[Rectangle(120.,120.,0.52,19.,100.),Rectangle(50.,150.,0.,50.,40.),Rectangle(150.,150.,-0.3,90.,20.)]
 
 def rechercheChemin(debut,fin):
     """
     fonction de recherche de chemin, utilisant le meilleur algorithme codé
     """
+    supprimerInaccessibles()
     return AStar(debut,fin)
-        
+
 def AStar(debut,fin):
     """
     algorithme A*, sur une table de jeu discrétisée "par cases"
     """
-    print "discretiseTable -->"
-    discretiseTable()
-    
-    print "listeNoeuds -->"
-    
-    n=selectNoeudProche(objet.x,objet.y) #TODO élire directement le noeud en arrondissant les coordonnées de l'objet
-    
-    listeNoeuds=[]
-    
-    #itération sur les objets
-    l=listerNoeuds(objet,[n],[n],listeNoeuds)
-    l=sorted(l,reverse=True)
-    print l
-    print "supprimerNoeuds -->"
-    supprimerNoeuds(l)
     
     #TODO : algorithme A* sur le graphe obtenu
     #TODO : retour de la structure cheminObtenu
     print "tracePDF -->"
     tracePDF()
-
+    
+def supprimerInaccessibles():
+    """
+    retire du graphe les noeuds entrant en collision avec les objets inaccessibles de la table de jeu
+    """
+    print "discretiseTable -->"
+    discretiseTable()
+    print "supprimerNoeuds -->"
+    listeNoeuds=[]
+    #itération sur les objets
+    for objet in listeObjets:
+        #trouve directement un noeud en collision avec l'objet en arrondissant les coordonnées de ce dernier
+        n=g.vertex((objet.x+objet.y*longueur)/pas)
+        listeNoeuds.extend(listerNoeuds(objet,[n],[n],[]))
+    listeNoeuds=sorted(list(set(listeNoeuds)),reverse=True)
+    supprimerNoeuds(listeNoeuds)
+    
     
 def supprimerNoeuds(listeNoeuds):
     listeNoeuds = map(lambda v: g.vertex(v),listeNoeuds)
@@ -80,17 +81,6 @@ def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
             
     return listeNoeuds
         
-def selectNoeudProche(x,y):
-    """
-    à partir des coordonnée d'un objet inaccessible, renvoi un noeud du graphe contenant ces coordonnées.
-    ce sera un premier noeud eliminé, et des tests de collision seront effectués par récurrence sur ses voisins.
-    """
-    for v in g.vertices() :
-        if (abs(posX[v]-x) <= pas/2) and (abs(posY[v]-y) <= pas/2) :
-            return v
-            break
-            
-    
 def discretiseTable():    
     """
     génération des noeuds, avec positions
@@ -158,5 +148,4 @@ def tracePDF():
 
 rechercheChemin(0,0)
       
-#g, pos = gt.triangulation(points, type="delaunay")
 #dist, pred = gt.astar_search(g, g.vertex(0), weight, VisitorExample(touch_v, touch_e, target), heuristic=lambda v: h(v, target, pos))
