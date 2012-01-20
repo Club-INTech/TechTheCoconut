@@ -19,7 +19,6 @@ Contents:
     decision
     elements_jeu
     evenement
-    i2c
     jeu
     log
     outils_math

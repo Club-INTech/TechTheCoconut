@@ -20,12 +20,6 @@ class Conf:
     """
     def __init__(self, profil):
         self.importation = self.importer_profil(profil)
-        if (self.importation):
-            try:
-                exec("import profils."+profil+".constantes")
-                exec("self.constantes = profils."+profil+".constantes.constantes")
-            except:
-                self.importation = False
 
     def importer_profil(self, profil):
         """
@@ -38,5 +32,5 @@ class Conf:
             exec("import profils."+profil)
             return True
         except:
-            print "Erreur : profil de configuration "+profil+" inconnu"
+            print >> sys.stderr, "Erreur : profil de configuration "+profil+" inconnu"
             return False
