@@ -172,7 +172,7 @@ class Lingot(ElementARamener):
         self.hauteur = hauteur
         self.enemy = enemy
         self.largeur = constantes['Objets_Table']['largeur_lingot']
-        self.longueur = constantes['Objets_Table']['longueur_disque']
+        self.longueur = constantes['Objets_Table']['longueur_lingot']
     
     def actualiser(self, position, orientation = 0) :
         """
