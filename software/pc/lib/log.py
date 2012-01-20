@@ -38,7 +38,6 @@ class Log:
 	:type stderr_format: string
 	:param dossier: Dossier où mettre les logs (à partir de la racine du code, c'est-à-dire le dossier contenant lanceur.py). Ex : 'logs'
 	:type dossier: string
-	:TODO: Mettre les valeurs qui vont bien dans les profils de configuration
 	"""
 	def __init__(self, logs=None, logs_level=None, logs_format=None, stderr=None, stderr_level=None, stderr_format=None, dossier=None):
 		# Si jamais initialisée

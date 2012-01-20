@@ -111,6 +111,7 @@ Lingots
 TODO gerer l'assignation de la variable enemy
 """
 
+hauteur = 0
 
 pointLingot1 = point.Point(0, 3000-647) #en bas au milieu
 pointLingot2 = point.Point(-1500 + 400, 518 + 280) #droite
@@ -120,13 +121,27 @@ oriLingot1 = 0
 oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
-                #TODO Les deux autres lingots dans les totems
+
 
 enemy = False  #TODO
 
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3, hauteur, enemy))
+
+# Lingots des totems
+oriLingotsTotem = math.pi /2
+hauteur = 18 + 54.5
+
+pointLingot4 = point.Point(400 + 125, 1000)
+pointLingot5 = point.Point(400 - 125, 1000)
+pointLingot6 = point.Point(-400 + 125, 1000)
+pointLingot7 = point.Point(-400 - 125, 1000)
+
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot4, oriLingot4, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot5, oriLingot5, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot6, oriLingot6, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingots(pointLingot7, oriLingot7, hauteur, enemy))
 
 
 """
@@ -185,6 +200,31 @@ ptDisque22 = point.Point(-90, 2000 - 300)
 
 # On rentre les disques noirs dans la Carte
 for i in range (19, 23):
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+    
+
+# Niveau 1 des totems
+hauteur = 18
+couleur = "BLANC"
+ptDisque23 = point.Point(400 - 100, 1000 - 100)
+ptDisque24 = point.Point(400 + 100, 1000 - 100)
+ptDisque25 = point.Point(400 + 100, 1000 + 100)
+ptDisque26 = point.Point(400 - 100, 1000 + 100)
+ptDisque27 = point.Point(-400 +100, 1000 - 100)
+ptDisque28 = point.Point(-400 - 100, 1000 - 100)
+ptDisque29 = point.Point(-400 - 100, 1000 + 100)
+ptDisque30 = point.Point(-400 + 100, 1000 + 100)
+
+# On rentre les disques du niveau 1 dans la Carte
+for i in range (23, 31):
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+
+    
+# Niveau 3 des totems :
+hauteur = 18 + 18 + 18 + 2* 54.5
+
+# On rentre les disques du niveau 3 dans la Carte
+for i in range (23, 31):
     exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
 
 
