@@ -24,6 +24,10 @@ modules.append("peripherique")
 modules.append("robot")
 modules.append("serie")
 modules.append("strategie")
+modules.append("recherche_chemin.astar")
+modules.append("recherche_chemin.graph")
+modules.append("recherche_chemin.graph_tool_test")
+modules.append("recherche_chemin.thetastar")
 
 for module in modules:
     try:
