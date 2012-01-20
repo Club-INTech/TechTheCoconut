@@ -65,3 +65,6 @@ class Carte:
     def ajouter_zone(self, zone) :
         log.logger.info("Ajout d'une zone dans l'objet Carte \n")
         Carte.zones.append(zone)
+        # LIGNE 69 ! !! ! !! ! ! FUCK Y(e)ah !
+        
+        

@@ -2,8 +2,8 @@
 
 import os
 import sys
-# Ajout de ../../.. au path python
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
+# Ajout de ../.. au path python
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 import lib.log
 log = lib.log.Log()
@@ -40,26 +40,3 @@ carte.reglettesEnBois[0]
 
 
 """
-
-class carteDiscrete():
-    """
-    Classe implémentant la carte du jeu discrétisée pour la recherche de chemin
-    """
-    def __init__(self):
-        graph.Graph.__init__(self)
-    #'pas' en mm pour la discrétisation de la carte en 'cases'
-    self.pas=15
-    self.nbCasesLarg=int (largeurCarte / self.pas)
-    self.nbCasesHaut=int (hauteurCarte / self.pas)
-    #on définie une matrice booléenne pour le caractère accessible des cases
-    self.casesAccess=nbCasesHaut*[nbCasesLarg*[True]]
-    for i in tableauElementInfranchissable:
-        pass
-
-class Astar(graph.Graph):
-    """
-    Classe implémentant l'algorithme A* pour la recherche de chemin
-    """
-    def __init__(self):
-        graph.Graph.__init__(self)
-        
