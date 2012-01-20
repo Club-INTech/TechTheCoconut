@@ -3,7 +3,7 @@
 from graph_tool.all import *
 import os,sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../"))
-from outils_math.collisionRectangleCase import collisionRectangleCase
+from outils_math.collisions import *
 from outils_math.point import Point
 from outils_math.rectangle import Rectangle
 
@@ -13,7 +13,6 @@ tableLongueur = 300.
 coteRobot = 50.
 
 #TODO lien avec éléments de jeu
-#listeObjets=[Rectangle(120.,120.,0.52,19.,100.),Rectangle(50.,150.,0.,50.,40.),Rectangle(150.,150.,-0.3,90.,20.)]
 listeObjets=[Rectangle(50,50,0.,10.,10.)]
 
 #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
@@ -60,12 +59,6 @@ def rechercheChemin(depart,arrive):
     discretiseTable()
 
     #g.save("map_vierge.xml")
-    
-    #masque les pointeurs
-    posX[g.vertex(0)]=int((depart.x)/pas)*pas-pas/2
-    posY[g.vertex(0)]=int((depart.y)/pas)*pas
-    posX[g.vertex(1)]=int((arrive.x)/pas)*pas-pas/2
-    posY[g.vertex(1)]=int((arrive.y)/pas)*pas
     
     #calcul l'index initial des noeuds de départ et d'arrivée 
     Ndepart=( int((depart.x-axeX)/pas)*pas + int((depart.y-axeY)/pas)*pas*longueur )/pas
@@ -116,7 +109,7 @@ def supprimerInaccessibles():
         n=g.vertex(Nstruct+n)
         #n=g.vertex(Nstruct+(int((objet.x-axeX)/pas)*pas+int((objet.y-axeY)/pas)*pas*longueur)/pas)
         #recherche les autres noeuds en collision par récurrence sur les noeuds voisins. complexité proportionnelle à l'aire de l'objet.
-        listeNoeuds.extend(listerNoeuds(objet,[n],[n],[]))
+        listeNoeuds.extend(listerNoeuds(RectangleToPoly(objet),[n],[n],[]))
     listeNoeuds=sorted(list(set(listeNoeuds)),reverse=True)
     supprimerNoeuds(listeNoeuds)
 
@@ -133,10 +126,10 @@ def NoeudsVoisins(noeud,registreVoisins):
             nouveaux.append(v)
     return nouveaux   
     
-def listerNoeuds(objet,registreVoisins,aParcourir,listeNoeuds):
+def listerNoeuds(poly,registreVoisins,aParcourir,listeNoeuds):
     while aParcourir!=[]:
         noeud=aParcourir.pop()
-        if collisionRectangleCase(objet,Point(posX[noeud],posY[noeud]),pas):
+        if collisionPolyCase(poly,Point(posX[noeud],posY[noeud]),pas):
             listeNoeuds.append((posX[noeud]-axeX+(posY[noeud]-axeY)*longueur)/pas)
             nouveaux = NoeudsVoisins(noeud,registreVoisins)
             registreVoisins.extend(nouveaux)
@@ -207,6 +200,6 @@ def tracePDF():
     etiq = g.new_vertex_property("int")
     for v in g.vertices() :
         etiq[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
-    graph_draw(g, vprops={"label": etiq}, output="map_objetsAprès.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
+    graph_draw(g, vprops={"label": etiq}, output="map_objets1.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
 
 rechercheChemin(Point(-20,0),Point(50,190))
