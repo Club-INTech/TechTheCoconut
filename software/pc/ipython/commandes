@@ -1,0 +1,4 @@
+Liste des commandes conçues pour INTech :
+        - %readme : Affiche le README du dossier software/pc qui décrit l'organisation du code PC.
+        - %tuto : Affiche un tutoriel qui permet une première prise en main de Ipython.
+

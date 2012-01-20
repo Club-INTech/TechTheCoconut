@@ -66,7 +66,8 @@ class Visu_table:
     def quit(self):
 	pygame.quit ()  
 
-#Instanctation de la classe (pour démo)
+"""Instanctation de la classe (pour démo)
 vTable = Visu_table()
 vTable.mainLoop()
 vTable.quit()
+"""
