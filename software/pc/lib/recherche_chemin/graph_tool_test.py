@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../"))
 from outils_math.collisions import *
 from outils_math.point import Point
 from outils_math.rectangle import Rectangle
+from math import sqrt
 
 #TODO lien avec constantes dans profil
 tableLargeur = 200.
@@ -13,13 +14,16 @@ tableLongueur = 300.
 coteRobot = 50.
 
 #TODO lien avec éléments de jeu
-listeObjets=[Rectangle(50,50,0.,10.,10.)]
+listeObjets=[Rectangle(100,70,0.,10.,10.),Rectangle(-50,100,0.7,10.,60.)]
 
 #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
 g = Graph(directed=False)
 posX = g.new_vertex_property("int")
 posY = g.new_vertex_property("int")
 poids = g.new_edge_property("double")
+aCouleur = g.new_edge_property("string")
+aLarg = g.new_edge_property("double")
+nCouleur = g.new_vertex_property("string")
 
 Nstruct = 10 #nb de noeuds de structure placés à la racine. il servent à pointer d'autres noeuds
 """
@@ -35,7 +39,7 @@ pas = 10 # pas en mm
 longueur = int(tableLongueur/pas)
 largeur = int(tableLargeur/pas)
 #centrage de l'axe des abscisses
-axeX=-(tableLongueur-pas)/2
+axeX=-(tableLongueur)/2
 axeY=0#-(0-pas)/2
 
 #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
@@ -44,6 +48,24 @@ for o in listeObjets:
     o.wx += largeurRobot
     o.wy += largeurRobot
 
+    
+class VisitorExample(AStarVisitor):
+
+    def __init__(self, touched_v, touched_e, target):
+        self.touched_v = touched_v
+        self.touched_e = touched_e
+        self.target = target
+
+    def discover_vertex(self, u):
+        self.touched_v[u] = True
+
+    def examine_edge(self, e):
+        self.touched_e[e] = True
+
+    def edge_relaxed(self, e):
+        if e.target() == self.target:
+            raise StopSearch()
+        
 
 def rechercheChemin(depart,arrive):
     """
@@ -78,18 +100,42 @@ def rechercheChemin(depart,arrive):
         Ndepart=n
     for n in g.vertex(1).out_neighbours():
         Narrive=n
-    return AStar(Ndepart,Narrive)
+    chemin=AStar(Ndepart,Narrive)
+    print "tracePDF -->"
+    tracePDF()
+    print "chemin -->"
+    for p in chemin:
+        print "(" + str(p.x) + ", " + str(p.y) + ")"
 
 def AStar(Ndepart,Narrive):
     """
     algorithme A*, sur une table de jeu discrétisée "par cases"
     """
     
-    #TODO : algorithme A* sur le graphe obtenu
-    #dist, pred = gt.astar_search(g, g.vertex(Nstruct+0), weight, VisitorExample(touch_v, touch_e, target), heuristic=lambda v: h(v, target, pos))
-    #TODO : retour de la structure cheminObtenu
-    print "tracePDF -->"
-    tracePDF()
+    #fonction heuristique : renvoit la distance restante supposée
+    def h(n, Narrive):
+        return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
+    
+    touch_v = g.new_vertex_property("bool")
+    touch_e = g.new_edge_property("bool")
+    dist, pred = astar_search(g, Ndepart, poids, VisitorExample(touch_v, touch_e, Narrive), heuristic=lambda n: h(n, Narrive))
+    aLarg.a = 20.
+    for e in g.edges():
+        aCouleur[e] = "blue" if touch_e[e] else "black"
+    v = Narrive
+    chemin=[]
+    while v != Ndepart:
+        chemin.insert(0, Point(posX[v],posY[v]))
+        nCouleur[v] = "orange"
+        p = g.vertex(pred[v])
+        for e in v.out_edges():
+            if e.target() == p:
+                aCouleur[e] = "red"
+                aLarg[e] = 100.
+        v = p
+    nCouleur[v] = "red"
+    chemin.insert(0, Point(posX[v],posY[v]))
+    return chemin
     
 def supprimerInaccessibles():
     """
@@ -195,11 +241,13 @@ def discretiseTable():
         
     
 def tracePDF():
-    #tracé pdf
-    #graph_draw(g, vprops={"label": g.vertex_index}, output="map_suppr.pdf", splines='false',vsize=0.11, elen=1)
+    """
     etiq = g.new_vertex_property("int")
     for v in g.vertices() :
         etiq[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
     graph_draw(g, vprops={"label": etiq}, output="map_objets1.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
+    """
+    graph_draw(g, output="map_chemin.pdf", pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
+    
 
-rechercheChemin(Point(-20,0),Point(50,190))
+rechercheChemin(Point(-120,40),Point(90,140))
