@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 try:
     from graph_tool.all import *
 except:
@@ -13,6 +14,24 @@ from lib.outils_math.collisions import *
 from lib.outils_math.point import Point
 from lib.outils_math.rectangle import Rectangle
 from math import sqrt
+=======
+
+import os
+import sys
+# Ajout de ../.. au path python
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
+
+import lib.log
+log = lib.log.Log()
+
+import lib.elements_jeu
+from lib.outils_math.collisionRectangles import collision
+try:
+    from graph_tool.all import *
+except:
+    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
+from lib.carte import Carte
+>>>>>>> origin/HEAD
 
 #TODO lien avec constantes dans profil
 tableLargeur = 200.
