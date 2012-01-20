@@ -156,13 +156,17 @@ class Lingot(ElementARamener):
     :param longueur: Longueur du lingot en mm
     :type longueur: int
     
+    :param hauteur: Hauteur du lingot en mm (au début du jeu)
+    :type hauteur: int
+    
     :param enemy: Est à True si le lingot est en terrain ennemi au début du jeu
     :type enemy: bool
     
     """
-    def __init__(self, position, orientation, enemy):
+    def __init__(self, position, orientation, hauteur, enemy):
         #log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(self, position, orientation)
+        self.hauteur = hauteur
         self.enemy = enemy
         self.largeur = constantes['Objets_Table']['largeur_lingot']
         self.longueur = constantes['Objets_Table']['longueur_disque']
