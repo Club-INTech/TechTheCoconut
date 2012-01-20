@@ -10,14 +10,23 @@ class Carte:
     def __init__(self):
         self.log = mod_log.Log()
         self.log.logger.info("Création de la table en cours...\n")
-        Carte.lingots = []
-        Carte.disques = []
-        Carte.totems  = []
-        Carte.poussoirs=[]
-        Carte.cartesAuxTresor = []
-        Carte.palmiers= []
-        Carte.reglettesEnBois = []
-        Carte.zones   = []
+        # On initialise seuleument si les listes n'existent pas déjà
+        if not hasattr(Carte, 'lingots'):
+            Carte.lingots = []
+        if not hasattr(Carte, 'disques'):
+            Carte.disques = []
+        if not hasattr(Carte, 'totems'):
+            Carte.totems  = []
+        if not hasattr(Carte, 'poussoirs'):
+            Carte.poussoirs=[]
+        if not hasattr(Carte, 'cartesAuxTresor'):
+            Carte.cartesAuxTresor = []
+        if not hasattr(Carte, 'palmiers'):
+            Carte.palmiers= []
+        if not hasattr(Carte, 'reglettesEnBois'):
+            Carte.reglettesEnBois = []
+        if not hasattr(Carte, 'zones'):
+            Carte.zones   = []
         
     
     def goto(self, depart, arrivee):
