@@ -8,9 +8,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../math"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../profils/develop/injection/"))
 
 import lib.elements_jeu
-from collisionRectangles import collision
-from graph_tool.all import *
-from carte import Carte
+#from carte import Carte
 
 """
 carte=Carte()
@@ -36,26 +34,3 @@ carte.reglettesEnBois[0]
 
 
 """
-
-class carteDiscrete():
-    """
-    Classe implémentant la carte du jeu discrétisée pour la recherche de chemin
-    """
-    def __init__(self):
-        graph.Graph.__init__(self)
-    #'pas' en mm pour la discrétisation de la carte en 'cases'
-    self.pas=15
-    self.nbCasesLarg=int (largeurCarte / self.pas)
-    self.nbCasesHaut=int (hauteurCarte / self.pas)
-    #on définie une matrice booléenne pour le caractère accessible des cases
-    self.casesAccess=nbCasesHaut*[nbCasesLarg*[True]]
-    for i in tableauElementInfranchissable[]:
-      
-
-class Astar(graph.Graph):
-    """
-    Classe implémentant l'algorithme A* pour la recherche de chemin
-    """
-    def __init__(self):
-        graph.Graph.__init__(self)
-        
