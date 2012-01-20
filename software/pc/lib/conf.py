@@ -2,7 +2,6 @@
 
 import sys
 import os
-import __builtin__
 
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -33,5 +32,5 @@ class Conf:
             exec("import profils."+profil)
             return True
         except:
-            print "Erreur : profil de configuration "+profil+" inconnu"
+            print >> sys.stderr, "Erreur : profil de configuration "+profil+" inconnu"
             return False
