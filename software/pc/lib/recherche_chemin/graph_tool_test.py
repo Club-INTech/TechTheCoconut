@@ -2,7 +2,16 @@
 
 import os
 import sys
-from graph_tool.all import *
+
+# Ajout de ../../.. au path python
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
+
+import lib.log
+log = lib.log.Log()
+try:
+    from graph_tool.all import *
+except:
+    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../outils_math"))
 #from collisionRectangles import Rectangle,collision
 from collisionRectangles import *

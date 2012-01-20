@@ -2,15 +2,19 @@
 
 import os
 import sys
-# Ajout de ../ au path python
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../math"))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../profils/develop/injection/"))
+# Ajout de ../../.. au path python
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
+
+import lib.log
+log = lib.log.Log()
 
 import lib.elements_jeu
-from collisionRectangles import collision
-from graph_tool.all import *
-from carte import Carte
+from lib.outils_math.collisionRectangles import collision
+try:
+    from graph_tool.all import *
+except:
+    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
+from lib.carte import Carte
 
 """
 carte=Carte()
@@ -49,8 +53,8 @@ class carteDiscrete():
     self.nbCasesHaut=int (hauteurCarte / self.pas)
     #on définie une matrice booléenne pour le caractère accessible des cases
     self.casesAccess=nbCasesHaut*[nbCasesLarg*[True]]
-    for i in tableauElementInfranchissable[]:
-      
+    for i in tableauElementInfranchissable:
+        pass
 
 class Astar(graph.Graph):
     """
