@@ -2,6 +2,7 @@
 
 import log as mod_log
 
+
 class Carte:
     """
     Classe permettant de gérer l'aire de jeu
