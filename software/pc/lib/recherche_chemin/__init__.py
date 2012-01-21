@@ -1,3 +1,2 @@
 import astar
-import graph
-import thetastar
+import rechercheChemin
