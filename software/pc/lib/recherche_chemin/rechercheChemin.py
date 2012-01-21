@@ -2,7 +2,7 @@
 
 """
 il faudra importer :
-from lib.recherche_chemin.rechercheChemin import discretiseTable,rechercheChemin
+from lib.recherche_chemin.rechercheChemin import *
 
 et faire un seul appel de discretiseTable(), pour initialiser le graphe.
 rechercheChemin(a,b) où a et b sont des Points renvoi une liste de Points, du départ à l'arrivée
@@ -10,10 +10,6 @@ rechercheChemin(a,b) où a et b sont des Points renvoi une liste de Points, du d
 voir utiliseRechercheChemin pour exemple
 """
 
-try:
-    from graph_tool.all import *
-except:
-    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 import os,sys
 # Ajout de ../.. au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
@@ -23,6 +19,7 @@ log = lib.log.Log()
 from lib.outils_math.collisions import *
 from lib.outils_math.point import Point
 from lib.outils_math.rectangle import Rectangle
+from lib.recherche_chemin.astar import *
 from math import sqrt
 
 #TODO lien avec constantes dans profil
@@ -77,25 +74,6 @@ largeurRobot=coteRobot*1.414#sqrt(2)
 for o in listeObjets:
     o.wx += largeurRobot
     o.wy += largeurRobot
-
-
-class VisitorExample(AStarVisitor):
-
-    def __init__(self, touched_v, touched_e, target):
-        self.touched_v = touched_v
-        self.touched_e = touched_e
-        self.target = target
-
-    def discover_vertex(self, u):
-        self.touched_v[u] = True
-
-    def examine_edge(self, e):
-        self.touched_e[e] = True
-
-    def edge_relaxed(self, e):
-        if e.target() == self.target:
-            raise StopSearch()
-        
 
 def rechercheChemin(depart,arrive,centresRobotsA):
     """
