@@ -42,6 +42,7 @@ carte.palmiers[i].rectangle. #0
 g = Graph(directed=False)
 posX = g.new_vertex_property("int")
 posY = g.new_vertex_property("int")
+pos = g.new_vertex_property("int")
 poids = g.new_edge_property("double")
 aCouleur = g.new_edge_property("string")
 aLarg = g.new_edge_property("double")
@@ -79,13 +80,7 @@ class VisitorExample(AStarVisitor):
         self.target = target
 
     def discover_vertex(self, u):
-         #détecte les noeuds du robot adverse
-        for r in centresRobotsA:
-            if sqrt((posX[u] - r.x) ** 2 + (posY[u] - r.y) ** 2) < rayonRobotsA:
-                #TODO : ignorer les noeuds
-                nCouleur[u] = "blue"
-            else:
-                self.touched_v[u] = True
+        self.touched_v[u] = True
 
     def examine_edge(self, e):
         self.touched_e[e] = True
@@ -125,13 +120,24 @@ def rechercheChemin(depart,arrive):
     """
     
     #noeuds arguments 2è méthode
+    """
     for v in find_vertex(g, posX, depart.x):
         if posY[v] == depart.y:
             Ndepart=v
+    
     for v in find_vertex(g, posX, arrive.x):
         if posY[v] == arrive.y:
             Narrive=v
+    """
     
+    #noeuds arguments 3è méthode
+    for v in find_vertex(g, pos, (depart.x-axeX+(depart.y-axeY)*longueur)/pas ):
+        Ndepart=v
+    for v in find_vertex(g, pos, (arrive.x-axeX+(arrive.y-axeY)*longueur)/pas ):
+        Narrive=v
+        
+        
+        
     
     #pointeurs sur départ et arrivé
     g.add_edge(g.vertex(0),Ndepart)
@@ -157,7 +163,13 @@ def AStar(Ndepart,Narrive):
     
     #fonction heuristique : renvoit la distance restante supposée
     def h(n, Narrive):
-        return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
+        for r in centresRobotsA:
+            if sqrt((posX[n] - r.x) ** 2 + (posY[n] - r.y) ** 2) < rayonRobotsA:
+                #ignorer les noeuds en leur attribuant une distance heuristique infinie
+                nCouleur[n] = "blue"
+                return float('Inf')
+            else:
+                return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
     
     touch_v = g.new_vertex_property("bool")
     touch_e = g.new_edge_property("bool")
@@ -169,7 +181,7 @@ def AStar(Ndepart,Narrive):
     chemin=[]
     while v != Ndepart:
         chemin.insert(0, Point(posX[v],posY[v]))
-        #nCouleur[v] = "orange"
+        nCouleur[v] = "orange"
         p = g.vertex(pred[v])
         for e in v.out_edges():
             if e.target() == p:
@@ -281,6 +293,8 @@ def discretiseTable():
         poids[g.edge(g.vertex(Nstruct+longueur*i-1),g.vertex(Nstruct+longueur*(i+1)-1))]=poidsDirect
         g.add_edge(g.vertex(Nstruct+longueur*i-2),g.vertex(Nstruct+longueur*(i+1)-1))
         poids[g.edge(g.vertex(Nstruct+longueur*i-2),g.vertex(Nstruct+longueur*(i+1)-1))]=poidsDiag
+    for v in g.vertices() :
+        pos[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
         
     
 def tracePDF():
