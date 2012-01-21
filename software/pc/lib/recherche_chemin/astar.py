@@ -18,6 +18,7 @@ from math import sqrt
 tableLargeur = 200.
 tableLongueur = 300.
 coteRobot = 50.
+rayonRobotsA = 50.
 
 #TODO lien avec éléments de jeu
 listeObjets=[Rectangle(100,70,0.,10.,10.),Rectangle(-50,100,0.7,10.,60.)]
@@ -40,12 +41,10 @@ carte.palmiers[i].rectangle. #0
 g = Graph(directed=False)
 posX = g.new_vertex_property("int")
 posY = g.new_vertex_property("int")
+pos = g.new_vertex_property("int")
 poids = g.new_edge_property("double")
-aCouleur = g.new_edge_property("string")
-aLarg = g.new_edge_property("double")
-nCouleur = g.new_vertex_property("string")
 
-Nstruct = 10 #nb de noeuds de structure placés à la racine. il servent à pointer d'autres noeuds
+Nstruct = 2 #nb de noeuds de structure placés à la racine. il servent à pointer d'autres noeuds
 """
 g.vertex(0) pointe sur le noeud de départ
 g.vertex(1) pointe sur le noeud d'arrivé
@@ -68,7 +67,7 @@ for o in listeObjets:
     o.wx += largeurRobot
     o.wy += largeurRobot
 
-    
+
 class VisitorExample(AStarVisitor):
 
     def __init__(self, touched_v, touched_e, target):
@@ -92,23 +91,40 @@ def rechercheChemin(depart,arrive):
     fonction de recherche de chemin, utilisant le meilleur algorithme codé
     """
     
-    print "discretiseTable -->"
-    #g=load_graph("map_vierge.xml")
-
-    #noeuds de structures, servant de pointeurs
-    for k in range(Nstruct):
-        g.add_vertex()
-    discretiseTable()
-
-    #g.save("map_vierge.xml")
+    #réinitialisation des property map de couleurs
+    global aCouleur
+    global aLarg
+    global nCouleur
+    aCouleur = g.new_edge_property("string")
+    aLarg = g.new_edge_property("double")
+    nCouleur = g.new_vertex_property("string")
     
-    #calcul l'index initial des noeuds de départ et d'arrivée 
-    Ndepart=( int((depart.x-axeX)/pas)*pas + int((depart.y-axeY)/pas)*pas*longueur )/pas
-    Narrive=( int((arrive.x-axeX)/pas)*pas + int((arrive.y-axeY)/pas)*pas*longueur )/pas
-
-    #définit les noeuds correspondant aux points de départ et d'arrivée
-    Ndepart=g.vertex(Nstruct+Ndepart)
-    Narrive=g.vertex(Nstruct+Narrive)
+    
+    """
+    besoin de sauvegarder le graphe ?
+    g=load_graph("map_vierge.xml")
+    g.save("map_vierge.xml")
+    """
+    
+  
+    #noeuds arguments 1è méthode
+    """
+    for v in find_vertex(g, posX, depart.x):
+        if posY[v] == depart.y:
+            Ndepart=v
+    
+    for v in find_vertex(g, posX, arrive.x):
+        if posY[v] == arrive.y:
+            Narrive=v
+    """
+    
+    #noeuds arguments 2è méthode
+    for v in find_vertex(g, pos, (depart.x-axeX+(depart.y-axeY)*longueur)/pas ):
+        Ndepart=v
+    for v in find_vertex(g, pos, (arrive.x-axeX+(arrive.y-axeY)*longueur)/pas ):
+        Narrive=v
+        
+        
     
     #pointeurs sur départ et arrivé
     g.add_edge(g.vertex(0),Ndepart)
@@ -116,13 +132,16 @@ def rechercheChemin(depart,arrive):
     
     supprimerInaccessibles()
     
+    #on retrouve les noeuds départ et arrivé grace aux pointeurs
     for n in g.vertex(0).out_neighbours():
         Ndepart=n
     for n in g.vertex(1).out_neighbours():
         Narrive=n
+        
+    #algorithme utilisé : A*
     chemin=AStar(Ndepart,Narrive)
-    print "tracePDF -->"
-    tracePDF()
+    
+    #sortie
     print "chemin -->"
     for p in chemin:
         print "(" + str(p.x) + ", " + str(p.y) + ")"
@@ -134,26 +153,39 @@ def AStar(Ndepart,Narrive):
     
     #fonction heuristique : renvoit la distance restante supposée
     def h(n, Narrive):
-        return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
+        #test sur les robots adverses détéctés
+        for r in centresRobotsA:
+            if sqrt((posX[n] - r.x) ** 2 + (posY[n] - r.y) ** 2) < rayonRobotsA:
+                #ignorer les noeuds en leur attribuant une distance heuristique infinie
+                nCouleur[n] = "blue"
+                return float('Inf')
+            else:
+                return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
     
+    #réinitialisation des tables des noeuds et arêtes parcourus par A*
     touch_v = g.new_vertex_property("bool")
     touch_e = g.new_edge_property("bool")
+    #A* : liste 
     dist, pred = astar_search(g, Ndepart, poids, VisitorExample(touch_v, touch_e, Narrive), heuristic=lambda n: h(n, Narrive))
+    
+    #VISU : réinitialisation de la largeur des arêtes, couleur des noeuds
     aLarg.a = 20.
     for e in g.edges():
         aCouleur[e] = "blue" if touch_e[e] else "black"
+    #tracé du chemin
     v = Narrive
     chemin=[]
     while v != Ndepart:
         chemin.insert(0, Point(posX[v],posY[v]))
-        nCouleur[v] = "orange"
+        nCouleur[v] = "orange"#VISU noeuds du chemin
         p = g.vertex(pred[v])
+        #VISU : arêtes du chemin épaisses en rouge
         for e in v.out_edges():
             if e.target() == p:
                 aCouleur[e] = "red"
                 aLarg[e] = 100.
         v = p
-    nCouleur[v] = "red"
+    nCouleur[v] = "red"#VISU départ en rouge
     chemin.insert(0, Point(posX[v],posY[v]))
     return chemin
     
@@ -173,7 +205,6 @@ def supprimerInaccessibles():
         elif(n<0):
             n += longueur
         n=g.vertex(Nstruct+n)
-        #n=g.vertex(Nstruct+(int((objet.x-axeX)/pas)*pas+int((objet.y-axeY)/pas)*pas*longueur)/pas)
         #recherche les autres noeuds en collision par récurrence sur les noeuds voisins. complexité proportionnelle à l'aire de l'objet.
         listeNoeuds.extend(listerNoeuds(RectangleToPoly(objet),[n],[n],[]))
     listeNoeuds=sorted(list(set(listeNoeuds)),reverse=True)
@@ -181,11 +212,13 @@ def supprimerInaccessibles():
 
     
 def supprimerNoeuds(listeNoeuds):
+    #supprime les noeuds de la liste d'index, qui doit impérativement etre triée dans l'ordre décroissant
     listeNoeuds = map(lambda v: g.vertex(Nstruct+v),listeNoeuds)
     for n in listeNoeuds:
         g.remove_vertex(n)
     
 def NoeudsVoisins(noeud,registreVoisins):
+    #renvoi la liste des voisins du noeuds, si ils ne sont pas dans registreVoisins
     nouveaux=[]
     for v in noeud.out_neighbours():
         if not (v in registreVoisins):
@@ -193,14 +226,20 @@ def NoeudsVoisins(noeud,registreVoisins):
     return nouveaux   
     
 def listerNoeuds(poly,registreVoisins,aParcourir,listeNoeuds):
+    """
+    poly : polygone devant etre retiré du graphe (liste de Points représentant les sommets du poly)
+    registreVoisins : évite de tester plusieurs fois un noeuds (et donc de créer des boucles incontrolées )
+    aParcourir : pile des noeuds non évalués
+    listeNoeuds : liste des noeuds effectivement en collision avec le polygone
+    """
     while aParcourir!=[]:
         noeud=aParcourir.pop()
+        #test de collision entre un polygone et une case carrée centré en Point, et de côté pas
         if collisionPolyCase(poly,Point(posX[noeud],posY[noeud]),pas):
             listeNoeuds.append((posX[noeud]-axeX+(posY[noeud]-axeY)*longueur)/pas)
             nouveaux = NoeudsVoisins(noeud,registreVoisins)
             registreVoisins.extend(nouveaux)
             aParcourir.extend(nouveaux)
-            
     return listeNoeuds
         
 def discretiseTable():    
@@ -208,6 +247,13 @@ def discretiseTable():
     génération des noeuds, avec positions
     et des arêtes, avec poids
     """
+    
+    print "discretiseTable -->"
+
+    #noeuds de structures, servant de pointeurs
+    for k in range(Nstruct):
+        g.add_vertex()
+        
     #premier noeud
     g.add_vertex()
     posX[g.vertex(Nstruct+0)] = 0+axeX
@@ -258,16 +304,23 @@ def discretiseTable():
         poids[g.edge(g.vertex(Nstruct+longueur*i-1),g.vertex(Nstruct+longueur*(i+1)-1))]=poidsDirect
         g.add_edge(g.vertex(Nstruct+longueur*i-2),g.vertex(Nstruct+longueur*(i+1)-1))
         poids[g.edge(g.vertex(Nstruct+longueur*i-2),g.vertex(Nstruct+longueur*(i+1)-1))]=poidsDiag
+    for v in g.vertices() :
+        pos[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
         
     
-def tracePDF():
-    """
-    etiq = g.new_vertex_property("int")
-    for v in g.vertices() :
-        etiq[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
-    graph_draw(g, vprops={"label": etiq}, output="map_objets1.pdf", pos=(posX,posY),vsize=5, pin=True,penwidth=20.,ecolor="#000000")
-    """
-    graph_draw(g, output="map_chemin.pdf", pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
+def tracePDF(nom):
+    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
     
+    
+#et c'est parti :
+discretiseTable()
 
+centresRobotsA = [Point(-20,0)]
 rechercheChemin(Point(-120,40),Point(90,140))
+print "tracePDF -->"
+tracePDF("map_chemin_robot1.pdf")
+
+centresRobotsA = [Point(30,0)]
+rechercheChemin(Point(-120,40),Point(90,140))
+print "tracePDF -->"
+tracePDF("map_chemin_robot2.pdf")
