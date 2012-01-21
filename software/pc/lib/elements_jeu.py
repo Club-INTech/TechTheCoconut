@@ -10,6 +10,8 @@ Ce fichier crée les classes des différents objets présents sur le terrain, ob
 # Classe Point
 #import outils_math.point
 
+import outils_math.rectangle as Rectangle
+
 # Ajout de ../ au path python
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -375,7 +377,6 @@ class Zone:
     :param protectionCale: Est à True si le cadre protégeant le dessous de la cale est fermé, à False sinon.
     :type protectionCale: boolean
     
-    :TODO: Prévoir une adaptation pour la zone trapézoïdale (bas de la cale)
     """
     def __init__(self, nomZone, angleSG, angleSD, angleIG, angleID, ennemi):
         nomZone = nomZone.upper()
