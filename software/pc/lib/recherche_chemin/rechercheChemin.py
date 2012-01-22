@@ -4,12 +4,10 @@
 il faudra importer :
 from lib.recherche_chemin.rechercheChemin import *
 
-et faire un seul appel de discretiseTable(), pour initialiser le graphe.
-rechercheChemin(a,b) où a et b sont des Points renvoi une liste de Points, du départ à l'arrivée
-
 voir utiliseRechercheChemin pour exemple
 """
 
+import marshal
 import os,sys
 # Ajout de ../.. au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
@@ -79,6 +77,7 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     """
     fonction de recherche de chemin, utilisant le meilleur algorithme codé
     """
+    print "recherche chemin"
     
     #réinitialisation des property map de couleurs
     global aCouleur
@@ -89,15 +88,7 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     nCouleur = g.new_vertex_property("string")
     
     
-    """
-    besoin de sauvegarder le graphe ?
-    g=load_graph("map_vierge.xml")
-    g.save("map_vierge.xml")
-    """
-    
-  
-    #noeuds arguments 1è méthode
-    """
+    #retrouve les noeuds arguments
     for v in find_vertex(g, posX, depart.x):
         if posY[v] == depart.y:
             Ndepart=v
@@ -106,27 +97,13 @@ def rechercheChemin(depart,arrive,centresRobotsA):
         if posY[v] == arrive.y:
             Narrive=v
     """
-    
-    #noeuds arguments 2è méthode
+    #autre méthode, ne marche pas avec un graphe enregistré (?)
     for v in find_vertex(g, pos, (depart.x-axeX+(depart.y-axeY)*longueur)/pas ):
         Ndepart=v
     for v in find_vertex(g, pos, (arrive.x-axeX+(arrive.y-axeY)*longueur)/pas ):
         Narrive=v
-        
-        
+    """
     
-    #pointeurs sur départ et arrivé
-    g.add_edge(g.vertex(0),Ndepart)
-    g.add_edge(g.vertex(1),Narrive)
-    
-    supprimerInaccessibles()
-    
-    #on retrouve les noeuds départ et arrivé grace aux pointeurs
-    for n in g.vertex(0).out_neighbours():
-        Ndepart=n
-    for n in g.vertex(1).out_neighbours():
-        Narrive=n
-        
     #algorithme utilisé : A*
     chemin=AStar(Ndepart,Narrive,centresRobotsA)
     
@@ -230,14 +207,27 @@ def listerNoeuds(poly,registreVoisins,aParcourir,listeNoeuds):
             registreVoisins.extend(nouveaux)
             aParcourir.extend(nouveaux)
     return listeNoeuds
-        
-def discretiseTable():    
+
+def chargeGraphe():
+    print "chargement du graphe..."
+    global g
+    g=load_graph("sauv_g.xml")
+    TposX=marshal.load(open("sauv_posX","rb"))
+    TposY=marshal.load(open("sauv_posY","rb"))
+    Tpos=marshal.load(open("sauv_pos","rb"))
+    for k in range(len(Tpos)):
+        posX[g.vertex(k)]=TposX[k]
+        posY[g.vertex(k)]=TposY[k]
+        pos[g.vertex(k)]=Tpos[k]
+    
+def enregistreGraphe():    
+
     """
     génération des noeuds, avec positions
     et des arêtes, avec poids
     """
-    
-    print "discretiseTable -->"
+   
+    print "discrétiseTable -->"
 
     #noeuds de structures, servant de pointeurs
     for k in range(Nstruct):
@@ -296,6 +286,24 @@ def discretiseTable():
     for v in g.vertices() :
         pos[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
         
+    supprimerInaccessibles()
+    
+    print "enregistreGraphe -->"
+    TposX=[]
+    TposY=[]
+    Tpos=[]
+    Tpoids=[]
+    for v in g.vertices() :
+        pos[v]=(posX[v]-axeX+(posY[v]-axeY)*longueur)/pas
+        TposX.append(posX[v])
+        TposY.append(posY[v])
+        Tpos.append(posX[v])
+        #Tpoids.append(poids[v])
+    marshal.dump(TposX, open("sauv_posX", 'wb'))
+    marshal.dump(TposY, open("sauv_posY", 'wb'))
+    marshal.dump(Tpos, open("sauv_pos", 'wb'))
+    #marshal.dump(Tpoids, open("sauv_poids", 'wb'))
+    g.save("sauv_g.xml")
     
 def tracePDF(nom):
     graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
