@@ -10,7 +10,7 @@ Ce fichier crée les classes des différents objets présents sur le terrain, ob
 # Classe Point
 #import outils_math.point
 
-import outils_math.rectangle as Rectangle
+import outils_math.rectangle as rectangle
 
 # Ajout de ../ au path python
 import sys, os
@@ -224,8 +224,8 @@ class Totem(ElementInfranchissable):
         self.longueur = constantes['Objets_Table']['longueur_totem']
         self.largeur = constantes['Objets_Table']['largeur_totem']
         self.hauteur = constantes['Objets_Table']['hauteur_totem']
-        
-        self.rectangle = Rectangle.rectangle(position.x, position.y, 0, self.longueur, self.largeur)
+         
+        self.rectangle = rectangle.Rectangle(position.x, position.y, 0, self.longueur, self.largeur)
         
 class Palmier(ElementInfranchissable) :
     
@@ -245,7 +245,7 @@ class Palmier(ElementInfranchissable) :
     def __init__(self, position) :
         ElementInfranchissable.__init__(self, position, 0)
         self.rayon = constantes['Objets_Table']['rayon_palmier']
-        self.rectangle = Rectangle.rectangle(position.x, position.y, 0, 2*self.rayon, 2*self.rayon)
+        self.rectangle = rectangle.Rectangle(position.x, position.y, 0, 2*self.rayon, 2*self.rayon)
         
 
 class RegletteEnBois(ElementInfranchissable) :
@@ -276,7 +276,7 @@ class RegletteEnBois(ElementInfranchissable) :
         self.longueur = longueur
         self.largeur = constantes["Objets_Table"]['largeur_regletteEnBois']
         
-        self.rectangle = Rectangle.rectangle(position.x, position.y, orientation, self.largeur, self.longueur)
+        self.rectangle = rectangle.Rectangle(position.x, position.y, orientation, self.largeur, self.longueur)
     
     
         
