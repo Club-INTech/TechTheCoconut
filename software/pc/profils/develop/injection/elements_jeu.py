@@ -16,7 +16,6 @@ Ce module set à placer tous les élements de jeu
 
 :param Lingots
 
-:TODO: Disques, zones.
 
 """
 
@@ -226,12 +225,6 @@ hauteur = 18 + 18 + 18 + 2* 54.5
 # On rentre les disques du niveau 3 dans la Carte
 for i in range (23, 31):
     exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
-
-
-    
-# TODO pas fini : Il reste les disques qui sont dans les totems
-
-
 
 """
 Zones de jeu
