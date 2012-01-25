@@ -14,7 +14,7 @@ class Visu_table:
 	      'BLANC':[255,255,255],
 	      'lingot':[0,255,0],
 	      'totem':[255,0,0],
-	      'palmier':[0,0,255],
+	      'palmier':[147,239,8],
 	      'poussoirTrue':[127,127,127],
 	      'poussoirFalse':[127,127,127],
 	      'carteTresorTrue':[127,127,127],
@@ -24,7 +24,7 @@ class Visu_table:
 	      'BUREAUCAPITAINE':[127,127,127],
 	      'AIREDEJEU':[127,127,127]}
     srcImageTable = os.path.join(os.path.dirname(__file__), "../../donnees/images/table_3000_2000.png")
-    debug = False
+    debug = True
 	      
     #Nota: Utiliser des Setters/Getters pour les propriétés suivantes ?
     scale = 0.3
@@ -110,13 +110,17 @@ class Visu_table:
 	:param palmier: Le palmier à dessiner
 	:type palmier: Palmier
 	"""
-	obj = pygame.Rect(palmier.position.x, palmier.position.y, palmier.rayon, palmier.rayon)
-	pygame.draw.rect( pygame.display.get_surface(),
-			  Visu_table.couleur['palmier'],
-			  obj)
-			  
+	x = self.tailleTablePx[0]/2 + math.trunc(self.scale*palmier.position.x)
+	y = self.tailleTablePx[1] - math.trunc(self.scale*palmier.position.y)
+	r = math.trunc( self.scale*palmier.rayon)
+	
+	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["palmier"], (x,y), r)
+	
 	if Visu_table.debug:
-	    print "draw Palmier"
+	    print "draw Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")"
+	    print "Table[x="+str(self.tailleTablePx[0])+";y="+str(self.tailleTablePx[1])+"]"
+	    print "x = "+str(self.tailleTablePx[0]/2)+" + "+str(math.trunc(self.scale*palmier.position.x))+" = "+str(x)+" (detail: "+str(self.scale)+"*"+str(palmier.position.x)+")"
+	    print "y = "+str(self.tailleTablePx[1])+" - "+str(math.trunc(self.scale*palmier.position.y))+" = "+str(y)+" (detail: "+str(self.scale)+"*"+str(palmier.position.y)+")"
     
     def drawPoussoir(self, poussoir):
 	"""
@@ -166,7 +170,7 @@ class Visu_table:
     def majTable(self):
 	print "majTable"
 	#"Efface" les précédents items
-        self.screen.blit(self.imageTable, [0,0])
+        #self.screen.blit(self.imageTable, [0,0])
         
         for lingot in self.carte.lingots:
 	    self.drawLingot(lingot)
