@@ -15,8 +15,8 @@ class Visu_table:
 	      'lingot':[0,255,0],
 	      'totem':[255,0,0],
 	      'palmier':[147,239,8],
-	      'poussoirTrue':[127,127,127],
-	      'poussoirFalse':[127,127,127],
+	      'poussoirTrue':[234,57,59], # Eux
+	      'poussoirFalse':[138,48,225],# Nous
 	      'carteTresorTrue':[127,127,127],
 	      'carteTresorFalse':[127,127,127],
 	      'CALE':[127,127,127],
@@ -25,6 +25,7 @@ class Visu_table:
 	      'AIREDEJEU':[127,127,127]}
     srcImageTable = os.path.join(os.path.dirname(__file__), "../../donnees/images/table_3000_2000.png")
     debug = True
+    displayMap = False
 	      
     #Nota: Utiliser des Setters/Getters pour les propriétés suivantes ?
     scale = 0.3
@@ -129,13 +130,24 @@ class Visu_table:
 	:param poussoir: Le poussoir à dessiner
 	:type poussoir: Poussoir
 	"""
-	obj = pygame.Rect(poussoir.position.x, poussoir.position.y, 10, 10)
+	
+	x = self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale * poussoir.position.x )
+	y = self.tailleTablePx[1] - math.trunc( Visu_table.scale * poussoir.position.y )
+	
+	if poussoir.etat: #si enfoncé
+	    l = 4
+	else:
+	    l = 9
+	
+	# if poussoir.etat: appartient à l'ennemi
 	pygame.draw.rect( pygame.display.get_surface(),
-			  Visu_table.couleur['poussoir'+str(poussoir.etat)],
-			  obj)
-			  
+			  Visu_table.couleur['poussoir'+str(poussoir.ennemi)],
+			  pygame.Rect(x, y, 7, l))
+	
 	if Visu_table.debug:
-	    print "draw Poussoir"
+	    print "draw Poussoir (etat="+str(poussoir.etat)+")" \
+		  " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
+		  " rel[x="+str(math.trunc( Visu_table.scale * poussoir.position.x ))+" | y="+str(math.trunc( Visu_table.scale * poussoir.position.y ))+"]"
 			  
     def drawCarteTresor(self, carteTresor):
 	"""
@@ -170,7 +182,8 @@ class Visu_table:
     def majTable(self):
 	print "majTable"
 	#"Efface" les précédents items
-        #self.screen.blit(self.imageTable, [0,0])
+	if Visu_table.displayMap:
+	    self.screen.blit(self.imageTable, [0,0])
         
         for lingot in self.carte.lingots:
 	    self.drawLingot(lingot)
