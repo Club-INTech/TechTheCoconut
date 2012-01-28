@@ -3,14 +3,19 @@
 import serial
 import threading
 import Queue
+import time
 
 import log
 log = log.Log()
 
 class SerieThread(threading.Thread, serial.Serial):
     """
-    Classe de créer une liaison Série utilisant un thread (ie non bloquante)
-    
+    Classe de créer une liaison Série utilisant un thread (ie non bloquante)\n
+    \n
+    Pour la démarrer utiliser la méthode start()\n
+    Les messages sont stockés dans l'attribut d'instance file_attente qui est un objet LifoQueue http://www.doughellmann.com/PyMOTW/Queue/index.html#lifo-queue \n
+    Pour l'arrêter utiliser l'instruction del (del mavariable)\n
+    \n
     :param peripherique: chemin du périphérique utilisant la liaison série
     :type peripherique: string
     :param nom: Nom à donner au thread
@@ -25,6 +30,7 @@ class SerieThread(threading.Thread, serial.Serial):
     """
     def __init__(self, peripherique, nom, debit, timeout, parite=None):
         self.peripherique = peripherique
+        # File d'attente LIFO des messages venant de cette liaison
         self.file_attente = Queue.LifoQueue()
         log.logger.info("Initialisation de la liaison série threadée sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
         try:
@@ -32,7 +38,7 @@ class SerieThread(threading.Thread, serial.Serial):
             if parite == None:
                 serial.Serial.__init__(self, peripherique, debit, timeout=timeout)
             else:
-                serial.Serial.__init__(self, peripherique, debit, name=nom, target=self.lire, timeout=timeout, parity=parite)
+                serial.Serial.__init__(self, peripherique, debit, target=self.lire, timeout=timeout, parity=parite)
         except:
             log.logger.error("Erreur d'initialisation de la liaison série threadée sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
 
@@ -54,12 +60,14 @@ class SerieThread(threading.Thread, serial.Serial):
         
         :return: Chaîne lue
         :rtype: string
+        :TODO; permettre d'utiliser correction self.join()
+        :TODO: trouver solution pour les logs
         """
         while 42:
             lu = self.readline()
             lu = lu.split("\r\n")[0]
             if lu != '':
-                log.logger.debug("Lecture sur la liaison série "+self.peripherique+" : "+lu)
+                #log.logger.debug("Lecture sur la liaison série "+self.peripherique+" : "+lu)
                 self.file_attente.put(lu)
 
     def __del__(self):
@@ -69,12 +77,6 @@ class SerieThread(threading.Thread, serial.Serial):
         log.logger.info("Suppression de la liaison série sur "+self.peripherique)
         self.join()
         self.close()
-
-def ipbreak():
-    import IPython.Shell
-    if IPython.Shell.KBINT:
-        IPython.Shell.KBINT = False
-        raise SystemExit
 
 class SerieSimple(serial.Serial):
     """
