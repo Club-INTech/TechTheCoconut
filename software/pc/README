@@ -8,6 +8,11 @@
 * tests/ : tests unitaires
 * lanceur.py : Lance les programmes dans bin/ avec les bons paramètres
 
+== Lancer le programme ==
+
+Sur Ubuntu : $ sudo python lanceur.py
+Sur Debian : # python2.6 lanceur.py
+
 == Dépendances ==
 ipython
 python-nose

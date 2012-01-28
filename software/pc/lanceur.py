@@ -20,6 +20,9 @@ log = lib.log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], 
 
 log.logger.info('Profil de configuration chargé : ' + conf)
 
+log.logger.info('Injection des données de la carte')
+exec('import profils.'+conf+'.injection.elements_jeu')
+
 first = True
 erreur = False
 while first or erreur:
