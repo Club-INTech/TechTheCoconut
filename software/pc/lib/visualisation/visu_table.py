@@ -16,7 +16,7 @@ class Visu_table:
 		'totem':[168,86,6],
 		'palmier':[147,239,8],
 		'ennemi':[234,57,59],
-		'allie':[138,48,225];
+		'allie':[138,48,225],
 		#:TODO: A recycler (c'est trop moche et pas du tout parlant)
 		'poussoirTrue':[234,57,59],	# Eux  ("Rouge")
 		'poussoirFalse':[138,48,225],	# Nous ("Violet")

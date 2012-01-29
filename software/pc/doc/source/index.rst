@@ -27,6 +27,7 @@ Contents:
     recherche_chemin
     robot
     serie
+    serie_simple
     simul_uc
     strategie
     visualisation
