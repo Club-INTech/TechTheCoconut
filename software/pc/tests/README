@@ -1,1 +1,2 @@
 Pour log.py : utiliser le flag --nologcapture
+Pour serie.py : lancer outils/simul_serie.sh au préalable
