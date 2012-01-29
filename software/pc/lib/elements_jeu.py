@@ -10,6 +10,8 @@ Ce fichier crée les classes des différents objets présents sur le terrain, ob
 # Classe Point
 #import outils_math.point
 
+import outils_math.rectangle as rectangle
+
 # Ajout de ../ au path python
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -59,6 +61,7 @@ class ElementInfranchissable :
     
     :param orientation: orientation de l'objet à ramener
     :type orientation: float
+    
     
     """
     
@@ -169,7 +172,7 @@ class Lingot(ElementARamener):
         self.hauteur = hauteur
         self.enemy = enemy
         self.largeur = constantes['Objets_Table']['largeur_lingot']
-        self.longueur = constantes['Objets_Table']['longueur_disque']
+        self.longueur = constantes['Objets_Table']['longueur_lingot']
     
     def actualiser(self, position, orientation = 0) :
         """
@@ -207,6 +210,10 @@ class Totem(ElementInfranchissable):
     
     :param ennemi: [OPTIONEL] Est à True si le totem appartient à l'ennemi, à False sinon
     :type ennemi: boolean
+    
+    :param rectangle: Rectangle de collision, utilisé principalement pour la recherche de chemin
+    :type rectangle: Rectangle (voir lib/outils_math/rectangle.py)
+    
     """
     
     def __init__(self, position, ennemi):
@@ -217,12 +224,28 @@ class Totem(ElementInfranchissable):
         self.longueur = constantes['Objets_Table']['longueur_totem']
         self.largeur = constantes['Objets_Table']['largeur_totem']
         self.hauteur = constantes['Objets_Table']['hauteur_totem']
+         
+        self.rectangle = rectangle.Rectangle(position.x, position.y, 0, self.longueur, self.largeur)
         
 class Palmier(ElementInfranchissable) :
+    
+    """
+    
+    :param position: Position du palmier
+    :type position: Point
+    
+    :param rayon: Rayon du palmier (en mm)
+    :type rayon: int
+    
+    :param rectangle: Rectangle de collision, utilisé principalement pour la recherche de chemin
+    :type rectangle: Rectangle (voir lib/outils_math/rectangle.py)
+    
+    """
     
     def __init__(self, position) :
         ElementInfranchissable.__init__(self, position, 0)
         self.rayon = constantes['Objets_Table']['rayon_palmier']
+        self.rectangle = rectangle.Rectangle(position.x, position.y, 0, 2*self.rayon, 2*self.rayon)
         
 
 class RegletteEnBois(ElementInfranchissable) :
@@ -241,6 +264,8 @@ class RegletteEnBois(ElementInfranchissable) :
     :param largeur: Largeur (en mm) de la reglette CONSTANTE (voir profils/prod/constantes.py)
     :type largeur: int
     
+    :param rectangle: Rectangle de collision, utilisé principalement pour la recherche de chemin
+    :type rectangle: Rectangle (voir lib/outils_math/rectangle.py)
     
     """
     
@@ -250,6 +275,8 @@ class RegletteEnBois(ElementInfranchissable) :
         self.orientation = orientation
         self.longueur = longueur
         self.largeur = constantes["Objets_Table"]['largeur_regletteEnBois']
+        
+        self.rectangle = rectangle.Rectangle(position.x, position.y, orientation, self.largeur, self.longueur)
     
     
         
@@ -350,7 +377,6 @@ class Zone:
     :param protectionCale: Est à True si le cadre protégeant le dessous de la cale est fermé, à False sinon.
     :type protectionCale: boolean
     
-    :TODO: Prévoir une adaptation pour la zone trapézoïdale (bas de la cale)
     """
     def __init__(self, nomZone, angleSG, angleSD, angleIG, angleID, ennemi):
         nomZone = nomZone.upper()

@@ -6,7 +6,6 @@ modules = []
 modules.append("actions_in")
 modules.append("actions_out")
 modules.append("outils_math")
-modules.append("recherche_chemin")
 modules.append("simul_uc")
 modules.append("visualisation")
 modules.append("actionneur")
@@ -24,6 +23,9 @@ modules.append("peripherique")
 modules.append("robot")
 modules.append("serie")
 modules.append("strategie")
+modules.append("recherche_chemin")
+modules.append("recherche_chemin.astar")
+modules.append("recherche_chemin.rechercheChemin")
 
 for module in modules:
     try:

@@ -28,5 +28,4 @@ def collisionPolyCase(poly,ctr,pas):
     c2 = collisionPolyPoint(poly,Point(ctr.x+pas/2,ctr.y-pas/2))
     c3 = collisionPolyPoint(poly,Point(ctr.x+pas/2,ctr.y+pas/2))
     c4 = collisionPolyPoint(poly,Point(ctr.x-pas/2,ctr.y+pas/2))
-    c5 = collisionPolyPoint(poly,Point(ctr.x,ctr.y))
-    return c1 or c2 or c3 or c4 or c5
+    return c1 or c2 or c3 or c4

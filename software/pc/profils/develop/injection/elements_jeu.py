@@ -16,7 +16,6 @@ Ce module set à placer tous les élements de jeu
 
 :param Lingots
 
-:TODO: Disques, zones.
 
 """
 
@@ -25,7 +24,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../.."))
 
 import lib.elements_jeu as elements_jeu
-import lib.math.point as point
+import lib.outils_math.point as point
 import lib.carte as mod_carte
 
 import math
@@ -102,8 +101,8 @@ pointCarte2 = point.Point(-100,0)
 
 enemy = False   #TODO
 
-carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte1))
-carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte2)
+carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte1, enemy))
+carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte2, enemy))
 
 
 """
@@ -125,9 +124,9 @@ oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu pench
 
 enemy = False  #TODO
 
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot1, oriLingot1, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot2, oriLingot2, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot3, oriLingot3, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot1, oriLingot1, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot2, oriLingot2, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot3, oriLingot3, hauteur, enemy))
 
 # Lingots des totems
 oriLingotsTotem = math.pi /2
@@ -138,10 +137,10 @@ pointLingot5 = point.Point(400 - 125, 1000)
 pointLingot6 = point.Point(-400 + 125, 1000)
 pointLingot7 = point.Point(-400 - 125, 1000)
 
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot4, oriLingot4, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot5, oriLingot5, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot6, oriLingot6, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingots(pointLingot7, oriLingot7, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot4, oriLingotsTotem, hauteur, enemy)) #NOTE Est-ce bien oriLingotsTotem ? (Anthony)
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot5, oriLingotsTotem, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot6, oriLingotsTotem, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot7, oriLingotsTotem, hauteur, enemy))
 
 
 """
@@ -187,7 +186,7 @@ ptDisque18 = point.Point(0, 240 - 30)
 
 # On rentre les variables disques dans la Carte.
 for i in range(1, 19) :
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
 
 
@@ -200,7 +199,7 @@ ptDisque22 = point.Point(-90, 2000 - 300)
 
 # On rentre les disques noirs dans la Carte
 for i in range (19, 23):
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
     
 
 # Niveau 1 des totems
@@ -217,7 +216,7 @@ ptDisque30 = point.Point(-400 + 100, 1000 + 100)
 
 # On rentre les disques du niveau 1 dans la Carte
 for i in range (23, 31):
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
     
 # Niveau 3 des totems :
@@ -225,13 +224,7 @@ hauteur = 18 + 18 + 18 + 2* 54.5
 
 # On rentre les disques du niveau 3 dans la Carte
 for i in range (23, 31):
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy)")
-
-
-    
-# TODO pas fini : Il reste les disques qui sont dans les totems
-
-
+    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
 """
 Zones de jeu
