@@ -24,7 +24,7 @@ class Serie(threading.Thread, serial.Serial):
     :param timeout: Timeout de la liaison en secondes
     :type timeout: int
     :param parite: Type de parité
-    :type parite: None|PARITY_NONE|PARITY_EVEN|PARITY_ODD|PARITY_MARK|PARITY_SPACE
+    :type parite: None|'PARITY_NONE'|'PARITY_EVEN'|'PARITY_ODD'|'PARITY_MARK'|'PARITY_SPACE'
     :TODO: Mettre le débit de Baud par défaut
     """
     def __init__(self, peripherique, nom, debit, timeout, parite=None):
