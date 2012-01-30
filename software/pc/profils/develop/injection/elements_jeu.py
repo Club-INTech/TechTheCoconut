@@ -60,7 +60,7 @@ oriReglette2   = 0
 longueurReglette2 = 400
 
 pointReglette3 = point.Point(1500 - 345, 2000 - 375)
-oriReglette3   = math.pi - math.atan((3000-500.)/(400-325.))
+oriReglette3   = 3.1415 - math.atan((3000-500.)/(400-325.))
 longueurReglette3 = 750
 
 pointReglette4 = point.Point(-1500 + 345, 2000 - 375)
@@ -78,9 +78,9 @@ Boutons poussoir
 :TODO: Gerer l'assignation de la variable enemy
 """
 
-pointPoussoir1 = point.Point(150 - 640, 2000)
-pointPoussoir2 = point.Point(1500 - 640 + 477, 2000)
-pointPoussoir3 = point.Point(-1500 + 640 - 477, 2000)
+pointPoussoir1 = point.Point(1500 - 640, 2000)
+pointPoussoir2 = point.Point(1500 - 640 - 477, 2000)
+pointPoussoir3 = point.Point(-1500 + 640 + 477, 2000)
 pointPoussoir4 = point.Point(-1500 + 640, 2000)
 
 enemy = False     # :TODO:
@@ -117,8 +117,8 @@ pointLingot2 = point.Point(-1500 + 400, 518 + 280) #droite
 pointLingot3 = point.Point(+1500 - 400, 518 + 280) #gauche
 
 oriLingot1 = 0
-oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
-oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
+oriLingot2 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché...
+oriLingot3 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
 
 
@@ -129,7 +129,7 @@ carte.ajouter_lingot(elements_jeu.Lingot(pointLingot2, oriLingot2, hauteur, enem
 carte.ajouter_lingot(elements_jeu.Lingot(pointLingot3, oriLingot3, hauteur, enemy))
 
 # Lingots des totems
-oriLingotsTotem = math.pi /2
+oriLingotsTotem = 3.1415 /2
 hauteur = 18 + 54.5
 
 pointLingot4 = point.Point(400 + 125, 1000)

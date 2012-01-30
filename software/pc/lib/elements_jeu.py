@@ -304,7 +304,7 @@ class Poussoir(ElementQueteAnnexe):
         """
         
         #log.logger.info("Création d'un objet Poussoir en cours...\n")
-        ElementQueteAnnexe.__init__(self, position, math.pi/2, ennemi, etat)
+        ElementQueteAnnexe.__init__(self, position, 3.1415/2, ennemi, etat)
         
     def setEtatOK(self, etat = True) :
         """
@@ -338,7 +338,7 @@ class CarteAuTresor(ElementQueteAnnexe):
         Je ne pense pas que ça soit important (Anthony V.)
         """
         #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
-        ElementQueteAnnexe.__init__(self, position, -math.pi/2, ennemi, False)
+        ElementQueteAnnexe.__init__(self, position, -3.1415/2, ennemi, False)
         
         
     def setEtatOK(self, etat = True):
