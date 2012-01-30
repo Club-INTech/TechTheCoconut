@@ -13,11 +13,13 @@ class Visu_table:
     couleur = { 'NOIR':[0,0,0], 
 		'BLANC':[255,255,255],
 		'lingot':[0,255,0],
-		'totem':[168,86,6],
-		'palmier':[147,239,8],
-		'ennemi':[234,57,59],
-		'allie':[138,48,225],
-		#:TODO: A recycler (c'est trop moche et pas du tout parlant)
+		'marron':[168,86,6],
+		'vert':[147,239,8],
+		'rouge':[234,57,59],
+		'violet':[138,48,225],
+		'gris':[213,215,217],
+		
+		#:deprecated: retro-compatibilité
 		'poussoirTrue':[234,57,59],	# Eux  ("Rouge")
 		'poussoirFalse':[138,48,225],	# Nous ("Violet")
 		'carteTresorTrue':[234,57,59],
@@ -109,7 +111,7 @@ class Visu_table:
 	longueur = math.trunc( Visu_table.scale * totem.longueur )
 	
 	pygame.draw.rect(pygame.display.get_surface(),
-			 Visu_table.couleur['totem'],
+			 Visu_table.couleur['marron'],
 			 pygame.Rect(x, y, largeur, longueur))
 			  
 	if self.debug:
@@ -127,7 +129,7 @@ class Visu_table:
 	y = self.tailleTablePx[1] - math.trunc(self.scale*palmier.position.y)
 	r = math.trunc( self.scale*palmier.rayon)
 	
-	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["palmier"], (x,y), r)
+	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["vert"], (x,y), r)
 	
 	if self.debug:
 	    print "Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
@@ -144,6 +146,7 @@ class Visu_table:
 	
 	x = self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale * poussoir.position.x )
 	y = self.tailleTablePx[1] - math.trunc( Visu_table.scale * poussoir.position.y )
+	couleur = (poussoir.ennemi  and 'rouge') or 'violet'
 	
 	if poussoir.etat: #si enfoncé
 	    l = math.trunc( 12 * Visu_table.scale )
@@ -152,7 +155,7 @@ class Visu_table:
 	
 	# if poussoir.etat: appartient à l'ennemi
 	pygame.draw.rect( pygame.display.get_surface(),
-			  Visu_table.couleur['poussoir'+str(poussoir.ennemi)],
+			  Visu_table.couleur[couleur],
 			  pygame.Rect(x, y, 7, l))
 	
 	if self.debug:
@@ -172,11 +175,11 @@ class Visu_table:
 	
 	x = self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*carteTresor.position.x) - math.trunc( largeur/2 )
 	y = self.tailleTablePx[1] - math.trunc( Visu_table.scale*carteTresor.position.y) - hauteur
-	
+	couleur = (carteTresor.ennemi  and 'rouge') or 'violet'
 	
 	if not carteTresor.etat:
 	    pygame.draw.rect(pygame.display.get_surface(),
-			     Visu_table.couleur['carteTresor'+str(carteTresor.etat)],
+			     Visu_table.couleur[couleur],
 			     pygame.Rect(x, y, largeur, hauteur) )
 			  
 	if self.debug:
@@ -201,12 +204,17 @@ class Visu_table:
 	id = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*zone.angleID.x), self.tailleTablePx[1] - math.trunc( Visu_table.scale*zone.angleID.y))
 	sd = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*zone.angleSD.x), self.tailleTablePx[1] - math.trunc( Visu_table.scale*zone.angleSD.y))
 	
-	#:TODO: Choix de la couleur en fonction de la zone et de l'appartenance
-	couleur = Visu_table.couleur[zone.nomZone]
+	if zone.nomZone == 'CALEPROTEGEE':
+	    couleur = Visu_table.couleur['gris']
+	elif zone.nomZone == 'CALE':
+	    couleur = Visu_table.couleur['marron']
+	elif zone.nomZone == 'BUREAUCAPITAINE':
+	    couleur = Visu_table.couleur['violet']
+	else: #AIREDEJEU
+	    pass
+
 	
-	pygame.draw.polygon( pygame.display.get_surface(),
-			  couleur,
-			  [sg, ig, id, sd])
+	pygame.draw.polygon( pygame.display.get_surface(), couleur, [sg, ig, id, sd])
 			  
 	if self.debug:
 	    print "Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
