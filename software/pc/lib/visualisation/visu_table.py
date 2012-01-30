@@ -13,6 +13,7 @@ class Visu_table:
     couleur = { 'NOIR':[0,0,0], 
 		'BLANC':[255,255,255],
 		'lingot':[0,255,0],
+<<<<<<< HEAD
 		'marron':[168,86,6],
 		'vert':[147,239,8],
 		'rouge':[234,57,59],
@@ -20,6 +21,13 @@ class Visu_table:
 		'gris':[213,215,217],
 		
 		#:deprecated: retro-compatibilité
+=======
+		'totem':[168,86,6],
+		'palmier':[147,239,8],
+		'ennemi':[234,57,59],
+		'allie':[138,48,225],
+		#:TODO: A recycler (c'est trop moche et pas du tout parlant)
+>>>>>>> 22821a1c3ea5a1a5c966a38745d3fc458443be63
 		'poussoirTrue':[234,57,59],	# Eux  ("Rouge")
 		'poussoirFalse':[138,48,225],	# Nous ("Violet")
 		'carteTresorTrue':[234,57,59],
