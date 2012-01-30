@@ -21,17 +21,7 @@ class Visu_table( threading.Thread):
 		'vert':[147,239,8],
 		'rouge':[234,57,59],
 		'violet':[138,48,225],
-		'gris':[213,215,217],
-		
-		#:deprecated: retro-compatibilité
-		'poussoirTrue':[234,57,59],	# Eux  ("Rouge")
-		'poussoirFalse':[138,48,225],	# Nous ("Violet")
-		'carteTresorTrue':[234,57,59],
-		'carteTresorFalse':[138,48,225],
-		'CALE':[127,127,127],
-		'CALEPROTEGEE':[127,127,127],
-		'BUREAUCAPITAINE':[127,127,127],
-		'AIREDEJEU':[127,127,127]}
+		'gris':[213,215,217]}
     srcImageTable = os.path.join(os.path.dirname(__file__), "../../donnees/images/table_3000_2000_vierge.png")
     displayMap = True
 	      
