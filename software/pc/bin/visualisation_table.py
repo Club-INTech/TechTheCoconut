@@ -7,6 +7,5 @@ import lib
 from lib.visualisation.visu_table import Visu_table
 
 
-vTable = Visu_table()
-vTable.mainLoop()
-vTable.quit()
+vTable = Visu_table(nom='vTable', debug=False)
+vTable.start()
