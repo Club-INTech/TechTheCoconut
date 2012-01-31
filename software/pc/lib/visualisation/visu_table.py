@@ -1,31 +1,27 @@
 # -*- coding: utf-8 -*-
-import pygame, time, sys, os, math
+import pygame, time, sys, os, math, threading, lib.log
 from lib.carte import Carte
+
+log = lib.log.Log()
 
 #:TODO: Import et utilisation des logs
 
-class Visu_table:
+class Visu_table( threading.Thread):
     """
-    Classe permettant de visualiser la table de jeu avec les zones, les éléments de jeu, les robots, ...
+    Classe permettant de visualiser la table de jeu avec les zones, les éléments de jeu, les robots utilisant un thread (ie non bloquante)\n
+    Pour la démarrer utiliser la méthode start()\n
+    Pour l'arrêter utiliser la méthode stop()\n
     """
     
     #Définition des constantes de la classe
     couleur = { 'NOIR':[0,0,0], 
 		'BLANC':[255,255,255],
 		'lingot':[0,255,0],
-		'totem':[168,86,6],
-		'palmier':[147,239,8],
-		'ennemi':[234,57,59],
-		'allie':[138,48,225],
-		#:TODO: A recycler (c'est trop moche et pas du tout parlant)
-		'poussoirTrue':[234,57,59],	# Eux  ("Rouge")
-		'poussoirFalse':[138,48,225],	# Nous ("Violet")
-		'carteTresorTrue':[234,57,59],
-		'carteTresorFalse':[138,48,225],
-		'CALE':[127,127,127],
-		'CALEPROTEGEE':[127,127,127],
-		'BUREAUCAPITAINE':[127,127,127],
-		'AIREDEJEU':[127,127,127]}
+		'marron':[168,86,6],
+		'vert':[147,239,8],
+		'rouge':[234,57,59],
+		'violet':[138,48,225],
+		'gris':[213,215,217]}
     srcImageTable = os.path.join(os.path.dirname(__file__), "../../donnees/images/table_3000_2000_vierge.png")
     displayMap = True
 	      
@@ -34,14 +30,17 @@ class Visu_table:
     caption = "Visualisation Table - INTech 2012"
     fps = 1
     
-    def __init__(self,debug=True):
+    def __init__(self,nom,debug=True):
 	"""
 	Constructeur
 	
 	:param debug: Affiche les paramètres de dessin des différents objets
 	:type debug: boolean
+	:param nom: Défini le nom du Thread
+	:type nom: string
 	"""
 	self.debug = debug
+	self.nom = nom
 	self.tailleTablePx = [math.trunc(3000*self.scale), math.trunc(2000*self.scale)]
 	
         pygame.init()
@@ -62,6 +61,12 @@ class Visu_table:
 	self.clock.tick(Visu_table.fps)
 	
 	self.carte = Carte()
+	
+	try:
+	    threading.Thread.__init__(self, name=nom)
+	    log.logger.info("Création de la visualisation de la table (thread nommé "+nom+")...")
+	except:
+	    self.stop()
 	
     def drawLingot(self, lingot):
 	"""
@@ -91,11 +96,10 @@ class Visu_table:
 	
 	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur[disque.couleur], (x,y), r)
 	
-	if self.debug:
-	    print "Disque (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
-		  "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
-		  "rel[x="+str(math.trunc( Visu_table.scale * disque.position.x ))+" | y="+str(math.trunc( Visu_table.scale * disque.position.y ))+"]"
-			  
+	log.logger.debug("Disque (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
+			 "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
+			 "rel[x="+str(math.trunc( Visu_table.scale * disque.position.x ))+" | y="+str(math.trunc( Visu_table.scale * disque.position.y ))+"]")
+
     def drawTotem(self, totem):
 	"""
 	Dessine le totem sur l'écran
@@ -109,12 +113,12 @@ class Visu_table:
 	longueur = math.trunc( Visu_table.scale * totem.longueur )
 	
 	pygame.draw.rect(pygame.display.get_surface(),
-			 Visu_table.couleur['totem'],
+			 Visu_table.couleur['marron'],
 			 pygame.Rect(x, y, largeur, longueur))
 			  
-	if self.debug:
-	    print "Totem(la="+str(largeur)+";lo="+str(longueur)+") abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
-		  "rel[x="+str(math.trunc( Visu_table.scale * totem.position.x ))+" | y="+str(math.trunc( Visu_table.scale * totem.position.y ))+"]"
+	log.logger.debug("Totem(la="+str(largeur)+";lo="+str(longueur)+") " \
+			 "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			 "rel[x="+str(math.trunc( Visu_table.scale * totem.position.x ))+" | y="+str(math.trunc( Visu_table.scale * totem.position.y ))+"]")
 			  
     def drawPalmier(self, palmier):
 	"""
@@ -127,12 +131,11 @@ class Visu_table:
 	y = self.tailleTablePx[1] - math.trunc(self.scale*palmier.position.y)
 	r = math.trunc( self.scale*palmier.rayon)
 	
-	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["palmier"], (x,y), r)
+	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["vert"], (x,y), r)
 	
-	if self.debug:
-	    print "Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
-		  " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
-		  " rel[x="+str(math.trunc( Visu_table.scale * palmier.position.x ))+" | y="+str(math.trunc( Visu_table.scale * palmier.position.y ))+"]"
+	log.logger.debug("Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
+			 " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
+			 " rel[x="+str(math.trunc( Visu_table.scale * palmier.position.x ))+" | y="+str(math.trunc( Visu_table.scale * palmier.position.y ))+"]")
     
     def drawPoussoir(self, poussoir):
 	"""
@@ -144,6 +147,7 @@ class Visu_table:
 	
 	x = self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale * poussoir.position.x )
 	y = self.tailleTablePx[1] - math.trunc( Visu_table.scale * poussoir.position.y )
+	couleur = (poussoir.ennemi  and 'rouge') or 'violet'
 	
 	if poussoir.etat: #si enfoncé
 	    l = math.trunc( 12 * Visu_table.scale )
@@ -152,13 +156,12 @@ class Visu_table:
 	
 	# if poussoir.etat: appartient à l'ennemi
 	pygame.draw.rect( pygame.display.get_surface(),
-			  Visu_table.couleur['poussoir'+str(poussoir.ennemi)],
+			  Visu_table.couleur[couleur],
 			  pygame.Rect(x, y, 7, l))
 	
-	if self.debug:
-	    print "Poussoir (etat="+str(poussoir.etat)+";ennemi="+str(poussoir.ennemi)+") "  \
-		  "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
-		  "rel[x="+str(math.trunc( Visu_table.scale * poussoir.position.x ))+" | y="+str(math.trunc( Visu_table.scale * poussoir.position.y ))+"]"
+	log.logger.debug("Poussoir (etat="+str(poussoir.etat)+";ennemi="+str(poussoir.ennemi)+") "  \
+			 "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			 "rel[x="+str(math.trunc( Visu_table.scale * poussoir.position.x ))+" | y="+str(math.trunc( Visu_table.scale * poussoir.position.y ))+"]")
 			  
     def drawCarteTresor(self, carteTresor):
 	"""
@@ -172,20 +175,19 @@ class Visu_table:
 	
 	x = self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*carteTresor.position.x) - math.trunc( largeur/2 )
 	y = self.tailleTablePx[1] - math.trunc( Visu_table.scale*carteTresor.position.y) - hauteur
-	
+	couleur = (carteTresor.ennemi  and 'rouge') or 'violet'
 	
 	if not carteTresor.etat:
 	    pygame.draw.rect(pygame.display.get_surface(),
-			     Visu_table.couleur['carteTresor'+str(carteTresor.etat)],
+			     Visu_table.couleur[couleur],
 			     pygame.Rect(x, y, largeur, hauteur) )
-			  
-	if self.debug:
-	    if carteTresor.etat:
-		print "CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): not displayed "
-	    else:
-		print "CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): " \
-		  " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
-		  " rel[x="+str(math.trunc( Visu_table.scale * carteTresor.position.x ))+" | y="+str(math.trunc( Visu_table.scale * carteTresor.position.y ))+"]"
+			
+	if carteTresor.etat:
+	    log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): not displayed ")
+	else:
+	    log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			     "rel[x="+str(math.trunc( Visu_table.scale * carteTresor.position.x ))+" | y="+str(math.trunc( Visu_table.scale * carteTresor.position.y ))+"]")
 			  
     def drawZone(self, zone):
 	"""
@@ -201,19 +203,23 @@ class Visu_table:
 	id = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*zone.angleID.x), self.tailleTablePx[1] - math.trunc( Visu_table.scale*zone.angleID.y))
 	sd = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*zone.angleSD.x), self.tailleTablePx[1] - math.trunc( Visu_table.scale*zone.angleSD.y))
 	
-	#:TODO: Choix de la couleur en fonction de la zone et de l'appartenance
-	couleur = Visu_table.couleur[zone.nomZone]
+	if zone.nomZone == 'CALEPROTEGEE':
+	    couleur = Visu_table.couleur['gris']
+	elif zone.nomZone == 'CALE':
+	    couleur = Visu_table.couleur['marron']
+	elif zone.nomZone == 'BUREAUCAPITAINE':
+	    couleur = Visu_table.couleur['violet']
+	else: #AIREDEJEU
+	    pass
+
 	
-	pygame.draw.polygon( pygame.display.get_surface(),
-			  couleur,
-			  [sg, ig, id, sd])
+	pygame.draw.polygon( pygame.display.get_surface(), couleur, [sg, ig, id, sd])
 			  
-	if self.debug:
-	    print "Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
-		  "abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]"
+	log.logger.debug("Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
+			 "abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]")
 
     def majTable(self):
-	print "majTable"
+
 	#"Efface" les précédents items
 	if Visu_table.displayMap:
 	    self.screen.blit(self.imageTable, [0,0])
@@ -250,19 +256,23 @@ class Visu_table:
 	
 	pygame.display.flip()
 
-    def mainLoop(self):
-	done=False
+    def quit(self):
+	log.logger.info("Fermeture du thread en cours...")
+	self.Terminated = True
+	pygame.quit ()  
+	self.join()
+
+    def run(self):
+	self.Terminated=False
 	
-	while done==False:
+	while self.Terminated is False:
 	    #On parcours la liste des évènements depuis le dernier appel à get()
 	    for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-		    done=True
+		    self.Terminated=True
 	    
 	    #Evite la surchage du processeur
 	    time.sleep(1/self.fps)
-	    
 	    self.majTable()
-
-    def quit(self):
-	pygame.quit ()  
+	
+	self.quit()
