@@ -60,7 +60,7 @@ oriReglette2   = 0
 longueurReglette2 = 400
 
 pointReglette3 = point.Point(1500 - 345, 2000 - 375)
-oriReglette3   = math.pi - math.atan((3000-500.)/(400-325.))
+oriReglette3   = 3.1415 - math.atan((3000-500.)/(400-325.))
 longueurReglette3 = 750
 
 pointReglette4 = point.Point(-1500 + 345, 2000 - 375)
@@ -78,9 +78,9 @@ Boutons poussoir
 :TODO: Gerer l'assignation de la variable enemy
 """
 
-pointPoussoir1 = point.Point(150 - 640, 2000)
-pointPoussoir2 = point.Point(1500 - 640 + 477, 2000)
-pointPoussoir3 = point.Point(-1500 + 640 - 477, 2000)
+pointPoussoir1 = point.Point(1500 - 640, 2000)
+pointPoussoir2 = point.Point(1500 - 640 - 477, 2000)
+pointPoussoir3 = point.Point(-1500 + 640 + 477, 2000)
 pointPoussoir4 = point.Point(-1500 + 640, 2000)
 
 enemy = False     # :TODO:
@@ -117,8 +117,8 @@ pointLingot2 = point.Point(-1500 + 400, 518 + 280) #droite
 pointLingot3 = point.Point(+1500 - 400, 518 + 280) #gauche
 
 oriLingot1 = 0
-oriLingot2 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
-oriLingot3 = math.pi/2    #WARNING Normalement, ce lingot est un petit peu penché...
+oriLingot2 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché...
+oriLingot3 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
 
 
@@ -129,7 +129,7 @@ carte.ajouter_lingot(elements_jeu.Lingot(pointLingot2, oriLingot2, hauteur, enem
 carte.ajouter_lingot(elements_jeu.Lingot(pointLingot3, oriLingot3, hauteur, enemy))
 
 # Lingots des totems
-oriLingotsTotem = math.pi /2
+oriLingotsTotem = 3.1415 /2
 hauteur = 18 + 54.5
 
 pointLingot4 = point.Point(400 + 125, 1000)
@@ -167,22 +167,22 @@ ptDisque2 = point.Point(-500, 500)
 ptDisque3 = point.Point(1500 - 450, 2000-300)
 ptDisque4 = point.Point(-1500 + 450, 2000-300)
 
-ptDisque5 = point.Point(400 - 170, 1000 - 170)
+ptDisque5 = point.Point(400 - 170, 1000 -170)
 ptDisque6 = point.Point(400, 1000 - 230)
 ptDisque7 = point.Point(400 + 170, 1000 - 170)
 ptDisque8 = point.Point(400 + 230, 1000)
 ptDisque9 = point.Point(400 + 170, 1000 + 170)
-ptDisque10 = point.Point(400 - 170, 1000 + 230)
+ptDisque10 = point.Point(400 - 170, 1000 + 170)
 
 ptDisque11 = point.Point(-400 + 170, 1000 - 170)
 ptDisque12 = point.Point(-400, 1000 - 230)
 ptDisque13 = point.Point(-400 - 170, 1000 - 170)
 ptDisque14 = point.Point(-400 - 230, 1000)
 ptDisque15 = point.Point(-400 - 170, 1000 + 170)
-ptDisque16 = point.Point(-400 + 170, 1000 + 230)
+ptDisque16 = point.Point(-400 + 170, 1000 + 170)
 
-ptDisque17 = point.Point(0, 240+120+30)
-ptDisque18 = point.Point(0, 240 - 30)
+ptDisque17 = point.Point(0, 2000-(240+120+30))
+ptDisque18 = point.Point(0, 2000-(240 - 30))
 
 # On rentre les variables disques dans la Carte.
 for i in range(1, 19) :
@@ -205,14 +205,15 @@ for i in range (19, 23):
 # Niveau 1 des totems
 hauteur = 18
 couleur = "BLANC"
-ptDisque23 = point.Point(400 - 100, 1000 - 100)
-ptDisque24 = point.Point(400 + 100, 1000 - 100)
-ptDisque25 = point.Point(400 + 100, 1000 + 100)
-ptDisque26 = point.Point(400 - 100, 1000 + 100)
-ptDisque27 = point.Point(-400 +100, 1000 - 100)
-ptDisque28 = point.Point(-400 - 100, 1000 - 100)
-ptDisque29 = point.Point(-400 - 100, 1000 + 100)
-ptDisque30 = point.Point(-400 + 100, 1000 + 100)
+radius = 80
+ptDisque23 = point.Point(400 - radius, 1000 - radius)
+ptDisque24 = point.Point(400 + radius, 1000 - radius)
+ptDisque25 = point.Point(400 + radius, 1000 + radius)
+ptDisque26 = point.Point(400 - radius, 1000 + radius)
+ptDisque27 = point.Point(-400 + radius, 1000 - radius)
+ptDisque28 = point.Point(-400 - radius, 1000 - radius)
+ptDisque29 = point.Point(-400 - radius, 1000 + radius)
+ptDisque30 = point.Point(-400 + radius, 1000 + radius)
 
 # On rentre les disques du niveau 1 dans la Carte
 for i in range (23, 31):
