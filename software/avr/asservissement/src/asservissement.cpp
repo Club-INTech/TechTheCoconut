@@ -10,7 +10,7 @@
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 
 
-Asservissement::Asservissement(float kp, float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0),consigne_(0), pwmMax_(255)
+Asservissement::Asservissement(float kp, float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0), pwmMax_(255) ,consigne_(0)
 {
 }
 

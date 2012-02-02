@@ -238,9 +238,9 @@ namespace CommunicationPC
 				traiterCaractereER(lireCaractere(), robot);
 				break;
 			case 's':
-				TIMSK1 &= ~(1 << TOIE1);
-				printlnChar(robot.typeAsservissement());
-				TIMSK1 |= (1 << TOIE1);
+// 				TIMSK1 &= ~(1 << TOIE1);
+// 				printlnChar(robot.typeAsservissement());
+// 				TIMSK1 |= (1 << TOIE1);
 				break;
 			case 't':
 				traiterCaractereET(lireCaractere(), robot);
@@ -326,10 +326,10 @@ namespace CommunicationPC
 		switch (caractereLu)
 		{
 			case 'r':
-				robot.typeAsservissement('r');
+// 				robot.typeAsservissement('r');
 				break;
 			case 't':
-				robot.typeAsservissement('t');
+// 				robot.typeAsservissement('t');
 				break;
 			default:
 				break;
@@ -366,9 +366,6 @@ namespace CommunicationPC
 		switch (caractereLu)
 		{
 			case 'c':
-				i = lireEntierLong();
-				if (i >= 0)
-					robot.x(i);
 				break;
 			case 'e':
 				printlnLong(robot.x());
@@ -386,9 +383,6 @@ namespace CommunicationPC
 		switch (caractereLu)
 		{
 			case 'c':
-				i = lireEntierLong();
-				if (i >= 0)
-					robot.y(i);
 				break;
 			case 'e':
 				printlnLong(robot.y());
