@@ -70,7 +70,10 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     """
     fonction de recherche de chemin, utilisant le meilleur algorithme codé
     """
-    print "recherche chemin"
+    
+    chargeGraphe()
+    
+    print "recherche chemin -->"
     
     #réinitialisation des property map de couleurs
     global aCouleur
@@ -306,22 +309,3 @@ def enregistreGraphe():
 def tracePDF(nom):
     graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
     #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
-
-
-enregistreGraphe()
-centresRobotsA = []
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("chemin_0_robotsA.pdf")
-
-chargeGraphe()
-centresRobotsA = [Point(10.,30.)]
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("chemin_1_robotsA.pdf")
-
-chargeGraphe()
-centresRobotsA = [Point(10.,30.),Point(-100.,200.)]
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("chemin_2_robotsA.pdf")
