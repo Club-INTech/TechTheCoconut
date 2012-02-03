@@ -17,6 +17,7 @@ log = lib.log.Log()
 from lib.outils_math.collisions import *
 from lib.outils_math.point import Point
 from lib.outils_math.rectangle import Rectangle
+from lib.outils_math.polygone import polygone
 from lib.recherche_chemin.astar import *
 from math import sqrt
 
@@ -25,6 +26,7 @@ tableLargeur = 200.
 tableLongueur = 300.
 coteRobot = 50.
 rayonRobotsA = 50.
+nCotesRobotsA = 6#approximation hexagonale
 
 #TODO lien avec éléments de jeu
 listeObjets=[Rectangle(100.,70.,0.,10.,10.),Rectangle(-50.,100.,0.7,10.,60.),Rectangle(120.,230.,0.4,60.,10.)]
@@ -79,12 +81,69 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     nCouleur = g.new_vertex_property("string")
     
     
+    #création des robots adverses
+    robotsA=[]
+    for centre in centresRobotsA:
+        robotsA.append(polygone(centre,rayonRobotsA,nCotesRobotsA))
+    print robotsA
+        
+    
+    k=g.num_vertices()
+    for robotA in robotsA:
+        #ajoute les noeuds des sommets du polygone représentant le robot adverse
+        for angle in robotA:
+            g.add_vertex()
+            posX[g.vertex(k)] = angle.x
+            posY[g.vertex(k)] = angle.y
+            for l in range(k):
+                #teste les arêtes accessibles
+                touche = False
+                for rect in listeObjets:
+                    if collisionSegmentPoly(angle,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
+                        touche = True
+                        break
+                if not touche:
+                    for robotA in centresRobotsA:
+                        if collisionSegmentPoly(angle,Point(posX[g.vertex(l)],posY[g.vertex(l)]),polygone(robotA,rayonRobotsA,nCotesRobotsA)):
+                            touche = True
+                            break
+                if not touche:
+                    g.add_edge(g.vertex(k),g.vertex(l))
+                    poids[g.edge(g.vertex(k),g.vertex(l))] = sqrt((posX[g.vertex(k)] - posX[g.vertex(l)]) ** 2 + (posY[g.vertex(k)] - posY[g.vertex(l)]) ** 2)
+            k+=1
+        
+            
+    #supprime les arêtes du graphe initial en collision avec les polygones des robots adverses
+    for e in g.edges() :
+        p1=Point(posX[e.source()],posY[e.source()])
+        p2=Point(posX[e.target()],posY[e.target()])
+        touche = False
+        for rect in listeObjets:
+            if collisionSegmentPoly(p1,p2,RectangleToPoly(rect)):
+                touche = True
+                break
+        if not touche:
+            for robotA in robotsA:
+                if collisionSegmentPoly(p1,p2,robotA):
+                    touche = True
+                    break
+        if touche :
+            g.remove_edge(e)
+    
+    
+    
+    
     #test de l'accessibilité des positions de départ et d'arrivée
     touche_td = False
     for objet in listeObjets:
         if collisionPolyPoint(RectangleToPoly(objet),depart):
             touche_td = True
             break
+        if not touche_td:
+            for robotA in robotsA:
+                if collisionPolyPoint(robotA,depart):
+                    touche_td = True
+                    break
     if touche_td :
         print "la position de départ est inaccessible !"
     else :
@@ -93,6 +152,11 @@ def rechercheChemin(depart,arrive,centresRobotsA):
             if collisionPolyPoint(RectangleToPoly(objet),arrive):
                 touche_ta = True
                 break
+            if not touche_ta:
+                for robotA in robotsA:
+                    if collisionPolyPoint(robotA,arrive):
+                        touche_ta = True
+                        break
         if touche_ta :
             print "la position d'arrivée est inaccessible !"
         else :
@@ -103,25 +167,34 @@ def rechercheChemin(depart,arrive,centresRobotsA):
             Narrive=g.add_vertex()
             posX[Narrive] = arrive.x
             posY[Narrive] = arrive.y
-            for l in range(4*len(listeObjets)):
+            for l in range(g.num_vertices()-2):
                 #teste les arêtes accessibles
                 touche_d = False
                 for rect in listeObjets:
                     if collisionSegmentPoly(depart,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
                         touche_d = True
                         break
+                    if not touche_d:
+                        for robotA in robotsA:
+                            if collisionSegmentPoly(depart,Point(posX[g.vertex(l)],posY[g.vertex(l)]),robotA):
+                                touche_d = True
+                                break
                 if not touche_d:
                     g.add_edge(Ndepart,g.vertex(l))
                     poids[g.edge(Ndepart,g.vertex(l))] = sqrt((depart.x - posX[g.vertex(l)]) ** 2 + (depart.y - posY[g.vertex(l)]) ** 2)
             
-                  
-            for l in range(4*len(listeObjets)+1):
+            for l in range(g.num_vertices()-1):
                 #teste les arêtes accessibles
                 touche_a = False
                 for rect in listeObjets:
                     if collisionSegmentPoly(arrive,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
                         touche_a = True
                         break
+                    if not touche_a:
+                        for robotA in robotsA:
+                            if collisionSegmentPoly(arrive,Point(posX[g.vertex(l)],posY[g.vertex(l)]),robotA):
+                                touche_a = True
+                                break
                 if not touche_a:
                     g.add_edge(Narrive,g.vertex(l))
                     poids[g.edge(Narrive,g.vertex(l))] = sqrt((arrive.x - posX[g.vertex(l)]) ** 2 + (arrive.y - posY[g.vertex(l)]) ** 2)
@@ -241,7 +314,7 @@ def tracePDF(nom):
 
     
 enregistreGraphe()
-centresRobotsA = []
+centresRobotsA = [Point(0.,200.)]
 rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
 print "tracePDF -->"
 tracePDF("graphe_angles_chemin.pdf")
