@@ -59,6 +59,7 @@
 #ifndef CommunicationPC_h
 #define CommunicationPC_h
 
+#include <stdint.h>
 #include "robot.h"
 
 namespace CommunicationPC

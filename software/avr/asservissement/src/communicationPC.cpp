@@ -10,7 +10,10 @@
 * TIMSK1 |= (1 << TOIE1);
 */
 
+#include <libintech/usart.h>
+
 #include "communicationPC.h"
+
 
 namespace CommunicationPC
 {
@@ -361,7 +364,6 @@ namespace CommunicationPC
 
 	void traiterCaractereX(unsigned char caractereLu,Robot &robot)
 	{
-		int32_t i = 0;
 		TIMSK1 &= ~(1 << TOIE1);
 		switch (caractereLu)
 		{
@@ -378,7 +380,6 @@ namespace CommunicationPC
 
 	void traiterCaractereY(unsigned char caractereLu,Robot &robot)
 	{
-		int32_t i = 0;
 		TIMSK1 &= ~(1 << TOIE1);
 		switch (caractereLu)
 		{

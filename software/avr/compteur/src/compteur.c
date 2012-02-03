@@ -1,6 +1,8 @@
+#include <libintech/twi_slave.h>
+#include <libintech/usart.h>
+
 #include "compteur.h"
-#include "twi_slave.h"
-#include "serial.h"
+
 
 volatile int32_t roue1;
 volatile int32_t roue2;

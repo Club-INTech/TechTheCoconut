@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-#include "twi_master.h"
+#include <libintech/twi_master.h>
 
 class I2c {
 	public:

@@ -2,9 +2,10 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 
-#include "twi_slave.h"
+#include <libintech/usart.h>
+#include <libintech/twi_slave.h>
 #include "compteur.h"
-#include "serial.h"
+
 
 int main( void ){
 	

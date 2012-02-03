@@ -4,9 +4,14 @@
  * Fichier principal qui sert juste à appeler les fichiers, créer la structure Robot et faire le traitement du port série
  */
 
+#include <util/delay.h>
+#include <avr/interrupt.h>
+
+#include <libintech/twi_master.h>
+
 #include "robot.h"
 #include "communicationPC.h"
-#include <util/delay.h>
+
 
 
 /**
@@ -18,7 +23,7 @@
 
 int main()
 {
-    Robot & robot = Robot::Instance();
+//     Robot & robot = Robot::Instance();
 	while(1)
 	{
 	}

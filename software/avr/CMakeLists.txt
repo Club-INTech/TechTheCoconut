@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 2.8)
+
+include(atmega_328p.cmake)
+
+
+set(LIBRARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/library)
+
+aux_source_directory(${LIBRARY_DIR}/libintech LIBINTECH_SRC)
+add_library(intech STATIC ${LIBINTECH_SRC})
+
+include_directories(${LIBRARY_DIR})
+
+set(MICROCONTROLEURS
+      asservissement
+      compteur
+    )
+
+
+foreach(MICROCONTROLEUR ${MICROCONTROLEURS})
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${MICROCONTROLEUR}/include)
+  set(${MICROCONTROLEUR}_SRC)
+  AUX_SOURCE_DIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/${MICROCONTROLEUR}/src ${MICROCONTROLEUR}_SRC)
+  AUX_SOURCE_DIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/${MICROCONTROLEUR}/ ${MICROCONTROLEUR}_SRC)
+  set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${MICROCONTROLEUR}.hex)
+  
+  add_executable(${MICROCONTROLEUR}.out ${${MICROCONTROLEUR}_SRC})
+  SET_TARGET_PROPERTIES(${MICROCONTROLEUR}.out PROPERTIES LINKER_LANGUAGE CXX)
+  target_link_libraries(${MICROCONTROLEUR}.out intech)
+  add_custom_target(${MICROCONTROLEUR}.hex ALL DEPENDS ${MICROCONTROLEUR}.out)
+  add_custom_command(TARGET ${MICROCONTROLEUR}.hex
+		    COMMAND avr-objcopy 
+		    ARGS -O ihex -R .eeprom ${MICROCONTROLEUR}.out ${MICROCONTROLEUR}.hex
+		    )
+  add_custom_target(upload_${MICROCONTROLEUR} DEPENDS ${MICROCONTROLEUR}.hex)
+  add_custom_command(TARGET upload_${MICROCONTROLEUR}
+		    COMMAND avrdude
+		    ARGS -P /dev/ttyUSB0 -c stk500v1 -p m328p -b 57600 -D -U flash:w:${MICROCONTROLEUR}.hex)
+endforeach()
+
+

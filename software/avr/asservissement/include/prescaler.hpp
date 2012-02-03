@@ -1,8 +1,10 @@
 #ifndef PRESCALER_HPP
 #define PRESCALER_HPP
 
-//Prescalers timer 0
+#include <stdint.h>
+#include <avr/io.h>
 
+//Prescalers timer 0
 
 template<uint8_t id, uint16_t PrescalerVal>
 struct Prescaler{
