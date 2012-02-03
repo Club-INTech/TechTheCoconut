@@ -1,14 +1,18 @@
-
-#include "robot.h"
-#include "twi_master.h"
 #include <math.h>
 
+#include <libintech/usart.h>
+#include <libintech/twi_master.h>
+
+#include "robot.h"
+
+
 // Constructeur avec assignation des attributs
-Robot::Robot() : translation(2,0.5,0),
-				rotation(2,4,0),
-				couleur_('r'),
-				x_(0),
-				y_(0)
+Robot::Robot() : 				couleur_('r')
+				,x_(0)
+				,y_(0)
+				,translation(2,0.5,0),
+				rotation(2,4,0)
+
 {
 	TWI_init();
 	uart_init();

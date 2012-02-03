@@ -5,7 +5,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "twi_slave.h"
+#include <libintech/twi_slave.h>
 
 /*
  *  Pins des codeurs

@@ -1,6 +1,9 @@
 #ifndef PWM_HPP
 #define PWM_HPP
 
+#include <stdint.h>
+#include <avr/io.h>
+
 template<uint8_t timer_id>
 struct ModeFastPwm;
 

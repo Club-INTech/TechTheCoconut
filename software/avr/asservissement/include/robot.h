@@ -2,9 +2,7 @@
 #define robot_h
 
 #include <stdint.h>
-#include "usart.h"
 
-#include "i2c.h"
 #include "asservissement.h"
 #include "timer.hpp"
 #include "pwm.hpp"
@@ -20,6 +18,8 @@ class Robot {
 // Par défaut les attributs sont publics dans une struct
 
 
+
+private:
 	
 	//Moteur sur le Timer 0 en FastPWM
 	Moteur<0,ModeFastPwm> moteurGauche;
@@ -45,11 +45,11 @@ class Robot {
 	* Ordonnée du robot en mm
 	*/
 	float y_;
-	
 public:
-  
   	Asservissement translation;
 	Asservissement rotation;
+	
+public:
   
   	static Robot& Instance();
 	void asservir(int32_t distance, int32_t angle);

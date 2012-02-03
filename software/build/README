@@ -1,0 +1,10 @@
+Pour compiler :
+
+cmake ../.
+make
+
+Pour flasher :
+
+(asservissement) upload_asservissement
+(compteur) upload_compteur
+(...

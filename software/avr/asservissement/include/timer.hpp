@@ -1,6 +1,9 @@
 #ifndef TIMER_HPP
 #define TIMER_HPP
 
+#include <stdint.h>
+#include <avr/io.h>
+
 #include "utils.h"
 #include "prescaler.hpp"
 
