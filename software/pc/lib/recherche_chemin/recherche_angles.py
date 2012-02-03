@@ -85,7 +85,6 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     robotsA=[]
     for centre in centresRobotsA:
         robotsA.append(polygone(centre,rayonRobotsA,nCotesRobotsA))
-    print robotsA
         
     
     k=g.num_vertices()
@@ -200,33 +199,23 @@ def rechercheChemin(depart,arrive,centresRobotsA):
                     poids[g.edge(Narrive,g.vertex(l))] = sqrt((arrive.x - posX[g.vertex(l)]) ** 2 + (arrive.y - posY[g.vertex(l)]) ** 2)
                     
                     
-            """
             #algorithme utilisé : A*
-            #TODO : robot adverse fixé dans le graphe
-            chemin=AStar(Ndepart,Narrive,centresRobotsA)
+            chemin=AStar(Ndepart,Narrive)
             
             #sortie
             print "chemin -->"
             for p in chemin:
                 print "(" + str(p.x) + ", " + str(p.y) + ")"
-            """
 
 
-def AStar(Ndepart,Narrive,centresRobotsA):
+def AStar(Ndepart,Narrive):
     """
     algorithme A*, sur une table de jeu discrétisée "par cases"
     """
     
     #fonction heuristique : renvoit la distance restante supposée
     def h(n, Narrive):
-        #test sur les robots adverses détéctés
-        for r in centresRobotsA:
-            if sqrt((posX[n] - r.x) ** 2 + (posY[n] - r.y) ** 2) < rayonRobotsA:
-                #ignorer les noeuds en leur attribuant une distance heuristique infinie
-                nCouleur[n] = "blue"
-                return float('Inf')
-            else:
-                return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
+        return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
     
     #réinitialisation des tables des noeuds et arêtes parcourus par A*
     touch_v = g.new_vertex_property("bool")
@@ -262,9 +251,15 @@ def chargeGraphe():
     g=load_graph("sauv_g.xml")
     TposX=marshal.load(open("sauv_posX","rb"))
     TposY=marshal.load(open("sauv_posY","rb"))
+    Tpoids=marshal.load(open("sauv_poids","rb"))
     for k in range(len(TposX)):
         posX[g.vertex(k)]=TposX[k]
         posY[g.vertex(k)]=TposY[k]
+    k=0
+    for e in g.edges():
+        poids[e]=Tpoids[k]
+        k+=1
+        
     
 def enregistreGraphe():    
 
@@ -293,7 +288,6 @@ def enregistreGraphe():
                     poids[g.edge(g.vertex(k),g.vertex(l))] = sqrt((posX[g.vertex(k)] - posX[g.vertex(l)]) ** 2 + (posY[g.vertex(k)] - posY[g.vertex(l)]) ** 2)
             k+=1
         
-            
     
     print "enregistreGraphe -->"
     TposX=[]
@@ -302,19 +296,32 @@ def enregistreGraphe():
     for v in g.vertices() :
         TposX.append(posX[v])
         TposY.append(posY[v])
-        #Tpoids.append(poids[v])
+    for e in g.edges():
+        Tpoids.append(poids[e])
     marshal.dump(TposX, open("sauv_posX", 'wb'))
     marshal.dump(TposY, open("sauv_posY", 'wb'))
-    #marshal.dump(Tpoids, open("sauv_poids", 'wb'))
+    marshal.dump(Tpoids, open("sauv_poids", 'wb'))
     g.save("sauv_g.xml")
     
 def tracePDF(nom):
-    #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
-    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
+    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
+    #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
 
-    
+
 enregistreGraphe()
-centresRobotsA = [Point(0.,200.)]
+centresRobotsA = []
 rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
 print "tracePDF -->"
-tracePDF("graphe_angles_chemin.pdf")
+tracePDF("chemin_0_robotsA.pdf")
+
+chargeGraphe()
+centresRobotsA = [Point(10.,30.)]
+rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
+print "tracePDF -->"
+tracePDF("chemin_1_robotsA.pdf")
+
+chargeGraphe()
+centresRobotsA = [Point(10.,30.),Point(-100.,200.)]
+rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
+print "tracePDF -->"
+tracePDF("chemin_2_robotsA.pdf")
