@@ -27,7 +27,7 @@ coteRobot = 50.
 rayonRobotsA = 50.
 
 #TODO lien avec éléments de jeu
-listeObjets=[Rectangle(100,70,0.,10.,10.),Rectangle(-50,100,0.7,10.,60.)]
+listeObjets=[Rectangle(100.,70.,0.,10.,10.),Rectangle(-50.,100.,0.7,10.,60.),Rectangle(120.,230.,0.4,60.,10.)]
 
 """ synthaxe :
 import lib.elements_jeu
@@ -45,11 +45,9 @@ carte.palmiers[i].rectangle. #0
 
 #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
 g = Graph(directed=False)
-posX = g.new_vertex_property("int")
-posY = g.new_vertex_property("int")
+posX = g.new_vertex_property("double")
+posY = g.new_vertex_property("double")
 poids = g.new_edge_property("double")
-
-Nstruct = 2 #nb de noeuds de structure placés à la racine. il servent à pointer d'autres noeuds
 
 pas = 10 # pas en mm
 longueur = int(tableLongueur/pas)
@@ -64,6 +62,8 @@ for o in listeObjets:
     o.wx += largeurRobot
     o.wy += largeurRobot
 
+        
+    
 def rechercheChemin(depart,arrive,centresRobotsA):
     """
     fonction de recherche de chemin, utilisant le meilleur algorithme codé
@@ -79,23 +79,65 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     nCouleur = g.new_vertex_property("string")
     
     
-    #retrouve les noeuds arguments
-    for v in find_vertex(g, posX, depart.x):
-        if posY[v] == depart.y:
-            Ndepart=v
-    
-    for v in find_vertex(g, posX, arrive.x):
-        if posY[v] == arrive.y:
-            Narrive=v
-    
-    #algorithme utilisé : A*
-    #TODO : robot adverse fixé dans le graphe
-    chemin=AStar(Ndepart,Narrive,centresRobotsA)
-    
-    #sortie
-    print "chemin -->"
-    for p in chemin:
-        print "(" + str(p.x) + ", " + str(p.y) + ")"
+    #test de l'accessibilité des positions de départ et d'arrivée
+    touche_td = False
+    for objet in listeObjets:
+        if collisionPolyPoint(RectangleToPoly(objet),depart):
+            touche_td = True
+            break
+    if touche_td :
+        print "la position de départ est inaccessible !"
+    else :
+        touche_ta = False
+        for objet in listeObjets:
+            if collisionPolyPoint(RectangleToPoly(objet),arrive):
+                touche_ta = True
+                break
+        if touche_ta :
+            print "la position d'arrivée est inaccessible !"
+        else :
+            #créations des noeuds arguments et de leurs arêtes
+            Ndepart=g.add_vertex()
+            posX[Ndepart] = depart.x
+            posY[Ndepart] = depart.y
+            Narrive=g.add_vertex()
+            posX[Narrive] = arrive.x
+            posY[Narrive] = arrive.y
+            for l in range(4*len(listeObjets)):
+                #teste les arêtes accessibles
+                touche_d = False
+                for rect in listeObjets:
+                    if collisionSegmentPoly(depart,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
+                        touche_d = True
+                        break
+                if not touche_d:
+                    g.add_edge(Ndepart,g.vertex(l))
+                    poids[g.edge(Ndepart,g.vertex(l))] = sqrt((depart.x - posX[g.vertex(l)]) ** 2 + (depart.y - posY[g.vertex(l)]) ** 2)
+            
+                  
+            for l in range(4*len(listeObjets)+1):
+                #teste les arêtes accessibles
+                touche_a = False
+                for rect in listeObjets:
+                    if collisionSegmentPoly(arrive,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
+                        touche_a = True
+                        break
+                if not touche_a:
+                    g.add_edge(Narrive,g.vertex(l))
+                    poids[g.edge(Narrive,g.vertex(l))] = sqrt((arrive.x - posX[g.vertex(l)]) ** 2 + (arrive.y - posY[g.vertex(l)]) ** 2)
+                    
+                    
+            """
+            #algorithme utilisé : A*
+            #TODO : robot adverse fixé dans le graphe
+            chemin=AStar(Ndepart,Narrive,centresRobotsA)
+            
+            #sortie
+            print "chemin -->"
+            for p in chemin:
+                print "(" + str(p.x) + ", " + str(p.y) + ")"
+            """
+
 
 def AStar(Ndepart,Narrive,centresRobotsA):
     """
@@ -159,19 +201,14 @@ def enregistreGraphe():
     """
    
     print "création du graphe -->"
-
-    #noeuds de structures, servant de pointeurs
-    for k in range(Nstruct):
-        g.add_vertex()
-    k=Nstruct
-    
+    k=0
     for objet in listeObjets:
         #ajoute 4 noeuds : les angles de l'objet rectangulaire
         for angle in RectangleToPoly(objet):
             g.add_vertex()
             posX[g.vertex(k)] = angle.x
             posY[g.vertex(k)] = angle.y
-            for l in range(Nstruct,k):
+            for l in range(k):
                 #teste les arêtes accessibles
                 touche = False
                 for rect in listeObjets:
@@ -200,9 +237,11 @@ def enregistreGraphe():
     
 def tracePDF(nom):
     #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
-    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True)
+    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
 
+    
 enregistreGraphe()
-for e in g.edges():
-    print e
-tracePDF("graphe_angles")
+centresRobotsA = []
+rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
+print "tracePDF -->"
+tracePDF("graphe_angles_chemin.pdf")
