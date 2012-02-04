@@ -8,23 +8,18 @@
 #include <avr/interrupt.h>
 
 #include <libintech/twi_master.h>
+#include <libintech/usart.h>
 
 #include "robot.h"
 #include "communicationPC.h"
 
 
-/**
- * Fonction principale
- *
- * \return int 0 si aucune erreur, 1 si erreur
- */
-
-
 int main()
 {
-//     Robot & robot = Robot::Instance();
+    Robot & robot = Robot::Instance();
 	while(1)
 	{
+		CommunicationPC::traiter(robot);
 	}
 	return 0;
 }
@@ -36,5 +31,5 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	get_all(infos);
 	robot.asservir(infos[0],infos[1]);
 	robot.updatePosition(infos[0],infos[1]);
-// 	printlnLong(robot.x());
+	//printlnLong(robot.x());
 }
