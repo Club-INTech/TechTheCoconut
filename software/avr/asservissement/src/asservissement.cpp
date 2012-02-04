@@ -4,11 +4,10 @@
 
 #include "asservissement.h"
 
-//Je laisse ces define pour le moment, mais à refaire type-safe.
+//Je laisse ces define pour le moment, mais ï¿½ refaire type-safe.
 #define ABS(x)      ((x) < 0 ? - (x) : (x))
 #define MAX(a,b)    ((a) > (b) ? (a) : (b))
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
-
 
 Asservissement::Asservissement(float kp, float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0), pwmMax_(255) ,consigne_(0)
 {
@@ -30,7 +29,7 @@ int16_t Asservissement::pwm(int32_t positionReelle)
 }
 
 /*
-* Arrêt progressif du moteur
+* Arrï¿½t progressif du moteur
 */
 void Asservissement::stop()
 {
@@ -38,7 +37,7 @@ void Asservissement::stop()
 }
 
 /*
-* Définition dynamique des constantes
+* Dï¿½finition dynamique des constantes
 */
 void Asservissement::kp(uint16_t kp)
 {

@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 #include "asservissement.h"
-#include "timer.hpp"
-#include "pwm.hpp"
-#include "moteur.hpp"
+#include <libintech/timer.hpp>
+#include <libintech/pwm.hpp>
+#include <libintech/moteur.hpp>
 
 /**
 * Structure principale Robot
@@ -16,7 +16,6 @@
 
 class Robot {
 // Par défaut les attributs sont publics dans une struct
-
 
 
 private:

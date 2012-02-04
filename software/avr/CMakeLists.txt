@@ -34,7 +34,7 @@ foreach(MICROCONTROLEUR ${MICROCONTROLEURS})
   add_custom_target(upload_${MICROCONTROLEUR} DEPENDS ${MICROCONTROLEUR}.hex)
   add_custom_command(TARGET upload_${MICROCONTROLEUR}
 		    COMMAND avrdude
-		    ARGS -P /dev/ttyUSB0 -c stk500v1 -p m328p -b 57600 -D -U flash:w:${MICROCONTROLEUR}.hex)
+		    ARGS -c usbasp -p m328p -U flash:w:${MICROCONTROLEUR}.hex)
 endforeach()
 
 
