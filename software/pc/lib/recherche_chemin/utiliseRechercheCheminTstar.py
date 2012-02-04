@@ -18,6 +18,8 @@ from lib.recherche_chemin.rechercheCheminTstar import *
 from lib.outils_math.point import Point
 
 
+
+
 enregistreGraphe()
 
 centresRobotsA = []

@@ -9,9 +9,9 @@ constantes = \
 	"Coconut":
 	{
 		#: Largeur en mm
-		"largeur": 150,
+		"largeur": 3000,
 		#: Longueur en mm
-		"longueur": 350
+		"longueur": 2000
 	},
 	"Anna": {},
     "Objets_Table": {

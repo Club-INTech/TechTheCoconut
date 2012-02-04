@@ -21,29 +21,34 @@ from lib.outils_math.polygone import polygone
 from lib.recherche_chemin.astar import *
 from math import sqrt
 
-#TODO lien avec constantes dans profil
-tableLargeur = 200.
-tableLongueur = 300.
+#importation des éléments de jeu
+import profils.develop.injection.elements_jeu
+from lib.carte import Carte
+import profils.develop.constantes
+
+
+
+#lien avec constantes dans profil
+tableLargeur = constantes["Coconut"]["longueur"]
+tableLongueur = constantes["Coconut"]["largeur"]
+
 coteRobot = 50.
 rayonRobotsA = 50.
 nCotesRobotsA = 6#approximation hexagonale
 
-#TODO lien avec éléments de jeu
-listeObjets=[Rectangle(100.,70.,0.,10.,10.),Rectangle(-50.,100.,0.7,10.,60.),Rectangle(120.,230.,0.4,60.,10.)]
-
-""" synthaxe :
-import lib.elements_jeu
-from lib.carte import Carte
+#lien avec éléments de jeu
 carte=Carte()
-carte.reglettesEnBois[i].rectangle. #3
-carte.totems[i].rectangle. #1
-carte.palmiers[i].rectangle. #0
-.x
-.y
-.t
-.wx
-.wy
-"""
+
+r1=carte.reglettesEnBois[0].rectangle
+r2=carte.reglettesEnBois[1].rectangle
+r3=carte.reglettesEnBois[2].rectangle
+r4=carte.reglettesEnBois[3].rectangle
+p=carte.palmiers[0].rectangle
+t1=carte.totems[0].rectangle
+t2=carte.totems[1].rectangle
+
+listeObjets=[r1,r2,r3,r4,p,t1,t2]
+
 
 #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
 g = Graph(directed=False)
