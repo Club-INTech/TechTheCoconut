@@ -13,7 +13,6 @@
 #include "communicationPC.h"
 
 
-
 /**
  * Fonction principale
  *
