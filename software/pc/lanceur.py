@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import shutil
+import glob
 import lib.log
 import lib.conf
 import __builtin__
