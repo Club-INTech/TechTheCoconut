@@ -17,31 +17,38 @@ log = lib.log.Log()
 from lib.outils_math.collisions import *
 from lib.outils_math.point import Point
 from lib.outils_math.rectangle import Rectangle
+from lib.outils_math.polygone import polygone
 from lib.recherche_chemin.astar import *
 from math import sqrt
 
-#TODO lien avec constantes dans profil
-tableLargeur = 200.
-tableLongueur = 300.
+#importation des éléments de jeu
+import profils.develop.injection.elements_jeu
+from lib.carte import Carte
+import profils.develop.constantes
+
+
+
+#lien avec constantes dans profil
+tableLargeur = constantes["Coconut"]["longueur"]
+tableLongueur = constantes["Coconut"]["largeur"]
+
 coteRobot = 50.
 rayonRobotsA = 50.
+nCotesRobotsA = 6#approximation hexagonale
 
-#TODO lien avec éléments de jeu
-listeObjets=[Rectangle(100.,70.,0.,10.,10.),Rectangle(-50.,100.,0.7,10.,60.),Rectangle(120.,230.,0.4,60.,10.)]
-
-""" synthaxe :
-import lib.elements_jeu
-from lib.carte import Carte
+#lien avec éléments de jeu
 carte=Carte()
-carte.reglettesEnBois[i].rectangle. #3
-carte.totems[i].rectangle. #1
-carte.palmiers[i].rectangle. #0
-.x
-.y
-.t
-.wx
-.wy
-"""
+
+r1=carte.reglettesEnBois[0].rectangle
+r2=carte.reglettesEnBois[1].rectangle
+r3=carte.reglettesEnBois[2].rectangle
+r4=carte.reglettesEnBois[3].rectangle
+p=carte.palmiers[0].rectangle
+t1=carte.totems[0].rectangle
+t2=carte.totems[1].rectangle
+
+listeObjets=[r1,r2,r3,r4,p,t1,t2]
+
 
 #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
 g = Graph(directed=False)
@@ -68,7 +75,10 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     """
     fonction de recherche de chemin, utilisant le meilleur algorithme codé
     """
-    print "recherche chemin"
+    
+    chargeGraphe()
+    
+    print "recherche chemin -->"
     
     #réinitialisation des property map de couleurs
     global aCouleur
@@ -79,12 +89,68 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     nCouleur = g.new_vertex_property("string")
     
     
+    #création des robots adverses
+    robotsA=[]
+    for centre in centresRobotsA:
+        robotsA.append(polygone(centre,rayonRobotsA,nCotesRobotsA))
+        
+    
+    k=g.num_vertices()
+    for robotA in robotsA:
+        #ajoute les noeuds des sommets du polygone représentant le robot adverse
+        for angle in robotA:
+            g.add_vertex()
+            posX[g.vertex(k)] = angle.x
+            posY[g.vertex(k)] = angle.y
+            for l in range(k):
+                #teste les arêtes accessibles
+                touche = False
+                for rect in listeObjets:
+                    if collisionSegmentPoly(angle,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
+                        touche = True
+                        break
+                if not touche:
+                    for robotA in centresRobotsA:
+                        if collisionSegmentPoly(angle,Point(posX[g.vertex(l)],posY[g.vertex(l)]),polygone(robotA,rayonRobotsA,nCotesRobotsA)):
+                            touche = True
+                            break
+                if not touche:
+                    g.add_edge(g.vertex(k),g.vertex(l))
+                    poids[g.edge(g.vertex(k),g.vertex(l))] = sqrt((posX[g.vertex(k)] - posX[g.vertex(l)]) ** 2 + (posY[g.vertex(k)] - posY[g.vertex(l)]) ** 2)
+            k+=1
+        
+            
+    #supprime les arêtes du graphe initial en collision avec les polygones des robots adverses
+    for e in g.edges() :
+        p1=Point(posX[e.source()],posY[e.source()])
+        p2=Point(posX[e.target()],posY[e.target()])
+        touche = False
+        for rect in listeObjets:
+            if collisionSegmentPoly(p1,p2,RectangleToPoly(rect)):
+                touche = True
+                break
+        if not touche:
+            for robotA in robotsA:
+                if collisionSegmentPoly(p1,p2,robotA):
+                    touche = True
+                    break
+        if touche :
+            g.remove_edge(e)
+    
+    
+    
+    
     #test de l'accessibilité des positions de départ et d'arrivée
     touche_td = False
     for objet in listeObjets:
         if collisionPolyPoint(RectangleToPoly(objet),depart):
             touche_td = True
             break
+        if not touche_td:
+            for robotA in robotsA:
+                if collisionPolyPoint(robotA,depart):
+                    touche_td = True
+                    break
     if touche_td :
         print "la position de départ est inaccessible !"
     else :
@@ -93,6 +159,11 @@ def rechercheChemin(depart,arrive,centresRobotsA):
             if collisionPolyPoint(RectangleToPoly(objet),arrive):
                 touche_ta = True
                 break
+            if not touche_ta:
+                for robotA in robotsA:
+                    if collisionPolyPoint(robotA,arrive):
+                        touche_ta = True
+                        break
         if touche_ta :
             print "la position d'arrivée est inaccessible !"
         else :
@@ -103,57 +174,56 @@ def rechercheChemin(depart,arrive,centresRobotsA):
             Narrive=g.add_vertex()
             posX[Narrive] = arrive.x
             posY[Narrive] = arrive.y
-            for l in range(4*len(listeObjets)):
+            for l in range(g.num_vertices()-2):
                 #teste les arêtes accessibles
                 touche_d = False
                 for rect in listeObjets:
                     if collisionSegmentPoly(depart,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
                         touche_d = True
                         break
+                    if not touche_d:
+                        for robotA in robotsA:
+                            if collisionSegmentPoly(depart,Point(posX[g.vertex(l)],posY[g.vertex(l)]),robotA):
+                                touche_d = True
+                                break
                 if not touche_d:
                     g.add_edge(Ndepart,g.vertex(l))
                     poids[g.edge(Ndepart,g.vertex(l))] = sqrt((depart.x - posX[g.vertex(l)]) ** 2 + (depart.y - posY[g.vertex(l)]) ** 2)
             
-                  
-            for l in range(4*len(listeObjets)+1):
+            for l in range(g.num_vertices()-1):
                 #teste les arêtes accessibles
                 touche_a = False
                 for rect in listeObjets:
                     if collisionSegmentPoly(arrive,Point(posX[g.vertex(l)],posY[g.vertex(l)]),RectangleToPoly(rect)):
                         touche_a = True
                         break
+                    if not touche_a:
+                        for robotA in robotsA:
+                            if collisionSegmentPoly(arrive,Point(posX[g.vertex(l)],posY[g.vertex(l)]),robotA):
+                                touche_a = True
+                                break
                 if not touche_a:
                     g.add_edge(Narrive,g.vertex(l))
                     poids[g.edge(Narrive,g.vertex(l))] = sqrt((arrive.x - posX[g.vertex(l)]) ** 2 + (arrive.y - posY[g.vertex(l)]) ** 2)
                     
                     
-            """
             #algorithme utilisé : A*
-            #TODO : robot adverse fixé dans le graphe
-            chemin=AStar(Ndepart,Narrive,centresRobotsA)
+            chemin=AStar(Ndepart,Narrive)
             
             #sortie
             print "chemin -->"
             for p in chemin:
                 print "(" + str(p.x) + ", " + str(p.y) + ")"
-            """
 
 
-def AStar(Ndepart,Narrive,centresRobotsA):
+def AStar(Ndepart,Narrive):
     """
     algorithme A*, sur une table de jeu discrétisée "par cases"
     """
     
     #fonction heuristique : renvoit la distance restante supposée
     def h(n, Narrive):
-        #test sur les robots adverses détéctés
-        for r in centresRobotsA:
-            if sqrt((posX[n] - r.x) ** 2 + (posY[n] - r.y) ** 2) < rayonRobotsA:
-                #ignorer les noeuds en leur attribuant une distance heuristique infinie
-                nCouleur[n] = "blue"
-                return float('Inf')
-            else:
-                return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
+        return sqrt((posX[n] - posX[Narrive]) ** 2 + (posY[n] - posY[Narrive]) ** 2)
     
     #réinitialisation des tables des noeuds et arêtes parcourus par A*
     touch_v = g.new_vertex_property("bool")
@@ -189,9 +259,15 @@ def chargeGraphe():
     g=load_graph("sauv_g.xml")
     TposX=marshal.load(open("sauv_posX","rb"))
     TposY=marshal.load(open("sauv_posY","rb"))
+    Tpoids=marshal.load(open("sauv_poids","rb"))
     for k in range(len(TposX)):
         posX[g.vertex(k)]=TposX[k]
         posY[g.vertex(k)]=TposY[k]
+    k=0
+    for e in g.edges():
+        poids[e]=Tpoids[k]
+        k+=1
+        
     
 def enregistreGraphe():    
 
@@ -220,7 +296,6 @@ def enregistreGraphe():
                     poids[g.edge(g.vertex(k),g.vertex(l))] = sqrt((posX[g.vertex(k)] - posX[g.vertex(l)]) ** 2 + (posY[g.vertex(k)] - posY[g.vertex(l)]) ** 2)
             k+=1
         
-            
     
     print "enregistreGraphe -->"
     TposX=[]
@@ -229,19 +304,13 @@ def enregistreGraphe():
     for v in g.vertices() :
         TposX.append(posX[v])
         TposY.append(posY[v])
-        #Tpoids.append(poids[v])
+    for e in g.edges():
+        Tpoids.append(poids[e])
     marshal.dump(TposX, open("sauv_posX", 'wb'))
     marshal.dump(TposY, open("sauv_posY", 'wb'))
-    #marshal.dump(Tpoids, open("sauv_poids", 'wb'))
+    marshal.dump(Tpoids, open("sauv_poids", 'wb'))
     g.save("sauv_g.xml")
     
 def tracePDF(nom):
-    #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
-    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
-
-    
-enregistreGraphe()
-centresRobotsA = []
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("graphe_angles_chemin.pdf")
+    graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
+    #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)

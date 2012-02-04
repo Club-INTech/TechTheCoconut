@@ -1,14 +1,13 @@
 /**
-* \file asservissement.h
-*
-* Classe gérant les différentes constantes d'asservissement
-*/
+ * \file asservissement.h
+ *
+ * Classe gérant les différentes constantes d'asservissement
+ */
 
 #ifndef Asservissement_h
 #define Asservissement_h
 
 #include <stdint.h>
-
 
 class Asservissement {
 	public:

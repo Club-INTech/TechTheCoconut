@@ -51,21 +51,21 @@ Règlettes en bois
 
 """
 
-pointReglette1 = point.Point(1500 - 200, 500 + 6)
+pointReglette1 = point.Point(1500. - 200, 500. + 6)
 oriReglette1   = 0
-longueurReglette1 = 400
+longueurReglette1 = 400.
 
-pointReglette2 = point.Point(-1500 + 200, 500 + 6)
+pointReglette2 = point.Point(-1500. + 200, 500 + 6)
 oriReglette2   = 0
-longueurReglette2 = 400
+longueurReglette2 = 400.
 
-pointReglette3 = point.Point(1500 - 345, 2000 - 375)
-oriReglette3   = 3.1415 - math.atan((3000-500.)/(400-325.))
-longueurReglette3 = 750
+pointReglette3 = point.Point(1500. - 345, 2000 - 375)
+oriReglette3   = math.atan((3000.-500.)/(400-325.))
+longueurReglette3 = 750.
 
-pointReglette4 = point.Point(-1500 + 345, 2000 - 375)
-oriReglette4   = math.atan((3000-500.)/(400-325.))
-longueurReglette4 = 750
+pointReglette4 = point.Point(-1500 + 345., 2000. - 375)
+oriReglette4   = 3.1415 - math.atan((3000-500.)/(400-325.))
+longueurReglette4 = 750.
 
 carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette1, oriReglette1, longueurReglette1))
 carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette2, oriReglette2, longueurReglette2))
