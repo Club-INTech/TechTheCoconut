@@ -30,5 +30,5 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	get_all(infos);
 	robot.asservir(infos[0],infos[1]);
 	robot.updatePosition(infos[0],infos[1]);
-	printlnLong(robot.x());
+	//printlnLong(robot.x());
 }

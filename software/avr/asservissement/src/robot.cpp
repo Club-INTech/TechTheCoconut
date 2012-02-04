@@ -87,7 +87,6 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 			y_ -= delta_distance_mm * sin(last_angle_radian);
 	}
     }
-    printlnLong(x_);
     last_distance = distance;
     last_angle = angle;
 }
