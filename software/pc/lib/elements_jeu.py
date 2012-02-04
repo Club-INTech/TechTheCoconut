@@ -21,7 +21,7 @@ import __builtin__
 
 # Log
 import log
-log = log.Log()
+#log = log.Log()
 
 
 # Ajout de constantes de develop si on ne passe pas par la console INTech
@@ -276,7 +276,7 @@ class RegletteEnBois(ElementInfranchissable) :
         self.longueur = longueur
         self.largeur = constantes["Objets_Table"]['largeur_regletteEnBois']
         
-        self.rectangle = rectangle.Rectangle(position.x, position.y, orientation, self.largeur, self.longueur)
+        self.rectangle = rectangle.Rectangle(position.x, position.y, orientation, self.longueur, self.largeur)
     
     
         
