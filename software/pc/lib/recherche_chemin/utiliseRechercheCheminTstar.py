@@ -21,7 +21,7 @@ from lib.outils_math.point import Point
 enregistreGraphe()
 
 centresRobotsA = []
-rechercheChemin(Point(1050.,248.),Point(-700.,1450.),centresRobotsA)
+rechercheChemin(Point(1050.,248.),Point(-700.,1700.),centresRobotsA)
 print "tracePDF -->"
 tracePDF("chemin_0_robotsA.pdf")
 """
