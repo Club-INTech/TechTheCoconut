@@ -19,6 +19,7 @@ int main()
     Robot & robot = Robot::Instance();
 	while(1)
 	{
+		CommunicationPC::traiter(robot);
 	}
 	return 0;
 }

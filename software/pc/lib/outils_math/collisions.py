@@ -4,6 +4,7 @@ from point import Point
 from vecteur import Vecteur
 from math import cos,sin
 from polygone import polygoneInscrit
+import copy
 
 def collisionPolyPoint(poly,p):
     poly.append(poly[0])
@@ -32,7 +33,8 @@ def collisionPolyCase(poly,ctr,pas):
     c4 = collisionPolyPoint(poly,Point(ctr.x-pas/2,ctr.y+pas/2))
     return c1 or c2 or c3 or c4
     
-def collisionSegmentPoly(a,b,poly):
+def collisionSegmentPoly(a,b,polyg):
+    poly=copy.copy(polyg)
     polyInscrit=polygoneInscrit(poly)
     poly.append(poly[0])#pour boucler le polygone
     touche=False

@@ -18,15 +18,13 @@ from lib.recherche_chemin.rechercheCheminTstar import *
 from lib.outils_math.point import Point
 
 
-
-
 enregistreGraphe()
 
 centresRobotsA = []
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
+rechercheChemin(Point(1050.,248.),Point(-700.,1700.),centresRobotsA)
 print "tracePDF -->"
 tracePDF("chemin_0_robotsA.pdf")
-
+"""
 centresRobotsA = [Point(10.,30.)]
 rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
 print "tracePDF -->"
@@ -36,3 +34,4 @@ centresRobotsA = [Point(10.,30.),Point(-100.,200.)]
 rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
 print "tracePDF -->"
 tracePDF("chemin_2_robotsA.pdf")
+"""
