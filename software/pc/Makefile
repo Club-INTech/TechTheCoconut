@@ -1,5 +1,5 @@
 fonction_ipython.py:
-	sudo cp ipython/fonction_ipython.py /usr/share/pyshared/IPython/UserConfig/
+	sudo cp ipython/fonctions_ipython.py /usr/share/pyshared/IPython/UserConfig/
 	sudo cp ipython/ipy_user_conf.py /usr/share/pyshared/IPython/UserConfig/
 
 install-ubuntu:

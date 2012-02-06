@@ -18,14 +18,14 @@ description on what you could do here.
 
 # Most of your config files and extensions will probably start with this import
 
+import fonctions_ipython
 import IPython.ipapi
 ip = IPython.ipapi.get()
 
 # You probably want to uncomment this if you did %upgrade -nolegacy
 # import ipy_defaults    
 
-import os
-import fonction_ipython.py
+import os   
 
 def main():   
 
