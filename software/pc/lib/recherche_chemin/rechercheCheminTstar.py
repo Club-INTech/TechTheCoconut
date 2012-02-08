@@ -221,9 +221,28 @@ def rechercheChemin(depart,arrive,centresRobotsA):
                         touche_ta = True
                         break
         if touche_ta :
-            print "+------------------------------------------+"
-            print "| la position d'arrivée est inaccessible ! |"
-            print "+------------------------------------------+"
+            print "+-----------------------------------------------------------------------------+"
+            print "| la position d'arrivée (",arrive.x,",",arrive.y,") est inaccessible ! |"
+            print "+-----------------------------------------------------------------------------+"
+            
+            
+            #on retente une destination voisine de celle recherchée
+            pCollision=False
+            for robotA in robotsA:
+                pCollision=collisionSegmentPoly(depart,arrive,robotA)
+                if pCollision:
+                    print "!! deviation vers --> (",pCollision[1].x,",",pCollision[1].y,") !!"
+                    break
+            if not pCollision:
+                for poly in listeObjets:
+                    pCollision=collisionSegmentPoly(depart,arrive,poly)
+                    if pCollision:
+                        print "!! deviation vers --> (",pCollision[1].x,",",pCollision[1].y,") !!"
+                        break
+            rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y),centresRobotsA)
+            
+            
+            
         else :
             #créations des noeuds arguments et de leurs arêtes
             Ndepart=g.add_vertex()
