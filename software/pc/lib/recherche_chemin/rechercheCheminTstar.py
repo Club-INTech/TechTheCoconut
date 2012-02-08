@@ -30,7 +30,7 @@ import profils.develop.constantes
 #lien avec constantes dans profil
 
 #TODO à mettre dans constantes
-coteRobot = 100.
+coteRobot = 100. # en vrai : 350. (meilleure visualisation à 100...)
 rayonRobotsA = 100.
 
 #approximation hexagonale des robots adverses
@@ -227,19 +227,41 @@ def rechercheChemin(depart,arrive,centresRobotsA):
             
             
             #on retente une destination voisine de celle recherchée
-            pCollision=False
-            for robotA in robotsA:
-                pCollision=collisionSegmentPoly(depart,arrive,robotA)
-                if pCollision:
-                    print "!! deviation vers --> (",pCollision[1].x,",",pCollision[1].y,") !!"
-                    break
-            if not pCollision:
+            
+            
+            #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
+            touche_cercle=True
+            for redir in polygone(arrive,10.,6):
+                touche_tr = False
                 for poly in listeObjets:
-                    pCollision=collisionSegmentPoly(depart,arrive,poly)
-                    if pCollision:
-                        print "!! deviation vers --> (",pCollision[1].x,",",pCollision[1].y,") !!"
+                    if collisionPolyPoint(poly,redir):
+                        touche_tr = True
                         break
-            rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y),centresRobotsA)
+                    if not touche_tr:
+                        for robotA in robotsA:
+                            if collisionPolyPoint(robotA,redir):
+                                touche_tr = True
+                                break
+                if not touche_tr :
+                    touche_cercle=False
+                    print "!! deviation négligeable vers --> (",redir.x,",",redir.y,") !!"
+                    rechercheChemin(depart,redir,centresRobotsA)
+                    break
+            
+            #puis sur le segment départ-arrivée initial, on choisit le point accessible le plus proche de l'arrivée
+            if touche_cercle:
+                pCollision=False
+                for robotA in robotsA:
+                    pCollision=collisionSegmentPoly(depart,arrive,robotA)
+                    if pCollision:
+                        break
+                if not pCollision:
+                    for poly in listeObjets:
+                        pCollision=collisionSegmentPoly(depart,arrive,poly)
+                        if pCollision:
+                            break
+                print "!! deviation vers --> (",pCollision[1].x,",",pCollision[1].y,") !!"
+                rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y),centresRobotsA)
             
             
             
@@ -420,5 +442,6 @@ def enregistreGraphe():
     g.save("sauv_g.xml")
     
 def tracePDF(nom):
+    print "création du rendu \"",nom,"\" -->"
     graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
     #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
