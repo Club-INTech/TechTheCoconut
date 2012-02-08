@@ -1,2 +1,2 @@
-import constantes.py
-import strategie.py
+import constantes
+import strategie
