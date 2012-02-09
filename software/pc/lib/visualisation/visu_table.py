@@ -75,14 +75,18 @@ class Visu_table( threading.Thread):
 	:param lingot: Le lingot à dessiner
 	:type lingot: Lingot
 	"""
-	obj = pygame.Rect(lingot.position.x, lingot.position.y, lingot.largeur, lingot.longueur)
+	
+	"""
 	pygame.draw.rect( pygame.display.get_surface(),
 			  Visu_table.couleur['lingot'],
-			  obj)
-			  
-	if self.debug:
-	    print "Lingot"
-	
+			  pygame.Rect(lingot.position.x, lingot.position.y, lingot.largeur, lingot.longueur))
+	"""
+	coord = self.createPolyCoord(lingot.position, (lingot.orientation)*(360/math.pi), lingot.largeur, lingot.longueur)
+	pygame.draw.polygon( pygame.display.get_surface(), Visu_table.couleur['lingot'], coord)
+	    
+	log.logger.debug("Lingot (x="+str(lingot.position.x)+";y="+str(lingot.position.y)+";ori="+str((lingot.orientation)*(360/math.pi))+ \
+			 ";largeur="+str(lingot.largeur)+";longueur="+str(lingot.longueur)+";coord="+str(coord)+")")
+
     def drawDisque(self, disque):
 	"""
 	Dessine le disque sur l'écran
@@ -218,6 +222,38 @@ class Visu_table( threading.Thread):
 	log.logger.debug("Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
 			 "abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]")
 
+    def createPolyCoord(self, pos,ori,l,h):
+	"""
+	Créer les coordonnées d'un rectangle en tenant compte de sa position, de son orientation et de sa taille
+	
+	:param pos: La position du rectangle
+	:type pos: Point
+	
+	:param ori: L'orientation du rectangle
+	:type ori: float
+	
+	:param l: La longueur du rectangle
+	:type l: integer
+	
+	:param h: La hauteur du rectangle
+	:type h: integer
+	"""
+	diag = math.sqrt( math.pow(l/2,2)+math.pow(h/2,2))
+	
+	sg = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x - math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
+	
+	ig = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x - math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y - math.sin(ori)*diag) ))
+	
+	id = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x + math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y - math.sin(ori)*diag) ))
+	
+	sd = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x + math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
+	
+	return [sg,ig,id,sd]
+      
     def majTable(self):
 
 	#"Efface" les précédents items
@@ -257,10 +293,10 @@ class Visu_table( threading.Thread):
 	pygame.display.flip()
 
     def quit(self):
-	log.logger.info("Fermeture du thread en cours...")
+	log.logger.info("Fermeture du thread "+self.nom+" en cours...")
 	self.Terminated = True
 	pygame.quit ()  
-	self.join()
+	self._Thread__stop()
 
     def run(self):
 	self.Terminated=False
