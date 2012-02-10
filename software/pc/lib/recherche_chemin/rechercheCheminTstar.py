@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-il faudra importer :
-from lib.recherche_chemin.rechercheChemin import *
-
-voir utiliseRechercheChemin pour exemple
+--> voir utiliseRechercheChemin pour exemple
 """
 
 #sauvegarde du graphe dans les fichiers "sauv_"
@@ -37,22 +34,25 @@ except:
     log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 
 
-#lien avec constantes dans profil
-
-#TODO à mettre dans constantes
-coteRobot = 100. # en vrai : 350. (meilleure visualisation à 100...)
-rayonRobotsA = 100.
-
-#approximation hexagonale des robots adverses
-nCotesRobotsA = 6
-#diamètre maximal du robot (cf élargissement des objets)
-largeurRobot=coteRobot*sqrt(2)
-
+#récupération des valeurs dans constantes.py
 #sur y
 tableLargeur = constantes["Coconut"]["longueur"]
 #sur x
 tableLongueur = constantes["Coconut"]["largeur"]
 
+coteRobot = constantes["Coconut"]["coteRobot"]
+rayonRobotsA = constantes["Coconut"]["rayonRobotsA"]
+
+"""
+# meilleure visualisation avec 100...
+coteRobot = 100. 
+rayonRobotsA = 100.
+"""
+
+#approximation hexagonale des robots adverses
+nCotesRobotsA = 6
+#diamètre maximal du robot (cf élargissement des objets)
+largeurRobot=coteRobot*sqrt(2)
 
 #VISU : 4 points = angles de l'aire de jeu
 bordsCarte=[Point(-tableLongueur/2,0.),Point(tableLongueur/2,0.),Point(-tableLongueur/2,tableLargeur),Point(tableLongueur/2,tableLargeur)]
@@ -76,6 +76,7 @@ for rect in listeRectangles:
     rect.wx += largeurRobot
     rect.wy += largeurRobot
 
+#VISU : permet de tracer les bords du graphe
 """
 #4 rectangles pour supprimer des arêtes sur les bords
 listeDebug=[]
@@ -90,13 +91,6 @@ g = Graph(directed=False)
 posX = g.new_vertex_property("double")
 posY = g.new_vertex_property("double")
 poids = g.new_edge_property("double")
-
-aCouleur = g.new_edge_property("string")
-aLarg = g.new_edge_property("double")
-nCouleur = g.new_vertex_property("string")
-
-touch_v = g.new_vertex_property("bool")
-touch_e = g.new_edge_property("bool")
 
 #centrage de l'axe des abscisses
 axeX=-(tableLongueur)/2
@@ -113,6 +107,8 @@ for rect in listeRectangles:
     #les éléments de jeu ne doivent pas dépasser de l'aire de jeu
     listePoints=[]
     for angle in RectangleToPoly(rect):
+        
+        #VISU : permet de tracer les bords du graphe
         """
         if (angle.x > -tableLongueur/2+largeurRobot/2 and angle.x < tableLongueur/2-largeurRobot/2):
             px = angle.x
@@ -130,6 +126,7 @@ for rect in listeRectangles:
         
         listePoints.append(Point(px,py))
         """
+        
         listePoints.append(Point(angle.x,angle.y))
     listeObjets.append(listePoints)
 
@@ -169,9 +166,14 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     print "recherche chemin -->"
     
     #réinitialisation des property map de couleurs
+    global aCouleur
+    global aLarg
+    global nCouleur
+    
     aCouleur = g.new_edge_property("string")
     aLarg = g.new_edge_property("double")
     nCouleur = g.new_vertex_property("string")
+    
     
     nCouleur[g.vertex(0)] = "red"
     nCouleur[g.vertex(1)] = "red"
