@@ -49,7 +49,7 @@
 
 	ISR(USART3_RX_vect)
 	{
-		Serial<3> & serial = Serial::Instance();
+		Serial<3> & serial = Serial<3>::Instance();
 		unsigned char c = UDR3;
 		serial.store_char(c);
 	}

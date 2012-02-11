@@ -13,6 +13,7 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libintech/singleton.hpp>
 
 /**
  * Define interne pour charger la bonne valeur dans les registres du microcontrôleur.
@@ -29,7 +30,7 @@
 #define rx_buffer__SIZE 32
 
 template<uint8_t id>
-class Serial{
+class Serial : public Singleton<Serial<id> >{
 private:
     struct ring_buffer
     {
@@ -68,16 +69,9 @@ private:
     	send_char('\n');
     }
 
-private:
-
-    Serial();
-
 public:
-
-    static Serial& Instance(){
-    	static Serial instance;
-    	return instance;
-    }
+    
+    inline Serial();
     
     inline void change_baudrate(uint32_t BAUD_RATE);
 

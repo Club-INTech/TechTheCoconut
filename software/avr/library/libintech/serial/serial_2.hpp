@@ -50,7 +50,7 @@
 
 	ISR(USART2_RX_vect)
 	{
-		Serial<2> & serial = Serial::Instance();
+		Serial<2> & serial = Serial<2>::Instance();
 		unsigned char c = UDR2;
 		serial.store_char(c);
 	}

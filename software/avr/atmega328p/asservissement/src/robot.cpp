@@ -17,16 +17,6 @@ Robot::Robot() :serial_(Serial<0>::Instance())
 	TWI_init();
 }
 
-int __cxa_guard_acquire(__guard *g) {return !*(char *)(g);};
-void __cxa_guard_release (__guard *g) {*(char *)g = 1;};
-void __cxa_guard_abort (__guard *) {};
-
-Robot& Robot::Instance()
-{
-	static Robot robot;
-	return robot;
-}
-
 void Robot::asservir(int32_t distance, int32_t angle)
 {
 	int16_t pwmTranslation = translation.pwm(distance);

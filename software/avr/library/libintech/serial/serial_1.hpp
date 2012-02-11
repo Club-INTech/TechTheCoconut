@@ -44,7 +44,7 @@
 
 	ISR(USART1_RX_vect)
 	{
-		Serial<1> & serial = Serial::Instance();
+		Serial<1> & serial = Serial<1>::Instance();
 		unsigned char c = UDR1;
 		serial.store_char(c);
 	}

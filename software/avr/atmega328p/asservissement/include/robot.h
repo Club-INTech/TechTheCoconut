@@ -11,11 +11,12 @@
 #include <libintech/pwm.hpp>
 #include <libintech/moteur.hpp>
 #include <libintech/register.hpp>
+#include <libintech/singleton.hpp>
 /**
 * Structure principale Robot
 */
 
-class Robot {
+class Robot : public Singleton<Robot>{
 // Par défaut les attributs sont publics dans une struct
 
 
@@ -52,8 +53,9 @@ private:
 	Asservissement rotation;
 
 public:
-  
-  	static Robot& Instance();
+	
+	Robot();
+	
 	void asservir(int32_t distance, int32_t angle);
 	
 	/**
@@ -118,18 +120,7 @@ public:
 	bool tourner(uint16_t angle);
 	
 	void communiquer_pc();
-
-private:
-	// Un singleton
-	Robot();
-	Robot(const Robot&);
 	
 };
-
-__extension__ typedef int __guard __attribute__((mode (__DI__)));
-
-extern "C" int __cxa_guard_acquire(__guard *);
-extern "C" void __cxa_guard_release (__guard *);
-extern "C" void __cxa_guard_abort (__guard *);
 
 #endif
