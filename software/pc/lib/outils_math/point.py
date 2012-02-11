@@ -6,10 +6,13 @@ class Point:
     
     :param x: abscisse
     :type x: float
+    
     :param y: ordonnée
     :type y: float
+    
     """
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
         

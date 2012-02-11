@@ -9,9 +9,15 @@ constantes = \
 	"Coconut":
 	{
 		#: Largeur en mm
-		"largeur": 150,
+		"largeur": 3000,
 		#: Longueur en mm
-		"longueur": 350
+		"longueur": 2000,
+		
+		#longueur du coté du robot, en mm
+		"coteRobot" : 350.,
+		#rayon maximal du cercle circonscrit aux robots adverses, en mm
+        "rayonRobotsA" : 350.
+		
 	},
 	"Anna": {},
     "Objets_Table": {
