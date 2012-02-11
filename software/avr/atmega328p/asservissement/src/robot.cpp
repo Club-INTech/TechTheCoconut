@@ -1,13 +1,13 @@
 #include <math.h>
 
-#include <libintech/usart.h>
-#include <libintech/twi_master.h>
-
+#include "twi_master.h"
+#include <libintech/serial/serial_0.hpp>
 #include "robot.h"
 
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : 				couleur_('r')
+Robot::Robot() :serial_(Serial<0>::Instance())
+				,couleur_('r')
 				,x_(0)
 				,y_(0)
 				,translation(2,0.5,0),
@@ -15,8 +15,6 @@ Robot::Robot() : 				couleur_('r')
 
 {
 	TWI_init();
-	uart_init();
-	printlnString("debut");
 }
 
 int __cxa_guard_acquire(__guard *g) {return !*(char *)(g);};
@@ -90,6 +88,57 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
     last_distance = distance;
     last_angle = angle;
 }
+
+void Robot::communiquer_pc(){
+	char buffer[10];
+	uint8_t length = serial_.read(buffer,10);
+#define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
+
+	if(COMPARE_BUFFER("?")){
+		serial_.print(0);
+	}
+
+	else if(COMPARE_BUFFER("ccr")){
+		couleur_ = 'r';
+	}
+	else if(COMPARE_BUFFER("ccv")){
+		couleur_ = 'v';
+	}
+
+	else if(COMPARE_BUFFER("ec")){
+		serial_.print((char)couleur_);
+	}
+
+
+	else if(COMPARE_BUFFER("crm")){
+		rotation.pwmMax(serial_.read<uint32_t>());
+	}
+	else if(COMPARE_BUFFER("crp")){
+		rotation.kp(serial_.read<float>());
+	}
+	else if(COMPARE_BUFFER("crd")){
+		rotation.kd(serial_.read<float>());
+	}
+	else if(COMPARE_BUFFER("cri")){
+		rotation.ki(serial_.read<float>());
+	}
+
+	else if(COMPARE_BUFFER("ctm")){
+		translation.pwmMax(serial_.read<uint32_t>());
+	}
+	else if(COMPARE_BUFFER("ctp")){
+		translation.pwmMax(serial_.read<float>());
+	}
+	else if(COMPARE_BUFFER("ctd")){
+		translation.pwmMax(serial_.read<float>());
+	}
+	else if(COMPARE_BUFFER("cti")){
+		translation.pwmMax(serial_.read<float>());
+	}
+
+#undef COMPARE_BUFFER
+}
+
 void Robot::couleur(unsigned char couleur)
 {
 	if (couleur == 'r' || couleur == 'v')

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   serial.hpp
  * Author: philippe
  *
@@ -14,15 +14,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BAUD_RATE 57600
-
 /**
  * Define interne pour charger la bonne valeur dans les registres du microcontrôleur.
  * @warning NE PAS MODIFIER CE DEFINE
  * @fn UBRR
  * @def UBRR
  */
-#define UBRR (F_CPU/8/BAUD_RATE - 1)/2
 
 /**
  * Define interne de la taille du ring buffer de la liaison série
@@ -31,6 +28,7 @@
  */
 #define rx_buffer__SIZE 32
 
+template<uint8_t id>
 class Serial{
 private:
     struct ring_buffer
@@ -45,11 +43,7 @@ private:
     volatile ring_buffer rx_buffer_;
     
 private:
-    inline void send_char(unsigned char byte)
-    {
-            while ( !( UCSR0A & (1<<UDRE0)) );
-            UDR0 = byte;
-    }
+    inline void send_char(unsigned char byte);
     
     inline bool available(void)
     {
@@ -76,15 +70,7 @@ private:
 
 private:
 
-    Serial(){
-        UBRR0H = (unsigned char)(UBRR >> 8);
-		UBRR0L = (unsigned char)UBRR;
-		UCSR0B |= ( 1 << RXCIE0 );	//Activation de l'interruption de réception
-		UCSR0B |= ( 1 << RXEN0 );	//Activation de la réception
-		UCSR0B |= ( 1 << TXEN0 );	//Activation de l'emission
-		UCSR0C = (1 << USBS0)|(3<<UCSZ00);
-		sei();
-    }
+    Serial();
 
 public:
 
@@ -93,6 +79,7 @@ public:
     	return instance;
     }
     
+    inline void change_baudrate(uint32_t BAUD_RATE);
 
     inline void store_char(unsigned char c)
     {
@@ -113,6 +100,11 @@ public:
     	print((const char *)buffer);
     }
 
+    inline void print(char val){
+    	send_char(val);
+    	send_ln();
+    }
+
     inline void print(const char * val)
     {
     	for(unsigned int i = 0 ; i < strlen(val) ; i++)
@@ -124,26 +116,29 @@ public:
 
     template<class T>
     inline T read(void){
-        T res = 0;
         char buffer[sizeof(T)];
         read(buffer,sizeof(T));
         return atol(buffer);
     }
 
-    inline void read(char* string, int length){
-        for (unsigned int i = 0; i < length; i++){
+    inline float read(){
+        char buffer[sizeof(float)];
+        read(buffer,sizeof(float));
+        return atof(buffer);
+    }
+
+    inline uint8_t read(char* string, uint8_t length){
+    	uint8_t i = 0;
+    	for (; i < length; i++){
         	while(!available());
-        	string[i] = read_char();
+        	char tmp = read_char();
+        	if(tmp == '\0' || tmp == '\n' || tmp == '\r')
+        		return i;
+        	string[i] = tmp;
         }
+        return i;
     }
 };
-
-ISR(USART_RX_vect)
-{
-	Serial & serial = Serial::Instance();
-	unsigned char c = UDR0;
-	serial.store_char(c);
-}
 
 #endif	/* SERIAL_HPP */
 

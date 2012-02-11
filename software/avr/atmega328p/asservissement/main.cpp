@@ -7,19 +7,17 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#include <libintech/twi_master.h>
-#include <libintech/usart.h>
+#include "twi_master.h"
 
+#include <stdint.h>
 #include "robot.h"
-#include "communicationPC.h"
-
 
 int main()
 {
     Robot & robot = Robot::Instance();
 	while(1)
 	{
-		CommunicationPC::traiter(robot);
+		robot.communiquer_pc();
 	}
 	return 0;
 }

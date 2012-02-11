@@ -1,6 +1,4 @@
-#include <libintech/twi_slave.h>
-#include <libintech/usart.h>
-
+#include "twi_slave.h"
 #include "compteur.h"
 
 

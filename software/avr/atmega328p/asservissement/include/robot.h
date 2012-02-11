@@ -3,16 +3,17 @@
 
 #include <stdint.h>
 
+#include <avr/io.h>
+
 #include "asservissement.h"
+#include <libintech/forwards_serial.h>
 #include <libintech/timer.hpp>
 #include <libintech/pwm.hpp>
 #include <libintech/moteur.hpp>
-
+#include <libintech/register.hpp>
 /**
 * Structure principale Robot
 */
-
-
 
 class Robot {
 // Par défaut les attributs sont publics dans une struct
@@ -20,13 +21,15 @@ class Robot {
 
 private:
 	
-	//Moteur sur le Timer 0 en FastPWM
-	Moteur<0,ModeFastPwm> moteurGauche;
-	//Moteur sur le Timer 2 en FastPWM
-	Moteur<2,ModeFastPwm> moteurDroit;
+	//Moteur sur le Timer 0 en FastPWM . Pont en H sur le PORTD4
+	typedef Timer<0,ModeFastPwm,1> T_0;
+	Moteur< T_0, AVR_PORTD<PORTD4> > moteurGauche;
+	//Moteur sur le Timer 2 en FastPWM . Pont en H sur le port B0
+	Moteur<Timer<2,ModeFastPwm,1>, AVR_PORTB<PORTB0> > moteurDroit;
 	//Timer 1 en mode compteur, Prescaler de 8
 	Timer<1,ModeCounter,8> compteur;
-	
+	Serial<0> & serial_;
+
 		/**
 	* Couleur du robot
 	* 
@@ -44,10 +47,10 @@ private:
 	* Ordonnée du robot en mm
 	*/
 	float y_;
-public:
-  	Asservissement translation;
+
+	Asservissement translation;
 	Asservissement rotation;
-	
+
 public:
   
   	static Robot& Instance();
@@ -61,14 +64,13 @@ public:
 	void couleur(unsigned char);
 
 	void updatePosition(int32_t distance, int32_t angle);
-	
 	/**
 	* Getter pour la variable couleur
 	*
 	* \return unsigned char couleur
 	*/
-	unsigned char couleur(void);
 
+	unsigned char couleur(void);
 	/**
 	* Getter pour la variable x d'abscisse
 	*
@@ -115,6 +117,8 @@ public:
 	*/
 	bool tourner(uint16_t angle);
 	
+	void communiquer_pc();
+
 private:
 	// Un singleton
 	Robot();

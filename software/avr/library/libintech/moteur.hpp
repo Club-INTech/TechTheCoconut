@@ -3,7 +3,7 @@
 
 #include "timer.hpp"
 #include "safe_enum.hpp"
-
+#include "register.hpp"
 struct direction_def
 {
 	enum type{ RECULER, AVANCER};
@@ -11,39 +11,33 @@ struct direction_def
 typedef safe_enum<direction_def> Direction;
 
 
-template<uint8_t TIMER_ID, template<uint8_t> class PWM, uint16_t PRESCALER_VALUE = 1>
+template<class Timer, class DirectionRegister>
 class Moteur{
+	static const uint8_t TIMER_ID = Timer::ID;
+	static const uint16_t PRESCALER_VALUE = Timer::PRESCALER_RATIO;
+	Timer timer_pwm_;
 private:
   void direction(Direction dir){
-    	if(TIMER_ID==0)
-	{
 		if(dir == Direction::AVANCER){
-		  PORTD &=  ~(1 << PORTD4);
+		  //PORTD &=  ~(1 << PORTD4);
+		  DirectionRegister::clear();
 		}
 		else if(dir == Direction::RECULER){
-		  PORTD |=  (1 << PORTD4);
+		  //PORTD |=  (1 << PORTD4);
+		  DirectionRegister::set();
 		}
-	}
-	else if(TIMER_ID==2)
-	{
-		if(dir == Direction::AVANCER){
-		  PORTB &=  ~(1 << PORTB0);
-		}
-		else if(dir == Direction::RECULER){
-		  PORTB |=  (1 << PORTB0);
-		}
-	}
+		//PORTB &=  ~(1 << PORTB0);
   }
   
 public:
   void envoyerPwm(int16_t pwm){
     if (pwm>0) {
       direction(Direction::AVANCER);
-      timerPwm_.seuil(pwm);
+      timer_pwm_.seuil(pwm);
     }
     else {
       direction(Direction::RECULER);
-      timerPwm_.seuil(-pwm);
+      timer_pwm_.seuil(-pwm);
     }
   }
   
@@ -57,7 +51,6 @@ public:
   
 private:
   uint16_t maxPWM_;
-  Timer<TIMER_ID, PWM, PRESCALER_VALUE> timerPwm_;
 };
 
 

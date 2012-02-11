@@ -20,6 +20,7 @@ extern "C" {
 #define REQUEST_DATA            0x02
 #define READ_DATA_FROM_BUFFER   0x03
 
+#include <stdint.h>
 
 /****************************************************************************
   Function definitions
