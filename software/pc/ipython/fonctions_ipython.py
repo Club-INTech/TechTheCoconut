@@ -57,7 +57,8 @@ def tuto(self, arg):
    1. Fonctions de base et choses à savoir.
    2. Commandes magiques.
    3. Créer ses propres fonctions
-   4. Quitter le menu
+   4. Graph Tool (recherche de chemin
+   5. Quitter le menu
    """
    
     print menu
@@ -65,13 +66,13 @@ def tuto(self, arg):
     flag = True
     while flag:
         choix = raw_input('Indiquer le chapitre a ouvrir avec le chiffre correspondant\n')
-        tableau = {'1' : 'tutoriel_un', '2' : 'tutoriel_deux', '3' : 'tutoriel_trois', '4' : 'exit'}
+        tableau = {'1' : 'tutoriel_un', '2' : 'tutoriel_deux', '3' : 'tutoriel_trois', '4' : 'tutoriel_quatre', '5' : 'exit'}
         
         if tableau[choix]:
             if tableau[choix] == 'exit':
                 flag = False
             else:
-                chapitre = open('../ipython/' + tableau[choix], 'r')
+                chapitre = open('ipython/' + tableau[choix], 'r')
                 print chapitre.read()
                 print menu
                 chapitre.close()

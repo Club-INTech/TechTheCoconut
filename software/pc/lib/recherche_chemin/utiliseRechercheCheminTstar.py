@@ -3,6 +3,9 @@
 """
 exemple d'utilisation de la fonction rechercheChemin avec Theta*.
 
+il faudra importer :
+from lib.recherche_chemin.rechercheChemin import *
+
 enregistreGraphe doit etre appelé pour stocker en dur le graphe de la table.
 
 on peut ensuite appeler rechercheChemin autant de fois que voulu
@@ -21,17 +24,9 @@ from lib.outils_math.point import Point
 enregistreGraphe()
 
 centresRobotsA = []
-rechercheChemin(Point(1050.,248.),Point(-700.,1700.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("chemin_0_robotsA.pdf")
-"""
-centresRobotsA = [Point(10.,30.)]
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("chemin_1_robotsA.pdf")
-
-centresRobotsA = [Point(10.,30.),Point(-100.,200.)]
-rechercheChemin(Point(-110.,40.),Point(120.,140.),centresRobotsA)
-print "tracePDF -->"
-tracePDF("chemin_2_robotsA.pdf")
-"""
+rechercheChemin(Point(-270.,248.),Point(-350.,1200.),centresRobotsA)
+tracePDF("chemin_dev1.pdf")
+rechercheChemin(Point(-150.,248.),Point(-350.,1190.),centresRobotsA)
+tracePDF("chemin_dev2.pdf")
+rechercheChemin(Point(-150.,248.),Point(-350.,1180.),centresRobotsA)
+tracePDF("chemin_dev3.pdf")

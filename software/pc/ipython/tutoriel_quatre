@@ -1,0 +1,17 @@
+    
+    la librairie graph-tool est utilisée pour la recherche de chemin
+    pour l'installer, il faut modifier la liste des dépôts de paquets comme
+    indiqué sur
+    http://projects.skewed.de/graph-tool/wiki/GraphToolDownload
+
+    ie, pour ubuntu 11.10 :
+    dans "/etc/apt/sources.list.d/"
+    créer le fichier "graph-tool.list" et y inscrire ces 2 lignes :
+    deb http://downloads.skewed.de/apt/oneiric oneiric universe
+    deb-src http://downloads.skewed.de/apt/oneiric oneiric universe
+
+    puis mettre à jour les paquets grace au nouveau dépôt :
+    $ sudo apt-get update
+    $ sudo apt-get install graph-tool
+
+    Pour Debian, vous devez lancer python2.6 pour utiliser graph-tool

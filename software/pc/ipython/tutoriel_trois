@@ -1,6 +1,18 @@
 
-        L'ensemble des fonctions magiques crées pour INTech sont stockées dans le fichier fonctions_ipython.py situé dans le dossier pc/software/profils.
+        L'ensemble des fonctions magiques crées pour INTech sont stockées dans le fichier fonctions_ipython.py situé dans le dossier software/pc/ipython.
         
         Il vous suffit de créer une nouvelle fonction qui doit obligatoirement contenir 'self' et 'arg' comme premiers arguments. Le premier commentaire est le texte qui apparaitra dans la définition de la fonction lorsque l'on tape la comande 'maFonction?'. Tapez ensuite le code de votre fonction. 
         Après votre fonction, ajouter la ligne : 'ip.expose_magic('nomDeLaCommande', nomDeLaFonction) qui associe la commande à la fonction.
-        Et voila, c'est prêt !
+        Pour mettre à jour le fichier de config, il faut refaire un make dans le dossier /pc.
+
+Exemple pour la fonction %commandes :
+
+def commandes(self, arg):
+    """
+    Fonction utilisée pour afficher la liste des commandes INTech.
+    """
+    text = open('../ipython/commandes', 'r')
+    print text.read()
+    text.close()
+    
+ip.expose_magic('commandes', commandes)

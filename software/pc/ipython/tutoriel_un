@@ -19,5 +19,5 @@ LES FONCTIONS DE BASE ET CHOSES A SAVOIR POUR UTILISER IPYTHON
          prenom
          
    D. Commandes dans le shell:
-      Il est possible d'utiliser le shell sans quitter IPython en préfixant la commande d'un point d'interrogation.
+      Il est possible d'utiliser le shell sans quitter IPython en préfixant la commande d'un point d'exclamation.
         exemple : !cd ..

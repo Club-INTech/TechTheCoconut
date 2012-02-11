@@ -1,48 +1,58 @@
 # -*- coding: utf-8 -*-
 
 """
-il faudra importer :
-from lib.recherche_chemin.rechercheChemin import *
-
-voir utiliseRechercheChemin pour exemple
+--> voir utiliseRechercheChemin pour exemple
 """
 
+#sauvegarde du graphe dans les fichiers "sauv_"
 import marshal
-import os,sys
+
 # Ajout de ../.. au path python
+import os,sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
+
+#gestion des logs
 import lib.log
 log = lib.log.Log()
 
+#importation de fonctions et classes de géométrie
 from lib.outils_math.collisions import *
 from lib.outils_math.point import Point
 from lib.outils_math.rectangle import Rectangle
 from lib.outils_math.polygone import polygone
-from lib.recherche_chemin.astar import *
 from math import sqrt
 
 #importation des éléments de jeu
 import profils.develop.injection.elements_jeu
-from lib.carte import Carte
 import profils.develop.constantes
+from lib.carte import Carte
+
+#bibliothèque pour la gestion des graphes 
+try:
+    from graph_tool.all import *
+except:
+    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 
 
-#lien avec constantes dans profil
-
-#TODO à mettre dans constantes
-coteRobot = 100.
-rayonRobotsA = 100.
-
-#approximation hexagonale des robots adverses
-nCotesRobotsA = 6
-#diamètre maximal du robot (cf élargissement des objets)
-largeurRobot=coteRobot*sqrt(2)
-
+#récupération des valeurs dans constantes.py
 #sur y
 tableLargeur = constantes["Coconut"]["longueur"]
 #sur x
 tableLongueur = constantes["Coconut"]["largeur"]
 
+coteRobot = constantes["Coconut"]["coteRobot"]
+rayonRobotsA = constantes["Coconut"]["rayonRobotsA"]
+
+"""
+# meilleure visualisation avec 100...
+coteRobot = 100. 
+rayonRobotsA = 100.
+"""
+
+#approximation hexagonale des robots adverses
+nCotesRobotsA = 6
+#diamètre maximal du robot (cf élargissement des objets)
+largeurRobot=coteRobot*sqrt(2)
 
 #VISU : 4 points = angles de l'aire de jeu
 bordsCarte=[Point(-tableLongueur/2,0.),Point(tableLongueur/2,0.),Point(-tableLongueur/2,tableLargeur),Point(tableLongueur/2,tableLargeur)]
@@ -66,6 +76,7 @@ for rect in listeRectangles:
     rect.wx += largeurRobot
     rect.wy += largeurRobot
 
+#VISU : permet de tracer les bords du graphe
 """
 #4 rectangles pour supprimer des arêtes sur les bords
 listeDebug=[]
@@ -85,6 +96,10 @@ poids = g.new_edge_property("double")
 axeX=-(tableLongueur)/2
 axeY=0
 
+#pour activer les déviations automatiques en cas de départ/arrivée inaccessible
+effectuer_deviation_negligeable = True
+effectuer_deviation_segment = True
+
 #conversion des rectangles en polygones de 4 sommets
 listeObjets=[]
 for rect in listeRectangles:
@@ -92,6 +107,8 @@ for rect in listeRectangles:
     #les éléments de jeu ne doivent pas dépasser de l'aire de jeu
     listePoints=[]
     for angle in RectangleToPoly(rect):
+        
+        #VISU : permet de tracer les bords du graphe
         """
         if (angle.x > -tableLongueur/2+largeurRobot/2 and angle.x < tableLongueur/2-largeurRobot/2):
             px = angle.x
@@ -109,14 +126,31 @@ for rect in listeRectangles:
         
         listePoints.append(Point(px,py))
         """
+        
         listePoints.append(Point(angle.x,angle.y))
     listeObjets.append(listePoints)
 
     
+
+class VisitorExample(AStarVisitor):
+
+    def __init__(self, touched_v, touched_e, target):
+        self.touched_v = touched_v
+        self.touched_e = touched_e
+        self.target = target
+
+    def discover_vertex(self, u):
+        self.touched_v[u] = True
+
+    def examine_edge(self, e):
+        self.touched_e[e] = True
+
+    def edge_relaxed(self, e):
+        if e.target() == self.target:
+            raise StopSearch()
+
+            
 def rechercheChemin(depart,arrive,centresRobotsA):
-    """
-    fonction de recherche de chemin, utilisant le meilleur algorithme codé
-    """
     
     chargeGraphe()
     
@@ -135,9 +169,11 @@ def rechercheChemin(depart,arrive,centresRobotsA):
     global aCouleur
     global aLarg
     global nCouleur
+    
     aCouleur = g.new_edge_property("string")
     aLarg = g.new_edge_property("double")
     nCouleur = g.new_vertex_property("string")
+    
     
     nCouleur[g.vertex(0)] = "red"
     nCouleur[g.vertex(1)] = "red"
@@ -209,6 +245,26 @@ def rechercheChemin(depart,arrive,centresRobotsA):
         print "+------------------------------------------+"
         print "| la position de départ est inaccessible ! |"
         print "+------------------------------------------+"
+        
+        if effectuer_deviation_negligeable :
+            #on retente depuis un point de départ voisin, sur un cercle (hexagone) de faible rayon
+            for redir in polygone(depart,10.,6):
+                touche_tr = False
+                for poly in listeObjets:
+                    if collisionPolyPoint(poly,redir):
+                        touche_tr = True
+                        break
+                    if not touche_tr:
+                        for robotA in robotsA:
+                            if collisionPolyPoint(robotA,redir):
+                                touche_tr = True
+                                break
+                if not touche_tr :
+                    print "!! deviation négligeable depuis --> (",redir.x,",",redir.y,") !!"
+                    rechercheChemin(redir,arrive,centresRobotsA)
+                    break
+        
+        
     else :
         touche_ta = False
         for poly in listeObjets:
@@ -221,9 +277,52 @@ def rechercheChemin(depart,arrive,centresRobotsA):
                         touche_ta = True
                         break
         if touche_ta :
-            print "+------------------------------------------+"
-            print "| la position d'arrivée est inaccessible ! |"
-            print "+------------------------------------------+"
+            print "+-----------------------------------------------------------------------------+"
+            print "| la position d'arrivée (",arrive.x,",",arrive.y,") est inaccessible ! |"
+            print "+-----------------------------------------------------------------------------+"
+            
+            
+            if effectuer_deviation_negligeable :
+                
+                #on retente une destination voisine de celle recherchée
+                
+                #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
+                touche_cercle_A=True
+                for redir in polygone(arrive,10.,6):
+                    touche_tr = False
+                    for poly in listeObjets:
+                        if collisionPolyPoint(poly,redir):
+                            touche_tr = True
+                            break
+                        if not touche_tr:
+                            for robotA in robotsA:
+                                if collisionPolyPoint(robotA,redir):
+                                    touche_tr = True
+                                    break
+                    if not touche_tr :
+                        touche_cercle_A=False
+                        print "!! deviation négligeable vers --> (",redir.x,",",redir.y,") !!"
+                        rechercheChemin(depart,redir,centresRobotsA)
+                        break
+                
+                if effectuer_deviation_segment :
+                    #puis sur le segment départ-arrivée initial, on choisit le point accessible le plus proche de l'arrivée
+                    if touche_cercle_A:
+                        pCollision=False
+                        for robotA in robotsA:
+                            pCollision=collisionSegmentPoly(depart,arrive,robotA)
+                            if pCollision:
+                                break
+                        if not pCollision:
+                            for poly in listeObjets:
+                                pCollision=collisionSegmentPoly(depart,arrive,poly)
+                                if pCollision:
+                                    break
+                        print "!! deviation vers --> (",pCollision[1].x,",",pCollision[1].y,") !!"
+                        rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y),centresRobotsA)
+            
+            
+            
         else :
             #créations des noeuds arguments et de leurs arêtes
             Ndepart=g.add_vertex()
@@ -401,5 +500,6 @@ def enregistreGraphe():
     g.save("sauv_g.xml")
     
 def tracePDF(nom):
+    print "création du rendu \"",nom,"\" -->"
     graph_draw(g, output=nom, pos=(posX,posY),vsize=5,vcolor=nCouleur, pin=True,penwidth=aLarg, eprops={"color": aCouleur})
     #graph_draw(g, output=nom, pos=(posX,posY),vsize=5,pin=True,penwidth=100)
