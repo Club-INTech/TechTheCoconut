@@ -4,7 +4,7 @@ import serial
 import serie
 import log
 
-log=log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], constantes['Logs']['logs_format'], constantes['Logs']['stderr'], constantes['Logs']['stderr_level'], constantes['Logs']['stderr_format'], constantes['Logs']['dossier'])
+log = log.Log()
 
 
 class Actionneur:
@@ -26,5 +26,3 @@ class Actionneur:
         """
         if angle < 170 and angle > 0:
             actionneur.ecrire('nom : '+self.nom, '\nangle : ' + angle + '\nreponse : ' + reponse + '\nvitesse : ' + vitesse)
-        
-        
