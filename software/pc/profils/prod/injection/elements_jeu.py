@@ -32,6 +32,10 @@ import math
 # Création de la carte
 carte = mod_carte.Carte()
 
+# TODO gérer l'assignation de cette variable
+# NOTE Soit 'R', soit 'V'
+couleur_robot = 'R'
+
 
 
 """
@@ -41,14 +45,11 @@ Totems
 pointTotem1 = point.Point(400,1000)
 pointTotem2 = point.Point(-400, 1000)
 
-enemy = True    #TODO
-
-carte.ajouter_totem(elements_jeu.Totem(pointTotem1, enemy))
-carte.ajouter_totem(elements_jeu.Totem(pointTotem2, enemy))
+carte.ajouter_totem(elements_jeu.Totem(pointTotem1, couleur_robot == 'R'))
+carte.ajouter_totem(elements_jeu.Totem(pointTotem2, couleur_robot == 'V'))
 
 """
 Règlettes en bois
-
 """
 
 pointReglette1 = point.Point(1500. - 200, 500. + 6)
@@ -75,7 +76,6 @@ carte.ajouter_regletteEnBois(elements_jeu.RegletteEnBois(pointReglette4, oriRegl
 
 """
 Boutons poussoir
-:TODO: Gerer l'assignation de la variable enemy
 """
 
 pointPoussoir1 = point.Point(1500 - 640, 2000)
@@ -83,12 +83,11 @@ pointPoussoir2 = point.Point(1500 - 640 - 477, 2000)
 pointPoussoir3 = point.Point(-1500 + 640 + 477, 2000)
 pointPoussoir4 = point.Point(-1500 + 640, 2000)
 
-enemy = False     # :TODO:
 
-carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir1, enemy))
-carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir2, enemy))
-carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir3, enemy))
-carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir4, enemy))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir1, couleur_robot == 'R'))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir2, couleur_robot == 'V'))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir3, couleur_robot == 'R'))
+carte.ajouter_poussoir(elements_jeu.Poussoir(pointPoussoir4, couleur_robot == 'V'))
 
 
 """
@@ -99,15 +98,12 @@ Cartes au trésor
 pointCarte1 = point.Point(100,0)
 pointCarte2 = point.Point(-100,0)
 
-enemy = False   #TODO
-
-carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte1, enemy))
-carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte2, enemy))
+carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte1, couleur_robot == 'R'))
+carte.ajouter_carteAuTresor(elements_jeu.CarteAuTresor(pointCarte2, couleur_robot == 'V'))
 
 
 """
 Lingots
-TODO gerer l'assignation de la variable enemy
 """
 
 hauteur = 0
@@ -117,16 +113,13 @@ pointLingot2 = point.Point(-1500 + 400, 518 + 280) #droite
 pointLingot3 = point.Point(+1500 - 400, 518 + 280) #gauche
 
 oriLingot1 = 0
-oriLingot2 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché...
+oriLingot2 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché... Mais OSEF.
 oriLingot3 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penché...
 
 
-
-enemy = False  #TODO
-
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot1, oriLingot1, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot2, oriLingot2, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot3, oriLingot3, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot1, oriLingot1, hauteur, False))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot2, oriLingot2, hauteur, couleur_robot == 'V'))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot3, oriLingot3, hauteur, couleur_robot == 'R'))
 
 # Lingots des totems
 oriLingotsTotem = 3.1415 /2
@@ -137,10 +130,10 @@ pointLingot5 = point.Point(400 - 125, 1000)
 pointLingot6 = point.Point(-400 + 125, 1000)
 pointLingot7 = point.Point(-400 - 125, 1000)
 
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot4, oriLingotsTotem, hauteur, enemy)) #NOTE Est-ce bien oriLingotsTotem ? (Anthony)
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot5, oriLingotsTotem, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot6, oriLingotsTotem, hauteur, enemy))
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot7, oriLingotsTotem, hauteur, enemy))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot4, oriLingotsTotem, hauteur, couleur_robot == 'R')) #NOTE Est-ce bien oriLingotsTotem ? (Anthony)
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot5, oriLingotsTotem, hauteur, couleur_robot == 'R'))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot6, oriLingotsTotem, hauteur, couleur_robot == 'V'))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot7, oriLingotsTotem, hauteur, couleur_robot == 'V'))
 
 
 """
@@ -186,7 +179,7 @@ ptDisque18 = point.Point(0, 2000-(240 - 30))
 
 # On rentre les variables disques dans la Carte.
 for i in range(1, 19) :
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
+    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
 
 
@@ -199,7 +192,7 @@ ptDisque22 = point.Point(-90, 2000 - 300)
 
 # On rentre les disques noirs dans la Carte
 for i in range (19, 23):
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
+    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
     
 
 # Niveau 1 des totems
@@ -217,7 +210,7 @@ ptDisque30 = point.Point(-400 + radius, 1000 + radius)
 
 # On rentre les disques du niveau 1 dans la Carte
 for i in range (23, 31):
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
+    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
     
 # Niveau 3 des totems :
@@ -225,7 +218,7 @@ hauteur = 18 + 18 + 18 + 2* 54.5
 
 # On rentre les disques du niveau 3 dans la Carte
 for i in range (23, 31):
-    exec("carte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
+    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
 """
 Zones de jeu
@@ -238,7 +231,7 @@ angleSG = point.Point(1500, 500)
 angleID = point.Point(1000, 0  )
 angleIG = point.Point(1500, 0  )
 
-enemy = True
+enemy = couleur_robot == 'R'
 carte.ajouter_zone(elements_jeu.Zone("BUREAUCAPITAINE", angleSD, angleSG, angleID, angleIG, enemy))
 
 # Bureau du capitaine rouge
@@ -247,7 +240,7 @@ angleSG = point.Point(-1000, 500)
 angleID = point.Point(-1500, 0  )
 angleIG = point.Point(-1000, 0  )
 
-enemy = True
+enemy = couleur_robot == 'V'
 carte.ajouter_zone(elements_jeu.Zone("BUREAUCAPITAINE", angleSD, angleSG, angleID, angleIG, enemy))
 
 # Zone du pont violet
@@ -256,7 +249,7 @@ angleSG = point.Point(1500, 2000 - 630)
 angleID = point.Point(1500 - 400, 518)
 angleIG = point.Point(1500, 518)
 
-enemy = True
+enemy = couleur_robot == 'R'
 carte.ajouter_zone(elements_jeu.Zone("CALE", angleSD, angleSG, angleID, angleIG, enemy))
 
 # Zone du pont rouge
@@ -265,7 +258,7 @@ angleSG = point.Point(-1500 + 350, 2000 - 630)
 angleID = point.Point(-1500, 518)
 angleIG = point.Point(-1500 + 400, 518)
 
-enemy = True
+enemy = couleur_robot == 'V'
 carte.ajouter_zone(elements_jeu.Zone("CALE", angleSD, angleSG, angleID, angleIG, enemy))
 
 # Zone de la cale violette
@@ -274,7 +267,7 @@ angleSG = point.Point(1500, 2000)
 angleID = point.Point(1500 - 325, 2000 - 630)
 angleIG = point.Point(1500, 2000 - 630)
 
-enemy = True
+enemy = couleur_robot == 'R'
 carte.ajouter_zone(elements_jeu.Zone("CALEPROTEGEE", angleSD, angleSG, angleID, angleIG, enemy))
 
 # Zone de la cale violette
@@ -283,5 +276,5 @@ angleSG = point.Point(-1500 + 325, 2000)
 angleID = point.Point(-1500, 2000 - 630)
 angleIG = point.Point(-1500 + 325, 2000 - 630)
 
-enemy = True
+enemy = couleur_robot == 'V'
 carte.ajouter_zone(elements_jeu.Zone("CALEPROTEGEE", angleSD, angleSG, angleID, angleIG, enemy))
