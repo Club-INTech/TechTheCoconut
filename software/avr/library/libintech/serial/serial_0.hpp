@@ -14,7 +14,7 @@ void Serial<0>::send_char(unsigned char byte)
 
 template<>
 void Serial<0>::change_baudrate(uint32_t new_baudrate){
-	uint16_t UBRR  =(F_CPU*new_baudrate/8 - 1)/2;
+	uint16_t UBRR  =(F_CPU/8/new_baudrate - 1)/2;
 	UBRR0H = (unsigned char)(UBRR >> 8);
 	UBRR0L = (unsigned char)UBRR;
 }

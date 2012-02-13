@@ -33,11 +33,11 @@ public:
   void envoyerPwm(int16_t pwm){
     if (pwm>0) {
       direction(Direction::AVANCER);
-      timer_pwm_.seuil(pwm);
+      Timer::MODE::seuil(pwm);
     }
     else {
       direction(Direction::RECULER);
-      timer_pwm_.seuil(-pwm);
+      Timer::MODE::seuil(-pwm);
     }
   }
   
