@@ -28,11 +28,13 @@ exec('import profils.'+conf+'.injection.elements_jeu')
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, console) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, console, visualisation_table) : \n')
     first = False
     try:
         log.logger.info("Chargement du fichier de lancement " + mode)
         exec('import bin.'+ mode)
+        if mode == "visualisation_table":
+            first = True
     except:
         log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
         erreur = True

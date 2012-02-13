@@ -7,18 +7,22 @@
 #include "utils.h"
 #include "prescaler.hpp"
 
-template<uint8_t ID,template<uint8_t> class MODE, uint8_t PRESCALER_RATIO>
+template<uint8_t ID_,template<uint8_t> class MODE_, uint8_t PRESCALER_RATIO_>
 class Timer{
+public:
+  static const uint8_t ID = ID_;
+  static const uint8_t PRESCALER_RATIO = PRESCALER_RATIO_;
+  typedef MODE_<ID_> MODE;
+private:
   typedef Prescaler<ID,PRESCALER_RATIO> prescaler_;
-  typedef MODE<ID> mode_;
 public:
   Timer(){
-    mode_::set();
+    MODE::set();
     prescaler_::set();
   }
   
   void seuil(uint16_t seuil){
-    mode_::seuil(seuil);
+    MODE::seuil(seuil);
   }
 };
 #endif

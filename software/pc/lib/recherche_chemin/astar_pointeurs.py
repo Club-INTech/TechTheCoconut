@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-try:
-    from graph_tool.all import *
-except:
-    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
+
 import os,sys
 # Ajout de ../.. au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 import lib.log
 log = lib.log.Log()
+
+try:
+    from graph_tool.all import *
+except:
+    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 
 from lib.outils_math.collisions import *
 from lib.outils_math.point import Point

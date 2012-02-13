@@ -3,6 +3,9 @@
 """
 exemple d'utilisation de la fonction rechercheChemin avec Theta*.
 
+il faudra importer :
+from lib.recherche_chemin.rechercheChemin import *
+
 enregistreGraphe doit etre appelé pour stocker en dur le graphe de la table.
 
 on peut ensuite appeler rechercheChemin autant de fois que voulu
