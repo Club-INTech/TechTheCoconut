@@ -35,7 +35,7 @@ class Visu_table( threading.Thread):
     caption = "Visualisation Table - INTech 2012"
     fps = 1
     
-    def __init__(self,nom,debug=True):
+    def __init__(self,nom,debug=False):
 	"""
 	Constructeur
 	
@@ -90,8 +90,9 @@ class Visu_table( threading.Thread):
 	coord = self.createPolyCoord(lingot.position, (lingot.orientation)*(360/math.pi), lingot.largeur, lingot.longueur)
 	pygame.draw.polygon( pygame.display.get_surface(), Visu_table.couleur['lingot'], coord)
 	    
-	#log.logger.debug("Lingot (x="+str(lingot.position.x)+";y="+str(lingot.position.y)+";ori="+str((lingot.orientation)*(360/math.pi))+ \
-			 #";largeur="+str(lingot.largeur)+";longueur="+str(lingot.longueur)+";coord="+str(coord)+")")
+	if self.debug:
+	    log.logger.debug("Lingot (x="+str(lingot.position.x)+";y="+str(lingot.position.y)+";ori="+str((lingot.orientation)*(360/math.pi))+ \
+			     ";largeur="+str(lingot.largeur)+";longueur="+str(lingot.longueur)+";coord="+str(coord)+")")
 
     def drawDisque(self, disque):
 	"""
@@ -105,10 +106,11 @@ class Visu_table( threading.Thread):
 	r = math.trunc( self.scale*disque.rayon)
 	
 	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur[disque.couleur], (x,y), r)
-	
-	#log.logger.debug("Disque (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
-			 #"abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
-			 #"rel[x="+str(math.trunc( Visu_table.scale * disque.position.x ))+" | y="+str(math.trunc( Visu_table.scale * disque.position.y ))+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Disque (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
+			     "rel[x="+str(math.trunc( Visu_table.scale * disque.position.x ))+" | y="+str(math.trunc( Visu_table.scale * disque.position.y ))+"]")
 
     def drawTotem(self, totem):
 	"""
@@ -125,10 +127,11 @@ class Visu_table( threading.Thread):
 	pygame.draw.rect(pygame.display.get_surface(),
 			 Visu_table.couleur['marron'],
 			 pygame.Rect(x, y, largeur, longueur))
-			  
-	#log.logger.debug("Totem(la="+str(largeur)+";lo="+str(longueur)+") " \
-			 #"abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
-			 #"rel[x="+str(math.trunc( Visu_table.scale * totem.position.x ))+" | y="+str(math.trunc( Visu_table.scale * totem.position.y ))+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Totem(la="+str(largeur)+";lo="+str(longueur)+") " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			     "rel[x="+str(math.trunc( Visu_table.scale * totem.position.x ))+" | y="+str(math.trunc( Visu_table.scale * totem.position.y ))+"]")
 			  
     def drawPalmier(self, palmier):
 	"""
@@ -142,10 +145,11 @@ class Visu_table( threading.Thread):
 	r = math.trunc( self.scale*palmier.rayon)
 	
 	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["vert"], (x,y), r)
-	
-	#log.logger.debug("Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
-			 #" abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
-			 #" rel[x="+str(math.trunc( Visu_table.scale * palmier.position.x ))+" | y="+str(math.trunc( Visu_table.scale * palmier.position.y ))+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
+			     " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
+			     " rel[x="+str(math.trunc( Visu_table.scale * palmier.position.x ))+" | y="+str(math.trunc( Visu_table.scale * palmier.position.y ))+"]")
     
     def drawPoussoir(self, poussoir):
 	"""
@@ -168,8 +172,9 @@ class Visu_table( threading.Thread):
 	pygame.draw.rect( pygame.display.get_surface(),
 			  Visu_table.couleur[couleur],
 			  pygame.Rect(x, y, 7, l))
-	
-	#log.logger.debug("Poussoir (etat="+str(poussoir.etat)+";ennemi="+str(poussoir.ennemi)+") "  \
+	    
+	if self.debug:
+	    log.logger.debug("Poussoir (etat="+str(poussoir.etat)+";ennemi="+str(poussoir.ennemi)+") "  \
 			 #"abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
 			 #"rel[x="+str(math.trunc( Visu_table.scale * poussoir.position.x ))+" | y="+str(math.trunc( Visu_table.scale * poussoir.position.y ))+"]")
 			  
@@ -193,13 +198,13 @@ class Visu_table( threading.Thread):
 			     pygame.Rect(x, y, largeur, hauteur) )
 			
 	if carteTresor.etat:
-		pass
-		#log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): not displayed ")
-	else:
-	    #log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): " \
-			     #"abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
-			     #"rel[x="+str(math.trunc( Visu_table.scale * carteTresor.position.x ))+" | y="+str(math.trunc( Visu_table.scale * carteTresor.position.y ))+"]")
-		pass
+	    if self.debug:
+		log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): not displayed ")
+	else:    
+	    if self.debug:
+		log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			     "rel[x="+str(math.trunc( Visu_table.scale * carteTresor.position.x ))+" | y="+str(math.trunc( Visu_table.scale * carteTresor.position.y ))+"]")
 			  
     def drawZone(self, zone):
 	"""
@@ -226,9 +231,10 @@ class Visu_table( threading.Thread):
 
 	
 	pygame.draw.polygon( pygame.display.get_surface(), couleur, [sg, ig, id, sd])
-			  
-	#log.logger.debug("Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
-			 #"abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
+			     "abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]")
 
     def createPolyCoord(self, pos,ori,l,h):
 	"""
