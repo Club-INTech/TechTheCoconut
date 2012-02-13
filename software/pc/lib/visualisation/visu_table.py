@@ -34,7 +34,8 @@ class Visu_table( threading.Thread):
 	"""
 	Constructeur
 	
-	:param debug: Affiche les paramètres de dessin des différents objets
+	:param debug: Affiche les paramètres de dessin des différents objets \n
+	Pour la retro-compatibilité, normalement non utilisé. Utilise log.logger.debug à la place
 	:type debug: boolean
 	:param nom: Défini le nom du Thread
 	:type nom: string
