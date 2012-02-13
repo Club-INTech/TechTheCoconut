@@ -1,4 +1,5 @@
 copies-IPython:
+	if ( test ! -d ~/.ipython);then mkdir ~/.ipython; fi
 	sudo cp ipython/fonctions_ipython.py /usr/share/pyshared/IPython/UserConfig/
 	sudo cp ipython/ipy_user_conf.py /usr/share/pyshared/IPython/UserConfig/
 	cp ipython/ipy_user_conf.py ~/.ipython/
