@@ -24,6 +24,7 @@ log.logger.info('Profil de configuration chargé : ' + conf)
 
 log.logger.info('Injection des données de la carte')
 exec('import profils.'+conf+'.injection.elements_jeu')
+exec('import profils.'+conf+'.injection.robot')
 
 first = True
 erreur = False
