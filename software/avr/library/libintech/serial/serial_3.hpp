@@ -31,7 +31,7 @@
 
 	template<>
 	void Serial<3>::change_baudrate(uint32_t new_baudrate){
-		uint16_t UBRR  =(F_CPU*new_baudrate/8 - 1)/2;
+		uint16_t UBRR  =(F_CPU/8/new_baudrate - 1)/2;
 		UBRR3H = (unsigned char)(UBRR >> 8);
 		UBRR3L = (unsigned char)UBRR;
 	}
