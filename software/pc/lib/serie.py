@@ -9,7 +9,7 @@ log = log.Log()
 
 class Serie(threading.Thread, serial.Serial):
     """
-    Classe de créer une liaison Série utilisant un thread (ie non bloquante)\n
+    Classe permettant de créer une liaison Série utilisant un thread (ie non bloquante)\n
     \n
     Pour la démarrer utiliser la méthode start()\n
     Les messages sont stockés dans l'attribut d'instance file_attente qui est un objet LifoQueue http://www.doughellmann.com/PyMOTW/Queue/index.html#lifo-queue \n
@@ -56,8 +56,17 @@ class Serie(threading.Thread, serial.Serial):
         :return: Nombre de caractères envoyés
         :rtype: int
         """
-        log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
-        return self.write(msg+"\r\n")
+        msg = msg.split()
+        liste_number = []
+        for i in msg:
+            if i.isdigit(): 
+                liste_number.append(i) # on place les nombres dans une liste
+            else:
+                log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
+                return self.write(i+"\r\n") # on écrit la chaine
+        for i in liste_number: # écriture des nombres, mais ça reste des strings
+            log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
+            return : self.write(i+"\r\n")
     
     def lire(self):
         """
