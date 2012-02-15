@@ -5,7 +5,7 @@ import threading
 import Queue
 
 import log
-log=log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], constantes['Logs']['logs_format'], constantes['Logs']['stderr'], constantes['Logs']['stderr_level'], constantes['Logs']['stderr_format'], constantes['Logs']['dossier'])
+log = log.Log()
 
 class Serie(threading.Thread, serial.Serial):
     """

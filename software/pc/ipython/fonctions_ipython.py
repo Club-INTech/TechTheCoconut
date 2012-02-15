@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import IPython.ipapi
+import os, signal
 
 ip = IPython.ipapi.get()
 
@@ -15,18 +16,27 @@ def readme(self, arg):
     Fonction utilisée pour afficher le README du dossier software/pc
     """
     
-    text = open('../README', 'r')
+    text = open('README', 'r')
     print text.read()
     text.close()
 
 ip.expose_magic('readme', readme)
 
 
+def kill(self, arg):
+    """
+    Fermeture du dernier thread avec un kill du pid
+    """
+    print "On ferme le dernier thread !"
+    os.kill(os.getpid(), signal.SIGTERM)
+
+ip.expose_magic('kill', kill)
+
 def commandes(self, arg):
     """
     Fonction utilisée pour afficher la liste des commandes INTech.
     """
-    text = open('../ipython/commandes', 'r')
+    text = open('ipython/commandes', 'r')
     print text.read()
     text.close()
     
@@ -57,7 +67,7 @@ def tuto(self, arg):
    1. Fonctions de base et choses à savoir.
    2. Commandes magiques.
    3. Créer ses propres fonctions
-   4. Graph Tool (recherche de chemin
+   4. Graph Tool (recherche de chemin)
    5. Quitter le menu
    """
    

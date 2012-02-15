@@ -14,10 +14,14 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 import lib.log
 log = lib.log.Log()
 
+try:
+    from graph_tool.all import *
+except:
+    log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
+
 from lib.outils_math.collisions import *
 from lib.outils_math.point import Point
 from lib.outils_math.rectangle import Rectangle
-from lib.recherche_chemin.astar import *
 from math import sqrt
 
 #TODO lien avec constantes dans profil
@@ -42,6 +46,23 @@ carte.palmiers[i].rectangle. #0
 .wx
 .wy
 """
+
+class VisitorExample(AStarVisitor):
+
+    def __init__(self, touched_v, touched_e, target):
+        self.touched_v = touched_v
+        self.touched_e = touched_e
+        self.target = target
+
+    def discover_vertex(self, u):
+        self.touched_v[u] = True
+
+    def examine_edge(self, e):
+        self.touched_e[e] = True
+
+    def edge_relaxed(self, e):
+        if e.target() == self.target:
+            raise StopSearch()
 
 #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
 g = Graph(directed=False)

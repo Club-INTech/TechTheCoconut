@@ -4,8 +4,8 @@ import sys, os
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import lib
-from lib.visualisation.visu_table import Visu_table
+from lib.visualisation.visu_serie import Visu_serie
 
 
-vTable = Visu_table(nom='vTable')
-vTable.start()
+vSerie = Visu_serie(nom='vSerie')
+vSerie.start()

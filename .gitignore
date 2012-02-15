@@ -5,4 +5,8 @@
 *.o
 *.hex
 *.out
-/software/nbproject/private/
+/software/nbproject/private//software/pc/sauv_g.xml
+/software/pc/sauv_poids
+/software/pc/sauv_posX
+/software/pc/sauv_posY
+/software/pc/sauv_g.xml
