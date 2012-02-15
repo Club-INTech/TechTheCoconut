@@ -56,8 +56,17 @@ class Serie(threading.Thread, serial.Serial):
         :return: Nombre de caractères envoyés
         :rtype: int
         """
-        log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
-        return self.write(msg+"\r\n")
+        msg = msg.split()
+        liste_number = []
+        for i in msg:
+            if i.isdigit(): 
+                liste_number.append(i) # on place les nombres dans une liste
+            else:
+                log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
+                return self.write(i+"\r\n") # on écrit la chaine
+        for i in liste_number: # écriture des nombres, mais ça reste des strings
+            log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
+            return : self.write(i+"\r\n")
     
     def lire(self):
         """
