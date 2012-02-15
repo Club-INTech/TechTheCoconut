@@ -302,13 +302,15 @@ class Thetastar:
                         Thetastar.poids[Thetastar.g.edge(Narrive,Thetastar.g.vertex(l))] = sqrt((arrive.x - Thetastar.posX[Thetastar.g.vertex(l)]) ** 2 + (arrive.y - Thetastar.posY[Thetastar.g.vertex(l)]) ** 2)
                         
                         
-                #algorithme utilisé : A*
-                chemin=self.AStar(Ndepart,Narrive)
                 
-                #sortie
+                chemin=[]
+                
                 log.logger.info("Chemin trouvé :")
-                for p in chemin:
+                #algorithme utilisé : A*
+                for p in self.AStar(Ndepart,Narrive):
                     log.logger.info("(" + str(p.x) + ", " + str(p.y) + ")")
+                    chemin.append(Point(int(p.x),int(p.y)))
+                return chemin
 
 
 
