@@ -11,7 +11,10 @@ constantes = \
 		#: Largeur en mm
 		"largeur": 3000,
 		#: Longueur en mm
-		"longueur": 2000
+		"longueur": 2000,
+		
+		#longueur du coté du robot, en mm
+		"coteRobot" : 350.,
 	},
 	"Anna": {},
     "Objets_Table": {
@@ -34,5 +37,12 @@ constantes = \
 		"stderr_level": "DEBUG",
 		"stderr_format": "%(asctime)s:%(name)s:%(levelname)s:%(threadName)s:l%(lineno)d:%(message)s",
 		"dossier": "logs"
-	}
+	},
+	"Recherche_Chemin":
+    {
+        #rayon maximal du cercle circonscrit aux robots adverses, en mm
+        "rayonRobotsA" : 350.,
+        #approximation hexagonale des robots adverses
+        "nCotesRobotsA" : 6
+    }
 }

@@ -12,8 +12,8 @@ Contents:
     :maxdepth: 5
 
     actionneur
-    actions
     asservissement
+    balise
     capteur
     carte
     decision

@@ -1,10 +1,11 @@
 * bin/ : Fichiers python exécutables, il sont lancés grâce au lanceur
-* conf/ : Configuration avec les différents profils (constantes, disposition initiale, stratégie, tests de séquences, ...)
 * doc/ : Documentation générée par Sphinx 1.1.2
 * donnees/ : Images, ..
+* ipython/ : Fichiers pour générer l'aide la console basée sur ipython
 * lib/ : librairie sous forme de classes
 * logs/ : Logs
 * outils/ : scripts facultatifs pour se simplifier la vie
+* profils/ : Configuration avec les différents profils (constantes, disposition initiale, stratégie, tests de séquences, ...)
 * tests/ : tests unitaires
 * lanceur.py : Lance les programmes dans bin/ avec les bons paramètres
 
@@ -23,6 +24,9 @@ graph-tools
 
 Pour installer les dépendances nécessaires (sauf graph-tools) sur ubuntu :
 'make install-ubuntu'
+
+Pour installer l'aide pour la console :
+'make copies-IPython'
 
 == Graph-Tool ==
 

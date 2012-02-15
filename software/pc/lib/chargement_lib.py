@@ -3,13 +3,12 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 modules = []
-modules.append("actions_in")
-modules.append("actions_out")
 modules.append("outils_math")
 modules.append("simul_uc")
 modules.append("visualisation")
 modules.append("actionneur")
 modules.append("asservissement")
+modules.append("balise")
 modules.append("capteur")
 modules.append("carte")
 modules.append("conf")
@@ -25,7 +24,8 @@ modules.append("serie")
 modules.append("strategie")
 modules.append("recherche_chemin")
 modules.append("recherche_chemin.astar")
-modules.append("recherche_chemin.rechercheChemin")
+modules.append("recherche_chemin.rechercheCheminAstar")
+modules.append("recherche_chemin.rechercheCheminTstar")
 
 for module in modules:
     try:

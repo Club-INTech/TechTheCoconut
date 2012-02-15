@@ -1,2 +1,0 @@
-import constantes
-import strategie

@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
+
 import pygame, time, sys, os, math, threading, lib.log
+
+
+# Ajout de ../.. au path python
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
+
 from lib.carte import Carte
+from lib.robot import Robot
 
 log = lib.log.Log()
 
@@ -16,12 +23,13 @@ class Visu_table( threading.Thread):
     #Définition des constantes de la classe
     couleur = { 'NOIR':[0,0,0], 
 		'BLANC':[255,255,255],
-		'lingot':[0,255,0],
+		'orange':[255,127,0],
 		'marron':[168,86,6],
 		'vert':[147,239,8],
 		'rouge':[234,57,59],
 		'violet':[138,48,225],
-		'gris':[213,215,217]}
+		'gris':[213,215,217],
+		'bleuMarine':[0,0,127]}
     srcImageTable = os.path.join(os.path.dirname(__file__), "../../donnees/images/table_3000_2000_vierge.png")
     displayMap = True
 	      
@@ -34,7 +42,8 @@ class Visu_table( threading.Thread):
 	"""
 	Constructeur
 	
-	:param debug: Affiche les paramètres de dessin des différents objets
+	:param debug: Affiche les paramètres de dessin des différents objets \n
+	Pour la retro-compatibilité, normalement non utilisé. Utilise log.logger.debug à la place
 	:type debug: boolean
 	:param nom: Défini le nom du Thread
 	:type nom: string
@@ -53,7 +62,7 @@ class Visu_table( threading.Thread):
 	#charge l'image en mémoire et ajuste la dimension
 	imageTable = pygame.image.load(Visu_table.srcImageTable).convert()
 	self.imageTable = pygame.transform.scale(imageTable, self.tailleTablePx )
-	
+
 	# Gère la vitesse de mise à jour de l'écran
 	self.clock=pygame.time.Clock()
 
@@ -61,6 +70,7 @@ class Visu_table( threading.Thread):
 	self.clock.tick(Visu_table.fps)
 	
 	self.carte = Carte()
+	self.robot = Robot()
 	
 	try:
 	    threading.Thread.__init__(self, name=nom)
@@ -75,14 +85,19 @@ class Visu_table( threading.Thread):
 	:param lingot: Le lingot à dessiner
 	:type lingot: Lingot
 	"""
-	obj = pygame.Rect(lingot.position.x, lingot.position.y, lingot.largeur, lingot.longueur)
+	
+	"""
 	pygame.draw.rect( pygame.display.get_surface(),
 			  Visu_table.couleur['lingot'],
-			  obj)
-			  
+			  pygame.Rect(lingot.position.x, lingot.position.y, lingot.largeur, lingot.longueur))
+	"""
+	coord = self.createPolyCoord(lingot.position, (lingot.orientation)*(360/math.pi), lingot.largeur, lingot.longueur)
+	pygame.draw.polygon( pygame.display.get_surface(), Visu_table.couleur['orange'], coord)
+	    
 	if self.debug:
-	    print "Lingot"
-	
+	    log.logger.debug("Lingot (x="+str(lingot.position.x)+";y="+str(lingot.position.y)+";ori="+str((lingot.orientation)*(360/math.pi))+ \
+			     ";largeur="+str(lingot.largeur)+";longueur="+str(lingot.longueur)+";coord="+str(coord)+")")
+
     def drawDisque(self, disque):
 	"""
 	Dessine le disque sur l'écran
@@ -95,10 +110,33 @@ class Visu_table( threading.Thread):
 	r = math.trunc( self.scale*disque.rayon)
 	
 	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur[disque.couleur], (x,y), r)
+	    
+	if self.debug:
+	    log.logger.debug("Disque (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
+			     "rel[x="+str(math.trunc( Visu_table.scale * disque.position.x ))+" | y="+str(math.trunc( Visu_table.scale * disque.position.y ))+"]")
+			     
+    def drawRobot(self, robot):
+	"""
+	Dessine le robot sur l'écran (disque)
 	
-	log.logger.debug("Disque (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
-			 "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
-			 "rel[x="+str(math.trunc( Visu_table.scale * disque.position.x ))+" | y="+str(math.trunc( Visu_table.scale * disque.position.y ))+"]")
+	:param robot: Le robot à dessiner
+	:type robot: Robot
+	"""
+	x = self.tailleTablePx[0]/2 + math.trunc(self.scale*robot.position.x)
+	y = self.tailleTablePx[1] - math.trunc(self.scale*robot.position.y)
+	r = math.trunc( self.scale*robot.rayon)
+	
+	#pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur['bleuMarine'], (x,y), r)
+	
+	surface = pygame.Surface( (r,r) )
+	surface.set_alpha(127)
+	self.screen.blit(surface, [x,y])
+		    
+	if self.debug:
+	    log.logger.debug("Robot (r="+str(r)+";x="+str(x)+";y="+str(y)+") " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] " \
+			     "rel[x="+str(math.trunc( Visu_table.scale * robot.position.x ))+" | y="+str(math.trunc( Visu_table.scale * robot.position.y ))+"]")
 
     def drawTotem(self, totem):
 	"""
@@ -115,10 +153,11 @@ class Visu_table( threading.Thread):
 	pygame.draw.rect(pygame.display.get_surface(),
 			 Visu_table.couleur['marron'],
 			 pygame.Rect(x, y, largeur, longueur))
-			  
-	log.logger.debug("Totem(la="+str(largeur)+";lo="+str(longueur)+") " \
-			 "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
-			 "rel[x="+str(math.trunc( Visu_table.scale * totem.position.x ))+" | y="+str(math.trunc( Visu_table.scale * totem.position.y ))+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Totem(la="+str(largeur)+";lo="+str(longueur)+") " \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			     "rel[x="+str(math.trunc( Visu_table.scale * totem.position.x ))+" | y="+str(math.trunc( Visu_table.scale * totem.position.y ))+"]")
 			  
     def drawPalmier(self, palmier):
 	"""
@@ -132,10 +171,11 @@ class Visu_table( threading.Thread):
 	r = math.trunc( self.scale*palmier.rayon)
 	
 	pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur["vert"], (x,y), r)
-	
-	log.logger.debug("Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
-			 " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
-			 " rel[x="+str(math.trunc( Visu_table.scale * palmier.position.x ))+" | y="+str(math.trunc( Visu_table.scale * palmier.position.y ))+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Palmier (r="+str(r)+";x="+str(x)+";y="+str(y)+")" \
+			     " abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"]"+ \
+			     " rel[x="+str(math.trunc( Visu_table.scale * palmier.position.x ))+" | y="+str(math.trunc( Visu_table.scale * palmier.position.y ))+"]")
     
     def drawPoussoir(self, poussoir):
 	"""
@@ -158,10 +198,11 @@ class Visu_table( threading.Thread):
 	pygame.draw.rect( pygame.display.get_surface(),
 			  Visu_table.couleur[couleur],
 			  pygame.Rect(x, y, 7, l))
-	
-	log.logger.debug("Poussoir (etat="+str(poussoir.etat)+";ennemi="+str(poussoir.ennemi)+") "  \
-			 "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
-			 "rel[x="+str(math.trunc( Visu_table.scale * poussoir.position.x ))+" | y="+str(math.trunc( Visu_table.scale * poussoir.position.y ))+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Poussoir (etat="+str(poussoir.etat)+";ennemi="+str(poussoir.ennemi)+") "  \
+			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | " +  "y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
+			     "rel[x="+str(math.trunc( Visu_table.scale * poussoir.position.x ))+" | y="+str(math.trunc( Visu_table.scale * poussoir.position.y ))+"]")
 			  
     def drawCarteTresor(self, carteTresor):
 	"""
@@ -183,9 +224,11 @@ class Visu_table( threading.Thread):
 			     pygame.Rect(x, y, largeur, hauteur) )
 			
 	if carteTresor.etat:
-	    log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): not displayed ")
-	else:
-	    log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): " \
+	    if self.debug:
+		log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): not displayed ")
+	else:    
+	    if self.debug:
+		log.logger.debug("CarteAuTresor(ennemi="+str(carteTresor.ennemi)+"): " \
 			     "abs[x="+str(x)+"/"+str(self.tailleTablePx[0])+" | y="+str(y)+"/"+str(self.tailleTablePx[1])+"] "+ \
 			     "rel[x="+str(math.trunc( Visu_table.scale * carteTresor.position.x ))+" | y="+str(math.trunc( Visu_table.scale * carteTresor.position.y ))+"]")
 			  
@@ -214,10 +257,57 @@ class Visu_table( threading.Thread):
 
 	
 	pygame.draw.polygon( pygame.display.get_surface(), couleur, [sg, ig, id, sd])
-			  
-	log.logger.debug("Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
-			 "abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]")
+	    
+	if self.debug:
+	    log.logger.debug("Zone (nom="+zone.nomZone+";ennemi="+str(zone.ennemi)+"): " \
+			     "abs[sg="+str(sg)+";ig="+str(ig)+";id="+str(id)+";sd=;"+str(sd)+"]")
 
+    def createPolyCoord(self, pos,ori,l,h):
+	"""
+	Créer les coordonnées d'un rectangle en tenant compte de sa position, de son orientation et de sa taille
+	
+	:param pos: La position du rectangle
+	:type pos: Point
+	
+	:param ori: L'orientation du rectangle
+	:type ori: float
+	
+	:param l: La longueur du rectangle
+	:type l: integer
+	
+	:param h: La hauteur du rectangle
+	:type h: integer
+	"""
+	diag = math.sqrt( math.pow(l/2,2)+math.pow(h/2,2))
+	
+	sg = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x - math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
+	
+	ig = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x - math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y - math.sin(ori)*diag) ))
+	
+	id = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x + math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y - math.sin(ori)*diag) ))
+	
+	sd = (self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*(pos.x + math.cos(ori)*diag) ),
+	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
+	
+	return [sg,ig,id,sd]
+	
+    def drawPointsLines(self, listePoints):
+	"""
+	Dessine la ligne de point\n
+	/!\ Attention: Les points sont représentés par une simple liste (pas l'objet Point donc) /!\
+	
+	:param listePoints: La liste des points à créer
+	:type listePoints: dictionnaire de liste 
+	"""
+	
+	pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['rouge'], False, listePoints);
+	
+	if self.debug:
+	    log.logger.debug("Liste de point:  abs"+listePoints)
+      
     def majTable(self):
 
 	#"Efface" les précédents items
@@ -245,6 +335,7 @@ class Visu_table( threading.Thread):
         for disque in self.carte.disques:
 	    self.drawDisque(disque)
 	    
+	self.drawRobot(self.robot)
         
 	
 	#Nota: Dessin des réglettes inutiles puisqu'elles ne devraient à priori pas bouger. 
@@ -257,10 +348,10 @@ class Visu_table( threading.Thread):
 	pygame.display.flip()
 
     def quit(self):
-	log.logger.info("Fermeture du thread en cours...")
+	log.logger.info("Fermeture du thread "+self.nom+" en cours...")
 	self.Terminated = True
 	pygame.quit ()  
-	self.join()
+	self._Thread__stop()
 
     def run(self):
 	self.Terminated=False

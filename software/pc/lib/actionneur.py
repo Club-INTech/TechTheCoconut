@@ -4,7 +4,7 @@ import serial
 import serie
 import log
 
-log=log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], constantes['Logs']['logs_format'], constantes['Logs']['stderr'], constantes['Logs']['stderr_level'], constantes['Logs']['stderr_format'], constantes['Logs']['dossier'])
+log = log.Log()
 
 
 class Actionneur(serie.Serie):
@@ -24,6 +24,7 @@ class Actionneur(serie.Serie):
         :vitesse : vitesse de la rotation
         :reponse : booleen pour demander une réponse ou non
         """
+<<<<<<< HEAD
         if angle > 170:
             log.logger.info("La valeur demandé " + str(angle) + " est trop grande, on ramène cette valeur à 170°")
             angle = 170
@@ -33,3 +34,7 @@ class Actionneur(serie.Serie):
         self.ecrire('nom : ' + self.nom + '\nangle : ' + str(angle) + '\nreponse : ' + str(reponse) + '\nvitesse : ' + str(vitesse))
         
         
+=======
+        if angle < 170 and angle > 0:
+            actionneur.ecrire('nom : '+self.nom, '\nangle : ' + angle + '\nreponse : ' + reponse + '\nvitesse : ' + vitesse)
+>>>>>>> 9d90902cf80b60e00bc59a58bb7aa7693a2c4cf7

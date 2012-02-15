@@ -1,9 +1,9 @@
 copies-IPython: install-ubuntu clean
-	if not(test -d ~/.ipython) then mkdir ~/.ipython
+	if ( test ! -d ~/.ipython);then mkdir ~/.ipython; fi
 	sudo cp ipython/fonctions_ipython.py /usr/share/pyshared/IPython/UserConfig/
 	sudo cp ipython/ipy_user_conf.py /usr/share/pyshared/IPython/UserConfig/
-	sudo cp ipython/ipy_user_conf.py ~/.ipython/
-	sudo cp ipython/fonctions_ipython.py  ~/.ipython/
+	cp ipython/ipy_user_conf.py ~/.ipython/
+	cp ipython/fonctions_ipython.py  ~/.ipython/
 
 install-ubuntu:
 	sudo apt-get install python-nose python-sphinx python-serial python-pygame ipython
