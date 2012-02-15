@@ -293,6 +293,20 @@ class Visu_table( threading.Thread):
 	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
 	
 	return [sg,ig,id,sd]
+	
+    def drawPointsLines(self, listePoints):
+	"""
+	Dessine la ligne de point\n
+	/!\ Attention: Les points sont représentés par une simple liste (pas l'objet Point donc) /!\
+	
+	:param listePoints: La liste des points à créer
+	:type listePoints: dictionnaire de liste 
+	"""
+	
+	pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['rouge'], False, listePoints);
+	
+	if self.debug:
+	    log.logger.debug("Liste de point:  abs"+listePoints)
       
     def majTable(self):
 
