@@ -12,6 +12,7 @@ while first or not profil.importation:
 	first = False
 	conf = raw_input('Indiquer la configuration a importer (prod, develop, developSimulUc) : \n')
 	
+	#tronque la string conf pour éviter les bugs à l'import
 	conf = conf.split('.')
 	for i in conf:
             if i == 'prod': conf = 'prod'
