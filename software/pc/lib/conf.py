@@ -29,7 +29,7 @@ class Conf:
         :type profil: string
         """
         try:
-            exec("import profils."+profil)
+            exec("import profils."+profil+'.injection')
             return True
         except:
             print >> sys.stderr, "Erreur : profil de configuration "+profil+" inconnu"

@@ -11,8 +11,16 @@ first = True
 while first or not profil.importation:
 	first = False
 	conf = raw_input('Indiquer la configuration a importer (prod, develop, developSimulUc) : \n')
-	profil = lib.conf.Conf(conf)
-
+	
+	conf = conf.split('.')
+	for i in conf:
+            if i == 'prod': conf = 'prod'
+            elif i == 'develop' : conf = 'develop'
+            elif i == 'developSimulUc' : conf = 'developSimulUc'
+    
+        profil = lib.conf.Conf(conf)
+	
+	
 # Chargement des constantes en variable globale
 exec('import profils.'+conf+'.constantes')
 exec('__builtin__.constantes = profils.'+conf+'.constantes.constantes')
@@ -24,7 +32,12 @@ log.logger.info('Profil de configuration chargé : ' + conf)
 
 log.logger.info('Injection des données de la carte')
 exec('import profils.'+conf+'.injection.elements_jeu')
-exec('import profils.'+conf+'.injection.robot')
+
+if conf == 'develop':
+    exec('import profils.'+conf+'.injection.robot')
+else:
+    exec('import profils.'+conf+'.injection')
+    
 
 first = True
 erreur = False
