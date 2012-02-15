@@ -9,7 +9,7 @@ log=log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], consta
 
 class Serie(threading.Thread, serial.Serial):
     """
-    Classe de créer une liaison Série utilisant un thread (ie non bloquante)\n
+    Classe permettant de créer une liaison Série utilisant un thread (ie non bloquante)\n
     \n
     Pour la démarrer utiliser la méthode start()\n
     Les messages sont stockés dans l'attribut d'instance file_attente qui est un objet LifoQueue http://www.doughellmann.com/PyMOTW/Queue/index.html#lifo-queue \n

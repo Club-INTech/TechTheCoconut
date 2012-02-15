@@ -26,7 +26,7 @@ def commandes(self, arg):
     """
     Fonction utilisée pour afficher la liste des commandes INTech.
     """
-    text = open('../ipython/commandes', 'r')
+    text = open('ipython/commandes', 'r')
     print text.read()
     text.close()
     
