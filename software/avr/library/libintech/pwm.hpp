@@ -4,6 +4,46 @@
 #include <stdint.h>
 #include <avr/io.h>
 
+
+
+template<uint8_t timer_id>
+struct ModeCounter{
+  static void set();
+};
+
+template<>
+struct ModeCounter<0>{
+  static void seuil(uint16_t seuil){
+    OCR0A = seuil;
+  }
+
+  static void set(){
+    sbi(TIMSK0,TOIE0);
+  }
+};
+
+template<>
+struct ModeCounter<1>{
+  static void seuil(uint16_t seuil){
+    OCR1A = seuil;
+  }
+
+  static void set(){
+    sbi(TIMSK1,TOIE1);
+  }
+};
+
+template<>
+struct ModeCounter<2>{
+  static void seuil(uint16_t seuil){
+    OCR2A = seuil;
+  }
+
+  static void set(){
+    sbi(TIMSK2,TOIE2);
+  }
+};
+
 template<uint8_t timer_id>
 struct ModeFastPwm;
 
@@ -62,42 +102,5 @@ struct ModeFastPwm<2>{
   }
 };
 
-template<uint8_t timer_id>
-struct ModeCounter{
-  static void set();
-};
-
-template<>
-struct ModeCounter<0>{
-  static void seuil(uint16_t seuil){
-    OCR0A = seuil;
-  }
-  
-  static void set(){
-    sbi(TIMSK0,TOIE0);
-  }
-};
-
-template<>
-struct ModeCounter<1>{
-  static void seuil(uint16_t seuil){
-    OCR1A = seuil;
-  }
-  
-  static void set(){
-    sbi(TIMSK1,TOIE1);
-  }
-};
-
-template<>
-struct ModeCounter<2>{
-  static void seuil(uint16_t seuil){
-    OCR2A = seuil;
-  }
-  
-  static void set(){
-    sbi(TIMSK2,TOIE2);
-  }
-};
 
 #endif
