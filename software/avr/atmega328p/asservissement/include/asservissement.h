@@ -23,10 +23,10 @@ class Asservissement {
 		void stop();
 
 		/**
-		* Calcule de la puissance moteur
+		* Calcul de la puissance moteur
 		*
 		* \param int32_t positionRelle
-		* \return int32_t pwm puissance à appliquer
+		* \return int16_t pwm puissance à appliquer
 		*/
 		int16_t	pwm(int32_t);
 
@@ -77,6 +77,7 @@ class Asservissement {
 		*/
 		uint16_t kp(void);
 
+
 		/**
 		* Setter pour la variable de PWM Max
 		*
@@ -103,19 +104,6 @@ class Asservissement {
 		*
 		*/
 		void consigne(int32_t);
-
-		/**
-		* Getter pour la vitesse
-		*
-		* \return int32_t consigne
-		*/
-		int32_t vitesse();
-
-		/**
-		* Setter pour la vitesse
-		*
-		*/
-		void vitesse(int32_t);
 
 		/**
 		* Remet à zéro l'asservissement en rotation en réinitialisant les données
@@ -147,7 +135,6 @@ class Asservissement {
 		uint16_t pwmMax_;
 
 		int32_t consigne_;
-		int32_t vitesse_;
 };
 
 
