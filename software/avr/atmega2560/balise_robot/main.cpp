@@ -1,16 +1,37 @@
 #include <libintech/serial/serial_0.hpp>
-#include <libintech/serial/serial_1.hpp>
-#include <stdint.h>
-#include <crc8.h>
-#include <frame.h>
+#include <libintech/timer.hpp>
 
+#include <stdint.h>
+#include "frame.h"
+#include "crc8.h"
+
+#ifndef sbi
+#define sbi(port,bit) (port) |= (1 << (bit))
+#endif
+
+#ifndef cbi
+#define cbi(port,bit) (port) &= ~(1 << (bit))
+#endif
+
+#ifndef tbi
+#define tbi(port,bit) (port) ^= (1 << (bit))
+#endif
+
+//  #include <libintech/serial/serial_1.hpp>
 //  #include <libintech/serial/serial_2.hpp>
 //  #include <libintech/serial/serial_3.hpp>
 
+typedef Timer<1,ModeCounter,64> ClasseTimer;
+
 int main() {
-	Serial<0> & serial0 = Serial<0>::Instance();
+	Serial < 0 > &serial0 = Serial < 0 > ::Instance();
+	ClasseTimer &timer = ClasseTimer::Instance();
+	
+	serial0.change_baudrate(9600);
 	//Initialisation table pour crc8
 	init_crc8();
+	//Pin L0 en input (Pin 49 sur board Arduino)
+	cbi(DDRL, PORTL0);
 
 	//   Serial<1> & serial1 = Serial<1>::Instance();
 	//   Serial<2> & serial2 = Serial<2>::Instance();
@@ -19,19 +40,14 @@ int main() {
 	uint32_t rawFrame;
 
 	while (1) {
-		rawFrame = serial0.read<uint32_t> ();
+		rawFrame = serial0.read<uint32_t>();
 		Frame frame(rawFrame);
 		if (frame.isValid()) {
 			serial0.print(frame.getRobotId());
 			serial0.print(frame.getDistance());
-		}
-		else{
+		} else {
 			serial0.print("ERROR");
 		}
-
-		//     serial1.print(0);
-		//     serial2.print(0);
-		//     serial3.print(0);
 	}
 }
 

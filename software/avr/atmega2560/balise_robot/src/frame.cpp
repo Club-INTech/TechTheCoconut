@@ -2,9 +2,9 @@
  * \file frame.cpp
  */
 
-#include "frame.h"
-#include <stdint.h>
-#include "crc8.h"
+#include "main.h"
+
+
 Frame::Frame(uint32_t frame) {
 	
 	data = (uint16_t)(frame >> 16);

@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "prescaler.hpp"
 #include "pwm.hpp"
-
+#include "singleton.hpp"
 
 template<uint8_t ID, class Mode>
 struct TimerRegisters;
@@ -46,7 +46,7 @@ struct TimerRegisters<2, ModeCounter<2> >{
 };
 
 template<uint8_t ID_,template<uint8_t> class MODE_, uint8_t PRESCALER_RATIO_>
-class Timer{
+class Timer : public Singleton< Timer<ID_, MODE_, PRESCALER_RATIO_> >{
 public:
   static const uint8_t ID = ID_;
   static const uint8_t PRESCALER_RATIO = PRESCALER_RATIO_;
