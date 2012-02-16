@@ -89,16 +89,6 @@ void Asservissement::consigne(int32_t consigne)
 	consigne_ = consigne;
 }
 
-int32_t Asservissement::vitesse()
-{
-	return vitesse_;
-}
-
-void Asservissement::vitesse(int32_t vitesse)
-{
-	vitesse_ = vitesse;
-}
-
 void Asservissement::reset()
 {
 }
