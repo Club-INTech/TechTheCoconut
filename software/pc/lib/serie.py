@@ -66,7 +66,7 @@ class Serie(threading.Thread, serial.Serial):
                 return self.write(i+"\r\n") # on écrit la chaine
         for i in liste_number: # écriture des nombres, mais ça reste des strings
             log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
-            return : self.write(i+"\r\n")
+            return self.write(i+"\r\n")
     
     def lire(self):
         """
