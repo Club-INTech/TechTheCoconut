@@ -12,7 +12,12 @@ class Actionneur(serie.Serie):
     Classe permettant de gérer un actionneur
     """
     def __init__(self, peripherique, nom, debit, timeout):
-        #actionneur = serie.Serie(peripherique, 'actionneur '+nom, debit, timeout)
+        """
+        peripherique : Nom de l'usb
+        nom : nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
+        debit : debit de bode à fixer
+        timeout : temps avant abandon
+        """
         self.nom = nom
         
         
@@ -27,3 +32,5 @@ class Actionneur(serie.Serie):
 
         if angle < 170 and angle > 0:
             actionneur.ecrire(self.nom + '\n ' + angle +'\n ' + vitesse)
+            return actionneur.lire()
+        
