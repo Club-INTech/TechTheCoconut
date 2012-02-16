@@ -34,6 +34,7 @@
 		uint16_t UBRR  =(F_CPU/8/new_baudrate - 1)/2;
 		UBRR3H = (unsigned char)(UBRR >> 8);
 		UBRR3L = (unsigned char)UBRR;
+		UCSR3C = (1 << USBS3)|(3<<UCSZ30);
 	}
 
 	template<>
@@ -43,7 +44,6 @@
 		UCSR3B |= ( 1 << RXEN3 );	//Activation de la réception
 		UCSR3B |= ( 1 << TXEN3 );	//Activation de l'emission
 		UCSR3C = (1 << USBS3)|(3<<UCSZ30);
-		sei();
 	}
 
 
