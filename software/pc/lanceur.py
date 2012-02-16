@@ -15,9 +15,12 @@ while first or not profil.importation:
 	#tronque la string conf pour éviter les bugs à l'import
 	conf = conf.split('.')
 	for i in conf:
-            if i == 'prod': conf = 'prod'
-            elif i == 'develop' : conf = 'develop'
-            elif i == 'developSimulUc' : conf = 'developSimulUc'
+            if i == 'prod':
+                conf = 'prod'
+            elif i == 'develop':
+                conf = 'develop'
+            elif i == 'developSimulUc':
+                conf = 'developSimulUc'
     
         profil = lib.conf.Conf(conf)
 	

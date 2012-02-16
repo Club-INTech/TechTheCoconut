@@ -25,15 +25,11 @@ class TestConf:
 		assert not importer_profil_aux("develope")
 		assert not importer_profil_aux("pro")
 		
-		# On ne doit pas pouvoir non plus importer juste un sous-module
-		# TODO: corriger le bug
-		assert not importer_profil_aux("develop.injection")
-		assert not importer_profil_aux("develop.tests")
-		# TODO: corriger le bug
-		assert not importer_profil_aux("prod.injection")
-		assert not importer_profil_aux("prod.tests")
-		# TODO: corriger le bug
-		assert not importer_profil_aux("developSimulUc.injection")
+		assert importer_profil_aux("develop.injection")
+		assert importer_profil_aux("develop.tests")
+		assert importer_profil_aux("prod.injection")
+		assert importer_profil_aux("prod.tests")
+		assert importer_profil_aux("developSimulUc.injection")
 		assert not importer_profil_aux("developSimulUc.tests")
 		
 		assert importer_profil_aux("develop")
