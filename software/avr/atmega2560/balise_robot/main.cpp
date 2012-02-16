@@ -43,7 +43,7 @@ int main() {
 	sbi(EICRA,ISC00);
 	sbi(EIMSK,INT0);//Activation proprement dite
 	
-	//sei();
+	sei();
 
 	//   Serial<1> & serial1 = Serial<1>::Instance();
 	//   Serial<2> & serial2 = Serial<2>::Instance();
@@ -54,10 +54,10 @@ int main() {
 	
 	while (1) {
 		
-		serial0.print(42);
-		//sbi(PORTB, PORTB1);
-		//cbi(PORTB, PORTB1);
-		_delay_ms(2000);
+		serial0.print(1);
+//		sbi(PORTB, PORTB1);
+//		cbi(PORTB, PORTB1);
+//		_delay_ms(2000);
 		
 		/*
 		rawFrame = serial0.read<uint32_t>();
@@ -79,7 +79,7 @@ ISR(INT0_vect)
 	ClasseTimer &angle_counter = ClasseTimer::Instance();
 	Balise & balise = Balise::Instance();
 	
-	serial0.print(balise.getAngle());
+	serial0.print(1337);
 	angle_counter.value(0);
 }
 

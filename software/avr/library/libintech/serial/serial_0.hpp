@@ -26,7 +26,6 @@ Serial<0>::Serial(){
 	UCSR0B |= ( 1 << RXCIE0 );	//Activation de l'interruption de réception
 	UCSR0B |= ( 1 << RXEN0 );	//Activation de la réception
 	UCSR0B |= ( 1 << TXEN0 );	//Activation de l'emission
-	UCSR0C = (1 << USBS0)|(3<<UCSZ00);
 }
 
 #if defined (__AVR_ATmega328P__) || defined (__AVR_ATmega328__)
