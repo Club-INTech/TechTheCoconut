@@ -7,6 +7,6 @@
 #define Utils_h
 
 #include <libintech/timer.hpp>
-typedef Timer<1,ModeCounter,64> ClasseTimer;
+typedef Timer<1,ModeCounter,1> ClasseTimer;
 
 #endif
