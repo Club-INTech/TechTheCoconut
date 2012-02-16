@@ -8,6 +8,7 @@
 #define Frame_h
 
 #include <stdint.h>
+#include "crc8.h"
 
 class Frame {
 	
@@ -18,10 +19,10 @@ class Frame {
 		uint16_t getDistance();
 
 	private:
-		uint16_t data;
-		unsigned char robotId;
-		uint16_t distance;
-		uint8_t crc;
+		uint16_t data_;
+		unsigned char robotId_;
+		uint16_t distance_;
+		uint8_t crc_;
 };
 
 

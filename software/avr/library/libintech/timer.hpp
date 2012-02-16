@@ -14,7 +14,7 @@ struct TimerRegisters;
 
 template<>
 struct TimerRegisters<0, ModeCounter<0> >{
-    static uint16_t get_tcnt(){
+    static uint16_t get_TCNT(){
         return TCNT0;
     }
 
@@ -25,7 +25,7 @@ struct TimerRegisters<0, ModeCounter<0> >{
 
 template<>
 struct TimerRegisters<1, ModeCounter<1> >{
-    static uint16_t get_tcnt(){
+    static uint16_t get_TCNT(){
         return TCNT1;
     }
 
@@ -36,7 +36,7 @@ struct TimerRegisters<1, ModeCounter<1> >{
 
 template<>
 struct TimerRegisters<2, ModeCounter<2> >{
-    static uint16_t get_tcnt(){
+    static uint16_t get_TCNT(){
         return TCNT2;
     }
 
@@ -61,13 +61,12 @@ public:
   }
 
   uint16_t value(){
-      return TimerRegisters<ID_,MODE_<ID_> >::get_tcnt();
+      return TimerRegisters<ID_,MODE_<ID_> >::get_TCNT();
   }
 
   void value(uint16_t new_value){
-      TimerRegisters<ID_,MODE_<ID_> >::set_tcnt(new_value);
+      TimerRegisters<ID_,MODE_<ID_> >::set_TCNT(new_value);
   }
-
-
 };
+
 #endif
