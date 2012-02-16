@@ -29,6 +29,7 @@
 		uint16_t UBRR  =(F_CPU*new_baudrate/8 - 1)/2;
 		UBRR1H = (unsigned char)(UBRR >> 8);
 		UBRR1L = (unsigned char)UBRR;
+		UCSR1C = (1 << USBS1)|(3<<UCSZ10);
 	}
 
 	template<>
@@ -38,7 +39,6 @@
 		UCSR1B |= ( 1 << RXEN1 );	//Activation de la réception
 		UCSR1B |= ( 1 << TXEN1 );	//Activation de l'emission
 		UCSR1C = (1 << USBS1)|(3<<UCSZ10);
-		sei();
 	}
 
 

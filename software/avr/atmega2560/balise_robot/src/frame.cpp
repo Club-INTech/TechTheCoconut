@@ -3,26 +3,26 @@
  */
 
 #include "frame.h"
-#include <stdint.h>
-#include "crc8.h"
+
+
 Frame::Frame(uint32_t frame) {
 	
-	data = (uint16_t)(frame >> 16);
-	crc = (uint8_t)(frame >> 8);
+	data_ = (uint16_t)(frame >> 16);
+	crc_ = (uint8_t)(frame >> 8);
 	//Récupération du bit robot
-	robotId = (unsigned int) (data >> 15);
+	robotId_ = (unsigned int) (data_ >> 15);
 	//Mise à 0 du bit identifiant le robot
-	distance = (uint16_t)(data & ~(1 << (15)));
+	distance_ = (uint16_t)(data_ & ~(1 << (15)));
 }
 
 bool Frame::isValid() {
-	return (crc8(data)==crc) && (data != 0);
+	return (crc8(data_)==crc_) && (data_ != 0);
 }
 
 unsigned char Frame::getRobotId() {
-	return robotId;
+	return robotId_;
 }
 
 uint16_t Frame::getDistance() {
-	return distance;
+	return distance_;
 }

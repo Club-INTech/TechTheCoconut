@@ -17,6 +17,7 @@ void Serial<0>::change_baudrate(uint32_t new_baudrate){
 	uint16_t UBRR  =(F_CPU/8/new_baudrate - 1)/2;
 	UBRR0H = (unsigned char)(UBRR >> 8);
 	UBRR0L = (unsigned char)UBRR;
+	UCSR0C = (1 << USBS0)|(3<<UCSZ00);
 }
 
 template<>
@@ -26,7 +27,6 @@ Serial<0>::Serial(){
 	UCSR0B |= ( 1 << RXEN0 );	//Activation de la réception
 	UCSR0B |= ( 1 << TXEN0 );	//Activation de l'emission
 	UCSR0C = (1 << USBS0)|(3<<UCSZ00);
-	sei();
 }
 
 #if defined (__AVR_ATmega328P__) || defined (__AVR_ATmega328__)

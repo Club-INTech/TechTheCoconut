@@ -33,6 +33,7 @@
 		uint16_t UBRR  =(F_CPU*new_baudrate/8 - 1)/2;
 		UBRR2H = (unsigned char)(UBRR >> 8);
 		UBRR2L = (unsigned char)UBRR;
+		UCSR2C = (1 << USBS2)|(3<<UCSZ20);
 	}
 
 
@@ -43,7 +44,6 @@
 		UCSR2B |= ( 1 << RXEN2 );	//Activation de la réception
 		UCSR2B |= ( 1 << TXEN2 );	//Activation de l'emission
 		UCSR2C = (1 << USBS2)|(3<<UCSZ20);
-		sei();
 	}
 
 
