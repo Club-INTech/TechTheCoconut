@@ -2,6 +2,7 @@
 #include <libintech/timer.hpp>
 
 #include <stdint.h>
+#include <avr/delay.h>
 #include "balise.h"
 #include "frame.h"
 #include "crc8.h"
@@ -35,10 +36,14 @@ int main() {
 	init_crc8();
 	//Pin B0 en input (Pin 53 sur board Arduino)
 	cbi(DDRB, PORTB0);
+	//Pin B1 en input (Pin 52 sur board Arduino)
+	sbi(DDRB, PORTB1);
 	//Activation interruption INT0 sur front montant
 	sbi(EICRA,ISC01);//Configuration front montant
 	sbi(EICRA,ISC00);
 	sbi(EIMSK,INT0);//Activation proprement dite
+	
+	sei();
 
 	//   Serial<1> & serial1 = Serial<1>::Instance();
 	//   Serial<2> & serial2 = Serial<2>::Instance();
@@ -48,6 +53,13 @@ int main() {
 	
 	
 	while (1) {
+		
+		serial0.print(1);
+//		sbi(PORTB, PORTB1);
+//		cbi(PORTB, PORTB1);
+//		_delay_ms(2000);
+		
+		/*
 		rawFrame = serial0.read<uint32_t>();
 		Frame frame(rawFrame);
 		if (frame.isValid()) {
@@ -56,14 +68,18 @@ int main() {
 			serial0.print(balise.getAngle());
 		} else {
 			serial0.print("ERROR");
-		}
+		}*/
 	}
 }
 
 //INT0
 ISR(INT0_vect)
 {
+	Serial < 0 > &serial0 = Serial < 0 > ::Instance();
 	ClasseTimer &angle_counter = ClasseTimer::Instance();
+	Balise & balise = Balise::Instance();
+	
+	serial0.print(1337);
 	angle_counter.value(0);
 }
 

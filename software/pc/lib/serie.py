@@ -47,26 +47,18 @@ class Serie(threading.Thread, serial.Serial):
             log.logger.error("Erreur d'initialisation de la liaison série threadée "+nom+" sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
             self.stop()
 
-    def ecrire(self, msg):
+    
+        def ecrire(self, msg):
         """
         Écrire une information vers un périphérique puis retourner à la ligne
-        
         :param msg: message à donner au périphérique
         :type msg: string
         :return: Nombre de caractères envoyés
         :rtype: int
         """
-        msg = msg.split()
-        liste_number = []
-        for i in msg:
-            if i.isdigit(): 
-                liste_number.append(i) # on place les nombres dans une liste
-            else:
-                log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
-                return self.write(i+"\r\n") # on écrit la chaine
-        for i in liste_number: # écriture des nombres, mais ça reste des strings
-            log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+i)
-            return self.write(i+"\r\n")
+        log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
+        return self.write(msg+"\r\n")
+        
     
     def lire(self):
         """
