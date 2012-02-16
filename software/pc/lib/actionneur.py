@@ -6,7 +6,6 @@ import log
 
 log = log.Log()
 
-
 class Actionneur(serie.Serie):
     """
     Classe permettant de gérer un actionneur
@@ -18,7 +17,9 @@ class Actionneur(serie.Serie):
         debit : debit de bode à fixer
         timeout : temps avant abandon
         """
+        serie.Serie.def __init__(peripherique, nom, debit, timeout)
         self.nom = nom
+        self.angle = 0;
         
         
         
@@ -31,6 +32,14 @@ class Actionneur(serie.Serie):
         """
 
         if angle < 170 and angle > 0:
-            actionneur.ecrire(self.nom + '\n ' + angle +'\n ' + vitesse)
-            return actionneur.lire()
+            serie.Serie.ecrire(self.nom + '\n ' + angle +'\n ' + vitesse)
+            serie.Serie.lire()
+            self.angle = self.file_attente.get(lu)
         
+    def getAngle(self, nom):
+        """
+        Envoie une requête pour obtenir la position de chaque bras.
+        """
+        serie.Serie.ecrire(nom + '\n '+ '0' + '0')
+        serie.Serie.lire()
+        return self.file_attente.get(lu)
