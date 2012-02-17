@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
+
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+
 import log
-import lib.outils_math.point as point
+import outils_math.point as point
+import actionneur
 
 log = log.Log()
 
@@ -10,50 +17,41 @@ class Robot:
     rayon = 350
     
     """
-    Classe permettant de gérer le robot
+    Classe permettant de gérer le robot\n
     :Nota: Classement pouvant etre totalement refaite. Les attributs orientations et positions sont requis pour la visualisation de la table
-    
-    :angle : dictionnaire recessant les positions des quatres bras (hd, hg, bd, bg (h : haut, g : gauche, d : droite, g : gauche))
+    \n\n
+    attribut angle : dictionnaire recessant les positions des quatres bras (hd, hg, bd, bg (h : haut, g : gauche, d : droite, g : gauche))
     """
     
     def __init__(self):
-	self.position = point.Point(1000,1500)
-	self.orientation = 0
-	self.angle = {'hd' : 0, 'hg' : 0, 'bd' : 0, 'bg' : 0}
-	self.angle['hd'] = actionneur.Actionneur.getAngle('hd')
-    self.angle['hg'] = actionneur.Actionneur.getAngle('hg')
-    self.angle['bd'] = actionneur.Actionneur.getAngle('bd')
-    self.angle['bg'] = actionneur.Actionneur.getAngle('bg')
-	
-	log.logger.info('Création du robot')
-    
+        self.position = point.Point(1000,1500)
+        self.orientation = 0
+        self.actionneur = {"hd": actionneur.Actionneur("hd"),
+        "hg": actionneur.Actionneur("hg"),
+        "bd": actionneur.Actionneur("bd"),
+        "bg": actionneur.Actionneur("bg")} # TODO gérer ça dans la détection
+        # Pour avoir l'angle
+        # self.actionneur["hg"].angle
+
+        log.logger.info('Création du robot')
+
     def setPosition(self, position):
-	"""
-	Défini la position du robot
-	
-	:param position: Position du robot
-	:type position: Point
-	"""
+        """
+        Défini la position du robot
+
+        :param position: Position du robot
+        :type position: Point
+        """
         self.position = position
         
     def setOrientation(self, orientation):
-	"""
-	Défini l'orientation du robot
-	
-	:param orientation: Orientation du robot
-	:type orientation: float
-	"""
+        """
+        Défini l'orientation du robot
+
+        :param orientation: Orientation du robot
+        :type orientation: float
+        """
         self.orientation = orientation
         
-    def getAngle(self, actionneur):
-    """
-    Récupère l'angle actuel de l'actionneur passé en paramètre
-    :actionneur: actionneur dont on récupère l'angle
-    """
-        self.angle['hd'] = actionneur.Actionneur.getAngle('hd')
-        self.angle['hg'] = actionneur.Actionneur.getAngle('hg')
-        self.angle['bd'] = actionneur.Actionneur.getAngle('bd')
-        self.angle['bg'] = actionneur.Actionneur.getAngle('bg')
-        
     def calculerRayon(self):
-        
+        pass

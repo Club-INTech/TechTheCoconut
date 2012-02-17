@@ -6,7 +6,7 @@
 #include <avr/io.h>
 
 #include "asservissement.h"
-#include <libintech/forwards_serial.h>
+#include <libintech/serial/serial_impl.hpp>
 #include <libintech/timer.hpp>
 #include <libintech/pwm.hpp>
 #include <libintech/moteur.hpp>
@@ -29,7 +29,7 @@ private:
 	Moteur<Timer<2,ModeFastPwm,1>, AVR_PORTB<PORTB0> > moteurDroit;
 	//Timer 1 en mode compteur, Prescaler de 8
 	Timer<1,ModeCounter,8> compteur;
-	Serial<0> & serial_;
+	typedef Serial<0> serial_t_;
 
 		/**
 	* Couleur du robot

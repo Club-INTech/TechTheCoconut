@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import sys, os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+
 import serial
 import serie
 import log
@@ -11,22 +15,17 @@ class Actionneur(serie.Serie):
     """
     Classe permettant de gérer un actionneur
     """
-    def __init__(self, peripherique, nom, debit, timeout):
+    # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
+    def __init__(self, nom):
         """
-        :param peripherique: Nom de l'usb
-        :type peripherique: string
         :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
         :type nom: string
-        :param debit: debit de bode à fixer
-        :type debit: int
-        :param timeout: temps avant abandon
-        :type timeout: int
         """
-        serie.Serie.def __init__(peripherique, nom, debit, timeout)
+        if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
+            Actionneur.initialise = True
+            serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
         self.nom = nom
-        self.angle = 0;
-        
-        
+        self.angle = 0
         
     def deplacer(self, angle, vitesse = None):
         """
@@ -44,10 +43,10 @@ class Actionneur(serie.Serie):
             serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
-    def getAngle(self, nom):
+    def getAngle(self):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         """
         serie.Serie.ecrire(nom + '\n '+ '0' + '0')
         serie.Serie.lire()
-        return self.file_attente.get(lu)
+        self.angle = self.file_attente.get(lu)

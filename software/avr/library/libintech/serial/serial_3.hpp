@@ -21,37 +21,42 @@
 #include <libintech/serial/serial_impl.hpp>
 #define INIT_BAUDRATE_3 57600
 
+	template<>
+	void Serial<3>::init(){
+		static bool is_init = false;
+		if(is_init == false){
+			uint16_t UBRR  =(F_CPU/8/INIT_BAUDRATE_3 - 1)/2;
+			UBRR3H = (unsigned char)(UBRR >> 8);
+			UBRR3L = (unsigned char)UBRR;
+			UCSR3C = (1 << USBS3)|(3<<UCSZ30);
+			UCSR3B |= ( 1 << RXCIE3 );	//Activation de l'interruption de réception
+			UCSR3B |= ( 1 << RXEN3 );	//Activation de la réception
+			UCSR3B |= ( 1 << TXEN3 );	//Activation de l'emission
+			is_init = true;
+		}
+	}
 
 	template<>
 	void Serial<3>::send_char(unsigned char byte)
 	{
+			init();
 	        while ( !( UCSR3A & (1<<UDRE3)) );
 	        UDR3 = byte;
 	}
 
 	template<>
 	void Serial<3>::change_baudrate(uint32_t new_baudrate){
+		init();
 		uint16_t UBRR  =(F_CPU/8/new_baudrate - 1)/2;
 		UBRR3H = (unsigned char)(UBRR >> 8);
 		UBRR3L = (unsigned char)UBRR;
 		UCSR3C = (1 << USBS3)|(3<<UCSZ30);
 	}
 
-	template<>
-	Serial<3>::Serial(){
-		change_baudrate(INIT_BAUDRATE_3);
-		UCSR3B |= ( 1 << RXCIE3 );	//Activation de l'interruption de réception
-		UCSR3B |= ( 1 << RXEN3 );	//Activation de la réception
-		UCSR3B |= ( 1 << TXEN3 );	//Activation de l'emission
-		UCSR3C = (1 << USBS3)|(3<<UCSZ30);
-	}
-
-
 	ISR(USART3_RX_vect)
 	{
-		Serial<3> & serial = Serial<3>::Instance();
 		unsigned char c = UDR3;
-		serial.store_char(c);
+		Serial<3>::store_char(c);
 	}
 
 #endif

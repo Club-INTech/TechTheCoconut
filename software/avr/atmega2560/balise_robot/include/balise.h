@@ -12,8 +12,10 @@
 #include "utils.h"
 
 class Balise : public Singleton<Balise>{
-	
+	private:
+		uint16_t max_counter_;
 	public:
+		void max_counter(uint16_t valeur);
 		float getAngle();
 };
 

@@ -10,7 +10,7 @@ import __builtin__
 first = True
 while first or not profil.importation:
 	first = False
-	conf = raw_input('Indiquer la configuration a importer (prod, develop, developSimulUc) : \n')
+	conf = raw_input('Indiquer la configuration a importer (prod, [develop], developSimulUc) : \n')
 	
 	#tronque la string conf pour éviter les bugs à l'import
 	conf = conf.split('.')
@@ -21,6 +21,8 @@ while first or not profil.importation:
                 conf = 'develop'
             elif i == 'developSimulUc':
                 conf = 'developSimulUc'
+            elif i == '':
+                conf = 'develop'
     
         profil = lib.conf.Conf(conf)
 	
@@ -46,9 +48,11 @@ else:
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, console, visualisation_table) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table) : \n')
     first = False
     try:
+        if mode == '':
+            mode = 'console'
         log.logger.info("Chargement du fichier de lancement " + mode)
         exec('import bin.'+ mode)
         if mode == "visualisation_table":

@@ -2,7 +2,8 @@
 #include <libintech/timer.hpp>
 
 #include <stdint.h>
-#include <avr/delay.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
 #include "balise.h"
 #include "frame.h"
 #include "crc8.h"
@@ -27,21 +28,26 @@
 
 
 int main() {
-	Serial < 0 > &serial0 = Serial < 0 > ::Instance();
-	ClasseTimer &angle_counter = ClasseTimer::Instance();
+	ClasseTimer::init();
+	Serial<0>::init();
 	Balise & balise = Balise::Instance();
-	
-	serial0.change_baudrate(9600);
+	Serial<0>::change_baudrate(9600);
 	//Initialisation table pour crc8
 	init_crc8();
-	//Pin B0 en input (Pin 53 sur board Arduino)
-	cbi(DDRB, PORTB0);
-	//Pin B1 en input (Pin 52 sur board Arduino)
-	sbi(DDRB, PORTB1);
+// 	//Pin B0 en input (Pin 53 sur board Arduino)
+// 	cbi(DDRB, PORTB0);
+// 	//Pin B1 en input (Pin 52 sur board Arduino)
+// 	sbi(DDRB, PORTB1);
 	//Activation interruption INT0 sur front montant
-	sbi(EICRA,ISC01);//Configuration front montant
-	sbi(EICRA,ISC00);
-	sbi(EIMSK,INT0);//Activation proprement dite
+// 	sbi(EICRA,ISC01);//Configuration front montant
+// 	sbi(EICRA,ISC00);
+// 	sbi(EIMSK,INT0);//Activation proprement dite
+
+	// Initialisation interruptions codeurs
+	// Masques
+	PCMSK0 |= (1 << PCINT7);
+	// Activer les interruptions
+	PCICR |= (1 << PCIE0);
 	
 	sei();
 
@@ -53,11 +59,16 @@ int main() {
 	
 	
 	while (1) {
+// 		cli();		
 		
-		serial0.print(1);
-//		sbi(PORTB, PORTB1);
-//		cbi(PORTB, PORTB1);
-//		_delay_ms(2000);
+// 		sei();
+		Serial<0>::read<uint8_t>();
+		Serial<0>::print(balise.getAngle());
+// 		serial0.print("aaaa");
+// 		sbi(PORTB, PORTB1);
+// 		_delay_ms(2000);
+// 		cbi(PORTB, PORTB1);
+// 		
 		
 		/*
 		rawFrame = serial0.read<uint32_t>();
@@ -73,59 +84,17 @@ int main() {
 }
 
 //INT0
-ISR(INT0_vect)
+ISR(TIMER1_OVF_vect)
 {
-	Serial < 0 > &serial0 = Serial < 0 > ::Instance();
-	ClasseTimer &angle_counter = ClasseTimer::Instance();
-	Balise & balise = Balise::Instance();
+
 	
-	serial0.print(1337);
-	angle_counter.value(0);
 }
 
-//#define BAUD 9600
-//#define MYUBRR (F_CPU/16)/BAUD-1
 
-//#include <stdint.h>
-//#include <string.h>
-//#include <avr/pgmspace.h>
-//#include <avr/io.h>
-//#include <avr/interrupt.h>
-//#include <util/delay.h>
-//#include <util/setbaud.h>
+ISR(PCINT0_vect)
+{
+	Balise & balise = Balise::Instance();
+	balise.max_counter(ClasseTimer::value());
+	ClasseTimer::value(0);
+}
 
-//void USART_Init(unsigned int ubrr);
-//void USART_Transmit(unsigned char data);
-
-//int main(void)
-//{
-//   USART_Init(16); //MYUBRR = 51 for current settings
-
-//   while(1)
-//   {
-//      USART_Transmit('A');
-//     _delay_ms(500);
-//   }
-//}
-
-//void USART_Init( unsigned int ubrr)
-//{
-//   /* Set baud rate */
-//   UBRR0H = (unsigned char)(ubrr>>8);
-//   UBRR0L = (unsigned char)ubrr;
-
-//   /* Enable receiver and transmitter */
-//   UCSR0B = (1<<RXEN0)|(1<<TXEN0);
-//   /* Set frame format: 8data, 2stop bit */
-//  // UCSR0C = (1<<USBS0)|(3<<UCSZ00);
-
-//    UCSR0C = (!(1<<USBS0))|(1<<UCSZ01)|(1<<UCSZ00);
-//}
-
-//void USART_Transmit(unsigned char data)
-//{
-//   /* Wait for empty transmit buffer */
-//   while ( !( UCSR0A & (1<<UDRE0)) );
-//   /* Put data into buffer, sends the data */
-//   UDR0 = data;
-//}
