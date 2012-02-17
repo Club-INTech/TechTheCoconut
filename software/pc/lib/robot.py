@@ -59,7 +59,7 @@ class Robot:
         """
         self.orientation = orientation
         
-    def calculerRayon(self): #TODO : calcul des coordonnées du nouveau centre
+    def calculerRayon(self):
         """
         Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
         Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
@@ -83,6 +83,7 @@ class Robot:
         """
         
         #récupération des constantes nécessaires:
+        log.logger.info('Calcul du rayon et du centre du robot')
         rayon_original = profils.develop.constantes.constantes["Coconut"]["rayon"]
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeur"]
@@ -101,6 +102,9 @@ class Robot:
         
         if segment_centre_bras > rayon_original:
             self.rayon = (segment_centre_bras + rayon_original)/2
-        
+            sommet_robot = outils_math.point.Point(-largeur_robot/2, -cote_robot/2)
+            return outils_math.point.Point(sommet_robot.x+(sommet_bras.x-sommet_robot.x)/2, sommet_robot.y+(sommet_bras.y-sommet_robot.y)/2)
+            
         else:
             self.rayon = rayon_original
+            return outils_math.point.Point(0, 0)
