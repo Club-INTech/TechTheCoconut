@@ -48,6 +48,11 @@ private:
 	* Ordonnée du robot en mm
 	*/
 	float y_;
+	
+	/**
+	* dernière orientation du robot en radians
+	*/
+	float last_angle_rad_;
 
 	Asservissement translation;
 	Asservissement rotation;
@@ -119,7 +124,17 @@ public:
 	*/
 	bool tourner(uint16_t angle);
 	
+	/**
+	* déplace le robot
+	* 
+	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
+	* \param int16_t position sur y à atteindre sur l'aire de jeu, en absolu.
+	* \return bool true si réussi, false si échec
+	*/
+	bool gotoPos(int16_t x, int16_t y);
+	
 	void communiquer_pc();
+	
 	
 };
 
