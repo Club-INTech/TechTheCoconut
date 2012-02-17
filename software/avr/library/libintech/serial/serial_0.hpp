@@ -3,10 +3,12 @@
 
 #include <libintech/serial/serial_impl.hpp>
 
+#define USE_SERIAL_0
 #define INIT_BAUDRATE_0 57600
 
 template<>
 inline void Serial<0>::init(){
+	Serial<0>::PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	static bool is_init = false;
 	if(is_init == false){
 		uint16_t UBRR  =(F_CPU/8/INIT_BAUDRATE_0 - 1)/2;
@@ -33,20 +35,6 @@ inline void Serial<0>::change_baudrate(uint32_t new_baudrate){
 	UBRR0H = (unsigned char)(UBRR >> 8);
 	UBRR0L = (unsigned char)UBRR;
 	UCSR0C = (1 << USBS0)|(3<<UCSZ00);
-}
-
-#if defined (__AVR_ATmega328P__) || defined (__AVR_ATmega328__)
-ISR( inline USART_RX_vect)
-#elif defined (__AVR_ATmega640__)\
-		|| defined (__AVR_ATmega1280__)\
-		|| defined (__AVR_ATmega1281__)\
-		|| defined (__AVR_ATmega2560__)\
-		|| defined (__AVR_ATmega2561__)
-ISR( inline USART0_RX_vect)
-#endif
-{
-	unsigned char c = UDR0;
-	Serial<0>::store_char(c);
 }
 
 #endif /* SERIAL_0_HPP_ */

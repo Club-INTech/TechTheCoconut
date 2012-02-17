@@ -3,26 +3,31 @@
 #include "twi_master.h"
 #include <libintech/serial/serial_0.hpp>
 #include "robot.h"
-#include "asservissement.h"
+#include <libintech/asservissement.hpp>
 
 // Constructeur avec assignation des attributs
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
-				,translation(2,0.5,0),
-				rotation(2,4,0)
+				,translation(1,1,0),
+				rotation(1.5,1,0)
 
 {
 	TWI_init();
 	Serial<0>::init();
+	TimerCounter_t::init();
+	
 }
 
 void Robot::asservir(int32_t distance, int32_t angle)
 {
-	int16_t pwmTranslation = translation.pwm(distance);
-	int16_t pwmRotation = rotation.pwm(angle);
-	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
-	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	int32_t pwmTranslation = translation.pwm(distance);
+// 	int32_t pwmTranslation = 0;
+	int32_t pwmRotation = rotation.pwm(angle);
+// 	int32_t pwmRotation = 0;
+	Serial<0>::print(pwmTranslation);
+ 	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+ 	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 }
 
 void Robot::updatePosition(int32_t distance, int32_t angle)
@@ -89,6 +94,7 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 void Robot::communiquer_pc(){
 	char buffer[10];
 	uint8_t length = serial_t_::read(buffer,10);
+
 #define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
 
 	if(COMPARE_BUFFER("?")){
@@ -107,9 +113,6 @@ void Robot::communiquer_pc(){
 	}
 
 
-	else if(COMPARE_BUFFER("crm")){
-		rotation.pwmMax(serial_t_::read<uint32_t>());
-	}
 	else if(COMPARE_BUFFER("crp")){
 		rotation.kp(serial_t_::read<float>());
 	}
@@ -120,17 +123,14 @@ void Robot::communiquer_pc(){
 		rotation.ki(serial_t_::read<float>());
 	}
 
-	else if(COMPARE_BUFFER("ctm")){
-		translation.pwmMax(serial_t_::read<uint32_t>());
-	}
 	else if(COMPARE_BUFFER("ctp")){
-		translation.pwmMax(serial_t_::read<float>());
+		translation.kp(serial_t_::read<float>());
 	}
 	else if(COMPARE_BUFFER("ctd")){
-		translation.pwmMax(serial_t_::read<float>());
+		translation.kd(serial_t_::read<float>());
 	}
 	else if(COMPARE_BUFFER("cti")){
-		translation.pwmMax(serial_t_::read<float>());
+		translation.ki(serial_t_::read<float>());
 	}
 
 #undef COMPARE_BUFFER

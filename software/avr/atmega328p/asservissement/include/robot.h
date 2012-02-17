@@ -5,7 +5,7 @@
 
 #include <avr/io.h>
 
-#include "asservissement.h"
+#include <libintech/asservissement.hpp>
 #include <libintech/serial/serial_impl.hpp>
 #include <libintech/timer.hpp>
 #include <libintech/pwm.hpp>
@@ -25,15 +25,18 @@ private:
 	//Moteur sur le Timer 0 en FastPWM . Pont en H sur le PORTD4
 	typedef Timer<0,ModeFastPwm,1> T_0;
 	Moteur< T_0, AVR_PORTD<PORTD4> > moteurGauche;
+	
 	//Moteur sur le Timer 2 en FastPWM . Pont en H sur le port B0
-	Moteur<Timer<2,ModeFastPwm,1>, AVR_PORTB<PORTB0> > moteurDroit;
+	typedef Timer<2,ModeFastPwm,1> T_2;
+	Moteur<T_2, AVR_PORTB<PORTB0> > moteurDroit;
+	
 	//Timer 1 en mode compteur, Prescaler de 8
-	Timer<1,ModeCounter,8> compteur;
+	typedef Timer<1,ModeCounter,8> TimerCounter_t;
+	TimerCounter_t compteur;
+	
 	typedef Serial<0> serial_t_;
 
-		/**
-	* Couleur du robot
-	* 
+	/** Couleur du robot
 	* @li 'r' pour Rouge
 	* @li 'v' pour Violet
 	*/
