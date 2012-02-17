@@ -66,75 +66,37 @@ public:
 	
 	void asservir(int32_t distance, int32_t angle);
 	
-	/**
-	* Setter pour la variable couleur
-	*
-	* \param unsigned char couleur
-	*/
 	void couleur(unsigned char);
 
 	void updatePosition(int32_t distance, int32_t angle);
-	/**
-	* Getter pour la variable couleur
-	*
-	* \return unsigned char couleur
-	*/
 
 	unsigned char couleur(void);
-	/**
-	* Getter pour la variable x d'abscisse
-	*
-	* \return uint16_t abscisse x
-	*/
+
 	int16_t x(void);
 
-	/**
-	* Getter pour la variable y d'ordonnée
-	*
-	* \return uint16_t ordonnée y
-	*/
 	int16_t y(void);
 	
 	/**
-	* Setter pour la variable typeAsservissement
-	*
-	* \param unsigned char typeAsservissement
-	*/
-	void typeAsservissement(unsigned char);
-
-	/**
-	* Getter pour la variable typeAsservissement
-	*
-	* \return unsigned char typeAsservissement
-	*/
-	unsigned char typeAsservissement(void);
-	
-	/**
-	* TODO
 	* Translate le robot
 	* 
-	* \param int32_t distance de translation en mm (négative pour reculer, positive pour avancer)
-	* \return bool true si réussi, false si échec
+	* \param int32_t distance de translation en tics
 	*/
 	bool translater(uint16_t distance);
 	
 	/**
-	* TODO
 	* Tourner le robot
 	* 
-	* \param int32_t angle de rotation en radians*10000 (positif pour anti-horaire = trigo, négatif pour horaire)
-	* \return bool true si réussi, false si échec
+	* \param int32_t angle de rotation en tics
 	*/
-	bool tourner(uint16_t angle);
+	void tourner(int16_t angle);
 	
 	/**
 	* déplace le robot
 	* 
 	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
 	* \param int16_t position sur y à atteindre sur l'aire de jeu, en absolu.
-	* \return bool true si réussi, false si échec
 	*/
-	bool gotoPos(int16_t x, int16_t y);
+	void gotoPos(int16_t x, int16_t y);
 	
 	void communiquer_pc();
 	

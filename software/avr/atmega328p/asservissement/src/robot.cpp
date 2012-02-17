@@ -20,12 +20,19 @@ Robot::Robot() : couleur_('r')
 	//pour gérer la couleur..
 	//toute facon on a besoin de savoir la dernière orientation du robot, en attribut de classe (cf gotoPos() )
 
+	//[Philippe]
+	//Non on en a pas besoin, Il faut donner l'angle en tic par rapport à l'angle initial
+	//Moi ça ne me semble pas plus simple ! Les codeuses renvoient l'angle, pas une variation d'angle
+	//Et puis quoi qu'il arrive les codeuses commencent à zéro
+	//Et, surtout, tu sembles oublier que le robot s'initialise AVANT la liaison série, donc que si on fait cette méthode il sera impossible de changer la couleur! :p (je viens d'y penser) [la couleur est changée depuis le script python, car on ne va pas reflasher le microcontrôleur juste avant le match]
+	//Bref, je ne pense pas que ce soit une bonne idée tout compte fait
 	
-	if(couleur_ == 'r')
-		last_angle_rad_ = 0.;
-	else
-		//angle de Pi pour le robot violet
-		last_angle_rad_ = 3.141592654;
+// 	if(couleur_ == 'r')
+// 		last_angle_rad_ = 0.;
+// 	else
+// 		//angle de Pi pour le robot violet
+// 		//Plutôt en tic
+// 		last_angle_rad_ = 4259;
 
 	
 	TWI_init();
@@ -37,13 +44,12 @@ Robot::Robot() : couleur_('r')
 void Robot::asservir(int32_t distance, int32_t angle)
 {
 	int32_t pwmTranslation = translation.pwm(distance);
-// 	int32_t pwmTranslation = 0;
 	int32_t pwmRotation = rotation.pwm(angle);
-// 	int32_t pwmRotation = 0;
-	Serial<0>::print(pwmTranslation);
  	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
  	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 }
+
+
 
 void Robot::updatePosition(int32_t distance, int32_t angle)
 {
@@ -57,11 +63,11 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
     
     
-
+	//Ton
     if(delta_angle==0)
     {
         float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
-	float last_angle_radian =  last_angle * CONVERSION_TIC_RADIAN;
+		float last_angle_radian =  last_angle * CONVERSION_TIC_RADIAN;
 
 	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
@@ -153,27 +159,30 @@ return (int16_t)y_;
 }
 
 
-bool Robot::gotoPos(int16_t x, int16_t y)
+//Ca n'a pas de sens de faire des fonctions qui retournent faux si elles ratent sur microcontrôleurs
+//Puisque le but est de faire des fonctions qui ne ratent pas.
+void Robot::gotoPos(int16_t x, int16_t y)
 {
 	//pourquoi _x et _y sont en float au fait ?
+	//Car à chaque overflow de timer on les incrémente d'un nombre flottant
 	float delta_x = (x-x_);
 	float delta_y = (y-y_);
-	if(tourner((uint16_t)(atan(delta_y/delta_x)-last_angle_rad_)))
-	{
-		if(translater((uint16_t)sqrt(delta_x*delta_x+delta_y*delta_y)))
-			return true;
-		else
-			return false;
-	}else
-		return false;
+	//Penser à utiliser atan2 plutôt
+	//La, tu as bien raison, suivant sa couleur, il faut ajouter ou retrancher pi
+	//je l'ai juste converti en tics
+	if(couleur_=='v')
+		tourner((atan2(delta_y,delta_x)-4260));
+	else
+		tourner((atan2(delta_y,delta_x)));
+	translater(sqrt(delta_x*delta_x+delta_y*delta_y));
 }
 
-bool Robot::translater(uint16_t distance)
+void Robot::translater(int16_t distance)
 {
-	return true;
+	translation.consigne(translation.consigne()+distance);
 }
 
-bool Robot::tourner(uint16_t angle)
+void Robot::tourner(int16_t angle)
 {
-	return true;
+	rotation.consigne(angle);
 }
