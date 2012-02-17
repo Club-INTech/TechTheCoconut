@@ -29,15 +29,34 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 {
     
     static int32_t last_distance = 0;
+    
     if(couleur_ == 'r')
 	static int32_t last_angle = 0;
     else
-	static int32_t last_angle = 4260.000001287;
+	//angle de Pi pour le robot violet, (en tics)
+	static float last_angle = 4260.000001287;
+    
     int16_t delta_distance = distance - last_distance;
     int16_t delta_angle = angle - last_angle;
     static const float CONVERSION_TIC_MM = 1.04195690364;
     static const float CONVERSION_TIC_RADIAN = 0.000737463064;
-
+    
+    
+    /*
+    
+    ??
+    
+    float distance_mm = distance * CONVERSION_TIC_MM;
+    float angle_radian = (angle + last_angle) * CONVERSION_TIC_RADIAN;
+    
+    x_ += ( distance_mm * cos( angle_radian ) );
+    y_ += ( distance_mm * sin( angle_radian ) );
+    
+    
+    last_distance = distance;
+    last_angle = angle;
+}
+    */
     if(delta_angle==0)
     {
         float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
