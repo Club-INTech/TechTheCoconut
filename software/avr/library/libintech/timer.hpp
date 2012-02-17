@@ -46,25 +46,33 @@ struct TimerRegisters<2, ModeCounter<2> >{
 };
 
 template<uint8_t ID_,template<uint8_t> class MODE_, uint8_t PRESCALER_RATIO_>
-class Timer : public Singleton< Timer<ID_, MODE_, PRESCALER_RATIO_> >{
+class Timer{
+	
 public:
   static const uint8_t ID = ID_;
   static const uint8_t PRESCALER_RATIO = PRESCALER_RATIO_;
   typedef MODE_<ID_> MODE;
+  
 private:
   typedef Prescaler<ID,PRESCALER_RATIO> prescaler_;
+
 public:
 
-  Timer(){
-    MODE::set();
-    prescaler_::set();
-  }
+	static void init(){
+		static bool is_init = false;
+		if(is_init == false){
+			MODE::set();
+			prescaler_::set();
+			is_init = true;
+		}
+	}
 
-  uint16_t value(){
+	
+  static inline uint16_t value(){
       return TimerRegisters<ID_,MODE_<ID_> >::get_TCNT();
   }
 
-  void value(uint16_t new_value){
+  static inline void value(uint16_t new_value){
       TimerRegisters<ID_,MODE_<ID_> >::set_TCNT(new_value);
   }
 };

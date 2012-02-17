@@ -9,12 +9,15 @@
 #define MAX(a,b)    ((a) > (b) ? (a) : (b))
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 
-Asservissement::Asservissement(float kp, float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), en_(0), enm1_(0), enm2_(0), pwmCourant_(0), pwmMax_(255) ,consigne_(0)
+Asservissement::Asservissement(float kp, float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), pwmCourant_(0), pwmMax_(255) ,consigne_(0)
 {
 }
 
 int16_t Asservissement::pwm(int32_t positionReelle)
-{	
+{
+	static float en_ = 0;
+	static float enm1_ = 0;
+	static float enm2_ = 0;
 	enm2_ = enm1_;
 	enm1_ = en_;
 	en_=consigne_ - positionReelle;

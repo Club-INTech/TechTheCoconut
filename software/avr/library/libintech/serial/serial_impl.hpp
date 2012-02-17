@@ -30,7 +30,7 @@
 #define rx_buffer__SIZE 32
 
 template<uint8_t id>
-class Serial : public Singleton<Serial<id> >{
+class Serial{
 private:
     struct ring_buffer
     {
@@ -41,17 +41,18 @@ private:
         int tail;
     };
     
-    volatile ring_buffer rx_buffer_;
+    static volatile ring_buffer rx_buffer_;
     
 private:
-    inline void send_char(unsigned char byte);
+	
+    static inline void send_char(unsigned char byte);
     
-    inline bool available(void)
+    static inline bool available(void)
     {
     		return (rx_buffer__SIZE + rx_buffer_.head - rx_buffer_.tail) % rx_buffer__SIZE;
     }
     
-    inline unsigned char read_char(){
+    static inline unsigned char read_char(){
 			if (rx_buffer_.head == rx_buffer_.tail)
 			{
 				return -1;
@@ -64,18 +65,18 @@ private:
 			}
     }
     
-    inline void send_ln(){
+    static inline void send_ln(){
     	send_char('\r');
     	send_char('\n');
     }
 
 public:
-    
-    inline Serial();
-    
-    inline void change_baudrate(uint32_t BAUD_RATE);
 
-    inline void store_char(unsigned char c)
+	static inline void init();
+	
+    static inline void change_baudrate(uint32_t BAUD_RATE);
+
+    static inline void store_char(unsigned char c)
     {
     	int i = (rx_buffer_.head + 1) % rx_buffer__SIZE;
     	if (i != rx_buffer_.tail)
@@ -88,18 +89,18 @@ public:
 
 
     template<class T>
-    inline void print(T val){
+    static inline void print(T val){
     	char buffer[sizeof(T)];
     	ltoa(val,buffer,10);
     	print((const char *)buffer);
     }
 
-    inline void print(char val){
+    static inline void print(char val){
     	send_char(val);
     	send_ln();
     }
 
-    inline void print(const char * val)
+    static inline void print(const char * val)
     {
     	for(unsigned int i = 0 ; i < strlen(val) ; i++)
     	{
@@ -109,19 +110,19 @@ public:
     }
 
     template<class T>
-    inline T read(void){
+    static inline T read(void){
         char buffer[sizeof(T)];
         read(buffer,sizeof(T));
         return atol(buffer);
     }
 
-    inline float read(){
+    static inline float read(){
         char buffer[sizeof(float)];
         read(buffer,sizeof(float));
         return atof(buffer);
     }
 
-    inline uint8_t read(char* string, uint8_t length){
+    static inline uint8_t read(char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
         	while(!available());
@@ -133,6 +134,10 @@ public:
         return i;
     }
 };
+
+
+template<uint8_t ID>
+volatile typename Serial<ID>::ring_buffer Serial<ID>::rx_buffer_;
 
 #endif	/* SERIAL_HPP */
 

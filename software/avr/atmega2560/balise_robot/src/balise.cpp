@@ -3,12 +3,14 @@
  */
 
 #include "balise.h"
+#include <libintech/serial/serial_0.hpp>
 
-float Balise::getAngle() {
-	ClasseTimer &angle_counter = ClasseTimer::Instance();
-	int speed = 25;//Tour/s
-	int max_counter = 65536/speed;
-	
-	return angle_counter.value()*360/max_counter;
+void Balise::max_counter(uint16_t valeur){
+	max_counter_ = valeur;
 }
-
+float Balise::getAngle() {
+// 	float speed = 12.0/30.0;//Tour/s
+	Serial<0>::init();
+	Serial<0>::print(max_counter_);
+	return ClasseTimer::value()*360/max_counter_;
+}

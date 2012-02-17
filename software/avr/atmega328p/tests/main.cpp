@@ -5,8 +5,7 @@
 //  #include <libintech/serial/serial_2.hpp>
 //  #include <libintech/serial/serial_3.hpp>
 int main(){
-  Serial<0> & serial0 = Serial<0>::Instance();
-  Timer<1,ModeCounter,64> counter;
+  Timer<1,ModeCounter,64>::init();
 //   Serial<1> & serial1 = Serial<1>::Instance();
 //   Serial<2> & serial2 = Serial<2>::Instance();
 //   Serial<3> & serial3 = Serial<3>::Instance();
@@ -24,6 +23,5 @@ int main(){
 
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
-    Serial<0> & serial0 = Serial<0>::Instance();
-    serial0.print(TCNT1);
+    Serial<0>::print(TCNT1);
 }
