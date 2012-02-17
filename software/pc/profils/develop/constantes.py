@@ -15,6 +15,12 @@ constantes = \
 		
 		#longueur du coté du robot, en mm
 		"coteRobot" : 350.,
+		
+		#longueur d'un bras
+		"longueurBras" : 1550,
+		
+		#rayon circonscrit au robot avec les bras rabatus 
+		"rayon" : 1510,
 	},
 	"Anna": {},
     "Objets_Table": {
