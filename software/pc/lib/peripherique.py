@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-class Peripherique:
+# commande : '# ls -1 /dev/ttyUSB* 2> /dev/null'
+
+class Peripherique(serie.Serie):
     """
     Classe de gérer un périphérique
     
