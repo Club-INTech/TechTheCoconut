@@ -9,10 +9,25 @@
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
-				,translation(1,1,0),
-				rotation(1.5,1,0)
+				,translation(1,1,0)
+				,rotation(1.5,1,0)
+				,last_angle_rad_(0.)
 
 {
+	
+	//on peut foutre ici pour initialiser ? non ? :'( 
+	//ca me semble bcp plus simple, ces valeurs initiales
+	//pour gérer la couleur..
+	//toute facon on a besoin de savoir la dernière orientation du robot, en attribut de classe (cf gotoPos() )
+
+	
+	if(couleur_ == 'r')
+		last_angle_rad_ = 0.;
+	else
+		//angle de Pi pour le robot violet
+		last_angle_rad_ = 3.141592654;
+
+	
 	TWI_init();
 	Serial<0>::init();
 	TimerCounter_t::init();
@@ -33,36 +48,15 @@ void Robot::asservir(int32_t distance, int32_t angle)
 void Robot::updatePosition(int32_t distance, int32_t angle)
 {
     
-    static int32_t last_distance = 0;
+	static int32_t last_distance = 0;
 	static int32_t last_angle = 0;
-	//Cette implémentation ne peut pas compiler (je t'explique demain pourquoi)
-	//Mais l'idée est bonne :)
-	
-//     if(couleur_ == 'r')
-// 		static int32_t last_angle = 0;
-//     else
-// 		//angle de Pi pour le robot violet, (en tics)
-// 		static float last_angle = 4260.000001287;
-// 
+
 	int16_t delta_distance = distance - last_distance;
 	int16_t delta_angle = angle - last_angle;
 	static const float CONVERSION_TIC_MM = 1.04195690364;
 	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
     
     
-    
-    
-//     ??
-    
-    float distance_mm = distance * CONVERSION_TIC_MM;
-    float angle_radian = (angle + last_angle) * CONVERSION_TIC_RADIAN;
-    
-    x_ += ( distance_mm * cos( angle_radian ) );
-    y_ += ( distance_mm * sin( angle_radian ) );
-    
-    
-    last_distance = distance;
-    last_angle = angle;
 
     if(delta_angle==0)
     {
@@ -90,6 +84,7 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
     last_distance = distance;
     last_angle = angle;
 }
+
 
 void Robot::communiquer_pc(){
 	char buffer[10];
@@ -157,6 +152,21 @@ int16_t Robot::y(void)
 return (int16_t)y_;
 }
 
+
+bool Robot::gotoPos(int16_t x, int16_t y)
+{
+	//pourquoi _x et _y sont en float au fait ?
+	float delta_x = (x-x_);
+	float delta_y = (y-y_);
+	if(tourner((uint16_t)(atan(delta_y/delta_x)-last_angle_rad_)))
+	{
+		if(translater((uint16_t)sqrt(delta_x*delta_x+delta_y*delta_y)))
+			return true;
+		else
+			return false;
+	}else
+		return false;
+}
 
 bool Robot::translater(uint16_t distance)
 {
