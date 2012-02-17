@@ -50,3 +50,17 @@ class Actionneur(serie.Serie):
         serie.Serie.ecrire(nom + '\n '+ '0' + '0')
         serie.Serie.lire()
         self.angle = self.file_attente.get(lu)
+
+    def reset(self):
+        """
+        Réinitialise l'actionneur
+        :TODO: implémenter la méthode
+        """
+        pass
+        
+    def stop(self):
+        """
+        Arrête l'actionneur en urgence
+        :TODO: implémenter la méthode
+        """
+        pass
