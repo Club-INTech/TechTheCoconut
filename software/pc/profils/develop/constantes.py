@@ -8,19 +8,19 @@ constantes = \
 {
 	"Coconut":
 	{
-		#: Largeur en mm
+		#: Largeur de la table en mm
 		"largeur": 3000,
-		#: Longueur en mm
+		#: Longueur de la table en mm
 		"longueur": 2000,
 		
-		#longueur du coté du robot, en mm
-		"coteRobot" : 350.,
-		
+		#TODO : des vrais valeurs..
 		#longueur d'un bras
-		"longueurBras" : 1550,
+		"longueurBras" : 155.,
 		
-		#rayon circonscrit au robot avec les bras rabatus 
-		"rayon" : 1510,
+		#sans compter les bras
+		"largeurRobot" : 120.,
+		"longueurRobot" : 500.
+		
 	},
 	"Anna": {},
     "Objets_Table": {
