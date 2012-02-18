@@ -48,11 +48,11 @@ void Robot::updatePosition(int32_t distance_tic, int32_t angle_tic)
 	{
 		if(couleur_ == 'v'){
 			//angle de Pi pour le robot violet (en tic)
-			float last_angle_radian = last_angle_tic_ * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = (last_angle_tic_ + 4260) * CONVERSION_TIC_RADIAN;
 			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 		}else{
-			float last_angle_radian = (last_angle_tic_ + 4260)* CONVERSION_TIC_RADIAN;
+			float last_angle_radian = last_angle_tic_ * CONVERSION_TIC_RADIAN;
 			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 		}
@@ -66,11 +66,11 @@ void Robot::updatePosition(int32_t distance_tic, int32_t angle_tic)
 		
 		if(couleur_ == 'v'){
 			//angle de Pi pour le robot violet (en tic)
-			float last_angle_radian = last_angle_tic_ * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = (last_angle_tic_ + 4260) * CONVERSION_TIC_RADIAN;
 			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
 			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
 		}else{
-			float last_angle_radian = (last_angle_tic_ + 4260)* CONVERSION_TIC_RADIAN;
+			float last_angle_radian = last_angle_tic_ * CONVERSION_TIC_RADIAN;
 			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
 			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
 		}
@@ -171,18 +171,30 @@ void Robot::gotoPos(int16_t x, int16_t y)
 
 void Robot::translater(uint16_t distance)
 {
-	uint32_t cons_dist_tic = translation.consigne();
-	translation.consigne((int32_t)(cons_dist_tic+distance));
-	while(last_dist_tic_ != cons_dist_tic+distance);
+	 
+	translation.consigne((int32_t)(translation.consigne()+distance));
+	
+	/*
+	[pierre]
+	j'avais fait un abs(last_dist_mm - ... ) < eps pour permettre une erreur minime.
+	mais comme tu m'as convaincu de faire en tics (cf updatePosition() )
+	je pense qu'on peut etre précis au tic près, non ?
+	
+	c'est incomplet, il faut rajouter une évaluation de la vitesse et de l'acceleration
+	sinon le robot s'arretera après la consigne (faut rajouter des attributs pour acceder à enm1_ et enm2_ ??)
+	
+	on peut rajouter un timeout pour détecter un problème ? 
+	mais si tu veux un type void ca sert à rien
+	*/
+	
+	while(last_dist_tic_ != translation.consigne());
 		//attend d'atteindre la consigne
-		//on peut rajouter un timeout pour détecter un problème
+		
 }
 
+//idem
 void Robot::tourner(int16_t angle)
 {
 	rotation.consigne((int32_t)angle);
-	
-	while(last_angle_tic_ != angle);
-		//attend d'atteindre la consigne
-		//on peut rajouter un timeout pour détecter un problème
+	while(last_angle_tic_ != rotation.consigne());
 }
