@@ -12,21 +12,15 @@ Robot::Robot() : couleur_('r')
 				,translation(1,1,0)
 				,rotation(1.5,1,0)
 				,last_angle_rad_(0.)
+				,last_dist_mm_(0.)
 
 {
-	
-	//on peut foutre ici pour initialiser ? non ? :'( 
-	//ca me semble bcp plus simple, ces valeurs initiales
-	//pour gérer la couleur..
-	//toute facon on a besoin de savoir la dernière orientation du robot, en attribut de classe (cf gotoPos() )
-
 	
 	if(couleur_ == 'r')
 		last_angle_rad_ = 0.;
 	else
 		//angle de Pi pour le robot violet
-		last_angle_rad_ = 3.141592654;
-
+		last_angle_rad_ =  3.141592654;
 	
 	TWI_init();
 	Serial<0>::init();
@@ -45,44 +39,44 @@ void Robot::asservir(int32_t distance, int32_t angle)
  	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 }
 
-void Robot::updatePosition(int32_t distance, int32_t angle)
+void Robot::updatePosition(int32_t distance_tic, int32_t angle_tic)
 {
     
-	static int32_t last_distance = 0;
-	static int32_t last_angle = 0;
+	static int32_t last_distance_tic = 0;
+	static int32_t last_angle_tic = 0;
 
-	int16_t delta_distance = distance - last_distance;
-	int16_t delta_angle = angle - last_angle;
 	static const float CONVERSION_TIC_MM = 1.04195690364;
 	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
+	
+	float delta_angle_rad = (angle_tic - last_angle_tic)* CONVERSION_TIC_RADIAN;
+	float delta_distance_mm = (distance_tic - last_distance_tic) * CONVERSION_TIC_MM;
     
-    
 
-    if(delta_angle==0)
-    {
-        float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
-	float last_angle_radian =  last_angle * CONVERSION_TIC_RADIAN;
-
-	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
-	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
-
-    }
-    else
-    {
-        
-	float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
-	float delta_angle_radian = delta_angle * CONVERSION_TIC_RADIAN;
+	if(delta_angle_rad==0)
+	{
+		x_ += ( delta_distance_mm * cos( last_angle_rad_ ) );
+		y_ += ( delta_distance_mm * sin( last_angle_rad_ ) );
 	
-        float r = delta_distance_mm/delta_angle_radian;
+	}
+	else
+	{
+		float r = delta_distance_mm/delta_angle_rad;
+		float angle_radian =  angle_tic * CONVERSION_TIC_RADIAN;
 	
-	float angle_radian =  angle * CONVERSION_TIC_RADIAN;
-	float last_angle_radian =  last_angle * CONVERSION_TIC_RADIAN;
+		x_ += r * (-sin(angle_radian) + sin(last_angle_rad_));
+		y_ += r * (cos(angle_radian) - cos(last_angle_rad_));
+	}
 	
-	x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
-	y_ += r * (cos(angle_radian) - cos(last_angle_radian));
-    }
-    last_distance = distance;
-    last_angle = angle;
+	//met à jour la distance parcourue (mm) sur le dernier segment
+	last_dist_mm_ += (distance_tic - last_distance_tic) * CONVERSION_TIC_MM;
+	
+	last_distance_tic = distance_tic;
+	
+	//met à jour l'orientation (rad) connue du robot
+	last_angle_rad_ +=  (angle_tic - last_angle_tic) * CONVERSION_TIC_RADIAN;
+	
+	last_angle_tic = angle_tic;
+	
 }
 
 
@@ -170,10 +164,24 @@ bool Robot::gotoPos(int16_t x, int16_t y)
 
 bool Robot::translater(uint16_t distance)
 {
+	static float eps = 0.5;//incertitude
+	last_dist_mm_ = 0.;
+	translation.consigne((int32_t)distance);
+	while(abs(last_dist_mm_ - distance) > eps);
+		//attend d'atteindre la consigne
+		//on peut rajouter un timeout pour détecter un problème
+	
 	return true;
 }
 
 bool Robot::tourner(uint16_t angle)
 {
+	static float eps = 0.001;//incertitude
+	rotation.consigne((int32_t)angle);
+	
+	while(abs(last_angle_rad_ - angle) > eps);
+		//attend d'atteindre la consigne
+		//on peut rajouter un timeout pour détecter un problème
+	
 	return true;
 }

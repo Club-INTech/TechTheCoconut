@@ -56,10 +56,16 @@ private:
 	* dernière orientation du robot en radians
 	*/
 	float last_angle_rad_;
+	
+	/**
+	* distance à la position de consigne, en mm
+	*/
+	float last_dist_mm_;
+	
 
 	Asservissement translation;
 	Asservissement rotation;
-
+	
 public:
 	
 	Robot();
@@ -110,7 +116,6 @@ public:
 	unsigned char typeAsservissement(void);
 	
 	/**
-	* TODO
 	* Translate le robot
 	* 
 	* \param int32_t distance de translation en mm (négative pour reculer, positive pour avancer)
@@ -119,7 +124,6 @@ public:
 	bool translater(uint16_t distance);
 	
 	/**
-	* TODO
 	* Tourner le robot
 	* 
 	* \param int32_t angle de rotation en radians*10000 (positif pour anti-horaire = trigo, négatif pour horaire)
