@@ -2,6 +2,8 @@
  * \file balise.cpp
  */
 
+#include <libintech/serial/serial_0_interrupt.hpp>
+
 #include "balise.h"
 #include <libintech/serial/serial_0.hpp>
 
@@ -28,6 +30,6 @@ float Balise::getAngle() {
 
 ISR(TIMER0_OVF_vect){
 	Balise & balise = Balise::Instance();
-	balise.asservir(balise.vitesse_moteur());
+// 	balise.asservir(balise.vitesse_moteur());
 	//printlnLong(robot.x());
 }
