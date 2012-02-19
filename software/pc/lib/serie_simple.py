@@ -36,7 +36,7 @@ class SerieSimple(serial.Serial):
         """
         
         log.logger.debug("Écrire sur la liaison série  " + str(self.peripherique) + " : " + str(msg))
-        return self.write(msg+"\r\n")
+        return self.write(msg+"\n")
     
     def lire(self):
         """
