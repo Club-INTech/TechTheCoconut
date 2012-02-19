@@ -114,6 +114,7 @@ void Robot::communiquer_pc(){
 
 	else if(COMPARE_BUFFER("crp")){
 		rotation.kp(serial_t_::read<float>());
+		serial_t_::print("kp de rotation change\n");
 	}
 	else if(COMPARE_BUFFER("crd")){
 		rotation.kd(serial_t_::read<float>());
