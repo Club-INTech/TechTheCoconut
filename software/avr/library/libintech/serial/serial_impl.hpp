@@ -101,14 +101,14 @@ public:
 
     template<class T>
     static inline T read(void){
-        char buffer[sizeof(T)];
-        read(buffer,sizeof(T));
+        char buffer[20];
+        read(buffer,20);
         return atol(buffer);
     }
 
     static inline float read(){
-        char buffer[sizeof(float)];
-        read(buffer,sizeof(float));
+        char buffer[20];
+        read(buffer,20);
         return atof(buffer);
     }
 
