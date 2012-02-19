@@ -34,8 +34,12 @@ class SerieSimple(serial.Serial):
         :return: Nombre de caractères envoyés
         :rtype: int
         """
-        log.logger.debug("Écrire sur la liaison série  "+self.peripherique+" : "+msg)
-        return self.write(msg+"\r\n")
+        
+        log.logger.debug("Écrire sur la liaison série  " + str(self.peripherique) + " : " + str(msg))
+        if type (msg) == str:
+            return self.write(msg+"\r\n")
+        else:
+            return self.write(msg)
     
     def lire(self):
         """
