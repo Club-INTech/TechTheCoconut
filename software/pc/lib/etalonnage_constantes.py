@@ -18,6 +18,19 @@ serie0=SerieSimple("/dev/ttyUSB0",9600,5)
 global dest
 dest = "rien"
 
+def recevoir ():
+    a=""
+    b=""
+    try:
+            a=serie0.lire()
+    except:
+        pass
+    try:
+            b=serie1.lire()
+    except:
+        pass
+    return str(a)+str(b)
+
 def envoyer(arg):
     global dest
     try:
@@ -69,9 +82,9 @@ while True :
     print "modifier ?"
     print "constantes de rotation.............r"
     print "constantes de translation..........t"
-    print "une seule constante................c"
-    print "entrer constantes indépendemment...i"
+    print "entrer constantes indépendemment...c"
     print "afficher les constantes actuelles..a"
+    print "lire coordonnées...................l"
     print "sortez moi d'ici !.................q"
     choix = raw_input()
     if choix == "q":
@@ -121,20 +134,6 @@ while True :
         print "de rotation.....r"
         print "de translation..t"
         choixC = raw_input()
-        print "i ? p ? d ?"
-        const = raw_input()
-        print "entrez q pour quitter"
-        while True :
-            buf = raw_input()
-            if buf =="q":
-                break
-            envoyer("c"+choixC+const)
-            envoyer(str(float(buf)))
-    elif choix == "i":
-        print "quelle constante modifier ?"
-        print "de rotation.....r"
-        print "de translation..t"
-        choixC = raw_input()
         print "entrez q pour quitter"
         print "exemple : p 0.0"
         print "exemple : i 3"
@@ -150,3 +149,36 @@ while True :
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
         print "rotation    : kp="+ctes[3]+" kd="+ctes[4]+" ki="+ctes[5]
         
+    elif choix =="l":
+        while True:
+            print "x ? y ? o (orientation) ? "
+            print "b (pour lire en boucle), q (pour quitter)"
+            choixL = raw_input()
+            if choixL=="q":
+                break
+            elif choixL=="x":
+                envoyer("ex")
+                print recevoir()
+            elif choixL=="y":
+                envoyer("ey")
+                print recevoir()
+            elif choixL=="o":
+                envoyer("et")
+                print recevoir()
+            elif choixL=="b":
+                print "x ? y ? o (orientation) ? "
+                choixB = raw_input()
+                if choixB=="q":
+                    break
+                elif choixB=="x":
+                    while True:
+                        envoyer("ex")
+                        print recevoir()
+                elif choixB=="y":
+                    while True:
+                        envoyer("ey")
+                        print recevoir()
+                elif choixB=="o":
+                    while True:
+                        envoyer("et")
+                        print recevoir()
