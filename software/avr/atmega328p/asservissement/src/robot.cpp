@@ -1,15 +1,11 @@
 #include <math.h>
+#define PI 3.14159265
 
 #include "twi_master.h"
 #include <libintech/serial/serial_0.hpp>
 #include "robot.h"
 #include <libintech/asservissement.hpp>
 
-
-#define PI 3.14159265
-
-//enlever
-#define INITIAL 0.
 
 
 
@@ -19,27 +15,12 @@ Robot::Robot() : couleur_('r')
 				,y_(0)
 				,translation(1,1,0)
 				,rotation(1.5,1,0)
+				,CONVERSION_TIC_MM_(1.04195690364)
+				,CONVERSION_TIC_RADIAN_(0.000737463064)
+	
+	
 {
 	
-	//on peut foutre ici pour initialiser ? non ? :'( 
-	//ca me semble bcp plus simple, ces valeurs initiales
-	//pour gérer la couleur..
-	//toute facon on a besoin de savoir la dernière orientation du robot, en attribut de classe (cf gotoPos() )
-
-	//[Philippe]
-	//Non on en a pas besoin, Il faut donner l'angle en tic par rapport à l'angle initial
-	//Moi ça ne me semble pas plus simple ! Les codeuses renvoient l'angle, pas une variation d'angle
-	//Et puis quoi qu'il arrive les codeuses commencent à zéro
-	//Et, surtout, tu sembles oublier que le robot s'initialise AVANT la liaison série, donc que si on fait cette méthode il sera impossible de changer la couleur! :p (je viens d'y penser) [la couleur est changée depuis le script python, car on ne va pas reflasher le microcontrôleur juste avant le match]
-	//Bref, je ne pense pas que ce soit une bonne idée tout compte fait
-	
-// 	if(couleur_ == 'r')
-// 		last_angle_rad_ = 0.;
-// 	else
-// 		//angle de Pi pour le robot violet
-// 		//Plutôt en tic
-// 		last_angle_rad_ = 4259;
-
 	
 	TWI_init();
 	serial_t_::init();
@@ -67,8 +48,6 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 
 	int16_t delta_distance = distance - last_distance;
 	int16_t delta_angle = angle - last_angle;
-	static const float CONVERSION_TIC_MM = 1.04195690364;
-	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
     
     
 	if(delta_angle==0)
@@ -76,13 +55,13 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 		if(couleur_ == 'v')
 		{
 			//angle de Pi pour le robot violet (en tic)
-			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN;
-			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
+			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN_;
+			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM_;
 			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 		}else{
-			float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN;
-			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
+			float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN_;
+			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM_;
 			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 		}
@@ -90,20 +69,20 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	else
 	{
         
-		float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
-		float delta_angle_radian = delta_angle * CONVERSION_TIC_RADIAN;
+		float delta_distance_mm = delta_distance * CONVERSION_TIC_MM_;
+		float delta_angle_radian = delta_angle * CONVERSION_TIC_RADIAN_;
 		
 		float r = delta_distance_mm/delta_angle_radian;
 		
-		float angle_radian =  angle * CONVERSION_TIC_RADIAN;
+		float angle_radian =  angle * CONVERSION_TIC_RADIAN_;
 		
 		if(couleur_ == 'v'){
 			//angle de Pi pour le robot violet (en tic)
-			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN_;
 			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
 			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
 		}else{
-			float last_angle_radian = last_angle * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = last_angle * CONVERSION_TIC_RADIAN_;
 			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
 			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
 		}
@@ -155,6 +134,14 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("cti")){
 		translation.ki(serial_t_::read<float>());
 	}
+	
+	else if(COMPARE_BUFFER("ex")){
+		serial_t_::print((float)x_);
+	}else if(COMPARE_BUFFER("ey")){
+		serial_t_::print((float)y_);
+	}else if(COMPARE_BUFFER("et")){
+		serial_t_::print((float)rotation.consigne());
+	}
 
 #undef COMPARE_BUFFER
 }
@@ -185,8 +172,8 @@ return (int16_t)y_;
 //Puisque le but est de faire des fonctions qui ne ratent pas.
 void Robot::gotoPos(int16_t x, int16_t y)
 {
-	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
-	static const float CONVERSION_TIC_MM = 1.04195690364;
+	static const float CONVERSION_TIC_RADIAN_ = 0.000737463064;
+	static const float CONVERSION_TIC_MM_ = 1.04195690364;
 	
 	float delta_x = (x-x_);
 	float delta_y = (y-y_);
@@ -212,24 +199,24 @@ void Robot::gotoPos(int16_t x, int16_t y)
 	}
 	
 	if(couleur_=='v')
-		tourner((angle-INITIAL)/CONVERSION_TIC_RADIAN - 4260);
+		tourner(angle/CONVERSION_TIC_RADIAN_ - 4260);
 	else
-		tourner((angle-INITIAL)/CONVERSION_TIC_RADIAN);
-	translater(sqrt(delta_x*delta_x+delta_y*delta_y)/CONVERSION_TIC_MM);
+		tourner(angle/CONVERSION_TIC_RADIAN_);
+	translater(sqrt(delta_x*delta_x+delta_y*delta_y)/CONVERSION_TIC_MM_);
 }
 
 void Robot::translater(int16_t distance)
 {
 	static int32_t eps = 10;
 	translation.consigne(translation.consigne()+distance);
-	while(abs(translation.consigne() - translation.erreur()) < eps);
+	while(abs(translation.erreur()) < eps);
 		//attend d'atteindre la consigne
 }
 
 void Robot::tourner(int16_t angle)
 {
 	static int32_t eps = 10;
-	rotation.consigne(rotation.consigne()+angle);
-	while(abs(rotation.consigne() - rotation.erreur()) < eps);
+	rotation.consigne(angle);
+	while(abs(rotation.erreur()) < eps);
 		//attend d'atteindre la consigne
 }

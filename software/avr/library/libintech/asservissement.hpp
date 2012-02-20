@@ -75,7 +75,7 @@ class Asservissement {
 
 		float erreur()
 		{
-			return en_ - enm1_;
+			return en_;
 		}
 		
 		void valeur_bridage(int8_t new_val){

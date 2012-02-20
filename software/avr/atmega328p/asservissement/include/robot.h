@@ -52,6 +52,16 @@ private:
 	*/
 	float y_;
 	
+	/**
+	* constance de conversion de tic en mm
+	*/
+	float CONVERSION_TIC_MM_;
+	
+	/**
+	* constance de conversion de tic en radian
+	*/
+	float CONVERSION_TIC_RADIAN_;
+	
 	Asservissement translation;
 	Asservissement rotation;
 
