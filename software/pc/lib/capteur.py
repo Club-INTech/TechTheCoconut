@@ -23,13 +23,14 @@ class Capteur:
     
     
     """
-    def __init__(self, peripherique, nom, debit, timeout, parite=None):
+    def __init__(self, peripherique, nom, debit, timeout, parite=None, nombreEchantillons=3):
         self.peripherique = peripherique
         self.nom = nom
         self.debit = debit
         self.timeout = timeout
         self.parite = parite
         self.serie = serie.Serie(peripherique, nom, debit, timeout, parite)
+        self.nombreEchantillons = nombreEchantillons
     
     
     def lire(self) :
@@ -52,22 +53,29 @@ class Capteur:
         |   'f'
         """
         
-        if self.serie.lire() != 'd' :
-            log.logger.error("Erreur : le message du capteur "+self.peripherique+" ne commence pas par le caractère 'd'")
-            self.serie.stop()
-            #TODO Faut-il stopper l'exécution de la fonction ?
-            
-        val_capteur_1 = self.serie.lire()
-        val_capteur_2 = self.serie.lire()
-        val_capteur_3 = self.serie.lire()
+        compteur = 0
+        val = [0,0,0]
         
-        if self.serie.lire() != 'f' :
-            log.logger.error("Erreur : le message du capteur "+self.peripherique+" ne finit pas par le caractère 'f'")
-            self.serie.stop()
+        while compteur < self.nombreEchantillons :
+            if self.serie.lire() != 'd' :
+                log.logger.error("Erreur : le message du capteur "+self.peripherique+" ne commence pas par le caractère 'd'")
+                self.serie.stop()
+                compteur = nombreEchantillons
+                #TODO Faut-il stopper l'exécution de la fonction ?
+                
+             val[0] = (compteur/nombreEchantillons)*val[0] + int(self.serie.lire())/nombreEchantillons
+             val[1] = (compteur/nombreEchantillons)*val[1] + int(self.serie.lire())/nombreEchantillons
+             val[2] = (compteur/nombreEchantillons)*val[2] + int(self.serie.lire())/nombreEchantillons
+
+            if self.serie.lire() != 'f' :
+                log.logger.error("Erreur : le message du capteur "+self.peripherique+" ne finit pas par le caractère 'f'")
+                self.serie.stop()
+                compteur = nombreEchantillons
+                
         
         self.serie.stop()
         
-        return [val_capteur_1, val_capteur_2, val_capteur_3]
+        return val
         
              
       
