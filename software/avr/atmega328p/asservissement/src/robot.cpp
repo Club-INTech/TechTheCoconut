@@ -9,12 +9,13 @@
 
 
 
-// Constructeur avec assignation des attributs
+
+// Constructeur avec assignation des attrtimeibuts
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
-				,translation(1,1,0)
-				,rotation(1.5,1,0)
+				,translation(0,0,0)
+				,rotation(0,0,0)
 				,CONVERSION_TIC_MM_(1.04195690364)
 				,CONVERSION_TIC_RADIAN_(0.000737463064)
 	
@@ -36,6 +37,7 @@ void Robot::asservir(int32_t distance, int32_t angle)
 	int32_t pwmRotation = rotation.pwm(angle);
  	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
  	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+ 	
 }
 
 
@@ -116,23 +118,23 @@ void Robot::communiquer_pc(){
 
 
 	else if(COMPARE_BUFFER("crp")){
-		rotation.kp(serial_t_::read<float>());
+		rotation.kp(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("crd")){
-		rotation.kd(serial_t_::read<float>());
+		rotation.kd(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("cri")){
-		rotation.ki(serial_t_::read<float>());
+		rotation.ki(serial_t_::read_float());
 	}
 
 	else if(COMPARE_BUFFER("ctp")){
-		translation.kp(serial_t_::read<float>());
+		translation.kp(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("ctd")){
-		translation.kd(serial_t_::read<float>());
+		translation.kd(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("cti")){
-		translation.ki(serial_t_::read<float>());
+		translation.ki(serial_t_::read_float());
 	}
 	
 	else if(COMPARE_BUFFER("ex")){

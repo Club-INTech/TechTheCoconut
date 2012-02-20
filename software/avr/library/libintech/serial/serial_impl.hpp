@@ -99,16 +99,15 @@ public:
     	send_ln();
     }
 
-    template<class T>
-    static inline T read(void){
+    static inline int32_t read_int(void){
         char buffer[20];
         read(buffer,20);
         return atol(buffer);
     }
 
-    static inline float read(){
+    static inline float read_float(){
         char buffer[20];
-        read(buffer,20);
+        print(read(buffer,20));
         return atof(buffer);
     }
 

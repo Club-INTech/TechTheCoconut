@@ -62,7 +62,7 @@ int main() {
 // 		cli();		
 		
 // 		sei();
-		Serial<0>::read<uint8_t>();
+		Serial<0>::read_int();
 		Serial<0>::print(balise.getAngle());
 // 		serial0.print("aaaa");
 // 		sbi(PORTB, PORTB1);

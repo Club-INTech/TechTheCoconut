@@ -13,7 +13,8 @@ serie0=SerieSimple("/dev/ttyUSB0",9600,5)
 
 #ctes=["0.0","0.0","0.0","0.0","0.0","0.0"]
 #marshal.dump(ctes, open("constantes_asserv", 'wb'))
-
+lastx=0.0
+lasty=0.0
 
 global dest
 dest = "rien"
@@ -166,7 +167,7 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "x ? y ? o (orientation) ? "
+                print "x ? y ? o (orientation) ? l (log)"
                 choixB = raw_input()
                 if choixB=="q":
                     break
@@ -182,3 +183,15 @@ while True :
                     while True:
                         envoyer("et")
                         print recevoir()
+                elif choixB=="l":
+                    f=open("trace_x_y","w")
+                    while True:
+                        envoyer("ex")
+                        logx=recevoir()
+                        f.write("x = "+str(float(logx)-float(lastx))+" \t")
+                        envoyer("ey")
+                        logy=recevoir()
+                        f.write("y = "+str(float(logy)-float(lasty))+"\n")
+                        print "x = "+str(float(logx)-float(lastx))+" \t"+"y = "+str(float(logy)-float(lasty))+"\n"
+                        lastx=logx
+                        lasty=logy

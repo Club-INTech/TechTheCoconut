@@ -13,7 +13,9 @@ macro(add_microcontrolers MMCU MICROCONTROLEURS)
         set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${MICROCONTROLEUR}.hex)
 
         add_executable(${MICROCONTROLEUR}.out ${${MICROCONTROLEUR}_SRC} ${LIBRARY_DIR}/libintech/avr_cpp_compatibility.cpp)
-        set_target_properties(${MICROCONTROLEUR}.out PROPERTIES LINKER_LANGUAGE CXX)
+# 	set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
+	target_link_libraries(${MICROCONTROLEUR}.out c m c)
+	set_target_properties(${MICROCONTROLEUR}.out PROPERTIES LINKER_LANGUAGE CXX)
         
 
 	add_custom_target(${MICROCONTROLEUR}.hex ALL DEPENDS ${MICROCONTROLEUR}.out)
