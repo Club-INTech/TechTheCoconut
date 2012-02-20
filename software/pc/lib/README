@@ -1,0 +1,2 @@
+* constantes_asserv : cache d'importation marshal. stocke un tableau contenant les constantes d'asservissement K [tp,td,ti,rp,rd,ri]
+* etalonnage_constantes.py : console d'écriture/lecture sur la série, afin de déterminer les 6 constantes d'asservissement, et de débugger le goto

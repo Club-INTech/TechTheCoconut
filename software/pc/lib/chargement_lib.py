@@ -24,8 +24,8 @@ modules.append("serie")
 modules.append("strategie")
 modules.append("recherche_chemin")
 modules.append("recherche_chemin.astar")
-modules.append("recherche_chemin.rechercheCheminAstar")
-modules.append("recherche_chemin.rechercheCheminTstar")
+modules.append("recherche_chemin.thetastar")
+
 
 for module in modules:
     try:

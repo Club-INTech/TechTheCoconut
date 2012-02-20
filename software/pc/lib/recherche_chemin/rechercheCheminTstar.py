@@ -40,19 +40,20 @@ tableLargeur = constantes["Coconut"]["longueur"]
 #sur x
 tableLongueur = constantes["Coconut"]["largeur"]
 
-coteRobot = constantes["Coconut"]["coteRobot"]
+#TODO : importation de robot.rayon
+diamRobot = 350.
 rayonRobotsA = constantes["Coconut"]["rayonRobotsA"]
 
 """
 # meilleure visualisation avec 100...
-coteRobot = 100. 
+diamRobot = 100. 
 rayonRobotsA = 100.
 """
 
 #approximation hexagonale des robots adverses
 nCotesRobotsA = 6
 #diamètre maximal du robot (cf élargissement des objets)
-largeurRobot=coteRobot*sqrt(2)
+largeurRobot=diamRobot*sqrt(2)
 
 #VISU : 4 points = angles de l'aire de jeu
 bordsCarte=[Point(-tableLongueur/2,0.),Point(tableLongueur/2,0.),Point(-tableLongueur/2,tableLargeur),Point(tableLongueur/2,tableLargeur)]

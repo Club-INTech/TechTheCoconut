@@ -4,6 +4,9 @@
 #include "timer.hpp"
 #include "safe_enum.hpp"
 #include "register.hpp"
+#include <libintech/utils.h>
+#include "serial/serial_impl.hpp"
+
 struct direction_def
 {
 	enum type{ RECULER, AVANCER};
@@ -30,18 +33,23 @@ private:
   }
   
 public:
-  void envoyerPwm(int16_t pwm){
+  Moteur() : maxPWM_(255)
+  {
+	  Timer::init();
+  }
+  
+  void envoyerPwm(int16_t pwm){	  
     if (pwm>0) {
       direction(Direction::AVANCER);
-      Timer::MODE::seuil(pwm);
+      Timer::MODE::seuil(min(pwm, maxPWM_)); //Bridage
     }
     else {
       direction(Direction::RECULER);
-      Timer::MODE::seuil(-pwm);
+	  Timer::MODE::seuil(-max(pwm,-maxPWM_)); //Bridage
     }
   }
   
-  void maxPWM(uint16_t maxPWM){
+  void maxPWM(int16_t maxPWM){
 	maxPWM_ = maxPWM;
   }
   
@@ -50,7 +58,7 @@ public:
   };
   
 private:
-  uint16_t maxPWM_;
+  int16_t maxPWM_;
 };
 
 

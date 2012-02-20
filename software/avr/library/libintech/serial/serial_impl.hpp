@@ -15,18 +15,6 @@
 #include <string.h>
 #include <libintech/singleton.hpp>
 
-/**
- * Define interne pour charger la bonne valeur dans les registres du microcontrôleur.
- * @warning NE PAS MODIFIER CE DEFINE
- * @fn UBRR
- * @def UBRR
- */
-
-/**
- * Define interne de la taille du ring buffer de la liaison série
- * @fn rx_buffer__SIZE
- * @def rx_buffer__SIZE
- */
 #define rx_buffer__SIZE 32
 
 template<uint8_t id>
@@ -44,6 +32,8 @@ private:
     static volatile ring_buffer rx_buffer_;
     
 private:
+
+	static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	
     static inline void send_char(unsigned char byte);
     
@@ -111,21 +101,21 @@ public:
 
     template<class T>
     static inline T read(void){
-        char buffer[sizeof(T)];
-        read(buffer,sizeof(T));
+        char buffer[20];
+        read(buffer,20);
         return atol(buffer);
     }
 
     static inline float read(){
-        char buffer[sizeof(float)];
-        read(buffer,sizeof(float));
+        char buffer[20];
+        read(buffer,20);
         return atof(buffer);
     }
 
     static inline uint8_t read(char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
-        	while(!available());
+        	while(!available()){ asm("nop"); }
         	char tmp = read_char();
         	if(tmp == '\0' || tmp == '\n' || tmp == '\r')
         		return i;

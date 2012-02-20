@@ -23,6 +23,7 @@
 
 	template<>
 	void Serial<2>::init(){
+		Serial<2>::PLEASE_INCLUDE_SERIAL_INTERRUPT();
 		static bool is_init = false;
 		if(is_init == false){
 			uint16_t UBRR  = (F_CPU/8/INIT_BAUDRATE_2 - 1)/2;
