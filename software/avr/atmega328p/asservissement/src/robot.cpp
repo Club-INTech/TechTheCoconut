@@ -5,6 +5,14 @@
 #include "robot.h"
 #include <libintech/asservissement.hpp>
 
+
+#define PI 3.14159265
+
+//enlever
+#define INITIAL 0.
+
+
+
 // Constructeur avec assignation des attributs
 Robot::Robot() : couleur_('r')
 				,x_(0)
@@ -63,32 +71,46 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
     
     
-	//Ton
-    if(delta_angle==0)
-    {
-        float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
-		float last_angle_radian =  last_angle * CONVERSION_TIC_RADIAN;
-
-	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
-	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
-
-    }
-    else
-    {
+	if(delta_angle==0)
+	{
+		if(couleur_ == 'v')
+		{
+			//angle de Pi pour le robot violet (en tic)
+			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN;
+			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
+			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
+			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
+		}else{
+			float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN;
+			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
+			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
+			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
+		}
+	}
+	else
+	{
         
-	float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
-	float delta_angle_radian = delta_angle * CONVERSION_TIC_RADIAN;
+		float delta_distance_mm = delta_distance * CONVERSION_TIC_MM;
+		float delta_angle_radian = delta_angle * CONVERSION_TIC_RADIAN;
+		
+		float r = delta_distance_mm/delta_angle_radian;
+		
+		float angle_radian =  angle * CONVERSION_TIC_RADIAN;
+		
+		if(couleur_ == 'v'){
+			//angle de Pi pour le robot violet (en tic)
+			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN;
+			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
+			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
+		}else{
+			float last_angle_radian = last_angle * CONVERSION_TIC_RADIAN;
+			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
+			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
+		}
+	}
 	
-        float r = delta_distance_mm/delta_angle_radian;
-	
-	float angle_radian =  angle * CONVERSION_TIC_RADIAN;
-	float last_angle_radian =  last_angle * CONVERSION_TIC_RADIAN;
-	
-	x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
-	y_ += r * (cos(angle_radian) - cos(last_angle_radian));
-    }
-    last_distance = distance;
-    last_angle = angle;
+	last_distance = distance;
+	last_angle = angle;
 }
 
 
@@ -163,26 +185,51 @@ return (int16_t)y_;
 //Puisque le but est de faire des fonctions qui ne ratent pas.
 void Robot::gotoPos(int16_t x, int16_t y)
 {
-	//pourquoi _x et _y sont en float au fait ?
-	//Car à chaque overflow de timer on les incrémente d'un nombre flottant
+	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
+	static const float CONVERSION_TIC_MM = 1.04195690364;
+	
 	float delta_x = (x-x_);
 	float delta_y = (y-y_);
-	//Penser à utiliser atan2 plutôt
-	//La, tu as bien raison, suivant sa couleur, il faut ajouter ou retrancher pi
-	//je l'ai juste converti en tics
-	if(couleur_=='v')
-		tourner((atan(delta_y/delta_x)-4260));
+	float angle;
+	
+	if (delta_x==0)
+	{
+		if (delta_y > 0)
+			angle=PI/2;
+		else
+			angle=-PI/2;
+	}
+	else if (delta_x > 0)
+	{
+		angle=atan(delta_y/delta_x);
+	}
 	else
-		tourner((atan(delta_y/delta_x)));
-	translater(sqrt(delta_x*delta_x+delta_y*delta_y));
+	{
+		if (delta_y > 0)
+			angle=atan(delta_y/delta_x) - PI;
+		else
+			angle=atan(delta_y/delta_x) + PI;
+	}
+	
+	if(couleur_=='v')
+		tourner((angle-INITIAL)/CONVERSION_TIC_RADIAN - 4260);
+	else
+		tourner((angle-INITIAL)/CONVERSION_TIC_RADIAN);
+	translater(sqrt(delta_x*delta_x+delta_y*delta_y)/CONVERSION_TIC_MM);
 }
 
 void Robot::translater(int16_t distance)
 {
+	static int32_t eps = 10;
 	translation.consigne(translation.consigne()+distance);
+	while(abs(translation.consigne() - translation.erreur()) < eps);
+		//attend d'atteindre la consigne
 }
 
 void Robot::tourner(int16_t angle)
 {
-	rotation.consigne(angle);
+	static int32_t eps = 10;
+	rotation.consigne(rotation.consigne()+angle);
+	while(abs(rotation.consigne() - rotation.erreur()) < eps);
+		//attend d'atteindre la consigne
 }
