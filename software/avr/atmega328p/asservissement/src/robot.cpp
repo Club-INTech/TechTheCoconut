@@ -7,10 +7,10 @@
 #include <libintech/asservissement.hpp>
 
 
+//techthecoconut/software/pc/lib$ rm trace_x_y;python etalonnage_constantes.py
 
 
-
-// Constructeur avec assignation des attrtimeibuts
+// Constructeur avec assignation des attributs
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
