@@ -6,10 +6,10 @@ import marshal
 import time
 from serie_simple import *
 
+serie1=SerieSimple("/dev/ttyUSB1",9600,5)
+serie0=SerieSimple("/dev/ttyUSB0",9600,5)
+
 #BAUDRATE : 9600, 57600
-def init():
-    serie1=SerieSimple("/dev/ttyUSB1",9600,5)
-    serie0=SerieSimple("/dev/ttyUSB0",9600,5)
 
 #ctes=["0.0","0.0","0.0","0.0","0.0","0.0"]
 #marshal.dump(ctes, open("constantes_asserv", 'wb'))
@@ -64,7 +64,6 @@ def envoyer(arg):
     marshal.dump(ctes, open("constantes_asserv", 'wb'))
 
 def initialise():
-    init()
     ctes=marshal.load(open("constantes_asserv","rb"))
     envoyer("ctp")
     envoyer(ctes[0])
@@ -147,8 +146,6 @@ while True :
             envoyer("c"+choixC+buf[0])
             envoyer(str(float(buf[2:])))
             
-    elif choix == "i":
-        init()
         
     elif choix == "a":
         ctes=marshal.load(open("constantes_asserv","rb"))
