@@ -14,8 +14,8 @@
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
-				,translation(0,0,0)
-				,rotation(0,0,0)
+				,translation(0.0,0.0,0.0)
+				,rotation(0.0,0.0,0.0)
 				,CONVERSION_TIC_MM_(1.04195690364)
 				,CONVERSION_TIC_RADIAN_(0.000737463064)
 	
@@ -142,6 +142,7 @@ void Robot::communiquer_pc(){
 	}else if(COMPARE_BUFFER("ey")){
 		serial_t_::print((float)y_);
 	}else if(COMPARE_BUFFER("et")){
+		//TODO : orientation réelle
 		serial_t_::print((float)rotation.consigne());
 	}
 

@@ -7,9 +7,9 @@ import time
 from serie_simple import *
 
 #BAUDRATE : 9600, 57600
-
-serie1=SerieSimple("/dev/ttyUSB1",9600,5)
-serie0=SerieSimple("/dev/ttyUSB0",9600,5)
+def init():
+    serie1=SerieSimple("/dev/ttyUSB1",9600,5)
+    serie0=SerieSimple("/dev/ttyUSB0",9600,5)
 
 #ctes=["0.0","0.0","0.0","0.0","0.0","0.0"]
 #marshal.dump(ctes, open("constantes_asserv", 'wb'))
@@ -64,6 +64,7 @@ def envoyer(arg):
     marshal.dump(ctes, open("constantes_asserv", 'wb'))
 
 def initialise():
+    init()
     ctes=marshal.load(open("constantes_asserv","rb"))
     envoyer("ctp")
     envoyer(ctes[0])
@@ -87,6 +88,7 @@ while True :
     print "afficher les constantes actuelles..a"
     print "lire coordonnées...................l"
     print "sortez moi d'ici !.................q"
+    print "réinitialiser la série.............i"
     choix = raw_input()
     if choix == "q":
         try:
@@ -144,7 +146,10 @@ while True :
                 break
             envoyer("c"+choixC+buf[0])
             envoyer(str(float(buf[2:])))
-    
+            
+    elif choix == "i":
+        init()
+        
     elif choix == "a":
         ctes=marshal.load(open("constantes_asserv","rb"))
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
