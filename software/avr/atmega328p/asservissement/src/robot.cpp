@@ -14,8 +14,8 @@
 Robot::Robot() : couleur_('v')
 				,x_(0)
 				,y_(0)
-				,translation(0.6,2,0)
-				,rotation(1,3,0)
+				,translation(0.6,3,0.01)
+				,rotation(0.4,3,0.01)
 				,CONVERSION_TIC_MM_(1.04195690364)
 				,CONVERSION_TIC_RADIAN_(0.000737463064)
 	
@@ -34,10 +34,8 @@ void Robot::asservir(int32_t distance, int32_t angle)
 {
 	int32_t pwmTranslation = translation.pwm(distance);
 	int32_t pwmRotation = rotation.pwm(angle);
-	int16_t pwmG = pwmTranslation - pwmRotation;
-	int16_t pwmD = pwmTranslation + pwmRotation;
-	moteurGauche.envoyerPwm(pwmG);
-	moteurDroit.envoyerPwm(pwmD);
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
 }
 
 
