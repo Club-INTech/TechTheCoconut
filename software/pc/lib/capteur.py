@@ -2,6 +2,7 @@
 
 import serie
 import log
+import peripherique
 
 log = log.Log()
 
@@ -33,7 +34,7 @@ class Capteur:
         self.nombreEchantillons = nombreEchantillons
     
     
-    def lire(self) :
+    def lire(self):
         """
         Cette méthode permet de lire les informations d'un capteur
         

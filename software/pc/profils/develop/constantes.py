@@ -50,7 +50,7 @@ constantes = \
         "rayonRobotsA" : 350.,
         #approximation hexagonale des robots adverses
         "nCotesRobotsA" : 6
-    }
+    },
         "Serie":
         {
             "peripheriques": ["actionneur", "asservissement", "capteur"]

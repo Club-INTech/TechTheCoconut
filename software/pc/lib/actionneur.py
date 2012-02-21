@@ -4,9 +4,9 @@ import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
-import serial
 import serie
 import log
+import peripherique
 
 log = log.Log()
 
@@ -23,7 +23,11 @@ class Actionneur(serie.Serie):
         """
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
+            chemin = peripherique.chemin_de_peripherique("actionneur")
+            if chemin:
+                serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
+            else:
+                log.logger.error("L'actionneur "+nom+" n'est pas chargé")
         self.nom = nom
         self.angle = 0
         

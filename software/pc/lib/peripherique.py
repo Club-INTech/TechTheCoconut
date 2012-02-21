@@ -11,11 +11,17 @@ liste = []
 
 # commande : '# ls -1 /dev/ttyUSB* 2> /dev/null'
 
-class Peripherique(serie.Serie):
+def chemin_de_peripherique(periph):
+    for p in liste:
+        if p.nom == periph:
+            return periph
+    log.logger.error(periph+" n'est pas relié à un chemin sur Linux")
+    return None
+
+class Peripherique():
     """
     Classe de gérer un périphérique, notamment permet d'associer un périphérique physique à son chemin sous Linux
     
-    :TODO: Permettre la découverte de périphériques
     :param nom: Nom du périphérique
     :type nom: string
     """
@@ -23,6 +29,7 @@ class Peripherique(serie.Serie):
         self.nom = nom
         self.chemin = None
         log.logger.info("Nouveau périphérique "+self.nom)
+        self.association = self.associer()
     
     def associer(self):
         """
@@ -35,7 +42,8 @@ class Peripherique(serie.Serie):
         while 42:
             peripheriques = os.popen(peripheriques_commande)
             print "Associer "+self.nom+" à "
-            i = 0
+            print "0. Ne pas associer"
+            i = 1
             association = {}
             peripheriques = peripheriques.readlines()
             if not peripheriques:
@@ -56,9 +64,12 @@ class Peripherique(serie.Serie):
                     print str(i)+". "+chemin
                     association[i] = chemin
                     i+=1
-            log.logger.warning(association)
+            #log.logger.warning(association)
             numero = int(raw_input("numéro : "))
-            if numero in association.keys():
+            if numero == 0:
+                log.logger.info("Périphérique "+self.nom+" volontairement non associé")
+                return False
+            elif numero in association.keys() or numero:
                 self.chemin = association[numero]
                 log.logger.info("Chemin "+self.chemin+" associé au périphérique "+self.nom)
                 return True
