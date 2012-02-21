@@ -91,6 +91,7 @@ while True :
     print "écoute sur la série................e"
     print "tourner de n tics................tou"
     print "translater de n tics.............tra"
+    print "goto x y........................goto"
     
     choix = raw_input()
     if choix == "q":
@@ -170,6 +171,15 @@ while True :
         buff=raw_input()
         envoyer("tra")
         envoyer(str(float(buff)))
+        
+    elif choix == "goto":
+        buf1=raw_input()
+        buf2=raw_input()
+        envoyer("goto")
+        envoyer(str(float(buf1)))
+        envoyer(str(float(buf2)))
+        print recevoir()
+        print recevoir()
         
     elif choix =="l":
         while True:
