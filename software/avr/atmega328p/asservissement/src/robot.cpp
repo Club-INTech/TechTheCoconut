@@ -94,7 +94,7 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	last_angle = angle;
 }
 
-
+//TODO Finir implémentation de protocole.txt
 void Robot::communiquer_pc(){
 	char buffer[10];
 	uint8_t length = serial_t_::read(buffer,10);
