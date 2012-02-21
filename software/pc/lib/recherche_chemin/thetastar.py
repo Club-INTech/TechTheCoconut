@@ -23,6 +23,8 @@ import profils.develop.injection.elements_jeu
 import profils.develop.constantes
 from lib.carte import Carte
 
+import lib.visualisation.visu_threads as visu_threads
+
 #bibliothèque pour la gestion des graphes 
 try:
     from graph_tool.all import *
@@ -310,6 +312,11 @@ class Thetastar:
                 for p in self.AStar(Ndepart,Narrive):
                     log.logger.info("(" + str(p.x) + ", " + str(p.y) + ")")
                     chemin.append(Point(int(p.x),int(p.y)))
+                    
+                visu_table = visu_threads.Visu_threads.rechercheThread('visu_table')
+                if visu_table is not None:
+		    visu_table.creerChemin(chemin)
+
                 return chemin
 
 
