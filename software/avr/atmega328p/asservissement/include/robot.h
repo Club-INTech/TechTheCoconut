@@ -22,13 +22,13 @@ class Robot : public Singleton<Robot>{
 
 private:
 	
-	//Moteur sur le Timer 0 en FastPWM . Pont en H sur le PORTD4
-	typedef Timer<0,ModeFastPwm,1> T_0;
-	Moteur< T_0, AVR_PORTD<PORTD4> > moteurGauche;
+	//Moteur sur le Timer 2 en FastPWM . Pont en H sur le PORTD4
+	typedef Timer<2,ModeFastPwm,1> T_G;
+	Moteur< T_G, AVR_PORTD<PORTD4> > moteurGauche;
 	
-	//Moteur sur le Timer 2 en FastPWM . Pont en H sur le port B0
-	typedef Timer<2,ModeFastPwm,1> T_2;
-	Moteur<T_2, AVR_PORTB<PORTB0> > moteurDroit;
+	//Moteur sur le Timer 0 en FastPWM . Pont en H sur le port B0
+	typedef Timer<0,ModeFastPwm,1> T_D;
+	Moteur<T_D, AVR_PORTB<PORTB0> > moteurDroit;
 	
 	//Timer 1 en mode compteur, Prescaler de 8
 	typedef Timer<1,ModeCounter,8> TimerCounter_t;
@@ -61,12 +61,6 @@ private:
 	* constance de conversion de tic en radian
 	*/
 	float CONVERSION_TIC_RADIAN_;
-	
-	/**
-	* epsilon de tolérance pour l'erreur en tic
-	*/
-	int32_t eps_t_;
-	int32_t eps_r_;
 	
 	Asservissement translation;
 	Asservissement rotation;

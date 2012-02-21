@@ -14,10 +14,8 @@
 Robot::Robot() : couleur_('v')
 				,x_(0)
 				,y_(0)
-				,translation(0.5,2.5,0.0)
-				,rotation(1.0,2.8,0.0)
-				,eps_t_(10)
-				,eps_r_(10)
+				,translation(0.6,2,0)
+				,rotation(1,3,0)
 				,CONVERSION_TIC_MM_(1.04195690364)
 				,CONVERSION_TIC_RADIAN_(0.000737463064)
 	
@@ -30,36 +28,16 @@ Robot::Robot() : couleur_('v')
 	TimerCounter_t::init();
 	serial_t_::print("Debut");
 	serial_t_::change_baudrate(9600);
-	
 }
 
 void Robot::asservir(int32_t distance, int32_t angle)
 {
-	//eps_t_ = 10
-	//eps_r_ = 10
-	int32_t pwmTranslation = translation.pwm(distance,eps_t_);
-	int32_t pwmRotation = rotation.pwm(angle,eps_r_);
-		
-	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
-	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
-	
-	/*
-	int32_t plafond_pwm = pwmTranslation + pwmRotation;
-	if (plafond_pwm > 255)
-		plafond_pwm = 255;
-	
-	else if (plafond_pwm < -255)
-		plafond_pwm = -255;
-	
-	if (plafond_pwm > 20)
-	{
-		moteurDroit.envoyerPwm(plafond_pwm);
-		moteurGauche.envoyerPwm(plafond_pwm - 2*pwmRotation);
-	}else if (plafond_pwm < -20){
-		moteurDroit.envoyerPwm(plafond_pwm + 2*pwmRotation);
-		moteurGauche.envoyerPwm(plafond_pwm );
-	}*/
- 	
+	int32_t pwmTranslation = translation.pwm(distance);
+	int32_t pwmRotation = rotation.pwm(angle);
+	int16_t pwmG = pwmTranslation - pwmRotation;
+	int16_t pwmD = pwmTranslation + pwmRotation;
+	moteurGauche.envoyerPwm(pwmG);
+	moteurDroit.envoyerPwm(pwmD);
 }
 
 
@@ -168,11 +146,11 @@ void Robot::communiquer_pc(){
 		serial_t_::print((float)rotation.consigne());
 	}
 	
-	else if(COMPARE_BUFFER("cte")){
-		eps_t_ = (int32_t) serial_t_::read_float();
-	}else if(COMPARE_BUFFER("cre")){
-		eps_r_ = (int32_t) serial_t_::read_float();
-	}
+// 	else if(COMPARE_BUFFER("cte")){
+// 		eps_t_ = (int32_t) serial_t_::read_float();
+// 	}else if(COMPARE_BUFFER("cre")){
+// 		eps_r_ = (int32_t) serial_t_::read_float();
+// 	}
 	else if(COMPARE_BUFFER("tou")){
 		tourner((int16_t)serial_t_::read_float());
 	}
