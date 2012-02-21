@@ -47,24 +47,26 @@ class Actionneur(serie.Serie):
             serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
-    def getAngle(self):
+     def getAngle(self):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         """
-        serie.Serie.ecrire(nom + '\n '+ '0' + '0')
+        self.ecrire(self.nom + '\n '+ '0' + '\n '  + '0')
         serie.Serie.lire()
         self.angle = self.file_attente.get(lu)
 
     def reset(self):
         """
         Réinitialise l'actionneur
-        :TODO: implémenter la méthode
         """
-        pass
+        self.ecrire(self.nom + '\n' + '0')
+        self.angle = 0
         
     def stop(self):
         """
         Arrête l'actionneur en urgence
-        :TODO: implémenter la méthode
         """
-        pass
+        self.ecrire(self.nom + '\n '+ '1' + '\n '  + '0')#TODO modifier selon convention
+        self.getAngle()
+        serie.Serie.stop()
+        
