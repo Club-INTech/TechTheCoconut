@@ -69,9 +69,9 @@ class Peripherique():
             if numero == 0:
                 log.logger.info("Périphérique "+self.nom+" volontairement non associé")
                 return False
-            elif numero in association.keys() or numero:
+            elif numero in association.keys():
                 self.chemin = association[numero]
                 log.logger.info("Chemin "+self.chemin+" associé au périphérique "+self.nom)
                 return True
             else:
-                log.logger.warning("Numéro "+numero+" inconnu dans l'association du périphérique "+self.nom)
+                log.logger.warning("Numéro "+str(numero)+" inconnu dans l'association du périphérique "+self.nom)
