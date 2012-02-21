@@ -1,92 +1,122 @@
 #include <math.h>
+#define PI 3.14159265
 
 #include "twi_master.h"
 #include <libintech/serial/serial_0.hpp>
 #include "robot.h"
 #include <libintech/asservissement.hpp>
 
+
+//techthecoconut/software/pc/lib$ rm trace_x_y;python etalonnage_constantes.py
+
+
 // Constructeur avec assignation des attributs
-Robot::Robot() : couleur_('r')
+Robot::Robot() : couleur_('v')
 				,x_(0)
 				,y_(0)
-				,translation(1,1,0)
-				,rotation(1.5,1,0)
-				,last_angle_tic_(0)
-				,last_dist_tic_(0)
-
+				,translation(0.5,2.5,0.0)
+				,rotation(1.0,2.8,0.0)
+				,eps_t_(10)
+				,eps_r_(10)
+				,CONVERSION_TIC_MM_(1.04195690364)
+				,CONVERSION_TIC_RADIAN_(0.000737463064)
+	
+	
 {
 	
+	
 	TWI_init();
-	Serial<0>::init();
+	serial_t_::init();
 	TimerCounter_t::init();
+	serial_t_::print("Debut");
+	serial_t_::change_baudrate(9600);
 	
 }
 
 void Robot::asservir(int32_t distance, int32_t angle)
 {
-	int32_t pwmTranslation = translation.pwm(distance);
-	int32_t pwmRotation = rotation.pwm(angle);
- 	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
- 	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	//eps_t_ = 10
+	//eps_r_ = 10
+	int32_t pwmTranslation = translation.pwm(distance,eps_t_);
+	int32_t pwmRotation = rotation.pwm(angle,eps_r_);
+		
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	
+	/*
+	int32_t plafond_pwm = pwmTranslation + pwmRotation;
+	if (plafond_pwm > 255)
+		plafond_pwm = 255;
+	
+	else if (plafond_pwm < -255)
+		plafond_pwm = -255;
+	
+	if (plafond_pwm > 20)
+	{
+		moteurDroit.envoyerPwm(plafond_pwm);
+		moteurGauche.envoyerPwm(plafond_pwm - 2*pwmRotation);
+	}else if (plafond_pwm < -20){
+		moteurDroit.envoyerPwm(plafond_pwm + 2*pwmRotation);
+		moteurGauche.envoyerPwm(plafond_pwm );
+	}*/
+ 	
 }
 
 
-void Robot::updatePosition(int32_t distance_tic, int32_t angle_tic)
+
+void Robot::updatePosition(int32_t distance, int32_t angle)
 {
     
+	static int32_t last_distance = 0;
+	static int32_t last_angle = 0;
 
-	static const float CONVERSION_TIC_MM = 1.04195690364;
-	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
-	
-	
-	float delta_angle_rad = (angle_tic - last_angle_tic_)* CONVERSION_TIC_RADIAN;
-	float delta_distance_mm = (distance_tic - last_dist_tic_) * CONVERSION_TIC_MM;
-	
+	int16_t delta_distance = distance - last_distance;
+	int16_t delta_angle = angle - last_angle;
     
-	
-	if(delta_angle_rad==0)
+    
+	if(delta_angle==0)
 	{
-		if(couleur_ == 'v'){
+		if(couleur_ == 'v')
+		{
 			//angle de Pi pour le robot violet (en tic)
-			float last_angle_radian = (last_angle_tic_ + 4260) * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN_;
+			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM_;
 			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 		}else{
-			float last_angle_radian = last_angle_tic_ * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN_;
+			float delta_distance_mm = delta_distance * CONVERSION_TIC_MM_;
 			x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 			y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 		}
-	
 	}
 	else
 	{
-		float r = delta_distance_mm/delta_angle_rad;
-		float angle_radian =  angle_tic * CONVERSION_TIC_RADIAN;
-	
+        
+		float delta_distance_mm = delta_distance * CONVERSION_TIC_MM_;
+		float delta_angle_radian = delta_angle * CONVERSION_TIC_RADIAN_;
+		
+		float r = delta_distance_mm/delta_angle_radian;
+		
+		float angle_radian =  angle * CONVERSION_TIC_RADIAN_;
 		
 		if(couleur_ == 'v'){
 			//angle de Pi pour le robot violet (en tic)
-			float last_angle_radian = (last_angle_tic_ + 4260) * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = (last_angle + 4260) * CONVERSION_TIC_RADIAN_;
 			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
 			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
 		}else{
-			float last_angle_radian = last_angle_tic_ * CONVERSION_TIC_RADIAN;
+			float last_angle_radian = last_angle * CONVERSION_TIC_RADIAN_;
 			x_ += r * (-sin(angle_radian) + sin(last_angle_radian));
 			y_ += r * (cos(angle_radian) - cos(last_angle_radian));
 		}
-		
-		
 	}
 	
-	//met à jour la distance parcourue
-	last_dist_tic_ = distance_tic;
-	
-	//met à jour l'orientation du robot
-	last_angle_tic_ = angle_tic;
-	
+	last_distance = distance;
+	last_angle = angle;
 }
 
-
+//TODO Finir implémentation de protocole.txt
 void Robot::communiquer_pc(){
 	char buffer[10];
 	uint8_t length = serial_t_::read(buffer,10);
@@ -110,23 +140,44 @@ void Robot::communiquer_pc(){
 
 
 	else if(COMPARE_BUFFER("crp")){
-		rotation.kp(serial_t_::read<float>());
+		rotation.kp(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("crd")){
-		rotation.kd(serial_t_::read<float>());
+		rotation.kd(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("cri")){
-		rotation.ki(serial_t_::read<float>());
+		rotation.ki(serial_t_::read_float());
 	}
 
 	else if(COMPARE_BUFFER("ctp")){
-		translation.kp(serial_t_::read<float>());
+		translation.kp(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("ctd")){
-		translation.kd(serial_t_::read<float>());
+		translation.kd(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("cti")){
-		translation.ki(serial_t_::read<float>());
+		translation.ki(serial_t_::read_float());
+	}
+	
+	else if(COMPARE_BUFFER("ex")){
+		serial_t_::print((float)x_);
+	}else if(COMPARE_BUFFER("ey")){
+		serial_t_::print((float)y_);
+	}else if(COMPARE_BUFFER("et")){
+		//TODO : orientation réelle
+		serial_t_::print((float)rotation.consigne());
+	}
+	
+	else if(COMPARE_BUFFER("cte")){
+		eps_t_ = (int32_t) serial_t_::read_float();
+	}else if(COMPARE_BUFFER("cre")){
+		eps_r_ = (int32_t) serial_t_::read_float();
+	}
+	else if(COMPARE_BUFFER("tou")){
+		tourner((int16_t)serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("tra")){
+		translater((int16_t)serial_t_::read_float());
 	}
 
 #undef COMPARE_BUFFER
@@ -154,47 +205,62 @@ return (int16_t)y_;
 }
 
 
+//Ca n'a pas de sens de faire des fonctions qui retournent faux si elles ratent sur microcontrôleurs
+//Puisque le but est de faire des fonctions qui ne ratent pas.
 void Robot::gotoPos(int16_t x, int16_t y)
 {
-	static const float CONVERSION_TIC_RADIAN = 0.000737463064;
-	static const float CONVERSION_TIC_MM = 1.04195690364;
+	static const float CONVERSION_TIC_RADIAN_ = 0.000737463064;
+	static const float CONVERSION_TIC_MM_ = 1.04195690364;
 	
 	float delta_x = (x-x_);
 	float delta_y = (y-y_);
+	float angle;
+	
+	if (delta_x==0)
+	{
+		if (delta_y > 0)
+			angle=PI/2;
+		else
+			angle=-PI/2;
+	}
+	else if (delta_x > 0)
+	{
+		angle=atan(delta_y/delta_x);
+	}
+	else
+	{
+		if (delta_y > 0)
+			angle=atan(delta_y/delta_x) - PI;
+		else
+			angle=atan(delta_y/delta_x) + PI;
+	}
 	
 	if(couleur_=='v')
-		tourner(atan2(delta_y,delta_x)/CONVERSION_TIC_RADIAN - 4260);
+		tourner(angle/CONVERSION_TIC_RADIAN_ - 4260);
 	else
-		tourner(atan2(delta_y,delta_x)/CONVERSION_TIC_RADIAN);
-	translater(sqrt(delta_x*delta_x+delta_y*delta_y)/CONVERSION_TIC_MM);
+		tourner(angle/CONVERSION_TIC_RADIAN_);
+	translater(sqrt(delta_x*delta_x+delta_y*delta_y)/CONVERSION_TIC_MM_);
 }
 
-void Robot::translater(uint16_t distance)
+void Robot::translater(int16_t distance)
 {
-	 
-	translation.consigne((int32_t)(translation.consigne()+distance));
-	
-	/*
-	[pierre]
-	j'avais fait un abs(last_dist_mm - ... ) < eps pour permettre une erreur minime.
-	mais comme tu m'as convaincu de faire en tics (cf updatePosition() )
-	je pense qu'on peut etre précis au tic près, non ?
-	
-	c'est incomplet, il faut rajouter une évaluation de la vitesse et de l'acceleration
-	sinon le robot s'arretera après la consigne (faut rajouter des attributs pour acceder à enm1_ et enm2_ ??)
-	
-	on peut rajouter un timeout pour détecter un problème ? 
-	mais si tu veux un type void ca sert à rien
-	*/
-	
-	while(last_dist_tic_ != translation.consigne());
+	static int32_t eps = 100;
+	translation.consigne(translation.consigne()+distance);
+	while(abs(translation.erreur()) > eps);
+	{
+		serial_t_::print((float)translation.erreur());
+	}
 		//attend d'atteindre la consigne
-		
 }
 
-//idem
 void Robot::tourner(int16_t angle)
 {
-	rotation.consigne((int32_t)angle);
-	while(last_angle_tic_ != rotation.consigne());
+	static int32_t eps = 15;
+	rotation.consigne(angle);
+	while(abs(rotation.erreur()) > eps)
+	{
+		serial_t_::print((float)rotation.erreur());
+	}
+		
+		//attend d'atteindre la consigne
 }

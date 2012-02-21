@@ -53,19 +53,24 @@ private:
 	float y_;
 	
 	/**
-	* dernière orientation du robot en tic
+	* constance de conversion de tic en mm
 	*/
-	int32_t last_angle_tic_;
+	float CONVERSION_TIC_MM_;
 	
 	/**
-	* distance à la position de consigne, en tic
+	* constance de conversion de tic en radian
 	*/
-	uint32_t last_dist_tic_;
+	float CONVERSION_TIC_RADIAN_;
 	
-
+	/**
+	* epsilon de tolérance pour l'erreur en tic
+	*/
+	int32_t eps_t_;
+	int32_t eps_r_;
+	
 	Asservissement translation;
 	Asservissement rotation;
-	
+
 public:
 	
 	Robot();
@@ -83,25 +88,11 @@ public:
 	int16_t y(void);
 	
 	/**
-	* Setter pour la variable typeAsservissement
-	*
-	* \param unsigned char typeAsservissement
-	*/
-	void typeAsservissement(unsigned char);
-
-	/**
-	* Getter pour la variable typeAsservissement
-	*
-	* \return unsigned char typeAsservissement
-	*/
-	unsigned char typeAsservissement(void);
-	
-	/**
 	* Translate le robot
 	* 
 	* \param int32_t distance de translation en tics
 	*/
-	void translater(uint16_t distance);
+	void translater(int16_t distance);
 	
 	/**
 	* Tourner le robot

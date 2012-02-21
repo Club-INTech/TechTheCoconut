@@ -4,9 +4,9 @@ import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
-import serial
 import serie
 import log
+import peripherique
 
 log = log.Log()
 
@@ -23,7 +23,11 @@ class Actionneur(serie.Serie):
         """
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
+            chemin = peripherique.chemin_de_peripherique("actionneur")
+            if chemin:
+                serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
+            else:
+                log.logger.error("L'actionneur "+nom+" n'est pas chargé")
         self.nom = nom
         self.angle = 0
         
@@ -43,24 +47,26 @@ class Actionneur(serie.Serie):
             serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
-    def getAngle(self):
+     def getAngle(self):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         """
-        serie.Serie.ecrire(nom + '\n '+ '0' + '0')
+        self.ecrire(self.nom + '\n '+ '0' + '\n '  + '0')
         serie.Serie.lire()
         self.angle = self.file_attente.get(lu)
 
     def reset(self):
         """
         Réinitialise l'actionneur
-        :TODO: implémenter la méthode
         """
-        pass
+        self.ecrire(self.nom + '\n' + '0')
+        self.angle = 0
         
     def stop(self):
         """
         Arrête l'actionneur en urgence
-        :TODO: implémenter la méthode
         """
-        pass
+        self.ecrire(self.nom + '\n '+ '1' + '\n '  + '0')#TODO modifier selon convention
+        self.getAngle()
+        serie.Serie.stop()
+        

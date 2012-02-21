@@ -7,5 +7,5 @@ import lib
 from lib.visualisation.visu_serie import Visu_serie
 
 
-vSerie = Visu_serie(nom='vSerie')
+vSerie = Visu_serie()
 vSerie.start()

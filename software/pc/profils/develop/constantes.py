@@ -19,8 +19,10 @@ constantes = \
 		
 		#sans compter les bras
 		"largeurRobot" : 120.,
-		"longueurRobot" : 500.
+		"longueurRobot" : 500.,
 		
+                #longueur du coté du robot, en mm
+                "coteRobot" : 350.
 	},
 	"Anna": {},
     "Objets_Table": {
@@ -50,5 +52,9 @@ constantes = \
         "rayonRobotsA" : 350.,
         #approximation hexagonale des robots adverses
         "nCotesRobotsA" : 6
-    }
+    },
+        "Serie":
+        {
+            "peripheriques": ["actionneur", "asservissement", "capteur"]
+        }
 }

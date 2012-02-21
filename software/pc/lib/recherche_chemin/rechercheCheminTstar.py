@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#TEST
+
 """
 --> voir utiliseRechercheChemin pour exemple
 """
