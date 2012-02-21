@@ -62,6 +62,12 @@ private:
 	*/
 	float CONVERSION_TIC_RADIAN_;
 	
+	/**
+	* epsilon de tolérance pour l'erreur en tic
+	*/
+	int32_t eps_t_;
+	int32_t eps_r_;
+	
 	Asservissement translation;
 	Asservissement rotation;
 

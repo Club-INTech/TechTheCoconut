@@ -5,6 +5,7 @@
 import marshal
 import time
 from serie_simple import *
+from time import sleep
 
 serie1=SerieSimple("/dev/ttyUSB1",9600,5)
 serie0=SerieSimple("/dev/ttyUSB0",9600,5)
@@ -87,7 +88,10 @@ while True :
     print "afficher les constantes actuelles..a"
     print "lire coordonnées...................l"
     print "sortez moi d'ici !.................q"
-    print "réinitialiser la série.............i"
+    print "écoute sur la série................e"
+    print "tourner de n tics................tou"
+    print "translater de n tics.............tra"
+    
     choix = raw_input()
     if choix == "q":
         try:
@@ -151,6 +155,21 @@ while True :
         ctes=marshal.load(open("constantes_asserv","rb"))
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
         print "rotation    : kp="+ctes[3]+" kd="+ctes[4]+" ki="+ctes[5]
+        
+    elif choix == "tou":
+        buff=raw_input()
+        envoyer("tou")
+        envoyer(str(float(buff)))
+        
+    elif choix == "e":    
+        while True:
+            sleep(0.1)
+            print recevoir()
+                        
+    elif choix == "tra":
+        buff=raw_input()
+        envoyer("tra")
+        envoyer(str(float(buff)))
         
     elif choix =="l":
         while True:

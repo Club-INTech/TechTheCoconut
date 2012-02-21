@@ -11,11 +11,13 @@
 
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : couleur_('r')
+Robot::Robot() : couleur_('v')
 				,x_(0)
 				,y_(0)
-				,translation(0.0,0.0,0.0)
-				,rotation(0.0,0.0,0.0)
+				,translation(0.5,2.5,0.0)
+				,rotation(1.0,2.8,0.0)
+				,eps_t_(10)
+				,eps_r_(10)
 				,CONVERSION_TIC_MM_(1.04195690364)
 				,CONVERSION_TIC_RADIAN_(0.000737463064)
 	
@@ -33,10 +35,30 @@ Robot::Robot() : couleur_('r')
 
 void Robot::asservir(int32_t distance, int32_t angle)
 {
-	int32_t pwmTranslation = translation.pwm(distance);
-	int32_t pwmRotation = rotation.pwm(angle);
- 	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
- 	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	//eps_t_ = 10
+	//eps_r_ = 10
+	int32_t pwmTranslation = translation.pwm(distance,eps_t_);
+	int32_t pwmRotation = rotation.pwm(angle,eps_r_);
+		
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	
+	/*
+	int32_t plafond_pwm = pwmTranslation + pwmRotation;
+	if (plafond_pwm > 255)
+		plafond_pwm = 255;
+	
+	else if (plafond_pwm < -255)
+		plafond_pwm = -255;
+	
+	if (plafond_pwm > 20)
+	{
+		moteurDroit.envoyerPwm(plafond_pwm);
+		moteurGauche.envoyerPwm(plafond_pwm - 2*pwmRotation);
+	}else if (plafond_pwm < -20){
+		moteurDroit.envoyerPwm(plafond_pwm + 2*pwmRotation);
+		moteurGauche.envoyerPwm(plafond_pwm );
+	}*/
  	
 }
 
@@ -145,6 +167,18 @@ void Robot::communiquer_pc(){
 		//TODO : orientation réelle
 		serial_t_::print((float)rotation.consigne());
 	}
+	
+	else if(COMPARE_BUFFER("cte")){
+		eps_t_ = (int32_t) serial_t_::read_float();
+	}else if(COMPARE_BUFFER("cre")){
+		eps_r_ = (int32_t) serial_t_::read_float();
+	}
+	else if(COMPARE_BUFFER("tou")){
+		tourner((int16_t)serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("tra")){
+		translater((int16_t)serial_t_::read_float());
+	}
 
 #undef COMPARE_BUFFER
 }
@@ -210,16 +244,23 @@ void Robot::gotoPos(int16_t x, int16_t y)
 
 void Robot::translater(int16_t distance)
 {
-	static int32_t eps = 10;
+	static int32_t eps = 100;
 	translation.consigne(translation.consigne()+distance);
-	while(abs(translation.erreur()) < eps);
+	while(abs(translation.erreur()) > eps);
+	{
+		serial_t_::print((float)translation.erreur());
+	}
 		//attend d'atteindre la consigne
 }
 
 void Robot::tourner(int16_t angle)
 {
-	static int32_t eps = 10;
+	static int32_t eps = 15;
 	rotation.consigne(angle);
-	while(abs(rotation.erreur()) < eps);
+	while(abs(rotation.erreur()) > eps)
+	{
+		serial_t_::print((float)rotation.erreur());
+	}
+		
 		//attend d'atteindre la consigne
 }
