@@ -4,8 +4,6 @@ Ordres :
      'c' Couleur
          'r' Rouge
          'v' Violet
-         'r' de rotation à [float]
-         't' de translation à [float]
      'r' Rotation
          'd' Dérivée à [float]
          'i' Intégration à [float]

@@ -34,7 +34,8 @@ class Asservissement {
 // 				return max(pwmCourant_, -(int16_t)valeur_bridage_);
 			
 		}
-
+		
+	
 		void ki(float ki)
 		{
 			ki_ = ki;
