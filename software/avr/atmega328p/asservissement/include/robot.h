@@ -21,7 +21,7 @@ class Robot : public Singleton<Robot>{
 
 
 private:
-	
+
 	//Moteur sur le Timer 2 en FastPWM . Pont en H sur le PORTD4
 	typedef Timer<2,ModeFastPwm,1> T_G;
 	Moteur< T_G, AVR_PORTD<PORTD4> > moteurGauche;

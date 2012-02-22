@@ -9,6 +9,7 @@
 
 #include <stdint.h>
 #include <libintech/utils.h>
+#include "serial/serial_0.hpp"
 
 
 
@@ -35,7 +36,14 @@ class Asservissement {
 			
 		}
 		
-	
+		int32_t est_arrive(){
+// 			static int32_t eps = 100;
+// 			Serial<0>::print(9999);
+// 			Serial<0>::print(en_);
+// 			Serial<0>::print(en_ - enm1_);
+			return (en_ - enm1_);
+		}
+		
 		void ki(float ki)
 		{
 			ki_ = ki;
@@ -101,7 +109,7 @@ class Asservissement {
 		float en_;
 		float enm1_;
 		float enm2_;
-		
+
 		int32_t consigne_;
 };
 
