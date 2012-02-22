@@ -64,9 +64,6 @@ class Serie(threading.Thread, serial.Serial):
     def lire(self):
         """
         Lire une information venant d'un périphérique jusqu'au retour à la ligne
-        
-        :return: Chaîne lue
-        :rtype: string
         """
         while self.active:
             lu = self.readline()
