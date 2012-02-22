@@ -30,6 +30,6 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	//info[0]=>distance courante ; info[1] => angle courant.
 	get_all(infos);
 	robot.asservir(infos[0],infos[1]);
-// 	robot.updatePosition(infos[0],infos[1]);
+	robot.updatePosition(infos[0],infos[1]);
 	//printlnLong(robot.x());
 }

@@ -21,7 +21,7 @@ class Robot : public Singleton<Robot>{
 
 
 private:
-	
+
 	//Moteur sur le Timer 2 en FastPWM . Pont en H sur le PORTD4
 	typedef Timer<2,ModeFastPwm,1> T_G;
 	Moteur< T_G, AVR_PORTD<PORTD4> > moteurGauche;
@@ -101,7 +101,7 @@ public:
 	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
 	* \param int16_t position sur y à atteindre sur l'aire de jeu, en absolu.
 	*/
-	void gotoPos(int16_t x, int16_t y);
+	void gotoPos(float x, float y);
 	
 	void communiquer_pc();
 	
