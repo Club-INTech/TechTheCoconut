@@ -46,23 +46,23 @@ def envoyer(arg):
     
     #enregistrement des constantes étalonnées
     
-    ctes=marshal.load(open("constantes_asserv","rb"))
+    #ctes=marshal.load(open("constantes_asserv","rb"))
     
-    if dest == "ctp":
-        ctes[0]=arg
-    elif dest == "ctd":
-        ctes[1]=arg
-    elif dest == "cti":
-        ctes[2]=arg
-    elif dest == "crp":
-        ctes[3]=arg
-    elif dest == "crd":
-        ctes[4]=arg
-    elif dest == "cri":
-        ctes[5]=arg
+    #if dest == "ctp":
+        #ctes[0]=arg
+    #elif dest == "ctd":
+        #ctes[1]=arg
+    #elif dest == "cti":
+        #ctes[2]=arg
+    #elif dest == "crp":
+        #ctes[3]=arg
+    #elif dest == "crd":
+        #ctes[4]=arg
+    #elif dest == "cri":
+        #ctes[5]=arg
         
-    dest = arg    
-    marshal.dump(ctes, open("constantes_asserv", 'wb'))
+    #dest = arg    
+    #marshal.dump(ctes, open("constantes_asserv", 'wb'))
 
 def initialise():
     ctes=marshal.load(open("constantes_asserv","rb"))
@@ -79,7 +79,7 @@ def initialise():
     envoyer("cri")
     envoyer(ctes[5])
     
-initialise()
+#initialise()
 while True :
     print "modifier ?"
     print "constantes de rotation.............r"
@@ -178,8 +178,30 @@ while True :
         envoyer("goto")
         envoyer(str(float(buf1)))
         envoyer(str(float(buf2)))
-        print recevoir()
-        print recevoir()
+        
+    elif choix == "script":
+        envoyer("goto")
+        envoyer(str(float(210)))
+        envoyer(str(float(0)))
+        buf2=raw_input()
+        envoyer("goto")
+        envoyer(str(float(210)))
+        envoyer(str(float(-820)))
+        buf2=raw_input()
+        
+        envoyer("goto")
+        envoyer(str(float(700)))
+        envoyer(str(float(0)))
+        buf2=raw_input()
+        
+        envoyer("goto")
+        envoyer(str(float(0)))
+        envoyer(str(float(1640)))
+        buf2=raw_input()
+        
+        
+        buf2=raw_input()
+        
         
     elif choix =="l":
         while True:
@@ -202,18 +224,6 @@ while True :
                 choixB = raw_input()
                 if choixB=="q":
                     break
-                elif choixB=="x":
-                    while True:
-                        envoyer("ex")
-                        print recevoir()
-                elif choixB=="y":
-                    while True:
-                        envoyer("ey")
-                        print recevoir()
-                elif choixB=="o":
-                    while True:
-                        envoyer("et")
-                        print recevoir()
                 elif choixB=="l":
                     f=open("trace_x_y","w")
                     while True:
@@ -226,3 +236,7 @@ while True :
                         print "x = "+str(float(logx)-float(lastx))+" \t"+"y = "+str(float(logy)-float(lasty))+"\n"
                         lastx=logx
                         lasty=logy
+                else:
+                    while True:
+                        envoyer(choixB)
+                        print recevoir()

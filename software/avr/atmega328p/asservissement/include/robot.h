@@ -101,7 +101,7 @@ public:
 	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
 	* \param int16_t position sur y à atteindre sur l'aire de jeu, en absolu.
 	*/
-	void gotoPos(int16_t x, int16_t y);
+	void gotoPos(float x, float y);
 	
 	void communiquer_pc();
 	
