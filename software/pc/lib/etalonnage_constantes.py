@@ -220,10 +220,18 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "x ? y ? o (orientation) ? l (log)"
+                print "ex ? ey ? eo (orientation) ? l (log) xy (les deux) ?"
                 choixB = raw_input()
                 if choixB=="q":
                     break
+                elif choixB=="xy":
+                    while True:
+                        envoyer("ex")
+                        logx=recevoir()
+                        
+                        envoyer("ey")
+                        logy=recevoir()
+                        print str(float(logx))+", "+str(float(logy))+" \n"
                 elif choixB=="l":
                     f=open("trace_x_y","w")
                     while True:
