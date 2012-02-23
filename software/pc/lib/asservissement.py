@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 import log
 import outils_math.point as point
 import actionneur
-import outils_math.point
 
 sys.path.append('../')
 
@@ -58,7 +57,27 @@ class Asservissement:
         #calcul de l'orientation
         proj_x = arrivee.x - depart.x
         proj_y = arrivee.y - depart.y
-        orientation = arctan(proj_y / proj_x)
+        
+        ####
+        #[deboc] je te jure, je fais que passer...
+        
+        if (proj_x==0)
+            if (proj_y > 0)
+                orientation=pi/2
+            else
+                orientation=-pi/2
+        else if (proj_x > 0)
+            orientation=math.atan(proj_y/proj_x)
+        else
+            if (proj_y > 0)
+                orientation=math.atan(proj_y/proj_x) - pi
+            else
+                orientation=math.atan(proj_y/proj_x) + pi
+                
+        #tu peux me comprendre, je viens de faire la meme dans l'avr :P
+        ####
+        #orientation=arctan(proj_y/proj_x)
+        
         
         #distance entre le centre de la recherche de chemin et le milieu de la longueur du robot (pythagore)
         normale_Robot = math.sqrt(rayon ** 2 - (longueur_robot / 2) ** 2)
