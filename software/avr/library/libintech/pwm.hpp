@@ -49,7 +49,7 @@ struct ModeFastPwm;
 
 template<>
 struct ModeFastPwm<0>{
-  static void seuil(uint16_t seuil){
+  static void seuil(uint8_t seuil){
     OCR0A = seuil;
   }
   
@@ -68,7 +68,7 @@ struct ModeFastPwm<0>{
 
 template<>
 struct ModeFastPwm<1>{
-  static void seuil(uint16_t seuil){
+  static void seuil(uint8_t seuil){
     OCR1A = seuil;
   }
   static void set(){
@@ -87,7 +87,7 @@ struct ModeFastPwm<1>{
 
 template<>
 struct ModeFastPwm<2>{
-  static void seuil(uint16_t seuil){
+  static void seuil(uint8_t seuil){
     OCR2B = seuil;
   }
   static void set(){

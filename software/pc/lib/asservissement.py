@@ -9,10 +9,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 import log
 import outils_math.point as point
 import actionneur
+<<<<<<< HEAD
 import outils_math.point
 import recherche_chemin.thetastar
 import lib.log
 log = lib.log.Log()
+=======
+>>>>>>> 990b8616d82efe782c59b1b677acfc8e35f71b0a
 
 sys.path.append('../')
 
@@ -95,9 +98,22 @@ class Asservissement:
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
         
         #calcul de l'orientation
-            proj_x = arrivee.x - depart.x
-            proj_y = arrivee.y - depart.y
-            orientation = arctan(proj_y / proj_x)
+        proj_x = arrivee.x - depart.x
+        proj_y = arrivee.y - depart.y
+        
+        
+        if (proj_x==0)
+            if (proj_y > 0)
+                orientation=pi/2
+            else
+                orientation=-pi/2
+        else if (proj_x > 0)
+            orientation=math.atan(proj_y/proj_x)
+        else
+            if (proj_y > 0)
+                orientation=math.atan(proj_y/proj_x) - pi
+            else
+                orientation=math.atan(proj_y/proj_x) + pi
         
         #distance entre le centre de la recherche de chemin et le milieu de la longueur du robot (pythagore)
         normale_Robot = math.sqrt(rayon ** 2 - (longueur_robot / 2) ** 2)

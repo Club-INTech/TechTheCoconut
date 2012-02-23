@@ -49,10 +49,14 @@ class Thetastar:
     # Constantes du robot Coconut
     tableLargeur = constantes["Coconut"]["longueur"]
     tableLongueur = constantes["Coconut"]["largeur"]
-    coteRobot = constantes["Coconut"]["coteRobot"]
     rayonRobotsA = constantes["Recherche_Chemin"]["rayonRobotsA"]
     nCotesRobotsA = constantes["Recherche_Chemin"]["nCotesRobotsA"]
-    largeurRobot=coteRobot*sqrt(2)
+    
+    #à remplacer 
+    coteRobot = constantes["Coconut"]["coteRobot"]
+    rayonRobot=coteRobot*sqrt(2)
+    
+    #par rayonRobot=lib.robot.Robot.rayon
     
     carte = Carte()
     
@@ -93,8 +97,8 @@ class Thetastar:
         if not Thetastar.initialise:
             #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
             for rect in Thetastar.listeRectangles:
-                rect.wx += Thetastar.largeurRobot
-                rect.wy += Thetastar.largeurRobot
+                rect.wx += Thetastar.rayonRobot
+                rect.wy += Thetastar.rayonRobot
                 
             #conversion des rectangles en polygones de 4 sommets
             for rect in Thetastar.listeRectangles:
@@ -118,9 +122,9 @@ class Thetastar:
         self.chargeGraphe()
         log.logger.info("Recherche de chemin entre ("+str(depart.x)+", "+str(depart.y)+") et ("+str(arrive.x)+", "+str(arrive.y)+")")
 
-        if not (depart.x > -Thetastar.tableLongueur/2+Thetastar.largeurRobot/2 and depart.x < Thetastar.tableLongueur/2-Thetastar.largeurRobot/2 and depart.y < Thetastar.tableLargeur-Thetastar.largeurRobot/2 and depart.y > 0.+Thetastar.largeurRobot/2):
+        if not (depart.x > -Thetastar.tableLongueur/2+Thetastar.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-Thetastar.rayonRobot/2 and depart.y < Thetastar.tableLargeur-Thetastar.rayonRobot/2 and depart.y > 0.+Thetastar.rayonRobot/2):
             log.logger.error("Le point de départ n'est pas dans l'aire de jeu")
-        if not (arrive.x > -Thetastar.tableLongueur/2+Thetastar.largeurRobot/2 and arrive.x < Thetastar.tableLongueur/2-Thetastar.largeurRobot/2 and arrive.y < Thetastar.tableLargeur-Thetastar.largeurRobot/2 and arrive.y > 0.+Thetastar.largeurRobot/2):
+        if not (arrive.x > -Thetastar.tableLongueur/2+Thetastar.rayonRobot/2 and arrive.x < Thetastar.tableLongueur/2-Thetastar.rayonRobot/2 and arrive.y < Thetastar.tableLargeur-Thetastar.rayonRobot/2 and arrive.y > 0.+Thetastar.rayonRobot/2):
             log.logger.critical("le point d'arrivée n'est pas dans l'aire de jeu !")
 
         
@@ -315,7 +319,7 @@ class Thetastar:
                     
                 visu_table = visu_threads.Visu_threads.rechercheThread('visu_table')
                 if visu_table is not None:
-		    visu_table.creerChemin(chemin)
+                    visu_table.creerChemin(chemin)
 
                 return chemin
 
@@ -394,7 +398,7 @@ class Thetastar:
         for objet in Thetastar.listeObjets:
             #ajoute 4 noeuds : les angles de l'objet rectangulaire
             for angle in objet:
-                if (angle.x > -Thetastar.tableLongueur/2+Thetastar.largeurRobot/2 and angle.x < Thetastar.tableLongueur/2-Thetastar.largeurRobot/2 and angle.y < Thetastar.tableLargeur-Thetastar.largeurRobot/2 and angle.y > 0.+Thetastar.largeurRobot/2):
+                if (angle.x > -Thetastar.tableLongueur/2+Thetastar.rayonRobot/2 and angle.x < Thetastar.tableLongueur/2-Thetastar.rayonRobot/2 and angle.y < Thetastar.tableLargeur-Thetastar.rayonRobot/2 and angle.y > 0.+Thetastar.rayonRobot/2):
                     Thetastar.g.add_vertex()
                     Thetastar.posX[Thetastar.g.vertex(k)] = angle.x
                     Thetastar.posY[Thetastar.g.vertex(k)] = angle.y

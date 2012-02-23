@@ -9,6 +9,9 @@
 
 #include <stdint.h>
 #include <libintech/utils.h>
+#include "serial/serial_0.hpp"
+
+
 
 class Asservissement {
 	
@@ -16,26 +19,31 @@ class Asservissement {
 
 		Asservissement(float kp,float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), valeur_bridage_(255){ }
 
-		int32_t	pwm(int32_t positionReelle)
+		int16_t	pwm(int32_t positionReelle, int32_t eps = 0)
 		{
 			enm2_ = enm1_;
 			enm1_ = en_;
 			en_=consigne_ - positionReelle;
 			
 			pwmCourant_+=kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_);
-// 			if(pwmCourant_ > 0)
-// 				pwmCourant_ = min(pwmCourant_,valeur_bridage_);
-// 			else
-// 				pwmCourant_ = max(pwmCourant_, -valeur_bridage_);
-			return pwmCourant_;
-// 			if(pwmCourant_>0)
-// 				return min(pwmCourant_, (int16_t)valeur_bridage_);
-// 			else
-// 				return max(pwmCourant_, -(int16_t)valeur_bridage_);
+
+			if(pwmCourant_> valeur_bridage_)
+				return  valeur_bridage_;
+			else if (pwmCourant_< -valeur_bridage_)
+				return -valeur_bridage_;
+			else
+				return pwmCourant_;
 			
 		}
 		
-	
+		int32_t est_arrive(){
+// 			static int32_t eps = 100;
+// 			Serial<0>::print(9999);
+// 			Serial<0>::print(en_);
+//			Serial<0>::print(en_ - enm1_);
+			return (en_ - enm1_);
+		}
+		
 		void ki(float ki)
 		{
 			ki_ = ki;
@@ -79,6 +87,10 @@ class Asservissement {
 		float erreur()
 		{
 			return en_;
+        
+		}
+		int8_t valeur_bridage(void){
+			return valeur_bridage_;
 		}
 		
 		void valeur_bridage(int8_t new_val){
@@ -92,13 +104,13 @@ class Asservissement {
 		float ki_;
 
 		int16_t valeur_bridage_;
-
+		
 		float pwmCourant_;
 		
 		float en_;
 		float enm1_;
 		float enm2_;
-		
+
 		int32_t consigne_;
 };
 

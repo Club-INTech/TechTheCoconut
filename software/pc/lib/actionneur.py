@@ -14,6 +14,9 @@ log = log.Log()
 class Actionneur(serie.Serie):
     """
     Classe permettant de gérer un actionneur
+    
+    :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
+    :type nom: string
     """
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
     def __init__(self, nom):
@@ -26,7 +29,7 @@ class Actionneur(serie.Serie):
             Actionneur.initialise = True
             chemin = peripherique.chemin_de_peripherique("actionneur")
             if chemin:
-                serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
+                serie.Serie.__init__(self, chemin, nom, 9600, 3)
             else:
                 log.logger.error("L'actionneur "+nom+" n'est pas chargé")
         self.nom = nom
