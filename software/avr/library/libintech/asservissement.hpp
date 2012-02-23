@@ -108,7 +108,7 @@ class Asservissement {
 
 		int16_t valeur_bridage_;
 		
-		float pwmCourant_;
+		volatile float pwmCourant_;
 		
 		float en_;
 		float enm1_;
