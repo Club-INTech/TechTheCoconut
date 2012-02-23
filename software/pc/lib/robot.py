@@ -10,7 +10,9 @@ import log
 import outils_math.point as point
 import actionneur
 import outils_math.point
+import lib.log
 
+log = lib.log.Log()
 sys.path.append('../')
 
 #import profils.develop.constantes

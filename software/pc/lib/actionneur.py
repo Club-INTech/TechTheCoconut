@@ -20,6 +20,11 @@ class Actionneur(serie.Serie):
     """
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
     def __init__(self, nom):
+        """
+        :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
+        :type nom: string
+        """
+        serial.start()
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
             chemin = peripherique.chemin_de_peripherique("actionneur")
@@ -42,8 +47,8 @@ class Actionneur(serie.Serie):
         """
 
         if angle < 170 and angle > 0:
-            actionneur.ecrire(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
-            serie.Serie.lire()
+            self.ecrire(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
+            #serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
     def getAngle(self):
@@ -51,7 +56,7 @@ class Actionneur(serie.Serie):
         Envoie une requête pour obtenir la position de chaque bras.
         """
         self.ecrire(self.nom + '\n '+ '0' + '\n '  + '0')
-        serie.Serie.lire()
+        #serie.Serie.lire()
         self.angle = self.file_attente.get(lu)
 
     def reset(self):
