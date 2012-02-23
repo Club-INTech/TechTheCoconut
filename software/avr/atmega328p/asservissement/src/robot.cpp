@@ -28,7 +28,7 @@ Robot::Robot() : couleur_('r')
 	TWI_init();
 	serial_t_::init();
 	TimerCounter_t::init();
-	serial_t_::print("Debut");
+// 	serial_t_::print("Debut");
 	serial_t_::change_baudrate(9600);
 	
 }
@@ -183,9 +183,8 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("goto")){
 		float co_x = serial_t_::read_float();
 		float co_y = serial_t_::read_float();
-// 		serial_t_::print(10);
-// 		serial_t_::print(20);
 		gotoPos(co_x , co_y);
+		Serial<0>::print("END");
 	}
 	else if(COMPARE_BUFFER("eerT")){
 		serial_t_::print((float)translation.erreur());
@@ -244,19 +243,19 @@ void Robot::gotoPos(float x, float y)
 		else
 			angle=atan(delta_y/delta_x) + PI;
 	}
-	Serial<0>::print("ROT");
+// 	Serial<0>::print("ROT");
 	if(couleur_=='v')
 		tourner(angle - PI);
 	else
 		tourner(angle);
 	
-	Serial<0>::print("TRA");
-	Serial<0>::print(translation.consigne() );
+// 	Serial<0>::print("TRA");
+// 	Serial<0>::print(translation.consigne() );
 	
 	translater(sqrt(delta_x*delta_x+delta_y*delta_y));
 	
-	Serial<0>::print("ENDgoto");
-	Serial<0>::print(translation.consigne() );
+// 	Serial<0>::print("ENDgoto");
+// 	Serial<0>::print(translation.consigne() );
 	
 }
 

@@ -91,6 +91,11 @@ def trace_err():
             break
         print str(logt)+", "+str(logr)+" \n"
         
+def attend_fin_goto():
+    while recevoir() != "END":
+        pass
+    
+            
 #initialise()
 while True :
     print "modifier ?"
@@ -198,24 +203,46 @@ while True :
         envoyer("goto")
         envoyer(str(float(210)))
         envoyer(str(float(0)))
-        buf2=raw_input()
+        attend_fin_goto()
+        
         envoyer("goto")
-        envoyer(str(float(210)))
+        envoyer(str(float(420)))
         envoyer(str(float(-820)))
-        buf2=raw_input()
+        attend_fin_goto()
         
         envoyer("goto")
-        envoyer(str(float(700)))
-        envoyer(str(float(0)))
-        buf2=raw_input()
+        envoyer(str(float(1540)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
         
         envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(420)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(220)))
         envoyer(str(float(0)))
-        envoyer(str(float(1640)))
-        buf2=raw_input()
+        attend_fin_goto()
         
         
-        buf2=raw_input()
+        envoyer("tou")
+        envoyer(str(float(0.0)))
+        attend_fin_mvt()
+        
+        envoyer("tra")
+        envoyer(str(float(-50.0)))
+        attend_fin_mvt()
         
         
     elif choix =="l":
