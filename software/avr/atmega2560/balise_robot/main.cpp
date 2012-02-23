@@ -1,3 +1,4 @@
+#include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/timer.hpp>
 
@@ -22,79 +23,74 @@
 #define tbi(port,bit) (port) ^= (1 << (bit))
 #endif
 
-//  #include <libintech/serial/serial_1.hpp>
-//  #include <libintech/serial/serial_2.hpp>
-//  #include <libintech/serial/serial_3.hpp>
-
-
 int main() {
 	ClasseTimer::init();
 	Serial<0>::init();
+	
 	Balise & balise = Balise::Instance();
 	Serial<0>::change_baudrate(9600);
+	
 	//Initialisation table pour crc8
 	init_crc8();
-// 	//Pin B0 en input (Pin 53 sur board Arduino)
-// 	cbi(DDRB, PORTB0);
-// 	//Pin B1 en input (Pin 52 sur board Arduino)
-// 	sbi(DDRB, PORTB1);
-	//Activation interruption INT0 sur front montant
-// 	sbi(EICRA,ISC01);//Configuration front montant
-// 	sbi(EICRA,ISC00);
-// 	sbi(EIMSK,INT0);//Activation proprement dite
+ 	
+	//Activation des interruptions sur front montant pour pinn 21 sur board Arduino
+	sbi(EICRA,ISC01);//Configuration front montant
+	sbi(EICRA,ISC00);
+	sbi(EIMSK,INT0);//Activation proprement dite
 
 	// Initialisation interruptions codeurs
 	// Masques
-	PCMSK0 |= (1 << PCINT7);
+	//PCMSK0 |= (1 << PCINT7);
 	// Activer les interruptions
-	PCICR |= (1 << PCIE0);
+	//PCICR |= (1 << PCIE0);
 	
 	sei();
 
-	//   Serial<1> & serial1 = Serial<1>::Instance();
-	//   Serial<2> & serial2 = Serial<2>::Instance();
-	//   Serial<3> & serial3 = Serial<3>::Instance();
-
-	uint32_t rawFrame;
+	char rawFrame[3];
+	
 	
 	
 	while (1) {
 // 		cli();		
 		
 // 		sei();
-		Serial<0>::read_int();
-		Serial<0>::print(balise.getAngle());
+//		Serial<0>::read_int();
+//		Serial<0>::print(balise.getAngle());
 // 		serial0.print("aaaa");
 // 		sbi(PORTB, PORTB1);
 // 		_delay_ms(2000);
 // 		cbi(PORTB, PORTB1);
 // 		
 		
-		/*
-		rawFrame = serial0.read<uint32_t>();
+
+		Serial<0>::read(rawFrame,4);
+
 		Frame frame(rawFrame);
+			Serial<0>::print(frame.getRobotId());
+			Serial<0>::print(frame.getDistance());
+		
 		if (frame.isValid()) {
-			serial0.print(frame.getRobotId());
-			serial0.print(frame.getDistance());
-			serial0.print(balise.getAngle());
+			
+			//Serial<0>::print(frame.getRobotId());
+			//Serial<0>::print(frame.getDistance());
+			Serial<0>::print(balise.getAngle());
 		} else {
-			serial0.print("ERROR");
-		}*/
+			Serial<0>::print("ERROR");
+		}
 	}
 }
 
-//INT0
-ISR(TIMER1_OVF_vect)
-{
-
-	
-}
-
-
-ISR(PCINT0_vect)
+ISR(TIMER0_OVF_vect)
 {
 	Balise & balise = Balise::Instance();
-	balise.max_counter(ClasseTimer::value());
-	ClasseTimer::value(0);
+	balise.incremente_toptour();
 }
 
+//INT0
+ISR(INT0_vect)
+{
+	Balise & balise = Balise::Instance();
+	if(balise.toptour()>=10)
+		balise.max_counter(balise.toptour());
+	balise.reset_toptour();
+}
