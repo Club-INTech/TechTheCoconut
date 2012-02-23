@@ -40,7 +40,7 @@ class Asservissement {
 // 			static int32_t eps = 100;
 // 			Serial<0>::print(9999);
 // 			Serial<0>::print(en_);
-// 			Serial<0>::print(en_ - enm1_);
+//			Serial<0>::print(en_ - enm1_);
 			return (en_ - enm1_);
 		}
 		
@@ -87,6 +87,7 @@ class Asservissement {
 		float erreur()
 		{
 			return en_;
+        
 		}
 		int8_t valeur_bridage(void){
 			return valeur_bridage_;

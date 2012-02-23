@@ -205,22 +205,28 @@ void Robot::gotoPos(float x, float y)
 		else
 			angle=atan(delta_y/delta_x) + PI;
 	}
-	
+	Serial<0>::print("ROT");
 	if(couleur_=='v')
 		tourner(angle - PI);
 	else
 		tourner(angle);
+	
+	Serial<0>::print("TRA");
 	translater(sqrt(delta_x*delta_x+delta_y*delta_y));
 	
+	Serial<0>::print("END");
 }
 
 void Robot::translater(int16_t distance)
 {	
-	//Serial<0>::print(123);
-	
-	static int32_t eps = 20;
+	static int32_t epsR = 20;
 	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
-	while(translation.est_arrive()<eps);
+	
+	while(translation.est_arrive() < epsR){
+		Serial<0>::print("-er tr-");
+		Serial<0>::print(translation.est_arrive() );
+		Serial<0>::print(translation.consigne() );
+	}
 // 		Serial<0>::print(99999);
 // 		Serial<0>::print(translation.est_arrive());
 		//attend d'atteindre la consigne
@@ -228,12 +234,15 @@ void Robot::translater(int16_t distance)
 
 void Robot::tourner(int16_t angle)
 {
-
-	static int32_t eps = 20;
+	static int32_t epsT = 20;
 	
 	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
-	while(rotation.est_arrive()<eps);
-// 		Serial<0>::print(11111);
+	
+	while(rotation.est_arrive() < epsT){
+		Serial<0>::print("-er ro-");
+		Serial<0>::print(rotation.est_arrive() );
+		Serial<0>::print(rotation.consigne());
+	}
 // 		Serial<0>::print(rotation.est_arrive());
 		//attend d'atteindre la consigne
 	
