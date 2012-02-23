@@ -36,13 +36,7 @@ class Asservissement {
 			
 		}
 		
-		int32_t est_arrive(){
-// 			static int32_t eps = 100;
-// 			Serial<0>::print(9999);
-// 			Serial<0>::print(en_);
-//			Serial<0>::print(en_ - enm1_);
-			return (en_ - enm1_);
-		}
+		
 		
 		void ki(float ki)
 		{
@@ -84,10 +78,19 @@ class Asservissement {
 			consigne_ = consigne;
 		}
 
-		float erreur()
+		int32_t erreur()
 		{
 			return en_;
+		}
+		
+		int32_t pwmCourant()
+		{
+			return pwmCourant_;
         
+		}
+		int32_t erreur_d()
+		{
+			return (en_ - enm1_);
 		}
 		int8_t valeur_bridage(void){
 			return valeur_bridage_;
@@ -105,7 +108,7 @@ class Asservissement {
 
 		int16_t valeur_bridage_;
 		
-		float pwmCourant_;
+		volatile float pwmCourant_;
 		
 		float en_;
 		float enm1_;

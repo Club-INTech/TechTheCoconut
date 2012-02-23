@@ -9,6 +9,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 import log
 import outils_math.point as point
 import actionneur
+import outils_math.point
+import recherche_chemin.thetastar
+import lib.log
+log = lib.log.Log()
 
 sys.path.append('../')
 
@@ -19,14 +23,54 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
+        serial.start()
+        theta = thetastar.Thetastar([])
+        theta.enregistreGraphe()
+        chemin = peripherique.chemin_de_peripherique("asservissement")
+            if chemin:
+                serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
+            else:
+                log.logger.error("L'asservissement n'est pas chargé")
+    
+    def goToScript(self, script):
+        """
+        Fonction qui envoie une liste de coordonnées à la carte d'asservissement sans utiliser la recherche de chemin
+        :param script: Script à lancer
+        :type script: string
+        """
         pass
     
-    def goToScript(self):
-        pass
-    
-    def goTo(self):
-        pass
-    
+    def goTo(self, depart, arrivee):
+        """
+        Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
+        :param depart: point de départ
+        :type depart: Point
+        :param arrivee: point d'arrivée
+        :type arrivee: Point
+        :param chemin: chemin renvoyé par la recherche de chemin
+        :type chemin: liste de points
+        """
+        
+        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
+        self.centrePython()
+        theta = thetastar.Thetastar([])
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y") et d'arrivée : ("+arrivee.x+","+arrivee.y")")
+        chemin_python = theta.rechercheChemin(depart,arrivee)
+        
+        i = 0
+        while i+1 < len(chemin):
+            centre_avr[i] = centrePython(chemin[i],chemin[i+1])
+        
+        i = 0
+        for i in chemin_python:
+            self.ecrire("goto " + centre_avr[i].x + ' ' + centre_avr[i].y '\n')
+            #serie.Serie.lire()
+            self.reponse = self.file_attente.get(lu)
+            if reponse == "ok":
+                pass
+            else:
+                log.logger.debug("Erreur asservissement : " + reponse)
+            
     
     def centreAvr(self, depart, arrivee):
         """
@@ -58,8 +102,6 @@ class Asservissement:
         proj_x = arrivee.x - depart.x
         proj_y = arrivee.y - depart.y
         
-        ####
-        #[deboc] je te jure, je fais que passer...
         
         if (proj_x==0)
             if (proj_y > 0)
@@ -73,11 +115,6 @@ class Asservissement:
                 orientation=math.atan(proj_y/proj_x) - pi
             else
                 orientation=math.atan(proj_y/proj_x) + pi
-                
-        #tu peux me comprendre, je viens de faire la meme dans l'avr :P
-        ####
-        #orientation=arctan(proj_y/proj_x)
-        
         
         #distance entre le centre de la recherche de chemin et le milieu de la longueur du robot (pythagore)
         normale_Robot = math.sqrt(rayon ** 2 - (longueur_robot / 2) ** 2)
@@ -165,4 +202,164 @@ class Asservissement:
             
         else:
             robot.rayon = diam_original/2
-            return outils_math.point.Point(0., 0.)
+            robot.centre = outils_math.point.Point(0., 0.)
+            
+            
+    def afficherMenu():
+        print """
+        Indiquer l'action à effectuer :
+        Quitter-------------------------------[0]
+        Zone de départ------------------------[1]
+        Rotation------------------------------[2]
+        Translation---------------------------[3]
+        Position courante---------------------[4]
+        Activer/Désactiver l'asservissement---[5]
+        Afficher des valeurs------------------[6]
+        Ping de la liaison série--------------[7]\n
+        """
+
+    def afficherSousMenu():
+        print """
+        Revenir au menu-----------------------[0]
+        Changer la dérivée--------------------[1]
+        Changer l'intégration-----------------[2]
+        Changer le proportionnel--------------[3]
+        Mettre le max du PWM------------------[4]\n
+        """
+        
+    def modifierConstantes(self):
+        afficherMenu()
+
+        while not main_exit:
+            
+            choix = raw_input()
+            #Quitter
+            if choix == '0':
+                main_exit = True
+                pass
+            #Définir la zone de départ
+            elif choix == '1':
+                couleur = raw_input("Indiquer la zone de départ (r/v)\n")
+                message = 'c\nc\n' + str(couleur)
+                self.ecrire(message)
+                afficherMenu()
+            #Définir les constantes de rotation
+            elif choix == '2':
+                exit = False
+                valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
+                while not exit:
+                    afficherSousMenu()
+                    choix = raw_input()
+                    message = "c\nr\n"
+                    
+                    if choix != '0':
+                        constante = raw_input("Indiquer la valeur de la constante :\n")
+                        message += str(valeurs[choix]) + '\n' + str(constante)
+                        self.ecrire(message)
+                    
+                    else:
+                        exit = True
+                        afficherMenu()
+            #Définir les constantes de translation
+            elif choix == '3':
+                exit = False
+                valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
+                while not exit:
+                    afficherSousMenu()
+                    choix = raw_input()
+                    message = "c\nt\n"
+                    
+                    if choix != '0':
+                        constante = raw_input("Indiquer la valeur de la constante :\n")
+                        message += valeurs[choix] + '\n' + str(constante)
+                        self.ecrire(message)
+                    
+                    else:
+                        exit = True
+                        afficherMenu()
+            #Définir la position courante
+            elif choix == '4':
+                print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR\n"
+                coordonneX = raw_input("Rentrer a coordonée en x : \n")
+                if coordonneX:
+                    message = 'x\nc\n' + str(coordonneX)
+                    self.ecrire(message)
+                
+                coordonneY = raw_input("Rentrer a coordonée en y: \n")
+                if coordonneY:
+                    message = 'y\nc\n' + str(coordonneY)
+                    self.ecrire(message)
+                
+                afficherMenu()
+            #Activer ou désactiver l'asservissement
+            elif choix == '5':
+                exit = False
+                while not exit:
+                    print """
+                    Revenir au menu-----------------------[0]
+                    Activer/désactiver la rotation--------[1]
+                    Activer/désactiver la translation-----[2]\n
+                    """
+                    constante = raw_input()
+                    if constante == '1':
+                        message = 's\nr\n'
+                        self.ecrire(message)
+                    elif constante == '2':
+                        message = 's\nt\n'
+                        self.ecrire(message)
+                    elif constante == '0':
+                        exit = True
+                        afficherMenu()
+            #Afficher les constantes enregistrées dans l'AVR
+            elif choix == '6':
+                exit = False
+                while not exit:
+                    print """
+                    Revenir au menu------------------------------------[0]
+                    Afficher la couleur--------------------------------[1]
+                    Afficher la rotation-------------------------------[2]
+                    Afficher la translation----------------------------[3]
+                    Afficher le type d'asservissement------------------[4]
+                    Afficher les coordonnées enregistrées--------------[5]\n
+                    """
+                    choix = raw_input()
+                    if choix == '0':
+                        exit = True
+                        afficherMenu()
+                        
+                    elif choix == '1':
+                        message = 'e\nc'
+                        
+                    elif choix == '2':
+                        exit = False
+                        valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
+                        while not exit:
+                            afficherSousMenu()
+                            choix = raw_input()
+                            if choix == '0':
+                                exit = True
+                                afficherMenu()
+                            else:
+                                message = 'e\nr\n' + valeurs[choix]
+                                self.ecrire(message)
+                    elif choix == '3':
+                        exit = False
+                        valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
+                        while not exit:
+                            afficherSousMenu()
+                            choix = raw_input()
+                            if choix == '0':
+                                exit = True
+                                afficherMenu()
+                            else:
+                                message = 'e\nt\n' + valeurs[choix]
+                                self.ecrire(message)
+                    elif choix == '4':
+                        self.ecrire('e\ns')
+                    elif choix =='5':
+                        self.ecrire('x\ne')
+                        print self.file_attente.get(lu)
+                        self.ecrire('y\ne')
+                        print self.file_attente.get(lu)
+            else:
+                print "Il faut choisir une valeur contenue dans le menu.\n"

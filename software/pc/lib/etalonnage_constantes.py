@@ -79,6 +79,23 @@ def initialise():
     envoyer("cri")
     envoyer(ctes[5])
     
+                    
+def trace_err():
+    while True:
+        envoyer("eerT")
+        logt=recevoir()
+        
+        envoyer("eerR")
+        logr=recevoir()
+        if logt=="END" or logr=="END":
+            break
+        print str(logt)+", "+str(logr)+" \n"
+        
+def attend_fin_goto():
+    while recevoir() != "END":
+        pass
+    
+            
 #initialise()
 while True :
     print "modifier ?"
@@ -161,6 +178,7 @@ while True :
         buff=raw_input()
         envoyer("tou")
         envoyer(str(float(buff)))
+        trace_err()
         
     elif choix == "e":    
         while True:
@@ -171,6 +189,7 @@ while True :
         buff=raw_input()
         envoyer("tra")
         envoyer(str(float(buff)))
+        #trace_err()
         
     elif choix == "goto":
         buf1=raw_input()
@@ -178,29 +197,52 @@ while True :
         envoyer("goto")
         envoyer(str(float(buf1)))
         envoyer(str(float(buf2)))
+        trace_err()
         
     elif choix == "script":
         envoyer("goto")
         envoyer(str(float(210)))
         envoyer(str(float(0)))
-        buf2=raw_input()
+        attend_fin_goto()
+        
         envoyer("goto")
-        envoyer(str(float(210)))
+        envoyer(str(float(420)))
         envoyer(str(float(-820)))
-        buf2=raw_input()
+        attend_fin_goto()
         
         envoyer("goto")
-        envoyer(str(float(700)))
-        envoyer(str(float(0)))
-        buf2=raw_input()
+        envoyer(str(float(1540)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
         
         envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(420)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(220)))
         envoyer(str(float(0)))
-        envoyer(str(float(1640)))
-        buf2=raw_input()
+        attend_fin_goto()
         
         
-        buf2=raw_input()
+        envoyer("tou")
+        envoyer(str(float(0.0)))
+        attend_fin_mvt()
+        
+        envoyer("tra")
+        envoyer(str(float(-50.0)))
+        attend_fin_mvt()
         
         
     elif choix =="l":
@@ -220,7 +262,7 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "ex ? ey ? eo (orientation) ? l (log) xy (les deux) ?"
+                print "xy ? err ? (erreurs sur trans, rot)"#--- l (log) ? eo (orientation) ? "
                 choixB = raw_input()
                 if choixB=="q":
                     break
@@ -232,6 +274,8 @@ while True :
                         envoyer("ey")
                         logy=recevoir()
                         print str(float(logx))+", "+str(float(logy))+" \n"
+                elif choixB=="err":
+                    trace_err()
                 elif choixB=="l":
                     f=open("trace_x_y","w")
                     while True:
@@ -248,3 +292,4 @@ while True :
                     while True:
                         envoyer(choixB)
                         print recevoir()
+    
