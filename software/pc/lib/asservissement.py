@@ -9,8 +9,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 import log
 import outils_math.point as point
 import actionneur
+import robot
 import outils_math.point
 import recherche_chemin.thetastar
+import peripherique
 import lib.log
 log = lib.log.Log()
 
@@ -23,14 +25,14 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        serial.start()
         theta = thetastar.Thetastar([])
         theta.enregistreGraphe()
         chemin = peripherique.chemin_de_peripherique("asservissement")
-            if chemin:
-                serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
-            else:
-                log.logger.error("L'asservissement n'est pas chargé")
+        if chemin:
+            serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
+        else:
+            log.logger.error("L'asservissement n'est pas chargé")
+        self.start()
     
     def goToScript(self, script):
         """
@@ -54,7 +56,7 @@ class Asservissement:
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         self.centrePython()
         theta = thetastar.Thetastar([])
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y") et d'arrivée : ("+arrivee.x+","+arrivee.y")")
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y+") et d'arrivée : ("+arrivee.x+","+arrivee.y+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         i = 0
@@ -63,7 +65,7 @@ class Asservissement:
         
         i = 0
         for i in chemin_python:
-            self.ecrire("goto " + centre_avr[i].x + ' ' + centre_avr[i].y '\n')
+            self.ecrire("goto " + centre_avr[i].x + ' ' + centre_avr[i].y + '\n')
             #serie.Serie.lire()
             self.reponse = self.file_attente.get(lu)
             if reponse == "ok":
@@ -103,17 +105,17 @@ class Asservissement:
         proj_y = arrivee.y - depart.y
         
         
-        if (proj_x==0)
-            if (proj_y > 0)
+        if (proj_x==0):
+            if (proj_y > 0):
                 orientation=pi/2
             else
                 orientation=-pi/2
-        else if (proj_x > 0)
+        else if (proj_x > 0):
             orientation=math.atan(proj_y/proj_x)
         else
-            if (proj_y > 0)
+            if (proj_y > 0):
                 orientation=math.atan(proj_y/proj_x) - pi
-            else
+            else:
                 orientation=math.atan(proj_y/proj_x) + pi
         
         #distance entre le centre de la recherche de chemin et le milieu de la longueur du robot (pythagore)
