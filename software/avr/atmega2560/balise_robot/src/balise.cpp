@@ -1,35 +1,38 @@
 /**
  * \file balise.cpp
  */
-
-#include <libintech/serial/serial_0_interrupt.hpp>
-
 #include "balise.h"
 #include <libintech/serial/serial_0.hpp>
-
-Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
-{
-	Serial<0>::init();
-	
-}
-
-void Balise::asservir(int32_t vitesse_courante)
-{
-	moteur_.envoyerPwm(asservissement_moteur_.pwm(vitesse_courante));
-}
 
 void Balise::max_counter(uint16_t valeur){
 	max_counter_ = valeur;
 }
 float Balise::getAngle() {
-// 	float speed = 12.0/30.0;//Tour/s
-	Serial<0>::init();
-	Serial<0>::print(max_counter_);
-	return ClasseTimer::value()*360/max_counter_;
+	return ((float) toptour_)*360/((float) max_counter_);
 }
 
-ISR(TIMER0_OVF_vect){
-	Balise & balise = Balise::Instance();
-// 	balise.asservir(balise.vitesse_moteur());
-	//printlnLong(robot.x());
+Balise::Balise() //: asservissement_moteur_(0.5,0.5,0)
+{
+	Serial<0>::init();
+	
+}
+/*
+void Balise::asservir(int32_t vitesse_courante)
+{
+	moteur_.envoyerPwm(asservissement_moteur_.pwm(vitesse_courante));
+}*/
+
+void Balise::incremente_toptour()
+{
+	toptour_++;
+}
+
+void Balise::reset_toptour()
+{
+	toptour_=0;
+}
+
+uint16_t Balise::toptour()
+{
+	return toptour_;
 }
