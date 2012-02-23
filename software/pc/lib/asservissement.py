@@ -9,13 +9,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 import log
 import outils_math.point as point
 import actionneur
-<<<<<<< HEAD
 import outils_math.point
 import recherche_chemin.thetastar
 import lib.log
 log = lib.log.Log()
-=======
->>>>>>> 990b8616d82efe782c59b1b677acfc8e35f71b0a
 
 sys.path.append('../')
 
@@ -29,7 +26,11 @@ class Asservissement:
         serial.start()
         theta = thetastar.Thetastar([])
         theta.enregistreGraphe()
-        serie.Serie.__init__(self, "/dev/ttyUSB10", asservissement, 9600, 3)
+        chemin = peripherique.chemin_de_peripherique("asservissement")
+            if chemin:
+                serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
+            else:
+                log.logger.error("L'asservissement n'est pas chargé")
     
     def goToScript(self, script):
         """
