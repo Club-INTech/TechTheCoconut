@@ -84,16 +84,16 @@ public:
 	/**
 	* Translate le robot
 	* 
-	* \param int32_t distance de translation en tics
+	* \param float distance de translation en mm
 	*/
-	void translater(int16_t distance);
+	void translater(float distance);
 	
 	/**
 	* Tourner le robot
 	* 
-	* \param int32_t angle de rotation en tics
+	* \param float angle de rotation en radians
 	*/
-	void tourner(int16_t angle);
+	void tourner(float angle);
 	
 	/**
 	* déplace le robot

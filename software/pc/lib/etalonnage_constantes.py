@@ -79,6 +79,18 @@ def initialise():
     envoyer("cri")
     envoyer(ctes[5])
     
+                    
+def trace_err():
+    while True:
+        envoyer("eerT")
+        logt=recevoir()
+        
+        envoyer("eerR")
+        logr=recevoir()
+        if logt=="END" or logr=="END":
+            break
+        print str(logt)+", "+str(logr)+" \n"
+        
 #initialise()
 while True :
     print "modifier ?"
@@ -161,6 +173,7 @@ while True :
         buff=raw_input()
         envoyer("tou")
         envoyer(str(float(buff)))
+        trace_err()
         
     elif choix == "e":    
         while True:
@@ -171,6 +184,7 @@ while True :
         buff=raw_input()
         envoyer("tra")
         envoyer(str(float(buff)))
+        #trace_err()
         
     elif choix == "goto":
         buf1=raw_input()
@@ -178,6 +192,7 @@ while True :
         envoyer("goto")
         envoyer(str(float(buf1)))
         envoyer(str(float(buf2)))
+        trace_err()
         
     elif choix == "script":
         envoyer("goto")
@@ -220,7 +235,7 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "ex ? ey ? eo (orientation) ? l (log) xy (les deux) ?"
+                print "xy ? err ? (erreurs sur trans, rot)"#--- l (log) ? eo (orientation) ? "
                 choixB = raw_input()
                 if choixB=="q":
                     break
@@ -232,6 +247,8 @@ while True :
                         envoyer("ey")
                         logy=recevoir()
                         print str(float(logx))+", "+str(float(logy))+" \n"
+                elif choixB=="err":
+                    trace_err()
                 elif choixB=="l":
                     f=open("trace_x_y","w")
                     while True:
@@ -248,3 +265,4 @@ while True :
                     while True:
                         envoyer(choixB)
                         print recevoir()
+    

@@ -101,12 +101,7 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("ccv")){
 		couleur_ = 'v';
 	}
-
-	else if(COMPARE_BUFFER("ec")){
-		serial_t_::print((char)couleur_);
-	}
-
-
+	
 	else if(COMPARE_BUFFER("crp")){
 		rotation.kp(serial_t_::read_float());
 	}
@@ -126,26 +121,77 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("cti")){
 		translation.ki(serial_t_::read_float());
 	}
-	
-	else if(COMPARE_BUFFER("ex")){
-		serial_t_::print((float)x_);
-	}else if(COMPARE_BUFFER("ey")){
-		serial_t_::print((float)y_);
-	}else if(COMPARE_BUFFER("et")){
-		//TODO : orientation réelle
-		serial_t_::print((float)rotation.consigne());
+	/*
+	else if(COMPARE_BUFFER("cx")){
+		x((int32_t)serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("cy")){
+		y((int32_t)serial_t_::read_float());
+	}*/
+
+	else if(COMPARE_BUFFER("ec")){
+		serial_t_::print((char)couleur_);
 	}
 	
+	else if(COMPARE_BUFFER("erp")){
+		serial_t_::print(rotation.kp());
+	}
+	else if(COMPARE_BUFFER("erd")){
+		serial_t_::print(rotation.kd());
+	}
+	else if(COMPARE_BUFFER("eri")){
+		serial_t_::print(rotation.ki());
+	}
+	else if(COMPARE_BUFFER("erm")){
+		serial_t_::print(rotation.valeur_bridage());
+	}
+
+	else if(COMPARE_BUFFER("etp")){
+		serial_t_::print(translation.kp());
+	}
+	else if(COMPARE_BUFFER("etd")){
+		serial_t_::print(translation.kd());
+	}
+	else if(COMPARE_BUFFER("eti")){
+		serial_t_::print(translation.ki());
+	}
+	else if(COMPARE_BUFFER("etm")){
+		serial_t_::print(translation.valeur_bridage());
+	}
+	
+	else if(COMPARE_BUFFER("ex")){
+		serial_t_::print(x());
+	}else if(COMPARE_BUFFER("ey")){
+		serial_t_::print(y());
+	}
+	
+	else if(COMPARE_BUFFER("d")){
+		translater(serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("t")){
+		tourner(serial_t_::read_float());
+	}
 // 	else if(COMPARE_BUFFER("cte")){
 // 		eps_t_ = (int32_t) serial_t_::read_float();
 // 	}else if(COMPARE_BUFFER("cre")){
 // 		eps_r_ = (int32_t) serial_t_::read_float();
 // 	}
+
+	// Protocole de debug. A ne pas utiliser dans le code PC
+	else if(COMPARE_BUFFER("et")){
+		//TODO : orientation réelle
+		serial_t_::print((float)rotation.consigne());
+	}
 	else if(COMPARE_BUFFER("tou")){
-		tourner((int16_t)serial_t_::read_float());
+		//Serial<0>::print("ROT");
+		tourner(serial_t_::read_float());
+		Serial<0>::print("END");
+		
 	}
 	else if(COMPARE_BUFFER("tra")){
-		translater((int16_t)serial_t_::read_float());
+		//Serial<0>::print("TRA");
+		translater(serial_t_::read_float());
+		Serial<0>::print("END");
 	}
 	else if(COMPARE_BUFFER("goto")){
 		float co_x = serial_t_::read_float();
@@ -154,6 +200,12 @@ void Robot::communiquer_pc(){
 // 		serial_t_::print(20);
 		gotoPos(co_x , co_y);
 	}
+	else if(COMPARE_BUFFER("eerT")){
+		serial_t_::print((float)translation.erreur());
+	}else if(COMPARE_BUFFER("eerR")){
+		serial_t_::print((float)rotation.erreur());
+	}
+	
 
 #undef COMPARE_BUFFER
 }
@@ -217,33 +269,42 @@ void Robot::gotoPos(float x, float y)
 	Serial<0>::print("END");
 }
 
-void Robot::translater(int16_t distance)
+void Robot::translater(float distance)
 {	
-	static int32_t epsR = 20;
 	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
-	
-	while(translation.est_arrive() < epsR){
-		Serial<0>::print("-er tr-");
-		Serial<0>::print(translation.est_arrive() );
-		Serial<0>::print(translation.consigne() );
+	while(compteur.value()>0){ asm("nop"); }
+	while(abs(translation.erreur()) > 10 || abs(translation.erreur_d()) > 10){
+			Serial<0>::print(translation.erreur_d() );
 	}
-// 		Serial<0>::print(99999);
-// 		Serial<0>::print(translation.est_arrive());
-		//attend d'atteindre la consigne
+	/*
+	Serial<0>::print(translation.erreur() );
+	Serial<0>::print("WHI");
+	
+	bool var = true;
+	
+	
+	Serial<0>::print(translation.erreur() );
+	while(abs(translation.erreur()) > 100 && abs(translation.erreur_d()) > 100){
+		if(var)
+			var=false;
+		else
+			var=true;
+// 		Serial<0>::print("-er tr-");
+		//Serial<0>::print(translation.erreur() );
+// 		Serial<0>::print(translation.pwmCourant() );
+	}*/
+	
 }
 
-void Robot::tourner(int16_t angle)
+void Robot::tourner(float angle)
 {
-	static int32_t epsT = 20;
 	
 	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
-	
-	while(rotation.est_arrive() < epsT){
-		Serial<0>::print("-er ro-");
-		Serial<0>::print(rotation.est_arrive() );
-		Serial<0>::print(rotation.consigne());
+	while(compteur.value()>0){ asm("nop"); }
+	Serial<0>::print(rotation.erreur());
+	Serial<0>::print(rotation.erreur_d() );
+	while(abs(rotation.erreur()) > 10 || abs(rotation.erreur_d()) > 10){
+			Serial<0>::print(rotation.erreur_d() );
 	}
-// 		Serial<0>::print(rotation.est_arrive());
-		//attend d'atteindre la consigne
 	
 }
