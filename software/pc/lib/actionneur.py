@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-
 import serie
 import log
 import peripherique
@@ -24,16 +20,20 @@ class Actionneur(serie.Serie):
         :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
         :type nom: string
         """
-        serial.start()
+        self.nom = nom
+        self.angle = 0
+        self.demarrer()
+        
+    def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
             chemin = peripherique.chemin_de_peripherique("actionneur")
             if chemin:
-                serie.Serie.__init__(self, chemin, nom, 9600, 3)
+                serie.Serie.__init__(self, chemin, self.nom, 9600, 3)
             else:
-                log.logger.error("L'actionneur "+nom+" n'est pas chargé")
-        self.nom = nom
-        self.angle = 0
+                log.logger.error("L'actionneur "+ self.nom+" n'est pas chargé")
+        # Ouverture de la liaison série
+        #self.start()
         
     def deplacer(self, angle, vitesse = None):
         """

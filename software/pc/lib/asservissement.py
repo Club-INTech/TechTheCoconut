@@ -25,14 +25,14 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        theta = thetastar.Thetastar([])
+        theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
         chemin = peripherique.chemin_de_peripherique("asservissement")
         if chemin:
             serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
-        self.start()
+        #self.start()
     
     def goToScript(self, script):
         """
@@ -108,11 +108,11 @@ class Asservissement:
         if (proj_x==0):
             if (proj_y > 0):
                 orientation=pi/2
-            else
+            else:
                 orientation=-pi/2
-        else if (proj_x > 0):
+        elif (proj_x > 0):
             orientation=math.atan(proj_y/proj_x)
-        else
+        else:
             if (proj_y > 0):
                 orientation=math.atan(proj_y/proj_x) - pi
             else:
@@ -133,7 +133,7 @@ class Asservissement:
         
         
     
-    def centrePython(self):
+    def centrePython(self, angle):
         """
         Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
         Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
@@ -163,7 +163,9 @@ class Asservissement:
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
         longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
-        angle = robot.actionneur['bd'].angle
+        
+        #Commenté pour les tests !
+        #angle = robot.actionneur['bd'].angle
         
         #[]ouais, on pourrait le mettre dans constantes..
         diam_original = math.sqrt(longueur_robot ** 2 + largeur_robot ** 2)
@@ -172,8 +174,8 @@ class Asservissement:
         
         #[]c'est quoi la convention pour l'angle des bras ?
         #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
-        proj_x = -longueur_bras*math.cos(angle)
-        proj_y = longueur_bras*math.sin(angle)
+        proj_x = -longueur_bras*math.cos(float(angle))
+        proj_y = longueur_bras*math.sin(float(angle))
         
         #[]la longueur est sur x, largeur sur y
         sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
