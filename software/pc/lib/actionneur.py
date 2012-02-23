@@ -46,7 +46,7 @@ class Actionneur(serie.Serie):
             serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
-     def getAngle(self):
+    def getAngle(self):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         """
