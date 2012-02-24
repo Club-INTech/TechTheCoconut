@@ -70,6 +70,7 @@ class Visu_table( threading.Thread):
 	
 	self.carte = Carte()
 	self.robot = Robot()
+	self.chemin = []
 	
 	try:
 	    threading.Thread.__init__(self, name=self.nomThread, target=self.start)
@@ -293,7 +294,7 @@ class Visu_table( threading.Thread):
 	
 	return [sg,ig,id,sd]
 	
-    def drawPointsLines(self, listePoints):
+    def drawChemin(self):
 	"""
 	Dessine la ligne de point\n
 	/!\ Attention: Les points sont représentés par une simple liste (pas l'objet Point donc) /!\
@@ -304,7 +305,7 @@ class Visu_table( threading.Thread):
 	"""
 	
 	
-	pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['rouge'], False, listePoints);
+	pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['rouge'], False, self.chemin);
 	
 	if self.debug:
 	    log.logger.debug("Liste de point:  abs"+listePoints)
@@ -336,7 +337,8 @@ class Visu_table( threading.Thread):
 	    self.drawDisque(disque)
 	    
 	self.drawRobot(self.robot)
-        
+	if len(self.chemin) != 0 :
+	    self.drawChemin()
 	
 	#Nota: Dessin des réglettes inutiles puisqu'elles ne devraient à priori pas bouger. 
 	    
@@ -349,9 +351,9 @@ class Visu_table( threading.Thread):
 
     def quit(self):
 	log.logger.info("Fermeture du thread "+self.nomThread+" en cours...")
-	self.Terminated = True
-	pygame.quit ()  
+	self.Terminated = True 
 	self._Thread__stop()
+	pygame.quit () 
 
     def run(self):
 	self.Terminated=False
@@ -360,13 +362,12 @@ class Visu_table( threading.Thread):
 	    #On parcours la liste des évènements depuis le dernier appel à get()
 	    for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-		    self.Terminated=True
+		    self.quit()
 	    
 	    #Evite la surchage du processeur
 	    time.sleep(1/self.fps)
 	    self.majTable()
 	
-	self.quit()
 
     def creerChemin(self, chemin):
 	"""
@@ -377,10 +378,14 @@ class Visu_table( threading.Thread):
 	:type chemin: dictionnaire de Point 
 	"""
 	self.chemin =[]
+	c= []
 	for p in chemin:
-	    self.chemin.append((p.x,p.y))
-	print newChemin
-	
-	self.drawPointsLines(newChemin)
-	
-	print "Créer Chemin"
+	    c.append((p.x,p.y))
+	    self.chemin.append(((self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*p.x) ) ,
+				(self.tailleTablePx[1] - math.trunc( Visu_table.scale*p.y)   )))
+	    
+	print c
+	print self.chemin
+		
+	if self.debug:
+	    log.logger.debug("Chemin: "+self.chemin)

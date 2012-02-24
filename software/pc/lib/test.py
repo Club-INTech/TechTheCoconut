@@ -13,7 +13,7 @@ y = raw_input()
 arrivee = outils_math.point.Point(x,y)
 """
 
-x = 500
+x = -500
 y = 500
 depart = outils_math.point.Point(x,y)
 x = 2000
