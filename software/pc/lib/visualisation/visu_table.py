@@ -37,7 +37,7 @@ class Visu_table( threading.Thread):
     #Nota: Utiliser des Setters/Getters pour les propriétés suivantes ?
     scale = 0.3
     caption = "Visualisation Table - INTech 2012"
-    fps = 1
+    fps = 24
     
     def __init__(self,debug=False, nom="visu_table"):
 	"""
@@ -376,8 +376,10 @@ class Visu_table( threading.Thread):
 	:param chemin: La liste des points à créer
 	:type chemin: dictionnaire de Point 
 	"""
+	self.chemin =[]
 	for p in chemin:
-	    newChemin = newChemin + (p.x,p.y)
+	    self.chemin.append((p.x,p.y))
+	print newChemin
 	
 	self.drawPointsLines(newChemin)
 	
