@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libintech/singleton.hpp>
+#include <stdint.h>
 
 #define rx_buffer__SIZE 32
 
@@ -33,7 +34,7 @@ private:
     
 private:
 
-	static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
+    static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	
     static inline void send_char(unsigned char byte);
     
@@ -62,7 +63,7 @@ private:
 
 public:
 
-	static inline void init();
+    static inline void init();
 	
     static inline void change_baudrate(uint32_t BAUD_RATE);
 
@@ -76,13 +77,30 @@ public:
     	}
     }
 
-    template<class T>
-    static inline void print(T val){
-    	char buffer[sizeof(T)];
-    	ltoa(val,buffer,10);
+    static inline void print(int16_t val){
+    	char buffer[6];
+    	itoa(val,buffer,10);
     	print((const char *)buffer);
     }
 
+     static inline void print(uint16_t val){
+    	char buffer[6];
+    	itoa(val,buffer,10);
+    	print((const char *)buffer);
+    }
+    
+     static inline void print(int32_t val){
+    	char buffer[10];
+    	ltoa(val,buffer,10);
+    	print((const char *)buffer);
+    }
+    
+     static inline void print(uint32_t val){
+    	char buffer[10];
+    	ltoa(val,buffer,10);
+    	print((const char *)buffer);
+    }
+    
     static inline void print(char val){
     	send_char(val);
     	send_ln();
