@@ -168,7 +168,7 @@ class Asservissement:
         #angle = robot.actionneur['bd'].angle
         
         #[]ouais, on pourrait le mettre dans constantes..
-        diam_original = math.sqrt(longueur_robot ** 2 + largeur_robot ** 2)
+        diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
         
         #projection du bras sur x et y
         
@@ -199,7 +199,6 @@ class Asservissement:
             #il faut pas oublier que le vrai robot est orienté, et donc il faut encore projeter :P
             
             #TODO lien avec l'orientation absolue du robot sur la table
-            
             delta_x = - math.cos(robot.orientation)*(sommet_bras.x+sommet_robot.x)/2 - math.sin(robot.orientation)*(sommet_bras.y+sommet_robot.y)/2
             delta_y = - math.sin(robot.orientation)*(sommet_bras.x+sommet_robot.x)/2 + math.cos(robot.orientation)*(sommet_bras.y+sommet_robot.y)/2
             robot.centre =  outils_math.point.Point(delta_x,delta_y)
@@ -207,7 +206,6 @@ class Asservissement:
         else:
             robot.rayon = diam_original/2
             robot.centre = outils_math.point.Point(0., 0.)
-            
             
     def afficherMenu():
         print """

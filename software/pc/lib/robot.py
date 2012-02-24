@@ -23,7 +23,6 @@ class Robot:
     
     #:TODO: A modifier pour la valeur réel (voir a passer en  attribut d'instance
     rayon = 350
-    
     """
     Classe permettant de gérer le robot\n
     :Nota: Classement pouvant etre totalement refaite. Les attributs orientations et positions sont requis pour la visualisation de la table
@@ -42,7 +41,7 @@ class Robot:
         # self.actionneur["hg"].angle
 
         log.logger.info('Création du robot')
-
+    
     def setPosition(self, position):
         """
         Défini la position du robot
