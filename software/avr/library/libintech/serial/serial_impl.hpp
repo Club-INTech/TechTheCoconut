@@ -76,8 +76,6 @@ public:
     	}
     }
 
-
-
     template<class T>
     static inline void print(T val){
     	char buffer[sizeof(T)];

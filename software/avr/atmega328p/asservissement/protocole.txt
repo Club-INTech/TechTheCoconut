@@ -16,9 +16,6 @@ Ordres :
 	 'm' Mettre le Max du PWM
      'x' Change x (abscisse) en mm
      'y' Change y (ordonnée) en mm
- 'd' Avancer/Reculer : [float]
-     >0 : Avancer
-     <0 : Reculer
  'e' Afficher la valeur de
      'c' Couleur
      'r' Rotation
@@ -34,9 +31,20 @@ Ordres :
 	 'm' Max du PWM
      'x' position en abscisse du robot (mm)
      'y' position en ordonnée du robot(mm)
+     'o' orientation absolue du robot (rad)
  's' Désactiver/Activer asservissement
      'r' Rotation
      't' Translation
+
  't' Tourner : [float]
     >0 : Sens trigo positif ( anti-horaire )
     <0 : Sens trigo négatif
+	renvoi "END" en fin de déplacement
+ 'd' Avancer/Reculer : [float]
+     >0 : Avancer
+     <0 : Reculer
+	renvoi "END" en fin de déplacement
+ 'goto' se rend à une position [float] \n [float]
+     1er float : x en mm
+     2è  float : y en mm
+	renvoi "END" en fin de déplacement
