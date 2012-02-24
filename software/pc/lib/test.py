@@ -4,25 +4,28 @@ from asservissement import *
 
 #Tests fait en binome entre recherche de chemin et asservissement.
 
-
+"""
 x = raw_input("Donner les coordonnées en x puis y du point de départ\n")
 y = raw_input()
 depart = outils_math.point.Point(x,y)
 x = raw_input("Donner les coordonnées en x puis y du point de arrivee\n")
 y = raw_input()
 arrivee = outils_math.point.Point(x,y)
+"""
 
-"""
-x = 50
-y = 80
+x = 500
+y = 500
+depart = outils_math.point.Point(x,y)
+x = 2000
+y = 800
 arrivee = outils_math.point.Point(x,y)
-"""
+
+robotInstance = lib.robot.Robot()
 
 angle = raw_input("Donner l'angle des bras\n")
-
-robot.orientation = 0.79 #en rad
-asser = Asservissement()
-asser.centrePython(angle)
+lib.robot.orientation = 0.79 #en rad
+asser = Asservissement(robotInstance)
+centrePython = asser.avrToPython(angle)
 
 #Ici le centre et le rayon du robot sont initialisés, tu y accèdes avec robot.centre et robot.rayon
 
@@ -45,9 +48,12 @@ print "Appel de la recherche de chemin pour le point de départ : ("+str(depart.
 chemin = theta.rechercheChemin(depart,arrivee)
 
 i = 0
+centre_avr = []
+print len(chemin)
 while i+1 < len(chemin):
-    centre_avr[i] = centreAVR(chemin[i],chemin[i+1])
-        
+    centre_avr.append(asser.pythonToAvr(chemin[i],chemin[i+1]))
+    i += 1
+    
 i = 0
 for i in chemin:
-    print "goto " + str(centre_avr[i].x) + ' ' + str(centre_avr[i].y) + '\n'
+    print "goto " + str(i.x) + ' ' + str(i.y) + '\n'

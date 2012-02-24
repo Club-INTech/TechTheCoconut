@@ -22,7 +22,7 @@ sys.path.append('../')
 class Robot:
     
     #:TODO: A modifier pour la valeur réel (voir a passer en  attribut d'instance
-    rayon = 350
+    #rayon = 350
     """
     Classe permettant de gérer le robot\n
     :Nota: Classement pouvant etre totalement refaite. Les attributs orientations et positions sont requis pour la visualisation de la table
@@ -30,6 +30,8 @@ class Robot:
     """
     
     def __init__(self):
+        #TODO
+        # Convertir en attributs de classe et les initialiser que si non reconnus (hasattr)
         self.position = point.Point(1000,1500)
         self.orientation = 0
         self.rayon = 350

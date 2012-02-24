@@ -24,10 +24,11 @@ class Asservissement:
     """
     Classe pour gérer l'asservissement
     """
-    def __init__(self):
+    def __init__(self, robotInstance):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
         chemin = peripherique.chemin_de_peripherique("asservissement")
+        self.robotInstance = robotInstance
         if chemin:
             serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
         else:
@@ -54,14 +55,14 @@ class Asservissement:
         """
         
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        self.centrePython()
+        self.avrToPython()
         theta = thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y+") et d'arrivée : ("+arrivee.x+","+arrivee.y+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         i = 0
         while i+1 < len(chemin):
-            centre_avr[i] = centrePython(chemin[i],chemin[i+1])
+            centre_avr[i] = pythonToAvr(chemin[i],chemin[i+1])
         
         i = 0
         for i in chemin_python:
@@ -74,7 +75,7 @@ class Asservissement:
                 log.logger.debug("Erreur asservissement : " + reponse)
             
     
-    def centreAvr(self, depart, arrivee):
+    def pythonToAvr(self, depart, arrivee):
         """
         La recherche de chemin renvoit une position du robot qui est le centre du cercle circonscrit au robot en prenant en compte ses bras. Il faut envoyer
         à l'AVR le centre du robot avec les bras rabattus. centreSansBras() calcule l'orientation du robot et le centre à envoyer à l'AVR à partir du point 
@@ -95,8 +96,8 @@ class Asservissement:
         :type proj_x/proj_y: float
         
         """
-        centre = robot.position
-        rayon = robot.rayon
+        centre = self.robotInstance.position
+        rayon = self.robotInstance.rayon
         longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
         
@@ -125,15 +126,38 @@ class Asservissement:
         distance_centres = normale_Robot - (largeur_robot / 2)
         
         #Projection de la distance pour calculer les coordonnées du centre AVR
-        proj_x = distance_centres*cos(orientation)
-        proj_y = distance_centres*sin(orientation)
+        proj_x = distance_centres*math.cos(orientation)
+        proj_y = distance_centres*math.sin(orientation)
         
         #Calcul des coordonnées du centre AVR
-        return outils_math.point.Point(robot.position.x - proj_x, robot.position.y - proj_y)
+        return outils_math.point.Point(self.robotInstance.position.x - proj_x, self.robotInstance.position.y - proj_y)
         
+    def avrToPython(self, angle):
+        #récupération des constantes nécessaires:
+        rayon = self.robotInstance.rayon
+        longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
+        largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
+        longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
+        diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
         
+        #[]c'est quoi la convention pour l'angle des bras ?
+        #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
+        proj_x = -longueur_bras*math.cos(float(angle))
+        proj_y = longueur_bras*math.sin(float(angle))
+        
+        #[]la longueur est sur x, largeur sur y
+        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
+        sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
+        
+        if rayon > diam_original:
+            delta_x = - math.cos(self.robotInstance.orientation)*(sommet_bras.x+sommet_robot.x)/2 - math.sin(self.robotInstance.orientation)*(sommet_bras.y+sommet_robot.y)/2
+            delta_y = - math.sin(self.robotInstance.orientation)*(sommet_bras.x+sommet_robot.x)/2 + math.cos(self.robotInstance.orientation)*(sommet_bras.y+sommet_robot.y)/2
+            return outils_math.point.Point(delta_x,delta_y)
+            
+        else:
+            return outils_math.point.Point(0., 0.)
     
-    def centrePython(self, angle):
+    def calculRayon(self, angle):
         """
         Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
         Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
@@ -190,22 +214,10 @@ class Asservissement:
         diam_avec_bras = math.sqrt((sommet_bras.x - sommet_robot.x) ** 2 + (sommet_bras.y - sommet_robot.y) ** 2)
         
         if diam_avec_bras > diam_original:
-            robot.rayon = diam_avec_bras/2
-            
-            #[] donc c'est presque ca :
-            #return outils_math.point.Point((sommet_bras.x+sommet_robot.x)/2, (sommet_bras.y+sommet_robot.y)/2)
-            
-            #[] sauf que comme on renvoit un (delta x, delta y) pour modifier la position du centre
-            #il faut pas oublier que le vrai robot est orienté, et donc il faut encore projeter :P
-            
-            #TODO lien avec l'orientation absolue du robot sur la table
-            delta_x = - math.cos(robot.orientation)*(sommet_bras.x+sommet_robot.x)/2 - math.sin(robot.orientation)*(sommet_bras.y+sommet_robot.y)/2
-            delta_y = - math.sin(robot.orientation)*(sommet_bras.x+sommet_robot.x)/2 + math.cos(robot.orientation)*(sommet_bras.y+sommet_robot.y)/2
-            robot.centre =  outils_math.point.Point(delta_x,delta_y)
+            self.robotInstance.rayon = diam_avec_bras/2
             
         else:
-            robot.rayon = diam_original/2
-            robot.centre = outils_math.point.Point(0., 0.)
+            self.robotInstance.rayon = diam_original/2
             
     def afficherMenu():
         print """
