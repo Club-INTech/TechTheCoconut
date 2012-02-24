@@ -174,9 +174,9 @@ while True :
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
         print "rotation    : kp="+ctes[3]+" kd="+ctes[4]+" ki="+ctes[5]
         
-    elif choix == "tou":
+    elif choix == "t":
         buff=raw_input()
-        envoyer("tou")
+        envoyer("t")
         envoyer(str(float(buff)))
         trace_err()
         
@@ -185,9 +185,9 @@ while True :
             sleep(0.1)
             print recevoir()
                         
-    elif choix == "tra":
+    elif choix == "d":
         buff=raw_input()
-        envoyer("tra")
+        envoyer("d")
         envoyer(str(float(buff)))
         #trace_err()
         
@@ -236,11 +236,11 @@ while True :
         attend_fin_goto()
         
         
-        envoyer("tou")
+        envoyer("t")
         envoyer(str(float(0.0)))
         attend_fin_mvt()
         
-        envoyer("tra")
+        envoyer("d")
         envoyer(str(float(-50.0)))
         attend_fin_mvt()
         
@@ -262,10 +262,17 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "xy ? err ? (erreurs sur trans, rot)"#--- l (log) ? eo (orientation) ? "
+                print "xy ? o (orientation) ? " # err ? (erreurs sur trans, rot)"--- l (log) ? eo (orientation) ? "
                 choixB = raw_input()
                 if choixB=="q":
                     break
+                elif choixB=="o":
+                    while True:
+                        envoyer("eo")
+                        try:
+                            print str(float(recevoir())/1000)+" \n"
+                        except:
+                            pass
                 elif choixB=="xy":
                     while True:
                         envoyer("ex")

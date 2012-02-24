@@ -7,13 +7,11 @@
 #include <libintech/asservissement.hpp>
 
 
-//techthecoconut/software/pc/lib$ rm trace_x_y;python etalonnage_constantes.py
-
-
 // Constructeur avec assignation des attributs
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
+				,angle_courant_(0.0)
 				,translation(0.6,2,0.0)
 				,rotation(1,3,0.0)
 // 				,translation(0.6,3,0.01)
@@ -52,7 +50,7 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 
 	int16_t delta_distance_tic = distance - last_distance;
 	int16_t delta_angle_tic = angle - last_angle;
-	float last_angle_abs;
+	int32_t last_angle_abs;
     
 	if(couleur_ == 'v')
 	{
@@ -66,15 +64,20 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 	
+	
+	
+	angle_courant((float) angle_courant() + delta_angle_tic * CONVERSION_TIC_RADIAN_);
+	
 	last_distance = distance;
 	
 	last_angle = angle;
+	
 }
 
 //TODO Finir implémentation de protocole.txt
 void Robot::communiquer_pc(){
-	char buffer[10];
-	uint8_t length = serial_t_::read(buffer,10);
+	char buffer[17];
+	uint8_t length = serial_t_::read(buffer,17);
 
 #define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
 
@@ -108,13 +111,14 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("cti")){
 		translation.ki(serial_t_::read_float());
 	}
-	/*
+	//TODO ctm crm :  Max du PWM
+	
 	else if(COMPARE_BUFFER("cx")){
-		x((int32_t)serial_t_::read_float());
+		x(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("cy")){
-		y((int32_t)serial_t_::read_float());
-	}*/
+		y(serial_t_::read_float());
+	}
 
 	else if(COMPARE_BUFFER("ec")){
 		serial_t_::print((char)couleur_);
@@ -148,49 +152,35 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("ex")){
 		serial_t_::print(x());
-	}else if(COMPARE_BUFFER("ey")){
+	}
+	else if(COMPARE_BUFFER("ey")){
 		serial_t_::print(y());
+	}
+	else if(COMPARE_BUFFER("eo")){
+		serial_t_::print((float)angle_courant()*1000);
 	}
 	
 	else if(COMPARE_BUFFER("d")){
 		translater(serial_t_::read_float());
+		Serial<0>::print("END");
 	}
 	else if(COMPARE_BUFFER("t")){
 		tourner(serial_t_::read_float());
-	}
-// 	else if(COMPARE_BUFFER("cte")){
-// 		eps_t_ = (int32_t) serial_t_::read_float();
-// 	}else if(COMPARE_BUFFER("cre")){
-// 		eps_r_ = (int32_t) serial_t_::read_float();
-// 	}
-
-	// Protocole de debug. A ne pas utiliser dans le code PC
-	else if(COMPARE_BUFFER("et")){
-		//TODO : orientation réelle
-		serial_t_::print((float)rotation.consigne());
-	}
-	else if(COMPARE_BUFFER("tou")){
-		//Serial<0>::print("ROT");
-		tourner(serial_t_::read_float());
-		Serial<0>::print("END");
-		
-	}
-	else if(COMPARE_BUFFER("tra")){
-		//Serial<0>::print("TRA");
-		translater(serial_t_::read_float());
 		Serial<0>::print("END");
 	}
+	
 	else if(COMPARE_BUFFER("goto")){
 		float co_x = serial_t_::read_float();
 		float co_y = serial_t_::read_float();
 		gotoPos(co_x , co_y);
 		Serial<0>::print("END");
 	}
-	else if(COMPARE_BUFFER("eerT")){
-		serial_t_::print((float)translation.erreur());
-	}else if(COMPARE_BUFFER("eerR")){
-		serial_t_::print((float)rotation.erreur());
-	}
+	
+	/* TODO sr st
+	 's' Désactiver/Activer asservissement
+		'r' Rotation
+		't' Translation
+	*/
 	
 
 #undef COMPARE_BUFFER
@@ -207,16 +197,35 @@ unsigned char Robot::couleur(void)
 return couleur_;
 }
 
-int16_t Robot::x(void)
+float Robot::x(void)
 {
-return (int16_t)x_;
+return (float)x_;
 }
 
-int16_t Robot::y(void)
+float Robot::y(void)
 {
-return (int16_t)y_;
+return (float)y_;
 }
 
+float Robot::angle_courant(void)
+{
+return (float)angle_courant_;
+}
+
+void Robot::x(float new_x)
+{
+	x_ = new_x;
+}
+
+void Robot::y(float new_y)
+{
+	y_ = new_y;
+}
+
+void Robot::angle_courant(float new_angle)
+{
+	angle_courant_ = new_angle;
+}
 
 void Robot::gotoPos(float x, float y)
 {
