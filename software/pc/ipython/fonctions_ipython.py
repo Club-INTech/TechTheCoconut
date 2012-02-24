@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import IPython.ipapi
-import os, signal
+import os, signal, threading
 
 ip = IPython.ipapi.get()
 
@@ -93,3 +93,19 @@ def tuto(self, arg):
                       
         
 ip.expose_magic('tuto', tuto)
+
+
+def quit(self, arg):
+    """
+    Ferme la session en cours (et surtout la visualisation de la table)
+    """
+    
+    
+    for t in threading.enumerate():
+	if t.getName() == 'visu_table':
+	    t.quit()
+    
+    self.shell.ask_exit()
+    
+    
+ip.expose_magic('quit', quit)
