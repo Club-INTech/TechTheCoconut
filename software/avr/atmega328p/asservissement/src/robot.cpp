@@ -234,6 +234,7 @@ void Robot::gotoPos(float x, float y)
 	float delta_y = (y-y_);
 	float angle;
 	
+	/*
 	if (delta_x==0)
 	{
 		if (delta_y > 0)
@@ -252,19 +253,13 @@ void Robot::gotoPos(float x, float y)
 		else
 			angle=atan(delta_y/delta_x) + PI;
 	}
-// 	Serial<0>::print("ROT");
-	if(couleur_=='v')
-		tourner(angle - PI);
-	else
-		tourner(angle);
+	*/
 	
-// 	Serial<0>::print("TRA");
-// 	Serial<0>::print(translation.consigne() );
+	angle=atan2(delta_y,delta_x);
+	
+	tourner(angle);
 	
 	translater(sqrt(delta_x*delta_x+delta_y*delta_y));
-	
-// 	Serial<0>::print("ENDgoto");
-// 	Serial<0>::print(translation.consigne() );
 	
 }
 
@@ -279,6 +274,28 @@ void Robot::translater(float distance)
 
 void Robot::tourner(float angle)
 {
+	
+// 	serial_t_::print(rotation.consigne()*CONVERSION_TIC_RADIAN_*1000);
+// 	serial_t_::print(angle*1000);
+	
+	static float angleBkp = 0;
+	//angledepart_? (couleur_ == 'v') PI : 
+	
+	
+	float ang1 = abs(angle-angleBkp);
+	float ang2 = abs(angle+2*PI-angleBkp);
+	float ang3 = abs(angle-2*PI-angleBkp);
+	
+	if (!(ang1 < ang2 && ang1 < ang3))
+	{
+		if (ang2 < ang3)
+			angle += 2*PI;
+		else
+			angle -=  2*PI;
+	}
+	angleBkp=angle;
+	
+	
 	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
