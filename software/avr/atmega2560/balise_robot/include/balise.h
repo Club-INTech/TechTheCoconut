@@ -17,7 +17,7 @@ class Balise : public Singleton<Balise>{
 	private:
 		volatile uint16_t max_counter_;
 		volatile uint16_t toptour_;
-		bool is_toptour_available_;
+		volatile bool is_toptour_available_;
 /*
 		typedef Timer<2,ModeFastPwm,1> T_2;
 		
