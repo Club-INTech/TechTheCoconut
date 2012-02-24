@@ -262,10 +262,17 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "xy ? err ? (erreurs sur trans, rot)"#--- l (log) ? eo (orientation) ? "
+                print "xy ? o (orientation) ? " # err ? (erreurs sur trans, rot)"--- l (log) ? eo (orientation) ? "
                 choixB = raw_input()
                 if choixB=="q":
                     break
+                elif choixB=="o":
+                    while True:
+                        envoyer("eo")
+                        try:
+                            print str(float(recevoir())/1000)+" \n"
+                        except:
+                            pass
                 elif choixB=="xy":
                     while True:
                         envoyer("ex")

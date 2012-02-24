@@ -53,6 +53,11 @@ private:
 	float y_;
 	
 	/**
+	 * angle courant absolu en radian
+	*/
+	float angle_courant_;
+	
+	/**
 	* constance de conversion de tic en mm
 	*/
 	float CONVERSION_TIC_MM_;
@@ -76,10 +81,27 @@ public:
 	void updatePosition(int32_t distance, int32_t angle);
 
 	unsigned char couleur(void);
+	
+	/**
+	 * getter pour les coordonnées x,y, en mm
+	 */
+	
+	float x(void);
 
-	int16_t x(void);
-
-	int16_t y(void);
+	float y(void);
+	
+	float angle_courant(void);
+	
+	/**
+	 * setter pour les coordonnées x,y, en mm
+	 * \param float coordonnée en mm
+	 */
+	
+	void x(float);
+	
+	void y(float);
+	
+	void angle_courant(float);
 	
 	/**
 	* Translate le robot
