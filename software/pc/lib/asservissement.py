@@ -57,19 +57,29 @@ class Asservissement:
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         self.avrToPython()
         theta = thetastar.Thetastar([])
+        
+        #TODO : appeler avrToPython()
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y+") et d'arrivée : ("+arrivee.x+","+arrivee.y+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         i = 0
-        while i+1 < len(chemin):
-            centre_avr[i] = pythonToAvr(chemin[i],chemin[i+1])
+        while i+1 < len(chemin_python):
+            centre_avr[i] = pythonToAvr(chemin_python[i],chemin_python[i+1])
         
         i = 0
-        for i in chemin_python:
-            self.ecrire("goto " + centre_avr[i].x + ' ' + centre_avr[i].y + '\n')
+        for centre in centre_avr:
+            
+            #on peut tenter de concaténer après, sans doute avec des \0 entre les messages
+            self.ecrire("goto")
+            self.ecrire(str(float(centre.x)))
+            self.ecrire(str(float(centre.y)))
+            
+            
+            # TODO : gestion des erreurs
+            
             #serie.Serie.lire()
             self.reponse = self.file_attente.get(lu)
-            if reponse == "ok":
+            if reponse == "END":
                 pass
             else:
                 log.logger.debug("Erreur asservissement : " + reponse)
@@ -78,8 +88,9 @@ class Asservissement:
     def pythonToAvr(self, depart, arrivee):
         """
         La recherche de chemin renvoit une position du robot qui est le centre du cercle circonscrit au robot en prenant en compte ses bras. Il faut envoyer
-        à l'AVR le centre du robot avec les bras rabattus. centreSansBras() calcule l'orientation du robot et le centre à envoyer à l'AVR à partir du point 
+        à l'AVR le centre du robot avec les bras rabattus. pythonToAvr() calcule l'orientation du robot et le centre à envoyer à l'AVR à partir du point 
         de départ et du point d'arrivée.
+        
         :param orientation: Orientation du robot calculée avec es points de départ et d'arrivée envoyé par la recherche de chemin
         :type orientation: float
         :param depart: Point de départ envoyé par la recherche de chemin
@@ -115,9 +126,9 @@ class Asservissement:
             orientation=math.atan(proj_y/proj_x)
         else:
             if (proj_y > 0):
-                orientation=math.atan(proj_y/proj_x) - pi
-            else:
                 orientation=math.atan(proj_y/proj_x) + pi
+            else:
+                orientation=math.atan(proj_y/proj_x) - pi
         
         #distance entre le centre de la recherche de chemin et le milieu de la longueur du robot (pythagore)
         normale_Robot = math.sqrt(rayon ** 2 - (longueur_robot / 2) ** 2)
@@ -130,7 +141,7 @@ class Asservissement:
         proj_y = distance_centres*math.sin(orientation)
         
         #Calcul des coordonnées du centre AVR
-        return outils_math.point.Point(self.robotInstance.position.x - proj_x, self.robotInstance.position.y - proj_y)
+        return outils_math.point.Point(arrivee.x - proj_x, arrivee.y - proj_y)
         
     def avrToPython(self, angle):
         #récupération des constantes nécessaires:
@@ -140,16 +151,15 @@ class Asservissement:
         longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
         diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
         
-        #[]c'est quoi la convention pour l'angle des bras ?
-        #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
-        proj_x = -longueur_bras*math.cos(float(angle))
-        proj_y = longueur_bras*math.sin(float(angle))
-        
-        #[]la longueur est sur x, largeur sur y
-        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
-        sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
-        
         if rayon > diam_original:
+            # TODO : vérifier convention pour l'angle des bras :  angle = 0 vers l'avant du robot, sur l'axe y.
+            proj_x = -longueur_bras*math.cos(float(angle))
+            proj_y = longueur_bras*math.sin(float(angle))
+            
+            #[]la longueur est sur x, largeur sur y
+            sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
+            sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
+        
             delta_x = - math.cos(self.robotInstance.orientation)*(sommet_bras.x+sommet_robot.x)/2 - math.sin(self.robotInstance.orientation)*(sommet_bras.y+sommet_robot.y)/2
             delta_y = - math.sin(self.robotInstance.orientation)*(sommet_bras.x+sommet_robot.x)/2 + math.cos(self.robotInstance.orientation)*(sommet_bras.y+sommet_robot.y)/2
             return outils_math.point.Point(delta_x,delta_y)
@@ -180,10 +190,6 @@ class Asservissement:
         #récupération des constantes nécessaires:
         log.logger.info('Calcul du rayon et du centre du robot')
         
-        #[pierre] j'ai modifié des constantes...
-        #désolé mais c'était nécessaire : ta "largeur" était en fait celle de la table
-        #et toute facon constantes.py manquait de clarté
-        
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
         longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
@@ -191,26 +197,19 @@ class Asservissement:
         #Commenté pour les tests !
         #angle = robot.actionneur['bd'].angle
         
-        #[]ouais, on pourrait le mettre dans constantes..
         diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
         
         #projection du bras sur x et y
         
-        #[]c'est quoi la convention pour l'angle des bras ?
-        #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
+        # TODO : vérifier convention pour l'angle des bras :  angle = 0 vers l'avant du robot, sur l'axe y.
         proj_x = -longueur_bras*math.cos(float(angle))
         proj_y = longueur_bras*math.sin(float(angle))
         
-        #[]la longueur est sur x, largeur sur y
+        #la longueur est sur x, largeur sur y
         sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
         sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
         
-        #longueur du segment entre le centre du robot avec les bras fermés et le sommet du bras
-        #segment_centre_bras = math.sqrt(math.pow(sommet_bras.x, 2) + math.pow(sommet_bras.y, 2))
-        
-        #[] le diamètre mesuré (segment le plus long) doit etre pris entre deux extremités du robot.
-        #là tu considères que le milieu du diamètre est le centre_original
-        #en gros faut raisonner sur les diamètres, par sur les rayons ^^
+        #longueur du segment entre le sommet à l'arrière du robot et le sommet du bras opposé
         diam_avec_bras = math.sqrt((sommet_bras.x - sommet_robot.x) ** 2 + (sommet_bras.y - sommet_robot.y) ** 2)
         
         if diam_avec_bras > diam_original:
