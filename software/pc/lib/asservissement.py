@@ -58,7 +58,26 @@ class Asservissement:
         self.avrToPython()
         theta = thetastar.Thetastar([])
         
-        #TODO : appeler avrToPython()
+        
+        #TODO : appeler avrToPython() sur depart
+        
+        """
+        SOUCI :
+        quand on appelle une recherche de chemin de A à B,
+        on effectue avrToPython(orientation en A) pour avoir les coordonnées python de A
+        
+        MAIS on ne connait pas encore le chemin vers B
+        donc on ne connait pas encore l'orientation finale en B
+        donc on ne peut pas appeler avrToPython(orientation en B)
+        
+        DONC il faut appeler la recherche de chemin d'un point de départ AVR (robot) 
+        vers un point d'arrivée python (centre de périmètre)
+        
+        
+        il y a un problème non ? impossible de demander une destination précise pour le centre du robot (bras repliés)
+        j'ai pas encore de soluce, je veux juste pas etre le seul à m'inquiéter ^^
+        
+        """
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y+") et d'arrivée : ("+arrivee.x+","+arrivee.y+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
