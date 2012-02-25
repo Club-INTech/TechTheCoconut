@@ -162,10 +162,10 @@ class Asservissement:
         
             delta_x = - math.cos(self.robotInstance.orientation)*(sommet_bras.x+sommet_robot.x)/2 - math.sin(self.robotInstance.orientation)*(sommet_bras.y+sommet_robot.y)/2
             delta_y = - math.sin(self.robotInstance.orientation)*(sommet_bras.x+sommet_robot.x)/2 + math.cos(self.robotInstance.orientation)*(sommet_bras.y+sommet_robot.y)/2
-            return outils_math.point.Point(delta_x,delta_y)
+            return outils_math.point.Point(self.robotInstance.position.x + delta_x, self.robotInstance.position.y + delta_y)
             
         else:
-            return outils_math.point.Point(0., 0.)
+            return outils_math.point.Point(self.robotInstance.position.x, self.robotInstance.position.y)
     
     def calculRayon(self, angle):
         """
