@@ -9,6 +9,9 @@
 
 #include <stdint.h>
 #include <libintech/utils.h>
+#include "serial/serial_0.hpp"
+
+
 
 class Asservissement {
 	
@@ -16,24 +19,26 @@ class Asservissement {
 
 		Asservissement(float kp,float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), valeur_bridage_(255){ }
 
-		int32_t	pwm(int32_t positionReelle)
+		int16_t	pwm(int32_t positionReelle, int32_t eps = 0)
 		{
 			enm2_ = enm1_;
 			enm1_ = en_;
 			en_=consigne_ - positionReelle;
-			pwmCourant_=kp_*en_+ kd_*(en_ - enm1_);
-// 			if(pwmCourant_ > 0)
-// 				pwmCourant_ = min(pwmCourant_,valeur_bridage_);
-// 			else
-// 				pwmCourant_ = max(pwmCourant_, -valeur_bridage_);
-			return pwmCourant_;
-// 			if(pwmCourant_>0)
-// 				return min(pwmCourant_, (int16_t)valeur_bridage_);
-// 			else
-// 				return max(pwmCourant_, -(int16_t)valeur_bridage_);
-		}
+			
+			pwmCourant_+=kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_);
 
-		void ki(uint16_t ki)
+			if(pwmCourant_> valeur_bridage_)
+				return  valeur_bridage_;
+			else if (pwmCourant_< -valeur_bridage_)
+				return -valeur_bridage_;
+			else
+				return pwmCourant_;
+			
+		}
+		
+		
+		
+		void ki(float ki)
 		{
 			ki_ = ki;
 		}
@@ -43,7 +48,7 @@ class Asservissement {
 			return ki_;
 		}
 
-		void kd(uint16_t kd)
+		void kd(float kd)
 		{
 			kd_ = kd;
 		}
@@ -53,7 +58,7 @@ class Asservissement {
 			return kd_;
 		}
 
-		void kp(uint16_t kp)
+		void kp(float kp)
 		{
 			kp_ = kp;
 		}
@@ -73,9 +78,22 @@ class Asservissement {
 			consigne_ = consigne;
 		}
 
-		float erreur()
+		int32_t erreur()
 		{
 			return en_;
+		}
+		
+		int32_t pwmCourant()
+		{
+			return pwmCourant_;
+        
+		}
+		int32_t erreur_d()
+		{
+			return (en_ - enm1_);
+		}
+		int8_t valeur_bridage(void){
+			return valeur_bridage_;
 		}
 		
 		void valeur_bridage(int8_t new_val){
@@ -89,12 +107,13 @@ class Asservissement {
 		float ki_;
 
 		int16_t valeur_bridage_;
-
-		float pwmCourant_;
+		
+		volatile float pwmCourant_;
+		
 		float en_;
 		float enm1_;
 		float enm2_;
-		
+
 		int32_t consigne_;
 };
 

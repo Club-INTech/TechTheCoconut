@@ -4,8 +4,6 @@ Ordres :
      'c' Couleur
          'r' Rouge
          'v' Violet
-         'r' de rotation à [float]
-         't' de translation à [float]
      'r' Rotation
          'd' Dérivée à [float]
          'i' Intégration à [float]
@@ -16,9 +14,8 @@ Ordres :
          'i' Intégration à [float]
          'p' Proportionnel à [float]
 	 'm' Mettre le Max du PWM
- 'd' Avancer/Reculer : [EntierLong]
-     >0 : Avancer
-     <0 : Reculer
+     'x' Change x (abscisse) en mm
+     'y' Change y (ordonnée) en mm
  'e' Afficher la valeur de
      'c' Couleur
      'r' Rotation
@@ -26,21 +23,28 @@ Ordres :
          'i' Intégration
          'p' Proportionnel
 	 'm' Max du PWM
-     's' Type d'asservissement
+     's' Type d'asservissement  ???
      't' Translation
          'd' Dérivée
          'i' Intégration
          'p' Proportionnel
 	 'm' Max du PWM
+     'x' position en abscisse du robot (mm)
+     'y' position en ordonnée du robot(mm)
+     'o' orientation absolue du robot (rad)
  's' Désactiver/Activer asservissement
      'r' Rotation
      't' Translation
+
  't' Tourner : [float]
-    >0 : Sens trigo positif ( anti-horraire )
+    >0 : Sens trigo positif ( anti-horaire )
     <0 : Sens trigo négatif
- 'x' Variable x position en abscisse en mm
-     'c' Changer la valeur à [EntierLong]
-     'e' Afficher la valeur
- 'y' Variable y position en ordonnée en mm
-     'c' Changer la valeur à [EntierLong]
-     'e' Afficher la valeur
+	renvoi "END" en fin de déplacement
+ 'd' Avancer/Reculer : [float]
+     >0 : Avancer
+     <0 : Reculer
+	renvoi "END" en fin de déplacement
+ 'goto' se rend à une position [float] \n [float]
+     1er float : x en mm
+     2è  float : y en mm
+	renvoi "END" en fin de déplacement

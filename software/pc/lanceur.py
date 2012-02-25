@@ -6,6 +6,7 @@ import glob
 import lib.log
 import lib.conf
 import __builtin__
+import lib.peripherique
 
 first = True
 while first or not profil.importation:
@@ -44,6 +45,12 @@ if conf == 'develop':
 else:
     exec('import profils.'+conf+'.injection')
     
+# Association des périphériques
+for p in constantes['Serie']['peripheriques']:
+    p_obj = lib.peripherique.Peripherique(p)
+    if p_obj.association:
+        lib.peripherique.liste.append(p_obj)
+# Fin association des périphériques
 
 first = True
 erreur = False

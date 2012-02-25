@@ -18,6 +18,7 @@ class Visu_table( threading.Thread):
     Classe permettant de visualiser la table de jeu avec les zones, les éléments de jeu, les robots utilisant un thread (ie non bloquante)\n
     Pour la démarrer utiliser la méthode start()\n
     Pour l'arrêter utiliser la méthode stop()\n
+    Une seule instance simultanée de cette classe est possible (conflit de thread sinon)
     """
     
     #Définition des constantes de la classe
@@ -36,20 +37,18 @@ class Visu_table( threading.Thread):
     #Nota: Utiliser des Setters/Getters pour les propriétés suivantes ?
     scale = 0.3
     caption = "Visualisation Table - INTech 2012"
-    fps = 1
+    fps = 24
     
-    def __init__(self,nom,debug=True):
+    def __init__(self,debug=False, nom="visu_table"):
 	"""
 	Constructeur
 	
 	:param debug: Affiche les paramètres de dessin des différents objets \n
 	Pour la retro-compatibilité, normalement non utilisé. Utilise log.logger.debug à la place
 	:type debug: boolean
-	:param nom: Défini le nom du Thread
-	:type nom: string
 	"""
 	self.debug = debug
-	self.nom = nom
+	self.nomThread = nom
 	self.tailleTablePx = [math.trunc(3000*self.scale), math.trunc(2000*self.scale)]
 	
         pygame.init()
@@ -71,12 +70,13 @@ class Visu_table( threading.Thread):
 	
 	self.carte = Carte()
 	self.robot = Robot()
+	self.chemin = []
 	
 	try:
-	    threading.Thread.__init__(self, name=nom)
-	    log.logger.info("Création de la visualisation de la table (thread nommé "+nom+")...")
+	    threading.Thread.__init__(self, name=self.nomThread, target=self.start)
+	    log.logger.info("Création de la visualisation de la table (thread nommé "+self.nomThread+")...")
 	except:
-	    self.stop()
+	    self.quit()
 	
     def drawLingot(self, lingot):
 	"""
@@ -293,23 +293,45 @@ class Visu_table( threading.Thread):
 	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
 	
 	return [sg,ig,id,sd]
+
+    def creerChemin(self, chemin):
+	"""
+	Crée le chemin (suite de Point) à afficher sur la carte.\n
+	Chaque appel à cette fonction supprime l'ancienne liste de point
 	
-    def drawPointsLines(self, listePoints):
+	:param chemin: La liste des points à créer
+	:type chemin: dictionnaire de Point 
+	"""
+	self.chemin =[]
+	c= []
+	for p in chemin:
+	    c.append((p.x,p.y))
+	    self.chemin.append(((self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*p.x) ) ,
+				(self.tailleTablePx[1] - math.trunc( Visu_table.scale*p.y)   )))
+	    
+	print c
+	print self.chemin
+		
+	if self.debug:
+	    log.logger.debug("Chemin: "+self.chemin)
+	
+    def drawChemin(self):
 	"""
 	Dessine la ligne de point\n
 	/!\ Attention: Les points sont représentés par une simple liste (pas l'objet Point donc) /!\
+	:TODO: Voir avec pierre la nature des informations recupérées et adapter la méthode en consèquence
 	
 	:param listePoints: La liste des points à créer
-	:type listePoints: dictionnaire de liste 
+	:type listePoints: dictionnaire de tuple 
 	"""
 	
-	pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['rouge'], False, listePoints);
+	
+	pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['rouge'], False, self.chemin);
 	
 	if self.debug:
 	    log.logger.debug("Liste de point:  abs"+listePoints)
       
     def majTable(self):
-
 	#"Efface" les précédents items
 	if Visu_table.displayMap:
 	    self.screen.blit(self.imageTable, [0,0])
@@ -336,7 +358,8 @@ class Visu_table( threading.Thread):
 	    self.drawDisque(disque)
 	    
 	self.drawRobot(self.robot)
-        
+	if len(self.chemin) != 0 :
+	    self.drawChemin()
 	
 	#Nota: Dessin des réglettes inutiles puisqu'elles ne devraient à priori pas bouger. 
 	    
@@ -348,7 +371,7 @@ class Visu_table( threading.Thread):
 	pygame.display.flip()
 
     def quit(self):
-	log.logger.info("Fermeture du thread "+self.nom+" en cours...")
+	log.logger.info("Fermeture du thread "+self.nomThread+" en cours...")
 	self.Terminated = True
 	pygame.quit ()  
 	self._Thread__stop()
@@ -360,10 +383,9 @@ class Visu_table( threading.Thread):
 	    #On parcours la liste des évènements depuis le dernier appel à get()
 	    for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-		    self.Terminated=True
+		    self.quit()
 	    
 	    #Evite la surchage du processeur
 	    time.sleep(1/self.fps)
 	    self.majTable()
 	
-	self.quit()

@@ -49,24 +49,21 @@ class Serie(threading.Thread, serial.Serial):
             self.stop()
 
     
-        def ecrire(self, msg):
-            """
-            Écrire une information vers un périphérique puis retourner à la ligne
-            :param msg: message à donner au périphérique
-            :type msg: string
-            :return: Nombre de caractères envoyés
-            :rtype: int
-            """
-            log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
-            return self.write(msg+"\r\n")
+    def ecrire(self, msg):
+        """
+        Écrire une information vers un périphérique puis retourner à la ligne
+        :param msg: message à donner au périphérique
+        :type msg: string
+        :return: Nombre de caractères envoyés
+        :rtype: int
+        """
+        log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
+        return self.write(msg+"\r\n")
         
     
     def lire(self):
         """
         Lire une information venant d'un périphérique jusqu'au retour à la ligne
-        
-        :return: Chaîne lue
-        :rtype: string
         """
         while self.active:
             lu = self.readline()

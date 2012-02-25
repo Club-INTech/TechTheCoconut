@@ -5,12 +5,12 @@
 #include "frame.h"
 
 
-Frame::Frame(uint32_t frame) {
+Frame::Frame(char rawFrame[3]) {
 	
-	data_ = (uint16_t)(frame >> 16);
-	crc_ = (uint8_t)(frame >> 8);
+	data_ = (uint16_t) ((uint16_t) rawFrame[0] << 8) + rawFrame[1];
+	crc_ = rawFrame[2];
 	//Récupération du bit robot
-	robotId_ = (unsigned int) (data_ >> 15);
+	robotId_ = (unsigned char) (data_ >> 15);
 	//Mise à 0 du bit identifiant le robot
 	distance_ = (uint16_t)(data_ & ~(1 << (15)));
 }

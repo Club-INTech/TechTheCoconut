@@ -2,37 +2,37 @@
 
 import serie
 import log
+import peripherique
 
 log = log.Log()
 
 
-class Capteur:
+class Capteur(serie.Serie):
     """
     Classe permettant de gérer un capteur
     
-    :param peripherique: chemin du périphérique utilisant la liaison série
-    :type peripherique: string
     :param nom: Nom à donner au thread
     :type nom: string
-    :param debit: Débit de baud de la liaison
-    :type debit: int
-    :param timeout: Timeout de la liaison en secondes
-    :type timeout: int
-    :param parite: Type de parité
-    :type parite: None|'PARITY_NONE'|'PARITY_EVEN'|'PARITY_ODD'|'PARITY_MARK'|'PARITY_SPACE'
-    
-    
+    :param nombreEchantillons: Nombre de prises à faire pour éviter les erreurs de mesure
+    :type nombreEchantillons: int
     """
-    def __init__(self, peripherique, nom, debit, timeout, parite=None):
-        self.peripherique = peripherique
+    def __init__(self, nom, nombreEchantillons=3):
         self.nom = nom
-        self.debit = debit
-        self.timeout = timeout
-        self.parite = parite
-        self.serie = serie.Serie(peripherique, nom, debit, timeout, parite)
-    
-    
-    def lire(self) :
+        self.demarrer()
+        self.nombreEchantillons = nombreEchantillons
+
+    def demarrer(self):
+        if not hasattr(Capteur, 'initialise') or not Capteur.initialise:
+            Capteur.initialise = True
+            chemin = peripherique.chemin_de_peripherique("capteur")
+            if chemin:
+                serie.Serie.__init__(self, chemin, self.nom, 9600, 3)
+            else:
+                log.logger.error("Le capteur "+self.nom+" n'est pas chargé")
+        # Ouverture de la liaison série
+        self.start()
+
+    def mesurer(self):
         """
         Cette méthode permet de lire les informations d'un capteur
         
@@ -40,8 +40,6 @@ class Capteur:
         :rtype: tableau de float (?)
         
         """
-        # Ouverture de la liaison série
-        self.serie.start()
         
         """
         Architecture d'un message sur la liaison série :
@@ -52,22 +50,36 @@ class Capteur:
         |   'f'
         """
         
-        if self.serie.lire() != 'd' :
-            log.logger.error("Erreur : le message du capteur "+self.peripherique+" ne commence pas par le caractère 'd'")
-            self.serie.stop()
-            #TODO Faut-il stopper l'exécution de la fonction ?
-            
-        val_capteur_1 = self.serie.lire()
-        val_capteur_2 = self.serie.lire()
-        val_capteur_3 = self.serie.lire()
+        compteur = 0
+        val = [0,0,0]
         
-        if self.serie.lire() != 'f' :
-            log.logger.error("Erreur : le message du capteur "+self.peripherique+" ne finit pas par le caractère 'f'")
-            self.serie.stop()
+        while compteur < self.nombreEchantillons:
+            # On commence quand on reçoit 'd'
+            while not self.file_attente.empty() and self.file_attente.get() == 'd':
+                # On rejette la séquence de mesure si une mesure est erronnée
+                try:
+                    val[0] = (compteur/nombreEchantillons)*val[0] + float(self.file_attente.get(True, 3))/nombreEchantillons
+                except:
+                    log.logger.error("La première mesure reçue par le capteur "+self.nom+" n'est pas correcte")
+                    break
+                try:
+                    val[1] = (compteur/nombreEchantillons)*val[1] + float(self.file_attente.get(True, 3))/nombreEchantillons
+                except:
+                    log.logger.error("La deuxième mesure reçue par le capteur "+self.nom+" n'est pas correcte")
+                    break
+                try:
+                    val[2] = (compteur/nombreEchantillons)*val[2] + float(self.file_attente.get(True, 3))/nombreEchantillons
+                except:
+                    log.logger.error("La troisième mesure reçue par le capteur "+self.nom+" n'est pas correcte")
+                    break
+                if self.file_attente.get(True, 3) != 'f' :
+                    log.logger.error("Le caractère de fin reçu par le capteur "+self.nom+" n'est pas correct")
+                    break
+                return val
         
-        self.serie.stop()
-        
-        return [val_capteur_1, val_capteur_2, val_capteur_3]
-        
-             
-      
+    def arreter(self):
+        """
+        Arrêter le capteur (avec liaison série)
+        """
+        Capteur.initialise = False
+        self.stop()

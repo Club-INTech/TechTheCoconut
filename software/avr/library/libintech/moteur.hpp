@@ -45,7 +45,7 @@ public:
     }
     else {
       direction(Direction::RECULER);
-	  Timer::MODE::seuil(-max(pwm,-maxPWM_)); //Bridage
+	  Timer::MODE::seuil(min(-pwm,maxPWM_)); //Bridage
     }
   }
   
@@ -53,7 +53,7 @@ public:
 	maxPWM_ = maxPWM;
   }
   
-  uint16_t maxPWM() const{
+  int16_t maxPWM() const{
 	return maxPWM_;
   };
   

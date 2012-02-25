@@ -57,7 +57,7 @@ def main():
     
     #import_all("os sys")
     #execf('~/_ipython/ns.py')
-
+    import_all("threading")
 
     # -- prompt
     # A different, more compact set of prompts from the default ones, that

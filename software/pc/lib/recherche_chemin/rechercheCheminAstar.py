@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# TEST
+
 """
 il faudra importer :
 from lib.recherche_chemin.rechercheChemin import *

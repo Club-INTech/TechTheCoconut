@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-
-import serial
 import serie
 import log
+import peripherique
 
 log = log.Log()
 
@@ -14,6 +10,9 @@ log = log.Log()
 class Actionneur(serie.Serie):
     """
     Classe permettant de gérer un actionneur
+    
+    :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
+    :type nom: string
     """
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
     def __init__(self, nom):
@@ -21,11 +20,20 @@ class Actionneur(serie.Serie):
         :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
         :type nom: string
         """
-        if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
-            Actionneur.initialise = True
-            serie.Serie.__init__(self, "/dev/ttyUSB10", nom, 9600, 3)
         self.nom = nom
         self.angle = 0
+        self.demarrer()
+        
+    def demarrer(self):
+        if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
+            Actionneur.initialise = True
+            chemin = peripherique.chemin_de_peripherique("actionneur")
+            if chemin:
+                serie.Serie.__init__(self, chemin, self.nom, 9600, 3)
+            else:
+                log.logger.error("L'actionneur "+ self.nom+" n'est pas chargé")
+        # Ouverture de la liaison série
+        #self.start()
         
     def deplacer(self, angle, vitesse = None):
         """
@@ -39,28 +47,30 @@ class Actionneur(serie.Serie):
         """
 
         if angle < 170 and angle > 0:
-            actionneur.ecrire(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
-            serie.Serie.lire()
+            self.ecrire(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
+            #serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
     def getAngle(self):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         """
-        serie.Serie.ecrire(nom + '\n '+ '0' + '0')
-        serie.Serie.lire()
+        self.ecrire(self.nom + '\n '+ '0' + '\n '  + '0')
+        #serie.Serie.lire()
         self.angle = self.file_attente.get(lu)
 
     def reset(self):
         """
         Réinitialise l'actionneur
-        :TODO: implémenter la méthode
         """
-        pass
+        self.ecrire(self.nom + '\n' + '0')
+        self.angle = 0
         
     def stop(self):
         """
         Arrête l'actionneur en urgence
-        :TODO: implémenter la méthode
         """
-        pass
+        self.ecrire(self.nom + '\n '+ '1' + '\n '  + '0')#TODO modifier selon convention
+        self.getAngle()
+        serie.Serie.stop()
+        

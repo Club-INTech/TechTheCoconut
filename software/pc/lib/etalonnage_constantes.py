@@ -5,15 +5,17 @@
 import marshal
 import time
 from serie_simple import *
-
-#BAUDRATE : 9600, 57600
+from time import sleep
 
 serie1=SerieSimple("/dev/ttyUSB1",9600,5)
 serie0=SerieSimple("/dev/ttyUSB0",9600,5)
 
+#BAUDRATE : 9600, 57600
+
 #ctes=["0.0","0.0","0.0","0.0","0.0","0.0"]
 #marshal.dump(ctes, open("constantes_asserv", 'wb'))
-
+lastx=0.0
+lasty=0.0
 
 global dest
 dest = "rien"
@@ -44,23 +46,23 @@ def envoyer(arg):
     
     #enregistrement des constantes étalonnées
     
-    ctes=marshal.load(open("constantes_asserv","rb"))
+    #ctes=marshal.load(open("constantes_asserv","rb"))
     
-    if dest == "ctp":
-        ctes[0]=arg
-    elif dest == "ctd":
-        ctes[1]=arg
-    elif dest == "cti":
-        ctes[2]=arg
-    elif dest == "crp":
-        ctes[3]=arg
-    elif dest == "crd":
-        ctes[4]=arg
-    elif dest == "cri":
-        ctes[5]=arg
+    #if dest == "ctp":
+        #ctes[0]=arg
+    #elif dest == "ctd":
+        #ctes[1]=arg
+    #elif dest == "cti":
+        #ctes[2]=arg
+    #elif dest == "crp":
+        #ctes[3]=arg
+    #elif dest == "crd":
+        #ctes[4]=arg
+    #elif dest == "cri":
+        #ctes[5]=arg
         
-    dest = arg    
-    marshal.dump(ctes, open("constantes_asserv", 'wb'))
+    #dest = arg    
+    #marshal.dump(ctes, open("constantes_asserv", 'wb'))
 
 def initialise():
     ctes=marshal.load(open("constantes_asserv","rb"))
@@ -77,7 +79,24 @@ def initialise():
     envoyer("cri")
     envoyer(ctes[5])
     
-initialise()
+                    
+def trace_err():
+    while True:
+        envoyer("eerT")
+        logt=recevoir()
+        
+        envoyer("eerR")
+        logr=recevoir()
+        if logt=="END" or logr=="END":
+            break
+        print str(logt)+", "+str(logr)+" \n"
+        
+def attend_fin_goto():
+    while recevoir() != "END":
+        pass
+    
+            
+#initialise()
 while True :
     print "modifier ?"
     print "constantes de rotation.............r"
@@ -86,6 +105,11 @@ while True :
     print "afficher les constantes actuelles..a"
     print "lire coordonnées...................l"
     print "sortez moi d'ici !.................q"
+    print "écoute sur la série................e"
+    print "tourner de n tics................tou"
+    print "translater de n tics.............tra"
+    print "goto x y........................goto"
+    
     choix = raw_input()
     if choix == "q":
         try:
@@ -143,11 +167,83 @@ while True :
                 break
             envoyer("c"+choixC+buf[0])
             envoyer(str(float(buf[2:])))
-    
+            
+        
     elif choix == "a":
         ctes=marshal.load(open("constantes_asserv","rb"))
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
         print "rotation    : kp="+ctes[3]+" kd="+ctes[4]+" ki="+ctes[5]
+        
+    elif choix == "t":
+        buff=raw_input()
+        envoyer("t")
+        envoyer(str(float(buff)))
+        trace_err()
+        
+    elif choix == "e":    
+        while True:
+            sleep(0.1)
+            print recevoir()
+                        
+    elif choix == "d":
+        buff=raw_input()
+        envoyer("d")
+        envoyer(str(float(buff)))
+        #trace_err()
+        
+    elif choix == "goto":
+        buf1=raw_input()
+        buf2=raw_input()
+        envoyer("goto")
+        envoyer(str(float(buf1)))
+        envoyer(str(float(buf2)))
+        trace_err()
+        
+    elif choix == "script":
+        envoyer("goto")
+        envoyer(str(float(210)))
+        envoyer(str(float(0)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(420)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(1540)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(420)))
+        envoyer(str(float(-820)))
+        attend_fin_goto()
+        
+        envoyer("goto")
+        envoyer(str(float(220)))
+        envoyer(str(float(0)))
+        attend_fin_goto()
+        
+        
+        envoyer("t")
+        envoyer(str(float(0.0)))
+        attend_fin_mvt()
+        
+        envoyer("d")
+        envoyer(str(float(-50.0)))
+        attend_fin_mvt()
+        
         
     elif choix =="l":
         while True:
@@ -166,19 +262,41 @@ while True :
                 envoyer("et")
                 print recevoir()
             elif choixL=="b":
-                print "x ? y ? o (orientation) ? "
+                print "xy ? o (orientation) ? " # err ? (erreurs sur trans, rot)"--- l (log) ? eo (orientation) ? "
                 choixB = raw_input()
                 if choixB=="q":
                     break
-                elif choixB=="x":
-                    while True:
-                        envoyer("ex")
-                        print recevoir()
-                elif choixB=="y":
-                    while True:
-                        envoyer("ey")
-                        print recevoir()
                 elif choixB=="o":
                     while True:
-                        envoyer("et")
+                        envoyer("eo")
+                        try:
+                            print str(float(recevoir())/1000)+" \n"
+                        except:
+                            pass
+                elif choixB=="xy":
+                    while True:
+                        envoyer("ex")
+                        logx=recevoir()
+                        
+                        envoyer("ey")
+                        logy=recevoir()
+                        print str(float(logx))+", "+str(float(logy))+" \n"
+                elif choixB=="err":
+                    trace_err()
+                elif choixB=="l":
+                    f=open("trace_x_y","w")
+                    while True:
+                        envoyer("ex")
+                        logx=recevoir()
+                        f.write("x = "+str(float(logx)-float(lastx))+" \t")
+                        envoyer("ey")
+                        logy=recevoir()
+                        f.write("y = "+str(float(logy)-float(lasty))+"\n")
+                        print "x = "+str(float(logx)-float(lastx))+" \t"+"y = "+str(float(logy)-float(lasty))+"\n"
+                        lastx=logx
+                        lasty=logy
+                else:
+                    while True:
+                        envoyer(choixB)
                         print recevoir()
+    
