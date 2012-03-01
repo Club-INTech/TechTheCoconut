@@ -3,9 +3,6 @@
 # TEST
 
 """
-il faudra importer :
-from lib.recherche_chemin.rechercheChemin import *
-
 voir utiliseRechercheChemin pour exemple
 """
 

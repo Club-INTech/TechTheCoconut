@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#TEST
+# TEST
 
 """
 --> voir utiliseRechercheChemin pour exemple
