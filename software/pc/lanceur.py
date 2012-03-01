@@ -3,7 +3,6 @@
 import os
 import shutil
 import glob
-import lib.log
 import lib.conf
 import __builtin__
 
@@ -32,7 +31,8 @@ exec('import profils.'+conf+'.constantes')
 exec('__builtin__.constantes = profils.'+conf+'.constantes.constantes')
 
 # Initialisatoin des logs
-log = lib.log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], constantes['Logs']['logs_format'], constantes['Logs']['stderr'], constantes['Logs']['stderr_level'], constantes['Logs']['stderr_format'], constantes['Logs']['dossier'])
+import lib.log
+log = lib.log.Log(__name__)
 
 log.logger.info('Profil de configuration chargé : ' + conf)
 

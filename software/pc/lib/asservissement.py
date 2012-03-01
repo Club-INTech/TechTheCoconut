@@ -14,7 +14,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 
 sys.path.append('../')
 

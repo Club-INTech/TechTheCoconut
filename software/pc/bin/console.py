@@ -8,7 +8,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import lib.chargement_lib
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 
 try:
     from IPython.Shell import IPShellEmbed

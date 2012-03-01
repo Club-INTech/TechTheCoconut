@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from lib.carte import Carte
 from lib.robot import Robot
 
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 
 #:TODO: Import et utilisation des logs
 

@@ -21,7 +21,7 @@ import __builtin__
 
 # Log
 import log
-#log = log.Log()
+#log = log.Log(__name__)
 
 
 # Ajout de constantes de develop si on ne passe pas par la console INTech

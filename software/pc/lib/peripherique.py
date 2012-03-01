@@ -5,7 +5,7 @@ import log
 
 import os
 
-log = log.Log()
+log = log.Log(__name__)
 
 liste = []
 

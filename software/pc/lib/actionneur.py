@@ -4,7 +4,7 @@ import serie
 import log
 import peripherique
 
-log = log.Log()
+log = log.Log(__name__)
 
 
 class Actionneur(serie.Serie):
