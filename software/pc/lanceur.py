@@ -6,7 +6,6 @@ import glob
 import lib.log
 import lib.conf
 import __builtin__
-import lib.peripherique
 
 first = True
 while first or not profil.importation:
@@ -44,7 +43,9 @@ if conf == 'develop':
     exec('import profils.'+conf+'.injection.robot')
 else:
     exec('import profils.'+conf+'.injection')
-    
+
+import lib.peripherique
+
 # Association des périphériques
 for p in constantes['Serie']['peripheriques']:
     p_obj = lib.peripherique.Peripherique(p)
