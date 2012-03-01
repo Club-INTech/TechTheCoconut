@@ -6,6 +6,30 @@ import datetime
 import logging
 import inspect
 
+# Couleurs pour le fun et surtout pour ... le fun
+def add_coloring_to_emit_ansi(fn):
+    # add methods we need to the class
+    def new(*args):
+        levelno = args[1].levelno
+        if(levelno>=50): # CRITICAL
+            color = '\x1b[31m' # red
+        elif(levelno>=40): # ERROR
+            color = '\x1b[33m' # yellow
+        elif(levelno>=30): # WARNING
+            color = '\x1b[35m' # magenta
+        elif(levelno>=20): # INFO
+            color = '\x1b[32m' # green 
+        elif(levelno>=10): # DEBUG
+            color = '\x1b[36m' # cyan
+        else: # NOTSET
+            color = '\x1b[0m' # normal
+        args[1].msg = color + args[1].msg +  '\x1b[0m'  # normal
+        return fn(*args)
+    return new
+
+# Ne fonctionne pas sur Windows mais de toute façon on s'en balance de Windaube
+logging.StreamHandler.emit = add_coloring_to_emit_ansi(logging.StreamHandler.emit)
+
 class Log:
     """
     Classe permettant de gérer les logs\n\n
@@ -49,7 +73,7 @@ class Log:
             self.logger.setLevel(logging.DEBUG)
             self.stderr_handler = logging.StreamHandler()
             self.stderr_handler.setLevel(logging.WARNING)
-            formatter = logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(message)s")
+            formatter = logging.Formatter("%(asctime)s:"+self.nom+":%(levelname)s:%(message)s")
             self.stderr_handler.setFormatter(formatter)
             self.logger.addHandler(self.stderr_handler)
 
