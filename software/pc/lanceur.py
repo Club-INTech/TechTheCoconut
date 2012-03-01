@@ -6,6 +6,14 @@ import glob
 import lib.conf
 import __builtin__
 
+
+# Chargement de la couleur du robot
+first = True
+while first or couleur not in ['', 'R', 'V']:
+    first = False
+    couleur = raw_input('Couleur de notre robot rouge ou violet ([R], V) : ')
+
+# Chargement du profil de configuration
 first = True
 while first or not profil.importation:
 	first = False
@@ -29,6 +37,8 @@ while first or not profil.importation:
 # Chargement des constantes en variable globale
 exec('import profils.'+conf+'.constantes')
 exec('__builtin__.constantes = profils.'+conf+'.constantes.constantes')
+
+__builtin__.constantes['couleur'] = couleur
 
 # Initialisatoin des logs
 import lib.log
