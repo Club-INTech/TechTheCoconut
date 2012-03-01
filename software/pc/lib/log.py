@@ -83,9 +83,9 @@ class Log:
         Log.stderr_level = stderr_level
         Log.logs_level = logs_level
         # On ajoute le nom du module
-        Log.logs_format = str(map(lambda x: x if x else self.nom, logs_format.split(":")))
+        Log.logs_format = ':'.join(map(lambda x: x if x else self.nom, logs_format.split(":")))
         # On ajoute le nom du module
-        Log.stderr_format = str(map(lambda x: x if x else self.nom, stderr_format.split(":")))
+        Log.stderr_format = ':'.join(map(lambda x: x if x else self.nom, stderr_format.split(":")))
         Log.levels = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')
         
         if (stderr and (stderr_level not in Log.levels)):

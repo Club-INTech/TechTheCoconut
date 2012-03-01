@@ -64,7 +64,6 @@ class Peripherique():
                     print str(i)+". "+chemin
                     association[i] = chemin
                     i+=1
-            #log.logger.warning(association)
             numero = int(raw_input("numéro : "))
             if numero == 0:
                 log.logger.info("Périphérique "+self.nom+" volontairement non associé")
