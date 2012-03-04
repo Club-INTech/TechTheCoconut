@@ -11,8 +11,10 @@ import __builtin__
 first = True
 while first or couleur not in ['', 'R', 'V']:
     first = False
-    couleur = raw_input('Couleur de notre robot rouge ou violet ([R], V) : ')
-
+    couleur = raw_input('Couleur de notre robot rouge ou violet ([V], R) : ')
+    if couleur == '' :
+        couleur = 'V'
+    
 # Chargement du profil de configuration
 first = True
 while first or not profil.importation:
