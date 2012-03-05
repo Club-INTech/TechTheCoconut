@@ -12,6 +12,8 @@ Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
 				,angle_courant_(0.0)
+				,etat_rot_(true)
+				,etat_tra_(true)
 				,translation(0.6,2,0.0)
 				,rotation(1,3,0.0)
 // 				,translation(0.6,3,0.01)
@@ -157,7 +159,7 @@ void Robot::communiquer_pc(){
 		serial_t_::print(y());
 	}
 	else if(COMPARE_BUFFER("eo")){
-		serial_t_::print((float)angle_courant()*1000);
+		serial_t_::print(angle_courant()*1000);
 	}
 	
 	else if(COMPARE_BUFFER("d")){
@@ -176,12 +178,21 @@ void Robot::communiquer_pc(){
 		Serial<0>::print("END");
 	}
 	
-	/* TODO sr st
-	 's' Désactiver/Activer asservissement
-		'r' Rotation
-		't' Translation
-	*/
+	//stopper asservissement rotation/translation
+	else if(COMPARE_BUFFER("sr")){
+		etat_rot(false);
+	}
+	else if(COMPARE_BUFFER("st")){
+		etat_tra(false);
+	}
 	
+	//démarrer asservissement rotation/translation
+	else if(COMPARE_BUFFER("dr")){
+		etat_rot(true);
+	}
+	else if(COMPARE_BUFFER("dt")){
+		etat_tra(true);
+	}
 
 #undef COMPARE_BUFFER
 }
@@ -212,6 +223,16 @@ float Robot::angle_courant(void)
 return (float)angle_courant_;
 }
 
+bool Robot::etat_rot(void)
+{
+return (bool)etat_rot_;
+}
+bool Robot::etat_tra(void)
+{
+return (bool)etat_tra_;
+}
+
+
 void Robot::x(float new_x)
 {
 	x_ = new_x;
@@ -226,6 +247,17 @@ void Robot::angle_courant(float new_angle)
 {
 	angle_courant_ = new_angle;
 }
+
+
+void Robot::etat_rot(bool etat)
+{
+	etat_rot_ = etat;
+}
+void Robot::etat_tra(bool etat)
+{
+	etat_tra_ = etat;
+}
+
 
 void Robot::gotoPos(float x, float y)
 {

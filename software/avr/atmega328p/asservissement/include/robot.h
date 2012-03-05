@@ -67,6 +67,12 @@ private:
 	*/
 	float CONVERSION_TIC_RADIAN_;
 	
+	/**
+	* booléens d'activation de l'asservissement
+	*/
+	bool etat_rot_;
+	bool etat_tra_;
+	
 	Asservissement translation;
 	Asservissement rotation;
 
@@ -92,6 +98,7 @@ public:
 	
 	float angle_courant(void);
 	
+	
 	/**
 	 * setter pour les coordonnées x,y, en mm
 	 * \param float coordonnée en mm
@@ -102,6 +109,21 @@ public:
 	void y(float);
 	
 	void angle_courant(float);
+	
+	/**
+	 * getter pour l'état activé ou non des asservissement
+	 */
+	
+	bool etat_rot(void);
+	bool etat_tra(void);
+	
+	/**
+	 * setter pour l'état activé ou non des asservissement
+	 */
+	
+	
+	void etat_rot(bool);
+	void etat_tra(bool);
 	
 	/**
 	* Translate le robot
