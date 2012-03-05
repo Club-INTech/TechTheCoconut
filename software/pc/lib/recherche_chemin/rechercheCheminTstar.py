@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#TEST
+# TEST
 
 """
 --> voir utiliseRechercheChemin pour exemple
@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 #gestion des logs
 import lib.log
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 
 #importation de fonctions et classes de géométrie
 from lib.outils_math.collisions import *

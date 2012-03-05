@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from lib.carte import Carte
 from lib.robot import Robot
 
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 
 #:TODO: Import et utilisation des logs
 
@@ -293,6 +293,27 @@ class Visu_table( threading.Thread):
 	      self.tailleTablePx[1] - math.trunc( Visu_table.scale*(pos.y + math.sin(ori)*diag) ))
 	
 	return [sg,ig,id,sd]
+
+    def creerChemin(self, chemin):
+	"""
+	Crée le chemin (suite de Point) à afficher sur la carte.\n
+	Chaque appel à cette fonction supprime l'ancienne liste de point
+	
+	:param chemin: La liste des points à créer
+	:type chemin: dictionnaire de Point 
+	"""
+	self.chemin =[]
+	c= []
+	for p in chemin:
+	    c.append((p.x,p.y))
+	    self.chemin.append(((self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*p.x) ) ,
+				(self.tailleTablePx[1] - math.trunc( Visu_table.scale*p.y)   )))
+	    
+	print c
+	print self.chemin
+		
+	if self.debug:
+	    log.logger.debug("Chemin: "+self.chemin)
 	
     def drawChemin(self):
 	"""
@@ -301,7 +322,7 @@ class Visu_table( threading.Thread):
 	:TODO: Voir avec pierre la nature des informations recupérées et adapter la méthode en consèquence
 	
 	:param listePoints: La liste des points à créer
-	:type listePoints: dictionnaire de liste 
+	:type listePoints: dictionnaire de tuple 
 	"""
 	
 	
@@ -351,9 +372,9 @@ class Visu_table( threading.Thread):
 
     def quit(self):
 	log.logger.info("Fermeture du thread "+self.nomThread+" en cours...")
-	self.Terminated = True 
+	self.Terminated = True
+	pygame.quit ()  
 	self._Thread__stop()
-	pygame.quit () 
 
     def run(self):
 	self.Terminated=False
@@ -368,24 +389,3 @@ class Visu_table( threading.Thread):
 	    time.sleep(1/self.fps)
 	    self.majTable()
 	
-
-    def creerChemin(self, chemin):
-	"""
-	Ajoute le chemin (suite de Point) à afficher sur la carte.\n
-	Chaque appel à cette fonction supprime l'ancienne liste de point
-	
-	:param chemin: La liste des points à créer
-	:type chemin: dictionnaire de Point 
-	"""
-	self.chemin =[]
-	c= []
-	for p in chemin:
-	    c.append((p.x,p.y))
-	    self.chemin.append(((self.tailleTablePx[0]/2 + math.trunc( Visu_table.scale*p.x) ) ,
-				(self.tailleTablePx[1] - math.trunc( Visu_table.scale*p.y)   )))
-	    
-	print c
-	print self.chemin
-		
-	if self.debug:
-	    log.logger.debug("Chemin: "+self.chemin)

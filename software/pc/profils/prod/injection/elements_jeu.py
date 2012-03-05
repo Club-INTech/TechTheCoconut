@@ -34,7 +34,7 @@ carte = mod_carte.Carte()
 
 # TODO gérer l'assignation de cette variable
 # NOTE Soit 'R', soit 'V'
-couleur_robot = 'R'
+couleur_robot = constantes["couleur"]
 
 
 

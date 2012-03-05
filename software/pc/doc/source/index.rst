@@ -18,6 +18,7 @@ Contents:
     carte
     decision
     elements_jeu
+    ennemi
     evenement
     jeu
     log

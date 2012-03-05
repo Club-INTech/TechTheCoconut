@@ -4,7 +4,7 @@ import serie
 import log
 import peripherique
 
-log = log.Log()
+log = log.Log(__name__)
 
 
 class Actionneur(serie.Serie):
@@ -38,6 +38,7 @@ class Actionneur(serie.Serie):
     def deplacer(self, angle, vitesse = None):
         """
         Envoyer un ordre à l'actionneur
+        
         :param angle: angle à atteindre (angle mesuré entre la face avant du robot et le bras)
         :type angle: int
         :param vitesse: (facultatif) vitesse de la rotation

@@ -12,12 +12,11 @@ import actionneur
 import outils_math.point
 import lib.log
 
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 sys.path.append('../')
 
 #import profils.develop.constantes
 
-#log = log.Log()
 
 class Robot:
     

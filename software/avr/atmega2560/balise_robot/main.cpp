@@ -66,17 +66,18 @@ int main() {
 		Serial<0>::read(rawFrame,4);
 
 		Frame frame(rawFrame);
-			Serial<0>::print(frame.getRobotId());
-			Serial<0>::print(frame.getDistance());
+// 			Serial<0>::print(frame.getRobotId());
+// 			Serial<0>::print(frame.getDistance());
 		
-		if (frame.isValid()) {
+// 		if (frame.isValid()) {
 			
-			//Serial<0>::print(frame.getRobotId());
-			//Serial<0>::print(frame.getDistance());
-			Serial<0>::print(balise.getAngle());
-		} else {
-			Serial<0>::print("ERROR");
-		}
+// 			Serial<0>::print(frame.getRobotId());
+			Serial<0>::print(frame.getDistance());
+			Serial<0>::print(frame.isValid());
+// 			Serial<0>::print(balise.getAngle());
+// 		} else {
+// 			Serial<0>::print("ERROR");
+// 		}
 	}
 }
 
@@ -90,7 +91,7 @@ ISR(TIMER0_OVF_vect)
 ISR(INT0_vect)
 {
 	Balise & balise = Balise::Instance();
-	if(balise.toptour()>=10)
+	if(balise.toptour()>=100)
 		balise.max_counter(balise.toptour());
 	balise.reset_toptour();
 }

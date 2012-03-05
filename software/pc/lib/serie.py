@@ -5,7 +5,7 @@ import threading
 import Queue
 
 import log
-log = log.Log()
+log = log.Log(__name__)
 
 class Serie(threading.Thread, serial.Serial):
     """

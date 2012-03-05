@@ -21,11 +21,11 @@ y = 800
 arrivee = outils_math.point.Point(x,y)
 
 robotInstance = lib.robot.Robot()
-
 angle = raw_input("Donner l'angle des bras\n")
+angle = (float(angle)*3.14)/180
 lib.robot.orientation = 0.79 #en rad
 asser = Asservissement(robotInstance)
-centrePython = asser.avrToPython(angle)
+robotInstance.rayon = 350
 
 #Ici le centre et le rayon du robot sont initialisés, tu y accèdes avec robot.centre et robot.rayon
 
@@ -42,18 +42,21 @@ l'attribut centre robot doit plutot contenir les coordonnées du centre pour l'a
 et pis faudrait tester centrepython() et centreAvr() indépendemment, avec des listes de points, avant d'implémenter un joli test de goto.
 
 """
-
+print angle
 theta = recherche_chemin.thetastar.Thetastar([])
 print "Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")"
 chemin = theta.rechercheChemin(depart,arrivee)
+for i in chemin:
+    print "goto " + str(i.x) + ' ' + str(i.y) + '\n'
 
-i = 0
-centre_avr = []
-print len(chemin)
+asser.calculRayon(angle)
+
+"""
 while i+1 < len(chemin):
     centre_avr.append(asser.pythonToAvr(chemin[i],chemin[i+1]))
     i += 1
     
 i = 0
-for i in chemin:
+for i in centre_avr:
     print "goto " + str(i.x) + ' ' + str(i.y) + '\n'
+"""

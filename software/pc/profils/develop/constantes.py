@@ -40,10 +40,12 @@ constantes = \
 		"logs": True,
 		"logs_level": "DEBUG",
 		# 	%(processName)s pour ajouter nom du processus
-		"logs_format": "%(asctime)s:%(name)s:%(levelname)s:%(threadName)s:l%(lineno)d:%(message)s",
+		# le :: est volontaire, le nom du module sera inséré par la suite du programme
+		"logs_format": "%(asctime)s::%(levelname)s:%(threadName)s:%(message)s",
 		"stderr": True,
 		"stderr_level": "DEBUG",
-		"stderr_format": "%(asctime)s:%(name)s:%(levelname)s:%(threadName)s:l%(lineno)d:%(message)s",
+                # le :: est volontaire, le nom du module sera inséré par la suite du programme
+		"stderr_format": "%(asctime)s::%(levelname)s:%(threadName)s:%(message)s",
 		"dossier": "logs"
 	},
 	"Recherche_Chemin":
