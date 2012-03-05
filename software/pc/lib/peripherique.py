@@ -64,8 +64,15 @@ class Peripherique():
                     print str(i)+". "+chemin
                     association[i] = chemin
                     i+=1
-            numero = int(raw_input("numéro : "))
-            if numero == 0:
+            numero = raw_input("numéro : ")
+            if numero == '':
+                log.logger.info("Périphérique "+self.nom+" ")
+                return False
+            try:
+                numero = int(numero)
+            except:
+                continue
+            if numero == '' or numero == 0:
                 log.logger.info("Périphérique "+self.nom+" volontairement non associé")
                 return False
             elif numero in association.keys():
