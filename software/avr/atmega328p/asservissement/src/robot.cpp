@@ -424,7 +424,6 @@ void Robot::fin_tourner()
 	
 	if (consigne_tra() != translation.consigne())
 	{
-		Serial<0>::print("--->TRA");
 		translation.consigne(consigne_tra());
 	}
 	else if (abs(angle_courant_ == rotation.consigne()*CONVERSION_TIC_RADIAN_) < 0.01)

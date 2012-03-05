@@ -48,7 +48,8 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 
 	if (robot.rotation_en_cours() && abs(robot.rot_pwmCourant())<10)
 	{
-		robot.translation_en_cours(false);
+		
+		robot.rotation_en_cours(false);
 		robot.fin_tourner();
 	}
 	
