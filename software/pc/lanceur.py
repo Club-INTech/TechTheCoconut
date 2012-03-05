@@ -68,11 +68,13 @@ for p in constantes['Serie']['peripheriques']:
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes)) : \n')
     first = False
     try:
         if mode == '':
             mode = 'console'
+        if mode == 'e':
+            mode = 'etalonnage_constantes'
         log.logger.info("Chargement du fichier de lancement " + mode)
         exec('import bin.'+ mode)
         if mode == "visualisation_table":

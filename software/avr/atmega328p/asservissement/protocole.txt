@@ -23,7 +23,6 @@ Ordres :
          'i' Intégration
          'p' Proportionnel
 	 'm' Max du PWM
-     's' Type d'asservissement  ???
      't' Translation
          'd' Dérivée
          'i' Intégration
@@ -32,7 +31,10 @@ Ordres :
      'x' position en abscisse du robot (mm)
      'y' position en ordonnée du robot(mm)
      'o' orientation absolue du robot (rad)
- 's' Désactiver/Activer asservissement
+ 's' Désactiver asservissement
+     'r' Rotation
+     't' Translation
+ 'd' Démarrer asservissement
      'r' Rotation
      't' Translation
 

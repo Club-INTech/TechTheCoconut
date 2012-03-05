@@ -25,11 +25,45 @@ int main()
 }
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
+	/*
 	Robot & robot = Robot::Instance();
+	
 	int32_t infos[2];
 	//info[0]=>distance courante ; info[1] => angle courant.
 	get_all(infos);
 	robot.asservir(infos[0],infos[1]);
 	robot.updatePosition(infos[0],infos[1]);
-	//printlnLong(robot.x());
+	*/
+	
+	
+	//méthodes non bloquantes :
+	
+	Robot & robot = Robot::Instance();
+	int32_t infos[2];
+	//info[0]=>distance courante ; info[1] => angle courant.
+	get_all(infos);
+	
+	if (abs(robot.rot_pwmCourant())>=10)
+		robot.rotation_en_cours(true);
+
+	if (robot.rotation_en_cours() && abs(robot.rot_pwmCourant())<10)
+	{
+		robot.translation_en_cours(false);
+		robot.fin_tourner();
+	}
+	
+	if (abs(robot.tra_pwmCourant())>=10)
+		robot.translation_en_cours(true);
+
+	if (robot.translation_en_cours() && abs(robot.tra_pwmCourant())<10)
+	{
+		robot.translation_en_cours(false);
+		robot.fin_translater();
+	}
+	
+	robot.asservir(infos[0],infos[1]);
+	robot.updatePosition(infos[0],infos[1]);
+	
+	
+	
 }

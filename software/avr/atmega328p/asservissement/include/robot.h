@@ -73,6 +73,20 @@ private:
 	bool etat_rot_;
 	bool etat_tra_;
 	
+	/**
+	* consignes de déplacements en tic
+	*/
+	
+	int32_t consigne_tra_;
+	int32_t consigne_rot_;
+	
+	/**
+	* booléens pour l'attente de fin de mouvement
+	*/
+	
+	bool translation_en_cours_;
+	bool rotation_en_cours_;
+	
 	Asservissement translation;
 	Asservissement rotation;
 
@@ -113,17 +127,47 @@ public:
 	/**
 	 * getter pour l'état activé ou non des asservissement
 	 */
-	
 	bool etat_rot(void);
 	bool etat_tra(void);
 	
 	/**
 	 * setter pour l'état activé ou non des asservissement
 	 */
-	
-	
 	void etat_rot(bool);
 	void etat_tra(bool);
+	
+	
+	/**
+	 * getter pour les consignes de déplacements en tic
+	 */
+	int32_t consigne_tra(void);
+	int32_t consigne_rot(void);
+	
+	/**
+	 * setter pour les consignes de déplacements en tic
+	*/
+	void consigne_tra(int32_t);
+	void consigne_rot(int32_t);
+	
+	
+	/**
+	 * getter pour les marqueurs de déplacements
+	 */
+	bool translation_en_cours(void);
+	bool rotation_en_cours(void);
+	
+	/**
+	 * setter pour les marqueurs de déplacements
+	*/
+	void translation_en_cours(bool);
+	void rotation_en_cours(bool);
+	
+	
+	/**
+	 * accesseurs pour les pwm courant des asservissements
+	*/
+	int32_t rot_pwmCourant(void);
+	int32_t tra_pwmCourant(void);
 	
 	/**
 	* Translate le robot
@@ -146,6 +190,16 @@ public:
 	* \param int16_t position sur y à atteindre sur l'aire de jeu, en absolu.
 	*/
 	void gotoPos(float x, float y);
+	
+	
+	
+	
+	//méthodes non bloquantes
+	
+	void debut_tourner(float angle);
+	void fin_tourner(void);
+	void debut_translater(float distance);
+	void fin_translater(void);
 	
 	void communiquer_pc();
 	
