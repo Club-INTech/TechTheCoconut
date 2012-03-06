@@ -62,6 +62,10 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 		robot.fin_translater();
 	}
 	
+	
+	if (robot.demande_stop())
+		robot.stopper(infos[0]);
+	
 	robot.asservir(infos[0],infos[1]);
 	robot.updatePosition(infos[0],infos[1]);
 	

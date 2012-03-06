@@ -87,6 +87,19 @@ private:
 	bool translation_en_cours_;
 	bool rotation_en_cours_;
 	
+	/**
+	* booléens pour l'attente de fin de consigne
+	*/
+	
+	bool translation_attendue_;
+	bool rotation_attendue_;
+	bool goto_attendu_;
+	
+	/**
+	* booléen de demande d'arret
+	*/
+	bool demande_stop_;
+	
 	Asservissement translation;
 	Asservissement rotation;
 
@@ -162,6 +175,31 @@ public:
 	void translation_en_cours(bool);
 	void rotation_en_cours(bool);
 	
+	/**
+	 * getter pour les ordres de déplacements
+	 */
+	bool translation_attendue(void);
+	bool rotation_attendue(void);
+	bool goto_attendu(void);
+	
+	/**
+	 * setter pour les ordres de déplacements
+	*/
+	void translation_attendue(bool);
+	void rotation_attendue(bool);
+	void goto_attendu(bool);
+	
+	
+	/**
+	 * getter pour le booléen de demande d'arret
+	 */
+	bool demande_stop(void);
+	
+	/**
+	 * setter pour le booléen de demande d'arret
+	*/
+	void demande_stop(bool);
+	
 	
 	/**
 	 * accesseurs pour les pwm courant des asservissements
@@ -200,6 +238,8 @@ public:
 	void fin_tourner(void);
 	void debut_translater(float distance);
 	void fin_translater(void);
+	
+	void stopper(int32_t distance);
 	
 	void communiquer_pc();
 	

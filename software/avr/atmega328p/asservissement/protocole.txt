@@ -50,3 +50,4 @@ Ordres :
      1er float : x en mm
      2è  float : y en mm
 	renvoi "END" en fin de déplacement
+ 'stop' s'immobilise sur place

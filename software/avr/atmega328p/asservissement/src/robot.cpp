@@ -14,8 +14,12 @@ Robot::Robot() : couleur_('r')
 				,angle_courant_(0.0)
 				,translation_en_cours_(false)
 				,rotation_en_cours_(false)
+				,translation_attendue_(false)
+				,rotation_attendue_(false)
+				,goto_attendu_(false)
 				,etat_rot_(true)
 				,etat_tra_(true)
+				,demande_stop_(false)
 				,translation(0.6,2,0.0)
 				,rotation(1,3,0.0)
 // 				,translation(0.6,3,0.01)
@@ -178,6 +182,14 @@ void Robot::communiquer_pc(){
 		gotoPos(co_x , co_y);
 	}
 	
+	else if(COMPARE_BUFFER("stop")){
+		demande_stop(true);
+		//TODO attention au tour sur lui meme
+		consigne_rot(angle_courant()/CONVERSION_TIC_RADIAN_);
+		rotation.consigne(consigne_rot());
+		
+	}
+	
 	//stopper asservissement rotation/translation
 	else if(COMPARE_BUFFER("sr")){
 		etat_rot(false);
@@ -273,6 +285,47 @@ void Robot::rotation_en_cours(bool etat)
 }
 
 
+
+bool Robot::translation_attendue(void)
+{
+return (bool)translation_attendue_;
+}
+
+bool Robot::rotation_attendue(void)
+{
+return (bool)rotation_attendue_;
+}
+
+void Robot::translation_attendue(bool etat)
+{
+	translation_attendue_ = etat;
+}
+void Robot::rotation_attendue(bool etat)
+{
+	rotation_attendue_ = etat;
+}
+
+bool Robot::goto_attendu(void)
+{
+return (bool)goto_attendu_;
+}
+
+void Robot::goto_attendu(bool etat)
+{
+	goto_attendu_ = etat;
+}
+
+
+bool Robot::demande_stop(void)
+{
+return (bool)demande_stop_;
+}
+
+void Robot::demande_stop(bool etat)
+{
+	demande_stop_ = etat;
+}
+
 void Robot::x(float new_x)
 {
 	x_ = new_x;
@@ -340,6 +393,8 @@ void Robot::gotoPos(float x, float y)
 	
 	angle=atan2(delta_y,delta_x);
 	
+	goto_attendu(true);
+	
 	debut_tourner(angle);
 	
 	debut_translater(sqrt(delta_x*delta_x+delta_y*delta_y));
@@ -399,6 +454,7 @@ void Robot::debut_tourner(float angle)
 	static float angleBkp = 0;
 	//angledepart_? (couleur_ == 'v') PI : 
 	
+	rotation_attendue(true);
 	
 	float ang1 = abs(angle-angleBkp);
 	float ang2 = abs(angle+2*PI-angleBkp);
@@ -424,22 +480,46 @@ void Robot::fin_tourner()
 	
 	if (consigne_tra() != translation.consigne())
 	{
+		
+		serial_t_::print((int32_t)(consigne_tra() - translation.consigne()));
 		translation.consigne(consigne_tra());
 	}
-	else if (abs(angle_courant_ == rotation.consigne()*CONVERSION_TIC_RADIAN_) < 0.01)
+	//else if (abs(angle_courant_ == rotation.consigne()*CONVERSION_TIC_RADIAN_) < 0.01)
+	else if (rotation_attendue())
 	{
-		//fin d'un ordre de rotation simple
-		Serial<0>::print("FIN_TOU");
+		rotation_attendue(false);
+		if (not goto_attendu())
+		{
+			//fin d'un ordre de rotation simple
+			Serial<0>::print("FIN_TOU");
+		}else{
+			//fin d'un ordre de goto
+			goto_attendu(false);
+			Serial<0>::print("FIN_GOTO");
+		}
 	}
 }
 
 void Robot::debut_translater(float distance)
 {	
+	translation_attendue(true);
 	consigne_tra(translation.consigne()+distance/CONVERSION_TIC_MM_);
 }
 
 
 void Robot::fin_translater()
 {
-	Serial<0>::print("FIN_TRA");
+	if (translation_attendue())
+	{
+		translation_attendue(false);
+		if (not goto_attendu())
+			Serial<0>::print("FIN_TRA");
+	}
+}
+
+void Robot::stopper(int32_t distance)
+{
+	demande_stop(false);
+	translation.consigne(distance);
+	consigne_tra(distance);
 }
