@@ -100,6 +100,13 @@ private:
 	*/
 	bool demande_stop_;
 	
+	/**
+	* mémoires pour les tests d'immobilité
+	*/
+	
+	int32_t last_tic_tra_;
+	int32_t last_tic_rot_;
+	
 	Asservissement translation;
 	Asservissement rotation;
 
@@ -202,6 +209,21 @@ public:
 	
 	
 	/**
+	 * getter pour les tests d'immobilité
+	 */
+	
+	int32_t last_tic_tra(void);
+	int32_t last_tic_rot(void);
+	
+	/**
+	 * setter pour les tests d'immobilité
+	*/
+	
+	void last_tic_tra(int32_t);
+	void last_tic_rot(int32_t);
+	
+	
+	/**
 	 * accesseurs pour les pwm courant des asservissements
 	*/
 	int32_t rot_pwmCourant(void);
@@ -242,6 +264,9 @@ public:
 	void stopper(int32_t distance);
 	
 	void communiquer_pc();
+	
+	void trace(int32_t debug);
+
 	
 	
 };

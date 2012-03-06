@@ -43,6 +43,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	//info[0]=>distance courante ; info[1] => angle courant.
 	get_all(infos);
 	
+	
 	if (abs(robot.rot_pwmCourant())>=10)
 		robot.rotation_en_cours(true);
 
@@ -63,6 +64,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	}
 	
 	
+	//gestion de l'arret
 	if (robot.demande_stop())
 		robot.stopper(infos[0]);
 	
@@ -70,5 +72,19 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.updatePosition(infos[0],infos[1]);
 	
 	
+	//detection d'un blocage - translation
+	//2500 ne stoppe pas | 2000 ne démarre pas | 2200 ne stop pas ET ne démarre pas...
+	if(abs(robot.tra_pwmCourant())>2200 && abs(infos[0]-robot.last_tic_tra())<2)
+// 		robot.trace(abs(infos[0]-robot.last_tic_tra()));
+		robot.demande_stop(true);
+		
+	/*
+	//detection d'un blocage - rotation
+	if(abs(robot.rot_pwmCourant())>200 && abs(infos[1]-robot.last_tic_rot())<50)
+		robot.demande_stop(true);
+	
+	*/
+	robot.last_tic_rot(infos[0]);
+	robot.last_tic_tra(robot.last_tic_rot());
 	
 }

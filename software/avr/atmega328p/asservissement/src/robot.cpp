@@ -11,6 +11,8 @@
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
+				,last_tic_rot_(0)
+				,last_tic_tra_(0)
 				,angle_courant_(0.0)
 				,translation_en_cours_(false)
 				,rotation_en_cours_(false)
@@ -184,10 +186,6 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("stop")){
 		demande_stop(true);
-		//TODO attention au tour sur lui meme
-		consigne_rot(angle_courant()/CONVERSION_TIC_RADIAN_);
-		rotation.consigne(consigne_rot());
-		
 	}
 	
 	//stopper asservissement rotation/translation
@@ -326,6 +324,26 @@ void Robot::demande_stop(bool etat)
 	demande_stop_ = etat;
 }
 
+int32_t Robot::last_tic_tra(void)
+{
+return (int32_t)last_tic_tra_;
+}
+
+void Robot::last_tic_tra(int32_t valeur)
+{
+	last_tic_tra_ = valeur;
+}
+
+int32_t Robot::last_tic_rot(void)
+{
+return (int32_t)last_tic_rot_;
+}
+
+void Robot::last_tic_rot(int32_t valeur)
+{
+	last_tic_rot_ = valeur;
+}
+
 void Robot::x(float new_x)
 {
 	x_ = new_x;
@@ -370,27 +388,6 @@ void Robot::gotoPos(float x, float y)
 	float delta_y = (y-y_);
 	float angle;
 	
-	/*
-	if (delta_x==0)
-	{
-		if (delta_y > 0)
-			angle=PI/2;
-		else
-			angle=-PI/2;
-	}
-	else if (delta_x > 0)
-	{
-		angle=atan(delta_y/delta_x);
-	}
-	else
-	{
-		if (delta_y > 0)
-			angle=atan(delta_y/delta_x) - PI;
-		else
-			angle=atan(delta_y/delta_x) + PI;
-	}
-	*/
-	
 	angle=atan2(delta_y,delta_x);
 	
 	goto_attendu(true);
@@ -402,6 +399,7 @@ void Robot::gotoPos(float x, float y)
 }
 
 /*
+/////////  méthodes  bloquantes ///////////
 
 void Robot::translater(float distance)
 {	
@@ -412,9 +410,6 @@ void Robot::translater(float distance)
 		asm("nop");
 	}
 }
-
-
-
 
 void Robot::tourner(float angle)
 {
@@ -447,7 +442,7 @@ void Robot::tourner(float angle)
 	}	
 }
 */
-///////// test méthodes non bloquantes ///////////
+
 
 void Robot::debut_tourner(float angle)
 {
@@ -480,8 +475,6 @@ void Robot::fin_tourner()
 	
 	if (consigne_tra() != translation.consigne())
 	{
-		
-		serial_t_::print((int32_t)(consigne_tra() - translation.consigne()));
 		translation.consigne(consigne_tra());
 	}
 	//else if (abs(angle_courant_ == rotation.consigne()*CONVERSION_TIC_RADIAN_) < 0.01)
@@ -520,6 +513,16 @@ void Robot::fin_translater()
 void Robot::stopper(int32_t distance)
 {
 	demande_stop(false);
-	translation.consigne(distance);
+	
+	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
+	consigne_rot(angle_courant()/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(consigne_rot());
+	//stop en translation
 	consigne_tra(distance);
+	translation.consigne(distance);
+}
+
+void Robot::trace(int32_t debug)
+{
+	serial_t_::print((int32_t)debug);
 }
