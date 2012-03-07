@@ -230,18 +230,24 @@ public:
 	int32_t tra_pwmCourant(void);
 	
 	/**
-	* Translate le robot
-	* 
-	* \param float distance de translation en mm
+	 * accesseurs pour les consignes des asservissements
 	*/
-	void translater(float distance);
+	int32_t tra_consigne(void);
+	int32_t rot_consigne(void);
 	
-	/**
-	* Tourner le robot
-	* 
-	* \param float angle de rotation en radians
-	*/
-	void tourner(float angle);
+// 	/**
+// 	* Translate le robot
+// 	* 
+// 	* \param float distance de translation en mm
+// 	*/
+// 	void translater(float distance);
+// 	
+// 	/**
+// 	* Tourner le robot
+// 	* 
+// 	* \param float angle de rotation en radians
+// 	*/
+// 	void tourner(float angle);
 	
 	/**
 	* déplace le robot
@@ -266,6 +272,8 @@ public:
 	void communiquer_pc();
 	
 	void trace(int32_t debug);
+	void atteinteConsignes(void);
+	void gestionStoppage(int32_t distance, int32_t angle);
 
 	
 	

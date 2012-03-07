@@ -262,6 +262,14 @@ int32_t Robot::rot_pwmCourant(void)
 return (int32_t)rotation.pwmCourant();
 }
 
+int32_t Robot::tra_consigne(void)
+{
+return (int32_t)translation.consigne();
+}
+int32_t Robot::rot_consigne(void)
+{
+return (int32_t)rotation.consigne();
+}
 
 bool Robot::translation_en_cours(void)
 {
@@ -525,4 +533,88 @@ void Robot::stopper(int32_t distance)
 void Robot::trace(int32_t debug)
 {
 	serial_t_::print((int32_t)debug);
+}
+
+
+void Robot::atteinteConsignes()
+{
+	if (abs(rot_pwmCourant())>=10)
+		rotation_en_cours(true);
+
+	if (rotation_en_cours() && abs(rot_pwmCourant())<10)
+	{
+		
+		rotation_en_cours(false);
+		fin_tourner();
+	}
+	
+	if (abs(tra_pwmCourant())>=10)
+		translation_en_cours(true);
+
+	if (translation_en_cours() && abs(tra_pwmCourant())<10)
+	{
+		translation_en_cours(false);
+		fin_translater();
+	}
+}
+
+void Robot::gestionStoppage(int32_t distance, int32_t angle)
+{
+	
+	static float compteurBlocage=0;
+	static int32_t last_distance;
+	static int32_t last_angle;
+	
+	
+	//gestion de l'arret
+	if (demande_stop())
+		stopper(distance);
+	
+	
+	
+	//detection d'un blocage - translation
+		
+	//2500 ne stoppe pas | 2000 ne démarre pas | 2200 ne stop pas ET ne démarre pas...
+// 	if(abs(robot.tra_pwmCourant())>2150 && abs(distance-robot.last_tic_tra())==0)
+		
+		
+	if (	   abs(rot_pwmCourant())>0 
+		&& abs(tra_pwmCourant())>0 
+		&& abs(last_distance-distance)<10
+		&& abs(last_angle-angle)<10
+	   )
+	{
+			
+		if(compteurBlocage==20){
+			demande_stop(true);
+			compteurBlocage=0;
+		}
+		else{
+			compteurBlocage++;
+		}
+		
+	}
+	else
+	{
+		compteurBlocage=0;
+	}
+	
+	
+	last_distance = distance;
+	last_angle = angle;
+		
+	/*	
+	if(abs(tra_consigne()-distance) > (abs(tra_consigne()-last_tic_tra()) - 20))
+	{
+// 		robot.trace(abs(distance-robot.last_tic_tra()));
+		demande_stop(true);
+	}*/
+	
+	/*
+	//detection d'un blocage - rotation
+	if(abs(robot.rot_pwmCourant())>200 && abs(infos[1]-robot.last_tic_rot())<50)
+		robot.demande_stop(true);
+	
+	*/
+	
 }
