@@ -14,7 +14,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
-log = lib.log.Log()
+log =lib.log.Log(__name__)
 
 sys.path.append('../')
 
@@ -61,14 +61,45 @@ class Asservissement:
         
         i = 0
         for i in chemin_python:
-            self.ecrire("goto " + i.x + ' ' + i.y + '\n')
+            self.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             self.reponse = self.file_attente.get(lu)
-            if reponse == "ok":
+            if reponse == "END":
                 pass
             else:
-                log.logger.debug("Erreur asservissement : " + reponse)
+                log.logger.debug("Erreur asservissement (goto) : " + reponse)
 
+    def tourner(self, angle):
+        """
+        Fonction de script pour faire tourner le robot sur lui même.
+        :param angle: Angle à atteindre
+        :type angle: Float
+        """
+        self.ecrire("t\n" + str(float(angle))
+        self.reponse = self.file_attente.get(lu)
+        if reponse == "END":
+            pass
+        else:
+            log.logger.debug("Erreur asservissement (tourner) : " + reponse)
     
+    def avancer(self, distance):
+        """
+        Fonction de script pour faire avancer le robot en ligne droite. (distance <0 => reculer)c
+        :param distance: Distance à parcourir
+        :type angle: Float
+        """
+        self.ecrire("d\n" + str(float(distance))
+        self.reponse = self.file_attente.get(lu)
+        if reponse == "END":
+            pass
+        else:
+            log.logger.debug("Erreur asservissement (avancer) : " + reponse)
+    
+    def stop(self):
+        """
+        Fonction pour demander l'immombilisation du robot
+        """
+        self.ecrire('stop\n')
+        
     def calculRayon(self, angle):
         """
         Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
