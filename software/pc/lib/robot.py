@@ -11,6 +11,7 @@ import outils_math.point as point
 import actionneur
 import outils_math.point
 import lib.log
+import asservissement
 
 log = lib.log.Log(__name__)
 sys.path.append('../')
@@ -61,4 +62,10 @@ class Robot:
         """
         self.orientation = orientation
         
-    
+    def demarer(self):#TODO : protocole pour la languette (démarrage du robot)
+        """
+        Fonction utilisée pour initialiser le robot
+        """
+        asser = Asservissement(robotInstance)
+        asser.ecrire("recal\n")
+        asser.reponse = self.file_attente.get(lu)
