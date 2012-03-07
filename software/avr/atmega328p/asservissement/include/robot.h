@@ -74,7 +74,7 @@ private:
 	bool etat_tra_;
 	
 	/**
-	* consignes de déplacements en tic
+	* consigne pour la translation, en tic
 	*/
 	
 	int32_t consigne_tra_;
@@ -147,68 +147,6 @@ public:
 	 */
 	void etat_rot(bool);
 	void etat_tra(bool);
-	
-	
-	/**
-	 * getter pour les consignes de déplacements en tic
-	 */
-	int32_t consigne_tra(void);
-	
-	/**
-	 * setter pour les consignes de déplacements en tic
-	*/
-	void consigne_tra(int32_t);
-	
-	
-	/**
-	 * getter pour les marqueurs de déplacements
-	 */
-	bool rotation_en_cours(void);
-	
-	/**
-	 * setter pour les marqueurs de déplacements
-	*/
-	void rotation_en_cours(bool);
-	
-	/**
-	 * getter pour les ordres de déplacements
-	 */
-	bool translation_attendue(void);
-	bool rotation_attendue(void);
-	bool goto_attendu(void);
-	
-	/**
-	 * setter pour les ordres de déplacements
-	*/
-	void translation_attendue(bool);
-	void rotation_attendue(bool);
-	void goto_attendu(bool);
-	
-	
-	/**
-	 * getter pour le booléen de demande d'arret
-	 */
-	bool demande_stop(void);
-	
-	/**
-	 * setter pour le booléen de demande d'arret
-	*/
-	void demande_stop(bool);
-	
-	
-// 	/**
-// 	* Translate le robot
-// 	* 
-// 	* \param float distance de translation en mm
-// 	*/
-// 	void translater(float distance);
-// 	
-// 	/**
-// 	* Tourner le robot
-// 	* 
-// 	* \param float angle de rotation en radians
-// 	*/
-// 	void tourner(float angle);
 	
 	/**
 	* déplace le robot
