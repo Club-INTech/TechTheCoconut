@@ -11,10 +11,7 @@
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
-				,last_tic_rot_(0)
-				,last_tic_tra_(0)
 				,angle_courant_(0.0)
-				,translation_en_cours_(false)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -82,6 +79,7 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	
 }
 
+////////////////////////////// PROTOCOLE SERIE ///////////////////////////////////
 //TODO Finir implémentation de protocole.txt
 void Robot::communiquer_pc(){
 	char buffer[17];
@@ -207,15 +205,18 @@ void Robot::communiquer_pc(){
 #undef COMPARE_BUFFER
 }
 
-void Robot::couleur(unsigned char couleur)
-{ 
-	if (couleur == 'r' || couleur == 'v')
-		couleur_ = couleur;
-}
+
+////////////////////////////// ACCESSEURS /////////////////////////////////
 
 unsigned char Robot::couleur(void)
 {
 return couleur_;
+}
+
+void Robot::couleur(unsigned char couleur)
+{ 
+	if (couleur == 'r' || couleur == 'v')
+		couleur_ = couleur;
 }
 
 float Robot::x(void)
@@ -223,9 +224,19 @@ float Robot::x(void)
 return (float)x_;
 }
 
+void Robot::x(float new_x)
+{
+	x_ = new_x;
+}
+
 float Robot::y(void)
 {
 return (float)y_;
+}
+
+void Robot::y(float new_y)
+{
+	y_ = new_y;
 }
 
 float Robot::angle_courant(void)
@@ -233,13 +244,29 @@ float Robot::angle_courant(void)
 return (float)angle_courant_;
 }
 
+void Robot::angle_courant(float new_angle)
+{
+	angle_courant_ = new_angle;
+}
+
 bool Robot::etat_rot(void)
 {
 return (bool)etat_rot_;
 }
+
+void Robot::etat_rot(bool etat)
+{
+	etat_rot_ = etat;
+}
+
 bool Robot::etat_tra(void)
 {
 return (bool)etat_tra_;
+}
+
+void Robot::etat_tra(bool etat)
+{
+	etat_tra_ = etat;
 }
 
 int32_t Robot::consigne_tra(void)
@@ -247,33 +274,10 @@ int32_t Robot::consigne_tra(void)
 return (int32_t)consigne_tra_;
 
 }
-int32_t Robot::consigne_rot(void)
-{
-return (int32_t)consigne_rot_;
-}
 
-
-int32_t Robot::tra_pwmCourant(void)
+void Robot::consigne_tra(int32_t cons)
 {
-return (int32_t)translation.pwmCourant();
-}
-int32_t Robot::rot_pwmCourant(void)
-{
-return (int32_t)rotation.pwmCourant();
-}
-
-int32_t Robot::tra_consigne(void)
-{
-return (int32_t)translation.consigne();
-}
-int32_t Robot::rot_consigne(void)
-{
-return (int32_t)rotation.consigne();
-}
-
-bool Robot::translation_en_cours(void)
-{
-return (bool)translation_en_cours_;
+	consigne_tra_ = cons;
 }
 
 bool Robot::rotation_en_cours(void)
@@ -281,20 +285,19 @@ bool Robot::rotation_en_cours(void)
 return (bool)rotation_en_cours_;
 }
 
-void Robot::translation_en_cours(bool etat)
-{
-	translation_en_cours_ = etat;
-}
 void Robot::rotation_en_cours(bool etat)
 {
 	rotation_en_cours_ = etat;
 }
 
-
-
 bool Robot::translation_attendue(void)
 {
 return (bool)translation_attendue_;
+}
+
+void Robot::translation_attendue(bool etat)
+{
+	translation_attendue_ = etat;
 }
 
 bool Robot::rotation_attendue(void)
@@ -302,10 +305,6 @@ bool Robot::rotation_attendue(void)
 return (bool)rotation_attendue_;
 }
 
-void Robot::translation_attendue(bool etat)
-{
-	translation_attendue_ = etat;
-}
 void Robot::rotation_attendue(bool etat)
 {
 	rotation_attendue_ = etat;
@@ -321,7 +320,6 @@ void Robot::goto_attendu(bool etat)
 	goto_attendu_ = etat;
 }
 
-
 bool Robot::demande_stop(void)
 {
 return (bool)demande_stop_;
@@ -332,61 +330,7 @@ void Robot::demande_stop(bool etat)
 	demande_stop_ = etat;
 }
 
-int32_t Robot::last_tic_tra(void)
-{
-return (int32_t)last_tic_tra_;
-}
-
-void Robot::last_tic_tra(int32_t valeur)
-{
-	last_tic_tra_ = valeur;
-}
-
-int32_t Robot::last_tic_rot(void)
-{
-return (int32_t)last_tic_rot_;
-}
-
-void Robot::last_tic_rot(int32_t valeur)
-{
-	last_tic_rot_ = valeur;
-}
-
-void Robot::x(float new_x)
-{
-	x_ = new_x;
-}
-
-void Robot::y(float new_y)
-{
-	y_ = new_y;
-}
-
-void Robot::angle_courant(float new_angle)
-{
-	angle_courant_ = new_angle;
-}
-
-
-void Robot::etat_rot(bool etat)
-{
-	etat_rot_ = etat;
-}
-void Robot::etat_tra(bool etat)
-{
-	etat_tra_ = etat;
-}
-
-void Robot::consigne_tra(int32_t cons)
-{
-	consigne_tra_ = cons;
-}
-void Robot::consigne_rot(int32_t cons)
-{
-	consigne_rot_ = cons;
-}
-
-
+////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
 	
 
 void Robot::gotoPos(float x, float y)
@@ -405,52 +349,6 @@ void Robot::gotoPos(float x, float y)
 	debut_translater(sqrt(delta_x*delta_x+delta_y*delta_y));
 	
 }
-
-/*
-/////////  méthodes  bloquantes ///////////
-
-void Robot::translater(float distance)
-{	
-	
-	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
-	while(compteur.value()>0){ asm("nop"); }
-	while(abs(translation.pwmCourant())> 10){
-		asm("nop");
-	}
-}
-
-void Robot::tourner(float angle)
-{
-	
-// 	serial_t_::print(rotation.consigne()*CONVERSION_TIC_RADIAN_*1000);
-// 	serial_t_::print(angle*1000);
-	
-	static float angleBkp = 0;
-	//angledepart_? (couleur_ == 'v') PI : 
-	
-	
-	float ang1 = abs(angle-angleBkp);
-	float ang2 = abs(angle+2*PI-angleBkp);
-	float ang3 = abs(angle-2*PI-angleBkp);
-	
-	if (!(ang1 < ang2 && ang1 < ang3))
-	{
-		if (ang2 < ang3)
-			angle += 2*PI;
-		else
-			angle -=  2*PI;
-	}
-	angleBkp=angle;
-	
-	
-	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
-	while(compteur.value()>0){ asm("nop"); }
-	while(abs(rotation.pwmCourant())> 10){
-		asm("nop");
-	}	
-}
-*/
-
 
 void Robot::debut_tourner(float angle)
 {
@@ -523,37 +421,32 @@ void Robot::stopper(int32_t distance)
 	demande_stop(false);
 	
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
-	consigne_rot(angle_courant()/CONVERSION_TIC_RADIAN_);
-	rotation.consigne(consigne_rot());
+	rotation.consigne(angle_courant()/CONVERSION_TIC_RADIAN_);
 	//stop en translation
 	consigne_tra(distance);
 	translation.consigne(distance);
 }
 
-void Robot::trace(int32_t debug)
-{
-	serial_t_::print((int32_t)debug);
-}
-
-
 void Robot::atteinteConsignes()
 {
-	if (abs(rot_pwmCourant())>=10)
+	static bool translation_en_cours = false;
+	
+	if (abs(rotation.pwmCourant())>=10)
 		rotation_en_cours(true);
 
-	if (rotation_en_cours() && abs(rot_pwmCourant())<10)
+	if (rotation_en_cours() && abs(rotation.pwmCourant())<10)
 	{
 		
 		rotation_en_cours(false);
 		fin_tourner();
 	}
 	
-	if (abs(tra_pwmCourant())>=10)
-		translation_en_cours(true);
+	if (abs(translation.pwmCourant())>=10)
+		translation_en_cours = true;
 
-	if (translation_en_cours() && abs(tra_pwmCourant())<10)
+	if (translation_en_cours && abs(translation.pwmCourant())<10)
 	{
-		translation_en_cours(false);
+		translation_en_cours = false;
 		fin_translater();
 	}
 }
@@ -574,19 +467,17 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 	
 	//detection d'un blocage - translation
 		
-	//2500 ne stoppe pas | 2000 ne démarre pas | 2200 ne stop pas ET ne démarre pas...
-// 	if(abs(robot.tra_pwmCourant())>2150 && abs(distance-robot.last_tic_tra())==0)
 		
-		
-	if (	   abs(rot_pwmCourant())>0 
-		&& abs(tra_pwmCourant())>0 
+	if (	   abs(rotation.pwmCourant())>0 
+		&& abs(translation.pwmCourant())>0 
 		&& abs(last_distance-distance)<10
 		&& abs(last_angle-angle)<10
 	   )
 	{
 			
 		if(compteurBlocage==20){
-			demande_stop(true);
+// 			demande_stop(true);
+			stopper(distance);
 			compteurBlocage=0;
 		}
 		else{
@@ -604,17 +495,12 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 	last_angle = angle;
 		
 	/*	
+	//2500 ne stoppe pas | 2000 ne démarre pas | 2200 ne stop pas ET ne démarre pas...
+ 	//if(abs(robot.tra_pwmCourant())>2150 && abs(distance-robot.last_tic_tra())==0)
 	if(abs(tra_consigne()-distance) > (abs(tra_consigne()-last_tic_tra()) - 20))
 	{
-// 		robot.trace(abs(distance-robot.last_tic_tra()));
 		demande_stop(true);
-	}*/
-	
-	/*
-	//detection d'un blocage - rotation
-	if(abs(robot.rot_pwmCourant())>200 && abs(infos[1]-robot.last_tic_rot())<50)
-		robot.demande_stop(true);
-	
+	}
 	*/
 	
 }

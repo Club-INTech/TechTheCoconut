@@ -78,13 +78,11 @@ private:
 	*/
 	
 	int32_t consigne_tra_;
-	int32_t consigne_rot_;
 	
 	/**
 	* booléens pour l'attente de fin de mouvement
 	*/
 	
-	bool translation_en_cours_;
 	bool rotation_en_cours_;
 	
 	/**
@@ -100,12 +98,6 @@ private:
 	*/
 	bool demande_stop_;
 	
-	/**
-	* mémoires pour les tests d'immobilité
-	*/
-	
-	int32_t last_tic_tra_;
-	int32_t last_tic_rot_;
 	
 	Asservissement translation;
 	Asservissement rotation;
@@ -161,25 +153,21 @@ public:
 	 * getter pour les consignes de déplacements en tic
 	 */
 	int32_t consigne_tra(void);
-	int32_t consigne_rot(void);
 	
 	/**
 	 * setter pour les consignes de déplacements en tic
 	*/
 	void consigne_tra(int32_t);
-	void consigne_rot(int32_t);
 	
 	
 	/**
 	 * getter pour les marqueurs de déplacements
 	 */
-	bool translation_en_cours(void);
 	bool rotation_en_cours(void);
 	
 	/**
 	 * setter pour les marqueurs de déplacements
 	*/
-	void translation_en_cours(bool);
 	void rotation_en_cours(bool);
 	
 	/**
@@ -207,33 +195,6 @@ public:
 	*/
 	void demande_stop(bool);
 	
-	
-	/**
-	 * getter pour les tests d'immobilité
-	 */
-	
-	int32_t last_tic_tra(void);
-	int32_t last_tic_rot(void);
-	
-	/**
-	 * setter pour les tests d'immobilité
-	*/
-	
-	void last_tic_tra(int32_t);
-	void last_tic_rot(int32_t);
-	
-	
-	/**
-	 * accesseurs pour les pwm courant des asservissements
-	*/
-	int32_t rot_pwmCourant(void);
-	int32_t tra_pwmCourant(void);
-	
-	/**
-	 * accesseurs pour les consignes des asservissements
-	*/
-	int32_t tra_consigne(void);
-	int32_t rot_consigne(void);
 	
 // 	/**
 // 	* Translate le robot
@@ -271,7 +232,6 @@ public:
 	
 	void communiquer_pc();
 	
-	void trace(int32_t debug);
 	void atteinteConsignes(void);
 	void gestionStoppage(int32_t distance, int32_t angle);
 
