@@ -94,7 +94,7 @@ class Asservissement:
         else:
             log.logger.debug("Erreur asservissement (avancer) : " + reponse)
     
-    def stop(self):
+    def immobiliser(self):
         """
         Fonction pour demander l'immombilisation du robot
         """
