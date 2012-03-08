@@ -63,7 +63,7 @@ class Asservissement:
         for i in chemin_python:
             self.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             self.reponse = self.file_attente.get(lu)
-            if reponse == "END":
+            if reponse == "FIN_GOTO":
                 pass
             else:
                 log.logger.debug("Erreur asservissement (goto) : " + reponse)
@@ -76,7 +76,7 @@ class Asservissement:
         """
         self.ecrire("t\n" + str(float(angle))
         self.reponse = self.file_attente.get(lu)
-        if reponse == "END":
+        if reponse == "FIN_TOU":
             pass
         else:
             log.logger.debug("Erreur asservissement (tourner) : " + reponse)
@@ -89,7 +89,7 @@ class Asservissement:
         """
         self.ecrire("d\n" + str(float(distance))
         self.reponse = self.file_attente.get(lu)
-        if reponse == "END":
+        if reponse == "FIN_TRA":
             pass
         else:
             log.logger.debug("Erreur asservissement (avancer) : " + reponse)
