@@ -2,14 +2,14 @@
 
 # screen /dev/ttyUSB0 57600
 
-#import os,sys
-#sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import os,sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 #from  profils.develop.constantes import *
 
 import marshal
 import time
-from serie_simple import *
+from lib.serie_simple import *
 from time import sleep
 
 

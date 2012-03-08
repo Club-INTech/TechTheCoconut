@@ -40,6 +40,7 @@ while first or not profil.importation:
 exec('import profils.'+conf+'.constantes')
 exec('__builtin__.constantes = profils.'+conf+'.constantes.constantes')
 
+# WARNING création de constantes['couleur']
 __builtin__.constantes['couleur'] = couleur
 
 # Initialisatoin des logs
@@ -70,15 +71,15 @@ erreur = False
 while first or erreur:
     mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes)) : \n')
     first = False
-    try:
-        if mode == '':
-            mode = 'console'
-        if mode == 'e':
-            mode = 'etalonnage_constantes'
-        log.logger.info("Chargement du fichier de lancement " + mode)
-        exec('import bin.'+ mode)
-        if mode == "visualisation_table":
-            first = True
-    except:
-        log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
-        erreur = True
+    #try:
+    if mode == '':
+        mode = 'console'
+    if mode == 'e':
+        mode = 'etalonnage_constantes'
+    log.logger.info("Chargement du fichier de lancement " + mode)
+    exec('import bin.'+ mode)
+    if mode == "visualisation_table":
+        first = True
+    #except:
+        #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
+        #erreur = True

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import serie
 import log
 
 import os
@@ -14,7 +13,7 @@ liste = []
 def chemin_de_peripherique(periph):
     for p in liste:
         if p.nom == periph:
-            return periph
+            return p.chemin
     log.logger.error(periph+" n'est pas relié à un chemin sur Linux")
     return None
 

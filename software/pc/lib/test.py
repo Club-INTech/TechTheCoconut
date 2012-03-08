@@ -2,7 +2,9 @@
 
 #serieInstance = lib.serie.Serie("/dev/ttyUSB1","asservissement",9600,5)
 
-from asservissement import *
+#from asservissement import *
+import asservissement
+import outils_math
 
 """
 import time
@@ -54,15 +56,17 @@ arrivee = outils_math.point.Point(x,y)
 
 depart = outils_math.point.Point(0.0,0.0)
 
-x = raw_input("x arrivé ?")
-y = raw_input("y arrivé ?")
-arrivee = outils_math.point.Point(x,y)
+x, y = '', ''
+while x=='':
+    x = raw_input("x arrivé ?")
+while y=='':
+    y = raw_input("y arrivé ?")
+arrivee = outils_math.point.Point(int(x),int(y))
 
-robotInstance = lib.robot.Robot()
 #angle = raw_input("Donner l'angle des bras\n")
 angle = 0.0
 angle = (float(angle)*3.14)/180
-asser = Asservissement(robotInstance)
+asser = asservissement.Asservissement(robotInstance)
 
 asser.goTo(depart,arrivee)
 
