@@ -172,9 +172,7 @@ public:
 	
 	void atteinteConsignes(void);
 	void gestionStoppage(int32_t distance, int32_t angle);
-
-	
-	
+	void recalage();
 };
 
 #endif

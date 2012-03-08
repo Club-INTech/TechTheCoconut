@@ -58,17 +58,14 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	int32_t last_angle_abs;
     
 	if(couleur_ == 'v')
-	{
 		last_angle_abs= (last_angle + 4260);
-	}else{
+	else
 		last_angle_abs = last_angle;
-	}
 		
 	float last_angle_radian = last_angle_abs* CONVERSION_TIC_RADIAN_;
 	float delta_distance_mm = delta_distance_tic * CONVERSION_TIC_MM_;
 	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
-	
 	
 	
 	angle_courant((float) angle_courant() + delta_angle_tic * CONVERSION_TIC_RADIAN_);
@@ -117,13 +114,22 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("cti")){
 		translation.ki(serial_t_::read_float());
 	}
-	//TODO ctm crm :  Max du PWM
+	else if(COMPARE_BUFFER("ctm")){
+		translation.valeur_bridage(serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("crm")){
+		rotation.valeur_bridage(serial_t_::read_float());
+	}
 	
 	else if(COMPARE_BUFFER("cx")){
 		x(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("cy")){
 		y(serial_t_::read_float());
+	}
+	
+	else if(COMPARE_BUFFER("co")){
+		angle_courant(serial_t_::read_float());
 	}
 
 	else if(COMPARE_BUFFER("ec")){
@@ -163,16 +169,14 @@ void Robot::communiquer_pc(){
 		serial_t_::print((int32_t)y());
 	}
 	else if(COMPARE_BUFFER("eo")){
-		serial_t_::print((int32_t)angle_courant()*1000);
+		serial_t_::print((int32_t)((float)angle_courant()*1000));
 	}
 	
 	else if(COMPARE_BUFFER("d")){
-// 		translater(serial_t_::read_float());
 		debut_translater(serial_t_::read_float());
 		rotation_en_cours_ = true;
 	}
 	else if(COMPARE_BUFFER("t")){
-// 		tourner(serial_t_::read_float());
 		debut_tourner(serial_t_::read_float());
 	}
 	
@@ -184,6 +188,9 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("stop")){
 		demande_stop_ = true;
+	}
+	else if(COMPARE_BUFFER("recal")){
+		recalage();
 	}
 	
 	//stopper asservissement rotation/translation
@@ -290,10 +297,12 @@ void Robot::gotoPos(float x, float y)
 	
 }
 
+
+
 void Robot::debut_tourner(float angle)
 {
-	static float angleBkp = 0;
-	//angledepart_? (couleur_ == 'v') PI : 
+	static float angleBkp = 4260;
+// 	static float angleBkp = ((couleur_ == 'v') ? 4260 : 0);
 	
 	rotation_attendue_ = true;
 	
@@ -310,7 +319,6 @@ void Robot::debut_tourner(float angle)
 	}
 	angleBkp=angle;
 	
-	
 	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
 }
 	
@@ -318,21 +326,15 @@ void Robot::debut_tourner(float angle)
 	
 void Robot::fin_tourner()
 {
-	
 	if (consigne_tra_ != translation.consigne())
-	{
 		translation.consigne(consigne_tra_);
-	}
-	//else if (abs(angle_courant_ == rotation.consigne()*CONVERSION_TIC_RADIAN_) < 0.01)
 	else if (rotation_attendue_)
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
-		{
-			//fin d'un ordre de rotation simple
 			Serial<0>::print("FIN_TOU");
-		}else{
-			//fin d'un ordre de goto
+		else
+		{
 			goto_attendu_ = false;
 			Serial<0>::print("FIN_GOTO");
 		}
@@ -442,5 +444,10 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 		demande_stop_ = true;
 	}
 	*/
+}
+
+void Robot::recalage()
+{
 	
 }
+

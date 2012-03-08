@@ -92,11 +92,11 @@ class Asservissement {
 		{
 			return (en_ - enm1_);
 		}
-		int8_t valeur_bridage(void){
+		uint8_t valeur_bridage(void){
 			return valeur_bridage_;
 		}
 		
-		void valeur_bridage(int8_t new_val){
+		void valeur_bridage(uint8_t new_val){
 			valeur_bridage_  = new_val;
 		}
 

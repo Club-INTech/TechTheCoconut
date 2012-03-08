@@ -51,3 +51,4 @@ Ordres :
      2è  float : y en mm
 	renvoi "END" en fin de déplacement
  'stop' s'immobilise sur place
+ 'recal' initialise la position du robot par recalage
