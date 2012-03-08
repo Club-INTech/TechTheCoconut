@@ -34,7 +34,7 @@ class Robot:
         # Convertir en attributs de classe et les initialiser que si non reconnus (hasattr)
         self.position = point.Point(1000,1500)
         self.orientation = 0
-        self.rayon = 350
+        self.rayon = 279
         self.actionneur = {"hd": actionneur.Actionneur("hd"),
         "hg": actionneur.Actionneur("hg"),
         "bd": actionneur.Actionneur("bd"),
