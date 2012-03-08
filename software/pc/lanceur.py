@@ -40,7 +40,6 @@ while first or not profil.importation:
 exec('import profils.'+conf+'.constantes')
 exec('__builtin__.constantes = profils.'+conf+'.constantes.constantes')
 
-# WARNING création de constantes['couleur']
 __builtin__.constantes['couleur'] = couleur
 
 # Initialisatoin des logs
