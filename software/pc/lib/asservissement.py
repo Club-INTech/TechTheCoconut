@@ -101,39 +101,6 @@ class Asservissement:
         else:
             log.logger.debug("Erreur asservissement (avancer) : " + reponse)
         """
-    def asserRotation(self, mode):
-        """
-        Arrête ou remet l'asservissement en rotation
-        :param mode: permet de choisir entre marche et arrêt. 0 = arrêt; 1 = marche
-        :type mode: int
-        """
-        serieInstance.ecrire("cr"+str(mode))
-    
-    def recalage(self):
-        """
-        Fonction permettant de recaller le robot dans un coin de la table
-        """
-        couleur = profils.develop.constantes.constantes["couleur"]
-        self.avancer(-400.0)
-        self.asserRotation(0)
-        self.avancer(-200.0)
-        if couleur == 'R':
-            robotInstance.position.x = 1460
-        else:
-            robotInstance.position.x = -1460
-        self.asserRotation(1)
-        self.avancer(300.0)
-        self.tourner(math.pi)
-        self.avancer(-400.0)
-        self.asserRotation(0)
-        self.avancer(-200)
-        robotInstance.position.y = 60
-        self.avancer(200.0)
-        if couleur == 'R':
-            self.tourner(math.pi)
-        else:
-            self.tourner(0)
-        self.avancer(-300.0)
         
     def immobiliser(self):
         """

@@ -5,6 +5,7 @@
 #from asservissement import *
 import asservissement
 import outils_math
+import robot
 
 """
 import time
@@ -55,6 +56,7 @@ arrivee = outils_math.point.Point(x,y)
 """
 
 depart = outils_math.point.Point(0.0,0.0)
+robotInstance=robot.Robot()
 
 x, y = '', ''
 while x=='':
