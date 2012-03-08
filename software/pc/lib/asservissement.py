@@ -113,10 +113,14 @@ class Asservissement:
         """
         Fonction permettant de recaller le robot dans un coin de la table
         """
+        couleur = profils.develop.constantes.constantes["couleur"]
         self.avancer(-400.0)
         self.asserRotation(0)
         self.avancer(-200.0)
-        robotInstance.position.x = 1460 #TODO modifier en fonction de la couleur de départ (ici : cas rouge)
+        if couleur = 'R':
+            robotInstance.position.x = 1460
+        else:
+            robotInstance.position.x = -1460
         self.asserRotation(1)
         self.avancer(300.0)
         self.tourner(math.pi)
@@ -125,7 +129,10 @@ class Asservissement:
         self avancer(-200)
         robotInstance.position.y = 60
         self.avancer(200.0)
-        self.tourner(math.pi)#TODO modifier en fonction de la couleur de départ (ici : cas rouge, tourner à 0  pour le violet) /!\ rotation en absolue !
+        if coulelur = 'R':
+            self.tourner(math.pi)
+        else:
+            self.tourner(0)
         self.avancer(-300.0)
         
     def immobiliser(self):
