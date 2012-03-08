@@ -14,7 +14,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
-log = lib.log.Log()
+log =lib.log.Log(__name__)
 
 sys.path.append('../')
 
@@ -30,7 +30,7 @@ class Asservissement:
         chemin = peripherique.chemin_de_peripherique("asservissement")
         self.robotInstance = robotInstance
         if chemin:
-            serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
+            serieInstance = serie.Serie(chemin, "asservissement", 9600, 3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
         #self.start()
@@ -61,14 +61,53 @@ class Asservissement:
         
         i = 0
         for i in chemin_python:
-            self.ecrire("goto " + i.x + ' ' + i.y + '\n')
-            self.reponse = self.file_attente.get(lu)
-            if reponse == "ok":
+            serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            """
+            reponse = serieInstance.file_attente.get(lu)
+            if reponse == "FIN_GOTO":
                 pass
             else:
-                log.logger.debug("Erreur asservissement : " + reponse)
+                log.logger.debug("Erreur asservissement (goto) : " + reponse)
+            """
 
+    def tourner(self, angle):
+        pass
+        """
+        Fonction de script pour faire tourner le robot sur lui même.
+        :param angle: Angle à atteindre
+        :type angle: Float
+
+        serieInstance.ecrire("t\n" + str(float(angle))
+
+        reponse = serieInstance.file_attente.get(lu)
+        if reponse == "FIN_TOU":
+            pass
+        else:
+            log.logger.debug("Erreur asservissement (tourner) : " + reponse)
+        """
     
+    def avancer(self, distance):
+        pass
+        """
+        Fonction de script pour faire avancer le robot en ligne droite. (distance <0 => reculer)c
+        :param distance: Distance à parcourir
+        :type angle: Float
+
+        serieInstance.ecrire("d\n" + str(float(distance))
+
+        reponse = serieInstance.file_attente.get(lu)
+        if reponse == "FIN_TRA":
+            pass
+        else:
+            log.logger.debug("Erreur asservissement (avancer) : " + reponse)
+        """
+    
+    def immobiliser(self):
+        """
+        Fonction pour demander l'immombilisation du robot
+        """
+        serieInstance.ecrire('stop\n')
+        
     def calculRayon(self, angle):
         """
         Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
@@ -166,7 +205,7 @@ class Asservissement:
             elif choix == '1':
                 couleur = raw_input("Indiquer la zone de départ (r/v)\n")
                 message = 'c\nc\n' + str(couleur)
-                self.ecrire(message)
+                serieInstance.ecrire(message)
                 afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
@@ -180,7 +219,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += str(valeurs[choix]) + '\n' + str(constante)
-                        self.ecrire(message)
+                        serieInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -197,7 +236,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += valeurs[choix] + '\n' + str(constante)
-                        self.ecrire(message)
+                        serieInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -208,12 +247,12 @@ class Asservissement:
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
                     message = 'x\nc\n' + str(coordonneX)
-                    self.ecrire(message)
+                    serieInstance.ecrire(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
                     message = 'y\nc\n' + str(coordonneY)
-                    self.ecrire(message)
+                    serieInstance.ecrire(message)
                 
                 afficherMenu()
             #Activer ou désactiver l'asservissement
@@ -228,10 +267,10 @@ class Asservissement:
                     constante = raw_input()
                     if constante == '1':
                         message = 's\nr\n'
-                        self.ecrire(message)
+                        serieInstance.ecrire(message)
                     elif constante == '2':
                         message = 's\nt\n'
-                        self.ecrire(message)
+                        serieInstance.ecrire(message)
                     elif constante == '0':
                         exit = True
                         afficherMenu()
@@ -266,7 +305,7 @@ class Asservissement:
                                 afficherMenu()
                             else:
                                 message = 'e\nr\n' + valeurs[choix]
-                                self.ecrire(message)
+                                serieInstance.ecrire(message)
                     elif choix == '3':
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
@@ -278,13 +317,13 @@ class Asservissement:
                                 afficherMenu()
                             else:
                                 message = 'e\nt\n' + valeurs[choix]
-                                self.ecrire(message)
+                                serieInstance.ecrire(message)
                     elif choix == '4':
-                        self.ecrire('e\ns')
+                        serieInstance.ecrire('e\ns')
                     elif choix =='5':
-                        self.ecrire('x\ne')
-                        print self.file_attente.get(lu)
-                        self.ecrire('y\ne')
-                        print self.file_attente.get(lu)
+                        serieInstance.ecrire('x\ne')
+                        print serieInstance.file_attente.get(lu)
+                        serieInstance.ecrire('y\ne')
+                        print serieInstance.file_attente.get(lu)
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"

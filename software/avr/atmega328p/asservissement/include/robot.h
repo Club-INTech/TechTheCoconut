@@ -74,17 +74,15 @@ private:
 	bool etat_tra_;
 	
 	/**
-	* consignes de déplacements en tic
+	* consigne pour la translation, en tic
 	*/
 	
 	int32_t consigne_tra_;
-	int32_t consigne_rot_;
 	
 	/**
 	* booléens pour l'attente de fin de mouvement
 	*/
 	
-	bool translation_en_cours_;
 	bool rotation_en_cours_;
 	
 	/**
@@ -100,12 +98,6 @@ private:
 	*/
 	bool demande_stop_;
 	
-	/**
-	* mémoires pour les tests d'immobilité
-	*/
-	
-	int32_t last_tic_tra_;
-	int32_t last_tic_rot_;
 	
 	Asservissement translation;
 	Asservissement rotation;
@@ -145,105 +137,6 @@ public:
 	void angle_courant(float);
 	
 	/**
-	 * getter pour l'état activé ou non des asservissement
-	 */
-	bool etat_rot(void);
-	bool etat_tra(void);
-	
-	/**
-	 * setter pour l'état activé ou non des asservissement
-	 */
-	void etat_rot(bool);
-	void etat_tra(bool);
-	
-	
-	/**
-	 * getter pour les consignes de déplacements en tic
-	 */
-	int32_t consigne_tra(void);
-	int32_t consigne_rot(void);
-	
-	/**
-	 * setter pour les consignes de déplacements en tic
-	*/
-	void consigne_tra(int32_t);
-	void consigne_rot(int32_t);
-	
-	
-	/**
-	 * getter pour les marqueurs de déplacements
-	 */
-	bool translation_en_cours(void);
-	bool rotation_en_cours(void);
-	
-	/**
-	 * setter pour les marqueurs de déplacements
-	*/
-	void translation_en_cours(bool);
-	void rotation_en_cours(bool);
-	
-	/**
-	 * getter pour les ordres de déplacements
-	 */
-	bool translation_attendue(void);
-	bool rotation_attendue(void);
-	bool goto_attendu(void);
-	
-	/**
-	 * setter pour les ordres de déplacements
-	*/
-	void translation_attendue(bool);
-	void rotation_attendue(bool);
-	void goto_attendu(bool);
-	
-	
-	/**
-	 * getter pour le booléen de demande d'arret
-	 */
-	bool demande_stop(void);
-	
-	/**
-	 * setter pour le booléen de demande d'arret
-	*/
-	void demande_stop(bool);
-	
-	
-	/**
-	 * getter pour les tests d'immobilité
-	 */
-	
-	int32_t last_tic_tra(void);
-	int32_t last_tic_rot(void);
-	
-	/**
-	 * setter pour les tests d'immobilité
-	*/
-	
-	void last_tic_tra(int32_t);
-	void last_tic_rot(int32_t);
-	
-	
-	/**
-	 * accesseurs pour les pwm courant des asservissements
-	*/
-	int32_t rot_pwmCourant(void);
-	int32_t tra_pwmCourant(void);
-	
-	/**
-	* Translate le robot
-	* 
-	* \param float distance de translation en mm
-	*/
-	void translater(float distance);
-	
-	/**
-	* Tourner le robot
-	* 
-	* \param float angle de rotation en radians
-	*/
-	void tourner(float angle);
-	
-	/**
 	* déplace le robot
 	* 
 	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
@@ -265,10 +158,8 @@ public:
 	
 	void communiquer_pc();
 	
-	void trace(int32_t debug);
-
-	
-	
+	void atteinteConsignes(void);
+	void gestionStoppage(int32_t distance, int32_t angle);
 };
 
 #endif

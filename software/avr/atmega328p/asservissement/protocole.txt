@@ -41,13 +41,14 @@ Ordres :
  't' Tourner : [float]
     >0 : Sens trigo positif ( anti-horaire )
     <0 : Sens trigo négatif
-	renvoi "END" en fin de déplacement
+	renvoi "FIN_TOU" en fin de rotation
  'd' Avancer/Reculer : [float]
      >0 : Avancer
      <0 : Reculer
-	renvoi "END" en fin de déplacement
+	renvoi "FIN_TRA" en fin de translation
  'goto' se rend à une position [float] \n [float]
      1er float : x en mm
      2è  float : y en mm
-	renvoi "END" en fin de déplacement
+	renvoi "FIN_GOTO" en fin de déplacement
  'stop' s'immobilise sur place
+ 'recal' initialise la position du robot par recalage
