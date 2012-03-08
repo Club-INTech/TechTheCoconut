@@ -137,18 +137,6 @@ public:
 	void angle_courant(float);
 	
 	/**
-	 * getter pour l'état activé ou non des asservissement
-	 */
-	bool etat_rot(void);
-	bool etat_tra(void);
-	
-	/**
-	 * setter pour l'état activé ou non des asservissement
-	 */
-	void etat_rot(bool);
-	void etat_tra(bool);
-	
-	/**
 	* déplace le robot
 	* 
 	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
@@ -172,7 +160,6 @@ public:
 	
 	void atteinteConsignes(void);
 	void gestionStoppage(int32_t distance, int32_t angle);
-	void recalage();
 };
 
 #endif

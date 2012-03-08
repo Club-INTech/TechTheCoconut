@@ -39,8 +39,19 @@ Robot::Robot() : couleur_('r')
 
 void Robot::asservir(int32_t distance, int32_t angle)
 {
-	int32_t pwmTranslation = translation.pwm(distance);
-	int32_t pwmRotation = rotation.pwm(angle);
+	int32_t pwmTranslation;
+	int32_t pwmRotation;
+	
+	if (etat_rot_)
+		pwmRotation = rotation.pwm(angle);
+	else
+		pwmRotation = 0;
+	
+	if(etat_tra_)
+		pwmTranslation = translation.pwm(distance);
+	else
+		pwmTranslation = 0;
+	
 	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
 }
@@ -189,24 +200,21 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("stop")){
 		demande_stop_ = true;
 	}
-	else if(COMPARE_BUFFER("recal")){
-		recalage();
-	}
 	
 	//stopper asservissement rotation/translation
-	else if(COMPARE_BUFFER("sr")){
-		etat_rot(false);
+	else if(COMPARE_BUFFER("cr0")){
+		etat_rot_ = false;
 	}
-	else if(COMPARE_BUFFER("st")){
-		etat_tra(false);
+	else if(COMPARE_BUFFER("ct0")){
+		etat_tra_ = false;
 	}
 	
 	//démarrer asservissement rotation/translation
-	else if(COMPARE_BUFFER("dr")){
-		etat_rot(true);
+	else if(COMPARE_BUFFER("cr1")){
+		etat_rot_ = true;
 	}
-	else if(COMPARE_BUFFER("dt")){
-		etat_tra(true);
+	else if(COMPARE_BUFFER("ct1")){
+		etat_tra_ = true;
 	}
 
 #undef COMPARE_BUFFER
@@ -255,27 +263,6 @@ void Robot::angle_courant(float new_angle)
 {
 	angle_courant_ = new_angle;
 }
-
-bool Robot::etat_rot(void)
-{
-return (bool)etat_rot_;
-}
-
-void Robot::etat_rot(bool etat)
-{
-	etat_rot_ = etat;
-}
-
-bool Robot::etat_tra(void)
-{
-return (bool)etat_tra_;
-}
-
-void Robot::etat_tra(bool etat)
-{
-	etat_tra_ = etat;
-}
-
 
 ////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
 	
@@ -445,9 +432,3 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 	}
 	*/
 }
-
-void Robot::recalage()
-{
-	
-}
-
