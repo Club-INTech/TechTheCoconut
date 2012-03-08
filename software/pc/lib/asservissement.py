@@ -44,7 +44,6 @@ class Asservissement:
         pass
     
     def goTo(self, depart, arrivee):
-        
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -63,14 +62,13 @@ class Asservissement:
         i = 0
         for i in chemin_python:
             self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-        """
-            reponse = self.serieInstance.file_attente.get(lu)
+            """
+            reponse = serieInstance.file_attente.get(lu)
             if reponse == "FIN_GOTO":
                 pass
             else:
                 log.logger.debug("Erreur asservissement (goto) : " + reponse)
-                
-        """
+            """
 
     def tourner(self, angle):
         pass
@@ -78,18 +76,14 @@ class Asservissement:
         Fonction de script pour faire tourner le robot sur lui même.
         :param angle: Angle à atteindre
         :type angle: Float
-        
-        """
-        
-        """
-        self.serieInstance.ecrire("t\n" + str(float(angle))
 
-        reponse = self.serieInstance.file_attente.get(lu)
+        serieInstance.ecrire("t\n" + str(float(angle))
+
+        reponse = serieInstance.file_attente.get(lu)
         if reponse == "FIN_TOU":
             pass
         else:
             log.logger.debug("Erreur asservissement (tourner) : " + reponse)
-            
         """
     
     def avancer(self, distance):
@@ -98,31 +92,24 @@ class Asservissement:
         Fonction de script pour faire avancer le robot en ligne droite. (distance <0 => reculer)c
         :param distance: Distance à parcourir
         :type angle: Float
-        """
-        
-        """
-        self.serieInstance.ecrire("d\n" + str(float(distance))
 
-        reponse = self.serieInstance.file_attente.get(lu)
+        serieInstance.ecrire("d\n" + str(float(distance))
+
+        reponse = serieInstance.file_attente.get(lu)
         if reponse == "FIN_TRA":
             pass
         else:
             log.logger.debug("Erreur asservissement (avancer) : " + reponse)
         """
-
     def asserRotation(self, mode):
-        pass
         """
         Arrête ou remet l'asservissement en rotation
         :param mode: permet de choisir entre marche et arrêt. 0 = arrêt; 1 = marche
         :type mode: int
-        
-        self.serieInstance.ecrire("cr"+str(mode))
         """
+        serieInstance.ecrire("cr"+str(mode))
     
     def recalage(self):
-        pass
-    """
         """
         Fonction permettant de recaller le robot dans un coin de la table
         """
@@ -131,23 +118,22 @@ class Asservissement:
         self.asserRotation(0)
         self.avancer(-200.0)
         if couleur == 'R':
-            self.robotInstance.position.x = 1460
+            robotInstance.position.x = 1460
         else:
-           self.robotInstance.position.x = -1460
+            robotInstance.position.x = -1460
         self.asserRotation(1)
         self.avancer(300.0)
         self.tourner(math.pi)
         self.avancer(-400.0)
         self.asserRotation(0)
         self.avancer(-200)
-        self.robotInstance.position.y = 60
+        robotInstance.position.y = 60
         self.avancer(200.0)
         if couleur == 'R':
             self.tourner(math.pi)
         else:
             self.tourner(0)
         self.avancer(-300.0)
-    """
         
     def immobiliser(self):
         """
