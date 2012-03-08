@@ -117,7 +117,7 @@ class Asservissement:
         self.avancer(-400.0)
         self.asserRotation(0)
         self.avancer(-200.0)
-        if couleur = 'R':
+        if couleur == 'R':
             robotInstance.position.x = 1460
         else:
             robotInstance.position.x = -1460
@@ -125,11 +125,11 @@ class Asservissement:
         self.avancer(300.0)
         self.tourner(math.pi)
         self.avancer(-400.0)
-        self asserRotation(0)
-        self avancer(-200)
+        self.asserRotation(0)
+        self.avancer(-200)
         robotInstance.position.y = 60
         self.avancer(200.0)
-        if coulelur = 'R':
+        if couleur == 'R':
             self.tourner(math.pi)
         else:
             self.tourner(0)
