@@ -1,6 +1,6 @@
 from math import *
 
-class matrix:
+class Matrix:
     
     # implements basic operations of a matrix class
     

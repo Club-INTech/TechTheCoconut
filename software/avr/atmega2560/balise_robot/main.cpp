@@ -33,7 +33,7 @@ int main() {
 	//Initialisation table pour crc8
 	init_crc8();
  	
-	//Activation des interruptions sur front montant pour pinn 21 sur board Arduino
+	//Activation des interruptions sur front montant pour pin 21 sur board Arduino
 	sbi(EICRA,ISC01);//Configuration front montant
 	sbi(EICRA,ISC00);
 	sbi(EIMSK,INT0);//Activation proprement dite
@@ -46,9 +46,7 @@ int main() {
 	
 	sei();
 
-	char rawFrame[3];
-	
-	
+	unsigned char rawFrame[3];
 	
 	while (1) {
 // 		cli();		
@@ -62,29 +60,25 @@ int main() {
 // 		cbi(PORTB, PORTB1);
 // 		
 		
-
 		Serial<0>::read(rawFrame,4);
 
 		Frame frame(rawFrame);
-// 			Serial<0>::print(frame.getRobotId());
-// 			Serial<0>::print(frame.getDistance());
-		
-// 		if (frame.isValid()) {
+
+		if (frame.isValid()) {
 			
-// 			Serial<0>::print(frame.getRobotId());
+			Serial<0>::print(frame.getRobotId());
 			Serial<0>::print(frame.getDistance());
-			Serial<0>::print(frame.isValid());
-// 			Serial<0>::print(balise.getAngle());
-// 		} else {
-// 			Serial<0>::print("ERROR");
-// 		}
+			//Serial<0>::print(balise.getAngle());
+		} else {
+			Serial<0>::print("ERROR");
+		}
 	}
 }
 
 ISR(TIMER0_OVF_vect)
 {
-	Balise & balise = Balise::Instance();
-	balise.incremente_toptour();
+	//Balise & balise = Balise::Instance();
+	//balise.incremente_toptour();
 }
 
 //INT0

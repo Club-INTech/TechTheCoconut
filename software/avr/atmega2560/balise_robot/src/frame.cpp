@@ -5,7 +5,7 @@
 #include "frame.h"
 
 
-Frame::Frame(char rawFrame[3]) {
+Frame::Frame(unsigned char rawFrame[3]) {
 	
 	data_ = (uint16_t) ((uint16_t) rawFrame[0] << 8) + rawFrame[1];
 	crc_ = rawFrame[2];
@@ -25,4 +25,8 @@ unsigned char Frame::getRobotId() {
 
 uint16_t Frame::getDistance() {
 	return distance_;
+}
+
+uint8_t Frame::getCrc() {
+	return crc_;
 }
