@@ -77,6 +77,20 @@ public:
     	}
     }
 
+    template<class T>
+    static inline void print_binary(T val){
+        static char buff[sizeof(T) * 8];
+        int j = sizeof(T) * 8 - 1;
+        for(int i=0 ; i<sizeof(T)*8 ; ++i){
+            if(val & (1 << i))
+               buff[j] = '1';
+            else
+               buff[j] = '0';
+            j--;
+        }
+        print((const char *)buff);
+    }
+    
     static inline void print(int16_t val){
     	char buffer[6];
     	itoa(val,buffer,10);
@@ -145,4 +159,5 @@ template<uint8_t ID>
 volatile typename Serial<ID>::ring_buffer Serial<ID>::rx_buffer_;
 
 #endif	/* SERIAL_HPP */
+
 

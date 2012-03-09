@@ -60,14 +60,13 @@ int main() {
 // 		cbi(PORTB, PORTB1);
 // 		
 		
-
-		Serial<0>::read(rawFrame,4);
-
-<<<<<<< HEAD
-Serial<0>::print(rawFrame[0]);
-Serial<0>::print(rawFrame[1]);
-Serial<0>::print(rawFrame[2]);
-Serial<0>::print(rawFrame[3]);
+        Serial<0>::print_binary(42);
+// 		Serial<0>::read(rawFrame,4);
+// 
+//        Serial<0>::print(rawFrame[0]);
+//        Serial<0>::print(rawFrame[1]);
+//        Serial<0>::print(rawFrame[2]);
+//        Serial<0>::print(rawFrame[3]);
 
 		//Frame frame(rawFrame);
 		//Serial<0>::print(frame.getCrc());
@@ -82,21 +81,6 @@ Serial<0>::print(rawFrame[3]);
 		} else {
 			Serial<0>::print("ERROR");
 		}*/
-=======
-		Frame frame(rawFrame);
-// 			Serial<0>::print(frame.getRobotId());
-// 			Serial<0>::print(frame.getDistance());
-		
-// 		if (frame.isValid()) {
-			
-// 			Serial<0>::print(frame.getRobotId());
-			Serial<0>::print(frame.getDistance());
-			Serial<0>::print(frame.isValid());
-// 			Serial<0>::print(balise.getAngle());
-// 		} else {
-// 			Serial<0>::print("ERROR");
-// 		}
->>>>>>> e1e136e8e9b181ec9fd40940a063f60c8e4bdbfc
 	}
 }
 
@@ -109,12 +93,8 @@ ISR(TIMER0_OVF_vect)
 //INT0
 ISR(INT0_vect)
 {
-<<<<<<< HEAD
-	/*Balise & balise = Balise::Instance();
-=======
 	Balise & balise = Balise::Instance();
->>>>>>> e1e136e8e9b181ec9fd40940a063f60c8e4bdbfc
 	if(balise.toptour()>=100)
 		balise.max_counter(balise.toptour());
-	balise.reset_toptour();*/
+	balise.reset_toptour();
 }
