@@ -31,7 +31,7 @@ class Asservissement:
         chemin = peripherique.chemin_de_peripherique("asservissement")
         self.robotInstance = robotInstance
         if chemin:
-            self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 3)
+            self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 10)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
         self.serieInstance.start()
@@ -61,17 +61,17 @@ class Asservissement:
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         i = 0
+        j = 0
         for i in chemin_python:
-            print i
-            try : self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(-i.y)) + '\n')
-            except : pass
+            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(-i.y)) + '\n')
+            
+            while self.serieInstance.inWaiting():
+                pass
             
             lu = self.serieInstance.readline()
             lu = lu.split("\r\n")[0]
             reponse = self.serieInstance.file_attente.get(lu)
-            if reponse == "FIN_GOTO":
-                pass
-            else:
+            if reponse != "FIN_GOTO":
                 log.logger.debug("Erreur asservissement (goto) : " + reponse)
 
     def tourner(self, angle):
