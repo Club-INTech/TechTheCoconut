@@ -34,7 +34,7 @@
 	}
 	
 	template<>
-	void Serial<1>::send_char(unsigned char byte)
+	void Serial<1>::send_char(char byte)
 	{
 			init();
 	        while ( !( UCSR1A & (1<<UDRE1)) );
@@ -55,7 +55,7 @@
 
 	ISR(USART1_RX_vect)
 	{
-		unsigned char c = UDR1;
+		char c = UDR1;
 		Serial<1>::store_char(c);
 	}
 
