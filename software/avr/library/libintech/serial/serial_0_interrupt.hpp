@@ -20,7 +20,7 @@
 	ISR( USART0_RX_vect)
 	#endif
 	{
-		unsigned char c = UDR0;
+		char c = UDR0;
 		Serial<0>::store_char(c);
 	}
 

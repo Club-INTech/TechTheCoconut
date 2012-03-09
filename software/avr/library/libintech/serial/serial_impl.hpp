@@ -25,7 +25,7 @@ private:
     {
         ring_buffer(){
         }
-        unsigned char buffer[rx_buffer__SIZE] ;
+        char buffer[rx_buffer__SIZE] ;
         int head;
         int tail;
     };
@@ -36,21 +36,21 @@ private:
 
     static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	
-    static inline void send_char(unsigned char byte);
+    static inline void send_char(char byte);
     
     static inline bool available(void)
     {
     		return (rx_buffer__SIZE + rx_buffer_.head - rx_buffer_.tail) % rx_buffer__SIZE;
     }
     
-    static inline unsigned char read_char(){
+    static inline char read_char(){
 			if (rx_buffer_.head == rx_buffer_.tail)
 			{
 				return -1;
 			}
 			else
 			{
-				unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
+				char c = rx_buffer_.buffer[rx_buffer_.tail];
 				rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
 				return c;
 			}
@@ -67,7 +67,7 @@ public:
 	
     static inline void change_baudrate(uint32_t BAUD_RATE);
 
-    static inline void store_char(unsigned char c)
+    static inline void store_char(char c)
     {
     	int i = (rx_buffer_.head + 1) % rx_buffer__SIZE;
     	if (i != rx_buffer_.tail)
@@ -141,11 +141,11 @@ public:
         return atof(buffer);
     }
 
-    static inline uint8_t read(unsigned char* string, uint8_t length){
+    static inline uint8_t read(char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
         	while(!available()){ asm("nop"); }
-        	unsigned char tmp = read_char();
+        	char tmp = read_char();
         	if(tmp == '\0' || tmp == '\n' || tmp == '\r')
         		return i;
         	string[i] = tmp;

@@ -28,13 +28,10 @@ Robot::Robot() : couleur_('r')
 	
 	
 {
-	
-	
 	TWI_init();
 	serial_t_::init();
 	TimerCounter_t::init();
 	serial_t_::change_baudrate(9600);
-	
 }
 
 void Robot::asservir(int32_t distance, int32_t angle)
@@ -193,7 +190,7 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("goto")){
 		float co_x = serial_t_::read_float();
-		float co_y = serial_t_::read_float();
+		float co_y = serial_t_::read_float();      
 		gotoPos(co_x , co_y);
 	}
 	
@@ -269,17 +266,12 @@ void Robot::angle_courant(float new_angle)
 
 void Robot::gotoPos(float x, float y)
 {
-	
 	float delta_x = (x-x_);
 	float delta_y = (y-y_);
 	float angle;
-	
 	angle=atan2(delta_y,delta_x);
-	
 	goto_attendu_ = true;
-	
 	debut_tourner(angle);
-	
 	debut_translater(sqrt(delta_x*delta_x+delta_y*delta_y));
 	
 }
@@ -290,13 +282,11 @@ void Robot::debut_tourner(float angle)
 {
 	static float angleBkp = 4260;
 // 	static float angleBkp = ((couleur_ == 'v') ? 4260 : 0);
-	
 	rotation_attendue_ = true;
-	
 	float ang1 = abs(angle-angleBkp);
 	float ang2 = abs(angle+2*PI-angleBkp);
 	float ang3 = abs(angle-2*PI-angleBkp);
-	
+    
 	if (!(ang1 < ang2 && ang1 < ang3))
 	{
 		if (ang2 < ang3)
@@ -305,7 +295,7 @@ void Robot::debut_tourner(float angle)
 			angle -=  2*PI;
 	}
 	angleBkp=angle;
-	
+    
 	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
 }
 	
@@ -387,16 +377,11 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 	static int32_t last_distance;
 	static int32_t last_angle;
 	
-	
 	//gestion de l'arret
 	if (demande_stop_)
 		stopper(distance);
-	
-	
-	
-	//detection d'un blocage - translation
-		
-		
+
+	//detection d'un blocage - translation	
 	if (	   abs(rotation.pwmCourant())>0 
 		&& abs(translation.pwmCourant())>0 
 		&& abs(last_distance-distance)<10
