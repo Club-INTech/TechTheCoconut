@@ -33,6 +33,7 @@ int main() {
 	//Initialisation table pour crc8
 	init_crc8();
  	
+ 	//Pin21 = input impulsion compte tour
 	//Activation des interruptions sur front montant pour pin 21 sur board Arduino
 	sbi(EICRA,ISC01);//Configuration front montant
 	sbi(EICRA,ISC00);
@@ -48,20 +49,9 @@ int main() {
 
 	unsigned char rawFrame[3];
 	
-	while (1) {
-// 		cli();		
-		
-// 		sei();
-//		Serial<0>::read_int();
-//		Serial<0>::print(balise.getAngle());
-// 		serial0.print("aaaa");
-// 		sbi(PORTB, PORTB1);
-// 		_delay_ms(2000);
-// 		cbi(PORTB, PORTB1);
-// 		
+	while (1) {		
 		
 		Serial<0>::read(rawFrame,4);
-
 		Frame frame(rawFrame);
 
 		if (frame.isValid()) {
@@ -77,8 +67,8 @@ int main() {
 
 ISR(TIMER0_OVF_vect)
 {
-	//Balise & balise = Balise::Instance();
-	//balise.incremente_toptour();
+	Balise & balise = Balise::Instance();
+	balise.incremente_toptour();
 }
 
 //INT0
