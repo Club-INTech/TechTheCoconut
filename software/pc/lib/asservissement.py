@@ -122,9 +122,9 @@ class Asservissement:
     
     def recalage(self):
         pass
-    """
         """
         Fonction permettant de recaller le robot dans un coin de la table
+        """
         """
         couleur = profils.develop.constantes.constantes["couleur"]
         self.avancer(-400.0)
