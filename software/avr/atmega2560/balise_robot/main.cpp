@@ -46,7 +46,7 @@ int main() {
 	
 	sei();
 
-	char rawFrame[3];
+	unsigned char rawFrame[3];
 	
 	while (1) {
 // 		cli();		
@@ -60,27 +60,18 @@ int main() {
 // 		cbi(PORTB, PORTB1);
 // 		
 		
-        Serial<0>::print_binary(42);
-// 		Serial<0>::read(rawFrame,4);
-// 
-//        Serial<0>::print(rawFrame[0]);
-//        Serial<0>::print(rawFrame[1]);
-//        Serial<0>::print(rawFrame[2]);
-//        Serial<0>::print(rawFrame[3]);
+		Serial<0>::read(rawFrame,4);
 
-		//Frame frame(rawFrame);
-		//Serial<0>::print(frame.getCrc());
-		//Serial<0>::print(frame.getDistance());
-		
-/*		
+		Frame frame(rawFrame);
+
 		if (frame.isValid()) {
 			
-			//Serial<0>::print(frame.getRobotId());
-			//Serial<0>::print(frame.getDistance());
+			Serial<0>::print(frame.getRobotId());
+			Serial<0>::print(frame.getDistance());
 			//Serial<0>::print(balise.getAngle());
 		} else {
 			Serial<0>::print("ERROR");
-		}*/
+		}
 	}
 }
 

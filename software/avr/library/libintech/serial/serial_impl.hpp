@@ -141,11 +141,11 @@ public:
         return atof(buffer);
     }
 
-    static inline uint8_t read(char* string, uint8_t length){
+    static inline uint8_t read(unsigned char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
         	while(!available()){ asm("nop"); }
-        	char tmp = read_char();
+        	unsigned char tmp = read_char();
         	if(tmp == '\0' || tmp == '\n' || tmp == '\r')
         		return i;
         	string[i] = tmp;
