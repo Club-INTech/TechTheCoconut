@@ -7,20 +7,21 @@
 void Balise::max_counter(uint16_t valeur){
 	max_counter_ = valeur;
 }
-float Balise::getAngle() {
-	return ((float) toptour_)*360/((float) max_counter_);
+
+uint16_t Balise::getAngle() {
+	return toptour_*360/max_counter_;
 }
 
-Balise::Balise() //: asservissement_moteur_(0.5,0.5,0)
+Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
 {
 	Serial<0>::init();
 	
 }
-/*
+
 void Balise::asservir(int32_t vitesse_courante)
 {
 	moteur_.envoyerPwm(asservissement_moteur_.pwm(vitesse_courante));
-}*/
+}
 
 void Balise::incremente_toptour()
 {

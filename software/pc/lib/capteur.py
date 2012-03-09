@@ -4,7 +4,7 @@ import serie
 import log
 import peripherique
 
-log = log.Log()
+log = log.Log(__name__)
 
 
 class Capteur(serie.Serie):
@@ -37,7 +37,7 @@ class Capteur(serie.Serie):
         Cette méthode permet de lire les informations d'un capteur
         
         :return: [val_capteur_1, val_capteur_2, val_capteur_3]
-        :rtype: tableau de float (?)
+        :rtype: tableau de float
         
         """
         

@@ -6,14 +6,38 @@ import datetime
 import logging
 import inspect
 
+# Couleurs pour le fun et surtout pour ... le fun
+def add_coloring_to_emit_ansi(fn):
+    # add methods we need to the class
+    def new(*args):
+        levelno = args[1].levelno
+        if(levelno>=50): # CRITICAL
+            color = '\x1b[31m' # red
+        elif(levelno>=40): # ERROR
+            color = '\x1b[33m' # yellow
+        elif(levelno>=30): # WARNING
+            color = '\x1b[35m' # magenta
+        elif(levelno>=20): # INFO
+            color = '\x1b[32m' # green 
+        elif(levelno>=10): # DEBUG
+            color = '\x1b[36m' # cyan
+        else: # NOTSET
+            color = '\x1b[0m' # normal
+        args[1].msg = color + args[1].msg +  '\x1b[0m'  # normal
+        return fn(*args)
+    return new
+
+# Ne fonctionne pas sur Windows mais de toute façon on s'en balance de Windaube
+logging.StreamHandler.emit = add_coloring_to_emit_ansi(logging.StreamHandler.emit)
+
 class Log:
     """
     Classe permettant de gérer les logs\n\n
     
-    Pour utiliser les logs dans vos fichiers (sauf dans le lanceur où il faut préciser les paramètres) :\n
+    Pour utiliser les logs dans vos fichiers :\n
     Pour charger le système de log correctement, en début de fichier ajoutez :\n
     import lib.log\n
-    log = lib.log.Log()
+    log = lib.log.Log(__name__)
     \n
     Puis vous pouvez logguer des messages avec (dans ordre croissant de niveau) :\n
     log.logger.debug('mon message')\n
@@ -39,29 +63,19 @@ class Log:
     :param dossier: Dossier où mettre les logs (à partir de la racine du code, c'est-à-dire le dossier contenant lanceur.py). Ex : 'logs'
     :type dossier: string
     """
-    def __init__(self, logs=None, logs_level=None, logs_format=None, stderr=None, stderr_level=None, stderr_format=None, dossier=None):
-        # Si jamais initialisée
-        if not hasattr(Log, 'initialise') or not Log.initialise:
-            if (logs != None and stderr != None and dossier != None):
-                self.initialisation(logs, logs_level, logs_format, stderr, stderr_level, stderr_format, dossier)
-            elif str(self.__init__.im_class) != "tests.log.TestLog":
-                print >> sys.stderr, "Erreur : Veuillez donner des paramètres pour créer un objet Log"
-                self.logger = logging.getLogger(__name__)
-                self.logger.setLevel(logging.DEBUG)
-                self.stderr_handler = logging.StreamHandler()
-                self.stderr_handler.setLevel(logging.WARNING)
-                formatter = logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(message)s")
-                self.stderr_handler.setFormatter(formatter)
-                self.logger.addHandler(self.stderr_handler)
-        else:
-            self.logger = logging.getLogger(__name__)
+    def __init__(self, nom, logs=constantes['Logs']['logs'], logs_level=constantes['Logs']['logs_level'], logs_format=constantes['Logs']['logs_format'], stderr=constantes['Logs']['stderr'], stderr_level=constantes['Logs']['stderr_level'], stderr_format=constantes['Logs']['stderr_format'], dossier=constantes['Logs']['dossier']):
+        self.nom = nom
+        if (logs != None and stderr != None and dossier != None):
+            self.initialisation(logs, logs_level, logs_format, stderr, stderr_level, stderr_format, dossier)
+        elif str(self.__init__.im_class) != "tests.log.TestLog":
+            print >> sys.stderr, "Erreur : Veuillez donner des paramètres pour créer un objet Log"
+            self.logger = logging.getLogger(self.nom)
             self.logger.setLevel(logging.DEBUG)
-            if stderr:
-                # Ajout du handler pour stderr
-                self.configurer_stderr()
-            if logs:
-                # Ajout du handler pour logs
-                self.configurer_logs()
+            self.stderr_handler = logging.StreamHandler()
+            self.stderr_handler.setLevel(logging.WARNING)
+            formatter = logging.Formatter("%(asctime)s:"+self.nom+":%(levelname)s:%(message)s")
+            self.stderr_handler.setFormatter(formatter)
+            self.logger.addHandler(self.stderr_handler)
 
     def initialisation(self, logs, logs_level, logs_format, stderr, stderr_level, stderr_format, dossier):
         """
@@ -92,8 +106,10 @@ class Log:
         Log.logs = logs
         Log.stderr_level = stderr_level
         Log.logs_level = logs_level
-        Log.logs_format = logs_format
-        Log.stderr_format = stderr_format
+        # On ajoute le nom du module
+        Log.logs_format = ':'.join(map(lambda x: x if x else self.nom, logs_format.split(":")))
+        # On ajoute le nom du module
+        Log.stderr_format = ':'.join(map(lambda x: x if x else self.nom, stderr_format.split(":")))
         Log.levels = ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')
         
         if (stderr and (stderr_level not in Log.levels)):
@@ -104,7 +120,7 @@ class Log:
             return False
         
         # Création du logger
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(self.nom)
         self.logger.setLevel(logging.DEBUG)
         if stderr:
             # Ajout du handler pour stderr

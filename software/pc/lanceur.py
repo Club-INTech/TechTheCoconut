@@ -3,11 +3,19 @@
 import os
 import shutil
 import glob
-import lib.log
 import lib.conf
 import __builtin__
-import lib.peripherique
 
+
+# Chargement de la couleur du robot
+first = True
+while first or couleur not in ['', 'R', 'V']:
+    first = False
+    couleur = raw_input('Couleur de notre robot rouge ou violet ([V], R) : ')
+    if couleur == '' :
+        couleur = 'V'
+    
+# Chargement du profil de configuration
 first = True
 while first or not profil.importation:
 	first = False
@@ -32,8 +40,11 @@ while first or not profil.importation:
 exec('import profils.'+conf+'.constantes')
 exec('__builtin__.constantes = profils.'+conf+'.constantes.constantes')
 
+__builtin__.constantes['couleur'] = couleur
+
 # Initialisatoin des logs
-log = lib.log.Log(constantes['Logs']['logs'], constantes['Logs']['logs_level'], constantes['Logs']['logs_format'], constantes['Logs']['stderr'], constantes['Logs']['stderr_level'], constantes['Logs']['stderr_format'], constantes['Logs']['dossier'])
+import lib.log
+log = lib.log.Log(__name__)
 
 log.logger.info('Profil de configuration chargé : ' + conf)
 
@@ -44,7 +55,9 @@ if conf == 'develop':
     exec('import profils.'+conf+'.injection.robot')
 else:
     exec('import profils.'+conf+'.injection')
-    
+
+import lib.peripherique
+
 # Association des périphériques
 for p in constantes['Serie']['peripheriques']:
     p_obj = lib.peripherique.Peripherique(p)
@@ -55,15 +68,17 @@ for p in constantes['Serie']['peripheriques']:
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes)) : \n')
     first = False
-    try:
-        if mode == '':
-            mode = 'console'
-        log.logger.info("Chargement du fichier de lancement " + mode)
-        exec('import bin.'+ mode)
-        if mode == "visualisation_table":
-            first = True
-    except:
-        log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
-        erreur = True
+    #try:
+    if mode == '':
+        mode = 'console'
+    if mode == 'e':
+        mode = 'etalonnage_constantes'
+    log.logger.info("Chargement du fichier de lancement " + mode)
+    exec('import bin.'+ mode)
+    if mode == "visualisation_table":
+        first = True
+    #except:
+        #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
+        #erreur = True

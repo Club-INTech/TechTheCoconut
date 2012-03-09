@@ -8,4 +8,3 @@ from lib.visualisation.visu_table import Visu_table
 
 vTable = Visu_table(False)
 vTable.start()
-

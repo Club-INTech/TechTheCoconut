@@ -8,7 +8,7 @@ class Carte:
     Classe permettant de gérer l'aire de jeu
     """
     def __init__(self):
-        self.log = mod_log.Log()
+        self.log = mod_log.Log(__name__)
         self.log.logger.info("Création de la table en cours...\n")
         # On initialise seuleument si les listes n'existent pas déjà
         if not hasattr(Carte, 'lingots'):

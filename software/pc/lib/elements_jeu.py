@@ -21,7 +21,7 @@ import __builtin__
 
 # Log
 import log
-#log = log.Log()
+#log = log.Log(__name__)
 
 
 # Ajout de constantes de develop si on ne passe pas par la console INTech
@@ -115,18 +115,18 @@ class Disque(ElementARamener):
     :param hauteur: Hauteur du disque en mm (nul si au sol)
     :type hauteur: int
     
-    :param enemy: Est à True si le disque est en terrain ennemi au début du jeu
-    :type enemy: bool
+    :param ennemi: Est à True si le disque est en terrain ennemi au début du jeu
+    :type ennemi: bool
     
     
     """
-    def __init__(self, position, orientation, couleur, hauteur, enemy):
+    def __init__(self, position, orientation, couleur, hauteur, ennemi):
         #log.logger.info("Création d'un objet disque en cours...\n")
         ElementARamener.__init__(self, position, orientation)
         self.rayon = constantes['Objets_Table']['rayon_disque']
         self.couleur = couleur
         self.hauteur = hauteur
-        self.enemy = enemy
+        self.ennemi = ennemi
         
     def actualiser(self, position, orientation = 0) :
         """
@@ -162,15 +162,15 @@ class Lingot(ElementARamener):
     :param hauteur: Hauteur du lingot en mm (au début du jeu)
     :type hauteur: int
     
-    :param enemy: Est à True si le lingot est en terrain ennemi au début du jeu
-    :type enemy: bool
+    :param ennemi: Est à True si le lingot est en terrain ennemi au début du jeu
+    :type ennemi: bool
     
     """
-    def __init__(self, position, orientation, hauteur, enemy):
+    def __init__(self, position, orientation, hauteur, ennemi):
         #log.logger.info("Création d'un objet Lingot en cours...\n")
         ElementARamener.__init__(self, position, orientation)
         self.hauteur = hauteur
-        self.enemy = enemy
+        self.ennemi = ennemi
         self.largeur = constantes['Objets_Table']['largeur_lingot']
         self.longueur = constantes['Objets_Table']['longueur_lingot']
     

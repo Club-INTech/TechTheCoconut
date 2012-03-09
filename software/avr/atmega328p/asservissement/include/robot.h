@@ -67,6 +67,38 @@ private:
 	*/
 	float CONVERSION_TIC_RADIAN_;
 	
+	/**
+	* booléens d'activation de l'asservissement
+	*/
+	bool etat_rot_;
+	bool etat_tra_;
+	
+	/**
+	* consigne pour la translation, en tic
+	*/
+	
+	int32_t consigne_tra_;
+	
+	/**
+	* booléens pour l'attente de fin de mouvement
+	*/
+	
+	bool rotation_en_cours_;
+	
+	/**
+	* booléens pour l'attente de fin de consigne
+	*/
+	
+	bool translation_attendue_;
+	bool rotation_attendue_;
+	bool goto_attendu_;
+	
+	/**
+	* booléen de demande d'arret
+	*/
+	bool demande_stop_;
+	
+	
 	Asservissement translation;
 	Asservissement rotation;
 
@@ -92,6 +124,7 @@ public:
 	
 	float angle_courant(void);
 	
+	
 	/**
 	 * setter pour les coordonnées x,y, en mm
 	 * \param float coordonnée en mm
@@ -104,20 +137,6 @@ public:
 	void angle_courant(float);
 	
 	/**
-	* Translate le robot
-	* 
-	* \param float distance de translation en mm
-	*/
-	void translater(float distance);
-	
-	/**
-	* Tourner le robot
-	* 
-	* \param float angle de rotation en radians
-	*/
-	void tourner(float angle);
-	
-	/**
 	* déplace le robot
 	* 
 	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
@@ -125,9 +144,22 @@ public:
 	*/
 	void gotoPos(float x, float y);
 	
+	
+	
+	
+	//méthodes non bloquantes
+	
+	void debut_tourner(float angle);
+	void fin_tourner(void);
+	void debut_translater(float distance);
+	void fin_translater(void);
+	
+	void stopper(int32_t distance);
+	
 	void communiquer_pc();
 	
-	
+	void atteinteConsignes(void);
+	void gestionStoppage(int32_t distance, int32_t angle);
 };
 
 #endif

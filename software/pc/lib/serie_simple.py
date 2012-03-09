@@ -3,7 +3,7 @@
 import serial
 
 import log
-log = log.Log()
+log = log.Log(__name__)
 
 class SerieSimple(serial.Serial):
     """

@@ -2,10 +2,16 @@
 
 # screen /dev/ttyUSB0 57600
 
+import os,sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+#from  profils.develop.constantes import *
+
 import marshal
 import time
-from serie_simple import *
+from lib.serie_simple import *
 from time import sleep
+
 
 serie1=SerieSimple("/dev/ttyUSB1",9600,5)
 serie0=SerieSimple("/dev/ttyUSB0",9600,5)
@@ -174,7 +180,7 @@ while True :
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
         print "rotation    : kp="+ctes[3]+" kd="+ctes[4]+" ki="+ctes[5]
         
-    elif choix == "t":
+    elif choix == "tou":
         buff=raw_input()
         envoyer("t")
         envoyer(str(float(buff)))
@@ -185,7 +191,7 @@ while True :
             sleep(0.1)
             print recevoir()
                         
-    elif choix == "d":
+    elif choix == "tra":
         buff=raw_input()
         envoyer("d")
         envoyer(str(float(buff)))

@@ -14,7 +14,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
-log = lib.log.Log()
+log =lib.log.Log(__name__)
 
 sys.path.append('../')
 
@@ -24,15 +24,16 @@ class Asservissement:
     """
     Classe pour gérer l'asservissement
     """
-    def __init__(self):
-        theta = thetastar.Thetastar([])
+    def __init__(self, robotInstance):
+        theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
         chemin = peripherique.chemin_de_peripherique("asservissement")
+        self.robotInstance = robotInstance
         if chemin:
-            serie.Serie.__init__(self, chemin, "asservissement", 9600, 3)
+            self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
-        self.start()
+        #self.start()
     
     def goToScript(self, script):
         """
@@ -54,86 +55,60 @@ class Asservissement:
         """
         
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        self.centrePython()
-        theta = thetastar.Thetastar([])
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+depart.x+","+depart.y+") et d'arrivée : ("+arrivee.x+","+arrivee.y+")")
+        theta = recherche_chemin.thetastar.Thetastar([])
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         i = 0
-        while i+1 < len(chemin):
-            centre_avr[i] = centrePython(chemin[i],chemin[i+1])
-        
-        i = 0
         for i in chemin_python:
-            self.ecrire("goto " + centre_avr[i].x + ' ' + centre_avr[i].y + '\n')
-            #serie.Serie.lire()
-            self.reponse = self.file_attente.get(lu)
-            if reponse == "ok":
+            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            """
+            reponse = serieInstance.file_attente.get(lu)
+            if reponse == "FIN_GOTO":
                 pass
             else:
-                log.logger.debug("Erreur asservissement : " + reponse)
-            
-    
-    def centreAvr(self, depart, arrivee):
+                log.logger.debug("Erreur asservissement (goto) : " + reponse)
+            """
+
+    def tourner(self, angle):
+        pass
         """
-        La recherche de chemin renvoit une position du robot qui est le centre du cercle circonscrit au robot en prenant en compte ses bras. Il faut envoyer
-        à l'AVR le centre du robot avec les bras rabattus. centreSansBras() calcule l'orientation du robot et le centre à envoyer à l'AVR à partir du point 
-        de départ et du point d'arrivée.
-        :param orientation: Orientation du robot calculée avec es points de départ et d'arrivée envoyé par la recherche de chemin
-        :type orientation: float
-        :param depart: Point de départ envoyé par la recherche de chemin
-        :type depart: Point
-        :param arrivee: Point d'arrevée envoyé par la recherche de chemin
-        :type arrivee: Point
-        :param centre: centre du robot selon la recherche de chemin
-        :type centre: Point
-        :param rayon: Rayon du robot selon la recherche de chemin
-        :type rayon: float
-        :param largeur_robot/longueur_robot: Constantes respectives de largeur et longueur du robot
-        :type largeur_robot/longueur_robot: int
-        :param proj_x/proj_y: Projections sur x et y suivant le clacul (voir commentaire lié au calcul)
-        :type proj_x/proj_y: float
-        
+        Fonction de script pour faire tourner le robot sur lui même.
+        :param angle: Angle à atteindre
+        :type angle: Float
+
+        serieInstance.ecrire("t\n" + str(float(angle))
+
+        reponse = serieInstance.file_attente.get(lu)
+        if reponse == "FIN_TOU":
+            pass
+        else:
+            log.logger.debug("Erreur asservissement (tourner) : " + reponse)
         """
-        centre = robot.position
-        rayon = robot.rayon
-        longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
-        largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
-        
-        #calcul de l'orientation
-        proj_x = arrivee.x - depart.x
-        proj_y = arrivee.y - depart.y
-        
-        
-        if (proj_x==0):
-            if (proj_y > 0):
-                orientation=pi/2
-            else
-                orientation=-pi/2
-        else if (proj_x > 0):
-            orientation=math.atan(proj_y/proj_x)
-        else
-            if (proj_y > 0):
-                orientation=math.atan(proj_y/proj_x) - pi
-            else:
-                orientation=math.atan(proj_y/proj_x) + pi
-        
-        #distance entre le centre de la recherche de chemin et le milieu de la longueur du robot (pythagore)
-        normale_Robot = math.sqrt(rayon ** 2 - (longueur_robot / 2) ** 2)
-        
-        #Distance sur l'axe de translation entre le centre de la recherche de chemin et le centre AVR
-        distance_centres = normale_Robot - (largeur_robot / 2)
-        
-        #Projection de la distance pour calculer les coordonnées du centre AVR
-        proj_x = distance_centres*cos(orientation)
-        proj_y = distance_centres*sin(orientation)
-        
-        #Calcul des coordonnées du centre AVR
-        return outils_math.point.Point(robot.position.x - proj_x, robot.position.y - proj_y)
-        
-        
     
-    def centrePython(self):
+    def avancer(self, distance):
+        pass
+        """
+        Fonction de script pour faire avancer le robot en ligne droite. (distance <0 => reculer)c
+        :param distance: Distance à parcourir
+        :type angle: Float
+
+        serieInstance.ecrire("d\n" + str(float(distance))
+
+        reponse = serieInstance.file_attente.get(lu)
+        if reponse == "FIN_TRA":
+            pass
+        else:
+            log.logger.debug("Erreur asservissement (avancer) : " + reponse)
+        """
+        
+    def immobiliser(self):
+        """
+        Fonction pour demander l'immombilisation du robot
+        """
+        self.serieInstance.ecrire('stop\n')
+        
+    def calculRayon(self, angle):
         """
         Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
         Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
@@ -163,49 +138,36 @@ class Asservissement:
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
         longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
-        angle = robot.actionneur['bd'].angle
+        
+        #Commenté pour les tests !
+        #angle = robot.actionneur['bd'].angle
         
         #[]ouais, on pourrait le mettre dans constantes..
-        diam_original = math.sqrt(longueur_robot ** 2 + largeur_robot ** 2)
-        
+        diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
+        print diam_original
         #projection du bras sur x et y
         
         #[]c'est quoi la convention pour l'angle des bras ?
         #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
-        proj_x = -longueur_bras*math.cos(angle)
-        proj_y = longueur_bras*math.sin(angle)
-        
+        proj_x = -longueur_bras*math.cos(float(angle))
+        proj_y = longueur_bras*math.sin(float(angle))
         #[]la longueur est sur x, largeur sur y
-        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
+        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + math.sqrt(proj_y ** 2))
         sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
-        
         #longueur du segment entre le centre du robot avec les bras fermés et le sommet du bras
         #segment_centre_bras = math.sqrt(math.pow(sommet_bras.x, 2) + math.pow(sommet_bras.y, 2))
         
         #[] le diamètre mesuré (segment le plus long) doit etre pris entre deux extremités du robot.
         #là tu considères que le milieu du diamètre est le centre_original
         #en gros faut raisonner sur les diamètres, par sur les rayons ^^
-        diam_avec_bras = math.sqrt((sommet_bras.x - sommet_robot.x) ** 2 + (sommet_bras.y - sommet_robot.y) ** 2)
-        
+        diam_avec_bras = 2*math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
         if diam_avec_bras > diam_original:
-            robot.rayon = diam_avec_bras/2
-            
-            #[] donc c'est presque ca :
-            #return outils_math.point.Point((sommet_bras.x+sommet_robot.x)/2, (sommet_bras.y+sommet_robot.y)/2)
-            
-            #[] sauf que comme on renvoit un (delta x, delta y) pour modifier la position du centre
-            #il faut pas oublier que le vrai robot est orienté, et donc il faut encore projeter :P
-            
-            #TODO lien avec l'orientation absolue du robot sur la table
-            
-            delta_x = - math.cos(robot.orientation)*(sommet_bras.x+sommet_robot.x)/2 - math.sin(robot.orientation)*(sommet_bras.y+sommet_robot.y)/2
-            delta_y = - math.sin(robot.orientation)*(sommet_bras.x+sommet_robot.x)/2 + math.cos(robot.orientation)*(sommet_bras.y+sommet_robot.y)/2
-            robot.centre =  outils_math.point.Point(delta_x,delta_y)
+            self.robotInstance.rayon = diam_avec_bras/2
             
         else:
-            robot.rayon = diam_original/2
-            robot.centre = outils_math.point.Point(0., 0.)
+            self.robotInstance.rayon = diam_original/2
             
+        print self.robotInstance.rayon
             
     def afficherMenu():
         print """
@@ -243,7 +205,7 @@ class Asservissement:
             elif choix == '1':
                 couleur = raw_input("Indiquer la zone de départ (r/v)\n")
                 message = 'c\nc\n' + str(couleur)
-                self.ecrire(message)
+                self.serieInstance.ecrire(message)
                 afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
@@ -257,7 +219,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += str(valeurs[choix]) + '\n' + str(constante)
-                        self.ecrire(message)
+                        self.serieInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -274,7 +236,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += valeurs[choix] + '\n' + str(constante)
-                        self.ecrire(message)
+                        self.serieInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -285,12 +247,12 @@ class Asservissement:
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
                     message = 'x\nc\n' + str(coordonneX)
-                    self.ecrire(message)
+                    self.serieInstance.ecrire(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
                     message = 'y\nc\n' + str(coordonneY)
-                    self.ecrire(message)
+                    self.serieInstance.ecrire(message)
                 
                 afficherMenu()
             #Activer ou désactiver l'asservissement
@@ -305,10 +267,10 @@ class Asservissement:
                     constante = raw_input()
                     if constante == '1':
                         message = 's\nr\n'
-                        self.ecrire(message)
+                        self.serieInstance.ecrire(message)
                     elif constante == '2':
                         message = 's\nt\n'
-                        self.ecrire(message)
+                        self.serieInstance.ecrire(message)
                     elif constante == '0':
                         exit = True
                         afficherMenu()
@@ -343,7 +305,7 @@ class Asservissement:
                                 afficherMenu()
                             else:
                                 message = 'e\nr\n' + valeurs[choix]
-                                self.ecrire(message)
+                                self.serieInstance.ecrire(message)
                     elif choix == '3':
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
@@ -355,13 +317,13 @@ class Asservissement:
                                 afficherMenu()
                             else:
                                 message = 'e\nt\n' + valeurs[choix]
-                                self.ecrire(message)
+                                self.serieInstance.ecrire(message)
                     elif choix == '4':
-                        self.ecrire('e\ns')
+                        self.serieInstance.ecrire('e\ns')
                     elif choix =='5':
-                        self.ecrire('x\ne')
-                        print self.file_attente.get(lu)
-                        self.ecrire('y\ne')
-                        print self.file_attente.get(lu)
+                        self.serieInstance.ecrire('x\ne')
+                        print self.serieInstance.file_attente.get(lu)
+                        self.serieInstance.ecrire('y\ne')
+                        print self.serieInstance.file_attente.get(lu)
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"

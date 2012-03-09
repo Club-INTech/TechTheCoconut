@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-exemple d'utilisation de la fonction rechercheChemin.
+EXEMPLE d'utilisation de la fonction rechercheChemin.
 
 enregistreGraphe doit etre appelé pour stocker en dur le graphe de la table.
 on peut donc le faire avant le jeu. ca prend quelques dizaines de secondes 

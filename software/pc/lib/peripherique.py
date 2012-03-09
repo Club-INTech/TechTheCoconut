@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import serie
 import log
 
 import os
 
-log = log.Log()
+log = log.Log(__name__)
 
 liste = []
 
@@ -14,7 +13,7 @@ liste = []
 def chemin_de_peripherique(periph):
     for p in liste:
         if p.nom == periph:
-            return periph
+            return p.chemin
     log.logger.error(periph+" n'est pas relié à un chemin sur Linux")
     return None
 
@@ -64,9 +63,15 @@ class Peripherique():
                     print str(i)+". "+chemin
                     association[i] = chemin
                     i+=1
-            #log.logger.warning(association)
-            numero = int(raw_input("numéro : "))
-            if numero == 0:
+            numero = raw_input("numéro : ")
+            if numero == '':
+                log.logger.info("Périphérique "+self.nom+" ")
+                return False
+            try:
+                numero = int(numero)
+            except:
+                continue
+            if numero == '' or numero == 0:
                 log.logger.info("Périphérique "+self.nom+" volontairement non associé")
                 return False
             elif numero in association.keys():

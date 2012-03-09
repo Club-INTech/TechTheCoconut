@@ -5,7 +5,7 @@ import threading
 import Queue
 
 import log
-log = log.Log()
+log = log.Log(__name__)
 
 class Serie(threading.Thread, serial.Serial):
     """
@@ -42,7 +42,7 @@ class Serie(threading.Thread, serial.Serial):
             if parite == None:
                 serial.Serial.__init__(self, peripherique, debit, timeout=timeout)
             else:
-                serial.Serial.__init__(self, peripherique, debit, target=self.lire, timeout=timeout, parity=parite)
+                serial.Serial.__init__(self, peripherique, debit, timeout=timeout, parity=parite)
         except:
             self.active = False
             log.logger.error("Erreur d'initialisation de la liaison série threadée "+nom+" sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
@@ -57,8 +57,11 @@ class Serie(threading.Thread, serial.Serial):
         :return: Nombre de caractères envoyés
         :rtype: int
         """
-        log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
-        return self.write(msg+"\r\n")
+        try:
+            log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
+            return self.write(msg+"\r\n")
+        except:
+            log.logger.error("Échec écriture sur la liaison série "+self.nom+" : "+msg)
         
     
     def lire(self):

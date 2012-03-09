@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-exemple d'utilisation de la fonction rechercheChemin avec Theta*.
+EXEMPLE d'utilisation de la fonction rechercheChemin avec Theta*.
 
 il faudra importer :
 from lib.recherche_chemin.rechercheChemin import *

@@ -11,19 +11,18 @@ import outils_math.point as point
 import actionneur
 import outils_math.point
 import lib.log
+import asservissement
 
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 sys.path.append('../')
 
 #import profils.develop.constantes
 
-#log = log.Log()
 
 class Robot:
     
     #:TODO: A modifier pour la valeur réel (voir a passer en  attribut d'instance
-    rayon = 350
-    
+    #rayon = 350
     """
     Classe permettant de gérer le robot\n
     :Nota: Classement pouvant etre totalement refaite. Les attributs orientations et positions sont requis pour la visualisation de la table
@@ -31,9 +30,11 @@ class Robot:
     """
     
     def __init__(self):
+        #TODO
+        # Convertir en attributs de classe et les initialiser que si non reconnus (hasattr)
         self.position = point.Point(1000,1500)
         self.orientation = 0
-        self.rayon = 350
+        self.rayon = 279
         self.actionneur = {"hd": actionneur.Actionneur("hd"),
         "hg": actionneur.Actionneur("hg"),
         "bd": actionneur.Actionneur("bd"),
@@ -42,7 +43,7 @@ class Robot:
         # self.actionneur["hg"].angle
 
         log.logger.info('Création du robot')
-
+    
     def setPosition(self, position):
         """
         Défini la position du robot
@@ -61,4 +62,10 @@ class Robot:
         """
         self.orientation = orientation
         
-    
+    def demarer(self):#TODO : protocole pour la languette (démarrage du robot)
+        """
+        Fonction utilisée pour initialiser le robot
+        """
+        asser = Asservissement(robotInstance)
+        asser.ecrire("recal\n")
+        asser.reponse = self.file_attente.get(lu)

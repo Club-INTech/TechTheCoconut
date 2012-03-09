@@ -5,7 +5,7 @@ import time, sys, os, threading, Tkinter, lib.log, datetime
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-log = lib.log.Log()
+log = lib.log.Log(__name__)
 
 class Visu_serie(threading.Thread):
     def __init__(self, nom="visu_serie"):
