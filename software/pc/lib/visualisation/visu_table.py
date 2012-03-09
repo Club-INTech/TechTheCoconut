@@ -7,7 +7,7 @@ import pygame, time, sys, os, math, threading, lib.log
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 from lib.carte import Carte
-from lib.robot import Robot
+#from lib.robot import Robot
 
 log = lib.log.Log(__name__)
 

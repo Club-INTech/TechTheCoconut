@@ -5,6 +5,8 @@
 #from asservissement import *
 import asservissement
 import outils_math
+import robot
+import recherche_chemin.thetastar
 
 """
 import time
@@ -54,7 +56,9 @@ y = raw_input()
 arrivee = outils_math.point.Point(x,y)
 """
 
-depart = outils_math.point.Point(0.0,0.0)
+depart = outils_math.point.Point(300.0,300.0)
+robotInstance=robot.Robot()
+
 
 x, y = '', ''
 while x=='':
@@ -63,13 +67,20 @@ while y=='':
     y = raw_input("y arrivé ?")
 arrivee = outils_math.point.Point(int(x),int(y))
 
-#angle = raw_input("Donner l'angle des bras\n")
+
 angle = 0.0
 angle = (float(angle)*3.14)/180
 asser = asservissement.Asservissement(robotInstance)
 
 asser.goTo(depart,arrivee)
+"""
+theta = recherche_chemin.thetastar.Thetastar([])
+chemin_python = theta.rechercheChemin(depart,arrivee)
 
+i = 0
+for i in chemin_python:
+    print "goto : (" + str(i.x) + ", "+str(i.y)+")\n"
+"""
 #Ici le centre et le rayon du robot sont initialisés, tu y accèdes avec robot.centre et robot.rayon
 
 """

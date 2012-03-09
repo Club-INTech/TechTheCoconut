@@ -3,6 +3,7 @@
 import sys
 import os
 import math
+import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
@@ -33,7 +34,7 @@ class Asservissement:
             self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
-        #self.start()
+        self.serieInstance.start()
     
     def goToScript(self, script):
         """
@@ -44,7 +45,6 @@ class Asservissement:
         pass
     
     def goTo(self, depart, arrivee):
-        
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -62,15 +62,17 @@ class Asservissement:
         
         i = 0
         for i in chemin_python:
-            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-        """
+            print i
+            try : self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(-i.y)) + '\n')
+            except : pass
+            
+            lu = self.serieInstance.readline()
+            lu = lu.split("\r\n")[0]
             reponse = self.serieInstance.file_attente.get(lu)
             if reponse == "FIN_GOTO":
                 pass
             else:
                 log.logger.debug("Erreur asservissement (goto) : " + reponse)
-                
-        """
 
     def tourner(self, angle):
         pass
@@ -78,18 +80,14 @@ class Asservissement:
         Fonction de script pour faire tourner le robot sur lui même.
         :param angle: Angle à atteindre
         :type angle: Float
-        
-        """
-        
-        """
-        self.serieInstance.ecrire("t\n" + str(float(angle))
 
-        reponse = self.serieInstance.file_attente.get(lu)
+        serieInstance.ecrire("t\n" + str(float(angle))
+
+        reponse = serieInstance.file_attente.get(lu)
         if reponse == "FIN_TOU":
             pass
         else:
             log.logger.debug("Erreur asservissement (tourner) : " + reponse)
-            
         """
     
     def avancer(self, distance):
@@ -98,12 +96,10 @@ class Asservissement:
         Fonction de script pour faire avancer le robot en ligne droite. (distance <0 => reculer)c
         :param distance: Distance à parcourir
         :type angle: Float
-        """
-        
-        """
-        self.serieInstance.ecrire("d\n" + str(float(distance))
 
-        reponse = self.serieInstance.file_attente.get(lu)
+        serieInstance.ecrire("d\n" + str(float(distance))
+
+        reponse = serieInstance.file_attente.get(lu)
         if reponse == "FIN_TRA":
             pass
         else:
