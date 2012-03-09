@@ -26,3 +26,7 @@ unsigned char Frame::getRobotId() {
 uint16_t Frame::getDistance() {
 	return distance_;
 }
+
+uint8_t Frame::getCrc() {
+	return crc_;
+}

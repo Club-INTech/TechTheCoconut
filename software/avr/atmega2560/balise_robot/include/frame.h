@@ -17,12 +17,13 @@ class Frame {
 		bool isValid();
 		unsigned char getRobotId();
 		uint16_t getDistance();
+		uint8_t getCrc();
 
 	private:
-		uint16_t data_;
-		unsigned char robotId_;
-		uint16_t distance_;
-		uint8_t crc_;
+		volatile uint16_t data_;
+		volatile unsigned char robotId_;
+		volatile uint16_t distance_;
+		volatile uint8_t crc_;
 };
 
 

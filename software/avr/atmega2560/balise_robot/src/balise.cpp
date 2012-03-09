@@ -29,7 +29,7 @@ void Balise::incremente_toptour()
 
 void Balise::reset_toptour()
 {
-	toptour_=0;
+	toptour_=1;
 }
 
 uint16_t Balise::toptour()
