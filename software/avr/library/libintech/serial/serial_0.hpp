@@ -23,7 +23,7 @@ inline void Serial<0>::init(){
 }
 
 template<>
-inline void Serial<0>::send_char(char byte)
+inline void Serial<0>::send_char(unsigned char byte)
 {
 	while ( !( UCSR0A & (1<<UDRE0)) );
 	UDR0 = byte;
