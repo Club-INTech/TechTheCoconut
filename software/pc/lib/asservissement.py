@@ -5,7 +5,7 @@ import os
 import math
 import time
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+#sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 import log
 import outils_math.point as point
@@ -28,7 +28,7 @@ class Asservissement:
     def __init__(self, robotInstance):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        chemin = peripherique.chemin_de_peripherique("asservissement")
+        chemin = lib.peripherique.chemin_de_peripherique("asservissement")
         self.robotInstance = robotInstance
         if chemin:
             self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 10)
@@ -68,12 +68,17 @@ class Asservissement:
             while self.serieInstance.inWaiting():
                 pass
             
-            lu = self.serieInstance.readline()
-            lu = lu.split("\r\n")[0]
-            reponse = self.serieInstance.file_attente.get(lu)
-            if reponse != "FIN_GOTO":
-                log.logger.debug("Erreur asservissement (goto) : " + reponse)
-
+            #lu = self.serieInstance.readline()
+            #lu = lu.split("\r\n")[0]
+            acquittement = False
+            while not acquittement:
+                while not self.serieInstance.file_attente.empty():
+                    reponse = self.serieInstance.file_attente.get()
+                    if reponse != "FIN_GOTO":
+                        log.logger.debug("Erreur asservissement (goto) : " + reponse)
+                    else:
+                        acquittement = True
+                        
     def tourner(self, angle):
         pass
         """
