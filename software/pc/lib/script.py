@@ -5,8 +5,11 @@ import os
 import math
 import time
 import asservissement
+import outils_math.point
+import outils_math.point as point
 
 sys.path.append('../')
+
 import profils.develop.constantes
 
 class Script:
@@ -49,3 +52,9 @@ class Script:
         else:
             self.asser.tourner(0)
         self.asser.avancer(-300.0)
+        
+    def huit(self):
+        depart = outils_math.point.Point(0.0,0.0)
+        
+        arrivee = outils_math.point.Point(800.0,800.0)
+        self.asser.goTo(depart, arrivee)
