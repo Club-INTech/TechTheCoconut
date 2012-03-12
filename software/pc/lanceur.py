@@ -65,6 +65,10 @@ for p in constantes['Serie']['peripheriques']:
         lib.peripherique.liste.append(p_obj)
 # Fin association des périphériques
 
+# WARNING variable globale pour instancier le robot
+import lib.robot
+__builtin__.robotInstance = lib.robot.Robot()
+
 first = True
 erreur = False
 while first or erreur:
