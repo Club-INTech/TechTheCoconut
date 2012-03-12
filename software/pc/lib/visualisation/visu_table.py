@@ -7,7 +7,6 @@ import pygame, time, sys, os, math, threading, lib.log
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 from lib.carte import Carte
-#from lib.robot import Robot
 
 log = lib.log.Log(__name__)
 
@@ -69,7 +68,7 @@ class Visu_table( threading.Thread):
 	self.clock.tick(Visu_table.fps)
 	
 	self.carte = Carte()
-	self.robot = Robot()
+	self.robot = robotInstance
 	self.chemin = []
 	
 	try:
