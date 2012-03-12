@@ -80,76 +80,63 @@ class Asservissement:
                         acquittement = True
                         
     def tourner(self, angle):
-        pass
         """
         Fonction de script pour faire tourner le robot sur lui même.
         :param angle: Angle à atteindre
         :type angle: Float
-
-        serieInstance.ecrire("t\n" + str(float(angle))
-
-        reponse = serieInstance.file_attente.get(lu)
-        if reponse == "FIN_TOU":
-            pass
-        else:
-            log.logger.debug("Erreur asservissement (tourner) : " + reponse)
         """
+        self.serieInstance.ecrire("t\n" + str(float(angle)))
+        acquittement = False
+        while not acquittement:
+            while not self.serieInstance.file_attente.empty():
+                reponse = self.serieInstance.file_attente.get()
+                if reponse == "FIN_TOU":
+                    acquittement = True
+                elif reponse == 6 or reponse ==7:
+                    pass
+                else:
+                    log.logger.debug("Erreur asservissement (tourner) : " + reponse)
     
     def avancer(self, distance):
-        pass
         """
         Fonction de script pour faire avancer le robot en ligne droite. (distance <0 => reculer)c
         :param distance: Distance à parcourir
         :type angle: Float
-
-        serieInstance.ecrire("d\n" + str(float(distance))
-
-        reponse = serieInstance.file_attente.get(lu)
-        if reponse == "FIN_TRA":
-            pass
-        else:
-            log.logger.debug("Erreur asservissement (avancer) : " + reponse)
         """
+        self.serieInstance.ecrire("d\n" + str(float(distance)))
+        acquittement = False
+        while not acquittement:
+            while not self.serieInstance.file_attente.empty():
+                reponse = self.serieInstance.file_attente.get()
+                if reponse == "FIN_TRA":
+                    acquittement = True
+                elif reponse == 6 or reponse ==7:
+                    pass
+                else:
+                    log.logger.debug("Erreur asservissement (avancer) : " + reponse)
 
-    def asserRotation(self, mode):
+    def setUnsetAsser(self, asservissement, mode):
         pass
         """
         Arrête ou remet l'asservissement en rotation
+        :param asservissement: Définit l'asservissement ciblé (translation ou rotation)
+        :type asservissement: string
         :param mode: permet de choisir entre marche et arrêt. 0 = arrêt; 1 = marche
         :type mode: int
-        
-        self.serieInstance.ecrire("cr"+str(mode))
         """
-    
-    def recalage(self):
-        pass
-        """
-        Fonction permettant de recaller le robot dans un coin de la table
-        """
-        """
-        couleur = profils.develop.constantes.constantes["couleur"]
-        self.avancer(-400.0)
-        self.asserRotation(0)
-        self.avancer(-200.0)
-        if couleur == 'R':
-            self.robotInstance.position.x = 1460
+        if mode == 0:
+            mode = 's\n'
         else:
-           self.robotInstance.position.x = -1460
-        self.asserRotation(1)
-        self.avancer(300.0)
-        self.tourner(math.pi)
-        self.avancer(-400.0)
-        self.asserRotation(0)
-        self.avancer(-200)
-        self.robotInstance.position.y = 60
-        self.avancer(200.0)
-        if couleur == 'R':
-            self.tourner(math.pi)
+            mode = 'd\n'
+            
+        if asservissement == "rotation":
+            asservissement = 'r\n'
         else:
-            self.tourner(0)
-        self.avancer(-300.0)
-    """
+            asservissement = 't\n'
         
+        self.serieInstance.ecrire(mode + asservissement)
+
+
     def immobiliser(self):
         """
         Fonction pour demander l'immombilisation du robot
@@ -217,20 +204,20 @@ class Asservissement:
             
         print self.robotInstance.rayon
             
-    def afficherMenu():
+    def afficherMenu(self):
         print """
         Indiquer l'action à effectuer :
         Quitter-------------------------------[0]
         Zone de départ------------------------[1]
-        Rotation------------------------------[2]
-        Translation---------------------------[3]
-        Position courante---------------------[4]
+        Constante de rotation-----------------[2]
+        Constante de translation--------------[3]
+        Changer la osition courante-----------[4]
         Activer/Désactiver l'asservissement---[5]
         Afficher des valeurs------------------[6]
         Ping de la liaison série--------------[7]\n
         """
 
-    def afficherSousMenu():
+    def afficherSousMenu(self):
         print """
         Revenir au menu-----------------------[0]
         Changer la dérivée--------------------[1]
@@ -240,8 +227,8 @@ class Asservissement:
         """
         
     def modifierConstantes(self):
-        afficherMenu()
-
+        self.afficherMenu()
+        main_exit = False
         while not main_exit:
             
             choix = raw_input()
@@ -254,13 +241,13 @@ class Asservissement:
                 couleur = raw_input("Indiquer la zone de départ (r/v)\n")
                 message = 'c\nc\n' + str(couleur)
                 self.serieInstance.ecrire(message)
-                afficherMenu()
+                self.afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
                 exit = False
                 valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
                 while not exit:
-                    afficherSousMenu()
+                    self.afficherSousMenu()
                     choix = raw_input()
                     message = "c\nr\n"
                     
@@ -271,13 +258,13 @@ class Asservissement:
                     
                     else:
                         exit = True
-                        afficherMenu()
+                        self.afficherMenu()
             #Définir les constantes de translation
             elif choix == '3':
                 exit = False
                 valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
                 while not exit:
-                    afficherSousMenu()
+                    self.afficherSousMenu()
                     choix = raw_input()
                     message = "c\nt\n"
                     
@@ -288,40 +275,48 @@ class Asservissement:
                     
                     else:
                         exit = True
-                        afficherMenu()
+                        self.afficherMenu()
             #Définir la position courante
             elif choix == '4':
                 print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR\n"
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
-                    message = 'x\nc\n' + str(coordonneX)
+                    message = 'c\nx\n' + str(coordonneX)
                     self.serieInstance.ecrire(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
-                    message = 'y\nc\n' + str(coordonneY)
+                    message = 'c\ny\n' + str(coordonneY)
                     self.serieInstance.ecrire(message)
                 
-                afficherMenu()
+                self.afficherMenu()
             #Activer ou désactiver l'asservissement
             elif choix == '5':
                 exit = False
                 while not exit:
                     print """
                     Revenir au menu-----------------------[0]
-                    Activer/désactiver la rotation--------[1]
-                    Activer/désactiver la translation-----[2]\n
+                    Activer la rotation-------------------[1]
+                    Désactiver la rotation----------------[2]
+                    Activer la translation----------------[3]
+                    Désactiver la translation-------------[4]\n
                     """
                     constante = raw_input()
                     if constante == '1':
                         message = 's\nr\n'
                         self.serieInstance.ecrire(message)
                     elif constante == '2':
+                        message = 'd\nr\n'
+                        self.serieInstance.ecrire(message)
+                    elif constante == '3':
                         message = 's\nt\n'
+                        self.serieInstance.ecrire(message)
+                    elif constante == '4':
+                        message = 'd\nt\n'
                         self.serieInstance.ecrire(message)
                     elif constante == '0':
                         exit = True
-                        afficherMenu()
+                        self.afficherMenu()
             #Afficher les constantes enregistrées dans l'AVR
             elif choix == '6':
                 exit = False
@@ -337,7 +332,7 @@ class Asservissement:
                     choix = raw_input()
                     if choix == '0':
                         exit = True
-                        afficherMenu()
+                        self.afficherMenu()
                         
                     elif choix == '1':
                         message = 'e\nc'
@@ -346,11 +341,11 @@ class Asservissement:
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
                         while not exit:
-                            afficherSousMenu()
+                            self.afficherSousMenu()
                             choix = raw_input()
                             if choix == '0':
                                 exit = True
-                                afficherMenu()
+                                self.afficherMenu()
                             else:
                                 message = 'e\nr\n' + valeurs[choix]
                                 self.serieInstance.ecrire(message)
@@ -358,20 +353,36 @@ class Asservissement:
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
                         while not exit:
-                            afficherSousMenu()
+                            self.afficherSousMenu()
                             choix = raw_input()
                             if choix == '0':
                                 exit = True
-                                afficherMenu()
+                                self.afficherMenu()
                             else:
                                 message = 'e\nt\n' + valeurs[choix]
                                 self.serieInstance.ecrire(message)
                     elif choix == '4':
                         self.serieInstance.ecrire('e\ns')
                     elif choix =='5':
-                        self.serieInstance.ecrire('x\ne')
-                        print self.serieInstance.file_attente.get(lu)
-                        self.serieInstance.ecrire('y\ne')
-                        print self.serieInstance.file_attente.get(lu)
+                        exit = False
+                        while not exit:
+                            self.serieInstance.ecrire('x\ne')
+                            answer = False
+                            while not answer:
+                                while not self.serieInstance.file_attente.empty():
+                                    print self.serieInstance.file_attente.get()
+                                    answer = True
+                                    self.afficherSousMenu()
+                            self.serieInstance.ecrire('y\ne')
+                            while not answer:
+                                while not self.serieInstance.file_attente.empty():
+                                    print self.serieInstance.file_attente.get()
+                                    answer = True
+                                    self.afficherSousMenu()
+            elif choix == '7':
+                exit = False
+                while not exit:
+                    self.serieInstance.ecrire('?\n')
+                    
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"
