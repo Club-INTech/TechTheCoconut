@@ -18,9 +18,15 @@
 #endif
 
 typedef Timer<1,ModeCounter,8> ClasseTimer;
-ring_buffer<unsigned int, 6> mesures;
-uint16_t derniere_valeur1;
-uint16_t derniere_valeur2;
+ring_buffer<uint16_t, 3> mesures_g;
+ring_buffer<uint16_t, 3> mesures_d;
+uint16_t derniere_valeur_g;
+uint16_t derniere_valeur_d;
+
+int compare (const void * a, const void * b)
+{
+  return ( *(uint16_t*)a - *(uint16_t*)b );
+}
 
 int main() {
 
@@ -44,6 +50,17 @@ int main() {
 
 	while(1) 
 	{
+		qsort(mesures_d.data(),mesures_d.size(),sizeof(uint16_t),compare);
+// 		for(int i=0; i<mesures_d.size(); ++i){
+// 		  Serial<0>::print(mesures_d.data()[i]);
+// 		}
+// 		qsort(mesures_g.data(),mesures_g.size(),sizeof(uint16_t),compare);
+// 		for(int i=0; i<mesures_g.size(); ++i){
+// 		  Serial<0>::print(mesures_g.data()[i]);
+// 		}
+// 		Serial<0>::print("Mediane");
+		Serial<0>::print(max(mesures_g.data()[mesures_g.size()/2],mesures_d.data()[mesures_d.size()/2]));
+// 		Serial<0>::print("\n\n\n\n");
 	}
 	
 	return 0;
@@ -53,14 +70,13 @@ ISR(INT0_vect)
 {
 	//Front montant
 	if(rbi(PIND,PORTD2)){
-		derniere_valeur1 = ClasseTimer::value();
+		derniere_valeur_g = ClasseTimer::value();
 	}else{//Front descendant
 		// prescaler/fcpu*inchToCm/tempsParInch
-		if(ClasseTimer::value() < derniere_valeur1)
-		  mesures.append(uint16_t((ClasseTimer::value() + 65536 - derniere_valeur1  )*0.0884353741496));
+		if(ClasseTimer::value() <derniere_valeur_g)
+		  mesures_g.append((ClasseTimer::value() + 65536 - derniere_valeur_g  )*0.0884353741496);
 		else
-		  mesures.append(uint16_t((ClasseTimer::value() - derniere_valeur1 )*0.0884353741496));
-		Serial<0>::print(mesures.data()[mesures.current() - 1]);
+		  mesures_g.append((ClasseTimer::value() - derniere_valeur_g )*0.0884353741496);
 	}
 }
 
@@ -68,14 +84,13 @@ ISR(INT1_vect)
 {
 	//Front montant
 	if(rbi(PIND,PORTD3))	{
-		derniere_valeur2 = ClasseTimer::value();
+		derniere_valeur_d = ClasseTimer::value();
 	}else{//Front descendant
 		// prescaler/fcpu*inchToCm/tempsParInch
-		if(ClasseTimer::value() < derniere_valeur2)
-		  mesures.append(uint16_t((ClasseTimer::value() + 65536 - derniere_valeur2  )*0.0884353741496));
+		if(ClasseTimer::value() < derniere_valeur_d)
+		  mesures_d.append((ClasseTimer::value() + 65536 - derniere_valeur_d  )*0.0884353741496);
 		else
-		  mesures.append(uint16_t((ClasseTimer::value() - derniere_valeur2 )*0.0884353741496));
-		Serial<0>::print(mesures.data()[mesures.current() - 1]);
+		  mesures_d.append((ClasseTimer::value() - derniere_valeur_d )*0.0884353741496);
 	}
 }
 

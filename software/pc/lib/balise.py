@@ -30,7 +30,7 @@ class Balise:
 	self.filtre_kalman = FiltreKalman(x,P,F,H,R)
     
     def tracker_robot_adverse(self):
-	Z = self.serial.readline(30)
+	#Z = self.serial.readline(30)
 	self.filtre_kalman.filtrer(Z)
 	
 	
