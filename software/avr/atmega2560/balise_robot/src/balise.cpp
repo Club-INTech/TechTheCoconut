@@ -14,13 +14,17 @@ uint16_t Balise::getAngle() {
 
 Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
 {
+	asservissement_moteur_.consigne(0);
 	Serial<0>::init();
+	T_Asservissement::init();
 	
 }
 
 void Balise::asservir(int32_t vitesse_courante)
 {
-	moteur_.envoyerPwm(asservissement_moteur_.pwm(vitesse_courante));
+	int16_t pwm = asservissement_moteur_.pwm(vitesse_courante);
+// 	Serial<0>::print(pwm);
+	moteur_.envoyerPwm(pwm);
 }
 
 void Balise::incremente_toptour()

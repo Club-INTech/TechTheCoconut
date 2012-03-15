@@ -33,6 +33,7 @@
 volatile uint8_t dernier_etat_a;
 volatile uint8_t dernier_etat_b;
 volatile int32_t codeur;
+volatile int32_t last_codeur = 0;
 
 int main() {
 	ClasseTimer::init();
@@ -66,12 +67,7 @@ int main() {
 
 	unsigned char rawFrame[3];
 	
-	dernier_etat_a = READ_CANAL_A();
-	dernier_etat_b = READ_CANAL_B();
-	
 	while (1) {
-		Serial<0>::print(codeur);
-// 		Serial<0>::print("Renald");
 // 		Serial<0>::read(rawFrame,4);
 // 		Frame frame(rawFrame);
 // 
@@ -89,8 +85,16 @@ int main() {
 
 ISR(TIMER0_OVF_vect)
 {
-	Balise & balise = Balise::Instance();
-	balise.incremente_toptour();
+	Balise::Instance().incremente_toptour();
+	Balise::Instance().asservir(codeur - last_codeur);
+}
+
+ISR(TIMER1_OVF_vect)
+{
+	
+	Serial<0>::print(codeur - last_codeur);
+	Balise::Instance().asservir(codeur - last_codeur);
+	last_codeur = codeur;
 }
 
 //INT0
@@ -116,7 +120,7 @@ ISR(PCINT0_vect)
 	   else
 	     codeur--;
 	 }
-	 if(dernier_etat_b == 0 && READ_CANAL_B() == 1){
+	 else if(dernier_etat_b == 0 && READ_CANAL_B() == 1){
 	   if(READ_CANAL_A() == 0)
 	     codeur--;
 	   else
