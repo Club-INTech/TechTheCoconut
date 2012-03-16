@@ -56,12 +56,14 @@ x = raw_input("Donner les coordonnées en x puis y du point de arrivee\n")
 y = raw_input()
 arrivee = outils_math.point.Point(x,y)
 """
-#depart = outils_math.point.Point(300.0,300.0)
+depart = outils_math.point.Point(50.0,100.0)
+"""
 robotInstance=robot.Robot()
 asser = asservissement.Asservissement(robotInstance)
 scriptInstance = script.Script(asser)
-scriptInstance.recalage()
+scriptInstance.huit()
 """
+
 x, y = '', ''
 while x=='':
     x = raw_input("x arrivé ?")
@@ -73,9 +75,9 @@ arrivee = outils_math.point.Point(int(x),int(y))
 angle = 0.0
 angle = (float(angle)*3.14)/180
 asser = asservissement.Asservissement(robotInstance)
-
+asser.serieInstance.ecrire('cy\n' + str(float(50)))
+asser.serieInstance.ecrire('cx\n' + str(float(100)))
 asser.goTo(depart,arrivee)
-"""
 """
 theta = recherche_chemin.thetastar.Thetastar([])
 chemin_python = theta.rechercheChemin(depart,arrivee)
