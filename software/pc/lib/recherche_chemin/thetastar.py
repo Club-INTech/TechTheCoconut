@@ -207,7 +207,7 @@ class Thetastar:
                                     break
                     if not touche_tr :
                         log.logger.warning("deviation négligeable depuis ("+str(redir.x)+","+str(redir.y)+")")
-                        self.rechercheChemin(redir,arrive)
+                        return self.rechercheChemin(redir,arrive)
                         break
             
             
@@ -246,7 +246,7 @@ class Thetastar:
                         if not touche_tr :
                             touche_cercle_A=False
                             log.logger.warning("deviation négligeable vers --> ("+str(redir.x)+","+str(redir.y)+")")
-                            self.rechercheChemin(depart,redir)
+                            return self.rechercheChemin(depart,redir)
                             break
                     
                     if Thetastar.effectuer_deviation_segment :
@@ -263,7 +263,7 @@ class Thetastar:
                                     if pCollision:
                                         break
                             log.logger.warning("deviation vers --> ("+str(pCollision[1].x)+","+str(pCollision[1].y)+")")
-                            self.rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y))
+                            return self.rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y))
                 
                 
                 

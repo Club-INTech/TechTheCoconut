@@ -60,24 +60,26 @@ class Asservissement:
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
-        i = 0
-        j = 0
+        chemin_python.remove(chemin_python[0])
+            
         for i in chemin_python:
             self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
+            """
             while self.serieInstance.inWaiting():
                 pass
-            
+            """
             #lu = self.serieInstance.readline()
             #lu = lu.split("\r\n")[0]
             acquittement = False
             while not acquittement:
-                while not self.serieInstance.file_attente.empty():
+                if not self.serieInstance.file_attente.empty():
                     reponse = self.serieInstance.file_attente.get()
                     if reponse != "FIN_GOTO":
                         log.logger.debug("Erreur asservissement (goto) : " + reponse)
                     else:
                         acquittement = True
+            lol = raw_input("suivant ?")
                         
     def tourner(self, angle):
         """
