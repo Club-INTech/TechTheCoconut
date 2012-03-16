@@ -63,7 +63,7 @@ class Asservissement:
         i = 0
         j = 0
         for i in chemin_python:
-            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(-i.y)) + '\n')
+            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
             while self.serieInstance.inWaiting():
                 pass
@@ -281,12 +281,12 @@ class Asservissement:
                 print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR\n"
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
-                    message = 'c\nx\n' + str(coordonneX)
+                    message = 'cx' + str(coordonneX)
                     self.serieInstance.ecrire(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
-                    message = 'c\ny\n' + str(coordonneY)
+                    message = 'cy' + str(coordonneY)
                     self.serieInstance.ecrire(message)
                 
                 self.afficherMenu()
@@ -366,7 +366,7 @@ class Asservissement:
                     elif choix =='5':
                         exit = False
                         while not exit:
-                            self.serieInstance.ecrire('x\ne')
+                            self.serieInstance.ecrire('ex')
                             answer = False
                             while not answer:
                                 while not self.serieInstance.file_attente.empty():
