@@ -1,0 +1,6 @@
+Todo liste pour l'asservissement :
+- Initialisation correcte de la couleur + déplacements
+- Faire un goto propre
+- Ajout de l'écoute des capteurs en attendant l'acquittement de l'asservissement et pendant l'avance scriptée
+- Ajout de l'arrêt du robot suivant la valeur renvoyé par les capteurs + recul et recheche de chemin
+- ajout d'un thread timer de 90s. Au bout des 90s, asservir en position
