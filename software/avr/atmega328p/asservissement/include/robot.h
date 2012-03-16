@@ -35,69 +35,27 @@ private:
 	TimerCounter_t compteur;
 	
 	typedef Serial<0> serial_t_;
-
-	/** Couleur du robot
-	* @li 'r' pour Rouge
-	* @li 'v' pour Violet
-	*/
+	
 	unsigned char couleur_;
-	
-	/**
-	* Abscisse du robot en mm
-	*/
 	float x_;
-	
-	/**
-	* Ordonnée du robot en mm
-	*/
 	float y_;
-	
-	/**
-	 * angle courant absolu en radian
-	*/
 	float angle_courant_;
 	
-	/**
-	* constance de conversion de tic en mm
-	*/
 	float CONVERSION_TIC_MM_;
-	
-	/**
-	* constance de conversion de tic en radian
-	*/
 	float CONVERSION_TIC_RADIAN_;
 	
-	/**
-	* booléens d'activation de l'asservissement
-	*/
 	bool etat_rot_;
 	bool etat_tra_;
 	
-	/**
-	* consigne pour la translation, en tic
-	*/
-	
 	int32_t consigne_tra_;
 	
-	/**
-	* booléens pour l'attente de fin de mouvement
-	*/
-	
 	bool rotation_en_cours_;
-	
-	/**
-	* booléens pour l'attente de fin de consigne
-	*/
 	
 	bool translation_attendue_;
 	bool rotation_attendue_;
 	bool goto_attendu_;
 	
-	/**
-	* booléen de demande d'arret
-	*/
 	bool demande_stop_;
-	
 	
 	Asservissement translation;
 	Asservissement rotation;
@@ -106,58 +64,27 @@ public:
 	
 	Robot();
 	
-	void asservir(int32_t distance, int32_t angle);
-	
 	void couleur(unsigned char);
-
-	void updatePosition(int32_t distance, int32_t angle);
-
 	unsigned char couleur(void);
-	
-	/**
-	 * getter pour les coordonnées x,y, en mm
-	 */
-	
-	float x(void);
-
-	float y(void);
-	
-	float angle_courant(void);
-	
-	
-	/**
-	 * setter pour les coordonnées x,y, en mm
-	 * \param float coordonnée en mm
-	 */
-	
 	void x(float);
-	
+	float x(void);
 	void y(float);
-	
+	float y(void);
 	void angle_courant(float);
+	float angle_courant(void);
+
 	
-	/**
-	* déplace le robot
-	* 
-	* \param int16_t position sur x à atteindre sur l'aire de jeu, en absolu.
-	* \param int16_t position sur y à atteindre sur l'aire de jeu, en absolu.
-	*/
+	void asservir(int32_t distance, int32_t angle);
+	void updatePosition(int32_t distance, int32_t angle);
+	void communiquer_pc();
+	
 	void gotoPos(float x, float y);
-	
-	
-	
-	
-	//méthodes non bloquantes
-	
 	void debut_tourner(float angle);
 	void fin_tourner(void);
 	void debut_translater(float distance);
 	void fin_translater(void);
 	
 	void stopper(int32_t distance);
-	
-	void communiquer_pc();
-	
 	void atteinteConsignes(void);
 	void gestionStoppage(int32_t distance, int32_t angle);
 };

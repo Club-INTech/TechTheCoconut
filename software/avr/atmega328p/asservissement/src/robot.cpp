@@ -85,7 +85,6 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 }
 
 ////////////////////////////// PROTOCOLE SERIE ///////////////////////////////////
-//TODO Finir implémentation de protocole.txt
 void Robot::communiquer_pc(){
 	char buffer[17];
 	uint8_t length = serial_t_::read(buffer,17);
@@ -407,13 +406,4 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 	
 	last_distance = distance;
 	last_angle = angle;
-		
-	/*	
-	//2500 ne stoppe pas | 2000 ne démarre pas | 2200 ne stop pas ET ne démarre pas...
- 	//if(abs(robot.tra_pwmCourant())>2150 && abs(distance-robot.last_tic_tra())==0)
-	if(abs(tra_consigne()-distance) > (abs(tra_consigne()-last_tic_tra()) - 20))
-	{
-		demande_stop_ = true;
-	}
-	*/
 }
