@@ -58,8 +58,6 @@ private:
 	bool rotation_attendue_;
 	bool goto_attendu_;
 	
-	bool demande_stop_;
-	
 	Mesure mesure_;
 	
 	Asservissement translation;
@@ -77,11 +75,15 @@ public:
 	float y(void);
 	void angle_courant(float);
 	float angle_courant(void);
-	void mesure(Mesure); 
-	Mesure mesure(void);
 	
-	void asservir(int32_t distance, int32_t angle);
-	void updatePosition(int32_t distance, int32_t angle);
+	//gestion de la structure mesure
+	void m_angle(int32_t); 
+	int32_t m_angle(void);
+	void m_distance(int32_t); 
+	int32_t m_distance(void);
+	
+	void asservir();
+	void updatePosition();
 	void communiquer_pc();
 	
 	void gotoPos(float x, float y);
@@ -90,9 +92,9 @@ public:
 	void debut_translater(float distance);
 	void fin_translater(void);
 	
-	void stopper(int32_t distance);
+	void stopper();
 	void atteinteConsignes(void);
-	void gestionStoppage(int32_t distance, int32_t angle);
+	void gestionStoppage();
 };
 
 #endif
