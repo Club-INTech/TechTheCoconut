@@ -99,7 +99,7 @@ public:
 
      static inline void print(uint16_t val){
     	char buffer[6];
-    	itoa(val,buffer,10);
+    	ltoa(val,buffer,10);
     	print((const char *)buffer);
     }
     
