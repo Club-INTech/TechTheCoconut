@@ -260,6 +260,16 @@ void Robot::angle_courant(float new_angle)
 	angle_courant_ = new_angle;
 }
 
+Mesure Robot::mesure(void)
+{
+return (Mesure)mesure_;
+}
+
+void Robot::mesure(Mesure new_mesure)
+{
+	mesure_ = new_mesure;
+}
+
 ////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
 	
 
