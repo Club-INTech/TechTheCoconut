@@ -39,12 +39,12 @@ void Robot::asservir()
 	int32_t pwmRotation;
 	
 	if (etat_rot_)
-		pwmRotation = rotation.pwm(mesure_.angle);
+		pwmRotation = rotation.pwm(mesure_angle_);
 	else
 		pwmRotation = 0;
 	
 	if(etat_tra_)
-		pwmTranslation = translation.pwm(mesure_.distance);
+		pwmTranslation = translation.pwm(mesure_distance_);
 	else
 		pwmTranslation = 0;
 	
@@ -60,8 +60,8 @@ void Robot::updatePosition()
 	static int32_t last_distance = 0;
 	static int32_t last_angle = 0;
 
-	int16_t delta_distance_tic = mesure_.distance - last_distance;
-	int16_t delta_angle_tic = mesure_.angle - last_angle;
+	int16_t delta_distance_tic = mesure_distance_ - last_distance;
+	int16_t delta_angle_tic = mesure_angle_ - last_angle;
 	int32_t last_angle_abs;
     
 	if(couleur_ == 'v')
@@ -77,9 +77,9 @@ void Robot::updatePosition()
 	
 	angle_courant((float) angle_courant() + delta_angle_tic * CONVERSION_TIC_RADIAN_);
 	
-	last_distance = mesure_.distance;
+	last_distance = mesure_distance_;
 	
-	last_angle = mesure_.angle;
+	last_angle = mesure_angle_;
 	
 }
 
@@ -259,22 +259,22 @@ void Robot::angle_courant(float new_angle)
 	angle_courant_ = new_angle;
 }
 
-int32_t Robot::m_angle(void)
+int32_t Robot::mesure_angle(void)
 {
-return (int32_t)mesure_.angle;
+return (int32_t)mesure_angle_;
 }
-void Robot::m_angle(int32_t new_angle)
+void Robot::mesure_angle(int32_t new_angle)
 {
-	mesure_.angle = new_angle;
+	mesure_angle_ = new_angle;
 }
 
-int32_t Robot::m_distance(void)
+int32_t Robot::mesure_distance(void)
 {
-return (int32_t)mesure_.distance;
+return (int32_t)mesure_distance_;
 }
-void Robot::m_distance(int32_t new_distance)
+void Robot::mesure_distance(int32_t new_distance)
 {
-	mesure_.distance = new_distance;
+	mesure_distance_ = new_distance;
 }
 
 ////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
@@ -356,8 +356,8 @@ void Robot::stopper()
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 	rotation.consigne(angle_courant()/CONVERSION_TIC_RADIAN_);
 	//stop en translation
-	consigne_tra_ = mesure_.distance;
-	translation.consigne(mesure_.distance);
+	consigne_tra_ = mesure_distance_;
+	translation.consigne(mesure_distance_);
 }
 
 void Robot::atteinteConsignes()
@@ -394,8 +394,8 @@ void Robot::gestionStoppage()
 	//detection d'un blocage - translation	
 	if (	   abs(rotation.pwmCourant())>0 
 		&& abs(translation.pwmCourant())>0 
-		&& abs(last_distance-mesure_.distance)<10
-		&& abs(last_angle-mesure_.angle)<10
+		&& abs(last_distance-mesure_distance_)<10
+		&& abs(last_angle-mesure_angle_)<10
 	   )
 	{
 			
@@ -414,6 +414,6 @@ void Robot::gestionStoppage()
 	}
 	
 	
-	last_distance = mesure_.distance;
-	last_angle = mesure_.angle;
+	last_distance = mesure_distance_;
+	last_angle = mesure_angle_;
 }

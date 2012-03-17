@@ -13,11 +13,6 @@
 #include <libintech/register.hpp>
 #include <libintech/singleton.hpp>
 
-//structure sauvegardant les valeurs courantes de rotation et translation, en tics.
-struct Mesure {
-	int32_t angle;
-	int32_t distance;
-};
 
 class Robot : public Singleton<Robot>{
 // Par défaut les attributs sont publics dans une struct
@@ -58,7 +53,8 @@ private:
 	bool rotation_attendue_;
 	bool goto_attendu_;
 	
-	Mesure mesure_;
+	int32_t mesure_distance_;
+	int32_t mesure_angle_;
 	
 	Asservissement translation;
 	Asservissement rotation;
@@ -76,11 +72,11 @@ public:
 	void angle_courant(float);
 	float angle_courant(void);
 	
-	//gestion de la structure mesure
-	void m_angle(int32_t); 
-	int32_t m_angle(void);
-	void m_distance(int32_t); 
-	int32_t m_distance(void);
+	//gestion des mesures courantes
+	void mesure_angle(int32_t); 
+	int32_t mesure_angle(void);
+	void mesure_distance(int32_t); 
+	int32_t mesure_distance(void);
 	
 	void asservir();
 	void updatePosition();
