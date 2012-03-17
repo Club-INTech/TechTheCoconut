@@ -18,7 +18,6 @@ Robot::Robot() : couleur_('r')
 				,goto_attendu_(false)
 				,etat_rot_(true)
 				,etat_tra_(true)
-				,demande_stop_(false)
 				,translation(0.6,2,0.0)
 				,rotation(1,3,0.0)
 // 				,translation(0.6,3,0.01)
@@ -34,18 +33,18 @@ Robot::Robot() : couleur_('r')
 	serial_t_::change_baudrate(9600);
 }
 
-void Robot::asservir(int32_t distance, int32_t angle)
+void Robot::asservir()
 {
 	int32_t pwmTranslation;
 	int32_t pwmRotation;
 	
 	if (etat_rot_)
-		pwmRotation = rotation.pwm(angle);
+		pwmRotation = rotation.pwm(mesure_.angle);
 	else
 		pwmRotation = 0;
 	
 	if(etat_tra_)
-		pwmTranslation = translation.pwm(distance);
+		pwmTranslation = translation.pwm(mesure_.distance);
 	else
 		pwmTranslation = 0;
 	
@@ -55,14 +54,14 @@ void Robot::asservir(int32_t distance, int32_t angle)
 
 
 
-void Robot::updatePosition(int32_t distance, int32_t angle)
+void Robot::updatePosition()
 {
     
 	static int32_t last_distance = 0;
 	static int32_t last_angle = 0;
 
-	int16_t delta_distance_tic = distance - last_distance;
-	int16_t delta_angle_tic = angle - last_angle;
+	int16_t delta_distance_tic = mesure_.distance - last_distance;
+	int16_t delta_angle_tic = mesure_.angle - last_angle;
 	int32_t last_angle_abs;
     
 	if(couleur_ == 'v')
@@ -78,9 +77,9 @@ void Robot::updatePosition(int32_t distance, int32_t angle)
 	
 	angle_courant((float) angle_courant() + delta_angle_tic * CONVERSION_TIC_RADIAN_);
 	
-	last_distance = distance;
+	last_distance = mesure_.distance;
 	
-	last_angle = angle;
+	last_angle = mesure_.angle;
 	
 }
 
@@ -194,7 +193,7 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("stop")){
-		demande_stop_ = true;
+		stopper();
 	}
 	
 	//stopper asservissement rotation/translation
@@ -258,6 +257,24 @@ return (float)angle_courant_;
 void Robot::angle_courant(float new_angle)
 {
 	angle_courant_ = new_angle;
+}
+
+int32_t Robot::m_angle(void)
+{
+return (int32_t)mesure_.angle;
+}
+void Robot::m_angle(int32_t new_angle)
+{
+	mesure_.angle = new_angle;
+}
+
+int32_t Robot::m_distance(void)
+{
+return (int32_t)mesure_.distance;
+}
+void Robot::m_distance(int32_t new_distance)
+{
+	mesure_.distance = new_distance;
 }
 
 ////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
@@ -334,15 +351,13 @@ void Robot::fin_translater()
 	}
 }
 
-void Robot::stopper(int32_t distance)
+void Robot::stopper()
 {
-	demande_stop_ = false;
-	
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 	rotation.consigne(angle_courant()/CONVERSION_TIC_RADIAN_);
 	//stop en translation
-	consigne_tra_ = distance;
-	translation.consigne(distance);
+	consigne_tra_ = mesure_.distance;
+	translation.consigne(mesure_.distance);
 }
 
 void Robot::atteinteConsignes()
@@ -369,28 +384,23 @@ void Robot::atteinteConsignes()
 	}
 }
 
-void Robot::gestionStoppage(int32_t distance, int32_t angle)
+void Robot::gestionStoppage()
 {
 	
 	static float compteurBlocage=0;
 	static int32_t last_distance;
 	static int32_t last_angle;
 	
-	//gestion de l'arret
-	if (demande_stop_)
-		stopper(distance);
-
 	//detection d'un blocage - translation	
 	if (	   abs(rotation.pwmCourant())>0 
 		&& abs(translation.pwmCourant())>0 
-		&& abs(last_distance-distance)<10
-		&& abs(last_angle-angle)<10
+		&& abs(last_distance-mesure_.distance)<10
+		&& abs(last_angle-mesure_.angle)<10
 	   )
 	{
 			
 		if(compteurBlocage==20){
-// 			demande_stop_ = true;
-			stopper(distance);
+			stopper();
 			compteurBlocage=0;
 		}
 		else{
@@ -404,6 +414,6 @@ void Robot::gestionStoppage(int32_t distance, int32_t angle)
 	}
 	
 	
-	last_distance = distance;
-	last_angle = angle;
+	last_distance = mesure_.distance;
+	last_angle = mesure_.angle;
 }
