@@ -72,7 +72,7 @@ class Serie(threading.Thread, serial.Serial):
             lu = self.readline()
             lu = lu.split("\r\n")[0]
             if lu != '':
-                log.logger.debug("Lecture sur la liaison série "+self.nom+" : "+lu)
+                #log.logger.debug("Lecture sur la liaison série "+self.nom+" : "+lu)
                 self.file_attente.put(lu)
     
     def stop(self):
