@@ -15,6 +15,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
+import capteur
 log =lib.log.Log(__name__)
 
 sys.path.append('../')
@@ -28,8 +29,7 @@ class Asservissement:
     def __init__(self, robotInstance):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        capteursInstance = lib.capteur.Capteur
-        capteursInstance.demarrer
+        self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
         chemin = lib.peripherique.chemin_de_peripherique("asservissement")
         self.robotInstance = robotInstance
         if chemin:
@@ -81,15 +81,12 @@ class Asservissement:
                         log.logger.debug("Erreur asservissement (goto) : " + reponse)
                     else:
                         acquittement = True
-                        """
-                    mesure = capteursInstance.mesurer
-                    x = 0
-                    if mesure < x:
+                    mesure = self.capteursInstance.mesurer
+                    if mesure < self.capteursInstance.distance:
                         self.immobiliser
                         self.avancer(-150)
                         #TODO Calculer le centre du robot adverse nommé centre_robotA
                         goto(depart, arrivee, centre_robotA)
-                        """
             lol = raw_input("suivant ?")
                         
     def tourner(self, angle):
