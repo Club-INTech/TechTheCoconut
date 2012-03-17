@@ -34,7 +34,7 @@ class Capteur(serie.Serie):
             else:
                 log.logger.error("Le capteur "+self.nom+" n'est pas chargé")
         # Ouverture de la liaison série
-        #self.start()
+        self.start()
 
     def mesurer(self):
         """
