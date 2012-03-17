@@ -15,6 +15,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
+import capteur
 log =lib.log.Log(__name__)
 
 sys.path.append('../')
@@ -28,6 +29,7 @@ class Asservissement:
     def __init__(self, robotInstance):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
+        self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
         chemin = lib.peripherique.chemin_de_peripherique("asservissement")
         self.robotInstance = robotInstance
         if chemin:
@@ -44,7 +46,7 @@ class Asservissement:
         """
         pass
     
-    def goTo(self, depart, arrivee):
+    def goTo(self, depart, arrivee, centre_robotA = None):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -60,24 +62,32 @@ class Asservissement:
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
-        i = 0
-        j = 0
-        for i in chemin_python:
-            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(-i.y)) + '\n')
+        chemin_python.remove(chemin_python[0])
             
+        for i in chemin_python:
+            self.serieInstance.ecrire("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            
+            """
             while self.serieInstance.inWaiting():
                 pass
-            
+            """
             #lu = self.serieInstance.readline()
             #lu = lu.split("\r\n")[0]
             acquittement = False
             while not acquittement:
-                while not self.serieInstance.file_attente.empty():
+                if not self.serieInstance.file_attente.empty():
                     reponse = self.serieInstance.file_attente.get()
                     if reponse != "FIN_GOTO":
                         log.logger.debug("Erreur asservissement (goto) : " + reponse)
                     else:
                         acquittement = True
+                    mesure = self.capteursInstance.mesurer
+                    if mesure < self.capteursInstance.distance:
+                        self.immobiliser
+                        self.avancer(-150)
+                        #TODO Calculer le centre du robot adverse nommé centre_robotA
+                        goto(depart, arrivee, centre_robotA)
+            lol = raw_input("suivant ?")
                         
     def tourner(self, angle):
         """
@@ -281,12 +291,12 @@ class Asservissement:
                 print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR\n"
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
-                    message = 'c\nx\n' + str(coordonneX)
+                    message = 'cx' + str(coordonneX)
                     self.serieInstance.ecrire(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
-                    message = 'c\ny\n' + str(coordonneY)
+                    message = 'cy' + str(coordonneY)
                     self.serieInstance.ecrire(message)
                 
                 self.afficherMenu()
@@ -366,7 +376,7 @@ class Asservissement:
                     elif choix =='5':
                         exit = False
                         while not exit:
-                            self.serieInstance.ecrire('x\ne')
+                            self.serieInstance.ecrire('ex')
                             answer = False
                             while not answer:
                                 while not self.serieInstance.file_attente.empty():

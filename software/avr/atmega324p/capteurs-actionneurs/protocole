@@ -1,0 +1,12 @@
+Noms des actionneurs : 'hd, 'hg', 'bd', 'bg', 'tt' : tous les actionneurs en même temps
+
+ping de la carte : '?'
+La carte doit retourner : '1'
+
+Commande de déplacement : nom + angle + '\n' + vitesse + '\n'
+*Paramètre vitesse facultatif
+
+Requete pour demander la position des bras : nom + '0'+ '\n' + '0' + '\n'
+
+Reset des actionneurs : nom + 'res\n'
+Arret des actionneurs : nom + 'stop\n'
