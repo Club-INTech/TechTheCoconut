@@ -29,9 +29,9 @@ class Asservissement:
     def __init__(self, robotInstance):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
-        chemin = lib.peripherique.chemin_de_peripherique("asservissement")
+        #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
         self.robotInstance = robotInstance
+        chemin = lib.peripherique.chemin_de_peripherique("asservissement")
         if chemin:
             self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 10)
         else:
@@ -75,18 +75,20 @@ class Asservissement:
             #lu = lu.split("\r\n")[0]
             acquittement = False
             while not acquittement:
-                if not self.serieInstance.file_attente.empty():
-                    reponse = self.serieInstance.file_attente.get()
-                    if reponse != "FIN_GOTO":
-                        log.logger.debug("Erreur asservissement (goto) : " + reponse)
-                    else:
-                        acquittement = True
-                    mesure = self.capteursInstance.mesurer
-                    if mesure < self.capteursInstance.distance:
-                        self.immobiliser
-                        self.avancer(-150)
-                        #TODO Calculer le centre du robot adverse nommé centre_robotA
-                        goto(depart, arrivee, centre_robotA)
+                #if not self.serieInstance.file_attente.empty():
+                reponse = self.serieInstance.file_attente.get()
+                if reponse == "FIN_GOTO":
+                    acquittement = True
+                """
+                mesure = self.capteursInstance.mesurer()
+                print 'mesure capteur :' + str(mesure)
+                if mesure < 10000:
+                    self.immobiliser()
+                    break
+                    #self.avancer(-150)
+                    #TODO Calculer le centre du robot adverse nommé centre_robotA
+                    #goto(depart, arrivee, centre_robotA)
+                    """
             lol = raw_input("suivant ?")
                         
     def tourner(self, angle):
