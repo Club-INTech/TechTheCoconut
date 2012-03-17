@@ -57,7 +57,6 @@ y = raw_input()
 arrivee = outils_math.point.Point(x,y)
 """
 depart = outils_math.point.Point(500.0,500.0)
-
 asser = asservissement.Asservissement(robotInstance)
 asser.serieInstance.ecrire('cy\n' + str(float(500)))
 asser.serieInstance.ecrire('cx\n' + str(float(500)))
