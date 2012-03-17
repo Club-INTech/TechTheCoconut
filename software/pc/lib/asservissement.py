@@ -28,6 +28,8 @@ class Asservissement:
     def __init__(self, robotInstance):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
+        capteursInstance = lib.capteur.Capteur
+        capteursInstance.demarrer
         chemin = lib.peripherique.chemin_de_peripherique("asservissement")
         self.robotInstance = robotInstance
         if chemin:
@@ -44,7 +46,7 @@ class Asservissement:
         """
         pass
     
-    def goTo(self, depart, arrivee):
+    def goTo(self, depart, arrivee, centre_robotA = None):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -79,6 +81,13 @@ class Asservissement:
                         log.logger.debug("Erreur asservissement (goto) : " + reponse)
                     else:
                         acquittement = True
+                    mesure = capteursInstance.mesurer
+                    x = 0
+                    if mesure < x:
+                        self.immobiliser
+                        self.avancer(-150)
+                        #TODO Calculer le centre du robot adverse nommé centre_robotA
+                        goto(depart, arrivee, centre_robotA)
             lol = raw_input("suivant ?")
                         
     def tourner(self, angle):
