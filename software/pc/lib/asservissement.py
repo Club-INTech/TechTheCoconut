@@ -81,6 +81,7 @@ class Asservissement:
                         log.logger.debug("Erreur asservissement (goto) : " + reponse)
                     else:
                         acquittement = True
+                        """
                     mesure = capteursInstance.mesurer
                     x = 0
                     if mesure < x:
@@ -88,6 +89,7 @@ class Asservissement:
                         self.avancer(-150)
                         #TODO Calculer le centre du robot adverse nommé centre_robotA
                         goto(depart, arrivee, centre_robotA)
+                        """
             lol = raw_input("suivant ?")
                         
     def tourner(self, angle):
