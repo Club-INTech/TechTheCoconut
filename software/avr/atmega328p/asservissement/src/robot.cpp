@@ -296,7 +296,8 @@ void Robot::gotoPos(float x, float y)
 
 void Robot::debut_tourner(float angle)
 {
-	static float angleBkp = 4260;
+	static float angleBkp = 0;
+// 	static float angleBkp = 4260;
 // 	static float angleBkp = ((couleur_ == 'v') ? 4260 : 0);
 	rotation_attendue_ = true;
 	float ang1 = abs(angle-angleBkp);

@@ -33,7 +33,7 @@ class Asservissement:
         self.robotInstance = robotInstance
         chemin = lib.peripherique.chemin_de_peripherique("asservissement")
         if chemin:
-            self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 10)
+            self.serieInstance = lib.serie.Serie(chemin, "asservissement", 9600, 0)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
         self.serieInstance.start()
@@ -76,7 +76,7 @@ class Asservissement:
             acquittement = False
             while not acquittement:
                 if not self.serieInstance.file_attente.empty():
-                    reponse = self.serieInstance.file_attente.get()
+                    reponse = self.serieInstance.read(80)
                     if reponse == "FIN_GOTO":
                         acquittement = True
                 """
@@ -91,8 +91,6 @@ class Asservissement:
                     #TODO Calculer le centre du robot adverse nommé centre_robotA
                     #goto(depart, arrivee, centre_robotA)
                     """
-                while not self.serieInstance.file_attente.empty():
-                    self.serieInstance.file_attente.get()
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
