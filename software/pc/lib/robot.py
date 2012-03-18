@@ -69,3 +69,10 @@ class Robot:
         asser = Asservissement(robotInstance)
         asser.ecrire("recal\n")
         asser.reponse = self.file_attente.get(lu)
+        
+    def stop(self) :
+        """
+        Arrête entièrement le robot (par exemple après les 90 secondes)
+        #TODO ELLE NE FAIT RIEN POUR L'INSTANT
+        """
+        pass
