@@ -23,4 +23,12 @@ class Strategie(decision.Decision):
         Retourne la décision prise par le robot. Pour les conventions, voir /lib/decision.py
         """
         
-        pass
+        if self.strategie == 1 :
+            pass
+        
+        elif self.strategie == 2:
+            pass
+        
+        elif self.strategie == 3 :
+            pass
+        
