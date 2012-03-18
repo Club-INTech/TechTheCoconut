@@ -3,8 +3,9 @@
 import decision
 import carte
 import robot
+import timer
 
-class Strategie(decision.Decision):
+class Strategie(decision.Decision, timer.Timer):
     """
     Classe permettant de construire une stratégie
     
@@ -17,6 +18,7 @@ class Strategie(decision.Decision):
     """
     def __init__(self, strategie):
         self.strategie = strategie
+        timer.Timer.__init__(self)
         
     def prendreDecision(self): 
         """
