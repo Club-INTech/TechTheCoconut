@@ -74,7 +74,7 @@ while(True):
     while y=='':
         y = raw_input("y arrivé ?")
     arrivee = outils_math.point.Point(int(x),int(y))
-
+    #print asser.capteursInstance.mesure()
 
     angle = 0.0
     angle = (float(angle)*3.14)/180
@@ -84,7 +84,8 @@ theta = recherche_chemin.thetastar.Thetastar([])
 chemin_python = theta.rechercheChemin(depart,arrivee)
 
 i = 0
-for i in chemin_python:
+for i
+in chemin_python:
     print "goto : (" + str(i.x) + ", "+str(i.y)+")\n"
 """
 #Ici le centre et le rayon du robot sont initialisés, tu y accèdes avec robot.centre et robot.rayon

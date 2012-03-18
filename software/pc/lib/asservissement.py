@@ -75,22 +75,24 @@ class Asservissement:
             #lu = lu.split("\r\n")[0]
             acquittement = False
             while not acquittement:
-                #if not self.serieInstance.file_attente.empty():
-                reponse = self.serieInstance.file_attente.get()
-                if reponse == "FIN_GOTO":
-                    acquittement = True
+                if not self.serieInstance.file_attente.empty():
+                    reponse = self.serieInstance.file_attente.get()
+                    if reponse == "FIN_GOTO":
+                        acquittement = True
                 """
                 mesure = self.capteursInstance.mesurer()
                 print 'mesure capteur :' + str(mesure)
-                if mesure < 10000:
+                print 'aquitement :' + str(acquittement)
+                if int(mesure) < 600:
                     self.immobiliser()
-                    break
+                    acquittement = True
+                    #break
                     #self.avancer(-150)
                     #TODO Calculer le centre du robot adverse nommé centre_robotA
                     #goto(depart, arrivee, centre_robotA)
                     """
-            lol = raw_input("suivant ?")
-                        
+                while not self.serieInstance.file_attente.empty():
+                    self.serieInstance.file_attente.get()
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
