@@ -20,19 +20,22 @@ class Strategie(decision.Decision, threading.Thread):
     :type strategie:  int
 
     """
-    def __init__(self, strategie=1, nbrDecisionsParSeconde=1):
-        log.logger.info("Lancement de la stratégie numéro " + str(strategie))
+    def __init__(self, strategie=1):
+
         
         self.strategie = strategie
-        self.timer = timer.Timer()
-        self.nbrDecisionsParSeconde = float(nbrDecisionsParSeconde)
+        self.timer = timer.Timer() 
         
-        # Gestion de l'arrêt au bout de 90 secondes :
-        Strategie.prendreDecisions = True
-        
-        
-        # Lancer le timer
-        self.timer.lancer()
+        # Résolution d'un bug de timer infini.
+        if not hasattr(Strategie, "prendreDecisions") :
+
+            log.logger.info("Lancement de la stratégie numéro " + str(strategie))
+            
+            # Gestion de l'arrêt au bout de 90 secondes :
+            Strategie.prendreDecisions = True
+            
+            # Lancement du timer.
+            self.timer.lancer()
         
         # Lancer le thread de prise de décision
         threading.Thread.__init__(self, name="prendreDecision", target=self.prendreDecision)
@@ -41,11 +44,11 @@ class Strategie(decision.Decision, threading.Thread):
     def arreterPrendreDecisions(self) :
         """
         Appeller cette méthode lorsque l'on souhaite arrêter de prendre des décisions
-        TODO L'APPELLER DEPUIS ROBOT : self.stop()
-        
+        Cette méthode est appellée depuis le timer.        
         """
         
         Strategie.prendreDecisions = False
+        log.logger.info("Arrêt de la prise de décisions")
         
     def prendreDecision(self): 
         """
@@ -60,13 +63,11 @@ class Strategie(decision.Decision, threading.Thread):
             while Strategie.prendreDecisions :
                 # Avant une seconde : on va raffler la partie 'haute' de notre Totem
                 if self.timer.getTime() <= 1 :
-                    return ["VIDERTOTEM", False , True, True]
+                    pass
                     
                 # etc.
                 elif self.timer.getTime() <= 10 :
                     pass
-                
-                time.sleep(1/nbrDecisionsParSeconde)
                     
             
         

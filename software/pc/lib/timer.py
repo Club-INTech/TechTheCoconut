@@ -3,6 +3,7 @@
 import time
 import threading
 import robot
+import strategie
 
 import log
 log = log.Log(__name__)
@@ -42,7 +43,7 @@ class Timer(threading.Thread):
         """
         Retourne le nombre de secondes écoulées depuis :
             - L'appel de self.lancer()
-            - Le lancement de iPython si al dernière méthode n'a jamais été lancée
+            - Le lancement de iPython si la dernière méthode n'a jamais été lancée
         """
         
         return time.time() - Timer.origine
@@ -51,12 +52,16 @@ class Timer(threading.Thread):
         
         # Durée du math
         # TODO A METTRE A 90 POUR DES VRAIES CONDITIONS DE MATCH
-        tempsFinal = 90
+        tempsFinal = 10
         
         time.sleep(tempsFinal)
         
         #TODO UTILISER LA METHODE self.stop() DE LA CLASSE ROBOT
         #TODO Pour l'intant, cette fonction ne fait rien.
+        
+        
+        # Arrêt de la prise de stratégie
+        strategie.Strategie().arreterPrendreDecisions()
         
         
         log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
