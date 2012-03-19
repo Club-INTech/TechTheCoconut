@@ -31,18 +31,14 @@ asser.test()
 
 depart = outils_math.point.Point(0.0,400.0)
 
-__builtin__.instance = instance.Instance()
-__builtin__.instance.instanciationRobot()
-__builtin__.instance.instanciationSerie()
-__builtin__.instance.instanciationAsservissement()
 
-asser = __builtin__.instance.asserInstance()
+
+asser = __builtin__.instance.asserInstance
 #écriture du point de départ initial
 asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
 
 robotInstance.setPosition(depart)
 
-asser = asservissement.Asservissement(robotInstance)
 
 
 #angle = 0.0

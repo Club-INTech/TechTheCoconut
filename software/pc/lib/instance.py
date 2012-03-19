@@ -7,6 +7,7 @@ import peripherique
 import asservissement
 import serial
 
+
 log =lib.log.Log(__name__)
 
 class Instance:
@@ -16,6 +17,12 @@ class Instance:
     
     def __init__(self):
         log.logger.info("Instanciation de la classe Instance")
+
+        
+    def instanciation(self):
+        self.instanciationRobot()
+        self.instanciationSerie()
+        self.instanciationAsservissement()
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()

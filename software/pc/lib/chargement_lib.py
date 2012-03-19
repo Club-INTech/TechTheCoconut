@@ -1,4 +1,6 @@
 import sys, os
+import instance
+import __builtin__
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -28,6 +30,9 @@ modules.append("recherche_chemin")
 modules.append("recherche_chemin.astar")
 modules.append("recherche_chemin.thetastar")
 
+
+__builtin__.instance = instance.Instance()
+__builtin__.instance.instanciation()
 
 for module in modules:
     try:

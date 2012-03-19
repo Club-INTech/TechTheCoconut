@@ -36,7 +36,7 @@ class Asservissement:
     """
     Classe pour gérer l'asservissement
     """
-    def __init__(self, robotInstance):
+    def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
         #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
