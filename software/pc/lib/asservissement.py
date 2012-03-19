@@ -4,6 +4,7 @@ import sys
 import os
 import math
 import time
+import __builtin__
 
 #sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
@@ -39,13 +40,8 @@ class Asservissement:
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
         #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
-        self.robotInstance = robotInstance
-        chemin = lib.peripherique.chemin_de_peripherique("asservissement")
-        if chemin:
-            self.serialInstance = serial.Serial(chemin, 9600, timeout=0)
-            #self.serialInstance = lib.serie.Serie(chemin, "asservissement", 9600, 0)
-        else:
-            log.logger.error("L'asservissement n'est pas chargé")
+        self.robotInstance = __builtin__.instance.robotInstance
+        self.serialInstance = __builtin__.instance.serieAsserInstance
             
     
     def goToScript(self, script):
