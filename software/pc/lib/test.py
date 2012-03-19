@@ -6,6 +6,10 @@ import robot
 import recherche_chemin.thetastar
 import script
 import time
+import serial
+import instance
+import __builtin__
+
 
 """
 x = raw_input("Donner les coordonnées en x puis y du point de départ\n")
@@ -26,12 +30,16 @@ asser.test()
 """
 
 depart = outils_math.point.Point(0.0,400.0)
-asser = asservissement.Asservissement(robotInstance)
 
+__builtin__.instance = instance.Instance()
+__builtin__.instance.instanciationRobot()
+__builtin__.instance.instanciationSerie()
+__builtin__.instance.instanciationAsservissement()
+
+asser = __builtin__.instance.asserInstance()
 #écriture du point de départ initial
 asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
 
-robotInstance=robot.Robot()
 robotInstance.setPosition(depart)
 
 asser = asservissement.Asservissement(robotInstance)
