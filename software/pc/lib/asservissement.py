@@ -72,8 +72,12 @@ class Asservissement:
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
-        chemin_python.remove(chemin_python[0])
-            
+        derniere_position = depart
+        
+        try :
+            chemin_python.remove(chemin_python[0])
+        except :
+            return (derniere_position)
             
         for i in chemin_python:
             
@@ -85,22 +89,26 @@ class Asservissement:
             time.sleep(0.1)
             print ">"+self.serialInstance.readline()+"<"
             
-            print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             
             
             
             time.sleep(0.1)
+            print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            derniere_destination = outils_math.point.Point(float(i.x),float(i.y))
            
             
             acquittement = False
             while not acquittement:
                 if self.serialInstance.readline() != "":
-                    #time.sleep(0.1)
+                    time.sleep(0.01)
                     reponse = self.serialInstance.readline()
-                    print "lit sur série : "+reponse
-                    if reponse == "FIN_GOTO":
+                    print "lit sur série : >"+reponse.replace("\r","\\r").replace("\n","\\n")+"<"
+                    if (reponse == "IN_GOTO\r\n" or reponse == "IN_GOTO\r"):
+                        print "reception de FIN_GOTO !"
                         acquittement = True
+                        derniere_position = derniere_destination
+                        
                  
                 """
                 mesure = self.capteursInstance.mesurer()
@@ -114,6 +122,7 @@ class Asservissement:
                     #TODO Calculer le centre du robot adverse nommé centre_robotA
                     #goto(depart, arrivee, centre_robotA)
                 """
+        return (derniere_position)
                     
     def tourner(self, angle):
         """
@@ -428,14 +437,3 @@ class Asservissement:
         self.serialInstance.write("?\n")
         time.sleep(1)
         print ">"+self.serialInstance.readline()+"<"
-        
-
-                
-"""  
-import robot
-import asservissement
-robotInstance=robot.Robot()
-asser = Asservissement(robotInstance)
-asser.test()
-
-"""
