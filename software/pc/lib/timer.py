@@ -20,8 +20,9 @@ class Timer(threading.Thread):
         Timer.origine  = constantes["t0"]  # Cette variable est crée par le lanceur
                                            # TODO utiliser la variable crée par le bumper de démarrage
                                            # 
-                                           
-        threading.Thread.__init__(self, target=self.interrupt, name="Timer")
+        
+        # Création du thread d'arrêt du robot
+        threading.Thread.__init__(self, target=self.interrupt, name="arretRobot")
         
     def lancer(self) :
         """
@@ -29,17 +30,33 @@ class Timer(threading.Thread):
         """
         
         log.logger.info("Lancement du timer...")
+        
+        # Origine des temps pour self.getTime()
         Timer.origine = time.time()
         
+        # Lancement du thread d'arrêt du robot
         self.start()
         
         
     def getTime(self) :
+        """
+        Retourne le nombre de secondes écoulées depuis :
+            - L'appel de self.lancer()
+            - Le lancement de iPython si al dernière méthode n'a jamais été lancée
+        """
+        
         return time.time() - Timer.origine
         
     def interrupt(self) :
-        tempsFinal = 10
+        
+        # Durée du math
+        # TODO A METTRE A 90 POUR DES VRAIES CONDITIONS DE MATCH
+        tempsFinal = 90
+        
         time.sleep(tempsFinal)
+        
         #TODO UTILISER LA METHODE self.stop() DE LA CLASSE ROBOT
         #TODO Pour l'intant, cette fonction ne fait rien.
+        
+        
         log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
