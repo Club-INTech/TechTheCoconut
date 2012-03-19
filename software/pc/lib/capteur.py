@@ -3,6 +3,7 @@
 import serie
 import log
 import peripherique
+import __builtin__
 
 log = log.Log(__name__)
 
@@ -18,23 +19,15 @@ class Capteur(serie.Serie):
     :param distance: Distance capté en mm à partir de laquelle on prévoit un évitemment
     :type distance: long
     """
-    def __init__(self, nom, nombreEchantillons=3):
-        self.nom = nom
+    def __init__(self):
         self.demarrer()
-        self.nombreEchantillons = nombreEchantillons
         self.distance  = 400
 
     def demarrer(self):
         
         if not hasattr(Capteur, 'initialise') or not Capteur.initialise:
             Capteur.initialise = True
-            chemin = peripherique.chemin_de_peripherique("capteur")
-            if chemin:
-                serie.Serie.__init__(self, chemin, self.nom, 57600, 3)
-            else:
-                log.logger.error("Le capteur "+self.nom+" n'est pas chargé")
-        # Ouverture de la liaison série
-        self.start()
+            self.serieInstance = __builtin__.instance.serieCaptInstance
 
     def mesurer(self):
         """
