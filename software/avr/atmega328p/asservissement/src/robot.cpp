@@ -361,6 +361,8 @@ void Robot::stopper()
 	//stop en translation
 	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
+	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
+		Serial<0>::print("STOPPE");
 }
 
 void Robot::atteinteConsignes()
