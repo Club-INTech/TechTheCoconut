@@ -321,33 +321,35 @@ void Robot::debut_tourner(float angle)
 void Robot::fin_tourner()
 {
 	if (consigne_tra_ != translation.consigne())
+	{
 		translation.consigne(consigne_tra_);
+		translation_attendue_ = true;
+	}
 	else if (rotation_attendue_)
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
 			Serial<0>::print("FIN_TOU");
-		else
-		{
-			goto_attendu_ = false;
-			Serial<0>::print("FIN_GOTO");
-		}
 	}
 }
 
 void Robot::debut_translater(float distance)
 {	
-	translation_attendue_ = true;
 	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
 }
 
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_)
+	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<100)
 	{
 		translation_attendue_ = false;
-		if (not goto_attendu_)
+		if (goto_attendu_)
+		{
+			goto_attendu_ = false;
+			Serial<0>::print("FIN_GOTO");
+		}
+		else
 			Serial<0>::print("FIN_TRA");
 	}
 }
