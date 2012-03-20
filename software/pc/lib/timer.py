@@ -71,7 +71,17 @@ class Timer(threading.Thread):
             __builtin__.instance.asserInstance.setUnsetAsser("rotation", 0)
         except : log.logger.error("Impossible d'arreter l'asservissement")
         
-
+        # Arrêt des actionneurs
+        try :
+            __builtin__.instance.actionInstance.stop()
+        except :
+            log.logger.error("Impossible d'arrêter les actionneurs")
+        
+        # Arrêt des capteurs
+        try :
+            __builtin__.instance.serieCaptInstance.close()
+        except :
+            log.logger.error("Impossible d'arrêter les capteurs")
         
         
         log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
