@@ -19,6 +19,7 @@ class Instance:
     :param asserInstance: Instance de la classe asservissement
     :param serieAsserInstance: Instance de la classe serie pour l'asservissement
     :param serieCaptInstance: Instance de la classe  serie pour les capteurs/actionneurs
+    :param actionInstance: Instance de la classe actionneurs
     """
     
     def __init__(self):
