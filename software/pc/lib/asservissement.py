@@ -135,11 +135,11 @@ class Asservissement:
             
             acquittement = False
             while not acquittement:
-                if self.serialInstance.readline() != "":
+                reponse = self.serialInstance.readline()
+                if reponse != "":
                     time.sleep(0.01)
-                    reponse = self.serialInstance.readline()
                     print "lit sur série : >"+reponse.replace("\r","\\r").replace("\n","\\n")+"<"
-                    if (reponse == "IN_GOTO\r\n" or reponse == "IN_GOTO\r"):
+                    if (reponse == "IN_GOTO\r\n" or reponse == "IN_GOTO\r" or reponse == "FIN_GOTO\r\n" or reponse == "FIN_GOTO\r"):
                         print "reception de FIN_GOTO !"
                         acquittement = True
                         self.robotInstance.position = destination

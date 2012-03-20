@@ -52,7 +52,7 @@ class Instance:
         #Instance serie asservissement
         cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
         if cheminAsser:
-            self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=0)
+            self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=5)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
             
