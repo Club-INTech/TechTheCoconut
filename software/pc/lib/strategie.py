@@ -68,7 +68,7 @@ class Strategie(decision.Decision, threading.Thread):
             capteur        = __builtin__.instance.capteurInstance
             actionneur     = __builtin__.instance.actionInstance
         except :
-            log.logger.error("Impossible d'importer les instances globales d'asserissement, capteur, et actionneur")
+            log.logger.error("Impossible d'importer les instances globales d'asservissement, capteur, et actionneur")
             
         #------------------------------------#
         #-- STRATEGIE NUMERO 1 : En carton --#
