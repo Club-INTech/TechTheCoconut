@@ -52,3 +52,4 @@ Ordres :
 	renvoi "FIN_GOTO" en fin de déplacement
  'stop' s'immobilise sur place
  'recal' initialise la position du robot par recalage
+	renvoi "FIN_REC" en fin de recalage (et le robot est non asservi)

@@ -92,6 +92,10 @@ public:
 	void stopper();
 	void atteinteConsignes(void);
 	void gestionStoppage();
+	
+	void recalage(void);
+	void translater(float distance);
+	void tourner(float angle);
 };
 
 #endif
