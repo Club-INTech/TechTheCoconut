@@ -106,8 +106,6 @@ class Asservissement:
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
-        derniere_position = depart
-        
         try :
             chemin_python.remove(chemin_python[0])
         except :
@@ -129,7 +127,7 @@ class Asservissement:
             time.sleep(0.1)
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-            derniere_destination = outils_math.point.Point(float(i.x),float(i.y))
+            destination = outils_math.point.Point(float(i.x),float(i.y))
            
             
             acquittement = False
@@ -141,7 +139,7 @@ class Asservissement:
                     if (reponse == "IN_GOTO\r\n" or reponse == "IN_GOTO\r"):
                         print "reception de FIN_GOTO !"
                         acquittement = True
-                        derniere_position = derniere_destination
+                        self.robotInstance.position = destination
                         
                  
                 """
@@ -167,14 +165,12 @@ class Asservissement:
         self.serialInstance.write("t\n" + str(float(angle)))
         acquittement = False
         while not acquittement:
-            while not self.serialInstance.file_attente.empty():
-                reponse = self.serialInstance.file_attente.get()
-                if reponse == "FIN_TOU":
+            if self.serialInstance.readline() != "":
+                time.sleep(0.01)
+                reponse = self.serialInstance.readline()
+                if (reponse == "IN_TOU\r\n" or reponse == "IN_TOU\r"):
+                    print "reception de FIN_TOU !"
                     acquittement = True
-                elif reponse == 6 or reponse ==7:
-                    pass
-                else:
-                    log.logger.debug("Erreur asservissement (tourner) : " + reponse)
     
     def avancer(self, distance):
         """
@@ -185,14 +181,12 @@ class Asservissement:
         self.serialInstance.ecrire("d\n" + str(float(distance)))
         acquittement = False
         while not acquittement:
-            while not self.serialInstance.file_attente.empty():
-                reponse = self.serialInstance.file_attente.get()
-                if reponse == "FIN_TRA":
+            if self.serialInstance.readline() != "":
+                time.sleep(0.01)
+                reponse = self.serialInstance.readline()
+                if (reponse == "IN_TRA\r\n" or reponse == "IN_TRA\r"):
+                    print "reception de FIN_TRA !"
                     acquittement = True
-                elif reponse == 6 or reponse ==7:
-                    pass
-                else:
-                    log.logger.debug("Erreur asservissement (avancer) : " + reponse)
 
     def setUnsetAsser(self, asservissement, mode):
         pass
