@@ -29,6 +29,7 @@ class Instance:
         self.instanciationSerie()
         self.instanciationAsservissement()
         self.instanciationCapteur()
+        self.instanciationActionneur()
     
     def instanciationCapteur(self):
         try : self.capteurInstance = lib.capteur.Capteur()

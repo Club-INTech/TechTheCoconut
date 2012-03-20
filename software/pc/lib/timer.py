@@ -8,6 +8,8 @@ import strategie
 import log
 log = log.Log(__name__)
 
+import __builtin__
+
 class Timer(threading.Thread):
     """
     Cette classe permet de gérer le timer, afin de minuter la stratégie
@@ -62,6 +64,14 @@ class Timer(threading.Thread):
         
         # Arrêt de la prise de stratégie
         strategie.Strategie().arreterPrendreDecisions()
+        
+        # Arrêt de l'asservissement.
+        try : 
+            __builtin__.instance.asserInstance.setUnsetAsser("translation", 0)
+            __builtin__.instance.asserInstance.setUnsetAsser("rotation", 0)
+        except : log.logger.error("Impossible d'arreter l'asservissement")
+        
+
         
         
         log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")

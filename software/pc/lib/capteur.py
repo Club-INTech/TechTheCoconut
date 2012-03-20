@@ -83,3 +83,4 @@ class Capteur(serie.Serie):
         """
         Capteur.initialise = False
         self.stop()
+        log.logger.info("Arrêt du capteur")
