@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import outils_math.point as point
+
 import decision
 import carte
 import robot
@@ -8,6 +10,8 @@ import threading
 
 import log
 log = log.Log(__name__)
+
+import __builtin__
 
 class Strategie(decision.Decision, threading.Thread):
     """
@@ -55,21 +59,36 @@ class Strategie(decision.Decision, threading.Thread):
         Retourne la décision prise par le robot. Pour les conventions, voir pc/lib/decision.py
         """
         
+        #------------------------------#
+        #-- Définition des instances --#
+        #------------------------------#
+        
+        asservissement = __builtin__.instance.asserInstance
+        capteur        = __builtin__.instance.capteurInstance
+        actionneur     = __builtin__.instance.actionInstance
+        
         #------------------------------------#
         #-- STRATEGIE NUMERO 1 : En carton --#
         #------------------------------------#
+        
         if self.strategie == 1 :
+            # TODO Demander au p'tit Pierre pour le point de départ (R/V, position exacte)
+            depart = point.Point(0,0) ####
+            
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
                 # Avant une seconde : on va raffler la partie 'haute' de notre Totem
                 if self.timer.getTime() <= 1 :
-                    time.sleep(1.5)
+                    asservissement.goTo(depart, point.Point(500,0)) #TODO Voir avec Pierre pour la symétrie
                     
                 # etc.
                 elif self.timer.getTime() <= 10 :
                     time.sleep(10.5)
                     
-            
+
+        #--------------------------------------#
+        #-- STRATEGIE NUMERO 2: Un peu mieux --#
+        #--------------------------------------#
         
         elif self.strategie == 2:
             pass
