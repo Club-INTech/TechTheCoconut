@@ -136,18 +136,15 @@ class Asservissement:
             thread = threading.Thread(target = self.ecoute_thread)
             thread.start()
             while thread.is_alive() :
-                pass
                 #self.CaptSerialInstance.write('?')
-                """
                 capteur = self.CaptSerialInstance.readline()
                 print 'capteur :' + capteur
                 if capteur == 'capteur\r\n' or capteur == 'capteur\r':
                     capteur.replace('\r\n', '')
                     capteur.replace('\r', '')
-                if int(capteur) < 1500:
+                if capteur < 1500:
                     self.serialInstance.write("stop")
                     log.logger.info('Evitement !')
-                    """
                 """
                 mesure = self.capteursInstance.mesurer()
                 print 'mesure capteur :' + str(mesure)
@@ -207,17 +204,12 @@ class Asservissement:
         :param mode: permet de choisir entre marche et arrêt. 0 = arrêt; 1 = marche
         :type mode: int
         """
-        if mode == 0:
-            mode = 's\n'
-        else:
-            mode = 'd\n'
             
         if asservissement == "rotation":
-            asservissement = 'r\n'
+            self.serialInstance.ecrire('cr'+str(float(mode))+'\n')
+
         else:
-            asservissement = 't\n'
-        
-        self.serialInstance.ecrire(mode + asservissement)
+            self.serialInstance.ecrire('ct'+str(float(mode))+'\n')
 
 
     def immobiliser(self):
