@@ -126,8 +126,6 @@ class Asservissement:
             print ">"+self.serialInstance.readline()+"<"
             
             
-            
-            
             time.sleep(0.1)
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
@@ -188,7 +186,7 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.serialInstance.ecrire("d\n" + str(float(distance)))
+        self.serialInstance.write("d\n" + str(float(distance)))
         acquittement = False
         while not acquittement:
             if self.serialInstance.readline() != "":
@@ -208,17 +206,17 @@ class Asservissement:
         """
             
         if asservissement == "rotation":
-            self.serialInstance.ecrire('cr'+str(float(mode))+'\n')
+            self.serialInstance.write('cr'+str(mode)+'\n')
 
-        else:
-            self.serialInstance.ecrire('ct'+str(float(mode))+'\n')
+        else if asservissement == "translation":
+            self.serialInstance.write('ct'+str(mode)+'\n')
 
 
     def immobiliser(self):
         """
         Fonction pour demander l'immombilisation du robot
         """
-        self.serialInstance.ecrire('stop\n')
+        self.serialInstance.write('stop\n')
         
     def calculRayon(self, angle):
         """
@@ -316,8 +314,8 @@ class Asservissement:
             #Définir la zone de départ
             elif choix == '1':
                 couleur = raw_input("Indiquer la zone de départ (r/v)\n")
-                message = 'c\nc\n' + str(couleur)
-                self.serialInstance.ecrire(message)
+                message = 'cc' + str(couleur)
+                self.serialInstance.write(message)
                 self.afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
@@ -326,12 +324,12 @@ class Asservissement:
                 while not exit:
                     self.afficherSousMenu()
                     choix = raw_input()
-                    message = "c\nr\n"
+                    message = "cr"
                     
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += str(valeurs[choix]) + '\n' + str(constante)
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     
                     else:
                         exit = True
@@ -348,7 +346,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += valeurs[choix] + '\n' + str(constante)
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     
                     else:
                         exit = True
@@ -359,12 +357,12 @@ class Asservissement:
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
                     message = 'cx' + str(coordonneX)
-                    self.serialInstance.ecrire(message)
+                    self.serialInstance.write(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
                     message = 'cy' + str(coordonneY)
-                    self.serialInstance.ecrire(message)
+                    self.serialInstance.write(message)
                 
                 self.afficherMenu()
             #Activer ou désactiver l'asservissement
@@ -381,16 +379,16 @@ class Asservissement:
                     constante = raw_input()
                     if constante == '1':
                         message = 's\nr\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '2':
                         message = 'd\nr\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '3':
                         message = 's\nt\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '4':
                         message = 'd\nt\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '0':
                         exit = True
                         self.afficherMenu()
@@ -425,7 +423,7 @@ class Asservissement:
                                 self.afficherMenu()
                             else:
                                 message = 'e\nr\n' + valeurs[choix]
-                                self.serialInstance.ecrire(message)
+                                self.serialInstance.write(message)
                     elif choix == '3':
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
@@ -437,20 +435,20 @@ class Asservissement:
                                 self.afficherMenu()
                             else:
                                 message = 'e\nt\n' + valeurs[choix]
-                                self.serialInstance.ecrire(message)
+                                self.serialInstance.write(message)
                     elif choix == '4':
-                        self.serialInstance.ecrire('e\ns')
+                        self.serialInstance.write('e\ns')
                     elif choix =='5':
                         exit = False
                         while not exit:
-                            self.serialInstance.ecrire('ex')
+                            self.serialInstance.write('ex')
                             answer = False
                             while not answer:
                                 while not self.serialInstance.file_attente.empty():
                                     print self.serialInstance.file_attente.get()
                                     answer = True
                                     self.afficherSousMenu()
-                            self.serialInstance.ecrire('y\ne')
+                            self.serialInstance.write('y\ne')
                             while not answer:
                                 while not self.serialInstance.file_attente.empty():
                                     print self.serialInstance.file_attente.get()
@@ -459,7 +457,7 @@ class Asservissement:
             elif choix == '7':
                 exit = False
                 while not exit:
-                    self.serialInstance.ecrire('?\n')
+                    self.serialInstance.write('?\n')
                     
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"
