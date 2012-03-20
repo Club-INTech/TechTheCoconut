@@ -27,13 +27,7 @@ class Actionneur(serie.Serie):
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            chemin = peripherique.chemin_de_peripherique("actionneur")
-            if chemin:
-                serie.Serie.__init__(self, chemin, self.nom, 9600, 3)
-            else:
-                log.logger.error("L'actionneur "+ self.nom+" n'est pas chargé")
-        # Ouverture de la liaison série
-        #self.start()
+            self.serieInstance = __builtin__.instance.serieCaptInstance
         
     def deplacer(self, angle, vitesse = None):
         """
@@ -48,7 +42,7 @@ class Actionneur(serie.Serie):
         """
 
         if angle < 170 and angle > 0:
-            self.ecrire(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
+            self.serieInstance.write(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
             #serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
@@ -56,7 +50,7 @@ class Actionneur(serie.Serie):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         """
-        self.ecrire(self.nom + '\n '+ '0' + '\n '  + '0')
+        self.serieInstance.write(self.nom + '\n '+ '0' + '\n '  + '0')
         #serie.Serie.lire()
         self.angle = self.file_attente.get(lu)
 
@@ -71,7 +65,7 @@ class Actionneur(serie.Serie):
         """
         Arrête l'actionneur en urgence
         """
-        self.ecrire(self.nom + '\n '+ '1' + '\n '  + '0')#TODO modifier selon convention
+        self.serieInstance.write(self.nom + '\n '+ '1' + '\n '  + '0')#TODO modifier selon convention
         self.getAngle()
         serie.Serie.stop()
         
