@@ -19,6 +19,7 @@ import peripherique
 import lib.log
 import conf
 import capteur
+import threading
 log =lib.log.Log(__name__)
 
 sys.path.append('../')
@@ -131,26 +132,22 @@ class Asservissement:
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             destination = outils_math.point.Point(float(i.x),float(i.y))
-           
             
-            acquittement = False
-            while not acquittement:
-                reponse = self.serialInstance.readline()
-                if reponse != "":
-                    time.sleep(0.01)
-                    print "lit sur série : >"+reponse.replace("\r","\\r").replace("\n","\\n")+"<"
-                    if (reponse == "IN_GOTO\r\n" or reponse == "IN_GOTO\r" or reponse == "FIN_GOTO\r\n" or reponse == "FIN_GOTO\r"):
-                        print "reception de FIN_GOTO !"
-                        acquittement = True
-                        self.robotInstance.position = destination
-                capteur = 0
-                if self.CaptSerialInstance.readline() != "":
-                    capteur = self.CaptSerialInstance.readline()
-                    if capteur < 1500:
-                        self.serialInstance.write("stop")
-                    
-                        
-                 
+            thread = threading.Thread(target = self.ecoute_thread)
+            thread.start()
+            while thread.is_alive() :
+                pass
+                #self.CaptSerialInstance.write('?')
+                """
+                capteur = self.CaptSerialInstance.readline()
+                print 'capteur :' + capteur
+                if capteur == 'capteur\r\n' or capteur == 'capteur\r':
+                    capteur.replace('\r\n', '')
+                    capteur.replace('\r', '')
+                if int(capteur) < 1500:
+                    self.serialInstance.write("stop")
+                    log.logger.info('Evitement !')
+                    """
                 """
                 mesure = self.capteursInstance.mesurer()
                 print 'mesure capteur :' + str(mesure)
@@ -164,7 +161,13 @@ class Asservissement:
                     #goto(depart, arrivee, centre_robotA)
                 """
         return destination
-                    
+     
+    def ecoute_thread(self):
+        reponse = self.serialInstance.readline()
+        while str(reponse) != 'FIN_GOTO\r\n' and str(reponse) != 'FIN_GOTO\r':
+            reponse = self.serialInstance.readline()
+            print 'reponse : ' + str(reponse)
+
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
@@ -175,9 +178,8 @@ class Asservissement:
         acquittement = False
         while not acquittement:
             if self.serialInstance.readline() != "":
-                time.sleep(0.01)
                 reponse = self.serialInstance.readline()
-                if (reponse == "IN_TOU\r\n" or reponse == "IN_TOU\r"):
+                if (reponse == "FIN_TOU\r\n" or reponse == "FIN_TOU\r"):
                     print "reception de FIN_TOU !"
                     acquittement = True
     
@@ -191,9 +193,8 @@ class Asservissement:
         acquittement = False
         while not acquittement:
             if self.serialInstance.readline() != "":
-                time.sleep(0.01)
                 reponse = self.serialInstance.readline()
-                if (reponse == "IN_TRA\r\n" or reponse == "IN_TRA\r"):
+                if (reponse == "FIN_TRA\r\n" or reponse == "FIN_TRA\r"):
                     print "reception de FIN_TRA !"
                     acquittement = True
 
