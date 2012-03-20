@@ -6,6 +6,7 @@ import lib.log
 import robot
 import peripherique
 import asservissement
+import capteur
 import serial
 
 
@@ -28,20 +29,20 @@ class Instance:
     def instanciation(self):
         self.instanciationRobot()
         self.instanciationSerie()
-        self.instanciationAsservissement()
         self.instanciationCapteur()
+        self.instanciationAsservissement()
         self.instanciationActionneur()
     
     def instanciationCapteur(self):
-        try : self.capteurInstance = lib.capteur.Capteur()
-        except : log.logger.error("Impossible d'instancier capteur")
+        self.capteurInstance = capteur.Capteur()
+        #log.logger.error("Impossible d'instancier capteur")
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
         
     def instanciationAsservissement(self):
-        try : self.asserInstance = asservissement.Asservissement()
-        except : log.logger.error("Impossible d'instancier asservissement")
+        self.asserInstance = asservissement.Asservissement()
+        #except : log.logger.error("Impossible d'instancier asservissement")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneur.Actionneur()
