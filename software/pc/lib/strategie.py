@@ -63,17 +63,12 @@ class Strategie(decision.Decision, threading.Thread):
             while Strategie.prendreDecisions :
                 # Avant une seconde : on va raffler la partie 'haute' de notre Totem
                 if self.timer.getTime() <= 1 :
-                    log.logger.info("TEST STRATEGIE, Rafle")
                     time.sleep(1.5)
                     
                 # etc.
                 elif self.timer.getTime() <= 10 :
-                    log.logger.info("TEST STRATEGIE, Rafle")
                     time.sleep(10.5)
                     
-                elif self.timer.getTime() <= 20 :
-                    log.logger.info("TEST STRATEGIE, end")
-                    time.sleep(5)                    
             
         
         elif self.strategie == 2:
