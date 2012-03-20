@@ -211,8 +211,17 @@ void Robot::communiquer_pc(){
 	}
 	
 	//recalage de la position
-	else if(COMPARE_BUFFER("recal")){
-		recalage();
+	else if(COMPARE_BUFFER("recal1")){
+		recalage1();
+	}
+	else if(COMPARE_BUFFER("recal2")){
+		recalage2();
+	}
+	else if(COMPARE_BUFFER("recal3")){
+		recalage3();
+	}
+	else if(COMPARE_BUFFER("recal4")){
+		recalage4();
 	}
 
 #undef COMPARE_BUFFER
@@ -432,7 +441,7 @@ void Robot::gestionStoppage()
 	last_angle = mesure_angle_;
 }
 
-void Robot::recalage()
+void Robot::recalage1()
 {
 	translater(-300.0);
 	etat_rot_ = false;
@@ -441,6 +450,9 @@ void Robot::recalage()
 	if (couleur_ == 'r') angle_courant(0.0); else angle_courant(PI);
 	etat_rot_ = true;
 	translater(300.0);
+}
+void Robot::recalage2()
+{
 	tourner(PI/2);
 	translater(-300.0);
 	etat_rot_ = false;
@@ -448,9 +460,17 @@ void Robot::recalage()
 	y(LARGEUR_ROBOT/2);
 	etat_rot_ = true;
 	translater(250.0);
+}
+void Robot::recalage3()
+{
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
+}
+void Robot::recalage4()
+{
+	translater(-200.0);
+// 	tourner(angle_courant()+PI/2);
 }
 
 void Robot::translater(float distance)

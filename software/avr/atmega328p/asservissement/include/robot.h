@@ -93,7 +93,11 @@ public:
 	void atteinteConsignes(void);
 	void gestionStoppage();
 	
-	void recalage(void);
+	void recalage1(void);
+	void recalage2(void);
+	void recalage3(void);
+	void recalage4(void);
+	
 	void translater(float distance);
 	void tourner(float angle);
 };
