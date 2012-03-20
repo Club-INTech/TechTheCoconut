@@ -62,13 +62,8 @@ void Robot::updatePosition()
 
 	int16_t delta_distance_tic = mesure_distance_ - last_distance;
 	int16_t delta_angle_tic = mesure_angle_ - last_angle;
-	int32_t last_angle_abs;
-    
-	if(couleur_ == 'v')
-		last_angle_abs= (last_angle + 4260);
-	else
-		last_angle_abs = last_angle;
-		
+	int32_t last_angle_abs = last_angle;
+	
 	float last_angle_radian = last_angle_abs* CONVERSION_TIC_RADIAN_;
 	float delta_distance_mm = delta_distance_tic * CONVERSION_TIC_MM_;
 	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
@@ -278,6 +273,15 @@ void Robot::mesure_distance(int32_t new_distance)
 }
 
 ////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
+
+
+int32_t Robot::angle_initial()
+{
+	if (couleur_ == 'r')
+		return 0;
+	else
+		return 4260;
+}
 	
 
 void Robot::gotoPos(float x, float y)
@@ -292,13 +296,10 @@ void Robot::gotoPos(float x, float y)
 	
 }
 
-
-
 void Robot::debut_tourner(float angle)
 {
-	static float angleBkp = 0;
-// 	static float angleBkp = 4260;
-// 	static float angleBkp = ((couleur_ == 'v') ? 4260 : 0);
+	static float angleBkp = angle_initial();
+
 	rotation_attendue_ = true;
 	float ang1 = abs(angle-angleBkp);
 	float ang2 = abs(angle+2*PI-angleBkp);
