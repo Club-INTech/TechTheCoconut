@@ -63,10 +63,13 @@ class Strategie(decision.Decision, threading.Thread):
         #-- Définition des instances --#
         #------------------------------#
         
-        asservissement = __builtin__.instance.asserInstance
-        capteur        = __builtin__.instance.capteurInstance
-        actionneur     = __builtin__.instance.actionInstance
-        
+        try :
+            asservissement = __builtin__.instance.asserInstance
+            capteur        = __builtin__.instance.capteurInstance
+            actionneur     = __builtin__.instance.actionInstance
+        except :
+            log.logger.error("Impossible d'importer les instances globales d'asserissement, capteur, et actionneur")
+            
         #------------------------------------#
         #-- STRATEGIE NUMERO 1 : En carton --#
         #------------------------------------#
@@ -79,8 +82,8 @@ class Strategie(decision.Decision, threading.Thread):
             while Strategie.prendreDecisions :
                 # Avant une seconde : on va raffler la partie 'haute' de notre Totem
                 if self.timer.getTime() <= 1 :
-                    asservissement.goTo(depart, point.Point(500,0)) #TODO Voir avec Pierre pour la symétrie
-                    
+                    #asservissement.goTo(depart, point.Point(500,0)) #TODO Voir avec Pierre pour la symétrie
+                    pass
                 # etc.
                 elif self.timer.getTime() <= 10 :
                     time.sleep(10.5)
