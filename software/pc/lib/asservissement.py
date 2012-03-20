@@ -137,6 +137,7 @@ class Asservissement:
             thread.start()
             while thread.is_alive() :
                 #self.CaptSerialInstance.write('?')
+                """
                 capteur = self.CaptSerialInstance.readline()
                 print 'capteur :' + capteur
                 if capteur == 'capteur\r\n' or capteur == 'capteur\r':
@@ -145,6 +146,7 @@ class Asservissement:
                 if capteur < 1500:
                     self.serialInstance.write("stop")
                     log.logger.info('Evitement !')
+                    """
                 """
                 mesure = self.capteursInstance.mesurer()
                 print 'mesure capteur :' + str(mesure)
