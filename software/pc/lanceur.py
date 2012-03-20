@@ -9,12 +9,11 @@ import __builtin__
 
 # Chargement de la couleur du robot
 first = True
-while first or couleur not in ['', 'R', 'V']:
+while first or couleur not in ['', 'r', 'v']:
     first = False
-    couleur = raw_input('Couleur de notre robot rouge ou violet ([V], R) : ')
-    prout = "APOJZKNZLKN"
+    couleur = raw_input('Couleur de notre robot rouge ou violet ([v], v) : ')
     if couleur == '' :
-        couleur = 'V'
+        couleur = 'v'
         
 # Chargement du profil de configuration
 first = True

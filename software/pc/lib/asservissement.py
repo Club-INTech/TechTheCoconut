@@ -42,7 +42,14 @@ class Asservissement:
         #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
         self.robotInstance = __builtin__.instance.robotInstance
         self.serialInstance = __builtin__.instance.serieAsserInstance
-            
+        self.couleur = __builtin__.constantes['couleur']
+        self.serialInstance.write("\n")
+        self.serialInstance.write("cc"+couleur+"\n")
+        if couleur == 'v':
+            orientation = 3.1415
+        else:
+            orientation = 0
+        self.serialInstance.write('co\n' + string(float(valeur)))
     
     def goToScript(self, script):
         """
