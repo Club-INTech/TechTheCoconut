@@ -11,7 +11,7 @@ import __builtin__
 first = True
 while first or couleur not in ['', 'r', 'v']:
     first = False
-    couleur = raw_input('Couleur de notre robot rouge ou violet ([v], v) : ')
+    couleur = raw_input('Couleur de notre robot rouge ou violet ([v], r) : ')
     if couleur == '' :
         couleur = 'v'
         
