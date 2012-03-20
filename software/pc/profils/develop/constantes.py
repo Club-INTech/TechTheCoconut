@@ -13,14 +13,14 @@ constantes = \
 		#: Longueur de la table en mm
 		"longueur": 2000,
 		
-		#TODO : des vrais valeurs..
 		#longueur d'un bras
-		"longueurBras" : 155.,
+		"longueurBras" : 180.,
 		
 		#sans compter les bras
-		"largeurRobot" : 120.,
-		"longueurRobot" : 500.,
+		"largeurRobot" : 200.,
+		"longueurRobot" : 360.,
 		
+                #TODO : à enlever...
                 #longueur du coté du robot, en mm
                 "coteRobot" : 350.
 	},
