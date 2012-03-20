@@ -28,12 +28,16 @@ robotInstance=robot.Robot()
 asser = Asservissement(robotInstance)
 asser.test()
 """
-
+"""
+while 42:
+    reponse = asser.capteurInstance.mesurer()
+    print reponse
+"""
 depart = outils_math.point.Point(0.0,400.0)
 
-
-
 asser = __builtin__.instance.asserInstance
+
+
 #écriture du point de départ initial
 asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
 

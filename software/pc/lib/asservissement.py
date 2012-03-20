@@ -7,6 +7,7 @@ import time
 import __builtin__
 
 #sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+import profils.develop.constantes
 
 import log
 import outils_math.point as point
@@ -16,6 +17,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
+import conf
 import capteur
 log =lib.log.Log(__name__)
 
@@ -39,19 +41,20 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
+        self.capteurInstance = __builtin__.instance.capteurInstance
         self.robotInstance = __builtin__.instance.robotInstance
         self.serialInstance = __builtin__.instance.serieAsserInstance
+        self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         self.couleur = __builtin__.constantes['couleur']
+        """
         self.serialInstance.write("\n")
-        self.serialInstance.write("cc"+couleur+"\n")
-        if couleur == 'v':
+        self.serialInstance.write("cc"+self.couleur+"\n")
+        if self.couleur == 'v':
             orientation = 3.1415
         else:
             orientation = 0
-        self.serialInstance.write('co\n' + string(float(valeur)))
-        
-        
+        self.serialInstance.write('co\n' + str(float(orientation)))
+        """
     
     def recalage(self):
         """
@@ -140,6 +143,12 @@ class Asservissement:
                         print "reception de FIN_GOTO !"
                         acquittement = True
                         self.robotInstance.position = destination
+                capteur = 0
+                if self.CaptSerialInstance.readline() != "":
+                    capteur = self.CaptSerialInstance.readline()
+                    if capteur < 1500:
+                        self.serialInstance.write("stop")
+                    
                         
                  
                 """
@@ -154,7 +163,7 @@ class Asservissement:
                     #TODO Calculer le centre du robot adverse nommé centre_robotA
                     #goto(depart, arrivee, centre_robotA)
                 """
-        return (derniere_position)
+        return destination
                     
     def tourner(self, angle):
         """

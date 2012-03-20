@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import serie
+
 import log
 import peripherique
 import __builtin__
@@ -8,7 +8,7 @@ import __builtin__
 log = log.Log(__name__)
 
 
-class Capteur(serie.Serie):
+class Capteur():
     """
     Classe permettant de gérer un capteur
     
@@ -25,8 +25,8 @@ class Capteur(serie.Serie):
 
     def demarrer(self):
         
-        if not hasattr(Capteur, 'initialise') or not Capteur.initialise:
-            Capteur.initialise = True
+        if not hasattr(self, 'initialise') or not self.initialise:
+            self.initialise = True
             self.serieInstance = __builtin__.instance.serieCaptInstance
 
     def mesurer(self):
@@ -46,7 +46,7 @@ class Capteur(serie.Serie):
         |   valeur_capteur_3
         |   'f'
         """
-        mesure = self.file_attente.get(True, 3)
+        mesure = self.serieInstance.readline()
             
         """ A modifier (peut-être) quand il y aura les trois capteurs.
         compteur = 0
@@ -81,6 +81,6 @@ class Capteur(serie.Serie):
         """
         Arrêter le capteur (avec liaison série)
         """
-        Capteur.initialise = False
+        self.initialise = False
         self.stop()
         log.logger.info("Arrêt du capteur")
