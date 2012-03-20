@@ -50,7 +50,38 @@ class Asservissement:
         else:
             orientation = 0
         self.serialInstance.write('co\n' + string(float(valeur)))
+        
+        
     
+    def recalage(self):
+        """
+        Fonction qui envoie le protocole de recallage à l'AVR
+        """
+        self.serialInstance.write('recal\n')
+        
+        
+        raw_input()
+        
+        #On redémarre l'asservissement
+        self.serialInstance.write('cr1\n')
+        self.serialInstance.write('ct1\n')
+        #On demande la position :
+        self.serialInstance.write('ex\n')
+        self.robotInstance.position.x = self.lire()
+        self.serialInstance.write('ey\n')
+        self.robotInstance.position.y = self.lire()
+        
+    def lire(self, verifier, check=0):
+        acquittement = False
+        while not acquittement:
+            if self.serialInstance.readline() != "":
+                time.sleep(0.01)
+                reponse = self.serialInstance.readline()
+                if reponse == check:
+                    acquitement = True
+                elif verifier == 0:
+                    acquitement = True
+                    
     def goToScript(self, script):
         """
         Fonction qui envoie une liste de coordonnées à la carte d'asservissement sans utiliser la recherche de chemin
