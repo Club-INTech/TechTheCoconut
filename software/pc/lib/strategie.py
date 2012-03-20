@@ -37,9 +37,9 @@ class Strategie(decision.Decision, threading.Thread):
             # Lancement du timer.
             self.timer.lancer()
         
-        # Lancer le thread de prise de décision
-        threading.Thread.__init__(self, name="prendreDecision", target=self.prendreDecision)
-        self.start()
+            # Lancer le thread de prise de décision
+            threading.Thread.__init__(self, name="prendreDecision", target=self.prendreDecision)
+            self.start()
         
     def arreterPrendreDecisions(self) :
         """
@@ -63,12 +63,17 @@ class Strategie(decision.Decision, threading.Thread):
             while Strategie.prendreDecisions :
                 # Avant une seconde : on va raffler la partie 'haute' de notre Totem
                 if self.timer.getTime() <= 1 :
-                    pass
+                    log.logger.info("TEST STRATEGIE, Rafle")
+                    time.sleep(1.5)
                     
                 # etc.
                 elif self.timer.getTime() <= 10 :
-                    pass
+                    log.logger.info("TEST STRATEGIE, Rafle")
+                    time.sleep(10.5)
                     
+                elif self.timer.getTime() <= 20 :
+                    log.logger.info("TEST STRATEGIE, end")
+                    time.sleep(5)                    
             
         
         elif self.strategie == 2:
