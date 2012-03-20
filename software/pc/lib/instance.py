@@ -42,6 +42,10 @@ class Instance:
         try : self.asserInstance = asservissement.Asservissement()
         except : log.logger.error("Impossible d'instancier asservissement")
 
+    def instanciationActionneur(self):
+        try: self.actionInstance = actionneur.Actionneur()
+        except: log.logger.error("Impossible d'instancier actionneur")
+        
     def instanciationSerie(self):
         #Instance serie asservissement
         cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")

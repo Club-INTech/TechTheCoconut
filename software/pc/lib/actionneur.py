@@ -3,6 +3,7 @@
 import serie
 import log
 import peripherique
+import __builtin__
 
 log = log.Log(__name__)
 
@@ -15,12 +16,11 @@ class Actionneur(serie.Serie):
     :type nom: string
     """
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
-    def __init__(self, nom):
+    def __init__(self):
         """
         :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
         :type nom: string
         """
-        self.nom = nom
         self.angle = 0
         self.demarrer()
         
@@ -29,7 +29,7 @@ class Actionneur(serie.Serie):
             Actionneur.initialise = True
             self.serieInstance = __builtin__.instance.serieCaptInstance
         
-    def deplacer(self, angle, vitesse = None):
+    def deplacer(self, nom, angle, vitesse = None):
         """
         Envoyer un ordre à l'actionneur
         
@@ -42,7 +42,7 @@ class Actionneur(serie.Serie):
         """
 
         if angle < 170 and angle > 0:
-            self.serieInstance.write(self.nom + '\n ' + str(angle) +'\n ' + str(vitesse))
+            self.serieInstance.write(nom + '\n ' + str(angle) +'\n ' + str(vitesse))
             #serie.Serie.lire()
             self.angle = self.file_attente.get(lu)
         
