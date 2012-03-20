@@ -31,13 +31,15 @@ class Instance:
         self.instanciationCapteur()
     
     def instanciationCapteur(self):
-        self.capteurInstance = lib.capteur.Capteur()
+        try : self.capteurInstance = lib.capteur.Capteur()
+        except : log.logger.error("Impossible d'instancier capteur")
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
         
     def instanciationAsservissement(self):
-        self.asserInstance = asservissement.Asservissement()
+        try : self.asserInstance = asservissement.Asservissement()
+        except : log.logger.error("Impossible d'instancier asservissement")
 
     def instanciationSerie(self):
         #Instance serie asservissement
@@ -47,12 +49,12 @@ class Instance:
         else:
             log.logger.error("L'asservissement n'est pas chargé")
             
-            
+        
         cheminCapt = peripherique.chemin_de_peripherique("capteur")
         if cheminCapt:
             self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=3)
         else:
-            log.logger.error("Le capteur "+self.nom+" n'est pas chargé")
+            log.logger.error("Le capteur n'est pas chargé")
         
         
 
