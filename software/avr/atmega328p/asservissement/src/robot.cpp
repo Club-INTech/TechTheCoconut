@@ -1,5 +1,8 @@
 #include <math.h>
+
 #define PI 3.14159265
+#define LARGEUR_ROBOT 200.0
+#define LONGUEUR_TABLE 3000.0
 
 #include "twi_master.h"
 #include <libintech/serial/serial_0.hpp>
@@ -205,6 +208,11 @@ void Robot::communiquer_pc(){
 	}
 	else if(COMPARE_BUFFER("ct1")){
 		etat_tra_ = true;
+	}
+	
+	//recalage de la position
+	else if(COMPARE_BUFFER("recal")){
+		recalage();
 	}
 
 #undef COMPARE_BUFFER
@@ -422,4 +430,58 @@ void Robot::gestionStoppage()
 	
 	last_distance = mesure_distance_;
 	last_angle = mesure_angle_;
+}
+
+void Robot::recalage()
+{
+	translater(-300.0);
+	etat_rot_ = false;
+	translater(-200.0);
+	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
+	if (couleur_ == 'r') angle_courant(0.0); else angle_courant(PI);
+	etat_rot_ = true;
+	translater(300.0);
+	tourner(PI/2);
+	translater(-300.0);
+	etat_rot_ = false;
+	translater(-200.0);
+	y(LARGEUR_ROBOT/2);
+	etat_rot_ = true;
+	translater(250.0);
+	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
+	etat_rot_ = false;
+	etat_tra_ = false;
+}
+
+void Robot::translater(float distance)
+{	
+	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
+	while(compteur.value()>0){ asm("nop"); }
+	while(abs(translation.pwmCourant())> 10){
+		asm("nop");
+	}
+}
+
+void Robot::tourner(float angle)
+{
+	static float angleBkp = angle_initial();
+	
+	float ang1 = abs(angle-angleBkp);
+	float ang2 = abs(angle+2*PI-angleBkp);
+	float ang3 = abs(angle-2*PI-angleBkp);
+	
+	if (!(ang1 < ang2 && ang1 < ang3))
+	{
+		if (ang2 < ang3)
+			angle += 2*PI;
+		else
+			angle -=  2*PI;
+	}
+	angleBkp=angle;
+	
+	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
+	while(compteur.value()>0){ asm("nop"); }
+	while(abs(rotation.pwmCourant())> 10){
+		asm("nop");
+	}
 }
