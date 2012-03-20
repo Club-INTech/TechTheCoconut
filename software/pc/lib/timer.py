@@ -54,7 +54,7 @@ class Timer(threading.Thread):
         
         # Durée du math
         # TODO A METTRE A 90 POUR DES VRAIES CONDITIONS DE MATCH
-        tempsFinal = 10
+        tempsFinal = 5
         
         time.sleep(tempsFinal)
         

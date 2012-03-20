@@ -35,6 +35,9 @@ class Strategie(decision.Decision, threading.Thread):
 
             log.logger.info("Lancement de la stratégie numéro " + str(strategie))
             
+
+            
+    def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
             Strategie.prendreDecisions = True
             
@@ -44,6 +47,7 @@ class Strategie(decision.Decision, threading.Thread):
             # Lancer le thread de prise de décision
             threading.Thread.__init__(self, name="prendreDecision", target=self.prendreDecision)
             self.start()
+        
         
     def arreterPrendreDecisions(self) :
         """
@@ -67,6 +71,7 @@ class Strategie(decision.Decision, threading.Thread):
             asservissement = __builtin__.instance.asserInstance
             capteur        = __builtin__.instance.capteurInstance
             actionneur     = __builtin__.instance.actionInstance
+            robot          = __builtin__.instance.robotInstance
         except :
             log.logger.error("Impossible d'importer les instances globales d'asservissement, capteur, et actionneur")
             
@@ -75,8 +80,8 @@ class Strategie(decision.Decision, threading.Thread):
         #------------------------------------#
         
         if self.strategie == 1 :
-            # TODO Demander au p'tit Pierre pour le point de départ (R/V, position exacte)
-            depart = point.Point(0,0) ####
+            # Position de départ.
+            #depart = robot.position()     #TODO A tester sur le vrai EeePC       
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
@@ -98,4 +103,6 @@ class Strategie(decision.Decision, threading.Thread):
         
         elif self.strategie == 3 :
             pass
+        
+        log.logger.info("ARRET DEFINITIF STRATEGIE")
         
