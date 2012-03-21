@@ -46,7 +46,7 @@ class Capteur():
         |   valeur_capteur_3
         |   'f'
         """
-        mesure = self.serieInstance.readline()
+        mesure = self.captSerialInstance.readline()
             
         """ A modifier (peut-être) quand il y aura les trois capteurs.
         compteur = 0
