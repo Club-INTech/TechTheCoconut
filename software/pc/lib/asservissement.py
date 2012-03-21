@@ -46,8 +46,8 @@ class Asservissement:
         self.robotInstance = __builtin__.instance.robotInstance
         self.serialInstance = __builtin__.instance.serieAsserInstance
         self.captSerialInstance = __builtin__.instance.serieCaptInstance
-        self.couleur = __builtin__.constantes['couleur']
         """
+        self.couleur = __builtin__.constantes['couleur']
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
         if self.couleur == 'v':
@@ -56,7 +56,7 @@ class Asservissement:
             orientation = 0
         self.serialInstance.write('co\n' + str(float(orientation)))
         """
-    
+        
     def recalage(self):
         """
         Fonction qui envoie le protocole de recallage à l'AVR
@@ -135,10 +135,12 @@ class Asservissement:
             thread.start()
             while thread.is_alive() :
                 pass
+            """
                 #self.CaptSerialInstance.write('?')
-                """
-                mesure = self.capteursInstance.mesurer()
-                print 'mesure capteur :' + str(mesure)
+                mesure = self.capteurInstance.mesurer()
+                print mesure
+                mesure.replace('\n', '')
+                mesure.replace('\r', '')
                 if int(mesure) < 600:
                     self.serialInstance.write("stop")
                     thread._Thread__stop()
@@ -172,10 +174,12 @@ class Asservissement:
 
      
     def ecoute_thread_goto(self):
-        reponse = self.serialInstance.readline()
+        #reponse = ''
+        #if self.serialInstance.inWaiting():
+            #reponse = self.serialInstance.readline()
         while str(reponse) != 'FIN_GOTO\r\n' and str(reponse) != 'FIN_GOTO\r':
-            reponse = self.serialInstance.readline()
-            print 'reponse : ' + str(reponse)
+           reponse = self.serialInstance.readline()
+           print 'reponse : ' + str(reponse)
             
     def ecoute_thread_avancer(self):
         reponse = self.serialInstance.readline()
