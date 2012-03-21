@@ -154,9 +154,9 @@ class Asservissement:
         """
         self.serialInstance.write("t\n" + str(float(angle)))
         thread = threading.Thread(target = self.ecoute_thread_tourner)
-            thread.start()
-            while thread.is_alive() :
-                pass
+        thread.start()
+        while thread.is_alive() :
+            pass
     
     def avancer(self, distance):
         """
@@ -166,9 +166,9 @@ class Asservissement:
         """
         self.serialInstance.write("d\n" + str(float(distance)))
         thread = threading.Thread(target = self.ecoute_thread_avancer)
-            thread.start()
-            while thread.is_alive() :
-                pass
+        thread.start()
+        while thread.is_alive() :
+            pass
 
      
     def ecoute_thread_goto(self):
