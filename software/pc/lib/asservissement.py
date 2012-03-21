@@ -45,7 +45,7 @@ class Asservissement:
         self.capteurInstance = __builtin__.instance.capteurInstance
         self.robotInstance = __builtin__.instance.robotInstance
         self.serialInstance = __builtin__.instance.serieAsserInstance
-        self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
+        self.captSerialInstance = __builtin__.instance.serieCaptInstance
         self.couleur = __builtin__.constantes['couleur']
         """
         self.serialInstance.write("\n")
@@ -131,40 +131,21 @@ class Asservissement:
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             destination = outils_math.point.Point(float(i.x),float(i.y))
             
-            thread = threading.Thread(target = self.ecoute_thread)
+            thread = threading.Thread(target = self.ecoute_thread_goto)
             thread.start()
             while thread.is_alive() :
+                pass
                 #self.CaptSerialInstance.write('?')
-                """
-                capteur = self.CaptSerialInstance.readline()
-                print 'capteur :' + capteur
-                if capteur == 'capteur\r\n' or capteur == 'capteur\r':
-                    capteur.replace('\r\n', '')
-                    capteur.replace('\r', '')
-                if capteur < 1500:
-                    self.serialInstance.write("stop")
-                    log.logger.info('Evitement !')
-                    """
                 """
                 mesure = self.capteursInstance.mesurer()
                 print 'mesure capteur :' + str(mesure)
-                print 'aquitement :' + str(acquittement)
                 if int(mesure) < 600:
-                    self.immobiliser()
-                    acquittement = True
-                    #break
-                    #self.avancer(-150)
-                    #TODO Calculer le centre du robot adverse nommé centre_robotA
-                    #goto(depart, arrivee, centre_robotA)
-                """
+                    self.serialInstance.write("stop")
+                    thread._Thread__stop()
+                    log.logger.info('Evitement !')
+                    """
         return destination
-     
-    def ecoute_thread(self):
-        reponse = self.serialInstance.readline()
-        while str(reponse) != 'FIN_GOTO\r\n' and str(reponse) != 'FIN_GOTO\r':
-            reponse = self.serialInstance.readline()
-            print 'reponse : ' + str(reponse)
-
+        
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
@@ -172,13 +153,10 @@ class Asservissement:
         :type angle: Float
         """
         self.serialInstance.write("t\n" + str(float(angle)))
-        acquittement = False
-        while not acquittement:
-            if self.serialInstance.readline() != "":
-                reponse = self.serialInstance.readline()
-                if (reponse == "FIN_TOU\r\n" or reponse == "FIN_TOU\r"):
-                    print "reception de FIN_TOU !"
-                    acquittement = True
+        thread = threading.Thread(target = self.ecoute_thread_tourner)
+            thread.start()
+            while thread.is_alive() :
+                pass
     
     def avancer(self, distance):
         """
@@ -187,13 +165,29 @@ class Asservissement:
         :type angle: Float
         """
         self.serialInstance.write("d\n" + str(float(distance)))
-        acquittement = False
-        while not acquittement:
-            if self.serialInstance.readline() != "":
-                reponse = self.serialInstance.readline()
-                if (reponse == "FIN_TRA\r\n" or reponse == "FIN_TRA\r"):
-                    print "reception de FIN_TRA !"
-                    acquittement = True
+        thread = threading.Thread(target = self.ecoute_thread_avancer)
+            thread.start()
+            while thread.is_alive() :
+                pass
+
+     
+    def ecoute_thread_goto(self):
+        reponse = self.serialInstance.readline()
+        while str(reponse) != 'FIN_GOTO\r\n' and str(reponse) != 'FIN_GOTO\r':
+            reponse = self.serialInstance.readline()
+            print 'reponse : ' + str(reponse)
+            
+    def ecoute_thread_avancer(self):
+        reponse = self.serialInstance.readline()
+        while str(reponse) != 'FIN_TRA\r\n' and str(reponse) != 'FIN_TRA\r':
+            reponse = self.serialInstance.readline()
+            print 'reponse : ' + str(reponse)
+    
+    def ecoute_thread_tourner(self):
+        reponse = self.serialInstance.readline()
+        while str(reponse) != 'FIN_TOU\r\n' and str(reponse) != 'FIN_TOU\r':
+            reponse = self.serialInstance.readline()
+            print 'reponse : ' + str(reponse)
 
     def setUnsetAsser(self, asservissement, mode):
         pass
