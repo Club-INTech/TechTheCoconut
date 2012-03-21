@@ -415,10 +415,10 @@ void Robot::gestionStoppage()
 	static int32_t last_angle;
 	
 	//detection d'un blocage - translation	
-	if (	   abs(rotation.pwmCourant())>0 
-		&& abs(translation.pwmCourant())>0 
-		&& abs(last_distance-mesure_distance_)<10
-		&& abs(last_angle-mesure_angle_)<10
+	if (	   (abs(rotation.pwmCourant())>0 
+		&& abs(last_angle-mesure_angle_)<10)
+		|| (abs(translation.pwmCourant())>0 
+		&& abs(last_distance-mesure_distance_)<10)
 	   )
 	{
 			
@@ -444,15 +444,30 @@ void Robot::gestionStoppage()
 void Robot::recalage1()
 {
 	translater(-300.0);
-	etat_rot_ = false;
-	translater(-200.0);
-	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
-	if (couleur_ == 'r') angle_courant(0.0); else angle_courant(PI);
-	etat_rot_ = true;
-	translater(300.0);
+	
+	
+
 }
 void Robot::recalage2()
 {
+	etat_rot_ = false;
+	translater(-200.0);
+}
+void Robot::recalage3()
+{
+	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
+	if (couleur_ == 'r') angle_courant(0.0); else angle_courant(PI);
+}
+void Robot::recalage4()
+{
+	etat_rot_ = true;
+	translater(300.0);
+	
+// 	translater(-200.0);
+// 	tourner(angle_courant()+PI/2);
+}
+	/*
+
 	tourner(PI/2);
 	translater(-300.0);
 	etat_rot_ = false;
@@ -460,22 +475,18 @@ void Robot::recalage2()
 	y(LARGEUR_ROBOT/2);
 	etat_rot_ = true;
 	translater(250.0);
-}
-void Robot::recalage3()
-{
+	
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
-}
-void Robot::recalage4()
-{
-	translater(-200.0);
-// 	tourner(angle_courant()+PI/2);
-}
+	*/
+
+
 
 void Robot::translater(float distance)
 {	
-	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
+	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
+	translation.consigne(consigne_tra_);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(translation.pwmCourant())> 10){
 		asm("nop");
