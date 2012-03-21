@@ -37,7 +37,7 @@ private:
 	unsigned char couleur_;
 	float x_;
 	float y_;
-	float angle_courant_;
+	float angle_serie_;
 	
 	float CONVERSION_TIC_MM_;
 	float CONVERSION_TIC_RADIAN_;
@@ -69,8 +69,6 @@ public:
 	float x(void);
 	void y(float);
 	float y(void);
-	void angle_courant(float);
-	float angle_courant(void);
 	
 	//gestion des mesures courantes
 	void mesure_angle(int32_t); 

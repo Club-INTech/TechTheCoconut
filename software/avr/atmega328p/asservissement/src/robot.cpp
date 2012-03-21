@@ -14,7 +14,7 @@
 Robot::Robot() : couleur_('r')
 				,x_(0)
 				,y_(0)
-				,angle_courant_(0.0)
+				,angle_serie_(0.0)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -65,18 +65,16 @@ void Robot::updatePosition()
 
 	int16_t delta_distance_tic = mesure_distance_ - last_distance;
 	int16_t delta_angle_tic = mesure_angle_ - last_angle;
-	int32_t last_angle_abs = last_angle;
 	
-	float last_angle_radian = last_angle_abs* CONVERSION_TIC_RADIAN_;
+	float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN_;
 	float delta_distance_mm = delta_distance_tic * CONVERSION_TIC_MM_;
+	
 	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
 	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
 	
-	
-	angle_courant((float) angle_courant() + delta_angle_tic * CONVERSION_TIC_RADIAN_);
+	angle_serie_ += delta_angle_tic * CONVERSION_TIC_RADIAN_;
 	
 	last_distance = mesure_distance_;
-	
 	last_angle = mesure_angle_;
 	
 }
@@ -133,7 +131,7 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("co")){
-		angle_courant(serial_t_::read_float());
+		angle_serie_ = serial_t_::read_float();
 	}
 
 	else if(COMPARE_BUFFER("ec")){
@@ -173,7 +171,7 @@ void Robot::communiquer_pc(){
 		serial_t_::print((int32_t)y());
 	}
 	else if(COMPARE_BUFFER("eo")){
-		serial_t_::print((int32_t)((float)angle_courant()*1000));
+		serial_t_::print((int32_t)((float)angle_serie_ * 1000));
 	}
 	
 	else if(COMPARE_BUFFER("d")){
@@ -259,16 +257,6 @@ return (float)y_;
 void Robot::y(float new_y)
 {
 	y_ = new_y;
-}
-
-float Robot::angle_courant(void)
-{
-return (float)angle_courant_;
-}
-
-void Robot::angle_courant(float new_angle)
-{
-	angle_courant_ = new_angle;
 }
 
 int32_t Robot::mesure_angle(void)
@@ -375,7 +363,7 @@ void Robot::fin_translater()
 void Robot::stopper()
 {
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
-	rotation.consigne(angle_courant()/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(mesure_angle_ * CONVERSION_TIC_RADIAN_/CONVERSION_TIC_RADIAN_);
 	//stop en translation
 	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
@@ -456,7 +444,7 @@ void Robot::recalage2()
 void Robot::recalage3()
 {
 	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
-	if (couleur_ == 'r') angle_courant(0.0); else angle_courant(PI);
+	if (couleur_ == 'r') angle_serie_ = 0.0; else angle_serie_ = PI;
 }
 void Robot::recalage4()
 {
@@ -464,7 +452,7 @@ void Robot::recalage4()
 	translater(300.0);
 	
 // 	translater(-200.0);
-// 	tourner(angle_courant()+PI/2);
+// 	tourner(angle_serie_+PI/2);
 }
 	/*
 
