@@ -56,6 +56,7 @@ class Strategie(decision.Decision, threading.Thread):
         """
         
         Strategie.prendreDecisions = False
+        self.Terminated = True
         log.logger.info("Arrêt de la prise de décisions")
         
     def prendreDecision(self): 
@@ -68,10 +69,10 @@ class Strategie(decision.Decision, threading.Thread):
         #------------------------------#
         
         try :
-            asservissement = __builtin__.instance.asserInstance
-            capteur        = __builtin__.instance.capteurInstance
-            actionneur     = __builtin__.instance.actionInstance
-            robot          = __builtin__.instance.robotInstance
+            self.asservissement = __builtin__.instance.asserInstance
+            self.capteur        = __builtin__.instance.capteurInstance
+            self.actionneur     = __builtin__.instance.actionInstance
+            self.robot          = __builtin__.instance.robotInstance
         except :
             log.logger.error("Impossible d'importer les instances globales d'asservissement, capteur, et actionneur")
             
@@ -81,17 +82,29 @@ class Strategie(decision.Decision, threading.Thread):
         
         if self.strategie == 1 :
             # Position de départ.
-            #depart = robot.position()     #TODO A tester sur le vrai EeePC       
+            #depart = self.robot.position()     #TODO A tester sur le vrai EeePC       
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
-                # Avant une seconde : on va raffler la partie 'haute' de notre Totem
-                if self.timer.getTime() <= 1 :
-                    #asservissement.goTo(depart, point.Point(500,0)) #TODO Voir avec Pierre pour la symétrie
+                success = self.rafflerTotem()
+                if success :
+                    success = self.rafflerTotem(ennemi = True)
+                    if success :
+                        success = self.rafflerTotem(nord = True)
+                        if success :
+                            success = self.rafflerTotem(ennemi = True, nord = True)
+                
+                
+                if self.timer.time() <= 70 :
+                    # Prise de décision selon ce qui n'a pas été prise
                     pass
-                # etc.
-                elif self.timer.getTime() <= 10 :
-                    time.sleep(10.5)
+                
+                else :
+                    # Faire un "tour de piste"
+                    pass
+                    
+                
+                   
                     
 
         #--------------------------------------#
@@ -105,4 +118,38 @@ class Strategie(decision.Decision, threading.Thread):
             pass
         
         log.logger.info("ARRET DEFINITIF STRATEGIE")
+        
+        
+    def rafflerTotem(self, ennemi = False, nord = False, versLaCalle = True) :
+        """
+        Le robot se déplace de façon à raffler un totem
+        
+        :param ennemi: A mettre à True si on veut raffler le totem ennemi
+        :type ennemi: Bool
+        
+        :param nord: Partie Nord ou Sud du Totem qu'on veut raffler
+        :type nord: Bool
+        
+        :param versLaCalle: A changer si on veut Parcourir le totem de D à G ou l'inverse
+        :type versLaCalle: Bool        
+        
+        """
+        pass
+    
+    def goTo(self.depart, arrivee) :
+        return self.asservissement.goTo(depart, arrivee)
+        
+    def enfoncerPoussoir(self, idPoussoir) :
+        """
+        Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
+        
+        :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
+        :type idPoussoir: int
+        """
+        pass
+    
+    
+    
+    
+    
         
