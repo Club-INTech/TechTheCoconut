@@ -438,13 +438,19 @@ void Robot::recalage1()
 }
 void Robot::recalage2()
 {
-	etat_rot_ = false;
-	translater(-200.0);
+	tourner(PI/2);
+// 	etat_rot_ = false;
+// 	translater(-200.0);
 }
 void Robot::recalage3()
 {
+	mesure_angle_ = 0.0;
+	rotation.consigne(0.0);
+	
+	/*
 	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
 	if (couleur_ == 'r') angle_serie_ = 0.0; else angle_serie_ = PI;
+	*/
 }
 void Robot::recalage4()
 {
