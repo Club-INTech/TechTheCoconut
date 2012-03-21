@@ -208,7 +208,7 @@ class Asservissement:
         if asservissement == "rotation":
             self.serialInstance.write('cr'+str(mode)+'\n')
 
-        else if asservissement == "translation":
+        elif asservissement == "translation":
             self.serialInstance.write('ct'+str(mode)+'\n')
 
 
