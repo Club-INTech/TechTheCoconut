@@ -363,7 +363,7 @@ void Robot::fin_translater()
 void Robot::stopper()
 {
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
-	rotation.consigne(mesure_angle_ * CONVERSION_TIC_RADIAN_/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(mesure_angle_);
 	//stop en translation
 	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
