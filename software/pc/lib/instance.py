@@ -55,7 +55,6 @@ class Instance:
             self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=5)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
-            
         
         cheminCapt = peripherique.chemin_de_peripherique("capteur")
         if cheminCapt:
