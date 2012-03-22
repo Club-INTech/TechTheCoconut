@@ -35,10 +35,7 @@ class Robot:
         self.position = point.Point(1000,1500)
         self.orientation = 0
         self.rayon = 279
-        self.actionneur = {"hd": actionneur.Actionneur("hd"),
-        "hg": actionneur.Actionneur("hg"),
-        "bd": actionneur.Actionneur("bd"),
-        "bg": actionneur.Actionneur("bg")} # TODO gérer ça dans la détection
+        
         # Pour avoir l'angle
         # self.actionneur["hg"].angle
 
@@ -66,6 +63,12 @@ class Robot:
         """
         Fonction utilisée pour initialiser le robot
         """
-        asser = Asservissement(robotInstance)
         asser.ecrire("recal\n")
         asser.reponse = self.file_attente.get(lu)
+        
+    def stop(self) :
+        """
+        Arrête entièrement le robot (par exemple après les 90 secondes)
+        #TODO ELLE NE FAIT RIEN POUR L'INSTANT
+        """
+        pass

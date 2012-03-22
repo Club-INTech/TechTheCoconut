@@ -9,12 +9,12 @@ import __builtin__
 
 # Chargement de la couleur du robot
 first = True
-while first or couleur not in ['', 'R', 'V']:
+while first or couleur not in ['', 'r', 'v']:
     first = False
-    couleur = raw_input('Couleur de notre robot rouge ou violet ([V], R) : ')
+    couleur = raw_input('Couleur de notre robot rouge ou violet ([v], r) : ')
     if couleur == '' :
-        couleur = 'V'
-    
+        couleur = 'v'
+        
 # Chargement du profil de configuration
 first = True
 while first or not profil.importation:
@@ -75,8 +75,13 @@ while first or erreur:
     mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes)) : \n')
     first = False
     #try:
-    if mode == '':
+    if mode == '' or mode == 'console':
         mode = 'console'
+        
+        # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
+        import time
+        __builtin__.constantes["t0"] = time.time()
+        
     if mode == 'e':
         mode = 'etalonnage_constantes'
     log.logger.info("Chargement du fichier de lancement " + mode)
@@ -86,3 +91,5 @@ while first or erreur:
     #except:
         #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
         #erreur = True
+        
+

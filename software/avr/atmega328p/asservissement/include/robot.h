@@ -12,9 +12,7 @@
 #include <libintech/moteur.hpp>
 #include <libintech/register.hpp>
 #include <libintech/singleton.hpp>
-/**
-* Structure principale Robot
-*/
+
 
 class Robot : public Singleton<Robot>{
 // Par défaut les attributs sont publics dans une struct
@@ -39,7 +37,7 @@ private:
 	unsigned char couleur_;
 	float x_;
 	float y_;
-	float angle_courant_;
+	float angle_serie_;
 	
 	float CONVERSION_TIC_MM_;
 	float CONVERSION_TIC_RADIAN_;
@@ -55,7 +53,8 @@ private:
 	bool rotation_attendue_;
 	bool goto_attendu_;
 	
-	bool demande_stop_;
+	int32_t mesure_distance_;
+	int32_t mesure_angle_;
 	
 	Asservissement translation;
 	Asservissement rotation;
@@ -70,23 +69,35 @@ public:
 	float x(void);
 	void y(float);
 	float y(void);
-	void angle_courant(float);
-	float angle_courant(void);
-
 	
-	void asservir(int32_t distance, int32_t angle);
-	void updatePosition(int32_t distance, int32_t angle);
+	//gestion des mesures courantes
+	void mesure_angle(int32_t); 
+	int32_t mesure_angle(void);
+	void mesure_distance(int32_t); 
+	int32_t mesure_distance(void);
+	
+	void asservir();
+	void updatePosition();
 	void communiquer_pc();
 	
+	int32_t angle_initial(void);
 	void gotoPos(float x, float y);
 	void debut_tourner(float angle);
 	void fin_tourner(void);
 	void debut_translater(float distance);
 	void fin_translater(void);
 	
-	void stopper(int32_t distance);
+	void stopper();
 	void atteinteConsignes(void);
-	void gestionStoppage(int32_t distance, int32_t angle);
+	void gestionStoppage();
+	
+	void recalage1(void);
+	void recalage2(void);
+	void recalage3(void);
+	void recalage4(void);
+	
+	void translater(float distance);
+	void tourner(float angle);
 };
 
 #endif

@@ -137,7 +137,8 @@ public:
 
     static inline float read_float(){
         char buffer[20];
-        print(read(buffer,20));
+//      print(read(buffer,20));
+	read(buffer,20);
         return atof(buffer);
     }
 
