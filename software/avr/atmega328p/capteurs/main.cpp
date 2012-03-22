@@ -18,6 +18,7 @@
 #endif
 
 typedef Timer<1,ModeCounter,8> ClasseTimer;
+typedef Serial<0> serial_t_;
 ring_buffer<uint16_t, 3> mesures_g;
 ring_buffer<uint16_t, 3> mesures_d;
 uint16_t derniere_valeur_g;
@@ -50,7 +51,23 @@ int main() {
 
 	while(1) 
 	{
-		qsort(mesures_d.data(),mesures_d.size(),sizeof(uint16_t),compare);
+	  	char buffer[17];
+		uint8_t length = serial_t_::read(buffer,17);
+
+	#define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
+
+		if(COMPARE_BUFFER("?")){
+			serial_t_::print(1);
+		}
+
+		if(COMPARE_BUFFER("ultrason")){
+			cli();
+			qsort(mesures_d.data(),mesures_d.size(),sizeof(uint16_t),compare);
+			qsort(mesures_g.data(),mesures_g.size(),sizeof(uint16_t),compare);
+			serial_t_::print(max(mesures_g.data()[mesures_g.size()/2],mesures_d.data()[mesures_d.size()/2]));
+			sei();
+		}
+
 // 		for(int i=0; i<mesures_d.size(); ++i){
 // 		  Serial<0>::print(mesures_d.data()[i]);
 // 		}
@@ -59,7 +76,7 @@ int main() {
 // 		  Serial<0>::print(mesures_g.data()[i]);
 // 		}
 // 		Serial<0>::print("Mediane");
-		Serial<0>::print(max(mesures_g.data()[mesures_g.size()/2],mesures_d.data()[mesures_d.size()/2]));
+		
 // 		Serial<0>::print("\n\n\n\n");
 	}
 	
