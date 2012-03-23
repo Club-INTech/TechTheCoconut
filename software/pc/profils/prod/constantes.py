@@ -49,6 +49,6 @@ constantes = \
     },
         "Serie":
         {
-            "peripheriques": ["actionneur", "asservissement", "capteur"]
+            "peripheriques": ["asservissement", "capteur_actionneur", "balise"]
         }
 }

@@ -19,8 +19,8 @@
 
 int main()
 {
-    ClassTimer::init();
-    Serial<0>::init()
+//     ClassTimer::init();
+    Serial<0>::init();
     
 }
 
