@@ -452,6 +452,7 @@ void Robot::recalage()
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
+	Serial<0>::print("FIN_REC");
 }
 
 void Robot::translater(float distance)
