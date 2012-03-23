@@ -121,7 +121,7 @@ class Asservissement:
             time.sleep(0.1)
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-            destination = outils_math.point.Point(float(i.x),float(i.y))
+            destination = i
             
             thread = threading.Thread(target = self.ecoute_thread)
             thread.start()
@@ -136,8 +136,37 @@ class Asservissement:
                     self.serialInstance.write('stop\n')
                     self.obstacle = True
                     break
+                    
             if self.obstacle:
+                
+                ####
+                self.serialInstance.write("ex\n")
+                posX = False
+                while not posX:
+                    try :
+                        reponse = self.serialInstance.readline()
+                        if (reponse == int(reponse)):
+                            sauvX = reponse
+                            print "reception de la position sur x"
+                            posX = True
+                    except :
+                        pass
+                            
+                self.serialInstance.write("ey\n")
+                posY = False
+                while not posY:
+                    try :
+                        reponse = self.serialInstance.readline()
+                        if (reponse == int(reponse)):
+                            destination = outils_math.point.Point(float(sauvX),float(reponse))
+                            print "reception de la position sur y"
+                            posY = True
+                    except :
+                        pass
+                ####
+                
                 break
+                
         return destination
 
     def ecoute_thread(self):
@@ -147,7 +176,7 @@ class Asservissement:
             reponse = self.serialInstance.readline()
             print 'reponse : ' + str(reponse)
             if self.obstacle:
-                break
+                break #c'est nécessaire ca ? (il y a déjà thread._Thread__stop() )
 
     def tourner(self, angle):
         """
