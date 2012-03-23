@@ -38,6 +38,8 @@ private:
 	float x_;
 	float y_;
 	float angle_serie_;
+	float angle_origine_;
+	void changer_orientation(float new_angle);
 	
 	float CONVERSION_TIC_MM_;
 	float CONVERSION_TIC_RADIAN_;
@@ -93,10 +95,7 @@ public:
 	void atteinteConsignes(void);
 	void gestionStoppage();
 	
-	void recalage1(void);
-	void recalage2(void);
-	void recalage3(void);
-	void recalage4(void);
+	void recalage(void);
 	
 	void translater(float distance);
 	void tourner(float angle);

@@ -11,10 +11,11 @@
 
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : couleur_('r')
+Robot::Robot() : couleur_('v')
 				,x_(0)
 				,y_(0)
 				,angle_serie_(0.0)
+				,angle_origine_(0.0)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -131,12 +132,7 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("co")){
-		float new_angle_rad = serial_t_::read_float();
-// 		new_angle_rad = angle_optimal(new_angle_rad, mesure_angle_*CONVERSION_TIC_RADIAN_);
-		int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
-		angle_serie_ = new_angle_rad;
-		rotation.consigne(new_angle_tic);
-		mesure_angle_ = new_angle_tic;
+		changer_orientation(serial_t_::read_float());
 	}
 
 	else if(COMPARE_BUFFER("ec")){
@@ -214,17 +210,8 @@ void Robot::communiquer_pc(){
 	}
 	
 	//recalage de la position
-	else if(COMPARE_BUFFER("recal1")){
-		recalage1();
-	}
-	else if(COMPARE_BUFFER("recal2")){
-		recalage2();
-	}
-	else if(COMPARE_BUFFER("recal3")){
-		recalage3();
-	}
-	else if(COMPARE_BUFFER("recal4")){
-		recalage4();
+	else if(COMPARE_BUFFER("recal")){
+		recalage();
 	}
 
 #undef COMPARE_BUFFER
@@ -308,7 +295,16 @@ float Robot::angle_optimal(float angle, float angleBkp)
 	}
 	return angle;
 }
+
+void Robot::changer_orientation(float new_angle)
+{
+	float new_angle_rad = angle_optimal(new_angle, mesure_angle_*CONVERSION_TIC_RADIAN_);
+	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
 	
+	mesure_angle_ = new_angle_tic;
+	angle_origine_ = new_angle_rad - angle_serie_;
+	angle_serie_ = new_angle_rad;
+}
 
 void Robot::gotoPos(float x, float y)
 {
@@ -324,9 +320,7 @@ void Robot::gotoPos(float x, float y)
 
 void Robot::debut_tourner(float angle)
 {
-	static float angleBkp = angle_initial();
-	float new_angle = angle_optimal(angle, angleBkp);
-	angleBkp=new_angle;
+	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
 	
 	rotation_attendue_ = true;
 	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
@@ -434,58 +428,31 @@ void Robot::gestionStoppage()
 		compteurBlocage=0;
 	}
 	
-	
 	last_distance = mesure_distance_;
 	last_angle = mesure_angle_;
 }
 
-void Robot::recalage1()
+void Robot::recalage()
 {
 	translater(-300.0);
-	
-	
-
-}
-void Robot::recalage2()
-{
-	tourner(PI/2);
-// 	etat_rot_ = false;
-// 	translater(-200.0);
-}
-void Robot::recalage3()
-{
-	mesure_angle_ = 0.0;
-	rotation.consigne(0.0);
-	
-	/*
+	etat_rot_ = false;
+	translater(-200.0);
 	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
-	if (couleur_ == 'r') angle_serie_ = 0.0; else angle_serie_ = PI;
-	*/
-}
-void Robot::recalage4()
-{
+	if (couleur_ == 'r') changer_orientation(0.0); else changer_orientation(PI);
 	etat_rot_ = true;
 	translater(300.0);
-	
-// 	translater(-200.0);
-// 	tourner(angle_serie_+PI/2);
-}
-	/*
-
 	tourner(PI/2);
 	translater(-300.0);
 	etat_rot_ = false;
 	translater(-200.0);
 	y(LARGEUR_ROBOT/2);
+	changer_orientation(PI/2);
 	etat_rot_ = true;
-	translater(250.0);
-	
+	translater(220.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
-	*/
-
-
+}
 
 void Robot::translater(float distance)
 {	
@@ -499,10 +466,7 @@ void Robot::translater(float distance)
 
 void Robot::tourner(float angle)
 {
-	static float angleBkp = angle_initial();
-	float new_angle = angle_optimal(angle, angleBkp);
-	angleBkp=new_angle;
-	
+	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
 	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
