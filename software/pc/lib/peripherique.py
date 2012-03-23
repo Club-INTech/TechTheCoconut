@@ -105,7 +105,7 @@ class Peripherique():
                 for chemin in peripheriques:
                     if chemin not in chemin_existant:
                         chemin = chemin.split('\n')[0]
-                        serie = serie_simple.SerieSimple(chemin, baudrate2, 0.5)
+                        serie = serie_simple.SerieSimple(chemin, baudrate2, 0.1)
                         # On envoie plusieurs fois au cas où
                         try:
                             serie.ecrire('?')
