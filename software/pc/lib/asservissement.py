@@ -42,10 +42,22 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        self.capteurInstance = __builtin__.instance.capteurInstance
-        self.robotInstance = __builtin__.instance.robotInstance
-        self.serialInstance = __builtin__.instance.serieAsserInstance
-        self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
+        if hasattr(__builtin__.instance, 'capteurInstance'):
+            self.capteurInstance = __builtin__.instance.capteurInstance
+        else:
+            log.logger.error("l'instance de instance.capteurInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.robotInstance = __builtin__.instance.robotInstance
+        else:
+            log.logger.error("l'instance de instance.robotInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'serieAsserInstance'):
+            self.serialInstance = __builtin__.instance.serieAsserInstance
+        else:
+            log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'serieCaptInstance'):
+            self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
+        else:
+            log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
         self.couleur = __builtin__.constantes['couleur']
         """
         self.serialInstance.write("\n")

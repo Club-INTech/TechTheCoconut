@@ -20,7 +20,10 @@ class Capteur():
     :type distance: long
     """
     def __init__(self):
-        self.demarrer()
+        if hasattr(__builtin__.instance, 'serieCaptInstance'):  
+            self.demarrer()
+        else:
+            log.logger.error("l'instance de lib.capteur.Capteur n'est pas chargée")
         self.distance  = 400
 
     def demarrer(self):
