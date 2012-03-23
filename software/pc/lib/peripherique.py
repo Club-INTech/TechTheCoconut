@@ -100,10 +100,11 @@ class Peripherique():
             association.append('asservissement')
             association.append('capteur_actionneur')
             association.append('balise')
+            chemin_existant = []
             for baudrate2 in [9600, 57600]:
                 for chemin in peripheriques:
-                    chemin = chemin.split('\n')[0]
-                    if chemin not in liste:
+                    if chemin not in chemin_existant:
+                        chemin = chemin.split('\n')[0]
                         serie = serie_simple.SerieSimple(chemin, baudrate2, 0.5)
                         # On envoie plusieurs fois au cas où
                         try:
@@ -120,12 +121,14 @@ class Peripherique():
                             pass
                         # Boucle pour gérer les exceptions
                         for i in xrange(3):
+                            chemin_existant = []
+                            for p in liste:
+                                chemin_existant.append(p.nom)
                             try:
-                                log.logger.critical("TEST")
                                 ping = serie.lire()
                                 if association[int(ping)] == self.nom:
                                     self.chemin = chemin
-                                    liste.append(chemin)
+                                    liste.append(self)
                                     serie.close()
                                     log.logger.info("Périphérique "+self.nom+" associé au chemin "+chemin)
                                     return True
