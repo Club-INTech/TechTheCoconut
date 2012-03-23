@@ -100,31 +100,38 @@ class Peripherique():
             association.append('asservissement')
             association.append('capteur_actionneur')
             association.append('balise')
-            for chemin in peripheriques:
-                serie = serie_simple.SerieSimple(chemin, 9600, 3)
-                # On envoie plusieurs fois au cas où
-                try:
-                    serie.ecrire('?')
-                except:
-                    pass
-                try:
-                    serie.ecrire('?')
-                except:
-                    pass
-                try:
-                    serie.ecrire('?')
-                except:
-                    pass
-                # Boucle pour gérer les exceptions
-                for i in xrange(3):
-                    try:
-                        ping = serie.lire()
-                        if association[int(ping)] == self.nom:
-                            self.chemin = chemin
-                            serie.close()
-                            return True
-                    except:
-                        log.logger.error("Erreur de l'association sur "+self.nom+" avec le chemin "+chemin+", on recommence ...")
-                serie.close()
-                log.logger.error("Périphérique "+self.nom+" non associé")
-                return False
+            for baudrate2 in [9600, 57600]:
+                for chemin in peripheriques:
+                    chemin = chemin.split('\n')[0]
+                    if chemin not in liste:
+                        serie = serie_simple.SerieSimple(chemin, baudrate2, 0.5)
+                        # On envoie plusieurs fois au cas où
+                        try:
+                            serie.ecrire('?')
+                        except:
+                            pass
+                        try:
+                            serie.ecrire('?')
+                        except:
+                            pass
+                        try:
+                            serie.ecrire('?')
+                        except:
+                            pass
+                        # Boucle pour gérer les exceptions
+                        for i in xrange(3):
+                            try:
+                                log.logger.critical("TEST")
+                                ping = serie.lire()
+                                if association[int(ping)] == self.nom:
+                                    self.chemin = chemin
+                                    liste.append(chemin)
+                                    serie.close()
+                                    log.logger.info("Périphérique "+self.nom+" associé au chemin "+chemin)
+                                    return True
+                                serie.close()
+                            except:
+                                log.logger.error("Erreur de l'association sur "+self.nom+" avec le chemin "+chemin+", on recommence ...")
+
+            log.logger.error("Périphérique "+self.nom+" non associé")
+            return False
