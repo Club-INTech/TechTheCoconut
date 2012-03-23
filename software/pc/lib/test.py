@@ -53,6 +53,15 @@ robotInstance.setPosition(depart)
 #scriptInstance.huit()
 
 while(True):
+    print depart.x
+    print depart.y
+    print '-----------------------'
+    asser.serialInstance.write('\ney\n')
+    print asser.serialInstance.readline()
+    time.sleep(0.1)
+    asser.serialInstance.write('\nex\n')
+    print asser.serialInstance.readline()
+    
     x, y = '', ''
     while x=='':
         x = raw_input("x arrivé ?")

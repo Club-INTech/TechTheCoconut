@@ -136,35 +136,8 @@ class Asservissement:
                     self.serialInstance.write('stop\n')
                     self.obstacle = True
                     break
-                    
+            destination = self.majPosition()
             if self.obstacle:
-                
-                ####
-                self.serialInstance.write("ex\n")
-                posX = False
-                while not posX:
-                    try :
-                        reponse = self.serialInstance.readline()
-                        if (reponse == int(reponse)):
-                            sauvX = reponse
-                            print "reception de la position sur x"
-                            posX = True
-                    except :
-                        pass
-                            
-                self.serialInstance.write("ey\n")
-                posY = False
-                while not posY:
-                    try :
-                        reponse = self.serialInstance.readline()
-                        if (reponse == int(reponse)):
-                            destination = outils_math.point.Point(float(sauvX),float(reponse))
-                            print "reception de la position sur y"
-                            posY = True
-                    except :
-                        pass
-                ####
-                
                 break
                 
         return destination
@@ -173,11 +146,45 @@ class Asservissement:
         reponse = 'HUK'
         while str(reponse) != 'FIN_GOTO\r\n' and str(reponse) != 'FIN_GOTO\r':
             print 'HUK'
-            reponse = self.serialInstance.readline()
+            try:
+                reponse = self.serialInstance.readline()
+            except:
+                pass
             print 'reponse : ' + str(reponse)
             if self.obstacle:
                 break #c'est nécessaire ca ? (il y a déjà thread._Thread__stop() )
-
+        position = self.majPosition()
+        return destination
+    
+    def majPosition(self):
+        self.serialInstance.write("ex\n")
+        posX = False
+        while not posX:
+            try :
+                reponse = self.serialInstance.readline()
+                if reponse:
+                    sauvX = int(reponse)
+                    print "reception de la position sur x"
+                    posX = True
+                    print sauvX
+            except :
+                print 'huk'
+                self.serialInstance.write("ex\n")
+                    
+        self.serialInstance.write("ey\n")
+        posY = False
+        while not posY:
+            try :
+                reponse = self.serialInstance.readline()
+                if reponse:
+                    sauvY = int(reponse)
+                    print "reception de la position sur y"
+                    posY = True
+                    print posY
+            except :
+                pass
+        return outils_math.point.Point(float(sauvX),float(reponse))
+    
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
