@@ -81,6 +81,8 @@ public:
 	void communiquer_pc();
 	
 	int32_t angle_initial(void);
+	float angle_optimal(float angle, float angleBkp);
+	
 	void gotoPos(float x, float y);
 	void debut_tourner(float angle);
 	void fin_tourner(void);

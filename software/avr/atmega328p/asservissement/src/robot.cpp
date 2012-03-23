@@ -131,7 +131,12 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("co")){
-		angle_serie_ = serial_t_::read_float();
+		float new_angle_rad = serial_t_::read_float();
+// 		new_angle_rad = angle_optimal(new_angle_rad, mesure_angle_*CONVERSION_TIC_RADIAN_);
+		int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
+		angle_serie_ = new_angle_rad;
+		rotation.consigne(new_angle_tic);
+		mesure_angle_ = new_angle_tic;
 	}
 
 	else if(COMPARE_BUFFER("ec")){
@@ -287,6 +292,22 @@ int32_t Robot::angle_initial()
 	else
 		return 4260;
 }
+
+float Robot::angle_optimal(float angle, float angleBkp)
+{
+	float ang1 = abs(angle-angleBkp);
+	float ang2 = abs(angle+2*PI-angleBkp);
+	float ang3 = abs(angle-2*PI-angleBkp);
+    
+	if (!(ang1 < ang2 && ang1 < ang3))
+	{
+		if (ang2 < ang3)
+			angle += 2*PI;
+		else
+			angle -=  2*PI;
+	}
+	return angle;
+}
 	
 
 void Robot::gotoPos(float x, float y)
@@ -304,22 +325,11 @@ void Robot::gotoPos(float x, float y)
 void Robot::debut_tourner(float angle)
 {
 	static float angleBkp = angle_initial();
-
+	float new_angle = angle_optimal(angle, angleBkp);
+	angleBkp=new_angle;
+	
 	rotation_attendue_ = true;
-	float ang1 = abs(angle-angleBkp);
-	float ang2 = abs(angle+2*PI-angleBkp);
-	float ang3 = abs(angle-2*PI-angleBkp);
-    
-	if (!(ang1 < ang2 && ang1 < ang3))
-	{
-		if (ang2 < ang3)
-			angle += 2*PI;
-		else
-			angle -=  2*PI;
-	}
-	angleBkp=angle;
-    
-	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
 }
 	
 	
@@ -490,21 +500,10 @@ void Robot::translater(float distance)
 void Robot::tourner(float angle)
 {
 	static float angleBkp = angle_initial();
+	float new_angle = angle_optimal(angle, angleBkp);
+	angleBkp=new_angle;
 	
-	float ang1 = abs(angle-angleBkp);
-	float ang2 = abs(angle+2*PI-angleBkp);
-	float ang3 = abs(angle-2*PI-angleBkp);
-	
-	if (!(ang1 < ang2 && ang1 < ang3))
-	{
-		if (ang2 < ang3)
-			angle += 2*PI;
-		else
-			angle -=  2*PI;
-	}
-	angleBkp=angle;
-	
-	rotation.consigne(angle/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
 		asm("nop");
