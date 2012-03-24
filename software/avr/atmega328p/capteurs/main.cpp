@@ -41,6 +41,7 @@ int main() {
 	sbi(EICRA,ISC00);
 	sbi(EIMSK,INT0);//Activation proprement dite
 	
+    
 	cbi(DDRD,PORTD3);
 	//Activation des interruptions pour tout changement logique pour pin3
 	cbi(EICRA,ISC11);
