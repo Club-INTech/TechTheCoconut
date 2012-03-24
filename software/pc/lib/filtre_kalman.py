@@ -12,7 +12,7 @@ class FiltreKalman:
     self.R = R
     
   def filtrer(self, Z, u = None):
-    # Anthony : On ne peut pas utiliser self dans les arguments par défault
+    # Anthony : On ne peut pas utiliser self dans les arguments par défaut
     # donc u = numpy.zeros(self.x.shape[0])[:, numpy.newaxis] ne passait pas
     if u == None:
         u = numpy.zeros(self.x.shape[0])[:, numpy.newaxis]
