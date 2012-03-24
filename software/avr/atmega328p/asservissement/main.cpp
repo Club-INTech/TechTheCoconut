@@ -20,6 +20,7 @@ int main()
 	while(1)
 	{
  		robot.communiquer_pc();
+		robot.envoyer_acquittement();
 	}
 	return 0;
 }

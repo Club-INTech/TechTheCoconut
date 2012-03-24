@@ -19,7 +19,7 @@ class Asservissement {
 
 		Asservissement(float kp,float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), valeur_bridage_(255){ }
 
-		int16_t	pwm(int32_t positionReelle, int32_t eps = 0)
+		int16_t	pwm(int32_t positionReelle)
 		{
 			enm2_ = enm1_;
 			enm1_ = en_;

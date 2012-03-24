@@ -84,7 +84,7 @@ public:
 	
 	int32_t angle_initial(void);
 	float angle_optimal(float angle, float angleBkp);
-	void envoyer_acquittement(char *message);
+	void envoyer_acquittement(int16_t instruction = 0, char *new_message = NULL);
 	
 	void gotoPos(float x, float y);
 	void debut_tourner(float angle);

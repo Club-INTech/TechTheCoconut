@@ -176,14 +176,20 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("d")){
+		envoyer_acquittement(-1);
+		
 		debut_translater(serial_t_::read_float());
 		rotation_en_cours_ = true;
 	}
 	else if(COMPARE_BUFFER("t")){
+		envoyer_acquittement(-1);
+		
 		debut_tourner(serial_t_::read_float());
 	}
 	
 	else if(COMPARE_BUFFER("goto")){
+		envoyer_acquittement(-1);
+		
 		float co_x = serial_t_::read_float();
 		float co_y = serial_t_::read_float();      
 		gotoPos(co_x , co_y);
@@ -307,9 +313,43 @@ void Robot::changer_orientation(float new_angle)
 }
 
 
-void Robot::envoyer_acquittement(char *message)
+void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 {
-	Serial<0>::print(message);
+	/*
+	 * les entiers envoi et instruction permettent d'accelerer la gestion de la nouvelle entrée string :
+	
+	 * l'entier envoi sauvegarde le type du dernier message envoyé :
+	 * 0 indique que le message ne sera pas envoyé
+	 * 1 indique qu'un message d'acquittement "FIN_..." est stocké dans message
+	 * 2 indique qu'un message d'arret "STOPPE" est stocké dans message
+	 
+	 * l'entier instruction modifie les variables statiques :
+	 * 1 indique qu'un nouveau message d'acquittement doit etre envoyé
+	 * 2 indique qu'un nouveau message d'arrêt doit etre envoyé
+	 * 0 ne modifie pas le message envoyé (l'appel envoie juste l'ancien message sur la série)
+	 * -1 arrete l'envoi sur la série
+	*/
+	
+	static char *message = "";
+	static int16_t envoi = 0;
+	
+	if (instruction)
+	{
+		if (instruction == -1)
+			envoi = 0;
+		else if (instruction == 1 && envoi < 2)
+		{
+			envoi = 1;
+			message = new_message;
+		}
+		else if (instruction == 2)
+		{
+			envoi = 2;
+			message = new_message;
+		}
+	}
+	if (envoi)
+		Serial<0>::print(message);
 }
 void Robot::gotoPos(float x, float y)
 {
@@ -344,7 +384,7 @@ void Robot::fin_tourner()
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
-			envoyer_acquittement("FIN_TOU");
+			envoyer_acquittement(1,"FIN_TOU");
 	}
 }
 
@@ -362,10 +402,10 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			envoyer_acquittement("FIN_GOTO");
+			envoyer_acquittement(1,"FIN_GOTO");
 		}
 		else
-			envoyer_acquittement("FIN_TRA");
+			envoyer_acquittement(1,"FIN_TRA");
 	}
 }
 
@@ -377,7 +417,7 @@ void Robot::stopper()
 	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
-		envoyer_acquittement("STOPPE");
+		envoyer_acquittement(2,"STOPPE");
 }
 
 void Robot::atteinteConsignes()
@@ -470,7 +510,7 @@ void Robot::recalage()
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
-	envoyer_acquittement("FIN_REC");
+	envoyer_acquittement(1,"FIN_REC");
 	translation.valeur_bridage(255.0);
 	
 }
