@@ -32,6 +32,7 @@ class Instance:
         self.instanciationCapteur()
         self.instanciationAsservissement()
         self.instanciationActionneur()
+        self.instanciationAcquisition()
     
     def instanciationCapteur(self):
         self.capteurInstance = capteur.Capteur()
@@ -56,12 +57,17 @@ class Instance:
         else:
             log.logger.error("L'asservissement n'est pas chargé")
         
-        cheminCapt = peripherique.chemin_de_peripherique("capteur")
+        cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
+        print cheminCapt
         if cheminCapt:
             self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=10)
         else:
             log.logger.error("Le capteur n'est pas chargé")
         
-        
+    def instanciationAcquisition(self):
+        try :
+            self.acquisitionInstance = serie_acquisition.Serie_acquisition()
+        except:
+            log.logger.error("L'acquisition n'est pas chargé")
 
         

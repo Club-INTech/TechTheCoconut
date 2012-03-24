@@ -121,51 +121,32 @@ class Asservissement:
         theta = recherche_chemin.thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
+        self.robotInstance.acquitemment = False
+        self.obstacle = False
+        position = self.robotInstance.position
         
         try :
             chemin_python.remove(chemin_python[0])
         except :
-            return (derniere_position)
+            return position
             
         for i in chemin_python:
-            self.serialInstance.write("\n")
-            
-            time.sleep(0.1)
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-            destination = i
             
-            thread = threading.Thread(target = self.ecoute_thread)
-            thread.start()
-            self.obstacle = False
-            while thread.is_alive():
+            while not self.robotInstance.acquitemment:
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
-                #time.sleep(0.3)
                 print capteur
                 if int(capteur) < 600:
-                    thread._Thread__stop()
                     self.serialInstance.write('stop\n')
                     self.obstacle = True
                     break
-            destination = self.majPosition()
+            position = self.robotInstance.position
             if self.obstacle:
                 break
-                
-        return destination
-
-    def ecoute_thread(self):
-        reponse = 'HUK'
-        while str(reponse) != 'FIN_GOTO\r\n' and str(reponse) != 'FIN_GOTO\r':
-            print 'HUK'
-            try:
-                reponse = self.serialInstance.readline()
-            except:
-                pass
-            print 'reponse : ' + str(reponse)
-            if self.obstacle:
-                break #c'est nécessaire ca ? (il y a déjà thread._Thread__stop() )
-        position = self.majPosition()
+        print position.x
+        print position.y
         return position
     
     def majPosition(self):
@@ -182,7 +163,7 @@ class Asservissement:
             except :
                 print 'huk'
                 self.serialInstance.write("ex\n")
-                    
+        time.sleep(0.5)
         self.serialInstance.write("ey\n")
         posY = False
         while not posY:
@@ -192,10 +173,10 @@ class Asservissement:
                     sauvY = int(reponse)
                     print "reception de la position sur y"
                     posY = True
-                    print posY
+                    print sauvY
             except :
                 pass
-        return outils_math.point.Point(float(sauvX),float(reponse))
+        return outils_math.point.Point(float(sauvX),float(sauvY))
     
     def tourner(self, angle):
         """

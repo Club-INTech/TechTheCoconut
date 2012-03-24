@@ -35,6 +35,10 @@ class Robot:
         self.position = point.Point(1000,1500)
         self.orientation = 0
         self.rayon = 279
+        self.acquitemment = True
+        self.translation = True
+        self.rotation = True
+        self.recalage = False
         
         # Pour avoir l'angle
         # self.actionneur["hg"].angle

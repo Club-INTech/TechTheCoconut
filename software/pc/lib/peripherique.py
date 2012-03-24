@@ -105,7 +105,7 @@ class Peripherique():
                 for chemin in peripheriques:
                     if chemin not in chemin_existant:
                         chemin = chemin.split('\n')[0]
-                        serie = serie_simple.SerieSimple(chemin, baudrate2, 0.1)
+                        serie = serie_simple.SerieSimple(chemin, baudrate2, 1)
                         # On envoie plusieurs fois au cas où
                         try:
                             serie.ecrire('?')
@@ -128,7 +128,6 @@ class Peripherique():
                                 ping = serie.lire()
                                 if association[int(ping)] == self.nom:
                                     self.chemin = chemin
-                                    liste.append(self)
                                     serie.close()
                                     log.logger.info("Périphérique "+self.nom+" associé au chemin "+chemin)
                                     return True

@@ -71,4 +71,7 @@ while(True):
     #print asser.capteursInstance.mesure()
 
     depart = asser.goTo(depart,arrivee)
-    
+    print 'depart.x'
+    print depart.x
+    print 'depart.y'
+    print depart.y

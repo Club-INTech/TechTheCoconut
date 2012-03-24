@@ -6,7 +6,6 @@ import glob
 import lib.conf
 import __builtin__
 
-
 # Chargement de la couleur du robot
 first = True
 while first or couleur not in ['', 'r', 'v']:
