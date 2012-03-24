@@ -166,7 +166,7 @@ class Asservissement:
             if self.obstacle:
                 break #c'est nécessaire ca ? (il y a déjà thread._Thread__stop() )
         position = self.majPosition()
-        return destination
+        return position
     
     def majPosition(self):
         self.serialInstance.write("ex\n")
