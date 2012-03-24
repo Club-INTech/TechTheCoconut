@@ -306,6 +306,11 @@ void Robot::changer_orientation(float new_angle)
 	angle_serie_ = new_angle_rad;
 }
 
+
+void Robot::envoyer_acquittement(char *message)
+{
+	Serial<0>::print(message);
+}
 void Robot::gotoPos(float x, float y)
 {
 	float delta_x = (x-x_);
@@ -339,7 +344,7 @@ void Robot::fin_tourner()
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
-			Serial<0>::print("FIN_TOU");
+			envoyer_acquittement("FIN_TOU");
 	}
 }
 
@@ -357,10 +362,10 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			Serial<0>::print("FIN_GOTO");
+			envoyer_acquittement("FIN_GOTO");
 		}
 		else
-			Serial<0>::print("FIN_TRA");
+			envoyer_acquittement("FIN_TRA");
 	}
 }
 
@@ -372,7 +377,7 @@ void Robot::stopper()
 	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
-		Serial<0>::print("STOPPE");
+		envoyer_acquittement("STOPPE");
 }
 
 void Robot::atteinteConsignes()
@@ -465,7 +470,7 @@ void Robot::recalage()
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
-	Serial<0>::print("FIN_REC");
+	envoyer_acquittement("FIN_REC");
 	translation.valeur_bridage(255.0);
 	
 }
