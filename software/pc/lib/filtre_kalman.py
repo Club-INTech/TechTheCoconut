@@ -11,7 +11,11 @@ class FiltreKalman:
     self.H = H
     self.R = R
     
-  def filtrer(self, Z, u = numpy.zeros(self.x.shape[0])[:, numpy.newaxis]):
+  def filtrer(self, Z, u = None):
+    # Anthony : On ne peut pas utiliser self dans les arguments par défault
+    # donc u = numpy.zeros(self.x.shape[0])[:, numpy.newaxis] ne passait pas
+    if u == None:
+        u = numpy.zeros(self.x.shape[0])[:, numpy.newaxis]
     # prediction
     self.x = (self.F * self.x) + u
     self.P = self.F * self.P * self.F.transpose()
