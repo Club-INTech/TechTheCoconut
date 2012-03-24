@@ -70,8 +70,8 @@ void Robot::updatePosition()
 	float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN_;
 	float delta_distance_mm = delta_distance_tic * CONVERSION_TIC_MM_;
 	
-	x_ += ( delta_distance_mm * cos( last_angle_radian ) );
-	y_ += ( delta_distance_mm * sin( last_angle_radian ) );
+	x_ += ( delta_distance_mm * cos( last_angle_radian - angle_origine_ ) );
+	y_ += ( delta_distance_mm * sin( last_angle_radian - angle_origine_) );
 	
 	angle_serie_ += delta_angle_tic * CONVERSION_TIC_RADIAN_;
 	
@@ -302,7 +302,7 @@ void Robot::changer_orientation(float new_angle)
 	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
 	
 	mesure_angle_ = new_angle_tic;
-	angle_origine_ = new_angle_rad - angle_serie_;
+	angle_origine_ += new_angle_rad - angle_serie_;
 	angle_serie_ = new_angle_rad;
 }
 
@@ -403,14 +403,19 @@ void Robot::gestionStoppage()
 {
 	
 	static float compteurBlocage=0;
+	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+	
+	/*
 	static int32_t last_distance;
 	static int32_t last_angle;
+	*/
 	
-	//detection d'un blocage - translation	
-	if (	   (abs(rotation.pwmCourant())>0 
-		&& abs(last_angle-mesure_angle_)<10)
-		|| (abs(translation.pwmCourant())>0 
-		&& abs(last_distance-mesure_distance_)<10)
+	//detection d'un blocage - translation
+	if (	   (abs(rotation.pwmCourant())>0
+		&& abs(T_last_angle[4]-T_last_angle[0])<10)
+		|| (abs(translation.pwmCourant())>0
+		&& abs(T_last_distance[4]-T_last_distance[0])<10)
 	   )
 	{
 			
@@ -428,12 +433,20 @@ void Robot::gestionStoppage()
 		compteurBlocage=0;
 	}
 	
+	for (int16_t i=4;i>0;i--)
+		T_last_distance[i] = T_last_distance[i-1];
+	T_last_distance[0] = mesure_distance_;
+	
+	/*
 	last_distance = mesure_distance_;
 	last_angle = mesure_angle_;
+	*/
 }
 
 void Robot::recalage()
 {
+	
+	translation.valeur_bridage(50.0);
 	translater(-300.0);
 	etat_rot_ = false;
 	translater(-200.0);
@@ -448,11 +461,13 @@ void Robot::recalage()
 	y(LARGEUR_ROBOT/2);
 	changer_orientation(PI/2);
 	etat_rot_ = true;
-	translater(220.0);
+	translater(150.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
 	Serial<0>::print("FIN_REC");
+	translation.valeur_bridage(255.0);
+	
 }
 
 void Robot::translater(float distance)
