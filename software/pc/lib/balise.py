@@ -2,7 +2,7 @@
 
 import threading
 import peripherique
-from filtre_kalman
+from filtre_kalman import FiltreKalman
 from numpy import array
 from numpy import matrix
 

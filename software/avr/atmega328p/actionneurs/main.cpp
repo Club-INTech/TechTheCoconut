@@ -6,6 +6,8 @@
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/ring_buffer.hpp>
 
+#include "ax12.h"
+
 
 //Fonctions de lecture/écriture de bit
 #ifndef sbi
@@ -44,23 +46,24 @@ int main()
     ClasseTimer::init();
     Serial<0>::init();
     
+    serial_t_::change_baudrate(57600);
     
-    //Pin D4 en OUTPUT
-    cbi(DDRB,PORTD4);
-    //Activation des interruptions pour tout changement logique pour pin4
-    cbi(EICRA,ISC01);
-    sbi(EICRA,ISC00);
-    sbi(EIMSK,INT0);
-    //Activation proprement dite
 
     sei();
 
+    uint8_t id = 0;
+    uint8_t masque = 0xFF;
+    
+    // CES LIGNES BUGGENT
+//     AX12Init(0xFE,211, 811, 511);
+//     AX12GoTo(0xFE, 500);
     
     while (1)
     {
 
         char buffer[17];
         uint8_t length = serial_t_::read(buffer,17);
+        
         #define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
         
         if (COMPARE_BUFFER("?"))
@@ -77,6 +80,47 @@ int main()
             sei();
         }
         
+        // Réinitialiser l'id de l'AX12 à 1.
+        else if (COMPARE_BUFFER("id"))
+        {
+            serial_t_::print(0xFF);
+            serial_t_::print(0xFF);
+            serial_t_::print(0xFE);
+            serial_t_::print(0x04);
+            serial_t_::print(0x03);
+            serial_t_::print(0x03);
+            serial_t_::print(0x01);
+            
+            serial_t_::print(~(0xfe + 0x04 + 0x03 + 0x03 + 0x01)&masque);
+            serial_t_::print(0xF6);
+            
+            // 100001001 : 265
+            //  11110110
+            
+        }
+        
+        // Tentative de rotation
+        else if (COMPARE_BUFFER("r"))
+        {
+            serial_t_::print(0xFF);
+            serial_t_::print(0xFF);
+            serial_t_::print(0x01);
+            serial_t_::print(0x07);
+            serial_t_::print(0x03);
+            serial_t_::print(0x1E);
+            serial_t_::print(0x00);
+            serial_t_::print(0x02);
+            serial_t_::print(0x00);
+            serial_t_::print(0x02);
+            serial_t_::print(~(0x01 + 0x07 + 0x03 + 0x1E + 0x00 + 0x02 + 0x00 + 0x02)&masque);
+            
+            id++;
+        }
+        
+        // Reset
+        
+        
+            
 
     }
     

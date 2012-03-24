@@ -82,7 +82,7 @@ class Strategie(decision.Decision, threading.Thread):
         
         if self.strategie == 1 :
             # Position de départ.
-            #depart = self.robot.position()     #TODO A tester sur le vrai EeePC       
+            self.depart = self.robot.position()     #TODO A tester sur le vrai EeePC       
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
@@ -136,7 +136,10 @@ class Strategie(decision.Decision, threading.Thread):
         """
         pass
     
-    def goTo(self.depart, arrivee) :
+    # L'utiliser avec goTo(arrivee=trucmuche)
+    def goTo(self, depart = None, arrivee):
+        if depart == None:
+            depart = self.depart
         return self.asservissement.goTo(depart, arrivee)
         
     def enfoncerPoussoir(self, idPoussoir) :
@@ -147,9 +150,3 @@ class Strategie(decision.Decision, threading.Thread):
         :type idPoussoir: int
         """
         pass
-    
-    
-    
-    
-    
-        
