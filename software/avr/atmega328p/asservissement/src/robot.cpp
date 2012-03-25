@@ -351,6 +351,12 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 	if (envoi)
 		Serial<0>::print(message);
 }
+
+void Robot::envoyer_position()
+{
+	serial_t_::print((int32_t)(x()*100000 + y()));
+}
+
 void Robot::gotoPos(float x, float y)
 {
 	float delta_x = (x-x_);

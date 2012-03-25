@@ -21,6 +21,7 @@ int main()
 	{
  		robot.communiquer_pc();
 		robot.envoyer_acquittement();
+		robot.envoyer_position();
 	}
 	return 0;
 }
