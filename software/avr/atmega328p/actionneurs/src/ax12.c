@@ -55,8 +55,7 @@
 // 
 // /** initializes serial0 transmit at baud, 8-N-1 */
 // void ax12Init(long baud){
-//     
-//     UBRR0H = ((F_CPU / 16 + baud / 2) / baud - 1) & 8;
+//     UBRR0H = ((long)(((long)(F_CPU / 16) + (long)(baud / 2)) / baud - 1)) >> 8;
 //     UBRR0L = ((F_CPU / 16 + baud / 2) / baud - 1);
 //     ax_rx_Pointer = 0;                                    
 //     // enable rx
@@ -203,7 +202,7 @@
 //     // Définit la vitesse de rotation
 //     writeData (ID, AX_GOAL_SPEED_L, 2, vitesse);
 //     // Fonction bas niveau pour la transmission série
-//     ax12Init (57600);
+//     ax12Init (200000);
 // }
 // 
 // void AX12GoTo (uint8_t ID, uint16_t angle)

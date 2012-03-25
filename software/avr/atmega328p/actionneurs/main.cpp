@@ -51,12 +51,51 @@ int main()
 
     sei();
 
-    uint8_t id = 0;
+//     uint8_t id = 0;
     uint8_t masque = 0xFF;
     
     // CES LIGNES BUGGENT
 //     AX12Init(0xFE,211, 811, 511);
 //     AX12GoTo(0xFE, 500);
+    
+    // RESET DE L'AX12
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFE);
+    serial_t_::print(0x02);
+    serial_t_::print(0x06);            
+    serial_t_::print(~(0xfe + 0x02 + 0x06)&masque);
+    // INITIALISATION DE LA ROTATION
+    
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFE);
+    serial_t_::print(0x03);
+    serial_t_::print(24);
+    serial_t_::print(0x01);
+    serial_t_::print(~(0xfe + 0x03 + 24 + 0x01)&masque);
+    
+    // ROTATION
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFF);
+    serial_t_::print(0x01);
+    serial_t_::print(0x07);
+    serial_t_::print(0x03);
+    serial_t_::print(0x1E);
+    serial_t_::print(0x12);
+    serial_t_::print(0x02);
+    serial_t_::print(0x00);
+    serial_t_::print(0x02);
+    serial_t_::print(~(0x01 + 0x07 + 0x03 + 0x1E + 0x12 + 0x02 + 0x00 + 0x02)&masque);
+    
+    // Action
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFF);
+    serial_t_::print(0xFE);
+    serial_t_::print(0x02);
+    serial_t_::print(0x05);
+    serial_t_::print(0xFA);
+    
     
     while (1)
     {
@@ -66,7 +105,7 @@ int main()
         
         #define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
         
-        if (COMPARE_BUFFER("?"))
+        if (COMPARE_BUFFER("z"))
         {
             serial_t_::print(1);
         }
@@ -92,13 +131,23 @@ int main()
             serial_t_::print(0x01);
             
             serial_t_::print(~(0xfe + 0x04 + 0x03 + 0x03 + 0x01)&masque);
-            serial_t_::print(0xF6);
             
             // 100001001 : 265
             //  11110110
             
         }
         
+        // Reset de l'AX12
+        else if (COMPARE_BUFFER("reset"))
+        {
+            serial_t_::print(0xFF);
+            serial_t_::print(0xFF);
+            serial_t_::print(0xFE);
+            serial_t_::print(0x02);
+            serial_t_::print(0x06);            
+            serial_t_::print(~(0xfe + 0x02 + 0x06)&masque);
+            
+        } 
         // Tentative de rotation
         else if (COMPARE_BUFFER("r"))
         {
@@ -108,14 +157,16 @@ int main()
             serial_t_::print(0x07);
             serial_t_::print(0x03);
             serial_t_::print(0x1E);
-            serial_t_::print(0x00);
+            serial_t_::print(0x55);
             serial_t_::print(0x02);
             serial_t_::print(0x00);
             serial_t_::print(0x02);
-            serial_t_::print(~(0x01 + 0x07 + 0x03 + 0x1E + 0x00 + 0x02 + 0x00 + 0x02)&masque);
+            serial_t_::print(~(0x01 + 0x07 + 0x03 + 0x1E + 0x55 + 0x02 + 0x00 + 0x02)&masque);
             
-            id++;
+//             id++;
         }
+        
+        serial_t_::print("HELLO");
         
         // Reset
         
@@ -126,6 +177,7 @@ int main()
     
     return 0;
     
+    
 }
 
 
@@ -133,21 +185,6 @@ int main()
 ISR(INT0_vect)
 {
 
-    //Front montant
-    if(rbi(PIND,PORTD2))
-    {
-        derniere_valeur_hg = ClasseTimer::value();
-    }
-    
-    // Front descendant
-    else
-    {
-        // prescaler/fcpu*inchToCm/tempsParInch
-        if(ClasseTimer::value() <derniere_valeur_hg)
-          mesures_hg.append((ClasseTimer::value() + 65536 - derniere_valeur_hg  )*0.0884353741496);
-        else
-          mesures_hg.append((ClasseTimer::value() - derniere_valeur_hg )*0.0884353741496);
-    }
 }
 
 
