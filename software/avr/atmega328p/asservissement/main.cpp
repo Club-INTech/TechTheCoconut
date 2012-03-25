@@ -43,13 +43,18 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.asservir();
 	robot.update_position();
 	
-	robot.envoyer_acquittement();
 	
-	inc++;
 	if (inc > 5)
 	{
-		robot.envoyer_position();
+		robot.envoyer_acquittement();
 		inc = 0;
 	}
+	
+	else
+	{
+		robot.envoyer_position();
+		inc++;
+	}
+	
 	
 }
