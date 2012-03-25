@@ -14,6 +14,8 @@
 #include "robot.h"
 
 
+int8_t inc = 0;
+
 int main()
 {
     Robot & robot = Robot::Instance();
@@ -25,6 +27,7 @@ int main()
 }
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
+	
 	
 	Robot & robot = Robot::Instance();
 	int32_t infos[2];
@@ -41,6 +44,12 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.update_position();
 	
 	robot.envoyer_acquittement();
-// 	robot.envoyer_position();
+	
+	inc++;
+	if (inc > 5)
+	{
+		robot.envoyer_position();
+		inc = 0;
+	}
 	
 }
