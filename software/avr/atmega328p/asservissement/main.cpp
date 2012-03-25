@@ -34,13 +34,13 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.mesure_distance(infos[0]);
 	robot.mesure_angle(infos[1]);
 
-	robot.atteinteConsignes();
-	robot.gestionStoppage();
+	robot.atteinte_consignes();
+	robot.gestion_stoppage();
 	
 	robot.asservir();
-	robot.updatePosition();
+	robot.update_position();
 	
 	robot.envoyer_acquittement();
-	robot.envoyer_position();
+// 	robot.envoyer_position();
 	
 }
