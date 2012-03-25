@@ -29,6 +29,7 @@ asser = Asservissement(robotInstance)
 asser.test()
 """
 asser = __builtin__.instance.asserInstance
+robotInstance = __builtin__.instance.robotInstance
 """
 while 42:
     reponse = asser.capteurInstance.mesurer()
@@ -52,16 +53,7 @@ robotInstance.setPosition(depart)
 #scriptInstance = script.Script(asser)
 #scriptInstance.huit()
 
-while(True):
-    print depart.x
-    print depart.y
-    print '-----------------------'
-    asser.serialInstance.write('\ney\n')
-    print asser.serialInstance.readline()
-    time.sleep(0.1)
-    asser.serialInstance.write('\nex\n')
-    print asser.serialInstance.readline()
-    
+while(True):    
     x, y = '', ''
     while x=='':
         x = raw_input("x arrivé ?")
@@ -70,8 +62,7 @@ while(True):
     arrivee = outils_math.point.Point(int(x),int(y))
     #print asser.capteursInstance.mesure()
 
-    depart = asser.goTo(depart,arrivee)
-    print 'depart.x'
-    print depart.x
-    print 'depart.y'
-    print depart.y
+    asser.goTo(depart,arrivee)
+    
+    depart.x = robotInstance.position.x
+    depart.y = robotInstance.position.y

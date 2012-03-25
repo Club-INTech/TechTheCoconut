@@ -1,50 +1,60 @@
 # -*- coding: utf-8 -*-
 
+import sys
+import os
 import robot
 import __builtin__
 import math
 import instance
+import asservissement
+import threading
 
 class Serie_acquisition:
     
-    __init__(self, huk):
+    def __init__(self):
         self.run = True
-        self.serieAsserInstance = __builtin__.instance.serieAsserInstance
-        self.serieCaptInstance = __builtin__.instance.serieCaptInstance
-        self.robotInstance = __builtin__.instance.robotInstance
-        thread = threading.Thread(target = self.ecoute_thread(huk))
-        thread.start()
         
-    def ecoute_thread(self, huk):
-        reponse = 'HUK'
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.robotInstance = __builtin__.instance.robotInstance
+        else:
+            log.logger.error("l'instance de instance.robotInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'serieAsserInstance'):
+            self.serieAsserInstance = __builtin__.instance.serieAsserInstance
+        else:
+            log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
+        self.serieAsserInstance.write('TG\n')
+        thread = threading.Thread(target = self.ecoute_thread)
+        thread.start()
+
+    def ecoute_thread(self):
         while self.run:
-            #reponse = self.serieAsserInstance.readline()
-            reponse = huk
+            reponse = self.serieAsserInstance.readline()
             if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                self.robotInstance.acquitemment = True
+                if __builtin__.instance.asserInstance.flag:
+                    pass
+                else:
+                    self.robotInstance.acquitemment = True
+                    self.serieAsserInstance.write('TG\n')
+            elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r':
+                self.robotInstance.stop = True
+                self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r':
                 self.robotInstance.translation = True
+                self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r':
                 self.robotInstance.rotation = True
+                self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_REC\r\n':
                 self.robotInstance.recalage = True
-            else:
-                signe = math.copysign(1,int(reponse))
-                if reponse[0] == 1:
-                    x = int(reponse) + 10000*signe 
-                    self.robotInstance.position.x = x
-                else:
-                    y = int(reponse) + 20000*signe
-                    self.robotInstance.position.y = y
-                
-            
-            print 'acquitemment :'
-            print self.robotInstance.acquitemment
-            print 'translation :'
-            print self.robotInstance.translation
-            print 'rotation'
-            print self.robotInstance.rotation
-            print 'recalage'
-            print self.robotInstance.recalage
-            print x
-            print y
+                self.serieAsserInstance.write('TG\n')
+            try:
+                if reponse[4]== '+':
+                    reponse = reponse.split('+')
+                    self.robotInstance.position.x = int(reponse[1])
+                    self.robotInstance.position.y = int(reponse[0])
+                elif reponse[4] == '-':
+                    reponse = reponse.split('-')
+                    self.robotInstance.position.x = -int(reponse[1])
+                    self.robotInstance.position.y = int(reponse[0])
+            except:
+                pass
