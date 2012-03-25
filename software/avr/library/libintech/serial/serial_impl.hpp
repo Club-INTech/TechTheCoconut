@@ -109,6 +109,35 @@ public:
     	print((const char *)buffer);
     }
     
+    static inline void print(int32_t posX, int32_t posY){
+    	char bufX[10];
+	char bufY[10];
+    	ltoa(abs(posX),bufX,10);
+    	ltoa(abs(posY),bufY,10);
+	
+	for(unsigned int i = 0 ; i < 4-strlen(bufY)  ; i++)
+    	{
+    		send_char('0');
+    	}
+	for(unsigned int i = 0 ; i < strlen(bufY)  ; i++)
+    	{
+    		send_char(bufY[i]);
+    	}
+    	if (posX < 0)
+		send_char('-');
+	else
+		send_char('+');
+	for(unsigned int i = 0 ; i < 4-strlen(bufX)  ; i++)
+    	{
+    		send_char('0');
+    	}
+	for(unsigned int i = 0 ; i < strlen(bufX)  ; i++)
+    	{
+    		send_char(bufX[i]);
+    	}
+    	send_ln();
+    }
+    
      static inline void print(uint32_t val){
     	char buffer[10];
     	ltoa(val,buffer,10);
