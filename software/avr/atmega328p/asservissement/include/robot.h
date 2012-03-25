@@ -79,7 +79,7 @@ public:
 	int32_t mesure_distance(void);
 	
 	void asservir();
-	void updatePosition();
+	void update_position();
 	void communiquer_pc();
 	
 	int32_t angle_initial(void);
@@ -94,8 +94,8 @@ public:
 	void fin_translater(void);
 	
 	void stopper();
-	void atteinteConsignes(void);
-	void gestionStoppage();
+	void atteinte_consignes(void);
+	void gestion_stoppage();
 	
 	void recalage(void);
 	

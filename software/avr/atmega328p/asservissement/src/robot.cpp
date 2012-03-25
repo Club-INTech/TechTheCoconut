@@ -58,7 +58,7 @@ void Robot::asservir()
 
 
 
-void Robot::updatePosition()
+void Robot::update_position()
 {
     
 	static int32_t last_distance = 0;
@@ -219,6 +219,10 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("recal")){
 		recalage();
 	}
+	//arrete l'envoi d'acquittement en boucle (protocole explicite...)
+	else if(COMPARE_BUFFER("TG")){
+		envoyer_acquittement(-1);
+	}
 
 #undef COMPARE_BUFFER
 }
@@ -321,11 +325,13 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 	 * l'entier envoi sauvegarde le type du dernier message envoyé :
 	 * 0 indique que le message ne sera pas envoyé
 	 * 1 indique qu'un message d'acquittement "FIN_..." est stocké dans message
-	 * 2 indique qu'un message d'arret "STOPPE" est stocké dans message
+	 * 2 indique qu'un message d'acquittement goto "FIN_GOTO" est stocké dans message
+	 * 3 indique qu'un message d'arret "STOPPE" est stocké dans message
 	 
 	 * l'entier instruction modifie les variables statiques :
 	 * 1 indique qu'un nouveau message d'acquittement doit etre envoyé
-	 * 2 indique qu'un nouveau message d'arrêt doit etre envoyé
+	 * 2 indique qu'un nouveau message d'acquittement goto doit etre envoyé
+	 * 3 indique qu'un nouveau message d'arrêt doit etre envoyé
 	 * 0 ne modifie pas le message envoyé (l'appel envoie juste l'ancien message sur la série)
 	 * -1 arrete l'envoi sur la série
 	*/
@@ -342,9 +348,14 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 			envoi = 1;
 			message = new_message;
 		}
-		else if (instruction == 2)
+		else if (instruction == 2 && envoi < 3)
 		{
 			envoi = 2;
+			message = new_message;
+		}
+		else if (instruction == 3)
+		{
+			envoi = 3;
 			message = new_message;
 		}
 	}
@@ -354,21 +365,7 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 
 void Robot::envoyer_position()
 {
-	int32_t posX = x();
-	int32_t posY = y();
-	int32_t sx;
-	int32_t sy;
-	
-	if (posX < 0)
-		sx = -10000;
-	else
-		sx = 10000;
-	if (posY < 0)
-		sy = -20000;
-	else
-		sy = 20000;
-	serial_t_::print((int32_t)(sx + posX));
-	serial_t_::print((int32_t)(sy + posY));
+	serial_t_::print((int32_t)x(),(int32_t)y());
 }
 
 void Robot::gotoPos(float x, float y)
@@ -422,7 +419,7 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			envoyer_acquittement(1,"FIN_GOTO");
+			envoyer_acquittement(2,"FIN_GOTO");
 		}
 		else
 			envoyer_acquittement(1,"FIN_TRA");
@@ -437,10 +434,10 @@ void Robot::stopper()
 	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
-		envoyer_acquittement(2,"STOPPE");
+		envoyer_acquittement(3,"STOPPE");
 }
 
-void Robot::atteinteConsignes()
+void Robot::atteinte_consignes()
 {
 	static bool translation_en_cours = false;
 	
@@ -464,7 +461,7 @@ void Robot::atteinteConsignes()
 	}
 }
 
-void Robot::gestionStoppage()
+void Robot::gestion_stoppage()
 {
 	
 	static float compteurBlocage=0;
@@ -530,7 +527,7 @@ void Robot::recalage()
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
 	etat_rot_ = false;
 	etat_tra_ = false;
-	envoyer_acquittement(1,"FIN_REC");
+	envoyer_acquittement(2,"FIN_REC");
 	translation.valeur_bridage(255.0);
 	
 }
