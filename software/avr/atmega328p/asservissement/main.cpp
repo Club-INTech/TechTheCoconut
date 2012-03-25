@@ -20,8 +20,6 @@ int main()
 	while(1)
 	{
  		robot.communiquer_pc();
-		robot.envoyer_acquittement();
-		robot.envoyer_position();
 	}
 	return 0;
 }
@@ -41,5 +39,8 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	
 	robot.asservir();
 	robot.updatePosition();
+	
+	robot.envoyer_acquittement();
+	robot.envoyer_position();
 	
 }

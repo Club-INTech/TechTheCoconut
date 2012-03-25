@@ -354,7 +354,21 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 
 void Robot::envoyer_position()
 {
-	serial_t_::print((int32_t)(x()*100000 + y()));
+	int32_t posX = x();
+	int32_t posY = y();
+	int32_t sx;
+	int32_t sy;
+	
+	if (posX < 0)
+		sx = -10000;
+	else
+		sx = 10000;
+	if (posY < 0)
+		sy = -20000;
+	else
+		sy = 20000;
+	serial_t_::print((int32_t)(sx + posX));
+	serial_t_::print((int32_t)(sy + posY));
 }
 
 void Robot::gotoPos(float x, float y)
