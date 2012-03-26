@@ -8,6 +8,7 @@ import peripherique
 import asservissement
 import capteur
 import serial
+import serie_acquisition
 
 
 log =lib.log.Log(__name__)
@@ -52,8 +53,9 @@ class Instance:
     def instanciationSerie(self):
         #Instance serie asservissement
         cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
+        #cheminAsser = '/dev/ttyUSB9'
         if cheminAsser:
-            self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=5)
+            self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
         
@@ -67,6 +69,7 @@ class Instance:
     def instanciationAcquisition(self):
         try :
             self.acquisitionInstance = serie_acquisition.Serie_acquisition()
+
         except:
             log.logger.error("L'acquisition n'est pas chargé")
 

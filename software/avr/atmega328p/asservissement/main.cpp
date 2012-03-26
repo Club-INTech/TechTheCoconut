@@ -14,6 +14,8 @@
 #include "robot.h"
 
 
+int8_t inc = 0;
+
 int main()
 {
     Robot & robot = Robot::Instance();
@@ -26,6 +28,7 @@ int main()
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	
+	
 	Robot & robot = Robot::Instance();
 	int32_t infos[2];
 	//info[0]=>distance courante ; info[1] => angle courant.
@@ -34,13 +37,24 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.mesure_distance(infos[0]);
 	robot.mesure_angle(infos[1]);
 
-	robot.atteinteConsignes();
-	robot.gestionStoppage();
+	robot.atteinte_consignes();
+	robot.gestion_stoppage();
 	
 	robot.asservir();
-	robot.updatePosition();
+	robot.update_position();
 	
-	robot.envoyer_acquittement();
-	robot.envoyer_position();
+	
+	if (inc > 5)
+	{
+		robot.envoyer_acquittement();
+		inc = 0;
+	}
+	
+	else
+	{
+		robot.envoyer_position();
+		inc++;
+	}
+	
 	
 }

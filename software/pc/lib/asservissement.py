@@ -20,6 +20,8 @@ import lib.log
 import conf
 import capteur
 import threading
+import serie_acquisition
+
 log =lib.log.Log(__name__)
 
 sys.path.append('../')
@@ -68,7 +70,8 @@ class Asservissement:
             orientation = 0
         self.serialInstance.write('co\n' + str(float(orientation)))
         """
-    
+
+
     def recalage(self):
         """
         Fonction qui envoie le protocole de recallage à l'AVR
@@ -116,38 +119,43 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        
+        self.flag = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
-        self.robotInstance.acquitemment = False
-        self.obstacle = False
-        position = self.robotInstance.position
+        
         
         try :
             chemin_python.remove(chemin_python[0])
         except :
             return position
             
+            
         for i in chemin_python:
+            self.obstacle = False
+            #print robotInstance.acquitemment
+            self.robotInstance.stop = False
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
+            self.serialInstance.write('TG\n')   
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
-            while not self.robotInstance.acquitemment:
+            
+            print "avant boucle :" + str(float(i.x)) + "_" + str(float(i.y)) + '\n'
+            self.robotInstance.acquitemment = False
+            self.flag = False
+            while not self.robotInstance.acquitemment :#and not self.robotInstance.stop:
+                print str(float(i.x)) + "_" + str(float(i.y)) + '\n'
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
-                print capteur
                 if int(capteur) < 600:
                     self.serialInstance.write('stop\n')
                     self.obstacle = True
                     break
-            position = self.robotInstance.position
+                if self.robotInstance.stop:
+                    break
             if self.obstacle:
                 break
-        print position.x
-        print position.y
-        return position
     
     def majPosition(self):
         self.serialInstance.write("ex\n")
