@@ -54,7 +54,7 @@
 // }
 // 
 // /** initializes serial0 transmit at baud, 8-N-1 */
-// void ax12Init(long baud){
+// void ax12Init_(long baud){
 //     UBRR0H = ((long)(((long)(F_CPU / 16) + (long)(baud / 2)) / baud - 1)) >> 8;
 //     UBRR0L = ((F_CPU / 16 + baud / 2) / baud - 1);
 //     ax_rx_Pointer = 0;                                    
@@ -142,28 +142,28 @@
 //  ******************************************************************************/
 // 
 // /** ping */
-// byte ping (byte id) {
+// byte ping_ (byte id) {
 //      byte *data = 0;
 //      ax12SendPacket (id, 0, AX_PING, data); 
 //      return ax12ReadPacket(); 
 // }
 // 
 // /** reset */
-// byte reset (byte id) {
+// byte reset_ (byte id) {
 //      byte *data = 0;
 //      ax12SendPacket (id, 0, AX_RESET, data); 
 //      return ax12ReadPacket(); 
 // }
 // 
 // /** action */
-// byte action (byte id) {
+// byte action_ (byte id) {
 //      byte *data = 0;
 //      ax12SendPacket (id, 0, AX_ACTION, data); 
 //      return ax12ReadPacket(); 
 // }
 // 
 // /** read data */
-// byte readData (byte id, byte regstart, byte reglength) {
+// byte readData_ (byte id, byte regstart, byte reglength) {
 //     byte data [2];
 //     data [0] = regstart; data [1] = reglength;
 //     ax12SendPacket (id, 2, AX_READ_DATA, data);
@@ -171,7 +171,7 @@
 // }
 // 
 // /** write data */
-// byte writeData (byte id, byte regstart, byte reglength, int value) {
+// byte writeData_ (byte id, byte regstart, byte reglength, int value) {
 //     byte data [reglength+1];
 //     data [0] = regstart; data [1] = value&0xFF;
 //     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
@@ -195,19 +195,19 @@
 // void AX12Init (uint8_t ID, uint16_t angleCW, uint16_t angleCCW, uint16_t vitesse)
 // {
 //     // Active l'asservissement du servo
-//     writeData (ID, AX_TORQUE_ENABLE, 1, 1);
+//     writeData_ (ID, AX_TORQUE_ENABLE, 1, 1);
 //     // Définit les angles mini et maxi
-//     writeData (ID, AX_CW_ANGLE_LIMIT_L, 2, angleCW);
-//     writeData (ID, AX_CCW_ANGLE_LIMIT_L, 2, angleCCW);
+//     writeData_ (ID, AX_CW_ANGLE_LIMIT_L, 2, angleCW);
+//     writeData_ (ID, AX_CCW_ANGLE_LIMIT_L, 2, angleCCW);
 //     // Définit la vitesse de rotation
-//     writeData (ID, AX_GOAL_SPEED_L, 2, vitesse);
+//     writeData_ (ID, AX_GOAL_SPEED_L, 2, vitesse);
 //     // Fonction bas niveau pour la transmission série
-//     ax12Init (200000);
+//     ax12Init_ (200000);
 // }
 // 
 // void AX12GoTo (uint8_t ID, uint16_t angle)
 // {
-//     writeData (ID, AX_GOAL_POSITION_L, 2, angle);
+//     writeData_ (ID, AX_GOAL_POSITION_L, 2, angle);
 // }
 // 
 // volatile uint16_t ax_cons1 = 511;

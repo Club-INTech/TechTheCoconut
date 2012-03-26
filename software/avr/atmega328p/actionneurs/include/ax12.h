@@ -82,12 +82,12 @@
 // 
 // typedef unsigned char byte;
 // 
-// void ax12Init(long baud);
+// void ax12Init_(long baud);
 // 
-// byte ping (byte id);
-// byte reset (byte id);
-// byte readData (byte id, byte regstart, byte reglength);
-// byte writeData (byte id, byte regstart, byte reglength, int value);
+// byte ping_ (byte id);
+// byte reset_ (byte id);
+// byte readData_ (byte id, byte regstart, byte reglength);
+// byte writeData_ (byte id, byte regstart, byte reglength, int value);
 // 
 // extern int status_id;
 // extern int status_error;
