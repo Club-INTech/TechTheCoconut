@@ -14,12 +14,7 @@ import profils.develop.constantes
 
 class Script:
     
-    def __init__(self, asser):
-        """
-        On utilise "asser" comme instance d'asservissement
-        
-        """
-        self.asser = asser
+    def __init__(self):
         pass
     
     
@@ -53,8 +48,5 @@ class Script:
             self.asser.tourner(0)
         self.asser.avancer(-300.0)
         
-    def huit(self):
-        depart = outils_math.point.Point(0.0,0.0)
-        
-        arrivee = outils_math.point.Point(800.0,800.0)
-        self.asser.goTo(depart, arrivee)
+    def evitement(self):
+        print 'evitement'

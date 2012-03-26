@@ -21,6 +21,7 @@ import conf
 import capteur
 import threading
 import serie_acquisition
+import script
 
 log =lib.log.Log(__name__)
 
@@ -61,6 +62,9 @@ class Asservissement:
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
         self.couleur = __builtin__.constantes['couleur']
+        self.scriptInstance = script.Script
+        self.procheEvite = False
+        self.maxCapt = 600
         """
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
@@ -119,6 +123,8 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
+        
+        self.obstacle = False
         self.flag = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
@@ -130,10 +136,13 @@ class Asservissement:
             chemin_python.remove(chemin_python[0])
         except :
             return position
+        
+        for i in chemin_python:
+            print i.x
+            print i.y
             
             
         for i in chemin_python:
-            self.obstacle = False
             #print robotInstance.acquitemment
             self.robotInstance.stop = False
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
@@ -141,21 +150,30 @@ class Asservissement:
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
             
-            print "avant boucle :" + str(float(i.x)) + "_" + str(float(i.y)) + '\n'
             self.robotInstance.acquitemment = False
             self.flag = False
-            while not self.robotInstance.acquitemment :#and not self.robotInstance.stop:
-                print str(float(i.x)) + "_" + str(float(i.y)) + '\n'
+            while not self.robotInstance.acquitemment :
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
-                if int(capteur) < 600:
+                if int(capteur) < self.maxCapt and not self.procheEvite:
                     self.serialInstance.write('stop\n')
                     self.obstacle = True
+                    self.procheEvite = True
+                    self.goTo(self.robotInstance.position, arrivee)
                     break
+                
+                elif self.procheEvite and int(capteur) >= self.maxCapt:
+                    self.obstacle = False
+                    self.procheEvite = False
+                
                 if self.robotInstance.stop:
                     break
-            if self.obstacle:
-                break
+                    
+            print 'depart :'
+            print self.robotInstance.position.x
+            print self.robotInstance.position.y
+            
+            chemin_python = chemin_python [:0]
     
     def majPosition(self):
         self.serialInstance.write("ex\n")
@@ -207,14 +225,11 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.serialInstance.ecrire("d\n" + str(float(distance)))
-        acquittement = False
-        while not acquittement:
-            if self.serialInstance.readline() != "":
-                reponse = self.serialInstance.readline()
-                if (reponse == "FIN_TRA\r\n" or reponse == "FIN_TRA\r"):
-                    print "reception de FIN_TRA !"
-                    acquittement = True
+        self.modified = False
+        self.serialInstance.write("d\n" + str(float(distance)))
+        while not self.robotInstance.translation:
+            pass
+        self.modified = False
 
     def setUnsetAsser(self, asservissement, mode):
         pass

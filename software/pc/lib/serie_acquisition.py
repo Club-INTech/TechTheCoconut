@@ -23,6 +23,7 @@ class Serie_acquisition:
         else:
             log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
         self.serieAsserInstance.write('TG\n')
+        self.asserInstance = __builtin__.instance.asserInstance
         thread = threading.Thread(target = self.ecoute_thread)
         thread.start()
 
@@ -30,7 +31,7 @@ class Serie_acquisition:
         while self.run:
             reponse = self.serieAsserInstance.readline()
             if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                if __builtin__.instance.asserInstance.flag:
+                if self.asserInstance.flag:
                     pass
                 else:
                     self.robotInstance.acquitemment = True
@@ -39,8 +40,10 @@ class Serie_acquisition:
                 self.robotInstance.stop = True
                 self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r':
-                self.robotInstance.translation = True
-                self.serieAsserInstance.write('TG\n')
+                if not self.asserInstance.modified:
+                    self.robotInstance.translation = True
+                    self.serieAsserInstance.write('TG\n')
+                    self.asserInstance.modified = True
             elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r':
                 self.robotInstance.rotation = True
                 self.serieAsserInstance.write('TG\n')
