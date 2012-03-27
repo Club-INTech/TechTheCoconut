@@ -124,7 +124,7 @@ class Asservissement:
         :type chemin: liste de points
         """
         
-        self.obstacle = False
+        self.robotInstance.bstacle = False
         self.flag = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
@@ -155,17 +155,10 @@ class Asservissement:
             while not self.robotInstance.acquitemment :
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
-                if int(capteur) < self.maxCapt and not self.procheEvite:
+                if int(capteur) < self.maxCapt:
                     self.serialInstance.write('stop\n')
-                    self.obstacle = True
-                    self.procheEvite = True
-                    self.goTo(self.robotInstance.position, arrivee)
+                    self.robotInstance.obstacle = True
                     break
-                
-                elif self.procheEvite and int(capteur) >= self.maxCapt:
-                    self.obstacle = False
-                    self.procheEvite = False
-                
                 if self.robotInstance.stop:
                     break
                     

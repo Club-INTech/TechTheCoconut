@@ -43,7 +43,6 @@ class Serie_acquisition:
                 if not self.asserInstance.modified:
                     self.robotInstance.translation = True
                     self.serieAsserInstance.write('TG\n')
-                    self.asserInstance.modified = True
             elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r':
                 self.robotInstance.rotation = True
                 self.serieAsserInstance.write('TG\n')
