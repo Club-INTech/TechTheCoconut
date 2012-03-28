@@ -77,6 +77,7 @@ public:
 	int32_t mesure_angle(void);
 	void mesure_distance(int32_t); 
 	int32_t mesure_distance(void);
+	void envoyer_position_tic(void);
 	
 	void asservir();
 	void update_position();
