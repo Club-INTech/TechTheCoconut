@@ -9,6 +9,7 @@ import asservissement
 import capteur
 import serial
 import serie_acquisition
+import script
 
 
 log =lib.log.Log(__name__)
@@ -34,17 +35,21 @@ class Instance:
         self.instanciationAsservissement()
         self.instanciationActionneur()
         self.instanciationAcquisition()
+        self.instanciationScript()
     
+    def instanciationScript(self):
+        self.scriptInstance = script.Script()
+
     def instanciationCapteur(self):
-        self.capteurInstance = capteur.Capteur()
-        #log.logger.error("Impossible d'instancier capteur")
+        try : self.capteurInstance = capteur.Capteur()
+        except : log.logger.error("Impossible d'instancier capteur")
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
         
     def instanciationAsservissement(self):
-        self.asserInstance = asservissement.Asservissement()
-        #except : log.logger.error("Impossible d'instancier asservissement")
+        try : self.asserInstance = asservissement.Asservissement()
+        except : log.logger.error("Impossible d'instancier asservissement")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneur.Actionneur()
