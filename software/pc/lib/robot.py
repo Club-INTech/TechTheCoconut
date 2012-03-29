@@ -35,11 +35,11 @@ class Robot:
         self.position = point.Point(0,400)
         self.orientation = 0
         self.rayon = 279
-        self.acquitemment = False
-        self.translation = False
-        self.rotation = False
-        self.recalage = False
-        self.stop=False
+        self.segment_en_cours = False
+        self.translation_en_cours = False
+        self.rotation_en_cours = False
+        self.recalage_en_cours = False
+        self.est_arrete=False
         self.message = ""
         self.new_message = False
         
@@ -67,7 +67,7 @@ class Robot:
         """
         self.orientation = orientation
         
-    def demarer(self):#TODO : protocole pour la languette (démarrage du robot)
+    def demarrer(self):#TODO : protocole pour la languette (démarrage du robot)
         """
         Fonction utilisée pour initialiser le robot
         """

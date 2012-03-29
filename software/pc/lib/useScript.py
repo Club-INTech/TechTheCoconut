@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import asservissement
 import outils_math
 import robot
@@ -15,25 +14,39 @@ robotInstance = __builtin__.instance.robotInstance
 scriptInstance = __builtin__.instance.scriptInstance
 
 scriptInstance.recalage()
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+asser.serialInstance.write('cr1\n')
+asser.serialInstance.write('ct1\n')
+raw_input()
+asser.avancer(600)
+raw_input()
+asser.tourner(1.57)
+raw_input()
+asser.goTo(robotInstance.position,outils_math.point.Point(100,1500))
+raw_input()
+asser.goTo(robotInstance.position,outils_math.point.Point(800,250))
+raw_input()
+asser.tourner(3.1415)
+raw_input()
+asser.avancer(-400)
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+asser.serialInstance.write('cr0\n')
+asser.serialInstance.write('ct0\n')
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
+raw_input()
+print "position : ("+str(asser.robotInstance.position.x)+", "+str(asser.robotInstance.position.y)+")\n"
 
-#scriptInstance = script.Script(asser)
-#scriptInstance.huit()
-
-
-#depart = outils_math.point.Point(0.0,400.0)
-##écriture du point de départ initial
-#asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
-#robotInstance.setPosition(depart)
-#while(True):    
-    #x, y = '', ''
-    #while x=='':
-        #x = raw_input("x arrivé ?")
-    #while y=='':
-        #y = raw_input("y arrivé ?")
-    #arrivee = outils_math.point.Point(int(x),int(y))
-    ##print asser.capteursInstance.mesure()
-
-    #asser.goTo(depart,arrivee)
-    
-    #depart.x = robotInstance.position.x
-    #depart.y = robotInstance.position.y
+#asser.serialInstance.write("cy\n400.0\n")

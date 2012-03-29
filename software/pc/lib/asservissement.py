@@ -81,21 +81,10 @@ class Asservissement:
         Fonction qui envoie le protocole de recallage à l'AVR
         """
         self.serialInstance.write('recal\n')
-        
-        
-        raw_input()
-        
-        #On redémarre l'asservissement
-        self.serialInstance.write('cr1\n')
-        self.serialInstance.write('ct1\n')
-        
-        #On demande la position :
-        self.serialInstance.write('ex\n')
-        #self.robotInstance.position.x = self.lire()
-        print self.lire()
-        self.serialInstance.write('ey\n')
-        #self.robotInstance.position.y = self.lire()
-        print self.lire()
+        self.robotInstance.recalage_en_cours = True
+        while self.robotInstance.recalage_en_cours :
+            time.sleep(0.01)
+        print "recalage terminé !\n"
       
       
     def lire(self):
@@ -137,48 +126,40 @@ class Asservissement:
         """
         
         self.robotInstance.bstacle = False
-        self.flag = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
+        
+        #affichage position consigne
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
-        
         
         try :
             chemin_python.remove(chemin_python[0])
         except :
-            return position
-        
-        for i in chemin_python:
-            print i.x
-            print i.y
-            
+            return ""
             
         for i in chemin_python:
-            #print robotInstance.acquitemment
             self.robotInstance.stop = False
-            print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
-            self.serialInstance.write('TG\n')   
+            print "goto (" + str(float(i.x)) + ", " + str(float(i.y)) + ")"
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            self.robotInstance.segment_en_cours = True
             
+            #trololo
+            time.sleep(0.01)
+            self.robotInstance.segment_en_cours = True
             
-            self.robotInstance.acquitemment = False
-            self.flag = False
-            while not self.robotInstance.acquitemment :
+            while self.robotInstance.segment_en_cours :
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
                 if int(capteur) < self.maxCapt:
-                    self.serialInstance.write('stop\n')
+                    self.immobiliser()
                     self.robotInstance.obstacle = True
                     break
-                if self.robotInstance.stop:
+                if self.robotInstance.est_arrete:
                     break
                     
-            print 'depart :'
-            print self.robotInstance.position.x
-            print self.robotInstance.position.y
-            
-            chemin_python = chemin_python [:0]
+            #affichage position réelle
+            print "res: (" + str(self.robotInstance.position.x) + ", " + str(self.robotInstance.position.y) + ")\n"
     
     def majPosition(self):
         self.serialInstance.write("ex\n")
@@ -215,14 +196,12 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write("t\n" + str(float(angle)))
-        acquittement = False
-        while not acquittement:
-            if self.serialInstance.readline() != "":
-                reponse = self.serialInstance.readline()
-                if (reponse == "FIN_TOU\r\n" or reponse == "FIN_TOU\r"):
-                    print "reception de FIN_TOU !"
-                    acquittement = True
+        
+        self.serialInstance.write("t\n" + str(float(angle))+"\n")
+        self.robotInstance.rotation_en_cours = True
+        while self.robotInstance.rotation_en_cours:
+            time.sleep(0.01)
+        print "rotation terminée !\n"
     
     def avancer(self, distance):
         """
@@ -230,12 +209,13 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.modified = False
-        self.serialInstance.write("d\n" + str(float(distance)))
-        while not self.robotInstance.translation:
-            pass
-        self.modified = False
-
+        
+        self.serialInstance.write("d\n" + str(float(distance))+"\n")
+        self.robotInstance.translation_en_cours = True
+        while self.robotInstance.translation_en_cours:
+            time.sleep(0.01)
+        print "translation terminée !\n"
+        
     def setUnsetAsser(self, asservissement, mode):
         pass
         """
@@ -262,7 +242,8 @@ class Asservissement:
         """
         Fonction pour demander l'immombilisation du robot
         """
-        self.serialInstance.ecrire('stop\n')
+        self.serialInstance.write('stop\n')
+        self.robotInstance.est_arrete = True
         
     def calculRayon(self, angle):
         """

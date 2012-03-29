@@ -32,23 +32,19 @@ class Serie_acquisition:
             recu = True
             reponse = self.serieAsserInstance.readline()
             if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                if self.asserInstance.flag:
-                    pass
-                else:
-                    self.robotInstance.acquitemment = True
-                    self.serieAsserInstance.write('TG\n')
+                self.robotInstance.segment_en_cours = False
+                self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r':
-                self.robotInstance.stop = True
+                self.robotInstance.est_arrete = True
                 self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r':
-                if not self.asserInstance.modified:
-                    self.robotInstance.translation = True
-                    self.serieAsserInstance.write('TG\n')
+                self.robotInstance.translation_en_cours = False
+                self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r':
-                self.robotInstance.rotation = True
+                self.robotInstance.rotation_en_cours = False
                 self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_REC\r\n':
-                self.robotInstance.recalage = True
+                self.robotInstance.recalage_en_cours = False
                 self.serieAsserInstance.write('TG\n')
             else:
                 recu = False
