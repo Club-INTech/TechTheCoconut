@@ -88,12 +88,23 @@ class Asservissement:
         #On redémarre l'asservissement
         self.serialInstance.write('cr1\n')
         self.serialInstance.write('ct1\n')
+        
         #On demande la position :
         self.serialInstance.write('ex\n')
-        self.robotInstance.position.x = self.lire()
+        #self.robotInstance.position.x = self.lire()
+        print self.lire()
         self.serialInstance.write('ey\n')
-        self.robotInstance.position.y = self.lire()
+        #self.robotInstance.position.y = self.lire()
+        print self.lire()
+      
+      
+    def lire(self):
+        while not self.robotInstance.new_message:
+            time.sleep(0.01)
+        self.robotInstance.new_message = False
+        return robotInstance.message
         
+    """
     def lire(self, verifier, check=0):
         acquittement = False
         while not acquittement:
@@ -104,6 +115,7 @@ class Asservissement:
                     acquitement = True
                 elif verifier == 0:
                     acquitement = True
+    """
                     
     def goToScript(self, script):
         """

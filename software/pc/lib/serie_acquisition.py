@@ -29,6 +29,7 @@ class Serie_acquisition:
 
     def ecoute_thread(self):
         while self.run:
+            recu = True
             reponse = self.serieAsserInstance.readline()
             if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
                 if self.asserInstance.flag:
@@ -49,14 +50,23 @@ class Serie_acquisition:
             elif str(reponse) == 'FIN_REC\r\n':
                 self.robotInstance.recalage = True
                 self.serieAsserInstance.write('TG\n')
+            else:
+                recu = False
+                
             try:
                 if reponse[4]== '+':
+                    recu = True
                     reponse = reponse.split('+')
                     self.robotInstance.position.x = int(reponse[1])
                     self.robotInstance.position.y = int(reponse[0])
                 elif reponse[4] == '-':
+                    recu = True
                     reponse = reponse.split('-')
                     self.robotInstance.position.x = -int(reponse[1])
                     self.robotInstance.position.y = int(reponse[0])
             except:
                 pass
+            
+            if not recu and len(reponse) > 3 :
+                self.robotInstance.message = str(reponse).replace("\r","")
+                self.robotInstance.new_message = True

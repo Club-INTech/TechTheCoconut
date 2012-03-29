@@ -40,6 +40,9 @@ class Robot:
         self.rotation = False
         self.recalage = False
         self.stop=False
+        self.message = ""
+        self.new_message = False
+        
         
         # Pour avoir l'angle
         # self.actionneur["hg"].angle
