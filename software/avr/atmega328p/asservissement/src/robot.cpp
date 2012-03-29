@@ -369,8 +369,8 @@ void Robot::envoyer_position()
 
 void Robot::envoyer_position_tic()
 {
-// 	serial_t_::print((int32_t)mesure_distance_);
-	serial_t_::print((int32_t)mesure_angle_);
+	serial_t_::print((int32_t)mesure_distance_);
+// 	serial_t_::print((int32_t)mesure_angle_);
 }
 
 void Robot::gotoPos(float x, float y)

@@ -57,7 +57,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 		robot.envoyer_position();
 		
 		//pour étalonnage
-		//robot.envoyer_position_tic();
+// 		robot.envoyer_position_tic();
 		
 		inc++;
 	}
