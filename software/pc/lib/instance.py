@@ -67,7 +67,7 @@ class Instance:
         cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
         print cheminCapt
         if cheminCapt:
-            self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=10)
+            self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
         else:
             log.logger.error("Le capteur n'est pas chargé")
         
