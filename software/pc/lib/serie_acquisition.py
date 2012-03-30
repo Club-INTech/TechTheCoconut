@@ -29,40 +29,37 @@ class Serie_acquisition:
 
     def ecoute_thread(self):
         while self.run:
-            recu = True
             reponse = self.serieAsserInstance.readline()
             if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                self.robotInstance.segment_en_cours = False
-                self.serieAsserInstance.write('TG\n')
+                if self.asserInstance.mutex:
+                    pass
+                else:
+                    self.robotInstance.acquitemment = True
+                    self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r':
                 self.robotInstance.est_arrete = True
                 self.serieAsserInstance.write('TG\n')
-            elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r':
-                self.robotInstance.translation_en_cours = False
+            elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r' or str(reponse) == 'FIN_TRA':
+                self.robotInstance.fin_translation = True
                 self.serieAsserInstance.write('TG\n')
-            elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r':
-                self.robotInstance.rotation_en_cours = False
+            elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r' or str(reponse) == 'FIN_TOU':
+                self.robotInstance.fin_rotation = True
                 self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_REC\r\n':
-                self.robotInstance.recalage_en_cours = False
+                self.robotInstance.fin_recalage = True
                 self.serieAsserInstance.write('TG\n')
-            else:
-                recu = False
-                
             try:
                 if reponse[4]== '+':
-                    recu = True
                     reponse = reponse.split('+')
                     self.robotInstance.position.x = int(reponse[1])
                     self.robotInstance.position.y = int(reponse[0])
                 elif reponse[4] == '-':
-                    recu = True
                     reponse = reponse.split('-')
                     self.robotInstance.position.x = -int(reponse[1])
                     self.robotInstance.position.y = int(reponse[0])
             except:
                 pass
             
-            if not recu and len(reponse) > 3 :
-                self.robotInstance.message = str(reponse).replace("\r","")
+            else:
                 self.robotInstance.new_message = True
+                self.robotInstance.message = str(reponse)
