@@ -35,12 +35,12 @@ class Robot:
         self.position = point.Point(0,400)
         self.orientation = 0
         self.rayon = 279
-        self.segment_en_cours = False
-        self.translation_en_cours = False
-        self.rotation_en_cours = False
-        self.recalage_en_cours = False
+        self.acquitemment = False
+        self.fin_translation = False
+        self.fin_rotation = False
+        self.fin_recalage = False
         self.est_arrete=False
-        self.message = ""
+        self.message = "huuk"
         self.new_message = False
         
         
