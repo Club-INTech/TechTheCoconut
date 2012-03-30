@@ -27,7 +27,7 @@ Robot::Robot() : couleur_('v')
 // 				,translation(0.6,3,0.01)
 // 				,rotation(0.4,3,0.01)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
-				,CONVERSION_TIC_RADIAN_(0.00071)//0.000737463064)
+				,CONVERSION_TIC_RADIAN_(0.000703762)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
 				
 {
 	TWI_init();
@@ -365,12 +365,13 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 void Robot::envoyer_position()
 {
 	serial_t_::print((int32_t)x(),(int32_t)y());
+// 	serial_t_::print((int32_t)((float)angle_serie_ * 1000));
 }
 
 void Robot::envoyer_position_tic()
 {
-	serial_t_::print((int32_t)mesure_distance_);
-// 	serial_t_::print((int32_t)mesure_angle_);
+// 	serial_t_::print((int32_t)mesure_distance_);
+	serial_t_::print((int32_t)mesure_angle_);
 }
 
 void Robot::gotoPos(float x, float y)
