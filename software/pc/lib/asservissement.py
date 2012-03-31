@@ -113,8 +113,7 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        depart.x = self.robotInstance.position.x
-        depart.y = self.robotInstance.position.y
+        depart = outils_math.point.Point(self.robotInstance.position.x,self.robotInstance.position.y)
         self.robotInstance.obstacle = False
         self.mutex = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
