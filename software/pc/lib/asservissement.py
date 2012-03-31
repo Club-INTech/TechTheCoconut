@@ -103,7 +103,7 @@ class Asservissement:
         self.robotInstance.new_message = False
         return self.robotInstance.message
   
-    def goTo(self, depart, arrivee, centre_robotA = None):
+    def goTo(self, arrivee, centre_robotA = None):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -113,12 +113,13 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        
-        self.robotInstance.bstacle = False
+        depart.x = self.robotInstance.position.x
+        depart.y = self.robotInstance.position.y
+        self.robotInstance.obstacle = False
         self.mutex = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(self.robotInstance.position.x)+","+str(self.robotInstance.position.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         
@@ -137,6 +138,7 @@ class Asservissement:
             self.robotInstance.acquitemment = False
             self.mutex = False
             while not self.robotInstance.acquitemment :
+                """
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
                 try:
@@ -146,6 +148,7 @@ class Asservissement:
                         break
                 except:
                     pass
+                """
                 if self.robotInstance.est_arrete:
                     break
                     
