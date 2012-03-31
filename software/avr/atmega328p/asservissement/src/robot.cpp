@@ -515,6 +515,7 @@ void Robot::recalage()
 {
 	
 	translation.valeur_bridage(50.0);
+	rotation.valeur_bridage(100.0);
 	translater(-300.0);
 	etat_rot_ = false;
 	translater(-200.0);
@@ -525,16 +526,17 @@ void Robot::recalage()
 	tourner(PI/2);
 	translater(-300.0);
 	etat_rot_ = false;
-	translater(-200.0);
+	translater(-300.0);
 	y(LARGEUR_ROBOT/2);
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	translater(150.0);
+	rotation.valeur_bridage(255.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
+	translation.valeur_bridage(255.0);
+	envoyer_acquittement(2,"FIN_REC");
 	etat_rot_ = false;
 	etat_tra_ = false;
-	envoyer_acquittement(2,"FIN_REC");
-	translation.valeur_bridage(255.0);
 	
 }
 
