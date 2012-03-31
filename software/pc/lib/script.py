@@ -56,5 +56,20 @@ class Script:
         self.asser.avancer(-300.0)
         """
         
+    def testPosition(self):
+        self.recalage()
+        raw_input()
+        self.asserInstance.avancer(600)
+        raw_input()
+        self.asserInstance.tourner(1.57)
+        raw_input()
+        self.asserInstance.goTo(robotInstance.position,outils_math.point.Point(100,1500))
+        raw_input()
+        self.asserInstance.goTo(robotInstance.position,outils_math.point.Point(800,250))
+        raw_input()
+        self.asserInstance.tourner(3.1415)
+        raw_input()
+        self.asserInstance.avancer(-400)
+
     def evitement(self):
         print 'evitement'
