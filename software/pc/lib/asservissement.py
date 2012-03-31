@@ -22,6 +22,7 @@ import capteur
 import threading
 import serie_acquisition
 import script
+from threading import Lock
 
 log =lib.log.Log(__name__)
 
@@ -65,6 +66,7 @@ class Asservissement:
         self.scriptInstance = script.Script
         self.procheEvite = False
         self.maxCapt = 600
+        self.mutex = Lock()
         """
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
@@ -75,7 +77,12 @@ class Asservissement:
         self.serialInstance.write('co\n' + str(float(orientation)))
         """
 
+    def test(self):
+        self.var = 1
+        while 42:
+            self.var += 1
 
+    
     def recalage(self):
         """
         Fonction qui envoie le protocole de recallage à l'AVR
@@ -115,7 +122,6 @@ class Asservissement:
         """
         depart = outils_math.point.Point(self.robotInstance.position.x,self.robotInstance.position.y)
         self.robotInstance.obstacle = False
-        self.mutex = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(self.robotInstance.position.x)+","+str(self.robotInstance.position.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
@@ -133,11 +139,8 @@ class Asservissement:
             self.serialInstance.write('TG\n')   
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
-            
             self.robotInstance.acquitemment = False
-            self.mutex = False
             while not self.robotInstance.acquitemment :
-                """
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
                 try:
@@ -147,7 +150,6 @@ class Asservissement:
                         break
                 except:
                     pass
-                """
                 if self.robotInstance.est_arrete:
                     break
                     
@@ -164,21 +166,13 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write("t\n" + str(float(angle)))
+        self.serialInstance.write("t\n" + str(float(angle))+"\n")
         self.robotInstance.fin_rotation = False
-        while not self.robotInstance.fin_rotation :
-            self.CaptSerialInstance.write('ultrason\n')
-            capteur = self.capteurInstance.mesurer()
-            try:
-                if int(capteur) < self.maxCapt:
-                    self.serialInstance.write('stop\n')
-                    self.robotInstance.obstacle = True
-                    print 'bite'
-                    break
-            except:
-                pass
-            if self.robotInstance.est_arrete:
-                break
+        print self.robotInstance.fin_rotation
+        while not self.robotInstance.fin_rotation:
+            print self.robotInstance.fin_rotation
+            time.sleep(0.01)
+        print 'fini tourner'
     
     def avancer(self, distance):
         """
@@ -187,8 +181,21 @@ class Asservissement:
         :type angle: Float
         """
         self.serialInstance.write("d\n" + str(float(distance))+"\n")
-        self.robotInstance.fin_translation
-        self.lire()
+        self.robotInstance.fin_translation = False
+        while not self.robotInstance.fin_translation :
+            self.CaptSerialInstance.write('ultrason\n')
+            capteur = self.capteurInstance.mesurer()
+            try:
+                if int(capteur) < self.maxCapt:
+                    print 'CAPTEUR !'
+                    self.serialInstance.write('stop\n')
+                    self.robotInstance.obstacle = True
+                    break
+            except:
+                pass
+            if self.robotInstance.est_arrete:
+                break
+        print 'fini avancer'
 
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -461,9 +468,3 @@ class Asservissement:
                     
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"
-                
-    def test(self):
-        print "test"
-        self.serialInstance.write("?\n")
-        time.sleep(1)
-        print ">"+self.serialInstance.readline()+"<"
