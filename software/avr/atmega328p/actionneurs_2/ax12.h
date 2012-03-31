@@ -80,14 +80,25 @@
 #define AX_RESET                    6
 #define AX_SYNC_WRITE               131
 
+#define AX_BAUD_RATE_1000000        1
+#define AX_BAUD_RATE_500000         3
+#define AX_BAUD_RATE_400000         4
+#define AX_BAUD_RATE_250000         7
+#define AX_BAUD_RATE_200000         9
+#define AX_BAUD_RATE_115200         16
+#define AX_BAUD_RATE_57600          34
+#define AX_BAUD_RATE_19200          103
+#define AX_BAUD_RATE_9600           207
+
+
 typedef unsigned char byte;
 
-void ax12Init_(long baud);
+void ax12Init(long baud);
 
-byte ping_ (byte id);
-byte reset_ (byte id);
-byte readData_ (byte id, byte regstart, byte reglength);
-byte writeData_ (byte id, byte regstart, byte reglength, int value);
+byte ping (byte id);
+byte reset (byte id);
+byte readData (byte id, byte regstart, byte reglength);
+byte writeData (byte id, byte regstart, byte reglength, int value);
 
 extern int status_id;
 extern int status_error;
@@ -97,7 +108,16 @@ extern int status_data;
 // extern volatile uint16_t ax_cons1;
 // extern volatile uint16_t ax_cons2;
 
-
+/*
+ *  Fonctions pour les AX12
+ *    ID : ID du servo
+ *    angleCW : angle max antitrigo
+ *    angleCCW : angle max trigo
+ *    angle : consigne en angle
+ *    vitesse : vitesse de rotation
+ */
+void AX12Init (uint8_t ID, uint16_t angleCW, uint16_t angleCCW, uint16_t vitesse);
+void AX12GoTo (uint8_t ID, uint16_t angle);
 
 
 #endif
