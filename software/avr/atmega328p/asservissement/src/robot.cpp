@@ -531,9 +531,9 @@ void Robot::recalage()
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	translater(150.0);
-	rotation.valeur_bridage(255.0);
+	rotation.valeur_bridage(120.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
-	translation.valeur_bridage(255.0);
+	translation.valeur_bridage(120.0);
 	envoyer_acquittement(2,"FIN_REC");
 	etat_rot_ = false;
 	etat_tra_ = false;
