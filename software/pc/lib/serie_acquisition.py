@@ -23,6 +23,7 @@ class Serie_acquisition:
         else:
             log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
         self.serieAsserInstance.write('TG\n')
+        self.asserInstance = __builtin__.instance.asserInstance
         thread = threading.Thread(target = self.ecoute_thread)
         thread.start()
 
@@ -30,22 +31,22 @@ class Serie_acquisition:
         while self.run:
             reponse = self.serieAsserInstance.readline()
             if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                if __builtin__.instance.asserInstance.flag:
+                if self.asserInstance.mutex:
                     pass
                 else:
                     self.robotInstance.acquitemment = True
                     self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r':
-                self.robotInstance.stop = True
+                self.robotInstance.est_arrete = True
                 self.serieAsserInstance.write('TG\n')
-            elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r':
-                self.robotInstance.translation = True
+            elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r' or str(reponse) == 'FIN_TRA':
+                self.robotInstance.fin_translation = True
                 self.serieAsserInstance.write('TG\n')
-            elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r':
-                self.robotInstance.rotation = True
+            elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r' or str(reponse) == 'FIN_TOU':
+                self.robotInstance.fin_rotation = True
                 self.serieAsserInstance.write('TG\n')
             elif str(reponse) == 'FIN_REC\r\n':
-                self.robotInstance.recalage = True
+                self.robotInstance.fin_recalage = True
                 self.serieAsserInstance.write('TG\n')
             try:
                 if reponse[4]== '+':
@@ -58,3 +59,7 @@ class Serie_acquisition:
                     self.robotInstance.position.y = int(reponse[0])
             except:
                 pass
+            
+            else:
+                self.robotInstance.new_message = True
+                self.robotInstance.message = str(reponse)

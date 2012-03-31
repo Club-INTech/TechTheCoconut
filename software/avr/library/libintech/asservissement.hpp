@@ -110,9 +110,9 @@ class Asservissement {
 		
 		volatile float pwmCourant_;
 		
-		float en_;
-		float enm1_;
-		float enm2_;
+		int32_t en_;
+		int32_t enm1_;
+		int32_t enm2_;
 
 		int32_t consigne_;
 };

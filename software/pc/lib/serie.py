@@ -63,18 +63,6 @@ class Serie(threading.Thread, serial.Serial):
         except:
             log.logger.error("Échec écriture sur la liaison série "+self.nom+" : "+msg)
         
-    
-    def lire(self):
-        """
-        Lire une information venant d'un périphérique jusqu'au retour à la ligne
-        """
-        while self.active:
-            lu = self.readline()
-            lu = lu.split("\r\n")[0]
-            if lu != '':
-                log.logger.debug("Lecture sur la liaison série "+self.nom+" : "+lu)
-                self.file_attente.put(lu)
-    
     def stop(self):
         """
         Arrête la liaison série
