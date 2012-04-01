@@ -51,7 +51,7 @@ constantes = \
 	"Recherche_Chemin":
     {
         #rayon maximal du cercle circonscrit aux robots adverses, en mm
-        "rayonRobotsA" : 350.,
+        "rayonRobotsA" : 255.,
         #approximation hexagonale des robots adverses
         "nCotesRobotsA" : 6
     },
