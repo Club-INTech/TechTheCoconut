@@ -32,7 +32,7 @@ class Peripherique():
         self.chemin = None
         log.logger.info("Nouveau périphérique "+self.nom)
     
-    def __repr__(self):
+    def __str__(self):
         return "<lib.peripherique.Peripherique "+self.nom+" "+self.chemin+">"
     
     def associer(self):
