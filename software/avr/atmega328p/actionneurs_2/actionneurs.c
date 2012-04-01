@@ -32,3 +32,17 @@ void AX12GoTo (uint8_t ID, uint16_t angle)
 {
     writeData (ID, AX_GOAL_POSITION_L, 2, angle);
 }
+
+void extraction(unsigned char x, char *x1, char *x2)
+{
+    char tmp = x >> 5;
+    *x1 = tmp & 0b00000011;
+    *x2 = x & 0b00011111;
+}
+
+void extraction_consigne(unsigned char x, char *cons)
+{
+    *cons = x >> 7;
+}
+
+    
