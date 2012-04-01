@@ -26,6 +26,16 @@ class Robot:
     """
     Classe permettant de gérer le robot\n
     :Nota: Classement pouvant etre totalement refaite. Les attributs orientations et positions sont requis pour la visualisation de la table
+    :param acq*: Permet de vérifier les acquitements qui arrivent en boucle
+    :type acq*: Booleen
+    :param position: Position du robot mise à jour en permanance via la série
+    :type position: math.Point
+    :param acquitement, fin_*: Permet de surveiller les acquitements. Mis à jour par serie_acquisition.py et asservissement.py
+    :type cquitement, fin_*: Booleen
+    :param message: Reçois tous les autres messages non filtrer par serie_acquisition.py
+    :type message: string
+    :param new_message: Permet de savoir quand la variable message est mise à jour
+    ;type new_message: Booleen
     \n\n
     """
     
@@ -42,7 +52,8 @@ class Robot:
         self.est_arrete=False
         self.message = "huuk"
         self.new_message = False
-        
+        self.acqA = False
+        self.acqB = False
         
         # Pour avoir l'angle
         # self.actionneur["hg"].angle
