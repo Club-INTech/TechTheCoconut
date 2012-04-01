@@ -22,6 +22,7 @@ import capteur
 import threading
 import serie_acquisition
 import script
+from threading import Lock
 
 log =lib.log.Log(__name__)
 
@@ -65,6 +66,7 @@ class Asservissement:
         self.scriptInstance = script.Script
         self.procheEvite = False
         self.maxCapt = 600
+        self.mutex = Lock()
         """
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
@@ -75,7 +77,12 @@ class Asservissement:
         self.serialInstance.write('co\n' + str(float(orientation)))
         """
 
+    def test(self):
+        self.var = 1
+        while 42:
+            self.var += 1
 
+    
     def recalage(self):
         """
         Fonction qui envoie le protocole de recallage à l'AVR
@@ -93,27 +100,17 @@ class Asservissement:
         self.robotInstance.position.x = self.lire()
         self.serialInstance.write('ey\n')
         self.robotInstance.position.y = self.lire()
-        
-    def lire(self, verifier, check=0):
-        acquittement = False
-        while not acquittement:
-            if self.serialInstance.readline() != "":
-                time.sleep(0.01)
-                reponse = self.serialInstance.readline()
-                if reponse == check:
-                    acquitement = True
-                elif verifier == 0:
-                    acquitement = True
-                    
-    def goToScript(self, script):
+                         
+    def lire(self):
         """
-        Fonction qui envoie une liste de coordonnées à la carte d'asservissement sans utiliser la recherche de chemin
-        :param script: Script à lancer
-        :type script: string
+        Permet de lire un message de l'asservissement autre que celui lu par le thread d'acquisition.
         """
-        pass
-    
-    def goTo(self, depart, arrivee, centre_robotA = None):
+        while not self.robotInstance.new_message:
+            time.sleep(0.01)
+        self.robotInstance.new_message = False
+        return self.robotInstance.message
+  
+    def goTo(self, arrivee, centre_robotA = None):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -123,12 +120,11 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        
-        self.robotInstance.bstacle = False
-        self.flag = True
+        depart = outils_math.point.Point(self.robotInstance.position.x,self.robotInstance.position.y)
+        self.robotInstance.obstacle = False
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(self.robotInstance.position.x)+","+str(self.robotInstance.position.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         
@@ -136,30 +132,25 @@ class Asservissement:
             chemin_python.remove(chemin_python[0])
         except :
             return position
-        
-        for i in chemin_python:
-            print i.x
-            print i.y
-            
             
         for i in chemin_python:
-            #print robotInstance.acquitemment
-            self.robotInstance.stop = False
+            self.robotInstance.est_arrete = False
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write('TG\n')   
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
-            
             self.robotInstance.acquitemment = False
-            self.flag = False
             while not self.robotInstance.acquitemment :
                 self.CaptSerialInstance.write('ultrason\n')
                 capteur = self.capteurInstance.mesurer()
-                if int(capteur) < self.maxCapt:
-                    self.serialInstance.write('stop\n')
-                    self.robotInstance.obstacle = True
-                    break
-                if self.robotInstance.stop:
+                try:
+                    if int(capteur) < self.maxCapt:
+                        self.serialInstance.write('stop\n')
+                        self.robotInstance.obstacle = True
+                        break
+                except:
+                    pass
+                if self.robotInstance.est_arrete:
                     break
                     
             print 'depart :'
@@ -167,35 +158,7 @@ class Asservissement:
             print self.robotInstance.position.y
             
             chemin_python = chemin_python [:0]
-    
-    def majPosition(self):
-        self.serialInstance.write("ex\n")
-        posX = False
-        while not posX:
-            try :
-                reponse = self.serialInstance.readline()
-                if reponse:
-                    sauvX = int(reponse)
-                    print "reception de la position sur x"
-                    posX = True
-                    print sauvX
-            except :
-                print 'huk'
-                self.serialInstance.write("ex\n")
-        time.sleep(0.5)
-        self.serialInstance.write("ey\n")
-        posY = False
-        while not posY:
-            try :
-                reponse = self.serialInstance.readline()
-                if reponse:
-                    sauvY = int(reponse)
-                    print "reception de la position sur y"
-                    posY = True
-                    print sauvY
-            except :
-                pass
-        return outils_math.point.Point(float(sauvX),float(sauvY))
+
     
     def tourner(self, angle):
         """
@@ -203,14 +166,13 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write("t\n" + str(float(angle)))
-        acquittement = False
-        while not acquittement:
-            if self.serialInstance.readline() != "":
-                reponse = self.serialInstance.readline()
-                if (reponse == "FIN_TOU\r\n" or reponse == "FIN_TOU\r"):
-                    print "reception de FIN_TOU !"
-                    acquittement = True
+        self.serialInstance.write("t\n" + str(float(angle))+"\n")
+        self.robotInstance.fin_rotation = False
+        print self.robotInstance.fin_rotation
+        while not self.robotInstance.fin_rotation:
+            print self.robotInstance.fin_rotation
+            time.sleep(0.01)
+        print 'fini tourner'
     
     def avancer(self, distance):
         """
@@ -218,11 +180,22 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.modified = False
-        self.serialInstance.write("d\n" + str(float(distance)))
-        while not self.robotInstance.translation:
-            pass
-        self.modified = False
+        self.serialInstance.write("d\n" + str(float(distance))+"\n")
+        self.robotInstance.fin_translation = False
+        while not self.robotInstance.fin_translation :
+            self.CaptSerialInstance.write('ultrason\n')
+            capteur = self.capteurInstance.mesurer()
+            try:
+                if int(capteur) < self.maxCapt:
+                    print 'CAPTEUR !'
+                    self.serialInstance.write('stop\n')
+                    self.robotInstance.obstacle = True
+                    break
+            except:
+                pass
+            if self.robotInstance.est_arrete:
+                break
+        print 'fini avancer'
 
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -495,9 +468,3 @@ class Asservissement:
                     
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"
-                
-    def test(self):
-        print "test"
-        self.serialInstance.write("?\n")
-        time.sleep(1)
-        print ">"+self.serialInstance.readline()+"<"

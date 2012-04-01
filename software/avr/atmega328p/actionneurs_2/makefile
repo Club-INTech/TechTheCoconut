@@ -4,7 +4,7 @@ MMCU_GCC=atmega328p
 MMCU_DUDE=m328p
 FREQ=16000000
 
-all: main.hex
+all: clean main.hex
 
 main.hex: main.out
 	avr-objcopy -O ihex -R .eeprom main.out main.hex

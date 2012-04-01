@@ -40,9 +40,12 @@ depart = outils_math.point.Point(0.0,400.0)
 
 
 #écriture du point de départ initial
-asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
+#asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
 
 robotInstance.setPosition(depart)
+
+asser.avancer(-800)
+asser.tourner(1)
 
 
 
@@ -52,7 +55,7 @@ robotInstance.setPosition(depart)
     
 #scriptInstance = script.Script(asser)
 #scriptInstance.huit()
-
+"""
 while(True):    
     x, y = '', ''
     while x=='':
@@ -62,7 +65,8 @@ while(True):
     arrivee = outils_math.point.Point(int(x),int(y))
     #print asser.capteursInstance.mesure()
 
-    asser.goTo(depart,arrivee)
+    asser.goTo(arrivee)
     
     depart.x = robotInstance.position.x
     depart.y = robotInstance.position.y
+"""

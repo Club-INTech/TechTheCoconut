@@ -36,10 +36,13 @@ class Robot:
         self.orientation = 0
         self.rayon = 279
         self.acquitemment = False
-        self.translation = False
-        self.rotation = False
-        self.recalage = False
-        self.stop=False
+        self.fin_translation = False
+        self.fin_rotation = False
+        self.fin_recalage = False
+        self.est_arrete=False
+        self.message = "huuk"
+        self.new_message = False
+        
         
         # Pour avoir l'angle
         # self.actionneur["hg"].angle
@@ -64,7 +67,7 @@ class Robot:
         """
         self.orientation = orientation
         
-    def demarer(self):#TODO : protocole pour la languette (démarrage du robot)
+    def demarrer(self):#TODO : protocole pour la languette (démarrage du robot)
         """
         Fonction utilisée pour initialiser le robot
         """

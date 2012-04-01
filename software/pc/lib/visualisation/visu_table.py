@@ -122,8 +122,8 @@ class Visu_table( threading.Thread):
 	:param robot: Le robot à dessiner
 	:type robot: Robot
 	"""
-	x = self.tailleTablePx[0]/2 + math.trunc(self.scale*robot.position.x) - math.trunc(self.scale*robot.rayon)
-	y = self.tailleTablePx[1] - math.trunc(self.scale*robot.position.y) - math.trunc(self.scale*robot.rayon)
+	x = self.tailleTablePx[0]/2 + math.trunc(self.scale*robot.position.x) - math.trunc(self.scale*robot.rayon)/2
+	y = self.tailleTablePx[1] - math.trunc(self.scale*robot.position.y) - math.trunc(self.scale*robot.rayon)/2
 	r = math.trunc( self.scale*robot.rayon)
 	
 	#pygame.draw.circle( pygame.display.get_surface(), Visu_table.couleur['bleuMarine'], (x,y), r)

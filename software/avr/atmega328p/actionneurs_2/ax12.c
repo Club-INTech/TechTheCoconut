@@ -54,8 +54,8 @@ ISR(USART_RX_vect){
 }
 
 /** initializes serial0 transmit at baud, 8-N-1 */
-void ax12Init_(long baud){
-    UBRR0H = ((long)(((long)(F_CPU / 16) + (long)(baud / 2)) / baud - 1)) >> 8;
+void ax12Init(long baud){
+    UBRR0H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
     UBRR0L = ((F_CPU / 16 + baud / 2) / baud - 1);
     ax_rx_Pointer = 0;                                    
     // enable rx
@@ -142,28 +142,28 @@ byte ax12ReadPacket(){
  ******************************************************************************/
 
 /** ping */
-byte ping_ (byte id) {
+byte ping (byte id) {
      byte *data = 0;
      ax12SendPacket (id, 0, AX_PING, data); 
      return ax12ReadPacket(); 
 }
 
 /** reset */
-byte reset_ (byte id) {
+byte reset (byte id) {
      byte *data = 0;
      ax12SendPacket (id, 0, AX_RESET, data); 
      return ax12ReadPacket(); 
 }
 
 /** action */
-byte action_ (byte id) {
+byte action (byte id) {
      byte *data = 0;
      ax12SendPacket (id, 0, AX_ACTION, data); 
      return ax12ReadPacket(); 
 }
 
 /** read data */
-byte readData_ (byte id, byte regstart, byte reglength) {
+byte readData (byte id, byte regstart, byte reglength) {
     byte data [2];
     data [0] = regstart; data [1] = reglength;
     ax12SendPacket (id, 2, AX_READ_DATA, data);
@@ -171,7 +171,7 @@ byte readData_ (byte id, byte regstart, byte reglength) {
 }
 
 /** write data */
-byte writeData_ (byte id, byte regstart, byte reglength, int value) {
+byte writeData (byte id, byte regstart, byte reglength, int value) {
     byte data [reglength+1];
     data [0] = regstart; data [1] = value&0xFF;
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
@@ -187,9 +187,6 @@ byte regWrite (byte id, byte regstart, byte reglength, int value) {
     ax12SendPacket (id, reglength+1, AX_REG_WRITE, data);
     return ax12ReadPacket();
 }
-
-
-
 
 
 volatile uint16_t ax_cons1 = 511;

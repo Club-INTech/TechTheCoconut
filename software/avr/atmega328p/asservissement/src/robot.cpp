@@ -16,6 +16,7 @@ Robot::Robot() : couleur_('v')
 				,y_(0)
 				,angle_serie_(0.0)
 				,angle_origine_(0.0)
+				,bascule_acquit(true)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -26,10 +27,9 @@ Robot::Robot() : couleur_('v')
 				,rotation(1,3,0.0)
 // 				,translation(0.6,3,0.01)
 // 				,rotation(0.4,3,0.01)
-				,CONVERSION_TIC_MM_(0.1061)
-				,CONVERSION_TIC_RADIAN_(0.000737463064)
-	
-	
+				,CONVERSION_TIC_MM_(0.10360)//0.1061)
+				,CONVERSION_TIC_RADIAN_(0.000703762)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
+				
 {
 	TWI_init();
 	serial_t_::init();
@@ -366,6 +366,13 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 void Robot::envoyer_position()
 {
 	serial_t_::print((int32_t)x(),(int32_t)y());
+// 	serial_t_::print((int32_t)((float)angle_serie_ * 1000));
+}
+
+void Robot::envoyer_position_tic()
+{
+// 	serial_t_::print((int32_t)mesure_distance_);
+	serial_t_::print((int32_t)mesure_angle_);
 }
 
 void Robot::gotoPos(float x, float y)
@@ -419,7 +426,11 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			envoyer_acquittement(2,"FIN_GOTO");
+			if (bascule_acquit)
+				envoyer_acquittement(2,"FIN_GOTOA");
+			else
+				envoyer_acquittement(2,"FIN_GOTOB");
+			bascule_acquit = !bascule_acquit;
 		}
 		else
 			envoyer_acquittement(1,"FIN_TRA");
@@ -509,6 +520,7 @@ void Robot::recalage()
 {
 	
 	translation.valeur_bridage(50.0);
+	rotation.valeur_bridage(100.0);
 	translater(-300.0);
 	etat_rot_ = false;
 	translater(-200.0);
@@ -519,16 +531,17 @@ void Robot::recalage()
 	tourner(PI/2);
 	translater(-300.0);
 	etat_rot_ = false;
-	translater(-200.0);
+	translater(-300.0);
 	y(LARGEUR_ROBOT/2);
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	translater(150.0);
+	rotation.valeur_bridage(120.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
+	translation.valeur_bridage(120.0);
+	envoyer_acquittement(2,"FIN_REC");
 	etat_rot_ = false;
 	etat_tra_ = false;
-	envoyer_acquittement(2,"FIN_REC");
-	translation.valeur_bridage(255.0);
 	
 }
 

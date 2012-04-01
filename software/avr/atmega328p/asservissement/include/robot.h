@@ -40,6 +40,7 @@ private:
 	float angle_serie_;
 	float angle_origine_;
 	void changer_orientation(float new_angle);
+	bool bascule_acquit;
 	
 	float CONVERSION_TIC_MM_;
 	float CONVERSION_TIC_RADIAN_;
@@ -77,6 +78,7 @@ public:
 	int32_t mesure_angle(void);
 	void mesure_distance(int32_t); 
 	int32_t mesure_distance(void);
+	void envoyer_position_tic(void);
 	
 	void asservir();
 	void update_position();

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# WARNING Non fini
+
 import time, sys, os, threading, Tkinter, lib.log, datetime
 
 # Ajout de ../ au path python
