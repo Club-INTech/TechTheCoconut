@@ -43,19 +43,20 @@ class Detection_peripheriques():
                     chemin = chemin.split('\n')[0]
                     serie = serie_simple.SerieSimple(chemin, constantes["Serie"]["peripheriques"][peripherique], 1)
                     # On envoie plusieurs fois au cas où
-                    try:
-                        serie.ecrire('?')
-                        serie.ecrire('?')
-                        serie.ecrire('?')
-                    except:
-                        pass
+                    for i in xrange(3):
+                        try:
+                            serie.ecrire('?')
+                        except:
+                            pass
                     # Boucle pour gérer les exceptions
                     for i in xrange(3):
                         chemin_existant = []
                         for p in lib.peripherique.liste:
                             chemin_existant.append(p.chemin)
                         try:
-                            ping = serie.lire()
+                            ping = '-1'
+                            while ping != '':
+                                ping = serie.lire()
                             if constantes["Serie"]["peripheriques_association"][peripherique] == int(ping):
                                 p_obj = lib.peripherique.Peripherique(peripherique)
                                 p_obj.chemin = chemin
