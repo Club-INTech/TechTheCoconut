@@ -1,9 +1,41 @@
 # -*- coding: utf-8 -*-
 
 import serial
+import sys
 
 import log
 log = log.Log(__name__)
+
+import threading
+class TimeoutError(Exception): pass
+
+
+# Truc compliqué (décorateur) qui permet de faire un timeout sur des fonctions
+def timelimit(timeout):
+    def internal(function):
+        def internal2(*args, **kw):
+            class Calculator(threading.Thread):
+                def __init__(self):
+                    threading.Thread.__init__(self)
+                    self.result = None
+                    self.error = None
+                
+                def run(self):
+                    try:
+                        self.result = function(*args, **kw)
+                    except:
+                        self.error = sys.exc_info()[0]
+            
+            c = Calculator()
+            c.start()
+            c.join(timeout)
+            if c.isAlive():
+                raise TimeoutError
+            if c.error:
+                raise c.error
+            return c.result
+        return internal2
+    return internal
 
 class SerieSimple(serial.Serial):
     """
@@ -38,6 +70,7 @@ class SerieSimple(serial.Serial):
         log.logger.debug("Écrire sur la liaison série  " + str(self.peripherique) + " : " + str(msg))
         return self.write(msg+"\r\n")
     
+    @timelimit(3)
     def lire(self):
         """
         Lire une information venant d'un périphérique jusqu'au retour à la ligne

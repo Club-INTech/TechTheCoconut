@@ -22,6 +22,7 @@ import capteur
 import threading
 import serie_acquisition
 import script
+from threading import Lock
 
 log =lib.log.Log(__name__)
 
@@ -65,6 +66,7 @@ class Asservissement:
         self.scriptInstance = script.Script
         self.procheEvite = False
         self.maxCapt = 600
+        self.mutex = Lock()
         """
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
@@ -75,7 +77,12 @@ class Asservissement:
         self.serialInstance.write('co\n' + str(float(orientation)))
         """
 
+    def test(self):
+        self.var = 1
+        while 42:
+            self.var += 1
 
+    
     def recalage(self):
         """
         Fonction qui envoie le protocole de recallage à l'AVR
@@ -113,10 +120,8 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        depart.x = self.robotInstance.position.x
-        depart.y = self.robotInstance.position.y
+        depart = outils_math.point.Point(self.robotInstance.position.x,self.robotInstance.position.y)
         self.robotInstance.obstacle = False
-        self.mutex = True
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(self.robotInstance.position.x)+","+str(self.robotInstance.position.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
@@ -126,32 +131,41 @@ class Asservissement:
         try :
             chemin_python.remove(chemin_python[0])
         except :
-            return position
+            return self.robotInstance.position
+            log.logger.error("Impossible de trouver un chemin")
             
         for i in chemin_python:
+            print self.robotInstance.acquitemment
             self.robotInstance.est_arrete = False
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write('TG\n')   
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             
-            
             self.robotInstance.acquitemment = False
-            self.mutex = False
             while not self.robotInstance.acquitemment :
-                """
                 self.CaptSerialInstance.write('ultrason\n')
-                capteur = self.capteurInstance.mesurer()
+                self.capteur = self.capteurInstance.mesurer()
                 try:
-                    if int(capteur) < self.maxCapt:
+                    if int(self.capteur) < self.maxCapt:
                         self.serialInstance.write('stop\n')
                         self.robotInstance.obstacle = True
-                        break
+                        centreEnnemi = point.Point(0,0)
+                        centreEnnemi = self.calculCentreEnemi()
+                        print centreEnnemi
+                        return centreEnnemi
                 except:
                     pass
-                """
                 if self.robotInstance.est_arrete:
                     break
-                    
+            print self.robotInstance.acquitemment
+            print 'stop'
+            print self.robotInstance.est_arrete
+            print 'message'
+            print self.robotInstance.message
+            print 'acq'
+            print self.robotInstance.acqA
+            print self.robotInstance.acqB
+            
             print 'depart :'
             print self.robotInstance.position.x
             print self.robotInstance.position.y
@@ -165,21 +179,13 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write("t\n" + str(float(angle)))
+        self.serialInstance.write("t\n" + str(float(angle))+"\n")
         self.robotInstance.fin_rotation = False
-        while not self.robotInstance.fin_rotation :
-            self.CaptSerialInstance.write('ultrason\n')
-            capteur = self.capteurInstance.mesurer()
-            try:
-                if int(capteur) < self.maxCapt:
-                    self.serialInstance.write('stop\n')
-                    self.robotInstance.obstacle = True
-                    print 'bite'
-                    break
-            except:
-                pass
-            if self.robotInstance.est_arrete:
-                break
+        print self.robotInstance.fin_rotation
+        while not self.robotInstance.fin_rotation:
+            print self.robotInstance.fin_rotation
+            time.sleep(0.01)
+        print 'fini tourner'
     
     def avancer(self, distance):
         """
@@ -188,9 +194,25 @@ class Asservissement:
         :type angle: Float
         """
         self.serialInstance.write("d\n" + str(float(distance))+"\n")
-        self.robotInstance.fin_translation
-        self.lire()
+        self.robotInstance.fin_translation = False
+        while not self.robotInstance.fin_translation :
+            self.CaptSerialInstance.write('ultrason\n')
+            capteur = self.capteurInstance.mesurer()
+            try:
+                if int(capteur) < self.maxCapt:
+                    print 'CAPTEUR !'
+                    self.serialInstance.write('stop\n')
+                    self.robotInstance.obstacle = True
+                    break
+            except:
+                pass
+            if self.robotInstance.est_arrete:
+                break
+        print 'fini avancer'
 
+    def calculCentreEnemi(self):
+        return self.capteur+(profils.develop.constantes.constantes["Recherche_Chemin"]["rayonRobotsA"]/2)
+        
     def setUnsetAsser(self, asservissement, mode):
         pass
         """
@@ -462,9 +484,3 @@ class Asservissement:
                     
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"
-                
-    def test(self):
-        print "test"
-        self.serialInstance.write("?\n")
-        time.sleep(1)
-        print ">"+self.serialInstance.readline()+"<"

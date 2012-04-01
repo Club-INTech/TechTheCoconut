@@ -65,7 +65,7 @@ while(True):
     arrivee = outils_math.point.Point(int(x),int(y))
     #print asser.capteursInstance.mesure()
 
-    asser.goTo(depart,arrivee)
+    asser.goTo(arrivee)
     
     depart.x = robotInstance.position.x
     depart.y = robotInstance.position.y

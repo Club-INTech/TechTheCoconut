@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import log
 import sys
 import os
 import __builtin__
@@ -9,6 +10,9 @@ import asservissement
 import outils_math.point
 import outils_math.point as point
 import instance
+import lib.log
+
+log =lib.log.Log(__name__)
 
 sys.path.append('../')
 
@@ -17,8 +21,26 @@ import profils.develop.constantes
 class Script:
     
     def __init__(self):
-        self.asserInstance = __builtin__.instance.asserInstance
-    
+        if hasattr(__builtin__.instance, 'asserInstance'):
+            self.asserInstance = __builtin__.instance.asserInstance
+        else:
+            log.logger.error("l'instance de instance.asserInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'capteurInstance'):
+            self.capteurInstance = __builtin__.instance.capteurInstance
+        else:
+            log.logger.error("l'instance de instance.capteurInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.robotInstance = __builtin__.instance.robotInstance
+        else:
+            log.logger.error("l'instance de instance.robotInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'serieAsserInstance'):
+            self.serialInstance = __builtin__.instance.serieAsserInstance
+        else:
+            log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
+        if hasattr(__builtin__.instance, 'serieCaptInstance'):
+            self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
+        else:
+            log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
     
     def recalage(self):
         """
@@ -63,13 +85,50 @@ class Script:
         raw_input()
         self.asserInstance.tourner(1.57)
         raw_input()
-        self.asserInstance.goTo(robotInstance.position,outils_math.point.Point(100,1500))
+        self.asserInstance.goTo(outils_math.point.Point(100,1500))
         raw_input()
-        self.asserInstance.goTo(robotInstance.position,outils_math.point.Point(800,250))
+        self.asserInstance.goTo(outils_math.point.Point(800,250))
         raw_input()
         self.asserInstance.tourner(3.1415)
         raw_input()
         self.asserInstance.avancer(-400)
-
-    def evitement(self):
-        print 'evitement'
+        
+    def etalonnageAsserv(self):
+        
+        while True :
+            print "modifier ?"
+            print "constantes de rotation.............r"
+            print "constantes de translation..........t"
+            print "sortez moi d'ici !.................q"
+            choix = raw_input()
+            if choix == "q":
+                break
+            elif choix == "r":
+                while True :
+                    print "constantes rotation : p,d,i. q pour quitter."
+                    cte=str(raw_input())
+                    if cte == "q":
+                        break
+                    else:
+                        val=str(float(raw_input()))
+                        self.serialInstance.write("cr"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
+                
+            elif choix == "t":
+                while True :
+                    print "constantes translation : p,d,i. q pour quitter."
+                    cte=str(raw_input())
+                    if cte == "q":
+                        break
+                    else:
+                        val=str(float(raw_input()))
+                        self.serialInstance.write("ct"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
+        
+        
+    def lire(self):
+        """
+        Permet de lire un message de ltestPosition'asservissement autre que celui lu par le thread d'acquisition.
+        """
+        while not self.robotInstance.new_message:
+            time.sleep(0.01)
+        self.robotInstance.new_message = False
+        return self.robotInstance.message

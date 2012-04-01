@@ -16,6 +16,9 @@ Robot::Robot() : couleur_('v')
 				,y_(0)
 				,angle_serie_(0.0)
 				,angle_origine_(0.0)
+				,bascule_goto_(true)
+				,bascule_tra_(true)
+				,bascule_tou_(true)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -54,7 +57,6 @@ void Robot::asservir()
 	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
 }
-
 
 
 void Robot::update_position()
@@ -407,7 +409,11 @@ void Robot::fin_tourner()
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
-			envoyer_acquittement(1,"FIN_TOU");
+			if (bascule_tou_)
+				envoyer_acquittement(1,"FIN_TOUA");
+			else
+				envoyer_acquittement(1,"FIN_TOUB");
+			bascule_tou_ = !bascule_tou_;
 	}
 }
 
@@ -425,10 +431,18 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			envoyer_acquittement(2,"FIN_GOTO");
+			if (bascule_goto_)
+				envoyer_acquittement(2,"FIN_GOTOA");
+			else
+				envoyer_acquittement(2,"FIN_GOTOB");
+			bascule_goto_ = !bascule_goto_;
 		}
 		else
-			envoyer_acquittement(1,"FIN_TRA");
+			if (bascule_tra_)
+				envoyer_acquittement(1,"FIN_TRAA");
+			else
+				envoyer_acquittement(1,"FIN_TRAB");
+			bascule_tra_ = !bascule_tra_;
 	}
 }
 
@@ -531,9 +545,9 @@ void Robot::recalage()
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	translater(150.0);
-	rotation.valeur_bridage(255.0);
+	rotation.valeur_bridage(120.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
-	translation.valeur_bridage(255.0);
+	translation.valeur_bridage(120.0);
 	envoyer_acquittement(2,"FIN_REC");
 	etat_rot_ = false;
 	etat_tra_ = false;

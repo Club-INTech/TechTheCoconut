@@ -13,8 +13,6 @@ liste = []
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
-# commande : '# ls -1 /dev/ttyUSB* 2> /dev/null'
-
 def chemin_de_peripherique(periph):
     for p in liste:
         if p.nom == periph:
@@ -33,7 +31,9 @@ class Peripherique():
         self.nom = nom
         self.chemin = None
         log.logger.info("Nouveau périphérique "+self.nom)
-        self.association = self.associer()
+    
+    def __str__(self):
+        return "<lib.peripherique.Peripherique "+self.nom+" "+self.chemin+">"
     
     def associer(self):
         """
