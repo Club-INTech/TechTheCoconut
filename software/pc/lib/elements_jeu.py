@@ -2,8 +2,6 @@
 
 """
 Ce fichier crée les classes des différents objets présents sur le terrain, obstacles et zone.
-
-:TODO: Utiliser les constantes de profil
 """
 
 

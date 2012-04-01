@@ -56,13 +56,17 @@ else:
     exec('import profils.'+conf+'.injection')
 
 import lib.peripherique
+import lib.detection_peripheriques
 
 # Association des périphériques
-for p in constantes['Serie']['peripheriques']:
-    p_obj = lib.peripherique.Peripherique(p)
-    if p_obj.association:
-        lib.peripherique.liste.append(p_obj)
+#for p in constantes['Serie']['peripheriques']:
+    #p_obj = lib.peripherique.Peripherique(p)
+    #if p_obj.associer():
+        #lib.peripherique.liste.append(p_obj)
 # Fin association des périphériques
+
+# Association automatique des périphériques
+lib.detection_peripheriques.Detection_peripheriques()
 
 # WARNING variable globale pour instancier le robot
 import lib.robot
