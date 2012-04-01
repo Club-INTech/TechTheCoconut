@@ -40,6 +40,7 @@ private:
 	float angle_serie_;
 	float angle_origine_;
 	void changer_orientation(float new_angle);
+	bool bascule_acquit;
 	
 	float CONVERSION_TIC_MM_;
 	float CONVERSION_TIC_RADIAN_;

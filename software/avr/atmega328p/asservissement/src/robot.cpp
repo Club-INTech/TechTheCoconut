@@ -16,6 +16,7 @@ Robot::Robot() : couleur_('v')
 				,y_(0)
 				,angle_serie_(0.0)
 				,angle_origine_(0.0)
+				,bascule_acquit(true)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -425,7 +426,11 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			envoyer_acquittement(2,"FIN_GOTO");
+			if (bascule_acquit)
+				envoyer_acquittement(2,"FIN_GOTOA");
+			else
+				envoyer_acquittement(2,"FIN_GOTOB");
+			bascule_acquit = !bascule_acquit;
 		}
 		else
 			envoyer_acquittement(1,"FIN_TRA");
