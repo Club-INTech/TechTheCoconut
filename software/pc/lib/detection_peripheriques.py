@@ -55,7 +55,7 @@ class Detection_peripheriques():
                             chemin_existant.append(p.chemin)
                         try:
                             ping = '-1'
-                            while ping != '':
+                            while ping != '' and ping not in range(0,9):
                                 ping = serie.lire()
                             if constantes["Serie"]["peripheriques_association"][peripherique] == int(ping):
                                 p_obj = lib.peripherique.Peripherique(peripherique)
