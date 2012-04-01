@@ -65,7 +65,7 @@ class Instance:
             log.logger.error("L'asservissement n'est pas chargé")
         
         cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
-        print cheminCapt
+        #cheminCapt = '/dev/ttyUSB44'
         if cheminCapt:
             self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
         else:
