@@ -35,13 +35,26 @@ class Serie_acquisition:
                 reponse = self.serieAsserInstance.readline()
             except:
                 pass
-            if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                self.mutex.acquire()
-                print 'offmutex'
-                print reponse
-                self.robotInstance.acquitemment = True
-                self.serieAsserInstance.write('TG\n')
-                self.mutex.release()
+            if str(reponse) == 'FIN_GOTOA\r\n' or str(reponse) == 'FIN_GOTOA\r':
+                if self.robotInstance.acqA == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    print reponse
+                    self.robotInstance.acquitemment = True
+                    self.robotInstance.acqA = True
+                    self.robotInstance.acqB = False
+                    self.mutex.release()
+            elif str(reponse) == 'FIN_GOTOB\r\n' or str(reponse) == 'FIN_GOTOB\r':
+                if self.robotInstance.acqB == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    print reponse
+                    self.robotInstance.acquitemment = True
+                    self.robotInstance.acqB = True
+                    self.robotInstance.acqA = False
+                    self.mutex.release()
             elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r':
                 self.mutex.acquire()
                 self.robotInstance.est_arrete = True
