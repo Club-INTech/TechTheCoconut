@@ -3,6 +3,7 @@
 import serial
 import threading
 import Queue
+import sys, os
 
 import log
 log = log.Log(__name__)

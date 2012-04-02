@@ -74,7 +74,7 @@ class Peripherique():
                 if not chemin_existant:
                     print str(i)+". "+chemin
                     association[i] = chemin
-                    i+=1
+                    i += 1
             numero = raw_input("numéro : ")
             if numero == '':
                 log.logger.info("Périphérique "+self.nom+" ")

@@ -4,7 +4,6 @@ import os
 import sys
 import datetime
 import logging
-import inspect
 
 # Couleurs pour le fun et surtout pour ... le fun
 def add_coloring_to_emit_ansi(fn):

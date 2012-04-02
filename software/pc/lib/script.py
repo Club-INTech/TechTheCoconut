@@ -6,8 +6,9 @@ import __builtin__
 import time
 import outils_math.point
 import lib.log
+import os
 
-#log =lib.log.Log(__name__)
+log = lib.log.Log(__name__)
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 

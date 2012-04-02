@@ -14,11 +14,10 @@ import outils_math.rectangle as rectangle
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-import math
 import __builtin__
 
 # Log
-import log
+#import log
 #log = log.Log(__name__)
 
 
@@ -217,7 +216,7 @@ class Totem(ElementInfranchissable):
     def __init__(self, position, ennemi):
         #log.logger.info("Création d'un objet Totem en cours...\n")
         ElementInfranchissable.__init__(self, position, 0)
-        self.ennemi = ennemi    #:TODO: Gérer l'assignation de cet élement en fonction de la position et de notre camp
+        self.ennemi = ennemi
         
         self.longueur = constantes['Objets_Table']['longueur_totem']
         self.largeur = constantes['Objets_Table']['largeur_totem']
@@ -297,10 +296,6 @@ class Poussoir(ElementQueteAnnexe):
     
     """
     def __init__(self, position, ennemi, etat = False):
-        """
-        :TODO: Gerer l'assignation de la variable 'ennemi' en fonction de la position du poussoir et de notre couleur
-        """
-        
         #log.logger.info("Création d'un objet Poussoir en cours...\n")
         ElementQueteAnnexe.__init__(self, position, 3.1415/2, ennemi, etat)
         
@@ -331,10 +326,6 @@ class CarteAuTresor(ElementQueteAnnexe):
     :type etat: boolean
     """
     def __init__(self, position, ennemi, etat = False):
-        """
-        :TODO: Gerer l'assignation de la variable 'ennemi' en fonction de la position du poussoir et de notre couleur
-        Je ne pense pas que ça soit important (Anthony V.)
-        """
         #log.logger.info("Création d'un objet Carte_tresor en cours...\n")
         ElementQueteAnnexe.__init__(self, position, -3.1415/2, ennemi, False)
         
