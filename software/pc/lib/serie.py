@@ -51,6 +51,17 @@ class Serie(threading.Thread, serial.Serial):
             log.logger.error("Erreur d'initialisation de la liaison série threadée "+nom+" sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
             self.stop()
 
+    def lire(self):
+        """
+        Lire une information venant d'un périphérique jusqu'au retour à la ligne
+        """
+        while self.active:
+            lu = self.readline()
+            lu = lu.split("\r\n")[0]
+            if lu != '':
+                log.logger.debug("Lecture sur la liaison série "+self.nom+" : "+lu)
+                self.file_attente.put(lu)
+
     
     def ecrire(self, msg):
         """
