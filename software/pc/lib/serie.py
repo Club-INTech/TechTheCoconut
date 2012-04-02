@@ -7,6 +7,8 @@ import Queue
 import log
 log = log.Log(__name__)
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
 class Serie(threading.Thread, serial.Serial):
     """
     Classe permettant de créer une liaison Série utilisant un thread (ie non bloquante)\n

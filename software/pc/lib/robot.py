@@ -14,7 +14,7 @@ import lib.log
 import asservissement
 
 log = lib.log.Log(__name__)
-sys.path.append('../')
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 #import profils.develop.constantes
 
