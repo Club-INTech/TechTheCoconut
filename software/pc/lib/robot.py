@@ -59,10 +59,6 @@ class Robot:
             self.message = "huuk"
         if not hasattr(self, 'new_message'):
             self.new_message = False
-        if not hasattr(self, 'acqA'):
-            self.acqA = False
-        if not hasattr(self, 'acqB'):
-            self.acqB = False
         
         # Pour avoir l'angle
         # self.actionneur["hg"].angle
