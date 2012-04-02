@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys
-import os
-import robot
 import __builtin__
-import math
-import instance
-import asservissement
 import threading
 from threading import Lock
 
@@ -77,7 +71,7 @@ class Serie_acquisition:
                 self.mutex.release()
                 self.serieAsserInstance.write('TG\n')
             try:
-                if reponse[4]== '+':
+                if reponse[4] == '+':
                     reponse = reponse.split('+')
                     self.mutex.acquire()
                     self.robotInstance.position.x = int(reponse[1])

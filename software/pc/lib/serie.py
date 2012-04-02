@@ -30,7 +30,9 @@ class Serie(threading.Thread, serial.Serial):
     :type parite: None|'PARITY_NONE'|'PARITY_EVEN'|'PARITY_ODD'|'PARITY_MARK'|'PARITY_SPACE'
     :TODO: Mettre le débit de Baud par défaut
     """
-    def __init__(self, peripherique, nom, debit, timeout, parite=None):
+    def __init__(self, peripherique, nom, debit = None, timeout = 0.5, parite=None):
+        if debit == None:
+            debit = constantes["Serie"]["peripheriques"][nom]
         self.peripherique = peripherique
         self.nom = nom
         # File d'attente LIFO des messages venant de cette liaison

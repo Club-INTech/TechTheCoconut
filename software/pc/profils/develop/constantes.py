@@ -67,5 +67,6 @@ constantes = \
             "capteur_actionneur": "^1$",
             "balise": "^2$",
         },
-    }
+    },
+    "DureeJeu": 5,
 }
