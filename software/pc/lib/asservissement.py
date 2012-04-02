@@ -67,6 +67,9 @@ class Asservissement:
         self.procheEvite = False
         self.maxCapt = 600
         self.mutex = Lock()
+        depart = outils_math.point.Point(0.0,400.0)
+        self.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
+        self.serialInstance.write('TG\n')
         """
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
@@ -162,9 +165,6 @@ class Asservissement:
             print self.robotInstance.est_arrete
             print 'message'
             print self.robotInstance.message
-            print 'acq'
-            print self.robotInstance.acqA
-            print self.robotInstance.acqB
             
             print 'depart :'
             print self.robotInstance.position.x
