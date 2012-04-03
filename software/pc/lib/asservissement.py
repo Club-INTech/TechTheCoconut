@@ -223,16 +223,16 @@ class Asservissement:
         :type mode: int
         """
         if mode == 0:
-            mode = 's\n'
+            mode = "0"
         else:
-            mode = 'd\n'
+            mode = "1"
             
         if asservissement == "rotation":
-            asservissement = 'r\n'
-        else:
-            asservissement = 't\n'
+            asservissement = "r"
+        elif asservissement == "translation":
+            asservissement = "t"
         
-        self.serialInstance.ecrire(mode + asservissement)
+        self.serialInstance.ecrire("c"+asservissement+mode)
 
 
     def immobiliser(self):
