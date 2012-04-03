@@ -20,6 +20,7 @@ Contents:
     elements_jeu
     ennemi
     evenement
+    instance
     jeu
     log
     outils_math

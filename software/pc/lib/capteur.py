@@ -2,7 +2,6 @@
 
 
 import log
-import peripherique
 import __builtin__
 
 log = log.Log(__name__)

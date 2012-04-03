@@ -2,39 +2,39 @@
 
 # screen /dev/ttyUSB0 57600
 
-import os,sys
+import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 #from  profils.develop.constantes import *
 
 import marshal
 import time
-from lib.serie_simple import *
+import lib.serie_simple
 from time import sleep
 
 
-serie1=SerieSimple("/dev/ttyUSB1",9600,5)
-serie0=SerieSimple("/dev/ttyUSB0",9600,5)
+serie1 = lib.serie_simple.SerieSimple("/dev/ttyUSB1", 9600, 5)
+serie0 = lib.serie_simple.SerieSimple("/dev/ttyUSB0", 9600, 5)
 
 #BAUDRATE : 9600, 57600
 
-#ctes=["0.0","0.0","0.0","0.0","0.0","0.0"]
+#ctes = ["0.0","0.0","0.0","0.0","0.0","0.0"]
 #marshal.dump(ctes, open("constantes_asserv", 'wb'))
-lastx=0.0
-lasty=0.0
+lastx = 0.0
+lasty = 0.0
 
 global dest
 dest = "rien"
 
 def recevoir ():
-    a=""
-    b=""
+    a = ""
+    b = ""
     try:
-            a=serie0.lire()
+        a = serie0.lire()
     except:
         pass
     try:
-            b=serie1.lire()
+        b = serie1.lire()
     except:
         pass
     return str(a)+str(b)
@@ -42,36 +42,36 @@ def recevoir ():
 def envoyer(arg):
     global dest
     try:
-            serie0.ecrire(arg)
+        serie0.ecrire(arg)
     except:
         pass
     try:
-            serie1.ecrire(arg)
+        serie1.ecrire(arg)
     except:
         pass
     
     #enregistrement des constantes étalonnées
     
-    #ctes=marshal.load(open("constantes_asserv","rb"))
+    #ctes = marshal.load(open("constantes_asserv","rb"))
     
     #if dest == "ctp":
-        #ctes[0]=arg
+        #ctes[0] = arg
     #elif dest == "ctd":
-        #ctes[1]=arg
+        #ctes[1] = arg
     #elif dest == "cti":
-        #ctes[2]=arg
+        #ctes[2] = arg
     #elif dest == "crp":
-        #ctes[3]=arg
+        #ctes[3] = arg
     #elif dest == "crd":
-        #ctes[4]=arg
+        #ctes[4] = arg
     #elif dest == "cri":
-        #ctes[5]=arg
+        #ctes[5] = arg
         
     #dest = arg    
     #marshal.dump(ctes, open("constantes_asserv", 'wb'))
 
 def initialise():
-    ctes=marshal.load(open("constantes_asserv","rb"))
+    ctes = marshal.load(open("constantes_asserv","rb"))
     envoyer("ctp")
     envoyer(ctes[0])
     envoyer("ctd")
@@ -84,16 +84,15 @@ def initialise():
     envoyer(ctes[4])
     envoyer("cri")
     envoyer(ctes[5])
-    
-                    
+
 def trace_err():
     while True:
         envoyer("eerT")
-        logt=recevoir()
+        logt = recevoir()
         
         envoyer("eerR")
-        logr=recevoir()
-        if logt=="END" or logr=="END":
+        logr = recevoir()
+        if logt == "END" or logr == "END":
             break
         print str(logt)+", "+str(logr)+" \n"
         
@@ -123,7 +122,7 @@ while True :
         except:
             pass
         try:
-                serie1.stop()
+            serie1.stop()
         except:
             pass
         break
@@ -131,15 +130,15 @@ while True :
         print "constantes de rotation :"
         
         print "kp ?"
-        buff=raw_input()
+        buff = raw_input()
         envoyer("crp")
         envoyer(str(float(buff)))
         print "kd ?"
-        buff=raw_input()
+        buff = raw_input()
         envoyer("crd")
         envoyer(str(float(buff)))
         print "ki ?"
-        buff=raw_input()
+        buff = raw_input()
         envoyer("cri")
         envoyer(str(float(buff)))
         
@@ -147,15 +146,15 @@ while True :
         print "constantes de translation :"
         
         print "kp ?"
-        buff=raw_input()
+        buff = raw_input()
         envoyer("ctp")
         envoyer(str(float(buff)))
         print "kd ?"
-        buff=raw_input()
+        buff = raw_input()
         envoyer("ctd")
         envoyer(str(float(buff)))
         print "ki ?"
-        buff=raw_input()
+        buff = raw_input()
         envoyer("cti")
         envoyer(str(float(buff)))
         
@@ -169,19 +168,18 @@ while True :
         print "exemple : i 3"
         while True :
             buf = raw_input()
-            if buf =="q":
+            if buf == "q":
                 break
             envoyer("c"+choixC+buf[0])
             envoyer(str(float(buf[2:])))
-            
         
     elif choix == "a":
-        ctes=marshal.load(open("constantes_asserv","rb"))
+        ctes = marshal.load(open("constantes_asserv","rb"))
         print "translation : kp="+ctes[0]+" kd="+ctes[1]+" ki="+ctes[2]
         print "rotation    : kp="+ctes[3]+" kd="+ctes[4]+" ki="+ctes[5]
         
     elif choix == "tou":
-        buff=raw_input()
+        buff = raw_input()
         envoyer("t")
         envoyer(str(float(buff)))
         trace_err()
@@ -192,14 +190,14 @@ while True :
             print recevoir()
                         
     elif choix == "tra":
-        buff=raw_input()
+        buff = raw_input()
         envoyer("d")
         envoyer(str(float(buff)))
         #trace_err()
         
     elif choix == "goto":
-        buf1=raw_input()
-        buf2=raw_input()
+        buf1 = raw_input()
+        buf2 = raw_input()
         envoyer("goto")
         envoyer(str(float(buf1)))
         envoyer(str(float(buf2)))
@@ -251,58 +249,58 @@ while True :
         attend_fin_mvt()
         
         
-    elif choix =="l":
+    elif choix == "l":
         while True:
             print "x ? y ? o (orientation) ? "
             print "b (pour lire en boucle), q (pour quitter)"
             choixL = raw_input()
-            if choixL=="q":
+            if choixL == "q":
                 break
-            elif choixL=="x":
+            elif choixL == "x":
                 envoyer("ex")
                 print recevoir()
-            elif choixL=="y":
+            elif choixL == "y":
                 envoyer("ey")
                 print recevoir()
-            elif choixL=="o":
+            elif choixL == "o":
                 envoyer("et")
                 print recevoir()
-            elif choixL=="b":
-                print "xy ? o (orientation) ? " # err ? (erreurs sur trans, rot)"--- l (log) ? eo (orientation) ? "
+            elif choixL == "b":
+                # err ? (erreurs sur trans, rot)"--- l (log) ? eo (orientation) ? "
+                print "xy ? o (orientation) ? "
                 choixB = raw_input()
-                if choixB=="q":
+                if choixB == "q":
                     break
-                elif choixB=="o":
+                elif choixB == "o":
                     while True:
                         envoyer("eo")
                         try:
                             print str(float(recevoir())/1000)+" \n"
                         except:
                             pass
-                elif choixB=="xy":
+                elif choixB == "xy":
                     while True:
                         envoyer("ex")
-                        logx=recevoir()
+                        logx = recevoir()
                         
                         envoyer("ey")
-                        logy=recevoir()
+                        logy = recevoir()
                         print str(float(logx))+", "+str(float(logy))+" \n"
-                elif choixB=="err":
+                elif choixB == "err":
                     trace_err()
-                elif choixB=="l":
-                    f=open("trace_x_y","w")
+                elif choixB == "l":
+                    f = open("trace_x_y","w")
                     while True:
                         envoyer("ex")
-                        logx=recevoir()
+                        logx = recevoir()
                         f.write("x = "+str(float(logx)-float(lastx))+" \t")
                         envoyer("ey")
-                        logy=recevoir()
+                        logy = recevoir()
                         f.write("y = "+str(float(logy)-float(lasty))+"\n")
                         print "x = "+str(float(logx)-float(lastx))+" \t"+"y = "+str(float(logy)-float(lasty))+"\n"
-                        lastx=logx
-                        lasty=logy
+                        lastx = logx
+                        lasty = logy
                 else:
                     while True:
                         envoyer(choixB)
                         print recevoir()
-    

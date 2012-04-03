@@ -3,9 +3,12 @@
 import serial
 import threading
 import Queue
+import sys, os
 
 import log
 log = log.Log(__name__)
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 class Serie(threading.Thread, serial.Serial):
     """
@@ -27,7 +30,9 @@ class Serie(threading.Thread, serial.Serial):
     :type parite: None|'PARITY_NONE'|'PARITY_EVEN'|'PARITY_ODD'|'PARITY_MARK'|'PARITY_SPACE'
     :TODO: Mettre le débit de Baud par défaut
     """
-    def __init__(self, peripherique, nom, debit, timeout, parite=None):
+    def __init__(self, peripherique, nom, debit = None, timeout = 0.5, parite=None):
+        if debit == None:
+            debit = constantes["Serie"]["peripheriques"][nom]
         self.peripherique = peripherique
         self.nom = nom
         # File d'attente LIFO des messages venant de cette liaison
@@ -47,6 +52,17 @@ class Serie(threading.Thread, serial.Serial):
             self.active = False
             log.logger.error("Erreur d'initialisation de la liaison série threadée "+nom+" sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
             self.stop()
+
+    def lire(self):
+        """
+        Lire une information venant d'un périphérique jusqu'au retour à la ligne
+        """
+        while self.active:
+            lu = self.readline()
+            lu = lu.split("\r\n")[0]
+            if lu != '':
+                log.logger.debug("Lecture sur la liaison série "+self.nom+" : "+lu)
+                self.file_attente.put(lu)
 
     
     def ecrire(self, msg):

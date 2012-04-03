@@ -2,21 +2,15 @@
 
 import log
 import sys
-import os
 import __builtin__
-import math
 import time
-import asservissement
 import outils_math.point
-import outils_math.point as point
-import instance
 import lib.log
+import os
 
-log =lib.log.Log(__name__)
+log = lib.log.Log(__name__)
 
-sys.path.append('../')
-
-import profils.develop.constantes
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 class Script:
     
@@ -85,9 +79,9 @@ class Script:
         raw_input()
         self.asserInstance.tourner(1.57)
         raw_input()
-        self.asserInstance.goTo(outils_math.point.Point(100,1500))
+        self.asserInstance.goTo(outils_math.point.Point(100, 1500))
         raw_input()
-        self.asserInstance.goTo(outils_math.point.Point(800,250))
+        self.asserInstance.goTo(outils_math.point.Point(800, 250))
         raw_input()
         self.asserInstance.tourner(3.1415)
         raw_input()
@@ -106,21 +100,21 @@ class Script:
             elif choix == "r":
                 while True :
                     print "constantes rotation : p,d,i. q pour quitter."
-                    cte=str(raw_input())
+                    cte = str(raw_input())
                     if cte == "q":
                         break
                     else:
-                        val=str(float(raw_input()))
+                        val = str(float(raw_input()))
                         self.serialInstance.write("cr"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
                 
             elif choix == "t":
                 while True :
                     print "constantes translation : p,d,i. q pour quitter."
-                    cte=str(raw_input())
+                    cte = str(raw_input())
                     if cte == "q":
                         break
                     else:
-                        val=str(float(raw_input()))
+                        val = str(float(raw_input()))
                         self.serialInstance.write("ct"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
         
         

@@ -14,15 +14,12 @@ import lib.log
 import asservissement
 
 log = lib.log.Log(__name__)
-sys.path.append('../')
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 #import profils.develop.constantes
 
 
 class Robot:
-    
-    #:TODO: A modifier pour la valeur réel (voir a passer en  attribut d'instance
-    #rayon = 350
     """
     Classe permettant de gérer le robot\n
     :Nota: Classement pouvant etre totalement refaite. Les attributs orientations et positions sont requis pour la visualisation de la table
@@ -42,18 +39,26 @@ class Robot:
     def __init__(self):
         #TODO
         # Convertir en attributs de classe et les initialiser que si non reconnus (hasattr)
-        self.position = point.Point(0,400)
-        self.orientation = 0
-        self.rayon = 279
-        self.acquitemment = False
-        self.fin_translation = False
-        self.fin_rotation = False
-        self.fin_recalage = False
-        self.est_arrete=False
-        self.message = "huuk"
-        self.new_message = False
-        self.acqA = False
-        self.acqB = False
+        if not hasattr(self, 'position'):
+            self.position = point.Point(0, 400)
+        if not hasattr(self, 'orientation'):
+            self.orientation = 0
+        if not hasattr(self, 'rayon'):
+            self.rayon = 279
+        if not hasattr(self, 'acquittement'):
+            self.acquitemment = False
+        if not hasattr(self, 'fin_translation'):
+            self.fin_translation = False
+        if not hasattr(self, 'fin_rotation'):
+            self.fin_rotation = False
+        if not hasattr(self, 'fin_recalage'):
+            self.fin_recalage = False
+        if not hasattr(self, 'est_arrete'):
+            self.est_arrete = False
+        if not hasattr(self, 'message'):
+            self.message = "huuk"
+        if not hasattr(self, 'new_message'):
+            self.new_message = False
         
         # Pour avoir l'angle
         # self.actionneur["hg"].angle

@@ -53,8 +53,7 @@ class Timer(threading.Thread):
     def interrupt(self) :
         
         # Durée du math
-        # TODO A METTRE A 90 POUR DES VRAIES CONDITIONS DE MATCH
-        tempsFinal = 5
+        tempsFinal = constantes["DureeJeu"]
         
         time.sleep(tempsFinal)
         
