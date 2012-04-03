@@ -52,14 +52,17 @@ int main()
                 unsigned char packet = read();
                 char consigne;
                 extraction_consigne(packet, &consigne);
+                
+                // ROTATION DE l'AX12
                 if (consigne == 0)
                 {
                     char id;
                     char angle;
                     extraction(packet, &id, &angle);                
-                    AX12GoTo(id, angle*1023/31);
+                    AX12GoTo(id, 198 +  angle*627/31);
                 }
                 
+                // ORDRE A DONNER A L'AX12
                 else
                 {
                     char ordre;
