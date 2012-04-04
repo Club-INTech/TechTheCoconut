@@ -178,13 +178,11 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("d")){
 		envoyer_acquittement(-1);
-		
-		debut_translater(serial_t_::read_float());
 		rotation_en_cours_ = true;
+		debut_translater(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("t")){
 		envoyer_acquittement(-1);
-		
 		debut_tourner(serial_t_::read_float());
 	}
 	
@@ -427,7 +425,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_)
+	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<100)
 	{
 		translation_attendue_ = false;
 		if (goto_attendu_)
@@ -478,7 +476,7 @@ void Robot::atteinte_consignes()
 	if (abs(translation.pwmCourant())>=10)
 		translation_en_cours = true;
 
-	if (translation_en_cours && abs(translation.pwmCourant())<10 && abs(mesure_distance_ - translation.consigne())<100)
+	if (translation_en_cours && abs(translation.pwmCourant())<10)
 	{
 		translation_en_cours = false;
 		fin_translater();
