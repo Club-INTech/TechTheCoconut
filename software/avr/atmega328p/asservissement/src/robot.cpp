@@ -409,11 +409,13 @@ void Robot::fin_tourner()
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
+		{
 			if (bascule_tou_)
 				envoyer_acquittement(1,"FIN_TOUA");
 			else
 				envoyer_acquittement(1,"FIN_TOUB");
 			bascule_tou_ = !bascule_tou_;
+		}
 	}
 }
 
@@ -425,7 +427,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<100)
+	if (translation_attendue_)
 	{
 		translation_attendue_ = false;
 		if (goto_attendu_)
@@ -438,11 +440,13 @@ void Robot::fin_translater()
 			bascule_goto_ = !bascule_goto_;
 		}
 		else
+		{
 			if (bascule_tra_)
 				envoyer_acquittement(1,"FIN_TRAA");
 			else
 				envoyer_acquittement(1,"FIN_TRAB");
 			bascule_tra_ = !bascule_tra_;
+		}
 	}
 }
 
@@ -474,7 +478,7 @@ void Robot::atteinte_consignes()
 	if (abs(translation.pwmCourant())>=10)
 		translation_en_cours = true;
 
-	if (translation_en_cours && abs(translation.pwmCourant())<10)
+	if (translation_en_cours && abs(translation.pwmCourant())<10 && abs(mesure_distance_ - translation.consigne())<100)
 	{
 		translation_en_cours = false;
 		fin_translater();
