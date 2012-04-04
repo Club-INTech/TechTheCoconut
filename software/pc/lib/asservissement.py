@@ -67,6 +67,9 @@ class Asservissement:
         self.procheEvite = False
         self.maxCapt = 600
         self.mutex = Lock()
+        depart = outils_math.point.Point(0.0,400.0)
+        self.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
+        self.serialInstance.write('TG\n')
         """
         self.serialInstance.write("\n")
         self.serialInstance.write("cc"+self.couleur+"\n")
@@ -131,9 +134,11 @@ class Asservissement:
         try :
             chemin_python.remove(chemin_python[0])
         except :
-            return position
+            return self.robotInstance.position
+            log.logger.error("Impossible de trouver un chemin")
             
         for i in chemin_python:
+            print self.robotInstance.acquitemment
             self.robotInstance.est_arrete = False
             print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
             self.serialInstance.write('TG\n')   
@@ -142,17 +147,25 @@ class Asservissement:
             self.robotInstance.acquitemment = False
             while not self.robotInstance.acquitemment :
                 self.CaptSerialInstance.write('ultrason\n')
-                capteur = self.capteurInstance.mesurer()
+                self.capteur = self.capteurInstance.mesurer()
                 try:
-                    if int(capteur) < self.maxCapt:
+                    if int(self.capteur) < self.maxCapt:
                         self.serialInstance.write('stop\n')
                         self.robotInstance.obstacle = True
-                        break
+                        centreEnnemi = point.Point(0,0)
+                        centreEnnemi = self.calculCentreEnemi()
+                        print centreEnnemi
+                        return centreEnnemi
                 except:
                     pass
                 if self.robotInstance.est_arrete:
                     break
-                    
+            print self.robotInstance.acquitemment
+            print 'stop'
+            print self.robotInstance.est_arrete
+            print 'message'
+            print self.robotInstance.message
+            
             print 'depart :'
             print self.robotInstance.position.x
             print self.robotInstance.position.y
@@ -197,6 +210,9 @@ class Asservissement:
                 break
         print 'fini avancer'
 
+    def calculCentreEnemi(self):
+        return self.capteur+(profils.develop.constantes.constantes["Recherche_Chemin"]["rayonRobotsA"]/2)
+        
     def setUnsetAsser(self, asservissement, mode):
         pass
         """
@@ -207,16 +223,16 @@ class Asservissement:
         :type mode: int
         """
         if mode == 0:
-            mode = 's\n'
+            mode = "0"
         else:
-            mode = 'd\n'
+            mode = "1"
             
         if asservissement == "rotation":
-            asservissement = 'r\n'
-        else:
-            asservissement = 't\n'
+            asservissement = "r"
+        elif asservissement == "translation":
+            asservissement = "t"
         
-        self.serialInstance.ecrire(mode + asservissement)
+        self.serialInstance.ecrire("c"+asservissement+mode)
 
 
     def immobiliser(self):

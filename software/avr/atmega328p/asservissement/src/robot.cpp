@@ -16,7 +16,9 @@ Robot::Robot() : couleur_('v')
 				,y_(0)
 				,angle_serie_(0.0)
 				,angle_origine_(0.0)
-				,bascule_acquit(true)
+				,bascule_goto_(true)
+				,bascule_tra_(true)
+				,bascule_tou_(true)
 				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
@@ -55,7 +57,6 @@ void Robot::asservir()
 	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
 	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
 }
-
 
 
 void Robot::update_position()
@@ -408,7 +409,11 @@ void Robot::fin_tourner()
 	{
 		rotation_attendue_ = false;
 		if (not goto_attendu_)
-			envoyer_acquittement(1,"FIN_TOU");
+			if (bascule_tou_)
+				envoyer_acquittement(1,"FIN_TOUA");
+			else
+				envoyer_acquittement(1,"FIN_TOUB");
+			bascule_tou_ = !bascule_tou_;
 	}
 }
 
@@ -426,14 +431,18 @@ void Robot::fin_translater()
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
-			if (bascule_acquit)
+			if (bascule_goto_)
 				envoyer_acquittement(2,"FIN_GOTOA");
 			else
 				envoyer_acquittement(2,"FIN_GOTOB");
-			bascule_acquit = !bascule_acquit;
+			bascule_goto_ = !bascule_goto_;
 		}
 		else
-			envoyer_acquittement(1,"FIN_TRA");
+			if (bascule_tra_)
+				envoyer_acquittement(1,"FIN_TRAA");
+			else
+				envoyer_acquittement(1,"FIN_TRAB");
+			bascule_tra_ = !bascule_tra_;
 	}
 }
 

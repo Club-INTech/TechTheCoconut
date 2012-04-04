@@ -9,8 +9,8 @@ all: clean main.hex
 main.hex: main.out
 	avr-objcopy -O ihex -R .eeprom main.out main.hex
 
-main.out: main.o ax12.o actionneurs.o
-	$(CC) $(CFLAGS) -mmcu=$(MMCU_GCC) -DF_CPU=$(FREQ) main.o ax12.o actionneurs.o -o main.out
+main.out: main.o ax12.o actionneurs.o serial.o
+	$(CC) $(CFLAGS) -mmcu=$(MMCU_GCC) -DF_CPU=$(FREQ) main.o ax12.o actionneurs.o serial.o -o main.out
 
 %.o: %.c
 	$(CC) $(CFLAGS) -mmcu=$(MMCU_GCC) -DF_CPU=$(FREQ) -c $<
@@ -26,3 +26,6 @@ upload2: all
 
 upload3: all
 	sudo avrdude -c usbtiny -p $(MMCU_DUDE) -U flash:w:main.hex
+
+upload4: all
+	sudo avrdude -c usbasp -p $(MMCU_DUDE) -U flash:w:main.hex -F

@@ -51,7 +51,7 @@ constantes = \
 	"Recherche_Chemin":
     {
         #rayon maximal du cercle circonscrit aux robots adverses, en mm
-        "rayonRobotsA" : 350.,
+        "rayonRobotsA" : 255.,
         #approximation hexagonale des robots adverses
         "nCotesRobotsA" : 6
     },
@@ -63,9 +63,10 @@ constantes = \
             "balise": 9600,
         },
         "peripheriques_association": {
-            "asservissement": 0,
-            "capteur_actionneur": 1,
-            "balise": 2,
+            "asservissement": "^([0-9]{4}(\+|-)[0-9]{4}|0)$",
+            "capteur_actionneur": "^1$",
+            "balise": "^2$",
         },
-    }
+    },
+    "DureeJeu": 5,
 }

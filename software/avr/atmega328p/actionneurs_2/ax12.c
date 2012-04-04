@@ -4,7 +4,9 @@
 */
 
 #include "ax12.h"
+#include "actionneurs.h"
 #include <avr/interrupt.h>
+#include <avr/io.h>
 
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit) ((value) |= (1UL << (bit)))
@@ -49,17 +51,33 @@ byte ax12writeB(byte data){
 
 /** We have a one-way recieve buffer, which is reset after each packet is receieved.
     A wrap-around buffer does not appear to be fast enough to catch all bytes at 1Mbps. */
-ISR(USART_RX_vect){  
-    ax_rx_buffer[(ax_rx_Pointer++)] = UDR0;
-}
+// ISR(USART_RX_vect){  
+//     ax_rx_buffer[(ax_rx_Pointer++)] = UDR0;
+// }
 
 /** initializes serial0 transmit at baud, 8-N-1 */
 void ax12Init(long baud){
     UBRR0H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
     UBRR0L = ((F_CPU / 16 + baud / 2) / baud - 1);
+
+    /************************/
+//     uint16_t UBRR  =(F_CPU/8/BAUD_RATE_SERIE - 1)/2;
+//     UBRR0H = (unsigned char)(UBRR >> 8);
+//     UBRR0L = (unsigned char)UBRR;
+//     
+//     UCSR0B |= ( 1 << RXCIE0 );  //Activation de l'interruption de réception
+//     
+//     
+//     UCSR0B |= ( 1 << RXEN0 );   //Activation de la réception
+//     UCSR0B |= ( 1 << TXEN0 );   //Activation de l'emission
+// 
+//     UCSR0C = (1 << USBS0)|(3<<UCSZ00);
+//     sei();
+    /***********************/
+     
     ax_rx_Pointer = 0;                                    
     // enable rx
-    setRX();    
+//     setRX();    
 }
 
 /******************************************************************************
@@ -69,7 +87,7 @@ void ax12Init(long baud){
 /** send instruction packet */
 void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
     byte checksum = 0;
-    setTX();    
+//     setTX();    
     ax12writeB(0xFF);
     ax12writeB(0xFF);
     checksum += ax12writeB(id);
@@ -82,7 +100,7 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
     }
     // checksum = 
     ax12writeB(~checksum);
-    setRX();
+//     setRX();
 }
 
 /** read status packet */

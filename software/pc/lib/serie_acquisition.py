@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys
-import os
-import robot
 import __builtin__
-import math
-import instance
-import asservissement
 import threading
 from threading import Lock
 
@@ -14,6 +8,12 @@ class Serie_acquisition:
     
     def __init__(self):
         self.run = True
+        self.acqA = False
+        self.acqB = False
+        self.touA = False
+        self.touB = False
+        self.traA = False
+        self.traB = False
         
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
@@ -35,36 +35,76 @@ class Serie_acquisition:
                 reponse = self.serieAsserInstance.readline()
             except:
                 pass
-            if str(reponse) == 'FIN_GOTO\r\n' or str(reponse) == 'FIN_GOTO\r':
-                self.mutex.acquire()
-                print 'offmutex'
-                print reponse
-                self.robotInstance.acquitemment = True
-                self.serieAsserInstance.write('TG\n')
-                self.mutex.release()
-            elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r':
+            if str(reponse) == 'FIN_GOTOA\r\n' or str(reponse) == 'FIN_GOTOA\r':
+                if self.acqA == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    print reponse
+                    self.robotInstance.acquitemment = True
+                    self.acqA = True
+                    self.acqB = False
+                    self.mutex.release()
+            elif str(reponse) == 'FIN_GOTOB\r\n' or str(reponse) == 'FIN_GOTOB\r':
+                if self.acqB == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    print reponse
+                    self.robotInstance.acquitemment = True
+                    self.acqB = True
+                    self.acqA = False
+                    self.mutex.release()
+            elif str(reponse) == 'STOPPE\r\n' or str(reponse) == 'STOPPE\r' or str(reponse) == 'STOPPE':
                 self.mutex.acquire()
                 self.robotInstance.est_arrete = True
                 self.mutex.release()
                 self.serieAsserInstance.write('TG\n')
-            elif str(reponse) == 'FIN_TRA\r\n' or str(reponse) == 'FIN_TRA\r' or str(reponse) == 'FIN_TRA':
-                self.mutex.acquire()
-                self.robotInstance.fin_translation = True
-                self.mutex.release()
-                self.serieAsserInstance.write('TG\n')
-            elif str(reponse) == 'FIN_TOU\r\n' or str(reponse) == 'FIN_TOU\r' or str(reponse) == 'FIN_TOU':
-                self.mutex.acquire()
-                self.robotInstance.fin_rotation = True
-                self.mutex.release()
-                print 'FIN TOURNER'
-                self.serieAsserInstance.write('TG\n')
+            elif str(reponse) == 'FIN_TRAA\r\n' or str(reponse) == 'FIN_TRAA\r' or str(reponse) == 'FIN_TRAA':
+                if self.traA == True:
+                    print 'HUKKKK'
+                    pass
+                else:
+                    print'HUUUUK'
+                    self.mutex.acquire()
+                    self.robotInstance.fin_translation = True
+                    self.traA = True
+                    self.traB = False
+                    self.mutex.release()
+            elif str(reponse) == 'FIN_TRAB\r\n' or str(reponse) == 'FIN_TRAB\r' or str(reponse) == 'FIN_TRAB':
+                if self.traB == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    self.robotInstance.fin_translation = True
+                    self.traB = True
+                    self.traA = False
+                    self.mutex.release()
+            elif str(reponse) == 'FIN_TOUA\r\n' or str(reponse) == 'FIN_TOUA\r' or str(reponse) == 'FIN_TOUA':
+                if self.touA == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    self.robotInstance.fin_rotation = True
+                    self.touA = True
+                    self.touB = False
+                    self.mutex.release()
+            elif str(reponse) == 'FIN_TOUB\r\n' or str(reponse) == 'FIN_TOUB\r' or str(reponse) == 'FIN_TOUB':
+                if self.touB == True:
+                    pass
+                else:
+                    self.mutex.acquire()
+                    self.robotInstance.fin_rotation = True
+                    self.touB = True
+                    self.touA = False
+                    self.mutex.release()
             elif str(reponse) == 'FIN_REC\r\n':
                 self.mutex.acquire()
                 self.robotInstance.fin_recalage = True
                 self.mutex.release()
                 self.serieAsserInstance.write('TG\n')
             try:
-                if reponse[4]== '+':
+                if reponse[4] == '+':
                     reponse = reponse.split('+')
                     self.mutex.acquire()
                     self.robotInstance.position.x = int(reponse[1])
