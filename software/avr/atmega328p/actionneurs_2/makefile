@@ -26,3 +26,6 @@ upload2: all
 
 upload3: all
 	sudo avrdude -c usbtiny -p $(MMCU_DUDE) -U flash:w:main.hex
+
+upload4: all
+	sudo avrdude -c usbasp -p $(MMCU_DUDE) -U flash:w:main.hex -F
