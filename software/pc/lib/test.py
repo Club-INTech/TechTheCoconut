@@ -9,6 +9,8 @@ import time
 import serial
 import instance
 import __builtin__
+import threading
+
 
 
 """
@@ -30,33 +32,38 @@ asser.test()
 """
 asser = __builtin__.instance.asserInstance
 robotInstance = __builtin__.instance.robotInstance
+capteurInstance = __builtin__.instance.capteurInstance
+#__builtin__.instance.serieCaptInstance = serial.Serial("/dev/ttyUSB10" 57600, timeout=1)
 """
 while 42:
     reponse = asser.capteurInstance.mesurer()
     print reponse
     """
-depart = outils_math.point.Point(0.0,400.0)
-
-
 
 #écriture du point de départ initial
-#asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
-
-robotInstance.setPosition(depart)
-
-asser.avancer(-800)
-asser.tourner(1)
-
-
-
+"""
+asser.avancer(300)
+asser.tourner(-1.5)
+asser.avancer(500)
+asser.tourner(3.2)
+asser.avancer(300)
+asser.avancer(-300)
+asser.tourner(-1.5)
+asser.avancer(600)
+asser.tourner(1.5)
+"""
+"""
+while 42:
+    __builtin__.instance.serieCaptInstance.write('ultrason\n')
+    capteurInstance.mesurer()
+"""
 #angle = 0.0
 #angle = (float(angle)*3.14)/180
 #asser.calculRayon(angle)
     
 #scriptInstance = script.Script(asser)
 #scriptInstance.huit()
-"""
-while(True):    
+while(True):
     x, y = '', ''
     while x=='':
         x = raw_input("x arrivé ?")
@@ -67,6 +74,15 @@ while(True):
 
     asser.goTo(arrivee)
     
-    depart.x = robotInstance.position.x
-    depart.y = robotInstance.position.y
+
+"""
+testThread= threading.Thread(target = asser.test)
+testThread.start()
+mutex = Lock()
+
+while 42:
+    mutex.acquire()
+    time.sleep(0.1)
+    print asser.var
+    mutex.release()
 """
