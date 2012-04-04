@@ -88,6 +88,29 @@ class Script:
         self.asser.setUnsetAsser('translation', 0)
         """
         
+    def homologation(self):
+        
+        #enfonce un poussoir
+        self.asser.avancer(600.0)
+        self.asser.tourner(math.pi/2)
+        self.asser.avancer(1500.0)
+        self.asser.tourner(-math.pi/2)
+        self.asser.avancer(-500.0)
+        self.asser.avancer(300.0)
+        self.asser.tourner(-math.pi/2)
+        self.asser.avancer(1500.0) 
+        if couleur == 'R':
+            self.asser.tourner(0.0)
+        else :
+            self.asser.tourner(math.pi)
+        self.asser.avancer(-500.0)
+        
+        """
+        #stocke le lingot et enfonce un poussoir
+        self.asser.avancer(600.0)
+        self.asser.tourner(math.pi/2)
+        """
+        
     def testPosition(self):
         self.recalage()
         raw_input()

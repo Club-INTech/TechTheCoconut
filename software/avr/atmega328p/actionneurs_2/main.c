@@ -6,6 +6,7 @@
 
 // #define FLASH_ID_MODE
 // #define FLASH_BAUD_RATE_MODE
+// #define TEST_NOSERIE_MODE
 // #define REANIMATION_MODE
 
 #include "serial.h"
@@ -29,9 +30,18 @@ int main()
         // BAUD RATE de l'AX12 (réception)
         writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
     #endif
-    // Initialisation de tous les AX12
-    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
-     
+        
+    #ifdef FLASH_ID_MODE
+        AX12InitID(0);
+    #endif
+        
+    #ifndef TEST_NOSERIE_MODE
+        // Initialisation de tous les AX12
+        AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
+    #else
+        AX12Init(AX_BROADCAST, 0, 0, 200);
+    #endif
+        
     while (1)
     {
         
@@ -40,10 +50,10 @@ int main()
             ax12Init(2000000/(debug_baudrate + 1));
             reset(AX_BROADCAST);
             debug_baudrate++;
-        #endif
+        #endif       
         
-        #ifdef FLASH_ID_MODE
-            AX12InitID(current_id);
+        #ifdef TEST_NOSERIE_MODE 
+            AX12GoTo(0xFE, 0x1ff);
         #endif
             
         if (available())
@@ -96,6 +106,7 @@ int main()
                         
                         
                 }
+                
         }
 // 
 
