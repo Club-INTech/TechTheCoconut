@@ -33,12 +33,6 @@ import profils.develop.constantes
 import serial
 
 
-
-
-
-
-
-
 class Asservissement:
     """
     Classe pour gérer l'asservissement
@@ -65,7 +59,7 @@ class Asservissement:
         self.couleur = __builtin__.constantes['couleur']
         self.scriptInstance = script.Script
         self.procheEvite = False
-        self.maxCapt = 600
+        self.maxCapt = 0
         self.mutex = Lock()
         depart = outils_math.point.Point(0.0,400.0)
         self.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
@@ -180,10 +174,11 @@ class Asservissement:
         :type angle: Float
         """
         self.serialInstance.write("t\n" + str(float(angle))+"\n")
+        print 'ordre tourner'
         self.robotInstance.fin_rotation = False
         print self.robotInstance.fin_rotation
         while not self.robotInstance.fin_rotation:
-            print self.robotInstance.fin_rotation
+            #print self.robotInstance.fin_rotation
             time.sleep(0.01)
         print 'fini tourner'
     
@@ -194,10 +189,12 @@ class Asservissement:
         :type angle: Float
         """
         self.serialInstance.write("d\n" + str(float(distance))+"\n")
+        print 'ordre'
         self.robotInstance.fin_translation = False
         while not self.robotInstance.fin_translation :
             self.CaptSerialInstance.write('ultrason\n')
             capteur = self.capteurInstance.mesurer()
+            print capteur
             try:
                 if int(capteur) < self.maxCapt:
                     print 'CAPTEUR !'
@@ -208,6 +205,7 @@ class Asservissement:
                 pass
             if self.robotInstance.est_arrete:
                 break
+            time.sleep(0.01)
         print 'fini avancer'
 
     def calculCentreEnemi(self):
