@@ -60,6 +60,8 @@ private:
 	bool rotation_attendue_;
 	bool goto_attendu_;
 	
+	bool debug_;
+	
 	int32_t mesure_distance_;
 	int32_t mesure_angle_;
 	

@@ -16,6 +16,7 @@ Robot::Robot() : couleur_('v')
 				,y_(0)
 				,angle_serie_(0.0)
 				,angle_origine_(0.0)
+				,debug_(false)
 				,bascule_goto_(true)
 				,bascule_tra_(true)
 				,bascule_tou_(true)
@@ -178,8 +179,8 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("d")){
 		envoyer_acquittement(-1);
-		rotation_en_cours_ = true;
 		debut_translater(serial_t_::read_float());
+		rotation_en_cours_ = true;
 	}
 	else if(COMPARE_BUFFER("t")){
 		envoyer_acquittement(-1);
@@ -341,7 +342,10 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 	if (instruction)
 	{
 		if (instruction == -1)
+		{
 			envoi = 0;
+			debug_ = false;
+		}
 		else if (instruction == 1 && envoi < 2)
 		{
 			envoi = 1;
@@ -364,8 +368,12 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 
 void Robot::envoyer_position()
 {
+	if (debug_)
+		Serial<0>::print("SSSSSSSSSSTOPPER");
+		/*
 	serial_t_::print((int32_t)x(),(int32_t)y());
 // 	serial_t_::print((int32_t)((float)angle_serie_ * 1000));
+*/
 }
 
 void Robot::envoyer_position_tic()
@@ -425,7 +433,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<100)
+	if (translation_attendue_)// && abs(mesure_distance_ - translation.consigne())<100)
 	{
 		translation_attendue_ = false;
 		if (goto_attendu_)
@@ -450,13 +458,31 @@ void Robot::fin_translater()
 
 void Robot::stopper()
 {
-	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
-	rotation.consigne(mesure_angle_);
-	//stop en translation
-	consigne_tra_ = mesure_distance_;
-	translation.consigne(mesure_distance_);
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
-		envoyer_acquittement(3,"STOPPE");
+	{
+		debug_ = true;
+		if (abs(mesure_angle_ - rotation.consigne())<25 && rotation_attendue_)
+			fin_tourner();
+		else if (abs(mesure_distance_ - translation.consigne())<50 && translation_attendue_)
+			fin_translater();
+		else 
+		{
+			envoyer_acquittement(3,"STOPPE");
+			//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
+			rotation.consigne(mesure_angle_);
+			//stop en translation
+			consigne_tra_ = mesure_distance_;
+			translation.consigne(mesure_distance_);
+		}
+	}
+	else
+	{
+		//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
+		rotation.consigne(mesure_angle_);
+		//stop en translation
+		consigne_tra_ = mesure_distance_;
+		translation.consigne(mesure_distance_);
+	}
 }
 
 void Robot::atteinte_consignes()
