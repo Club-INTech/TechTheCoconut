@@ -26,8 +26,8 @@ Robot::Robot() : couleur_('v')
 				,goto_attendu_(false)
 				,etat_rot_(true)
 				,etat_tra_(true)
-				,translation(0.6,2,0.0)
-				,rotation(1,3,0.0)
+				,translation(1.4,6.0,0.0)//(0.6,2,0.0)
+				,rotation(1.5,6.5,0.0)//(1,3,0.0)
 // 				,translation(0.6,3,0.01)
 // 				,rotation(0.4,3,0.01)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
@@ -48,12 +48,12 @@ void Robot::asservir()
 	int32_t pwmRotation;
 	
 	if (etat_rot_)
-		pwmRotation = rotation.pwm(mesure_angle_);
+		pwmRotation = rotation.pwm(mesure_angle_,10);
 	else
 		pwmRotation = 0;
 	
 	if(etat_tra_)
-		pwmTranslation = translation.pwm(mesure_distance_);
+		pwmTranslation = translation.pwm(mesure_distance_,20);
 	else
 		pwmTranslation = 0;
 	
@@ -462,14 +462,13 @@ void Robot::stopper()
 {
 	/*
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
--	rotation.consigne(mesure_angle_);
--	//stop en translation
--	consigne_tra_ = mesure_distance_;
--	translation.consigne(mesure_distance_);
+	rotation.consigne(mesure_angle_);
+	//stop en translation
+	consigne_tra_ = mesure_distance_;
+	translation.consigne(mesure_distance_);
  	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
--		envoyer_acquittement(3,"STOPPE");
+		envoyer_acquittement(3,"STOPPE");
 	*/
-	
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 	{
 		debug_ = true;
@@ -483,7 +482,7 @@ void Robot::stopper()
 			//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 			rotation.consigne(mesure_angle_);
 			//stop en translation
-			consigne_tra_ = mesure_distance_;
+// 			consigne_tra_ = mesure_distance_;
 			translation.consigne(mesure_distance_);
 		}
 	}
@@ -504,7 +503,7 @@ void Robot::atteinte_consignes()
 	if (abs(rotation.pwmCourant())>=10)
 		rotation_en_cours_ = true;
 
-	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10)
+	if (rotation_en_cours_ && abs(rotation.pwmCourant())<5)
 	{
 		
 		rotation_en_cours_ = false;
@@ -585,9 +584,9 @@ void Robot::recalage()
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	translater(150.0);
-	rotation.valeur_bridage(120.0);
+	rotation.valeur_bridage(250.0);
 	if (couleur_ == 'r') tourner(0.0); else tourner(PI);
-	translation.valeur_bridage(120.0);
+	translation.valeur_bridage(250.0);
 	envoyer_acquittement(2,"FIN_REC");
 	etat_rot_ = false;
 	etat_tra_ = false;
