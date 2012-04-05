@@ -96,12 +96,19 @@ class Script:
         #enfonce un poussoir
         self.asserInstance.avancer(250.0)
         self.asserInstance.tourner(math.pi/2)
-        self.asserInstance.avancer(1500.0)
+        self.asserInstance.avancer(1300.0)
         self.asserInstance.tourner(-math.pi/2)
+        
+        
+        self.serialInstance.write("ctm\n120.0\n")
         self.asserInstance.avancer(-500.0)
+        time.sleep(3)
+        self.serialInstance.write("ctm\n250.0\n")
+        
         self.asserInstance.avancer(300.0)
+        self.asserInstance.tourner(0.0)
         self.asserInstance.tourner(-math.pi/2)
-        self.asserInstance.avancer(1200.0) 
+        self.asserInstance.avancer(1350.0) 
         if couleur == 'R':
             self.asserInstance.tourner(0.0)
         else :
