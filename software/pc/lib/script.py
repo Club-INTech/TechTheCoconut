@@ -7,6 +7,7 @@ import time
 import outils_math.point
 import lib.log
 import os
+import math
 
 log = lib.log.Log(__name__)
 
@@ -90,25 +91,27 @@ class Script:
         
     def homologation(self):
         
+        couleur = 'V'
+        
         #enfonce un poussoir
-        self.asser.avancer(600.0)
-        self.asser.tourner(math.pi/2)
-        self.asser.avancer(1500.0)
-        self.asser.tourner(-math.pi/2)
-        self.asser.avancer(-500.0)
-        self.asser.avancer(300.0)
-        self.asser.tourner(-math.pi/2)
-        self.asser.avancer(1500.0) 
+        self.asserInstance.avancer(250.0)
+        self.asserInstance.tourner(math.pi/2)
+        self.asserInstance.avancer(1500.0)
+        self.asserInstance.tourner(-math.pi/2)
+        self.asserInstance.avancer(-500.0)
+        self.asserInstance.avancer(300.0)
+        self.asserInstance.tourner(-math.pi/2)
+        self.asserInstance.avancer(1200.0) 
         if couleur == 'R':
-            self.asser.tourner(0.0)
+            self.asserInstance.tourner(0.0)
         else :
-            self.asser.tourner(math.pi)
-        self.asser.avancer(-500.0)
+            self.asserInstance.tourner(math.pi)
+        self.asserInstance.avancer(-500.0)
         
         """
         #stocke le lingot et enfonce un poussoir
-        self.asser.avancer(600.0)
-        self.asser.tourner(math.pi/2)
+        self.asserInstance.avancer(600.0)
+        self.asserInstance.tourner(math.pi/2)
         """
         
     def testPosition(self):

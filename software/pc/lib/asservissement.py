@@ -193,8 +193,7 @@ class Asservissement:
         self.robotInstance.fin_translation = False
         while not self.robotInstance.fin_translation :
             self.CaptSerialInstance.write('ultrason\n')
-            capteur = self.capteurInstance.mesurer()
-            print capteur
+            capteur = self.capteurInstance.mesurer() 
             try:
                 if int(capteur) < self.maxCapt:
                     print 'CAPTEUR !'

@@ -118,6 +118,8 @@ class Serie_acquisition:
                     self.robotInstance.position.x = -int(reponse[1])
                     self.robotInstance.position.y = int(reponse[0])
                     self.mutex.release()
+                else :
+                    print reponse
             except:
                 pass
             
@@ -126,4 +128,4 @@ class Serie_acquisition:
                 self.robotInstance.new_message = True
                 self.robotInstance.message = str(reponse)
                 self.mutex.release()
-            print reponse
+            #print reponse
