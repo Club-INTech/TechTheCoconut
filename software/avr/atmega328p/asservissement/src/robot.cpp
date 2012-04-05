@@ -38,6 +38,8 @@ Robot::Robot() : couleur_('v')
 	serial_t_::init();
 	TimerCounter_t::init();
 	serial_t_::change_baudrate(9600);
+	
+	changer_orientation(3.1415);
 }
 
 void Robot::asservir()
@@ -368,12 +370,12 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 
 void Robot::envoyer_position()
 {
+	/*
 	if (debug_)
 		Serial<0>::print("SSSSSSSSSSTOPPER");
-		/*
+	*/
 	serial_t_::print((int32_t)x(),(int32_t)y());
 // 	serial_t_::print((int32_t)((float)angle_serie_ * 1000));
-*/
 }
 
 void Robot::envoyer_position_tic()
@@ -458,6 +460,16 @@ void Robot::fin_translater()
 
 void Robot::stopper()
 {
+	/*
+	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
+-	rotation.consigne(mesure_angle_);
+-	//stop en translation
+-	consigne_tra_ = mesure_distance_;
+-	translation.consigne(mesure_distance_);
+ 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
+-		envoyer_acquittement(3,"STOPPE");
+	*/
+	
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 	{
 		debug_ = true;
