@@ -5,7 +5,7 @@ void AX12InitID(uint8_t ID)
 {
 
     
-    writeData (0xFE, AX_ID, 1, ID);   
+    writeData (1, AX_ID, 1, ID);   
 }
 
 void AX12SetLeds(uint8_t ID, byte masque)
