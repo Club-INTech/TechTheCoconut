@@ -51,6 +51,8 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 		inc = 0;
 	}
 	
+	inc++;
+	/*
 	else
 	{
 		//mise à jour de la position réelle du robot dans la console python
@@ -61,6 +63,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 		
 		inc++;
 	}
+	*/
 	
 	
 }
