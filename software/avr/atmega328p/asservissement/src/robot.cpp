@@ -226,7 +226,7 @@ void Robot::communiquer_pc(){
 		envoyer_acquittement(-1);
 	}
 	//demande d'acquittement
-	else if (COMPARE_BUFFER("ok",2)){
+	else if (COMPARE_BUFFER("acq",2)){
 		envoyer_acquittement();
 	}
 	//demande de la position courante
@@ -414,7 +414,6 @@ void Robot::debut_tourner(float angle)
 }
 	
 	
-	
 void Robot::fin_tourner()
 {
 	/*
@@ -433,14 +432,14 @@ void Robot::fin_tourner()
 		}
 		else
 		{
-			
+			/*
 			if (bascule_tou_)
 				envoyer_acquittement(1,"FIN_TOUA");
 			else
 				envoyer_acquittement(1,"FIN_TOUB");
 			bascule_tou_ = !bascule_tou_;
-			
-// 			envoyer_acquittement(1,"FIN_MVT");
+			*/
+			envoyer_acquittement(1,"FIN_MVT");
 		}
 	}
 }
@@ -465,10 +464,10 @@ void Robot::fin_translater()
 	{
 		translation_attendue_ = false;
 
-// 		if (goto_attendu_)
-// 			goto_attendu_ = false;
-// 		envoyer_acquittement(1,"FIN_MVT");
-		
+		if (goto_attendu_)
+			goto_attendu_ = false;
+		envoyer_acquittement(1,"FIN_MVT");
+		/*
 		if (goto_attendu_)
 		{
 			goto_attendu_ = false;
@@ -487,6 +486,7 @@ void Robot::fin_translater()
 			bascule_tra_ = !bascule_tra_;
 			
 		}
+		*/
 		
 	}
 }
