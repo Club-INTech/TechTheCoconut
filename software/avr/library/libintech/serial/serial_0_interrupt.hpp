@@ -10,13 +10,14 @@
 		
 	}
 	
-	#if defined (__AVR_ATmega328P__) || defined (__AVR_ATmega328__)
+	#if defined (__AVR_ATmega328P__)
 	ISR( USART_RX_vect)
 	#elif defined (__AVR_ATmega640__)\
 	|| defined (__AVR_ATmega1280__)\
 	|| defined (__AVR_ATmega1281__)\
 	|| defined (__AVR_ATmega2560__)\
-	|| defined (__AVR_ATmega2561__)
+	|| defined (__AVR_ATmega2561__)\
+	|| defined (__AVR_ATmega324P__)
 	ISR( USART0_RX_vect)
 	#endif
 	{
