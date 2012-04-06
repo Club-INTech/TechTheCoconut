@@ -4,6 +4,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <string.h>
 
 
 struct ring_buffer rx_buffer = { { 0 }, 0, 0 };
@@ -17,8 +18,8 @@ ISR(USART_RX_vect)
 
 void uart_init( void )
 {
-    UBRR0H = (unsigned char)(UBRR >> 8);
-    UBRR0L = (unsigned char)UBRR;
+    UBRR0H = (uint8_t)((long)UBRR >> 8);
+    UBRR0L = (uint8_t)UBRR;
     
     UCSR0B |= ( 1 << RXCIE0 );  //Activation de l'interruption de réception
     

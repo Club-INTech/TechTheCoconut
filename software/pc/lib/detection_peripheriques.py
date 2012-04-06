@@ -41,12 +41,6 @@ class Detection_peripheriques():
                 if chemin not in chemin_existant:
                     chemin = chemin.split('\n')[0]
                     serie = lib.serie_simple.SerieSimple(chemin, constantes["Serie"]["peripheriques"][peripherique], 0.1)
-                    # On envoie plusieurs fois au cas où
-                    #for i in xrange(3):
-                        #try:
-                            #serie.ecrire('?')
-                        #except:
-                            #pass
                     # Boucle pour gérer les exceptions
                     for i in xrange(3):
                         chemin_existant = []
@@ -55,9 +49,8 @@ class Detection_peripheriques():
                         try:
                             ping = -1
                             for i in xrange(10):
-			        serie.ecrire('?')
+                                serie.ecrire('?')
                                 ping = serie.lire()
-                                #print "p"+ping+"p", constantes["Serie"]["peripheriques_association"][peripherique]
                                 if re.match(constantes["Serie"]["peripheriques_association"][peripherique], ping):
                                     p_obj = lib.peripherique.Peripherique(peripherique)
                                     p_obj.chemin = chemin
@@ -66,4 +59,12 @@ class Detection_peripheriques():
                                     break
                             serie.close()
                         except:
-                            log.logger.error("Erreur de l'association sur "+peripherique+" avec le chemin "+chemin+", on recommence ...")
+                            pass
+        # On vérifie que tout a été associé
+        for peripherique in constantes["Serie"]["peripheriques"].keys():
+            trouve = False
+            for obj in lib.peripherique.liste:
+                if obj.nom == peripherique:
+                    trouve = True
+            if not trouve:
+                log.logger.error("Périphérique "+peripherique+" n'est pas associé")

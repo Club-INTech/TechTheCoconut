@@ -6,8 +6,8 @@
 
 // #define FLASH_ID_MODE
 // #define FLASH_BAUD_RATE_MODE
-// #define TEST_NOSERIE_MODE
-// #define REANIMATION_MODE
+#define TEST_NOSERIE_MODE
+#define REANIMATION_MODE
 
 #include "serial.h"
 
@@ -32,15 +32,11 @@ int main()
     #endif
         
     #ifdef FLASH_ID_MODE
-        AX12InitID(0);
+        AX12InitID(3);
     #endif
         
-    #ifndef TEST_NOSERIE_MODE
-        // Initialisation de tous les AX12
-        AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
-    #else
-        AX12Init(AX_BROADCAST, 0, 0, 200);
-    #endif
+    // Initialisation de tous les AX12
+    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
         
     while (1)
     {
@@ -48,13 +44,13 @@ int main()
         #ifdef REANIMATION_MODE
             
             ax12Init(2000000/(debug_baudrate + 1));
-            reset(AX_BROADCAST);
+            
             debug_baudrate++;
         #endif       
         
         #ifdef TEST_NOSERIE_MODE 
-            AX12GoTo(0xFE, 0x1ff);
-        #endif
+            AX12Init(0xFE, 0,0,200);
+        #else
             
         if (available())
         {
@@ -101,22 +97,11 @@ int main()
                             writeData(AX_BROADCAST, AX_BAUD_RATE, 1, AX_BAUD_RATE_57600);
                         else if (valeur == 4)
                             writeData(AX_BROADCAST, AX_BAUD_RATE, 1, AX_BAUD_RATE_9600);
-                    }
-
-                        
-                        
-                }
-                
+                    }   
+                }   
         }
+        #endif
 // 
-
-
-            
-
-        
-
-        
-        
     }
     return 0;
 }

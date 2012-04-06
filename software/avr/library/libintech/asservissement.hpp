@@ -19,7 +19,7 @@ class Asservissement {
 
 		Asservissement(float kp,float kd,float ki) : kp_(kp), kd_(kd), ki_(ki), valeur_bridage_(255){ }
 
-		int16_t	pwm(int32_t positionReelle)
+		int16_t	pwm(int32_t positionReelle, int32_t eps = 0)
 		{
 			enm2_ = enm1_;
 			enm1_ = en_;
@@ -31,6 +31,8 @@ class Asservissement {
 				return  valeur_bridage_;
 			else if (pwmCourant_< -valeur_bridage_)
 				return -valeur_bridage_;
+			else if (abs(pwmCourant_) < eps)
+				return 0;
 			else
 				return pwmCourant_;
 			

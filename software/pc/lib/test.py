@@ -41,7 +41,6 @@ while 42:
     """
 
 #écriture du point de départ initial
-"""
 asser.avancer(300)
 asser.tourner(-1.5)
 asser.avancer(500)
@@ -51,7 +50,6 @@ asser.avancer(-300)
 asser.tourner(-1.5)
 asser.avancer(600)
 asser.tourner(1.5)
-"""
 """
 while 42:
     __builtin__.instance.serieCaptInstance.write('ultrason\n')
@@ -63,16 +61,16 @@ while 42:
     
 #scriptInstance = script.Script(asser)
 #scriptInstance.huit()
-while(True):
-    x, y = '', ''
-    while x=='':
-        x = raw_input("x arrivé ?")
-    while y=='':
-        y = raw_input("y arrivé ?")
-    arrivee = outils_math.point.Point(int(x),int(y))
-    #print asser.capteursInstance.mesure()
+#while(True):
+    #x, y = '', ''
+    #while x=='':
+        #x = raw_input("x arrivé ?")
+    #while y=='':
+        #y = raw_input("y arrivé ?")
+    #arrivee = outils_math.point.Point(int(x),int(y))
+    ##print asser.capteursInstance.mesure()
 
-    asser.goTo(arrivee)
+    #asser.goTo(arrivee)
     
 
 """
