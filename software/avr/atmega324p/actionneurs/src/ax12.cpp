@@ -57,23 +57,9 @@ byte ax12writeB(byte data){
 
 /** initializes serial0 transmit at baud, 8-N-1 */
 void ax12Init(long baud){
-    UBRR0H = ((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
+    UBRR0H = (long)((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
     UBRR0L = ((F_CPU / 16 + baud / 2) / baud - 1);
 
-    /************************/
-//     uint16_t UBRR  =(F_CPU/8/BAUD_RATE_SERIE - 1)/2;
-//     UBRR0H = (unsigned char)(UBRR >> 8);
-//     UBRR0L = (unsigned char)UBRR;
-//     
-//     UCSR0B |= ( 1 << RXCIE0 );  //Activation de l'interruption de réception
-//     
-//     
-//     UCSR0B |= ( 1 << RXEN0 );   //Activation de la réception
-//     UCSR0B |= ( 1 << TXEN0 );   //Activation de l'emission
-// 
-//     UCSR0C = (1 << USBS0)|(3<<UCSZ00);
-//     sei();
-    /***********************/
      
     ax_rx_Pointer = 0;                                    
     // enable rx
