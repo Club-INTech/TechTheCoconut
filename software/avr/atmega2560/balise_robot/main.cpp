@@ -68,17 +68,19 @@ int main() {
 	unsigned char rawFrame[3];
 	
 	while (1) {
-// 		Serial<0>::read(rawFrame,4);
-// 		Frame frame(rawFrame);
-// 
-// 		if (frame.isValid()) {
-// 			
-// 			Serial<0>::print(frame.getRobotId());
-// 			Serial<0>::print(frame.getDistance());
-// 			//Serial<0>::print(balise.getAngle());
-// 		} else {
-// 			Serial<0>::print("ERROR");
-// 		}
+		Serial<0>::read(rawFrame,4);
+		Serial<0>::print(rawFrame[0]);
+ 		/*Serial<0>::read(rawFrame,4);
+ 		Frame frame(rawFrame);
+ 
+ 		if(frame.isValid()){
+ 			
+ 			//Serial<0>::print(frame.getRobotId());
+ 			Serial<0>::print(frame.getDistance());
+ 			//Serial<0>::print(balise.getAngle());
+ 		} else {
+ 			Serial<0>::print("ERROR");
+ 		}*/
 	}
 	
 }
@@ -91,8 +93,7 @@ ISR(TIMER0_OVF_vect)
 
 ISR(TIMER1_OVF_vect)
 {
-	
-	Serial<0>::print(codeur - last_codeur);
+	//Serial<0>::print(codeur - last_codeur);
 	Balise::Instance().asservir(codeur - last_codeur);
 	last_codeur = codeur;
 }
