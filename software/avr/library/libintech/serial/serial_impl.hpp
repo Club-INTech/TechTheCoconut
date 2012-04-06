@@ -79,9 +79,10 @@ public:
 
     template<class T>
     static inline void print_binary(T val){
-        static char buff[sizeof(T) * 8];
-        int j = sizeof(T) * 8 - 1;
-        for(int i=0 ; i<sizeof(T)*8 ; ++i){
+        static char buff[sizeof(T) * 8 + 1];
+	buff[sizeof(T) * 8]='\0';
+        int16_t j = sizeof(T) * 8 - 1;
+        for(int16_t i=0 ; i<sizeof(T)*8 ; ++i){
             if(val & (1 << i))
                buff[j] = '1';
             else
@@ -89,6 +90,12 @@ public:
             j--;
         }
         print((const char *)buff);
+    }
+    
+    static inline void print_binary(unsigned char * val, int16_t len){
+        for(int16_t i = 0 ; i<len ; ++i){
+		print_binary(val[i]);
+	}
     }
     
     static inline void print(int16_t val){
@@ -151,13 +158,13 @@ public:
 
     static inline void print(const char * val)
     {
-    	for(unsigned int i = 0 ; i < strlen(val) ; i++)
+    	for(int16_t i = 0 ; i < strlen(val) ; i++)
     	{
     		send_char(val[i]);
     	}
     	send_ln();
     }
-
+    
     static inline int32_t read_int(void){
         char buffer[20];
         read(buffer,20);
@@ -166,7 +173,6 @@ public:
 
     static inline float read_float(){
         char buffer[20];
-//      print(read(buffer,20));
 	read(buffer,20);
         return atof(buffer);
     }
