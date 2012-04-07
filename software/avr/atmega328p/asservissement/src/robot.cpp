@@ -250,7 +250,9 @@ void Robot::communiquer_pc(){
 	
 	Serial<0>::print("////");
 	serial_t_::print((int32_t)mesure_angle_);
-	serial_t_::print((int32_t)(angle_origine_/CONVERSION_TIC_RADIAN_));
+	
+	serial_t_::print((int32_t)(compare_angle_tic(mesure_angle_,rotation.consigne())));
+// 	serial_t_::print((int32_t)(angle_origine_/CONVERSION_TIC_RADIAN_));
 	serial_t_::print((int32_t)rotation.consigne());
 	}
 	
@@ -344,6 +346,19 @@ int32_t Robot::angle_modulo_tic(int32_t angle)
 	while (angle > 4464)
 		angle -= 8928;//2*pi
 	return angle;
+}
+
+int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
+{
+	while (angle1 < 0)
+		angle1 += 8928;//2*pi
+	while (angle2 < 0)
+		angle2 += 8928;//2*pi	
+		
+	int32_t diff = abs(angle1-angle2);
+	while (diff >= 8928)
+		diff -= 8928;
+	return diff;
 }
 
 void Robot::changer_orientation(float new_angle)
@@ -452,7 +467,7 @@ void Robot::fin_tourner()
 		translation_attendue_ = true;
 	}*/
 	//@@@@
-	if (rotation_attendue_ && abs( angle_modulo_tic(mesure_angle_) - angle_modulo_tic(rotation.consigne()) ) < 250)//250 tic : 10 degrés)
+	if (rotation_attendue_ && compare_angle_tic(mesure_angle_,rotation.consigne()) < 250)//250 tic : 10 degrés)
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
