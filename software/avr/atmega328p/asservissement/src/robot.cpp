@@ -249,8 +249,9 @@ void Robot::communiquer_pc(){
 	else if (COMPARE_BUFFER("kadoc",5)){
 	
 	Serial<0>::print("////");
-	serial_t_::print((int32_t)angle_modulo_tic(mesure_distance_ + angle_origine_/CONVERSION_TIC_RADIAN_));
-	serial_t_::print((int32_t)angle_modulo_tic(rotation.consigne()));
+	serial_t_::print((int32_t)mesure_distance_);
+	serial_t_::print((int32_t)(angle_origine_/CONVERSION_TIC_RADIAN_));
+	serial_t_::print((int32_t)rotation.consigne());
 	}
 	
 
@@ -452,7 +453,7 @@ void Robot::fin_tourner()
 	}*/
 	
 	//@@@@
-	if (rotation_attendue_)//&& abs( angle_modulo_tic(mesure_distance_+ angle_origine_/CONVERSION_TIC_RADIAN_) - angle_modulo_tic(rotation.consigne()) ) < 1000)//250 tic : 10 degrés)
+	if (rotation_attendue_ && abs( angle_modulo_tic(mesure_distance_+ angle_origine_/CONVERSION_TIC_RADIAN_) - angle_modulo_tic(rotation.consigne()) ) < 1000)//250 tic : 10 degrés)
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
