@@ -182,8 +182,10 @@ public:
     	for (; i < length; i++){
         	while(!available()){ asm("nop"); }
         	unsigned char tmp = read_char();
-        	if(tmp == '\n' || tmp == '\r')
+        	if(tmp == '\n' || tmp == '\r'){
+			string[i]='\0';
         		return i;
+		}
         	string[i] = tmp;
         }
         return i;
