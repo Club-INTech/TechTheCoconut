@@ -4,8 +4,8 @@ SET(CMAKE_CXX_COMPILER avr-g++)
 SET(CWARN "-Wall")
 SET(COPT "-O2")
 SET(CMCU "-mmcu=atmega328p")
-SET(CDEFS "-DF_CPU=16e6") #sur un arduilol
-# SET(CDEFS "-DF_CPU=20e6") #sur les cartes
+#SET(CDEFS "-DF_CPU=16e6") #sur un arduilol
+SET(CDEFS "-DF_CPU=20e6") #sur les cartes
 
 SET(CFLAGS "${CMCU} ${CDEFS} ${COPT} ${CWARN}")
 SET(CXXFLAGS "${CMCU} ${CDEFS} ${COPT} ${CWARN}")
