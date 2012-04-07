@@ -339,15 +339,6 @@ float Robot::angle_optimal(float angle, float angleBkp)
 	return angle;
 }
 
-int32_t Robot::angle_modulo_tic(int32_t angle)
-{
-	while (angle <= -4464)
-		angle += 8928;//2*pi
-	while (angle > 4464)
-		angle -= 8928;//2*pi
-	return angle;
-}
-
 int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 {
 	while (angle1 < 0)
@@ -462,14 +453,7 @@ void Robot::debut_tourner(float angle)
 	
 void Robot::fin_tourner()
 {
-	/*
-	if (consigne_tra_ != translation.consigne())
-	{
-		translation.consigne(consigne_tra_);
-		translation_attendue_ = true;
-	}*/
-	//@@@@
-	if (rotation_attendue_ && compare_angle_tic(mesure_angle_,rotation.consigne()) < 250)//250 tic : 10 degrés)
+	if (rotation_attendue_ && compare_angle_tic(mesure_angle_,rotation.consigne()) < 250)//250 tics : 10 degrés
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
@@ -486,7 +470,7 @@ void Robot::fin_tourner()
 				envoyer_acquittement(1,"FIN_TOUB");
 			bascule_tou_ = !bascule_tou_;
 			*/
-			envoyer_acquittement(2,"FIN_MVT");
+			envoyer_acquittement(1,"FIN_MVT");
 		}
 	}
 }
@@ -513,7 +497,7 @@ void Robot::fin_translater()
 
 		if (goto_attendu_)
 			goto_attendu_ = false;
-		envoyer_acquittement(2,"FIN_MVT");
+		envoyer_acquittement(1,"FIN_MVT");
 		/*
 		if (goto_attendu_)
 		{
