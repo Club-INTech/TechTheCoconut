@@ -246,6 +246,12 @@ void Robot::communiquer_pc(){
 	else if (COMPARE_BUFFER("pos",3)){
 		envoyer_position();
 	}
+	else if (COMPARE_BUFFER("kadoc",5)){
+	
+	Serial<0>::print("////");
+	serial_t_::print((int32_t)angle_modulo_tic(mesure_distance_ + angle_origine_/CONVERSION_TIC_RADIAN_));
+	serial_t_::print((int32_t)angle_modulo_tic(rotation.consigne()));
+	}
 	
 
 #undef COMPARE_BUFFER
@@ -445,13 +451,8 @@ void Robot::fin_tourner()
 		translation_attendue_ = true;
 	}*/
 	
-	/*
-	Serial<0>::print("////");
-	serial_t_::print((int32_t)angle_modulo_tic(mesure_distance_ + angle_origine_/CONVERSION_TIC_RADIAN_));
-	serial_t_::print((int32_t)angle_modulo_tic(rotation.consigne()));
-	*/
 	
-	if (rotation_attendue_ && abs( angle_modulo_tic(mesure_distance_+ angle_origine_/CONVERSION_TIC_RADIAN_) - angle_modulo_tic(rotation.consigne()) ) < 250)//250 tic : 10 degrés)
+	if (rotation_attendue_ && abs( angle_modulo_tic(mesure_distance_+ angle_origine_/CONVERSION_TIC_RADIAN_) - angle_modulo_tic(rotation.consigne()) ) < 1000)//250 tic : 10 degrés)
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
@@ -468,7 +469,7 @@ void Robot::fin_tourner()
 				envoyer_acquittement(1,"FIN_TOUB");
 			bascule_tou_ = !bascule_tou_;
 			*/
-			envoyer_acquittement(1,"FIN_MVT");
+			envoyer_acquittement(2,"FIN_MVT");
 		}
 	}
 }
@@ -495,7 +496,7 @@ void Robot::fin_translater()
 
 		if (goto_attendu_)
 			goto_attendu_ = false;
-		envoyer_acquittement(1,"FIN_MVT");
+		envoyer_acquittement(2,"FIN_MVT");
 		/*
 		if (goto_attendu_)
 		{
