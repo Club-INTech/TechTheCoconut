@@ -4,7 +4,7 @@ SET(CMAKE_CXX_COMPILER avr-g++)
 SET(CWARN "-Wall")
 SET(COPT "-Os")
 SET(CMCU "-fno-exceptions -mmcu=atmega324p")
-SET(CDEFS "-DF_CPU=16000000L")
+SET(CDEFS "-DF_CPU=20000000L")
 
 
 SET(CFLAGS "${CMCU} ${CDEFS} ${COPT} ${CWARN}")
