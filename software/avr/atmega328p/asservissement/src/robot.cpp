@@ -448,8 +448,8 @@ void Robot::fin_tourner()
 	}*/
 	
 	Serial<0>::print("////");
-	serial_t_::print((int32_t)mesure_distance_);
-	serial_t_::print((int32_t)rotation.consigne());
+	serial_t_::print((int32_t)angle_modulo_tic(mesure_distance_));
+	serial_t_::print((int32_t)angle_modulo_tic(rotation.consigne()));
 	
 	if (rotation_attendue_)// && abs( angle_modulo_tic(mesure_distance_) - angle_modulo_tic(rotation.consigne()) ) < 1000)//10 degrés)
 	{
