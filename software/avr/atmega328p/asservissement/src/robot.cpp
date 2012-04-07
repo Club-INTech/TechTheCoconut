@@ -493,7 +493,7 @@ void Robot::fin_translater()
 
 void Robot::stopper()
 {
-
+    /*
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 	rotation.consigne(mesure_angle_);
 	//stop en translation
@@ -501,8 +501,8 @@ void Robot::stopper()
 	translation.consigne(mesure_distance_);
  	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 		envoyer_acquittement(3,"STOPPE");
+	*/
 	
-	/*
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 	{
 		if (abs(mesure_angle_ - rotation.consigne())<25 && rotation_attendue_)
@@ -527,7 +527,6 @@ void Robot::stopper()
 		consigne_tra_ = mesure_distance_;
 		translation.consigne(mesure_distance_);
 	}
-	*/
 }
 
 void Robot::atteinte_consignes()
