@@ -472,7 +472,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<200)
+	if (translation_attendue_)
 	{
 		translation_attendue_ = false;
 
@@ -548,9 +548,8 @@ void Robot::atteinte_consignes()
 	if (abs(rotation.pwmCourant())>=10)
 		rotation_en_cours_ = true;
 
-	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10)
+	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10 && abs(mesure_distance_ - rotation.consigne())<250)//10 degrés
 	{
-		
 		rotation_en_cours_ = false;
 		fin_tourner();
 	}
@@ -558,7 +557,7 @@ void Robot::atteinte_consignes()
 	if (abs(translation.pwmCourant())>=10)
 		translation_en_cours = true;
 
-	if (translation_en_cours && abs(translation.pwmCourant())<10)
+	if (translation_en_cours && abs(translation.pwmCourant())<10 && abs(mesure_distance_ - translation.consigne())<300)//3 cm
 	{
 		translation_en_cours = false;
 		fin_translater();
