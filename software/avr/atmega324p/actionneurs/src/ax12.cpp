@@ -30,22 +30,23 @@ int status_data;
 volatile byte ax_rx_Pointer;                       
 
 /** helper functions to emulate half-duplex */
-void setTX(){
-    bitClear(UCSR0B, RXCIE0);
-    bitClear(UCSR0B, RXEN0); 
-    bitSet(UCSR0B, TXEN0); 
-}
-void setRX(){
-    bitClear(UCSR0B, TXEN0);
-    bitSet(UCSR0B, RXEN0);
-    bitSet(UCSR0B, RXCIE0); 
-    ax_rx_Pointer = 0;
-}
+// void setTX(){
+//     bitClear(UCSR0B, RXCIE0);
+//     bitClear(UCSR0B, RXEN0); 
+//     bitSet(UCSR0B, TXEN0); 
+// }
+// void setRX(){
+//     bitClear(UCSR0B, TXEN0);
+//     bitSet(UCSR0B, RXEN0);
+//     bitSet(UCSR0B, RXCIE0); 
+//     ax_rx_Pointer = 0;
+// }
 
 /** Sends a character out the serial port */
 byte ax12writeB(byte data){
-    while (bit_is_clear(UCSR0A, UDRE0));
-    UDR0 = data;
+//     while (bit_is_clear(UCSR1A, UDRE1));
+    while (!( UCSR1A & (1<<UDRE1)));
+    UDR1 = data;
     return data; 
 }
 
@@ -57,8 +58,16 @@ byte ax12writeB(byte data){
 
 /** initializes serial0 transmit at baud, 8-N-1 */
 void ax12Init(long baud){
-    UBRR0H = (long)((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
-    UBRR0L = ((F_CPU / 16 + baud / 2) / baud - 1);
+    
+    UBRR1H = (long)((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
+    UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
+//     UBRR1H = (unsigned char)(((F_CPU/8/baud - 1)/2)>>8);
+//     UBRR1L = (unsigned char)(F_CPU/8/baud - 1)/2;
+
+    UCSR1B = (1<<RXEN1)|(1<<TXEN1);
+//     UCSR1C = (1<<USBS1)|(3<<UCSZ10);
+
+
 
      
     ax_rx_Pointer = 0;                                    

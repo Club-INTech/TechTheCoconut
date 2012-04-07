@@ -2,12 +2,16 @@
 #include "ax12.h"
 #include "actionneurs.h"
 
+// LIB INTECH
+#include <libintech/serial/serial_0_interrupt.hpp>
+#include <libintech/serial/serial_0.hpp>
+
 
 
 // #define FLASH_ID_MODE
 // #define FLASH_BAUD_RATE_MODE
 #define TEST_NOSERIE_MODE
-#define REANIMATION_MODE
+//#define REANIMATION_MODE
 
 #include "serial.h"
 
@@ -15,16 +19,20 @@
 #include <avr/interrupt.h>
 
 
+typedef Serial<0> serial_t_;
+
+
+
 int main()
 {
-    uart_init();
+    Serial<0>::init();
     // REANIMATION_MODE :
     #ifdef REANIMATION_MODE
         byte debug_baudrate = 0x00;
     #endif
         
     // BAUD RATE de la série (envoi)
-    ax12Init(BAUD_RATE_SERIE);
+    ax12Init(9600);
     
     #ifdef FLASH_BAUD_RATE_MODE
         // BAUD RATE de l'AX12 (réception)
@@ -43,15 +51,29 @@ int main()
         
         #ifdef REANIMATION_MODE
             
-            ax12Init(2000000/(debug_baudrate + 1));
+            ax12Init(debug_baudrate*10000 + 100000);
             
             debug_baudrate++;
         #endif       
         
         #ifdef TEST_NOSERIE_MODE 
-            AX12Init(0xFE, 0,0,200);
+            AX12Init(0xFE, 0,0,200);   
+            Serial<0>::print("H");
+            
+//             char buffer[17];
+//             uint8_t length = serial_t_::read(buffer,17);
+// 
+//             #define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
+//             
+//             if (COMPARE_BUFFER("GOTO"));
+//             {
+//                 // GOTO
+//             }
         #else
             
+        
+        
+        
         if (available())
         {
                 
