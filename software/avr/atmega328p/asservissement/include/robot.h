@@ -90,6 +90,8 @@ public:
 	
 	int32_t angle_initial(void);
 	float angle_optimal(float angle, float angleBkp);
+	int32_t angle_modulo_tic(int32_t angle);
+	
 	void envoyer_acquittement(int16_t instruction = 0, char *new_message = NULL);
 	void envoyer_position(void);
 	
