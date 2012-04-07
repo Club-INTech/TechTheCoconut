@@ -182,9 +182,10 @@ void Robot::communiquer_pc(){
 		envoyer_acquittement(-1);
 // 		debut_translater_seul(serial_t_::read_float());
 		
+		float dist = serial_t_::read_float();
 		goto_attendu_ = true;
-		debut_tourner(mesure_angle_*CONVERSION_TIC_RADIAN_);
-		debut_translater(serial_t_::read_float());
+		debut_translater(dist);
+		debut_tourner(angle_serie_);
 	}
 	else if(COMPARE_BUFFER("t",1)){
 		envoyer_acquittement(-1);
