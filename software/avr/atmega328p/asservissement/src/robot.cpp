@@ -567,9 +567,9 @@ void Robot::gestion_stoppage()
 	
 	//detection d'un blocage - translation
 	if (	   (abs(rotation.pwmCourant())>0
-		&& abs(T_last_angle[4]-T_last_angle[0])<10)
+		&& abs(T_last_angle[4]-T_last_angle[0])<5)
 		|| (abs(translation.pwmCourant())>0
-		&& abs(T_last_distance[4]-T_last_distance[0])<10)
+		&& abs(T_last_distance[4]-T_last_distance[0])<5)
 	   )
 	{
 			
