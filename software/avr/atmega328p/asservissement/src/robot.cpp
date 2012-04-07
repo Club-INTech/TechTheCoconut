@@ -437,7 +437,7 @@ void Robot::fin_tourner()
 		translation.consigne(consigne_tra_);
 		translation_attendue_ = true;
 	}*/
-	if (rotation_attendue_ && abs(mesure_distance_ - rotation.consigne())<250)//10 degrés)
+	if (rotation_attendue_ && abs(mesure_distance_ - rotation.consigne())<1000)//10 degrés)
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
