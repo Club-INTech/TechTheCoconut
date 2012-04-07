@@ -493,7 +493,7 @@ void Robot::fin_translater()
 
 void Robot::stopper()
 {
-    /*
+	/*
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 	rotation.consigne(mesure_angle_);
 	//stop en translation
@@ -505,9 +505,9 @@ void Robot::stopper()
 	
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 	{
-		if (abs(mesure_angle_ - rotation.consigne())<25 && rotation_attendue_)
+		if (rotation_attendue_ && abs(mesure_angle_ - rotation.consigne())<25)
 			fin_tourner();
-		else if (abs(mesure_distance_ - translation.consigne())<50 && translation_attendue_)
+		else if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<50)
 			fin_translater();
 		else 
 		{
@@ -515,7 +515,7 @@ void Robot::stopper()
 			//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 			rotation.consigne(mesure_angle_);
 			//stop en translation
-// 			consigne_tra_ = mesure_distance_;
+			consigne_tra_ = mesure_distance_;
 			translation.consigne(mesure_distance_);
 		}
 	}
@@ -567,9 +567,9 @@ void Robot::gestion_stoppage()
 	
 	//detection d'un blocage - translation
 	if (	   (abs(rotation.pwmCourant())>0
-		&& abs(T_last_angle[4]-T_last_angle[0])<10)
+		&& abs(T_last_angle[4]-T_last_angle[0])<5)
 		|| (abs(translation.pwmCourant())>0
-		&& abs(T_last_distance[4]-T_last_distance[0])<10)
+		&& abs(T_last_distance[4]-T_last_distance[0])<5)
 	   )
 	{
 			
