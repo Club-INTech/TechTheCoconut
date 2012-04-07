@@ -60,8 +60,6 @@ private:
 	bool rotation_attendue_;
 	bool goto_attendu_;
 	
-	bool debug_;
-	
 	int32_t mesure_distance_;
 	int32_t mesure_angle_;
 	
@@ -101,14 +99,17 @@ public:
 	void debut_translater(float distance);
 	void fin_translater(void);
 	
+	void debut_translater_seul(float distance);
+	
+	
 	void stopper();
 	void atteinte_consignes(void);
 	void gestion_stoppage();
 	
 	void recalage(void);
 	
-	void translater(float distance);
-	void tourner(float angle);
+	void translater_bloc(float distance);
+	void tourner_bloc(float angle);
 };
 
 #endif

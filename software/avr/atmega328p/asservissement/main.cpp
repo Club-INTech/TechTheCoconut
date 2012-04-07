@@ -44,6 +44,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.update_position();
 	
 	
+	/*
 	if (inc > 5)
 	{
 		//boucle d'envoi d'acquittement, en cas de perte sur la série
@@ -61,6 +62,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 		
 		inc++;
 	}
+	*/
 	
 	
 }
