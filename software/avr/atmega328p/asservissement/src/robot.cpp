@@ -358,6 +358,8 @@ int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 	int32_t diff = abs(angle1-angle2);
 	while (diff >= 8928)
 		diff -= 8928;
+	if (diff > 4464)
+		diff = 8928-diff;
 	return diff;
 }
 
