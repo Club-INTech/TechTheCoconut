@@ -339,9 +339,9 @@ float Robot::angle_optimal(float angle, float angleBkp)
 
 int32_t Robot::angle_modulo_tic(int32_t angle)
 {
-	while (angle < 0)
+	while (angle <= -4464)
 		angle += 8928;//2*pi
-	while (angle >= 8928)
+	while (angle > 4464)
 		angle -= 8928;//2*pi
 	return angle;
 }
@@ -452,7 +452,7 @@ void Robot::fin_tourner()
 		translation_attendue_ = true;
 	}*/
 	//@@@@
-	if (rotation_attendue_ && abs( angle_modulo_tic(mesure_angle_+ angle_origine_/CONVERSION_TIC_RADIAN_) - angle_modulo_tic(rotation.consigne()) ) < 1000)//250 tic : 10 degrés)
+	if (rotation_attendue_ && abs( angle_modulo_tic(mesure_angle_) - angle_modulo_tic(rotation.consigne()) ) < 250)//250 tic : 10 degrés)
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
