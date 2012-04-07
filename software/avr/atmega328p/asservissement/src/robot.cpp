@@ -238,7 +238,10 @@ void Robot::communiquer_pc(){
 		envoyer_acquittement(-1);
 	}
 	//demande d'acquittement
-	else if (COMPARE_BUFFER("acq",2)){
+	else if (COMPARE_BUFFER("acq",3)){
+		envoyer_acquittement();
+	}
+	else if (COMPARE_BUFFER("ok",2)){
 		envoyer_acquittement();
 	}
 	//demande de la position courante
@@ -434,7 +437,7 @@ void Robot::fin_tourner()
 		translation.consigne(consigne_tra_);
 		translation_attendue_ = true;
 	}*/
-	if (rotation_attendue_)
+	if (rotation_attendue_ && abs(mesure_distance_ - rotation.consigne())<250)//10 degrés)
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
@@ -548,7 +551,7 @@ void Robot::atteinte_consignes()
 	if (abs(rotation.pwmCourant())>=10)
 		rotation_en_cours_ = true;
 
-	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10 && abs(mesure_distance_ - rotation.consigne())<250)//10 degrés
+	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10)
 	{
 		rotation_en_cours_ = false;
 		fin_tourner();
