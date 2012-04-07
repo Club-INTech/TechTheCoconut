@@ -180,9 +180,11 @@ void Robot::communiquer_pc(){
 	
 	else if(COMPARE_BUFFER("d",1)){
 		envoyer_acquittement(-1);
-		debut_translater_seul(serial_t_::read_float());
-// 		debut_translater(serial_t_::read_float());
-// 		rotation_en_cours_ = true;
+// 		debut_translater_seul(serial_t_::read_float());
+		
+		goto_attendu_ = true;
+		debut_tourner(mesure_angle_*CONVERSION_TIC_RADIAN_);
+		debut_translater(serial_t_::read_float());
 	}
 	else if(COMPARE_BUFFER("t",1)){
 		envoyer_acquittement(-1);
