@@ -182,15 +182,19 @@ void Robot::communiquer_pc(){
 		
 		envoyer_acquittement(-1);
 		
+		debut_translater_seul(serial_t_::read_float());
+		
+		/*
 		debut_translater(serial_t_::read_float());
 		rotation_en_cours_ = true;
+		*/
 		
-// 		debut_translater_seul(serial_t_::read_float());
-		
-// 		float dist = serial_t_::read_float();
-// 		goto_attendu_ = true;
-// 		debut_translater(dist);
-// 		debut_tourner(angle_serie_);
+		/*
+		float dist = serial_t_::read_float();
+		goto_attendu_ = true;
+		debut_translater(dist);
+		debut_tourner(angle_serie_);
+		*/
 	}
 	else if(COMPARE_BUFFER("t",1)){
 		envoyer_acquittement(-1);
@@ -456,7 +460,7 @@ void Robot::debut_translater_seul(float distance)
 {
 	translation_attendue_ = true;
 	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
-	translation.consigne(consigne_tra_);
+	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
 	envoyer_acquittement(1,"EN_MVT");
 }
 
@@ -468,7 +472,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_)// && abs(mesure_distance_ - translation.consigne())<100)
+	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<200)
 	{
 		translation_attendue_ = false;
 
