@@ -137,7 +137,7 @@ class Script:
         self.asserInstance.avancer(-400)
         
     def etalonnageAsserv(self):
-        #pas = 0
+        pas = 0
         while True :
             print "modifier ?"
             print "constantes de rotation.............r"
@@ -148,45 +148,45 @@ class Script:
                 break
             elif choix == "r":
                 while True :
-                    #if (pas > 4):
-                        #pas = 0
-                        #self.serialInstance.write("d\n-1500.0\n")
+                    if (pas > 4):
+                        pas = 0
+                        self.serialInstance.write("d\n-1500.0\n")
                         
                     print "constantes rotation : p,d,i. q pour quitter."
                     cte = str(raw_input())
                     if cte == "q":
                         break
-                    #elif cte == "a":
-                        #self.serialInstance.write("d\n300.0\n")
-                        #pas+=1
+                    elif cte == "a":
+                        self.serialInstance.write("d\n300.0\n")
+                        pas+=1
                     else:
                         try:
                             val = str(float(raw_input()))
                             self.serialInstance.write("cr"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
-                            #self.serialInstance.write("d\n300.0\n")
-                            #pas+=1
+                            self.serialInstance.write("d\n300.0\n")
+                            pas+=1
                         except:
                             pass
                 
             elif choix == "t":
                 while True :
-                    #if (pas > 4):
-                        #pas = 0
-                        #self.serialInstance.write("d\n-1500.0\n")
+                    if (pas > 4):
+                        pas = 0
+                        self.serialInstance.write("d\n-1500.0\n")
                     
                     print "constantes translation : p,d,i. q pour quitter."
                     cte = str(raw_input())
                     if cte == "q":
                         break
-                    #elif cte == "a":
-                        #self.serialInstance.write("d\n300.0\n")
-                        #pas+=1
+                    elif cte == "a":
+                        self.serialInstance.write("d\n300.0\n")
+                        pas+=1
                     else:
                         try :
                             val = str(float(raw_input()))
                             self.serialInstance.write("ct"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
-                            #self.serialInstance.write("d\n300.0\n")
-                            #pas+=1
+                            self.serialInstance.write("d\n300.0\n")
+                            pas+=1
                         except :
                             pass
         
