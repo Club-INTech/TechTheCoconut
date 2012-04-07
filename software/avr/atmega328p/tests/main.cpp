@@ -19,8 +19,7 @@ int main(){
   unsigned long res;
   while(1){
 //       Serial<0>::read(trame,4);
-      res = Serial<0>::read_int();
-      Serial<0>::print(res);
+      Serial<0>::print(Serial<0>::read_int());
 //       Serial<0>::print_binary(trame,4);
 //       Serial<0>::print("\n");
    // _delay_ms(500);

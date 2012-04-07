@@ -6,9 +6,11 @@ volatile uint8_t portchistory = 0xFF;
 
 int main() 
 {
-	setup();
-	
-	while(1){	
+// 	setup();
+	Serial<0>::init();
+	Serial<0>::change_baudrate(9600);
+	while(1){
+		Serial<0>::print(5);
 	}
 	
 	return 0;
@@ -55,7 +57,7 @@ void setup()
 //Interruption pour les PCINT8,9,10,11
 ISR(PCINT1_vect)
 {
-	Serial<0>::print(5);
+	
 	/*
 	uint8_t changedbits;
 	

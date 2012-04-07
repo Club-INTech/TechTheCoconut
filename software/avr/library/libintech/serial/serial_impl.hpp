@@ -57,8 +57,9 @@ private:
     }
     
     static inline void send_ln(){
+	send_char('\0');
     	send_char('\r');
-    	send_char('\n');
+	send_char('\n');
     }
 
 public:
@@ -182,7 +183,7 @@ public:
     	for (; i < length; i++){
         	while(!available()){ asm("nop"); }
         	unsigned char tmp = read_char();
-        	if(tmp == '\0' || tmp == '\n' || tmp == '\r')
+        	if(tmp == '\n' && string[i-1]=='\r')
         		return i;
         	string[i] = tmp;
         }
@@ -194,7 +195,7 @@ public:
         for (; i < length; i++){
             while(!available()){ asm("nop"); }
             char tmp = static_cast<char>(read_char());
-            if(tmp == '\0' || tmp == '\n' || tmp == '\r')
+            if(tmp == '\n' && string[i-1]=='\r')
                 return i;
             string[i] = tmp;
         }
