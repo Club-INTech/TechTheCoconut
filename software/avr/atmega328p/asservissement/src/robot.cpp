@@ -491,7 +491,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_)
+	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne()) < 480 )//480 : 5cm
 	{
 		translation_attendue_ = false;
 
