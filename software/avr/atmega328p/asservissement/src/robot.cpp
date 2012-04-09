@@ -323,6 +323,17 @@ int32_t Robot::angle_initial()
 		return 4260;
 }
 
+int32_t Robot::angle_optimal(int32_t angle, int32_t angleBkp)
+{
+	// 8928 tics : 2*pi
+	while (angle > angleBkp+4464)
+		angle -= 8928;
+	while (angle <= angleBkp-4464)
+		angle += 8928;
+	return angle;
+}
+
+/*
 float Robot::angle_optimal(float angle, float angleBkp)
 {
 	float ang1 = abs(angle-angleBkp);
@@ -338,6 +349,7 @@ float Robot::angle_optimal(float angle, float angleBkp)
 	}
 	return angle;
 }
+*/
 
 int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 {
@@ -356,8 +368,11 @@ int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 
 void Robot::changer_orientation(float new_angle)
 {
-	float new_angle_rad = angle_optimal(new_angle, mesure_angle_*CONVERSION_TIC_RADIAN_);
-	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
+	int32_t new_angle_tic = angle_optimal( new_angle/CONVERSION_TIC_RADIAN_, mesure_angle_ );
+	float new_angle_rad = new_angle_tic*CONVERSION_TIC_RADIAN_;
+	
+// 	float new_angle_rad = angle_optimal(new_angle, mesure_angle_*CONVERSION_TIC_RADIAN_);
+// 	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
 	
 	mesure_angle_ = new_angle_tic;
 	angle_origine_ += new_angle_rad - angle_serie_;
@@ -443,10 +458,11 @@ void Robot::gotoPos(float x, float y)
 void Robot::debut_tourner(float angle)
 {
 	envoyer_acquittement(-1);
-	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
+	int32_t new_angle = angle_optimal( (angle - angle_origine_)/CONVERSION_TIC_RADIAN_, mesure_angle_ );
+// 	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
 	
 	rotation_attendue_ = true;
-	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(new_angle);
 	envoyer_acquittement(1,"EN_MVT");
 }
 	
@@ -670,8 +686,10 @@ void Robot::translater_bloc(float distance)
 
 void Robot::tourner_bloc(float angle)
 {
-	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
-	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
+	int32_t new_angle = angle_optimal( (angle - angle_origine_)/CONVERSION_TIC_RADIAN_, mesure_angle_ );
+// 	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
+	
+	rotation.consigne(new_angle);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
 		asm("nop");
