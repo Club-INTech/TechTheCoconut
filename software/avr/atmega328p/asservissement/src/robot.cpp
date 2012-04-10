@@ -25,10 +25,8 @@ Robot::Robot() : couleur_('v')
 				,goto_attendu_(false)
 				,etat_rot_(true)
 				,etat_tra_(true)
-				,translation(1.4,6.0,0.0)//(0.6,2,0.0)
-				,rotation(1.5,6.5,0.0)//(1,3,0.0)
-// 				,translation(0.6,3,0.01)
-// 				,rotation(0.4,3,0.01)
+				,translation(0.6,2.5,0.0)//(1.4,6.0,0.0)
+				,rotation(1.0,3.0,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
 				,CONVERSION_TIC_RADIAN_(0.000703762)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
 				
@@ -179,10 +177,22 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("d",1)){
+		
 		envoyer_acquittement(-1);
+		
 		debut_translater_seul(serial_t_::read_float());
-// 		debut_translater(serial_t_::read_float());
-// 		rotation_en_cours_ = true;
+		
+		/*
+		debut_translater(serial_t_::read_float());
+		rotation_en_cours_ = true;
+		*/
+		
+		/*
+		float dist = serial_t_::read_float();
+		goto_attendu_ = true;
+		debut_translater(dist);
+		debut_tourner(angle_serie_);
+		*/
 	}
 	else if(COMPARE_BUFFER("t",1)){
 		envoyer_acquittement(-1);
@@ -226,12 +236,24 @@ void Robot::communiquer_pc(){
 		envoyer_acquittement(-1);
 	}
 	//demande d'acquittement
-	else if (COMPARE_BUFFER("acq",2)){
+	else if (COMPARE_BUFFER("acq",3)){
+		envoyer_acquittement();
+	}
+	else if (COMPARE_BUFFER("ok",2)){
 		envoyer_acquittement();
 	}
 	//demande de la position courante
 	else if (COMPARE_BUFFER("pos",3)){
 		envoyer_position();
+	}
+	else if (COMPARE_BUFFER("kadoc",5)){
+	
+	Serial<0>::print("////");
+	serial_t_::print((int32_t)mesure_angle_);
+	
+	serial_t_::print((int32_t)(compare_angle_tic(mesure_angle_,rotation.consigne())));
+// 	serial_t_::print((int32_t)(angle_origine_/CONVERSION_TIC_RADIAN_));
+	serial_t_::print((int32_t)rotation.consigne());
 	}
 	
 
@@ -301,6 +323,17 @@ int32_t Robot::angle_initial()
 		return 4260;
 }
 
+int32_t Robot::angle_optimal(int32_t angle, int32_t angleBkp)
+{
+	// 8928 tics : 2*pi
+	while (angle > angleBkp+4464)
+		angle -= 8928;
+	while (angle <= angleBkp-4464)
+		angle += 8928;
+	return angle;
+}
+
+/*
 float Robot::angle_optimal(float angle, float angleBkp)
 {
 	float ang1 = abs(angle-angleBkp);
@@ -316,11 +349,30 @@ float Robot::angle_optimal(float angle, float angleBkp)
 	}
 	return angle;
 }
+*/
+
+int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
+{
+	while (angle1 < 0)
+		angle1 += 8928;//2*pi
+	while (angle2 < 0)
+		angle2 += 8928;//2*pi	
+		
+	int32_t diff = abs(angle1-angle2);
+	while (diff >= 8928)
+		diff -= 8928;
+	if (diff > 4464)
+		diff = 8928-diff;
+	return diff;
+}
 
 void Robot::changer_orientation(float new_angle)
 {
-	float new_angle_rad = angle_optimal(new_angle, mesure_angle_*CONVERSION_TIC_RADIAN_);
-	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
+	int32_t new_angle_tic = angle_optimal( new_angle/CONVERSION_TIC_RADIAN_, mesure_angle_ );
+	float new_angle_rad = new_angle_tic*CONVERSION_TIC_RADIAN_;
+	
+// 	float new_angle_rad = angle_optimal(new_angle, mesure_angle_*CONVERSION_TIC_RADIAN_);
+// 	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
 	
 	mesure_angle_ = new_angle_tic;
 	angle_origine_ += new_angle_rad - angle_serie_;
@@ -406,23 +458,18 @@ void Robot::gotoPos(float x, float y)
 void Robot::debut_tourner(float angle)
 {
 	envoyer_acquittement(-1);
-	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
+	int32_t new_angle = angle_optimal( (angle - angle_origine_)/CONVERSION_TIC_RADIAN_, mesure_angle_ );
+// 	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
 	
 	rotation_attendue_ = true;
-	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
+	rotation.consigne(new_angle);
 	envoyer_acquittement(1,"EN_MVT");
 }
 	
 	
 void Robot::fin_tourner()
 {
-	/*
-	if (consigne_tra_ != translation.consigne())
-	{
-		translation.consigne(consigne_tra_);
-		translation_attendue_ = true;
-	}*/
-	if (rotation_attendue_)
+	if (rotation_attendue_ && compare_angle_tic(mesure_angle_,rotation.consigne()) < 250)//250 tics : 10 degrés
 	{
 		rotation_attendue_ = false;
 		if (goto_attendu_)
@@ -448,7 +495,7 @@ void Robot::debut_translater_seul(float distance)
 {
 	translation_attendue_ = true;
 	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
-	translation.consigne(consigne_tra_);
+	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
 	envoyer_acquittement(1,"EN_MVT");
 }
 
@@ -460,7 +507,7 @@ void Robot::debut_translater(float distance)
 
 void Robot::fin_translater()
 {
-	if (translation_attendue_)// && abs(mesure_distance_ - translation.consigne())<100)
+	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne()) < 480 )//480 : 5cm
 	{
 		translation_attendue_ = false;
 
@@ -493,7 +540,7 @@ void Robot::fin_translater()
 
 void Robot::stopper()
 {
-
+	/*
 	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 	rotation.consigne(mesure_angle_);
 	//stop en translation
@@ -501,13 +548,13 @@ void Robot::stopper()
 	translation.consigne(mesure_distance_);
  	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 		envoyer_acquittement(3,"STOPPE");
+	*/
 	
-	/*
 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
 	{
-		if (abs(mesure_angle_ - rotation.consigne())<25 && rotation_attendue_)
+		if (rotation_attendue_ && abs(mesure_angle_ - rotation.consigne())<25)
 			fin_tourner();
-		else if (abs(mesure_distance_ - translation.consigne())<50 && translation_attendue_)
+		else if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<50)
 			fin_translater();
 		else 
 		{
@@ -515,7 +562,7 @@ void Robot::stopper()
 			//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 			rotation.consigne(mesure_angle_);
 			//stop en translation
-// 			consigne_tra_ = mesure_distance_;
+			consigne_tra_ = mesure_distance_;
 			translation.consigne(mesure_distance_);
 		}
 	}
@@ -527,7 +574,6 @@ void Robot::stopper()
 		consigne_tra_ = mesure_distance_;
 		translation.consigne(mesure_distance_);
 	}
-	*/
 }
 
 void Robot::atteinte_consignes()
@@ -539,7 +585,6 @@ void Robot::atteinte_consignes()
 
 	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10)
 	{
-		
 		rotation_en_cours_ = false;
 		fin_tourner();
 	}
@@ -547,7 +592,7 @@ void Robot::atteinte_consignes()
 	if (abs(translation.pwmCourant())>=10)
 		translation_en_cours = true;
 
-	if (translation_en_cours && abs(translation.pwmCourant())<10)
+	if (translation_en_cours && abs(translation.pwmCourant())<10 && abs(mesure_distance_ - translation.consigne())<300)//3 cm
 	{
 		translation_en_cours = false;
 		fin_translater();
@@ -568,9 +613,9 @@ void Robot::gestion_stoppage()
 	
 	//detection d'un blocage - translation
 	if (	   (abs(rotation.pwmCourant())>0
-		&& abs(T_last_angle[4]-T_last_angle[0])<10)
+		&& abs(T_last_angle[4]-T_last_angle[0])<5)
 		|| (abs(translation.pwmCourant())>0
-		&& abs(T_last_distance[4]-T_last_distance[0])<10)
+		&& abs(T_last_distance[4]-T_last_distance[0])<5)
 	   )
 	{
 			
@@ -641,8 +686,10 @@ void Robot::translater_bloc(float distance)
 
 void Robot::tourner_bloc(float angle)
 {
-	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
-	rotation.consigne(new_angle/CONVERSION_TIC_RADIAN_);
+	int32_t new_angle = angle_optimal( (angle - angle_origine_)/CONVERSION_TIC_RADIAN_, mesure_angle_ );
+// 	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
+	
+	rotation.consigne(new_angle);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
 		asm("nop");
