@@ -100,7 +100,7 @@ class Asservissement:
                     acquittement = True
                     
                 elif reponse == "STOPPE":
-                    return "STOPPE"
+                    return "stoppe"
                 #timerCourant = lib.timer.getTime()
                 #if timerCourant - debutTimer == 8:
                     #return "timeout"
@@ -116,7 +116,7 @@ class Asservissement:
                     pass
                 """
             
-        return reponse
+        return "acquittement"
                     
     def tourner(self, angle):
         """
@@ -136,12 +136,12 @@ class Asservissement:
                 print reponse
                 acquitement = True
             elif reponse == "STOPPE":
-                print "STOPPE"
+                return "stoppe"
                 break
             #timerCourant = lib.timer.getTime()
             #if timerCourant - debutTimer == 8:
                 #return "timeout"
-        return reponse
+        return "acquittement"
     
     def avancer(self, distance):
         """
@@ -162,7 +162,7 @@ class Asservissement:
                 print reponse
                 acquitement = True
             elif reponse == "STOPPE":
-                break
+                return "stoppe"
            
             self.CaptSerialInstance.write('ultrason\n')
             capteur = self.capteurInstance.mesurer()
@@ -177,7 +177,7 @@ class Asservissement:
                     return "obstacle"
             except:
                 pass
-        return reponse
+        return "acquittement"
         
     def setUnsetAsser(self, asservissement, mode):
         pass
