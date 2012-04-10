@@ -52,22 +52,26 @@ int main() {
 
 	while(1) 
 	{
-	  	char buffer[17];
-		uint8_t length = serial_t_::read(buffer,17);
+// 	  	char buffer[17];
+// 		uint8_t length = serial_t_::read(buffer,17);
+// 
+// 	#define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
+// 
+// 		if(COMPARE_BUFFER("?")){
+// 			serial_t_::print(1);
+// 		}
 
-	#define COMPARE_BUFFER(string) strncmp(buffer, string, length) == 0 && length>0
-
-		if(COMPARE_BUFFER("?")){
-			serial_t_::print(1);
-		}
-
+// 		qsort(mesures_d.data(),mesures_d.size(),sizeof(uint16_t),compare);
+// 		qsort(mesures_g.data(),mesures_g.size(),sizeof(uint16_t),compare);
+// 		serial_t_::print(mesures_g.data()[0]);
+/*		
 		if(COMPARE_BUFFER("ultrason")){
 			cli();
 			qsort(mesures_d.data(),mesures_d.size(),sizeof(uint16_t),compare);
 			qsort(mesures_g.data(),mesures_g.size(),sizeof(uint16_t),compare);
 			serial_t_::print(max(mesures_g.data()[mesures_g.size()/2],mesures_d.data()[mesures_d.size()/2]));
 			sei();
-		}
+		}*/
 
 // 		for(int i=0; i<mesures_d.size(); ++i){
 // 		  Serial<0>::print(mesures_d.data()[i]);
@@ -90,11 +94,16 @@ ISR(INT0_vect)
 	if(rbi(PIND,PORTD2)){
 		derniere_valeur_g = ClasseTimer::value();
 	}else{//Front descendant
+		  serial_t_::print((int)((ClasseTimer::value() - derniere_valeur_g  )*0.0884353741496));
 		// prescaler/fcpu*inchToCm/tempsParInch
-		if(ClasseTimer::value() <derniere_valeur_g)
-		  mesures_g.append((ClasseTimer::value() + 65536 - derniere_valeur_g  )*0.0884353741496);
-		else
-		  mesures_g.append((ClasseTimer::value() - derniere_valeur_g )*0.0884353741496);
+// 		if(ClasseTimer::value() < derniere_valeur_g){
+// // 		  serial_t_::print((int)((ClasseTimer::value() + 65536 - derniere_valeur_g  )*0.0884353741496));
+// 		  mesures_g.append((ClasseTimer::value() + 65536 - derniere_valeur_g  )*0.0884353741496);
+// 		}
+// 		else{
+// // 	          serial_t_::print((int)((ClasseTimer::value() - derniere_valeur_g )*0.0884353741496));
+// 		  mesures_g.append((ClasseTimer::value() - derniere_valeur_g )*0.0884353741496);
+// 		}
 	}
 }
 

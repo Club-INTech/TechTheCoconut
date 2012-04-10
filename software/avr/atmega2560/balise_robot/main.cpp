@@ -68,8 +68,8 @@ int main() {
 	unsigned char rawFrame[3];
 	
 	while (1) {
-		Serial<0>::read(rawFrame,4);
-		Serial<0>::print(rawFrame[0]);
+// 		Serial<0>::read(rawFrame,4);
+		Serial<0>::print(0);
  		/*Serial<0>::read(rawFrame,4);
  		Frame frame(rawFrame);
  
