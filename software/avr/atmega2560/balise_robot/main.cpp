@@ -47,18 +47,16 @@ int main() {
 	
 	while (1) {
 		rawFrame=Serial<0>::read_int();
-		Serial<0>::print(rawFrame);
- 		/*Serial<0>::read(rawFrame,4);
  		Frame frame(rawFrame);
- 
+
  		if(frame.isValid()){
  			
- 			//Serial<0>::print(frame.getRobotId());
+ 			Serial<0>::print(frame.getRobotId());
  			Serial<0>::print(frame.getDistance());
  			//Serial<0>::print(balise.getAngle());
  		} else {
  			Serial<0>::print("ERROR");
- 		}*/
+ 		}
 	}
 	
 }
@@ -75,20 +73,18 @@ void init()
 	//On met la pin 13 (OC0A, B7) en OUT
 	sbi(DDRB,PORTB7);
 
+	//Config PWM de la pin 13 (créneau de 40Hz)
 	//Active mode CTC (cf datasheet p 96)
 	cbi(TCCR0A,WGM00);
 	sbi(TCCR0A,WGM01);
 	cbi(TCCR0B,WGM02);
-
 	//Défini le mode de comparaison
 	sbi(TCCR0A,COM0A0);
 	cbi(TCCR0A,COM0A1);
-
 	// Prescaler (=1)
 	cbi(TCCR0B,CS02);
 	cbi(TCCR0B,CS01);
 	sbi(TCCR0B,CS00);
-
 	//Seuil (cf formule datasheet)
 	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
 	OCR0A= 199;

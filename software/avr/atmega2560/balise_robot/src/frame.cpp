@@ -3,16 +3,16 @@
  */
 
 #include "frame.h"
+#include <libintech/serial/serial_0.hpp>
 
-
-Frame::Frame(unsigned char rawFrame[3]) {
-	
-	data_ = (uint16_t) ((uint16_t) rawFrame[0] << 8) + rawFrame[1];
-	crc_ = rawFrame[2];
+Frame::Frame(uint32_t rawFrame) {
+	 
+	data_ = (uint16_t) (rawFrame >> 16);
+	crc_ = (uint8_t) (rawFrame >> 8);
 	//Récupération du bit robot
 	robotId_ = (unsigned char) (data_ >> 15);
 	//Mise à 0 du bit identifiant le robot
-	distance_ = (uint16_t)(data_ & ~(1 << (15)));
+	distance_ = (uint16_t) (data_ & ~(1 << (15)));
 }
 
 bool Frame::isValid() {

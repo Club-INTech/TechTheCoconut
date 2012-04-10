@@ -13,7 +13,7 @@
 class Frame {
 	
 	public:
-		Frame(unsigned char rawFrame[3]);
+		Frame(uint32_t rawFrame);
 		bool isValid();
 		unsigned char getRobotId();
 		uint16_t getDistance();
