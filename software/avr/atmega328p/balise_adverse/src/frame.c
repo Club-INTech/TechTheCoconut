@@ -26,7 +26,8 @@ Frame makeFrame(uint16_t distance)
 
 void sendFrame(Frame frame)
 {
-	unsigned char i,s=sizeof(Frame);
+	Serial<0>::print(frame);
+	/*unsigned char i,s=sizeof(Frame);
 	for (i = 1 ; i<=s ; i++)
-		Serial<0>::print((unsigned char) (frame >> 8*(s-i)));
+		Serial<0>::print((unsigned char) (frame >> 8*(s-i)));*/
 }

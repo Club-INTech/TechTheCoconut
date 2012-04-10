@@ -6,11 +6,10 @@ volatile uint8_t portchistory = 0xFF;
 
 int main() 
 {
-// 	setup();
-	Serial<0>::init();
-	Serial<0>::change_baudrate(9600);
+ 	setup();
+	
 	while(1){
-		Serial<0>::print(5);
+		
 	}
 	
 	return 0;
@@ -50,6 +49,7 @@ void setup()
 	
 	//Initialisation série
 	Serial<0>::init();
+	Serial<0>::change_baudrate(9600);
 	//Initialisation table pour crc8
 	init_crc8();
 }
@@ -57,8 +57,6 @@ void setup()
 //Interruption pour les PCINT8,9,10,11
 ISR(PCINT1_vect)
 {
-	
-	/*
 	uint8_t changedbits;
 	
     changedbits = PINC ^ portchistory;//masque
@@ -92,7 +90,7 @@ ISR(PCINT1_vect)
 			TCNT0=0;
 			WINDOW_OPENER=changedbits;
 		}
-	}*/
+	}
 }
 
 //Interruption du TIMER0 sur overflow
