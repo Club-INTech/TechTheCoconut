@@ -137,7 +137,7 @@ class Strategie(decision.Decision, threading.Thread):
         pass
     
     # L'utiliser avec goTo(arrivee=trucmuche)
-    def goTo(self, depart = None, arrivee):
+    def goTo(self, arrivee, depart = None):
         if depart == None:
             depart = self.depart
         return self.asservissement.goTo(depart, arrivee)
