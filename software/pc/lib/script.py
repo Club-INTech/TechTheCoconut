@@ -93,22 +93,21 @@ class Script:
         
         couleur = 'V'
         
-        #enfonce un poussoir
-        self.asserInstance.avancer(250.0)
-        self.asserInstance.tourner(math.pi/2)
-        self.asserInstance.avancer(1300.0)
-        self.asserInstance.tourner(-math.pi/2)
-        
-        
+        self.asserInstance.avancer(300)
+        self.asserInstance.tourner(1.5)
+        self.asserInstance.avancer(500)
+        self.asserInstance.tourner(0)
+        self.asserInstance.avancer(300)
+        self.asserInstance.avancer(-300)
+        self.asserInstance.tourner(1.5)
+        self.asserInstance.avancer(650)
+        self.asserInstance.tourner(-1.5)
+        self.asserInstance.avancer(-480)
         self.serialInstance.write("ctm\n120.0\n")
         self.asserInstance.avancer(-500.0)
-        time.sleep(3)
         self.serialInstance.write("ctm\n250.0\n")
         
-        self.asserInstance.avancer(300.0)
-        self.asserInstance.tourner(0.0)
-        self.asserInstance.tourner(-math.pi/2)
-        self.asserInstance.avancer(1350.0) 
+        self.asserInstance.avancer(1500)
         if couleur == 'R':
             self.asserInstance.tourner(0.0)
         else :
