@@ -39,6 +39,7 @@ int main() {
 	while(1) 
 	{
 		Serial<0>::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
+// 		Serial<0>::print(ultrason_d.mediane());
 	}
 	
 	return 0;
