@@ -11,7 +11,7 @@
 
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : couleur_('v')
+Robot::Robot() : 		couleur_('v')
 				,x_(0)
 				,y_(0)
 				,angle_serie_(0.0)
