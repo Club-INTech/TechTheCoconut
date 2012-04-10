@@ -57,9 +57,8 @@ private:
     }
     
     static inline void send_ln(){
-    	send_char('\0');
-    	send_char('\n');
 	send_char('\r');
+    	send_char('\n');
     }
 
 public:
@@ -168,13 +167,13 @@ public:
     
     static inline int32_t read_int(void){
         char buffer[20];
-        read(buffer,20);
+        buffer[read(buffer,20)] = '\0';
         return atol(buffer);
     }
 
     static inline float read_float(){
         char buffer[20];
-	read(buffer,20);
+	buffer[read(buffer,20)] = '\0';
         return atof(buffer);
     }
 
@@ -183,8 +182,7 @@ public:
     	for (; i < length; i++){
         	while(!available()){ asm("nop"); }
         	unsigned char tmp = read_char();
-        	if(tmp == '\n' || tmp == '\r'){
-			string[i]='\0';
+        	if(tmp == '\r'){
         		return i;
 		}
         	string[i] = tmp;
@@ -197,8 +195,7 @@ public:
         for (; i < length; i++){
             while(!available()){ asm("nop"); }
             char tmp = static_cast<char>(read_char());
-            if(tmp == '\n' || tmp == '\r'){
-		string[i]='\0';
+            if(tmp == '\r'){
                 return i;
 	    }
             string[i] = tmp;
