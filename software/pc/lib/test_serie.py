@@ -3,7 +3,7 @@ import serial
 import time
 
 
-serieCapt = serial.Serial('/dev/ttyUSB2', 9600, timeout=1)
+serieCapt = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 id_hg = 1
 id_hd = 2
@@ -56,6 +56,9 @@ def bin(a, nbBits) :
     result = '0'*(nbBits - l)
     return result+s.lstrip('0')
 
+def changer_serie(numero) :
+    serieCapt = serial.Serial('/dev/ttyUSB' + str(numero), 9600, timeout = 1)
+    
 def initialiserBras() :
     serieCapt.write(chr(int('00001111', 2)))
     serieCapt.write(chr(int('00101111', 2)))
@@ -76,7 +79,7 @@ def ouvrirBras() :
     
 def changer_angle(angle, nom = "ALL") :
     # ANGLE COMPRIS ENTRE 0 ET 150
-    if angle <= 150 and angle >= 0 :
+    if angle <= 125 and angle >= 0 :
         angle /= 180.
         angle *= 31
         angle = int(angle)
