@@ -46,8 +46,9 @@ private:
 	bool bascule_tra_;
 	bool bascule_tou_;
 	
-	float CONVERSION_TIC_MM_;
-	float CONVERSION_TIC_RADIAN_;
+	bool translation_attendue_;
+	bool rotation_attendue_;
+	bool goto_attendu_;
 	
 	bool etat_rot_;
 	bool etat_tra_;
@@ -56,16 +57,15 @@ private:
 	
 	bool rotation_en_cours_;
 	
-	bool translation_attendue_;
-	bool rotation_attendue_;
-	bool goto_attendu_;
-	
 	int32_t mesure_distance_;
 	int32_t mesure_angle_;
 	
 	Asservissement translation;
 	Asservissement rotation;
 
+	float CONVERSION_TIC_MM_;
+	float CONVERSION_TIC_RADIAN_;
+	
 public:
 	
 	Robot();
@@ -93,7 +93,7 @@ public:
 	int32_t angle_optimal(int32_t angle, int32_t angleBkp);
 	int32_t compare_angle_tic(int32_t angle1,int32_t angle2);
 	
-	void envoyer_acquittement(int16_t instruction = 0, char *new_message = NULL);
+	void envoyer_acquittement(int16_t instruction = 0, const char *new_message = NULL);
 	void envoyer_position(void);
 	
 	void gotoPos(float x, float y);

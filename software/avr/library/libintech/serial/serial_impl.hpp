@@ -129,7 +129,7 @@ public:
 
     static inline void print(const char * val)
     {
-    	for(int16_t i = 0 ; i < strlen(val) ; i++)
+    	for(uint16_t i = 0 ; i < strlen(val) ; i++)
     	{
     		send_char(val[i]);
     	}
