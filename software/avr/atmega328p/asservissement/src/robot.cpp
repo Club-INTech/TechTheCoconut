@@ -19,12 +19,12 @@ Robot::Robot() : 		couleur_('v')
 				,bascule_goto_(true)
 				,bascule_tra_(true)
 				,bascule_tou_(true)
-				,rotation_en_cours_(false)
 				,translation_attendue_(false)
 				,rotation_attendue_(false)
 				,goto_attendu_(false)
 				,etat_rot_(true)
 				,etat_tra_(true)
+				,rotation_en_cours_(false)
 				,translation(0.6,2.5,0.0)//(1.4,6.0,0.0)
 				,rotation(1.0,3.0,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
@@ -84,7 +84,7 @@ void Robot::update_position()
 ////////////////////////////// PROTOCOLE SERIE ///////////////////////////////////
 void Robot::communiquer_pc(){
 	char buffer[17];
-	uint8_t length = serial_t_::read(buffer,17);
+	serial_t_::read(buffer,17);
 
 #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
@@ -379,7 +379,7 @@ void Robot::changer_orientation(float new_angle)
 	angle_serie_ = new_angle_rad;
 }
 
-void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
+void Robot::envoyer_acquittement(int16_t instruction, const char *new_message)
 {
 	/*
 	 * les entiers envoi et instruction permettent d'accelerer la gestion de la nouvelle entrée string :
@@ -398,7 +398,7 @@ void Robot::envoyer_acquittement(int16_t instruction, char *new_message)
 	 * -1 arrete l'envoi sur la série
 	*/
 	
-	static char *message = "";
+	static const char *message = "";
 	static int16_t envoi = 0;
 	
 	if (instruction)

@@ -106,7 +106,7 @@ public:
 
      static inline void print(uint16_t val){
     	char buffer[6];
-    	ltoa(val,buffer,10);
+    	itoa(val,buffer,10);
     	print((const char *)buffer);
     }
     
@@ -115,6 +115,27 @@ public:
     	ltoa(val,buffer,10);
     	print((const char *)buffer);
     }
+    
+         static inline void print(uint32_t val){
+    	char buffer[10];
+    	ltoa(val,buffer,10);
+    	print((const char *)buffer);
+    }
+    
+    static inline void print(char val){
+    	send_char(val);
+    	send_ln();
+    }
+
+    static inline void print(const char * val)
+    {
+    	for(uint16_t i = 0 ; i < strlen(val) ; i++)
+    	{
+    		send_char(val[i]);
+    	}
+    	send_ln();
+    }
+
     
     static inline void print(int32_t posX, int32_t posY){
     	char bufX[10];
@@ -141,26 +162,6 @@ public:
 	for(unsigned int i = 0 ; i < strlen(bufX)  ; i++)
     	{
     		send_char(bufX[i]);
-    	}
-    	send_ln();
-    }
-    
-     static inline void print(uint32_t val){
-    	char buffer[10];
-    	ltoa(val,buffer,10);
-    	print((const char *)buffer);
-    }
-    
-    static inline void print(char val){
-    	send_char(val);
-    	send_ln();
-    }
-
-    static inline void print(const char * val)
-    {
-    	for(int16_t i = 0 ; i < strlen(val) ; i++)
-    	{
-    		send_char(val[i]);
     	}
     	send_ln();
     }
