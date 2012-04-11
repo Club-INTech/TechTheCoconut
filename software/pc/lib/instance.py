@@ -25,6 +25,9 @@ class Instance:
     
     def __init__(self):
         log.logger.info("Instanciation de la classe Instance")
+        
+        #liste (globale) des centres de robots adverses détectés
+        self.liste_robots_adv = []
 
     def instanciation(self):
         self.instanciationRobot()
@@ -34,6 +37,12 @@ class Instance:
         self.instanciationActionneur()
         self.instanciationAcquisition()
         self.instanciationScript()
+        
+    def ajouterRobotAdverse(self, position, vider = False):
+        self.liste_robots_adv.append(position)
+        if vider:
+            self.liste_robots_adv = []
+        
     
     def instanciationScript(self):
         self.scriptInstance = script.Script()

@@ -198,75 +198,72 @@ class Asservissement:
         else:
             asservissement = 't\n'
         
-        self.serialInstance.ecrire(mode + asservissement)
+        self.serialInstance.write(mode + asservissement)
+        
+    def changerPWM(self, typeAsservissement, valeur):
+        if typeAsservissement == "rotation":
+            self.serialInstance.write("crm\n"+str(float(valeur))+"\n")
+        elif typeAsservissement == "translation":
+            self.serialInstance.write("ctm\n"+str(float(valeur))+"\n")
 
-
+    def MAJorientation(self):
+        self.serialInstance.write("eo\n")
+        reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+        orientation = float(reponse)/1000.0
+        self.robotInstance.setOrientation(orientation)
+        return orientation
+        
+    def MAJposition(self):
+        asser.serialInstance.write("pos\n")
+        reponse = str(asser.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+        if reponse[4]== "+":
+            reponse = reponse.split("+")
+            pos = outils_math.point.Point(float(reponse[1]),float(reponse[0]))
+        else:
+            reponse = reponse.split("-")
+            pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
+        self.robotInstance.setPosition(pos)
+        return pos
+        
+        
     def immobiliser(self):
-        """
-        Fonction pour demander l'immombilisation du robot
-        """
-        self.serialInstance.ecrire('stop\n')
+        self.serialInstance.write('stop\n')
         
     def calculRayon(self, angle):
         """
-        Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
+        Modifie le rayon du cercle circonscrit au robot par rapport au centre d'origine (bras rabattus).
         Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
         
         
-        :param longueur_bras: longueur des bras du robot
-        :type longueur_bras: int
-        :param largeur_robot: largueur du robot
-        :type largeur_robot: int
-        :param angle: angle entre la face avant du robot et les bras en bas du robot. Unité : la radian
+        :param angle: angle entre la face avant du robot et les bras en bas du robot. Unité :  radian
         :type angle: float
-        :param proj_x/proj_y: projection sur x et y d'un bras du robot
-        :type proj_x/proj_y : float
-        :param sommet_bras : coordonnées du sommet du bras droit
-        :type sommet_bras: Point
-        :param segment_centre_bras: distance entre le centre original du cercle circonscrit au robot et le sommet du bras.
-        :type segment_centre_bras: float
         """
         
         #récupération des constantes nécessaires:
         log.logger.info('Calcul du rayon et du centre du robot')
         
-        #[pierre] j'ai modifié des constantes...
-        #désolé mais c'était nécessaire : ta "largeur" était en fait celle de la table
-        #et toute facon constantes.py manquait de clarté
-        
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
         largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
         longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
         
-        #Commenté pour les tests !
-        #angle = robot.actionneur['bd'].angle
-        
-        #[]ouais, on pourrait le mettre dans constantes..
         diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
-        print diam_original
-        #projection du bras sur x et y
-        
-        #[]c'est quoi la convention pour l'angle des bras ?
-        #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
         proj_x = -longueur_bras*math.cos(float(angle))
         proj_y = longueur_bras*math.sin(float(angle))
-        #[]la longueur est sur x, largeur sur y
-        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + math.sqrt(proj_y ** 2))
-        sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
-        #longueur du segment entre le centre du robot avec les bras fermés et le sommet du bras
-        #segment_centre_bras = math.sqrt(math.pow(sommet_bras.x, 2) + math.pow(sommet_bras.y, 2))
         
-        #[] le diamètre mesuré (segment le plus long) doit etre pris entre deux extremités du robot.
-        #là tu considères que le milieu du diamètre est le centre_original
-        #en gros faut raisonner sur les diamètres, par sur les rayons ^^
+        
+        #[]la longueur est sur x, largeur sur y
+        #point à l'extremité du bras droit
+        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + math.sqrt(proj_y ** 2))
+        #point au sommet bas gauche du robot
+        sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
+        
         diam_avec_bras = 2*math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
+        
         if diam_avec_bras > diam_original:
             self.robotInstance.rayon = diam_avec_bras/2
             
         else:
             self.robotInstance.rayon = diam_original/2
-            
-        print self.robotInstance.rayon
             
     def afficherMenu(self):
         print """
@@ -304,7 +301,7 @@ class Asservissement:
             elif choix == '1':
                 couleur = raw_input("Indiquer la zone de départ (r/v)\n")
                 message = 'c\nc\n' + str(couleur)
-                self.serialInstance.ecrire(message)
+                self.serialInstance.write(message)
                 self.afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
@@ -318,7 +315,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += str(valeurs[choix]) + '\n' + str(constante)
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     
                     else:
                         exit = True
@@ -335,7 +332,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\n")
                         message += valeurs[choix] + '\n' + str(constante)
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     
                     else:
                         exit = True
@@ -346,12 +343,12 @@ class Asservissement:
                 coordonneX = raw_input("Rentrer a coordonée en x : \n")
                 if coordonneX:
                     message = 'cx' + str(coordonneX)
-                    self.serialInstance.ecrire(message)
+                    self.serialInstance.write(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \n")
                 if coordonneY:
                     message = 'cy' + str(coordonneY)
-                    self.serialInstance.ecrire(message)
+                    self.serialInstance.write(message)
                 
                 self.afficherMenu()
             #Activer ou désactiver l'asservissement
@@ -368,16 +365,16 @@ class Asservissement:
                     constante = raw_input()
                     if constante == '1':
                         message = 's\nr\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '2':
                         message = 'd\nr\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '3':
                         message = 's\nt\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '4':
                         message = 'd\nt\n'
-                        self.serialInstance.ecrire(message)
+                        self.serialInstance.write(message)
                     elif constante == '0':
                         exit = True
                         self.afficherMenu()
@@ -412,7 +409,7 @@ class Asservissement:
                                 self.afficherMenu()
                             else:
                                 message = 'e\nr\n' + valeurs[choix]
-                                self.serialInstance.ecrire(message)
+                                self.serialInstance.write(message)
                     elif choix == '3':
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
@@ -424,20 +421,20 @@ class Asservissement:
                                 self.afficherMenu()
                             else:
                                 message = 'e\nt\n' + valeurs[choix]
-                                self.serialInstance.ecrire(message)
+                                self.serialInstance.write(message)
                     elif choix == '4':
-                        self.serialInstance.ecrire('e\ns')
+                        self.serialInstance.write('e\ns')
                     elif choix =='5':
                         exit = False
                         while not exit:
-                            self.serialInstance.ecrire('ex')
+                            self.serialInstance.write('ex')
                             answer = False
                             while not answer:
                                 while not self.serialInstance.file_attente.empty():
                                     print self.serialInstance.file_attente.get()
                                     answer = True
                                     self.afficherSousMenu()
-                            self.serialInstance.ecrire('y\ne')
+                            self.serialInstance.write('y\ne')
                             while not answer:
                                 while not self.serialInstance.file_attente.empty():
                                     print self.serialInstance.file_attente.get()
@@ -446,7 +443,7 @@ class Asservissement:
             elif choix == '7':
                 exit = False
                 while not exit:
-                    self.serialInstance.ecrire('?\n')
+                    self.serialInstance.write('?\n')
                     
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\n"

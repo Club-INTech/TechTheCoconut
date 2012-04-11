@@ -189,7 +189,6 @@ class Script:
                         except :
                             pass
         
-        
     def lire(self):
         """
         Permet de lire un message de ltestPosition'asservissement autre que celui lu par le thread d'acquisition.
@@ -198,3 +197,14 @@ class Script:
             time.sleep(0.01)
         self.robotInstance.new_message = False
         return self.robotInstance.message
+        
+        
+    def scriptPipeauNewStrategie(self):
+        try :
+            #script
+            asserInstance.gestionAvancer(300)
+            asserInstance.gestionAvancer(300,"forcer")
+            return "scriptOK"
+        except :
+            return "BAD_TRIP"
+        
