@@ -25,7 +25,7 @@ Robot::Robot() : 		couleur_('v')
 				,etat_rot_(true)
 				,etat_tra_(true)
 				,rotation_en_cours_(false)
-				,translation(0.6,2.5,0.0)//(1.4,6.0,0.0)
+				,translation(0.75,3.5,0.0)//(0.6,2.5,0.0)//(1.4,6.0,0.0)
 				,rotation(1.0,3.0,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
 				,CONVERSION_TIC_RADIAN_(0.000703762)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
@@ -37,6 +37,10 @@ Robot::Robot() : 		couleur_('v')
 	serial_t_::change_baudrate(9600);
 	
 	changer_orientation(3.1415);
+	
+	
+	translation.valeur_bridage(200.0);
+// 	rotation.valeur_bridage(100.0);
 }
 
 void Robot::asservir()
