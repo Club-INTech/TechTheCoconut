@@ -66,6 +66,7 @@ constantes = \
             "asservissement": "^([0-9]{4}(\+|-)[0-9]{4}|0)$",
             "capteur_actionneur": "^1$",
             "balise": "^2$",
+            "actionneur": "^4$",
         },
     },
     "DureeJeu": 5,
