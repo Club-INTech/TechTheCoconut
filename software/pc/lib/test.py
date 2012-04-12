@@ -21,6 +21,12 @@ y = raw_input()
 arrivee = outils_math.point.Point(x,y)
 """
 
+capteurInstance = __builtin__.instance.capteurInstance
+while 42:
+    print capteurInstance.mesurer()
+    time.sleep(0.1)
+    
+
 """  
 import robot
 import asservissement
@@ -28,7 +34,7 @@ robotInstance=robot.Robot()
 asser = Asservissement(robotInstance)
 asser.test()
 """
-
+"""
 scriptInstance = __builtin__.instance.scriptInstance
 
 depart = outils_math.point.Point(0.0,0.0)
@@ -38,7 +44,7 @@ asser = __builtin__.instance.asserInstance
 asser.serialInstance.write("\n")
 
 asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
-
+"""
 #robotInstance.setPosition
 #scriptInstance.homologation()
 """
