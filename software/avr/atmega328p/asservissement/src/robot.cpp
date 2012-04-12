@@ -26,7 +26,7 @@ Robot::Robot() : 		couleur_('v')
 				,etat_tra_(true)
 				,rotation_en_cours_(false)
 				,translation(0.75,3.5,0.0)//(0.6,2.5,0.0)//(1.4,6.0,0.0)
-				,rotation(1.0,3.0,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
+				,rotation(0.9,3.5,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
 				,CONVERSION_TIC_RADIAN_(0.000703762)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
 				
@@ -38,9 +38,13 @@ Robot::Robot() : 		couleur_('v')
 	
 	changer_orientation(3.1415);
 	
+	translation.valeur_bridage(100.0);
+	translation.kp(0.75);
+	translation.kd(2.5);
 	
-	translation.valeur_bridage(200.0);
-// 	rotation.valeur_bridage(100.0);
+	rotation.valeur_bridage(100.0);
+	rotation.kp(1.2);
+	rotation.kd(3.5);
 }
 
 void Robot::asservir()
@@ -250,20 +254,48 @@ void Robot::communiquer_pc(){
 	else if (COMPARE_BUFFER("pos",3)){
 		envoyer_position();
 	}
-	else if (COMPARE_BUFFER("kadoc",5)){
 	
-	Serial<0>::print("////");
-	serial_t_::print((int32_t)mesure_angle_);
-	
-	serial_t_::print((int32_t)(compare_angle_tic(mesure_angle_,rotation.consigne())));
-// 	serial_t_::print((int32_t)(angle_origine_/CONVERSION_TIC_RADIAN_));
-	serial_t_::print((int32_t)rotation.consigne());
+	////////////////////////////////////////vitesses prédéfinies
+	else if (COMPARE_BUFFER("ctv1",4))
+	{
+		translation.valeur_bridage(50.0);
+		translation.kp(0.75);
+		translation.kd(2.0);
+	}
+	else if (COMPARE_BUFFER("ctv2",4))
+	{
+		translation.valeur_bridage(100.0);
+		translation.kp(0.75);
+		translation.kd(2.5);
+	}
+	else if (COMPARE_BUFFER("ctv3",4))
+	{
+		translation.valeur_bridage(200.0);
+		translation.kp(0.75);
+		translation.kd(3.5);
+	}
+	else if (COMPARE_BUFFER("crv1",4))
+	{
+		rotation.valeur_bridage(50.0);
+		rotation.kp(1.5);
+		rotation.kd(2.0);
+	}
+	else if (COMPARE_BUFFER("crv2",4))
+	{
+		rotation.valeur_bridage(100.0);
+		rotation.kp(1.2);
+		rotation.kd(3.5);
+	}
+	else if (COMPARE_BUFFER("crv3",4))
+	{
+		rotation.valeur_bridage(200.0);
+		rotation.kp(0.9);
+		rotation.kd(3.5);
 	}
 	
 
 #undef COMPARE_BUFFER
 }
-
 
 ////////////////////////////// ACCESSEURS /////////////////////////////////
 
