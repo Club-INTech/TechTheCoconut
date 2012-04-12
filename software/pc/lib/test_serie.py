@@ -2,13 +2,23 @@
 import serial
 import time
 
-
-serieCapt = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+try :
+    serieCapt = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+except :
+    serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout=1)
 
 id_hg = 1
 id_hd = 2
 id_bg = 0
 id_bd = 3
+
+NEWVERSION = True
+
+ANGLEMIN = 0
+ANGLEMAX = 150
+
+ORDRE_GOTO = "GOTO"
+ORDRE_CHVITESSE = "CH_VITESSE"
 
 """
 PROTOCOLE DE COMMUNICATION PC <-> AVR POUR LES AX12 
@@ -60,10 +70,7 @@ def changer_serie(numero) :
     serieCapt = serial.Serial('/dev/ttyUSB' + str(numero), 9600, timeout = 1)
     
 def initialiserBras() :
-    serieCapt.write(chr(int('00001111', 2)))
-    serieCapt.write(chr(int('00101111', 2)))
-    serieCapt.write(chr(int('01001111', 2)))
-    serieCapt.write(chr(int('01101111', 2)))
+    changer_angle(90)
 
 def testerBras() :
     i=0
@@ -79,19 +86,26 @@ def ouvrirBras() :
     
 def changer_angle(angle, nom = "ALL") :
     # ANGLE COMPRIS ENTRE 0 ET 150
-    if angle <= 125 and angle >= 0 :
-        angle /= 180.
-        angle *= 31
-        angle = int(angle)
+    if angle <= 150 and angle >= 0 :
+
         
-        if nom == "hg" or nom == "ALL" :
-            serieCapt.write(chr(int('0' + bin(id_hg, 2) + bin(31 - angle, 5), 2)))
-        if nom == "hd" or nom =="ALL":
-            serieCapt.write(chr(int('0' + bin(id_hd, 2) + bin(angle, 5), 2)))
-        if nom == "bd" or nom =="ALL":
-            serieCapt.write(chr(int('0' + bin(id_bd, 2) + bin(31 - angle, 5), 2)))
-        if nom == "bg" or nom =="ALL":
-            serieCapt.write(chr(int('0' + bin(id_bg, 2) + bin(angle, 5), 2)))
+        if nom == "ALL" :
+            id = 4
+        else :
+            try :
+                exec("id = id_" + str(nom))
+            except :
+                return
+
+        
+        if angle <= ANGLEMIN:
+            angle = ANGLEMIN
+        elif angle >= ANGLEMAX :
+            angle = ANGLEMAX
+            
+        serieCapt.write(ORDRE_GOTO + "\n")
+        serieCapt.write(chr(id)+"\n")       
+        serieCapt.write(chr(angle) + "\n")
     
 
 # VITESSE DOIT ETRE COMPRIS ENTRE 0 et 500
