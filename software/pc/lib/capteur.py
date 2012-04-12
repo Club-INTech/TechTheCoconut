@@ -32,7 +32,7 @@ class Capteur():
             self.serieInstance = __builtin__.instance.serieCaptInstance
 
     def mesurer(self):
-        self.serieInstance.write("ultrason")
+        self.serieInstance.write("ultrason\n\r")
         mesure = self.serieInstance.readline()
         return mesure
         
