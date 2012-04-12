@@ -4,10 +4,14 @@ import time
 
 #import __builtin__
 #serieCapt = __builtin__.instance.serieCaptInstance
+
 try :
-    serieCapt = serial.Serial('/dev/ttyUSB2', 9600, timeout=1)
+    serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout=1)
 except :
-    serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout = 1)
+    try:
+        serieCapt = serial.Serial('/dev/ttyUSB2', 9600, timeout=1)
+    except :
+        pass
     
 serieCapt.write("B\n\r")
 
@@ -97,7 +101,6 @@ def goto(id, angle) :
     serieCapt.write(str(int(angle)) + "\n\r")
      
 def changer_angle(angle, nom = "ALL") :
-        
     if angle <= ANGLEMIN:
         angle = ANGLEMIN
     elif angle >= ANGLEMAX :
