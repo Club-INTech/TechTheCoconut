@@ -101,10 +101,10 @@ public:
     template<class T>
     static inline void print(T val){
     	char buffer[10];
-	if(sizeof(T)==16){
+	if(sizeof(T)==2){
 		itoa(val,buffer,10);
 	}
-	else if(sizeof(T)==32){
+	else if(sizeof(T)==4){
 		ltoa(val,buffer,10);
 	}
     	print((const char *)buffer);
