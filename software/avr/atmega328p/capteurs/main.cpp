@@ -18,9 +18,10 @@
 #define rbi(port,bit) ((port & (1 << bit)) >> bit)
 #endif
 
+
 int main() {
 	Serial<0>::init();
-
+// 	Serial<0>::change_baudrate(9600);
 	//Pin D2 en INPUT
 	cbi(DDRD,PORTD2);
 	//Activation des interruptions pour tout changement logique pour pin2
@@ -38,13 +39,25 @@ int main() {
 
 	while(1) 
 	{
-		Serial<0>::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
+		char buffer[17];
+		Serial<0>::read(buffer,17);
+
+		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+
+
+		if(COMPARE_BUFFER("?",1)){
+			Serial<0>::print(1);
+		}
+		if(COMPARE_BUFFER("ultrason",8)){
+			Serial<0>::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
+		}
 	}
 	
 	return 0;
 }
 
 ISR(TIMER1_OVF_vect){
+	asm("nop");
 }
 
 
