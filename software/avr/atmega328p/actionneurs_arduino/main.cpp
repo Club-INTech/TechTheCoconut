@@ -40,7 +40,7 @@ int main()
     #endif
         
     #ifdef FLASH_ID_MODE
-        AX12InitID(4);
+        AX12InitID(0);
     #endif
         
     // Initialisation de tous les AX12
@@ -52,12 +52,12 @@ int main()
         #ifdef REANIMATION_MODE
             
             ax12Init(2000000/(debug_baudrate + 1));
-            
+            reset(0xFE);
             debug_baudrate++;
-        #endif       
+        #else      
         
         #ifdef TEST_NOSERIE_MODE 
-            AX12Init(0x04, 0,0,200);
+            AX12Init(0xFE, 0,0,1200);
         #else
             
             
@@ -108,6 +108,7 @@ int main()
         
             
 
+        #endif
         #endif
 // 
     }

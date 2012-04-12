@@ -5,12 +5,10 @@ import time
 #import __builtin__
 #serieCapt = __builtin__.instance.serieCaptInstance
 try :
-    serieCapt = serial.Serial('/dev/ttyUSB1     ', 9600, timeout=1)
+    serieCapt = serial.Serial('/dev/ttyUSB2', 9600, timeout=1)
 except :
     serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout = 1)
     
-time.sleep(2)
-
 serieCapt.write("B\n\r")
 
 
@@ -22,7 +20,7 @@ id_bd = 3
 NEWVERSION = True
 
 ANGLEMIN = 0
-ANGLEMAX = 150
+ANGLEMAX = 160
 
 ORDRE_GOTO = "GOTO"
 ORDRE_CHVITESSE = "CH_VITESSE"
@@ -93,7 +91,9 @@ def ouvrirBras() :
     
 def goto(id, angle) :
     serieCapt.write(ORDRE_GOTO + "\n\r")
+    time.sleep(0.02)
     serieCapt.write(str(int(id)) + "\n\r")
+    time.sleep(0.02)
     serieCapt.write(str(int(angle)) + "\n\r")
      
 def changer_angle(angle, nom = "ALL") :
@@ -104,9 +104,9 @@ def changer_angle(angle, nom = "ALL") :
         angle = ANGLEMAX
         
     if nom == "ALL" :
-        goto(id_bg, angle)
-        goto(id_bd, 180 - angle)
-        goto(id_hg, 180 - angle)
+        goto(id_bg, angle + 5)
+        goto(id_bd, 180 - angle + 3)
+        goto(id_hg, 180 - angle + 3)
         goto(id_hd, angle)
         
     else :
@@ -123,14 +123,12 @@ def changer_vitesse(vitesse) :
         serieCapt.write(ORDRE_CHVITESSE + "\n\r")
         serieCapt.write(str(int(vitesse)) + "\n\r")
 
-def test() :
-    changer_angle(0)
-    time.sleep(2)
-    changer_vitesse(200)
-    changer_angle(150)
-    time.sleep(1)
-    changer_vitesse(500)
-    changer_angle(90)
+def test(tps) :
+    i = 0
+    while 1:
+        changer_angle((i%17)*10)
+        time.sleep(tps)
+        i += 1
 
 def changer_id(nouvel_id) :
     serieCapt.write(chr(int('1' + '01' + '000' + bin(nouvel_id, 2), 2)))
