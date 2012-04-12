@@ -97,7 +97,7 @@ def changer_angle(angle, nom = "ALL") :
 
         
         if nom == "ALL" :
-            id = 4
+            id = 0xFE
         else :
             try :
                 exec("id = id_" + str(nom))
