@@ -70,4 +70,11 @@ constantes = \
         },
     },
     "DureeJeu": 5,
+    
+    "Actionneurs":
+    {
+        "angleMax": 160,
+        "angleMin": 0,
+        
+    },
 }

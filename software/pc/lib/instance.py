@@ -70,6 +70,13 @@ class Instance:
             self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
+            
+        # Actionneurs ≠ Capteurs sur Arduino pour la Belgique.
+        cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
+        if cheminActionneur :
+            self.serieActionneurInstance = serial.Serial(cheminActionneur, 9600, timeout = 1)
+        else :
+            log.logger.error("Les actionneurs ne sont pas chargés")
         
         cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
         #cheminCapt = '/dev/ttyUSB13'

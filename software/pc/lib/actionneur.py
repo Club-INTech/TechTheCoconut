@@ -5,6 +5,11 @@ import log
 import peripherique
 import __builtin__
 
+# Ajout de constantes de develop si on ne passe pas par la console INTech
+if not hasattr(__builtin__, "constantes"):
+    import profils.develop.constantes
+    __builtin__.constantes = profils.develop.constantes.constantes
+
 log = log.Log(__name__)
 
 # Conversion du chiffre décimal a en chaîne de caract. de 0 et de 1, de longueur nbBits
@@ -41,75 +46,60 @@ class Actionneur(serie.Serie):
         self.position   = position
         self.id         = id
         
+        
         self.demarrer()
         
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            self.serieInstance = __builtin__.instance.serieCaptInstance
+            self.serieInstance = __builtin__.instance.serieActionneurInstance
         
-    def deplacer(self, angle):
+    def deplacer(self, angle, position = "ALL"):
         """
         Envoyer un ordre à l'actionneur
         
         :param angle: angle à atteindre (angle mesuré entre la face avant du robot et le bras)
-        :type angle: int (entre 0 et 180)
+        :type angle: int (entre 0 et ANGLEMAXI)
+        
+        :param position: Position de l'actionneur à tourner (OPTIONEL)
+        :type position: string "hg" | "hd" | "bg" | "bd". Défaut : ALL
 
         """
-
-        if angle >= 0 and angle <= 180 :
-            angle /= 180.
-            angle *= 31             # On se rapporte à un nombre codé sur 5 bits (2^5 = 32)
-            angle = int(angle)
+        if position != "ALL" and position != self.position :
+            if angle >= constantes["Actionneurs"]["angleMax"] :
+                angle = constantes["Actionneurs"]["angleMax"]
+            elif angle <= constantes["Actionneurs"]["angleMin"] :
+                angle = constantes["Actionneurs"]["angleMin"]
             
-            # Si le moteur est monté à l'envers ou est à droite (et vice-versa)
-            if (self.position[0] == 'hd' or self.position == 'bg') :
-                angle = 31-angle
-            
-            self.serieCaptInstance.write(chr('0' + bin(self.id, 2) + bin(angle, 5), 2))
-            
-        else :
-            log.logger.error("L'angle cible de l'actionneur doit être compris entre 0 et 500")
+            self.serieInstance.write("GOTO" + "\n\r")
+            self.serieInstance.write(str(int(self.id)) + "\n\r")
+            self.serieInstance.write(str(int(angle))   + "\n\r")
+        
         
     def changerVitesse(self, nouvelleVitesse) :
         """
         Changer la vitesse de rotation de TOUS les actionneurs branchés
         
         :param nouvelleVitesse: Nouvelle vitesse des actionneurs
-        :type nouvelleVitesse: int (entre 0 et 500)
+        :type nouvelleVitesse: int (entre 0 et 1000)
         """
-        if nouvelleVitesse >= 0 and nouvelleVitesse <= 500 :
-            nouvelleVitesse = nouvelleVitesse/500.
-            nouvelleVitesse *= 31                   # Codage sur 5 bits
-            nouvelleVitesse = int(nouvelleVitesse)
-            self.serieCaptInstance.write(chr(int('1' + '00' + bin(nouvelleVitesse, 5), 2)))
-            log.logger.info("La vitesse des actionneurs a été changée")
-            
-        else :
-            log.logger.error("La nouvelle vitesse de l'actionneur doit être comprise entre 0 et 500")
+        
+        if vitesse >= 1000 :
+            vitesse = 1000
+        elif vitesse <= 0 :
+            vitesse = 0
+        
+        self.serieInstance.write("CH_VITESSE" + "\n\r")
+        self.serieInstance.write(str(int(nouvelleVitesse)) + "\n\r")
         
     def getAngle(self):
         """
         Envoie une requête pour obtenir la position de chaque bras.
         NOTE Ne marcheras sans doute jamais. :'(
         """
-        self.serieCaptInstance.write(self.nom + '\n '+ '0' + '\n '  + '0')
-        #serie.Serie.lire()
-        self.angle = self.file_attente.get(lu)
-        
-    def change_id(self, nouvel_id) :
-        """
-        Permet de changer l'ID de tous les actionneurs branchés
-        WARNING Cette méthode change TOUS les IDs de TOUS les actionneurs branchés.
-        
-        :param nouvel_id: Nouvel ID des actionneurs branchés
-        :type nouvel_id: int (entre 0 et 3)
-        """
-        if nouvel_id >= 0 and nouvel_id <= 3 :
-            self.serieCaptInstance.write(chr(int('1' + '01' + '000' + bin(int(nouvel_id), 2), 2)))
-        
-        else :
-            log.logger.error("Le nouvel id des actionneurs doit être compris entre 0 et 3")
+        #self.serieCaptInstance.write(self.nom + '\n '+ '0' + '\n '  + '0')
+        ##serie.Serie.lire()
+        #self.angle = self.file_attente.get(lu)
 
     def reset(self):
         """
