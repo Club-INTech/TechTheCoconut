@@ -98,27 +98,15 @@ public:
 	}
     }
     
-    static inline void print(int16_t val){
-    	char buffer[6];
-    	itoa(val,buffer,10);
-    	print((const char *)buffer);
-    }
-
-     static inline void print(uint16_t val){
-    	char buffer[6];
-    	itoa(val,buffer,10);
-    	print((const char *)buffer);
-    }
-    
-     static inline void print(int32_t val){
+    template<class T>
+    static inline void print(T val){
     	char buffer[10];
-    	ltoa(val,buffer,10);
-    	print((const char *)buffer);
-    }
-    
-         static inline void print(uint32_t val){
-    	char buffer[10];
-    	ltoa(val,buffer,10);
+	if(sizeof(T)==4){
+		ltoa(val,buffer,10);
+	}
+	else{
+		itoa(val,buffer,10);
+	}
     	print((const char *)buffer);
     }
     

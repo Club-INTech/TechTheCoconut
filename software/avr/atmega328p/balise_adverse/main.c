@@ -3,13 +3,13 @@
 volatile uint8_t WINDOW_OPENER = 0;
 volatile uint8_t WINDOW_FLAG = 0;
 volatile uint8_t portchistory = 0xFF;
+volatile uint8_t changedbits=0;
 
 int main() 
 {
  	setup();
 	
-	while(1){
-		
+	while(1){		
 	}
 	
 	return 0;
@@ -31,10 +31,10 @@ void setup()
 
 	//Active les PCINT
 	sbi(PCMSK1,PCINT8);
-    sbi(PCMSK1,PCINT9);
-    sbi(PCMSK1,PCINT10);
-    sbi(PCMSK1,PCINT11);
-    sbi(PCICR,PCIE1);//active PCINT port C
+	sbi(PCMSK1,PCINT9);
+	sbi(PCMSK1,PCINT10);
+	sbi(PCMSK1,PCINT11);
+	sbi(PCICR,PCIE1);//active PCINT port C
 	
 	//Réglages du TIMER0
 	//Prescaler de 256
@@ -57,26 +57,23 @@ void setup()
 //Interruption pour les PCINT8,9,10,11
 ISR(PCINT1_vect)
 {
-	uint8_t changedbits;
-	
     changedbits = PINC ^ portchistory;//masque
     portchistory = PINC;
-    
+
     //Si front montant
     if((PINC & changedbits)!=0)
     {
 		//Si on est dans une fenêtre encore active
 		if(WINDOW_FLAG)
-		{
-			WINDOW_FLAG = 0;
-			
+		{	
 			Frame message;
 			uint16_t distance;
 		
 			if(TCNT0*16>=TIME_THRESHOLD_MIN)
-			{
+			{		
 				if(changedbits == WINDOW_OPENER)
 				{
+					WINDOW_FLAG = 0;
 					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
 					message=makeFrame(distance);
 					sendFrame(message);
