@@ -1,5 +1,7 @@
 #include <libintech/serial/serial_0_interrupt.hpp>
+#include <libintech/serial/serial_1_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
+#include <libintech/serial/serial_1.hpp>
 #include <libintech/timer.hpp>
 
 #include <stdint.h>
@@ -37,26 +39,39 @@ volatile uint8_t dernier_etat_b;
 volatile int32_t codeur;
 volatile int32_t last_codeur = 0;
 
+typedef Serial<1> serial_radio;
+typedef Serial<0> serial_pc;
 int main() {
 	
-// 	Balise & balise = Balise::Instance();
+	Balise & balise = Balise::Instance();
 	init();
 
 	//unsigned char rawFrame[3];
 	uint32_t rawFrame=0;
 	
 	while (1) {
-		rawFrame=Serial<0>::read_int();
- 		Frame frame(rawFrame);
+		
+		char buffer[17];
+		serial_pc::print(2);
+		serial_pc::read(buffer,17);
 
- 		if(frame.isValid()){
- 			
- 			Serial<0>::print(frame.getRobotId());
- 			Serial<0>::print(frame.getDistance());
- 			//Serial<0>::print(balise.getAngle());
- 		} else {
- 			Serial<0>::print("ERROR");
- 		}
+		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+
+		if(COMPARE_BUFFER("?",1)){
+			serial_pc::print(2);
+		}
+		
+		if(COMPARE_BUFFER("frame",5)){
+			rawFrame=serial_radio::read_int();
+			Frame frame(rawFrame);
+			if(frame.isValid()){
+ 			serial_pc::print(frame.getRobotId());
+ 			serial_pc::print(frame.getDistance());
+			serial_pc::print(balise.getAngle());
+			} else {
+				serial_pc::print("ERROR");
+			}
+		}
 	}
 	
 }
@@ -64,8 +79,10 @@ int main() {
 void init()
 {
   	ClasseTimer::init();
-	Serial<0>::init();
-	Serial<0>::change_baudrate(9600);
+	serial_pc::init();
+	serial_pc::change_baudrate(9600);
+	serial_radio::init();
+	serial_radio::change_baudrate(9600);
 	
 	//5V sur la pin 12 (B6) pour la direction laser
 	sbi(DDRB,PORTB6);
@@ -116,7 +133,7 @@ void init()
 ISR(TIMER0_OVF_vect)
 {
 	Balise::Instance().incremente_toptour();
-	Balise::Instance().asservir(codeur - last_codeur);
+// 	Balise::Instance().asservir(codeur - last_codeur);
 }
 
 ISR(TIMER1_OVF_vect)
