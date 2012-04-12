@@ -31,8 +31,6 @@ public:
   }
   
   uint16_t mediane(){
-    uint16_t res=0;
-//     if(mesures_[0] < mesures_[1]
     qsort(mesures_.data(),mesures_.size(),sizeof(uint16_t),compare);
     return mesures_.data()[mesures_.size()/2];
   }

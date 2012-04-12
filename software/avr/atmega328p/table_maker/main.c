@@ -90,7 +90,7 @@ ISR(PCINT1_vect)
 		if(WINDOW_FLAG)
 		{
 			WINDOW_FLAG = 0;			
-			uint16_t distance;
+// 			uint16_t distance;
 		
 			if(TCNT0*16>=TIME_THRESHOLD_MIN)
 			{

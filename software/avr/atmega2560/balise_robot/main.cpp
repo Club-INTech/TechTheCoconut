@@ -39,7 +39,7 @@ volatile int32_t last_codeur = 0;
 
 int main() {
 	
-	Balise & balise = Balise::Instance();
+// 	Balise & balise = Balise::Instance();
 	init();
 
 	//unsigned char rawFrame[3];

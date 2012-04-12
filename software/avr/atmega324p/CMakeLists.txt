@@ -1,3 +1,3 @@
 include(atmega324p.cmake)
-set(MICROCONTROLEURS capteurs-actionneurs actionneurs)
+set(MICROCONTROLEURS )
 add_microcontrolers(m324p "${MICROCONTROLEURS}")
