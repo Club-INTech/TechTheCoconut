@@ -207,4 +207,23 @@ class Script:
             return "scriptOK"
         except :
             return "BAD_TRIP"
+            
+    def testFonctions(self):
+        
+        raw_input()
+        self.asserInstance.avancer(200)
+        raw_input()
+        changerVitesse("translation",1)
+        self.asserInstance.avancer(-200)
+        raw_input()
+        changerVitesse("translation",2)
+        self.asserInstance.avancer(200)
+        raw_input()
+        self.asserInstance.tourner(1.57)
+        raw_input()
+        self.asserInstance.goTo(outils_math.point.Point(300, 300))
+        raw_input()
+        
+    def ramasserTotem(self):
+        
         

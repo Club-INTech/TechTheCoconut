@@ -205,6 +205,13 @@ class Asservissement:
             self.serialInstance.write("crm\n"+str(float(valeur))+"\n")
         elif typeAsservissement == "translation":
             self.serialInstance.write("ctm\n"+str(float(valeur))+"\n")
+            
+    def changerVitesse(self, typeAsservissement, valeur):
+        if typeAsservissement == "rotation":
+            self.serialInstance.write("crv"+str(int(valeur))+"\n")
+        elif typeAsservissement == "translation":
+            self.serialInstance.write("ctv"+str(int(valeur))+"\n")
+        
 
     def MAJorientation(self):
         self.serialInstance.write("eo\n")
