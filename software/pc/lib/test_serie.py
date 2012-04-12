@@ -2,10 +2,17 @@
 import serial
 import time
 
+#import __builtin__
+#serieCapt = __builtin__.instance.serieCaptInstance
 try :
     serieCapt = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 except :
-    serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout=1)
+    serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout = 1)
+    
+time.sleep(2)
+
+serieCapt.write("B\n\r")
+
 
 id_hg = 1
 id_hd = 2
@@ -103,27 +110,28 @@ def changer_angle(angle, nom = "ALL") :
         elif angle >= ANGLEMAX :
             angle = ANGLEMAX
             
-        serieCapt.write(ORDRE_GOTO + "\n")
-        serieCapt.write(chr(id)+"\n")       
-        serieCapt.write(chr(angle) + "\n")
+        serieCapt.write(ORDRE_GOTO + "\n\r")
+        time.sleep(0.5)
+        serieCapt.write(str(int(id)) + "\n\r")
+        time.sleep(0.5)
+        serieCapt.write(str(int(angle)) + "\n\r")
     
 
 # VITESSE DOIT ETRE COMPRIS ENTRE 0 et 500
 def changer_vitesse(vitesse) :
-    vitesse = vitesse/500.
-    vitesse *= 31
-    vitesse = int(vitesse)
-    serieCapt.write(chr(int('1' + '00' + bin(vitesse, 5), 2)))
-    
-def test_vitesse() :
-    for i in range(0,10) :
-        changer_vitesse(i*50)
-        time.sleep(1)
-        if i%2 == 0 :
-            ouvrirBras()
-        else :
-            fermerBras()
-            
+    if vitesse <= 1000 :
+        serieCapt.write(ORDRE_CHVITESSE + "\n\r")
+        serieCapt.write(str(int(vitesse)) + "\n\r")
+
+def test() :
+    changer_angle(0)
+    time.sleep(2)
+    changer_vitesse(200)
+    changer_angle(150)
+    time.sleep(1)
+    changer_vitesse(500)
+    changer_angle(90)
+
 def changer_id(nouvel_id) :
     serieCapt.write(chr(int('1' + '01' + '000' + bin(nouvel_id, 2), 2)))
 
@@ -348,5 +356,7 @@ def BIG_TEST() :
     time.sleep(0.15)
     
     changer_angle(160)
+
     
+test()
     

@@ -93,6 +93,16 @@ int main()
             AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
         }
         
+        else if (COMPARE_BUFFER("A", 1))
+        {
+            AX12Init(0xfe, 0, 0, 200);
+        }
+        
+        else if (COMPARE_BUFFER("B", 1))
+        {
+            AX12Init(0xFE, AX_ANGLECW, AX_ANGLECCW, 200);
+        }
+        
         
             
 
