@@ -11,7 +11,7 @@
 // #define FLASH_BAUD_RATE_MODE
 // #define TEST_NOSERIE_MODE
 // #define REANIMATION_MODE
-#define TEST_NOPYTHON_MODE
+// #define TEST_NOPYTHON_MODE
 
 #include "serial.h"
 
@@ -77,9 +77,11 @@ int main()
             int8_t id = serial_t_::read_int();
             int16_t angle = serial_t_::read_int();
             
-            serial_t_::print(id);
-            serial_t_::print(angle);
-            
+            #ifdef TEST_NOPYTHON_MODE
+                serial_t_::print(id);
+                serial_t_::print(angle);
+            #endif
+                
             AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
         }
         
