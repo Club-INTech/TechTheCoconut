@@ -5,7 +5,7 @@ import time
 #import __builtin__
 #serieCapt = __builtin__.instance.serieCaptInstance
 try :
-    serieCapt = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
+    serieCapt = serial.Serial('/dev/ttyUSB1     ', 9600, timeout=1)
 except :
     serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout = 1)
     
@@ -91,28 +91,30 @@ def fermerBras():
 def ouvrirBras() :
     changer_angle(160)
     
+def goto(id, angle) :
+    serieCapt.write(ORDRE_GOTO + "\n\r")
+    serieCapt.write(str(int(id)) + "\n\r")
+    serieCapt.write(str(int(angle)) + "\n\r")
+     
 def changer_angle(angle, nom = "ALL") :
-    # ANGLE COMPRIS ENTRE 0 ET 150
-    if angle <= 150 and angle >= 0 :
-
         
-        if nom == "ALL" :
-            id = 0xFE
-        else :
-            try :
-                exec("id = id_" + str(nom))
-            except :
-                return
-
+    if angle <= ANGLEMIN:
+        angle = ANGLEMIN
+    elif angle >= ANGLEMAX :
+        angle = ANGLEMAX
         
-        if angle <= ANGLEMIN:
-            angle = ANGLEMIN
-        elif angle >= ANGLEMAX :
-            angle = ANGLEMAX
-            
-        serieCapt.write(ORDRE_GOTO + "\n\r")
-        serieCapt.write(str(int(id)) + "\n\r")
-        serieCapt.write(str(int(angle)) + "\n\r")
+    if nom == "ALL" :
+        goto(id_bg, angle)
+        goto(id_bd, 180 - angle)
+        goto(id_hg, 180 - angle)
+        goto(id_hd, angle)
+        
+    else :
+        try :
+            exec("id = id_" + str(nom))
+        except :
+            return
+
     
 
 # VITESSE DOIT ETRE COMPRIS ENTRE 0 et 500
