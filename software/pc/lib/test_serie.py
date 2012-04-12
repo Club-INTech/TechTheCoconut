@@ -111,9 +111,7 @@ def changer_angle(angle, nom = "ALL") :
             angle = ANGLEMAX
             
         serieCapt.write(ORDRE_GOTO + "\n\r")
-        time.sleep(0.5)
         serieCapt.write(str(int(id)) + "\n\r")
-        time.sleep(0.5)
         serieCapt.write(str(int(angle)) + "\n\r")
     
 
@@ -357,6 +355,4 @@ def BIG_TEST() :
     
     changer_angle(160)
 
-    
-test()
     
