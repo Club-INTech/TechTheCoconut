@@ -225,5 +225,5 @@ class Script:
         raw_input()
         
     def ramasserTotem(self):
-        
+        pass
         
