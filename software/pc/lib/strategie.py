@@ -14,6 +14,8 @@ log = log.Log(__name__)
 
 import __builtin__
 
+carte = carte.Carte()
+
 class Strategie(decision.Decision, threading.Thread):
     """
     Classe permettant de construire une stratégie
@@ -29,9 +31,13 @@ class Strategie(decision.Decision, threading.Thread):
 
         
         self.strategie = strategie
-        self.timer = timer.Timer() 
+        self.timer = timer.Timer()
+        self.actions = []
         
-        ############
+        # Remplir le tableau actions d'actions à faire (Thibaut)
+        self.initialiserActionsAFaire()
+        
+        #--------------------------------
         #TODO : à mettre dans constantes
         #vitesses en pwm pour les scripts
         self.VITESSE_PRUDENCE_EVITEMENT = 80
@@ -40,7 +46,7 @@ class Strategie(decision.Decision, threading.Thread):
         
         self.rayonRobotsAdverses = 200.0
         
-        ############
+        #--------------------------------
         
         # Résolution d'un bug de timer infini.
         if not hasattr(Strategie, "prendreDecisions") :
@@ -206,10 +212,6 @@ class Strategie(decision.Decision, threading.Thread):
                 else :
                     # Faire un "tour de piste"
                     pass
-                    
-                
-                   
-                    
 
         #--------------------------------------#
         #-- STRATEGIE NUMERO 2: Un peu mieux --#
@@ -224,33 +226,44 @@ class Strategie(decision.Decision, threading.Thread):
         log.logger.info("ARRET DEFINITIF STRATEGIE")
         
         
-    def rafflerTotem(self, ennemi = False, nord = False, versLaCalle = True) :
-        """
-        Le robot se déplace de façon à raffler un totem
-        
-        :param ennemi: A mettre à True si on veut raffler le totem ennemi
-        :type ennemi: Bool
-        
-        :param nord: Partie Nord ou Sud du Totem qu'on veut raffler
-        :type nord: Bool
-        
-        :param versLaCalle: A changer si on veut Parcourir le totem de D à G ou l'inverse
-        :type versLaCalle: Bool        
-        
-        """
-        pass
-    
+
     # L'utiliser avec goTo(arrivee=trucmuche)
     def goTo(self, arrivee, depart = None):
         if depart == None:
             depart = self.depart
         return self.asserInstance.goTo(depart, arrivee)
         
-    def enfoncerPoussoir(self, idPoussoir) :
+    def initialiserActionsAFaire(self) :
         """
-        Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
+        Thibaut.
         
-        :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
-        :type idPoussoir: int
+        TYPE D'ACTIONS : [NOM_DE_L_ACTION, +paramètresOptionnels, PRIORITÉ DE L'ACTION]
+            NOM_DE_L_ACTION :   "FARMERTOTEM"   +param1 : ennemi, +param2: Nord
+                                "ENFONCERPOUSSOIR"                +param : id poussoir
+                                "CHOPEROBJET"  (lingot ou disque) +param : Point
+                                "FAIRECHIERENNEMI"                +param : AUCUN
+                                
+                                
+            PRIORITÉ DE L'ACTION : A coter de 1 à 5. La stratégie l'utilisera en cas de conflits.
         """
+        log.logger.info("Initialisation des actions à faire")
+        self.actions.append(["FARMERTOTEM", 0, 0, 5])
+        self.actions.append(["FARMERTOTEM", 0, 1, 5])
+        self.actions.append(["FARMERTOTEM", 1, 0, 4])
+        self.actions.append(["FARMERTOTEM", 1, 1, 4])
+        
+        self.actions.append(["ENFONCERPOUSSOIR", 1, 3])
+        self.actions.append(["ENFONCERPOUSSOIR", 2, 3])
+        
+        self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
+        self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
+        self.actions.append(["CHOPEROBJET", carte.disques[21].position, 3])  # disques du bas
+        self.actions.append(["CHOPEROBJET", carte.lingots[1].position, 1])
+        
+        self.actions.append(["FAIRECHIERENNEMI", 1])
+        
+    def changerPriorite(self, nomAction) :
         pass
+
+        
+        
