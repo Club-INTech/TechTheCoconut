@@ -207,6 +207,14 @@ class Asservissement:
             self.serialInstance.write("ctm\n"+str(float(valeur))+"\n")
             
     def changerVitesse(self, typeAsservissement, valeur):
+        """
+        spécifie une vitesse prédéfinie en translation ou rotation
+        une valeur 1,2,3 est attendue
+        1 : vitesse "prudente"
+        2 : vitesse normale
+        3 : vitesse pour forcer
+        """
+        
         if typeAsservissement == "rotation":
             self.serialInstance.write("crv"+str(int(valeur))+"\n")
         elif typeAsservissement == "translation":

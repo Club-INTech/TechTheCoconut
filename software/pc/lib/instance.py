@@ -81,7 +81,10 @@ class Instance:
         cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
         cheminCapt = '/dev/ttyUSB1'
         if cheminCapt:
-            self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
+            try:
+                self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
+            except :
+                pass
         else:
             log.logger.error("Le capteur n'est pas chargé")
         
