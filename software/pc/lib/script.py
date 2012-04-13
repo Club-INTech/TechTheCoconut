@@ -343,6 +343,7 @@ class Script:
         self.asserInstance.avancer(-470.0)  # Pour l'enfoncer à fond
         self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
         self.asserInstance.avancer(450)    # On se barre.
+        log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" fini")
         
         
     def faireChierEnnemi(self) :
@@ -356,6 +357,18 @@ class Script:
         Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
         """
         log.logger.info("Tour de table")
+        self.actionInstance.deplacer(120) # On ouvre les bras
+        self.asserInstance.goTo(outils_math.point.Point(860, 650)) # On va se placer à un de départ près de notre base
+        self.asserInstance.goTo(outils_math.point.Point(395, 505))
+        self.asserInstance.goTo(outils_math.point.Point(10, 580))
+        self.asserInstance.goTo(outils_math.point.Point(-425, 480))
+        self.asserInstance.goTo(outils_math.point.Point(-900, 970))
+        self.asserInstance.goTo(outils_math.point.Point(410, 1480))
+        self.asserInstance.goTo(outils_math.point.Point(0, 1400))
+        self.asserInstance.goTo(outils_math.point.Point(405, 1480))
+        self.asserInstance.goTo(outils_math.point.Point(900, 1000))
+        self.asserInstance.goTo(outils_math.point.Point(860, 650)) # On revient au point au départ du tour
+        log.logger.info("Fin tour de table")
         
     def defendreBase(self):
         """
