@@ -15,6 +15,25 @@ class ultrason
   ring_buffer<mesure_t, size> mesures_;
   uint16_t derniere_valeur_;
 
+  void bubbleSort(mesure_t* array)
+{
+    int i,j;
+    for(i=0;i<size;i++)
+    {
+        for(j=0;j<i;j++)
+        {
+            if(array[i]>array[j])
+            {
+                int temp=array[i];
+                array[i]=array[j];
+                array[j]=temp;
+            }
+
+        }
+
+    }
+}
+
 public:
   ultrason(){
     Timer::init();
@@ -33,12 +52,8 @@ public:
   }
   
   uint16_t mediane(){
-    uint16_t res;
-    mesure_t* data = mesures_.data();
-    if(data[0] < data[1] && data[1] < data[2]) res = data[1];
-    else if (data[1] < data[0] && data[0] < data[2]) res = data[0];
-    else if (data[0] < data[2] && data[2] < data[1]) res = data[2];
-    return res;
+    bubbleSort(mesures_.data());
+    return mesures_.data()[mesures_.size()/2];
   }
   
 };
