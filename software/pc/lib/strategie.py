@@ -13,6 +13,7 @@ import log
 log = log.Log(__name__)
 
 import __builtin__
+import script
 
 
 carte = carte.Carte()
@@ -284,7 +285,7 @@ class Strategie(decision.Decision, threading.Thread):
         
         if self.strategie == 1 :
             # Position de départ.
-            self.depart = self.robotInstance.position()     
+            #self.depart = self.robotInstance.position()     
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
@@ -356,8 +357,9 @@ class Strategie(decision.Decision, threading.Thread):
         #self.actions.append(["CHOPEROBJET", carte.disques[21].position, 3])  # disques du bas
         #self.actions.append(["CHOPEROBJET", carte.lingots[1].position, 1])
         
-        self.actions.append(["FAIRECHIERENNEMI", 1])
-        
+        self.actions.append(["FAIRECHIERENNEMI", 1])    #
+        self.actions.append(["TOURDETABLE", 1])         #
+        self.actions.append(["DEFENDRE", 1])            #NOTE À mettre à 
     
     def choisirAction(self) :
         """
@@ -371,6 +373,7 @@ class Strategie(decision.Decision, threading.Thread):
             if self.actions[i][len(self.actions[i]) -1] > max :
                 max = self.actions[i][len(self.actions[i]) -1]
                 maxID = i
+        log.logger.error("OUPS")
                 
         # Si maxID == -1 c'est que il ne reste rien à faire.
         # TODO FAIRE QUELQUE CHOSE BORDEL
@@ -390,8 +393,15 @@ class Strategie(decision.Decision, threading.Thread):
                 
             elif self.actions[maxID][0] == "FAIRECHIERENNEMI" :
                 self.scriptInstance.faireChierEnnemi()
-                self.changerPriorite("FAIRECHIERENNEMI", [], -1)
-        
+                self.changerPriorite("FAIRECHIERENNEMI", [], self.actions[maxID][-1]-0.01)
+                
+            elif self.actions[maxID][0] == "TOURDETABLE":
+                self.scriptInstance.tourDeTable()
+                self.changerPriorite("TOURDETABLE", [], self.actions[maxID][-1]-0.01)
+                
+            elif self.actions[maxID][0] == "DEFENDRE":
+                self.scriptInstance.defendreBase()
+                self.changerPriorite("DEFENDRE", [], self.actions[maxID][-1]-0.01)
                 
         
         

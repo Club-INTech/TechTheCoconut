@@ -337,3 +337,15 @@ class Script:
         """
         log.logger.info("C'est parti, on farme l'ennemi !")
         
+    def tourDeTable(self) :
+        """
+        Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
+        """
+        log.logger.info("Tour de table")
+        
+    def defendreBase(self):
+        """
+        Si l'ennemi est très bon, il faudra penser à défendre la base
+        """
+        log.logger.info("Défense de la base")
+        
