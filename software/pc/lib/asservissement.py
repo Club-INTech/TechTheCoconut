@@ -121,13 +121,13 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write("\n")
-        self.serialInstance.write('t\n' + str(float(angle))+'\n')
+        self.serialInstance.write("\n\r")
+        self.serialInstance.write('t\n\r' + str(float(angle))+'\n\r')
         log.logger.info("Ordre de tourner à " + str(float(angle)))
         acquitement = False
         #debutTimer = lib.timer.getTime()
         while not acquitement:
-            self.serialInstance.write('acq\n')
+            self.serialInstance.write('acq\n\r')
             reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             if reponse == "FIN_MVT":
                 print reponse
@@ -146,13 +146,13 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.serialInstance.write("\n")
-        self.serialInstance.write('d\n' + str(float(distance))+'\n')
+        self.serialInstance.write("\n\r")
+        self.serialInstance.write('d\n\r' + str(float(distance))+'\n\r')
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
         acquitement = False
         #debutTimer = lib.timer.getTime()
         while not acquitement:
-            self.serialInstance.write('acq\n')
+            self.serialInstance.write('acq\n\r')
             reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             
             if reponse == "FIN_MVT":
