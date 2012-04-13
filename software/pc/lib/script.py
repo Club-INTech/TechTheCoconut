@@ -8,8 +8,7 @@ import outils_math.point
 import lib.log
 import os
 import math
-
-import lib.test_serie as serieActionneurs
+import actionneur
 
 log = lib.log.Log(__name__)
 
@@ -202,6 +201,7 @@ class Script:
         
         
     def scriptPipeauNewStrategie(self):
+        """
         try :
             #script
             asserInstance.gestionAvancer(300)
@@ -209,6 +209,7 @@ class Script:
             return "scriptOK"
         except :
             return "BAD_TRIP"
+        """
             
     def testFonctions(self):
         
@@ -256,3 +257,26 @@ class Script:
                 orient = raw_input("orientation ? ")
                 self.asserInstance.tourner(float(orient))
                 
+                
+    def scriptTestStruct0(self):
+        try:
+            #1ère action effectuée
+            print "ca marche ! "
+            #le script est validé
+            return True
+        except:
+            return False
+            
+    
+    def scriptTestStruct1(self):
+        try:
+            #1ère action effectuée
+            print "yeeeees"
+            #2ème action lève une exception
+            print 4/0
+            #3ème action ne sera pas effectuée
+            print "yoyoyo"
+            #le script ne sera pas validé
+            return True
+        except:
+            return False

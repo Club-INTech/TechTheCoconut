@@ -2,12 +2,16 @@
 
 import lib.log
 import robot
-import peripherique
+#import peripherique
 import asservissement
 import capteur
 import serial
 import serie_acquisition
 import script
+import attributions
+import strategie
+
+
 
 
 log =lib.log.Log(__name__)
@@ -28,6 +32,7 @@ class Instance:
         
         #liste (globale) des centres de robots adverses détectés
         self.liste_robots_adv = []
+        self.chemins = attributions.attribuer()
 
     def instanciation(self):
         self.instanciationRobot()
@@ -37,15 +42,19 @@ class Instance:
         self.instanciationActionneur()
         self.instanciationAcquisition()
         self.instanciationScript()
+        self.instanciationStrategie()
+        
         
     def ajouterRobotAdverse(self, position, vider = False):
         self.liste_robots_adv.append(position)
         if vider:
             self.liste_robots_adv = []
-        
     
     def instanciationScript(self):
         self.scriptInstance = script.Script()
+        
+    def instanciationStrategie(self):
+        self.strategieInstance = strategie.Strategie()
 
     def instanciationCapteur(self):
         try : self.capteurInstance = capteur.Capteur()
@@ -64,22 +73,30 @@ class Instance:
         
     def instanciationSerie(self):
         #Instance serie asservissement
-        cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
+        #cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
         #cheminAsser = '/dev/ttyUSB9'
+        cheminAsser = self.chemins[0]
         if cheminAsser:
             self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
             
         # Actionneurs ≠ Capteurs sur Arduino pour la Belgique.
-        cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
+        #cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
+        
+        cheminActionneur = self.chemins[4]
+        
+        
         if cheminActionneur :
             self.serieActionneurInstance = serial.Serial(cheminActionneur, 9600, timeout = 1)
         else :
             log.logger.error("Les actionneurs ne sont pas chargés")
         
-        cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
-        cheminCapt = '/dev/ttyUSB1'
+        #cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
+        #cheminCapt = '/dev/ttyUSB1'
+        
+        cheminCapt = self.chemins[1]
+        
         if cheminCapt:
             try:
                 self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
