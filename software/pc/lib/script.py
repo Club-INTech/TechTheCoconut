@@ -37,6 +37,11 @@ class Script:
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
+            
+        if hasattr(__builtin__.instance, 'actionInstance') :
+            self.actionInstance = __builtin__.instance.actionInstance
+        else:
+            log.logger.error("l'instance de instance.actionInstance n'est pas chargée")
     
     def recalage(self):
         """
@@ -201,15 +206,25 @@ class Script:
         
         
     def scriptPipeauNewStrategie(self):
-        """
+        
         try :
             #script
             asserInstance.gestionAvancer(300)
             asserInstance.gestionAvancer(300,"forcer")
+            
+            actionInstance.deplacer(90)
+            actionInstance.deplacer(160)
+            actionInstance.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
+            actionInstance.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
+            actionInstance.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
             return "scriptOK"
         except :
             return "BAD_TRIP"
-        """
+            
+        
+        
+        
+        
             
     def testFonctions(self):
         
@@ -280,3 +295,45 @@ class Script:
             return True
         except:
             return False
+            
+            
+            
+    #-------------------------------------------------------------------#
+    #               Fonctions de très haut niveau                       #
+    #-------------------------------------------------------------------#
+    def rafflerTotem(self, ennemi = False, nord = False, versLaCalle = True) :
+        """
+        (Thibaut)
+        
+        Le robot se déplace de façon à raffler un totem
+        
+        :param ennemi: A mettre à True si on veut raffler le totem ennemi
+        :type ennemi: Bool
+        
+        :param nord: Partie Nord ou Sud du Totem qu'on veut raffler
+        :type nord: Bool
+        
+        :param versLaCalle: A changer si on veut Parcourir le totem de D à G ou l'inverse
+        :type versLaCalle: Bool        
+        
+        """
+        log.logger.info("Rafflage de totem en cours")
+    
+    
+    def enfoncerPoussoir(self, idPoussoir) :
+        """
+        (Thibaut)
+        
+        Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
+        
+        :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
+        :type idPoussoir: int
+        """
+        log.logger.info("Enfonçage de poussoir en cours")
+        
+    def faireChierEnnemi(self) :
+        """
+        Comment va-t-on bien faire chier l'ennemi ?
+        """
+        log.logger.info("C'est parti, on farme l'ennemi !")
+        

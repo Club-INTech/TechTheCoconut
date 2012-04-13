@@ -14,7 +14,6 @@ log = log.Log(__name__)
 
 import __builtin__
 
-import action
 
 carte = carte.Carte()
 
@@ -37,7 +36,6 @@ class Strategie(decision.Decision, threading.Thread):
         self.actions = []
         self.timerStrat = timer.Timer()
         
-        self.action = action.Action()
         
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
@@ -188,11 +186,6 @@ class Strategie(decision.Decision, threading.Thread):
             
             
             
-            
-            
-            
-            
-            
     def gestionTourner(self, angle, instruction = ""):
         
         """
@@ -200,6 +193,16 @@ class Strategie(decision.Decision, threading.Thread):
         prend en paramètre l' angle à parcourir en radians
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
+        
+        #l'angle spécifié dans les scripts est valable pour un robot violet.
+        if __builtin__.constantes['couleur'] == "r":
+            angle = math.pi - angle
+        if angle > math.pi:
+            angle = angle - 2*math.pi
+        if angle < -math.pi:
+            angle = angle + 2*math.pi
+        
+        
         
         ret = self.asserInstance.tourner()
         
@@ -364,6 +367,7 @@ class Strategie(decision.Decision, threading.Thread):
         max = 0
         maxID = -1
         
+        
         for i in range(len(self.actions)) :
             if self.actions[i][len(self.actions[i]) -1] > max :
                 max = self.actions[i][len(self.actions[i]) -1]
@@ -374,18 +378,30 @@ class Strategie(decision.Decision, threading.Thread):
         if maxID == -1 :
             log.logger.info("ZUT ALORS ! Plus d'actions à faire")
         
+        
         # Sinon, on prend l'action
         else :
             if self.actions[maxID][0] == "FARMERTOTEM" :
-                self.action.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
+                self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
+                self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
+                
             elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
-                self.action.enfoncerPoussoir(self.actions[maxID][1])
+                self.scriptInstance.enfoncerPoussoir(self.actions[maxID][1])
+                self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
+                
+            elif self.actions[maxID][0] == "FAIRECHIERENNEMI" :
+                self.scriptInstance.faireChierEnnemi()
+                self.changerPriorite("FAIRECHIERENNEMI", [], -1)
         
                 
         
         
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
         """
+        
+        Change la priorité d'une action dans le tableau self.actions
+        
+        
         :param nomAction: NOM_DE_L_ACTION
         :type nomAction: string
         
