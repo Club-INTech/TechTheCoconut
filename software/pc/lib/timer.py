@@ -23,7 +23,7 @@ class Timer(threading.Thread):
     """
     
     def __init__(self):
-        Timer.origine  = constantes["t0"]  # Cette variable est crée par le lanceur
+        Timer.origine  = time.time()  # Cette variable est crée par le lanceur
                                            # TODO utiliser la variable crée par le bumper de démarrage
                                            # 
         
@@ -60,29 +60,28 @@ class Timer(threading.Thread):
         
         time.sleep(tempsFinal)
         
-        # Suicide :D
-        os.kill(os.getpid(), signal.SIGUSR1)
-        
-        ## Arrêt de la prise de stratégie
-        #strategie.Strategie().arreterPrendreDecisions()
-        
         ## Arrêt de l'asservissement.
-        #try : 
-            #__builtin__.instance.asserInstance.setUnsetAsser("translation", 0)
-            #__builtin__.instance.asserInstance.setUnsetAsser("rotation", 0)
-        #except : log.logger.error("Impossible d'arreter l'asservissement")
+        try:
+            __builtin__.instance.asserInstance.immobiliser()
+            time.sleep(1)
+            __builtin__.instance.asserInstance.setUnsetAsser("translation", 0)
+            __builtin__.instance.asserInstance.setUnsetAsser("rotation", 0)
+        except: log.logger.error("Impossible d'arreter l'asservissement")
         
         ## Arrêt des actionneurs
-        #try :
-            #__builtin__.instance.actionInstance.stop()
-        #except :
-            #log.logger.error("Impossible d'arrêter les actionneurs")
+        try:
+            __builtin__.instance.actionInstance.stop()
+        except:
+            log.logger.error("Impossible d'arrêter les actionneurs")
         
         ## Arrêt des capteurs
-        #try :
-            #__builtin__.instance.serieCaptInstance.close()
-        #except :
-            #log.logger.error("Impossible d'arrêter les capteurs")
+        try:
+            __builtin__.instance.serieCaptInstance.close()
+        except:
+            log.logger.error("Impossible d'arrêter les capteurs")
         
         
         log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
+
+        # Suicide :D
+        os.kill(os.getpid(), signal.SIGUSR1)

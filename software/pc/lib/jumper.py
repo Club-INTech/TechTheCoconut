@@ -37,22 +37,22 @@ class Jumper :
                 time.sleep(0.01)
         
     def demarrerRecalage(self) :
+        """
+        Se met en attente d'un 1
+        """
         lancer = False
         while not lancer :
             lancer = self.getEtat()
         
-        log.logger.info("Lancement du recalage...")
         
-        log.logger.info("Robot prêt. Attente du départ")
-        self.scruterDepart()
         
     def scruterDepart(self):
-        
+        """
+        Se met en attente d'un 0
+        """
         attente = True
         while attente :
             attente = self.getEtat()
-            
-        log.logger.info("Le jumper a été retiré. Démarrage.")
         
         
             
