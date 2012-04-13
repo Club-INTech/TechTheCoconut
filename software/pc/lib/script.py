@@ -99,21 +99,21 @@ class Script:
         
         couleur = 'V'
         
-        self.asserInstance.avancer(300)
-        self.asserInstance.tourner(1.5)
-        self.asserInstance.avancer(500)
-        self.asserInstance.tourner(0)
-        self.asserInstance.avancer(300)
-        self.asserInstance.avancer(-300)
-        self.asserInstance.tourner(1.5)
-        self.asserInstance.avancer(650)
-        self.asserInstance.tourner(-1.5)
-        self.asserInstance.avancer(-480)
-        self.serialInstance.write("ctm\n120.0\n")
-        self.asserInstance.avancer(-500.0)
-        self.serialInstance.write("ctm\n250.0\n")
+        self.asserInstance.avancer(300)     # On sort de la zone départ
+        self.asserInstance.tourner(1.5)     # On se dirige vers le Nord
+        self.asserInstance.avancer(500)     # On avance jusqu'au lingots
+        self.asserInstance.tourner(0)       # On se tourne vers l'Est
+        self.asserInstance.avancer(300)     # On le rentre dans la calle du Cap'taine
+        self.asserInstance.avancer(-300)    # On ressort de la calle
+        self.asserInstance.tourner(1.5)     # On se tourne vers le boutton poussoir
+        self.asserInstance.avancer(650)     # On avance vers lui
+        self.asserInstance.tourner(-1.5)    # On lui montre nos fesses
+        self.asserInstance.avancer(-480)    # On recule pour lui mettre sa dose
+        self.serialInstance.write("ctm\n120.0\n")   # .. Puis on force moins
+        self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
+        self.serialInstance.write("ctm\n250.0\n")   # On remet le couple maxi à sa valeur d'origine.
+        self.asserInstance.avancer(1500)    # On se barre.
         
-        self.asserInstance.avancer(1500)
         if couleur == 'R':
             self.asserInstance.tourner(0.0)
         else :
@@ -329,7 +329,7 @@ class Script:
         :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
         :type idPoussoir: int
         """
-        log.logger.info("Enfonçage de poussoir en cours")
+        log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" en cours")
         
     def faireChierEnnemi(self) :
         """
