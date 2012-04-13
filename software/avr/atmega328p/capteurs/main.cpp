@@ -21,9 +21,12 @@
 
 int main() {
 	Serial<0>::init();
-// 	Serial<0>::change_baudrate(9600);
+ 	//Serial<0>::change_baudrate(9600);
 	//Pin D2 en INPUT
-	cbi(DDRD,PORTD2);
+	cbi(DDRD,DD2);
+	//Pin D7 en INPUT
+	cbi(DDRD,PD7);
+	cbi(PORTD,PD7);//Pull up disabled
 	//Activation des interruptions pour tout changement logique pour pin2
 	cbi(EICRA,ISC01);
 	sbi(EICRA,ISC00);
@@ -38,7 +41,7 @@ int main() {
 	sei();
 
 	while(1) 
-	{
+	{	  
 		char buffer[17];
 		Serial<0>::read(buffer,17);
 
@@ -50,6 +53,9 @@ int main() {
 		}
 		if(COMPARE_BUFFER("ultrason",8)){
 			Serial<0>::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
+		}
+		if(COMPARE_BUFFER("jumper",1)){
+			Serial<0>::print(rbi(PIND,PD7));
 		}
 	}
 	
