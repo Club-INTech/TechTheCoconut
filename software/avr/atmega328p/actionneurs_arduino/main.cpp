@@ -65,10 +65,13 @@ int main()
     serial_t_::read(buffer,17);
     #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
+        // Ping
         if(COMPARE_BUFFER("?", 1)){
             serial_t_::print(4);
         }
 
+        
+        // GoTo angle
         else if (COMPARE_BUFFER("GOTO", 4))
         {
             #ifdef TEST_NOPYTHON_MODE
@@ -84,7 +87,8 @@ int main()
                 
             AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
         }
-        
+       
+        // Changement de vitesse
         else if (COMPARE_BUFFER("CH_VITESSE", 10))
         {
             #ifdef TEST_NOPYTHON_MODE
@@ -95,16 +99,18 @@ int main()
             AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
         }
         
-        else if (COMPARE_BUFFER("A", 1))
+        // Désasservissement de tous les servos branchés
+        else if (COMPARE_BUFFER("UNASSERV", 8))
         {
-            AX12Init(0xfe, 0, 0, 200);
+             AX12Unasserv(0xFE);
         }
         
-        else if (COMPARE_BUFFER("B", 1))
+        // Reflashage de tous les servos branchés
+        else if (COMPARE_BUFFER("FLASH_ID", 8))
         {
-            AX12Init(0xFE, AX_ANGLECW, AX_ANGLECCW, 200);
+            int8_t id = serial_t_::read_int();
+            AX12InitID(id);
         }
-        
         
             
 

@@ -46,6 +46,8 @@ void AX12GoTo (uint8_t ID, uint16_t angle);
 
 void AX12GOTO (uint8_t ID, uint16_t angle);
 
+void AX12Unasserv(uint8_t ID);
+
 
 // Extraction des données binaires
 void extraction(unsigned char x, char *id, char *angle);
