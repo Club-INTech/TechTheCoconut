@@ -27,6 +27,8 @@ class Actionneur(serie.Serie):
         self.ids        = {"hg":1, "hd":2, "bg":0, "bd":3}
         self.demarrer()
         
+        self.endmsg = "\n\r"
+        
     # Démarrage.
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
@@ -77,15 +79,22 @@ class Actionneur(serie.Serie):
         elif nouvelleVitesse <= 0 :
             nouvelleVitesse = 0
         
-        self.serieInstance.write("CH_VITESSE" + "\n\r")
-        self.serieInstance.write(str(int(nouvelleVitesse)) + "\n\r")
+        self.serieInstance.write("CH_VITESSE" + self.endmsg)
+        self.serieInstance.write(str(int(nouvelleVitesse)) + self.endmsg)
         
-     
+    def flash_id(self, nouvelID) :
+        """
+        Flashage de l'id
+        """
+        self.serieInstance.write("FLASH_ID" + self.endmsg)
+        self.serieInstance.write(str(int(nouvelID)) + self.endmsg)
+        
+        
     def stop(self):
         """
         Arrête l'actionneur en urgence
         """
-        pass
+        self.serieInstance.write("UNASSERV" + self.endmsg)
         
     #------------------------------------------------#
     #       METHODES BAS NIVEAU                      #
@@ -93,10 +102,10 @@ class Actionneur(serie.Serie):
     
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
-        self.serieInstance.write("GOTO" + "\n\r")
+        self.serieInstance.write("GOTO" + self.endmsg)
         time.sleep(0.01)
-        self.serieInstance.write(str(int(id)) + "\n\r")
+        self.serieInstance.write(str(int(id)) + self.endmsg)
         time.sleep(0.01)
-        self.serieInstance.write(str(int(angle))   + "\n\r")
+        self.serieInstance.write(str(int(angle))   + self.endmsg)
         time.sleep(0.01)
         
