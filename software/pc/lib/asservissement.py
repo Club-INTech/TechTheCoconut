@@ -115,6 +115,19 @@ class Asservissement:
                 """
         return "acquittement"
                     
+                    
+    def recalage(self):
+        self.serialInstance.write("\n\r")
+        self.serialInstance.write("recal\n\r")
+        
+        while not acquitement:
+            self.serialInstance.write('acq\n\r')
+            reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+            if reponse == "FIN_REC":
+                print reponse
+                acquitement = True
+        
+        
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
