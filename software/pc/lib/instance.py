@@ -9,6 +9,9 @@ import serial
 import serie_acquisition
 import script
 import attributions
+import strategie
+
+
 
 
 log =lib.log.Log(__name__)
@@ -39,15 +42,19 @@ class Instance:
         self.instanciationActionneur()
         self.instanciationAcquisition()
         self.instanciationScript()
+        self.instanciationStrategie()
+        
         
     def ajouterRobotAdverse(self, position, vider = False):
         self.liste_robots_adv.append(position)
         if vider:
             self.liste_robots_adv = []
-        
     
     def instanciationScript(self):
         self.scriptInstance = script.Script()
+        
+    def instanciationStrategie(self):
+        self.strategieInstance = strategie.Strategie()
 
     def instanciationCapteur(self):
         try : self.capteurInstance = capteur.Capteur()

@@ -51,4 +51,9 @@ void extraction_consigne(unsigned char x, char *cons)
     *cons = x >> 7;
 }
 
+void AX12Unasserv(uint8_t ID)
+{
+    writeData (ID, AX_TORQUE_ENABLE, 1, 0);
+}
+
     
