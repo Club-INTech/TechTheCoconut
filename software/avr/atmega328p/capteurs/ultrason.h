@@ -10,6 +10,7 @@ int compare (const void * a, const void * b);
 template<class Timer, class Pin>
 class ultrason
 {
+  typedef uint16_t mesure_t;
   ring_buffer<uint16_t, 3> mesures_;
   uint16_t derniere_valeur_;
 
@@ -31,8 +32,12 @@ public:
   }
   
   uint16_t mediane(){
-//     qsort(mesures_.data(),mesures_.size(),sizeof(uint16_t),compare);
-    return mesures_.data()[mesures_.current()];
+    mesure_t* data = mesures_.data();
+    mesure_t res;
+    if(data[0] < data[1] && data[1] < data[2]) res = data[1];
+    else if (data[1] < data[0] && data[0] < data[2]) res = data[0];
+    else if (data[0] < data[2] && data[2] < data[1]) res = data[2];
+    return res;
   }
   
 };
