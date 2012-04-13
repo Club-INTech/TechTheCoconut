@@ -32,7 +32,9 @@ modules.append("strategie")
 modules.append("recherche_chemin")
 modules.append("recherche_chemin.astar")
 modules.append("recherche_chemin.thetastar")
-
+modules.append("timer")
+modules.append("jumper")
+modules.append("script")
 
 __builtin__.instance = instance.Instance()
 __builtin__.instance.instanciation()

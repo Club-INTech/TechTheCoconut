@@ -23,7 +23,7 @@ class Timer(threading.Thread):
     """
     
     def __init__(self):
-        Timer.origine  = constantes["t0"]  # Cette variable est crée par le lanceur
+        Timer.origine  = time.time()  # Cette variable est crée par le lanceur
                                            # TODO utiliser la variable crée par le bumper de démarrage
                                            # 
         
