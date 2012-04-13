@@ -3,7 +3,7 @@
 import serial
 
 def attribuer():
-    peripheriques = [[0,"asservissement",9600,"serieCapt"],[1,"capteurs",57600],[2,"balise",9600],[4,"actionneurs",9600]]
+    peripheriques = [[0,"asservissement",9600],[1,"capteurs",57600],[2,"balise",9600],[4,"actionneurs",9600]]
     chemins = ["","","","","",""]
 
     for periph in peripheriques:

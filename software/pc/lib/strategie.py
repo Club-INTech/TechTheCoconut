@@ -33,7 +33,7 @@ class Strategie(decision.Decision, threading.Thread):
         self.strategie = strategie
         self.timer = timer.Timer()
         self.actions = []
-        self.timerStrat = lib.timer.Timer()
+        self.timerStrat = timer.Timer()
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
@@ -54,21 +54,33 @@ class Strategie(decision.Decision, threading.Thread):
         #-- Définition des instances --#
         #------------------------------#
         
-        try :
             
+        try :
             self.asserInstance = __builtin__.instance.asserInstance
-            self.serieAsservInstance = __builtin__.instance.instanciationSerie
+        except :
+            log.logger.error("Impossible d'importer l'instances globale d'asservissement")
+            
+        try :
             self.capteurInstance = __builtin__.instance.capteurInstance
+        except :
+            log.logger.error("Impossible d'importer l'instances globale des capteurs")
+        
+        try :
             self.actionInstance = __builtin__.instance.actionInstance
+        except :
+            log.logger.error("Impossible d'importer l'instances globale des actionneurs")
+            
+        try :
             self.robotInstance = __builtin__.instance.robotInstance
         except :
-            log.logger.error("Impossible d'importer les instances globales d'asservissement, capteur, et actionneur")
+            log.logger.error("Impossible d'importer l'instances globale du robot")
             
+        try :
+            self.scriptInstance = __builtin__.instance.scriptInstance
+        except :
+            log.logger.error("Impossible d'importer l'instances globale de scripts")
             
-            
-            
-            
-            
+        
             
             
     def gestionAvancer(self, distance, instruction = ""):
@@ -337,6 +349,9 @@ class Strategie(decision.Decision, threading.Thread):
         
     def changerPriorite(self, nomAction) :
         pass
-
+    
+    def strateg_scripts(self):
+        if self.scriptInstance.scriptTestStruct0():
+            self.scriptInstance.scriptTestStruct1()
         
         
