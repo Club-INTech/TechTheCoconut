@@ -100,16 +100,16 @@ class Script:
         couleur = 'V'
         
         self.asserInstance.avancer(300)     # On sort de la zone départ
-        self.asserInstance.tourner(1.5)     # On se dirige vers le Nord
+        self.asserInstance.tourner(math.pi/2)     # On se dirige vers le Nord
         self.asserInstance.avancer(500)     # On avance jusqu'au lingots
         self.asserInstance.tourner(0)       # On se tourne vers l'Est
         self.asserInstance.avancer(300)     # On le rentre dans la calle du Cap'taine
         self.asserInstance.avancer(-300)    # On ressort de la calle
-        self.asserInstance.tourner(1.5)     # On se tourne vers le boutton poussoir
+        self.asserInstance.tourner(math.pi/2)     # On se tourne vers le boutton poussoir
         self.asserInstance.avancer(650)     # On avance vers lui
-        self.asserInstance.tourner(-1.5)    # On lui montre nos fesses
+        self.asserInstance.tourner(-math.pi/2)    # On lui montre nos fesses
         self.asserInstance.avancer(-480)    # On recule pour lui mettre sa dose
-        self.serialInstance.write("ctm\n120.0\n")   # .. Puis on force moins
+        self.serialInstance.write("ctm\n120.0\n")   # .. Puis on force plus
         self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
         self.serialInstance.write("ctm\n250.0\n")   # On remet le couple maxi à sa valeur d'origine.
         self.asserInstance.avancer(1500)    # On se barre.
@@ -131,13 +131,13 @@ class Script:
         raw_input()
         self.asserInstance.avancer(600)
         raw_input()
-        self.asserInstance.tourner(1.57)
+        self.asserInstance.tourner(math.pi)
         raw_input()
         self.asserInstance.goTo(outils_math.point.Point(100, 1500))
         raw_input()
         self.asserInstance.goTo(outils_math.point.Point(800, 250))
         raw_input()
-        self.asserInstance.tourner(3.1415)
+        self.asserInstance.tourner(2*math.pi)
         raw_input()
         self.asserInstance.avancer(-400)
         
@@ -323,6 +323,7 @@ class Script:
     def enfoncerPoussoir(self, idPoussoir) :
         """
         (Thibaut)
+        Made by Anthony
         
         Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
         
@@ -330,6 +331,19 @@ class Script:
         :type idPoussoir: int
         """
         log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" en cours")
+        self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la position
+        if idPoussoir == 0:
+            self.asserInstance.goTo(outils_math.point.Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
+        elif idPoussoir == 1:
+            self.asserInstance.goTo(outils_math.point.Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserInstance.tourner(-math.pi/2) # on s'oriente vers les poussoir
+        self.asserInstance.avancer(290) # on avance au point de rotation
+        self.asserInstance.tourner(-1.5)    # On lui montre nos fesses
+        self.asserInstance.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
+        self.asserInstance.avancer(-470.0)  # Pour l'enfoncer à fond
+        self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
+        self.asserInstance.avancer(450)    # On se barre.
+        
         
     def faireChierEnnemi(self) :
         """
