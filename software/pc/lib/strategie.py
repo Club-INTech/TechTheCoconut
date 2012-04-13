@@ -258,9 +258,8 @@ class Strategie(decision.Decision, threading.Thread):
             # Lancement du timer.
             self.timer.lancer()
         
-            # Lancer le thread de prise de décision
-            threading.Thread.__init__(self, name="prendreDecision", target=self.prendreDecision)
-            self.start()
+            # Lancer la de prise de décision
+            self.prendreDecision()
         
         
     def arreterPrendreDecisions(self) :
@@ -285,7 +284,7 @@ class Strategie(decision.Decision, threading.Thread):
         
         if self.strategie == 1 :
             # Position de départ.
-            self.depart = self.robotInstance.position()     #TODO A tester sur le vrai EeePC       
+            self.depart = self.robotInstance.position()     
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
