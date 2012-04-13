@@ -20,11 +20,12 @@ x = raw_input("Donner les coordonnées en x puis y du point de arrivee\n")
 y = raw_input()
 arrivee = outils_math.point.Point(x,y)
 """
-
+"""
 capteurInstance = __builtin__.instance.capteurInstance
 while 42:
     print capteurInstance.mesurer()
     time.sleep(0.1)
+"""
     
 
 """  
@@ -33,7 +34,6 @@ import asservissement
 robotInstance=robot.Robot()
 asser = Asservissement(robotInstance)
 asser.test()
-"""
 """
 scriptInstance = __builtin__.instance.scriptInstance
 
@@ -44,12 +44,11 @@ asser = __builtin__.instance.asserInstance
 asser.serialInstance.write("\n")
 
 asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
-"""
 #robotInstance.setPosition
 #scriptInstance.homologation()
-"""
 asser.avancer(500)
 asser.avancer(-500)
+"""
 asser.avancer(500)
 asser.avancer(-500)
 asser.avancer(500)

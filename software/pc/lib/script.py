@@ -8,8 +8,7 @@ import outils_math.point
 import lib.log
 import os
 import math
-
-import lib.test_serie as serieActionneurs
+import actionneur
 
 log = lib.log.Log(__name__)
 

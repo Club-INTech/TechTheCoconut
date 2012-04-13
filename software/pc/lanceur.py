@@ -53,7 +53,7 @@ else:
     exec('import profils.'+conf+'.injection')
 
 import lib.peripherique
-import lib.detection_peripheriques
+#import lib.detection_peripheriques
 
 # Association manuelle des périphériques
 #for p in constantes['Serie']['peripheriques']:
@@ -63,7 +63,8 @@ import lib.detection_peripheriques
 # Fin association manuelle des périphériques
 
 # Association automatique des périphériques
-lib.detection_peripheriques.Detection_peripheriques()
+
+#lib.detection_peripheriques.Detection_peripheriques()
 
 # WARNING variable globale pour instancier le robot
 import lib.robot

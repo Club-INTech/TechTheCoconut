@@ -1,10 +1,17 @@
 # -*- coding:utf-8 -*-
+
 import serial
 import time
+import __builtin__
 
-#import __builtin__
-#serieCapt = __builtin__.instance.serieCaptInstance
+import instance
 
+serieCapt = __builtin__.instance.serieCaptInstance
+
+
+#serieCapt.write("B\n\r")
+
+"""
 try :
     serieCapt = serial.Serial('/dev/ttyUSB1', 9600, timeout=1)
 except :
@@ -12,10 +19,13 @@ except :
         serieCapt = serial.Serial('/dev/ttyUSB2', 9600, timeout=1)
     except :
         pass
+try:
+    serieCapt
+except :
+    pass
+
+
     
-serieCapt.write("B\n\r")
-
-
 id_hg = 1
 id_hd = 2
 id_bg = 0
@@ -29,7 +39,6 @@ ANGLEMAX = 160
 ORDRE_GOTO = "GOTO"
 ORDRE_CHVITESSE = "CH_VITESSE"
 
-"""
 PROTOCOLE DE COMMUNICATION PC <-> AVR POUR LES AX12 
 ---------------------------------------------------
 
@@ -74,7 +83,6 @@ def bin(a, nbBits) :
     l = len(s.lstrip('0'))
     result = '0'*(nbBits - l)
     return result+s.lstrip('0')
-
 def changer_serie(numero) :
     serieCapt = serial.Serial('/dev/ttyUSB' + str(numero), 9600, timeout = 1)
     
@@ -357,5 +365,3 @@ def BIG_TEST() :
     time.sleep(0.15)
     
     changer_angle(160)
-
-    
