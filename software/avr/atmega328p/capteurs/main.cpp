@@ -47,7 +47,6 @@ int main() {
 
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
-
 		if(COMPARE_BUFFER("?",1)){
 			Serial<0>::print(1);
 		}

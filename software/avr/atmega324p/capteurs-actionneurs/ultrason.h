@@ -10,9 +10,29 @@ int compare (const void * a, const void * b);
 template<class Timer, class Pin>
 class ultrason
 {
-  ring_buffer<uint16_t, 3> mesures_;
+  static const int size = 3;
+  typedef uint16_t mesure_t;
+  ring_buffer<mesure_t, size> mesures_;
   uint16_t derniere_valeur_;
 
+  void bubbleSort(mesure_t* array)
+{
+    int i,j;
+    for(i=0;i<size;i++)
+    {
+        for(j=0;j<i;j++)
+        {
+            if(array[i]>array[j])
+            {
+                int temp=array[i];
+                array[i]=array[j];
+                array[j]=temp;
+            }
+
+        }
+
+    }
+}
 public:
   ultrason(){
     Timer::init();
@@ -31,8 +51,7 @@ public:
   }
   
   uint16_t mediane(){
-//     if(mesures_[0] < mesures_[1]
-    qsort(mesures_.data(),mesures_.size(),sizeof(uint16_t),compare);
+    bubbleSort(mesures_.data());
     return mesures_.data()[mesures_.size()/2];
   }
   
