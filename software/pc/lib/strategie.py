@@ -64,18 +64,25 @@ class Strategie(decision.Decision, threading.Thread):
         except :
             log.logger.error("Impossible d'importer les instances globales d'asservissement, capteur, et actionneur")
             
+            
+            
+            
+            
+            
+            
+            
     def gestionAvancer(self, distance, instruction = ""):
         
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
-        et en facultatif une instruction "auStopNeRienFaire"
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
         
         posAvant = self.asserInstance.MAJposition()
         ret = self.asserInstance.avancer()
         
-        if ret == "timeout" or (ret == "stoppe" and not instruction):
+        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
             ##1
             #reculer de ce qui a été avancé
             posApres = self.asserInstance.MAJposition()
@@ -91,8 +98,7 @@ class Strategie(decision.Decision, threading.Thread):
             orientation = self.asserInstance.MAJorientation()
             position = self.asserInstance.MAJposition()
             
-            #300 : distance au robot adverse à la detection
-            adverse = outils_math.point.Point(position.x + (300+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (300+self.rayonRobotsAdverses)*math.sin(orientation))
+            adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
             __builtin__.instance.ajouterRobotAdverse(adverse)
             
             if instruction == "sansRecursion":
@@ -112,9 +118,6 @@ class Strategie(decision.Decision, threading.Thread):
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
                     self.asserInstance.CaptSerialInstance.write('ultrason\n')
                     capteur = self.asserInstance.capteurInstance.mesurer()
-                    
-                    #if timerCourant - debutTimer == 8:
-                        #return "timeout"
                     try:
                         if int(capteur) < self.asserInstance.maxCapt:
                             print 'CAPTEUR !'
@@ -143,14 +146,14 @@ class Strategie(decision.Decision, threading.Thread):
                     #stopper l'execution du script parent
                     raise Exception
                 
-        if ret == "stoppe" and instruction == "sansRecursion":
+        if ret == "STOPPEE" and instruction == "sansRecursion":
             ##4
             #mettre à jour l'attribut position du robot
             
             #stopper l'execution du script parent
             raise Exception
             
-        if ret == "stoppe" and instruction == "forcer":
+        if ret == "STOPPEE" and instruction == "forcer":
             ##5
             
             #augmenter vitesse
@@ -166,6 +169,67 @@ class Strategie(decision.Decision, threading.Thread):
             #remettre vitesse
             self.asserInstance.changerVitesse("translation", 2)
             
+            
+            
+            
+            
+            
+            
+            
+    def gestionTourner(self, angle, instruction = ""):
+        
+        """
+        méthode de haut niveau pour tourner le robot
+        prend en paramètre l' angle à parcourir en radians
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+        
+        ret = self.asserInstance.tourner()
+        
+        orientAvant = self.asserInstance.MAJorientation()
+        
+        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
+            ##1
+            #tourner inversement à ce qui a été tourné
+            orientApres = self.asserInstance.MAJorientation()
+            signe = angle/abs(angle)
+            newangle = abs(orientAvant-orientApres)%(2*math.pi)
+            if newangle > math.pi:
+                newangle = 2*math.pi - newangle
+                
+            gestionTourner(-signe*newangle,"sansRecursion")
+            #recommencer le déplacement
+            gestionTourner(angle,"sansRecursion")
+        
+        if ret == "STOPPEE" and instruction == "sansRecursion":
+            ##4
+            #mettre à jour l'attribut orientation du robot
+            
+            #stopper l'execution du script parent
+            raise Exception
+            
+        if ret == "STOPPEE" and instruction == "forcer":
+            ##5
+            
+            #augmenter vitesse
+            self.asserInstance.changerVitesse("rotation", 3)
+            
+            #finir le déplacement
+            orientApres = self.asserInstance.MAJorientation()
+            signe = angle/abs(angle)
+            newangle = abs(orientAvant-orientApres)%(2*math.pi)
+            if newangle > math.pi:
+                newangle = 2*math.pi - newangle
+            gestionTourner(angle-signe*newangle)
+            
+            #remettre vitesse
+            self.asserInstance.changerVitesse("rotation", 2)
+            
+    
+    
+    
+    
+    
     
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
