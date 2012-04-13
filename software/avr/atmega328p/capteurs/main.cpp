@@ -21,7 +21,7 @@
 
 int main() {
 	Serial<0>::init();
-// 	Serial<0>::change_baudrate(9600);
+	Serial<0>::change_baudrate(9600);
 	//Pin D2 en INPUT
 	cbi(DDRD,PORTD2);
 	//Activation des interruptions pour tout changement logique pour pin2
