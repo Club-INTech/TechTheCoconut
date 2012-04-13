@@ -185,11 +185,8 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("d",1)){
-		
 		envoyer_acquittement(-1);
-		
 		debut_translater_seul(serial_t_::read_float());
-		
 		/*
 		debut_translater(serial_t_::read_float());
 		rotation_en_cours_ = true;
@@ -202,6 +199,7 @@ void Robot::communiquer_pc(){
 		debut_tourner(angle_serie_);
 		*/
 	}
+	
 	else if(COMPARE_BUFFER("t",1)){
 		envoyer_acquittement(-1);
 		debut_tourner(serial_t_::read_float());

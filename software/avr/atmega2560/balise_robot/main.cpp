@@ -52,18 +52,8 @@ int main() {
 	while (1) {
 		
 		char buffer[10];
-// 		rawFrame=serial_radio::read_int();
-// 		Frame frame(rawFrame);
-// 			if(frame.isValid()){
-// 			  serial_pc::print(frame.getRobotId());
-// 			  serial_pc::print(frame.getDistance());
-// 			  serial_pc::print((uint16_t)balise.getAngle());
-// 			} else {
-// 				serial_pc::print("ERROR");
-// 			}
-			
 		serial_pc::read(buffer,10);
-
+		
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
 		if(COMPARE_BUFFER("?",1)){
@@ -71,17 +61,23 @@ int main() {
 		}
 // 		
 		if(COMPARE_BUFFER("!",1)){
-			serial_radio::synchronize();
-			rawFrame=serial_radio::read_uint();
-			serial_pc::print(rawFrame);
-// 			Frame frame(rawFrame);
-// 			if(frame.isValid()){
-// 			  serial_pc::print(frame.getRobotId());
-// 			  serial_pc::print(frame.getDistance());
-// 			  serial_pc::print((uint16_t)balise.getAngle());
-// 			} else {
-// 				serial_pc::print("ERROR");
-// 			}
+			bool is_valid = false;
+			Frame frame(0);
+			const int val=10;
+// 			serial_pc::print(val);
+			serial_radio::print(val);
+			serial_pc::print(serial_radio::read_int());
+// 			do{
+// // 				serial_radio::synchronize();
+// 				rawFrame=serial_radio::read_int();
+// 				serial_pc::print(rawFrame);
+// 				frame = rawFrame;
+// 				is_valid = frame.isValid();
+// 				serial_radio::print(is_valid);
+// 			}while(is_valid==false);
+// 			serial_pc::print(frame.getRobotId());
+// 			serial_pc::print(frame.getDistance());
+// 			serial_pc::print((uint16_t)balise.getAngle());
 		}
 		#undef COMPARE_BUFFER
 	}

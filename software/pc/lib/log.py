@@ -169,7 +169,8 @@ class Log:
         """
         Crée l'entête dans les logs au niveau INFO
         """
-        self.logger.info("Début des logs")
+        #self.logger.info("Début des logs")
+        pass
     
     def configurer_logs(self):
         """

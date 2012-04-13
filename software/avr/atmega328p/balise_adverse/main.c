@@ -4,12 +4,25 @@ volatile uint8_t WINDOW_OPENER = 0;
 volatile uint8_t WINDOW_FLAG = 0;
 volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
+volatile int16_t distance = 0;
 
 int main() 
 {
  	setup();
 	
-	while(1){		
+	while(1){
+		char buffer[10];
+		int16_t order = 0;
+// 		Serial<0>::read(order);
+		Serial<0>::print(order);
+// 		if(order==1){
+// 			sendData(distance);
+// 			int16_t ACK=0;
+// 			do{
+// 				sendData(distance);
+// 				ACK = Serial<0>::read_int();
+// 			}while(ACK!=1);
+// 		}
 	}
 	
 	return 0;
@@ -67,7 +80,6 @@ ISR(PCINT1_vect)
 		if(WINDOW_FLAG)
 		{	
 			Frame message;
-			uint16_t distance;
 		
 			if(TCNT0*16>=TIME_THRESHOLD_MIN)
 			{		
@@ -76,7 +88,6 @@ ISR(PCINT1_vect)
 					WINDOW_FLAG = 0;
 					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
 // 					message=makeFrame(distance);
-					sendData(distance);
 // 					sendFrame(message);
 				}
 			}
