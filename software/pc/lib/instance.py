@@ -10,6 +10,7 @@ import serie_acquisition
 import script
 import attributions
 import strategie
+import peripherique
 
 
 
