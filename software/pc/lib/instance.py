@@ -79,7 +79,7 @@ class Instance:
             log.logger.error("Les actionneurs ne sont pas chargés")
         
         cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
-        cheminCapt = '/dev/ttyUSB1'
+        #cheminCapt = '/dev/ttyUSB0'
         if cheminCapt:
             self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
         else:

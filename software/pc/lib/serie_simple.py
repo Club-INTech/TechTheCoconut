@@ -53,7 +53,7 @@ class SerieSimple(serial.Serial):
         self.peripherique = peripherique
         log.logger.info("Initialisation de la liaison série simple sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
         try:
-            serial.Serial.__init__(self, peripherique, debit, timeout=timeout)
+            serial.Serial.__init__(self, peripherique, baudrate=debit, timeout=timeout)
         except:
             log.logger.error("Erreur d'initialisation de la liaison série simple sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
 
@@ -79,7 +79,7 @@ class SerieSimple(serial.Serial):
         :rtype: string
         """
         lu = self.readline()
-        lu = lu.split("\r\n")[0]
+        lu = lu.split("\r\n")[0].replace('\0', '')
         log.logger.debug("Lecture sur la liaison série "+self.peripherique+" : "+lu)
         return lu;
 

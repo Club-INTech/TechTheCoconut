@@ -60,7 +60,7 @@ class Asservissement:
         """
         pass
     
-    def goTo(self, depart, arrivee):
+    def goTo(self, arrivee):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -70,24 +70,22 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        
+        position = self.MAJorientation()
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(depart,arrivee)
-        
-        derniere_position = depart
+        chemin_python = theta.rechercheChemin(position,arrivee)
         
         try :
             chemin_python.remove(chemin_python[0])
         except :
-            return (derniere_position)
+            return (depart)
             
         for i in chemin_python:
             self.serialInstance.write("\n")
             log.logger.info("écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
             self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-            derniere_destination = outils_math.point.Point(float(i.x),float(i.y))
+            position = self.MAJorientation()
             
             acquittement = False
             #debutTimer = lib.timer.getTime()
@@ -115,7 +113,6 @@ class Asservissement:
                 except:
                     pass
                 """
-            
         return "acquittement"
                     
     def tourner(self, angle):
