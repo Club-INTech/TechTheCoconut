@@ -9,7 +9,7 @@ class Carte:
     """
     def __init__(self):
         self.log = mod_log.Log(__name__)
-        self.log.logger.info("Création de la table en cours...\n")
+        #self.log.logger.info("Création de la table en cours...\n")
         # On initialise seuleument si les listes n'existent pas déjà
         if not hasattr(Carte, 'lingots'):
             Carte.lingots = []
@@ -33,45 +33,45 @@ class Carte:
         pass
     
     def ajouter_disque(self, disque):
-        self.log.logger.info("Ajout d'un disque dans l'objet Carte\n")
+        #self.log.logger.info("Ajout d'un disque dans l'objet Carte\n")
         Carte.disques.append(disque)
     
     def enlever_disque(self, pos, orientation):
         pass
     
     def ajouter_lingot(self, lingot):
-        self.log.logger.info("Ajout d'un lingot dans l'objet Carte\n")
+        #self.log.logger.info("Ajout d'un lingot dans l'objet Carte\n")
         Carte.lingots.append(lingot)
     
     def enlever_lingot(self, pos, orientation):
         pass
     
-    def ajouter_totem(self, totem) :
-        self.log.logger.info("Ajout d'un totem dans l'objet Carte\n")
+    def ajouter_totem(self, totem):
+        #self.log.logger.info("Ajout d'un totem dans l'objet Carte\n")
         Carte.totems.append(totem)
     
     def ajouter_regletteEnBois(self, regletteEnBois) :
-        self.log.logger.info("Ajout d'une reglette en bois dans l'objet Carte\n")
+        #self.log.logger.info("Ajout d'une reglette en bois dans l'objet Carte\n")
         Carte.reglettesEnBois.append(regletteEnBois)
     
     def ajouter_palmier(self, palmier) :
-        self.log.logger.info("Ajout d'un palmier dans l'objet Carte\n")
+        #self.log.logger.info("Ajout d'un palmier dans l'objet Carte\n")
         Carte.palmiers.append(palmier)
     
     def ajouter_poussoir(self, poussoir) :
-        self.log.logger.info("Ajout d'un bouton poussoir dans l'objet Carte\n")
+        #self.log.logger.info("Ajout d'un bouton poussoir dans l'objet Carte\n")
         Carte.poussoirs.append(poussoir)
     
     def enfoncer_poussoir(self, id):
         Carte.poussoirs[id].setEtatOK()
     
     def ajouter_carteAuTresor(self, carteAuTresor) :
-        self.log.logger.info("Ajout d'une carte au trésor dans l'objet Carte\n")
+        #self.log.logger.info("Ajout d'une carte au trésor dans l'objet Carte\n")
         Carte.cartesAuxTresor.append(carteAuTresor)
     
     def arracher_carte_tresor(self, id):
         Carte.cartesAuxTresor[id].setEtatOK()
         
     def ajouter_zone(self, zone) :
-        self.log.logger.info("Ajout d'une zone dans l'objet Carte \n")
+        #self.log.logger.info("Ajout d'une zone dans l'objet Carte \n")
         Carte.zones.append(zone)
