@@ -23,4 +23,7 @@ Frame makeFrame(uint16_t distance);
  */
 void sendFrame(Frame frame);
 
+
+void sendData(uint16_t distance);
+
 #endif

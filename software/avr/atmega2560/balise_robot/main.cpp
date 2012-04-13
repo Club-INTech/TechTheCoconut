@@ -51,27 +51,39 @@ int main() {
 	
 	while (1) {
 		
-		char buffer[17];
-		serial_pc::print(2);
-		serial_pc::read(buffer,17);
+		char buffer[10];
+// 		rawFrame=serial_radio::read_int();
+// 		Frame frame(rawFrame);
+// 			if(frame.isValid()){
+// 			  serial_pc::print(frame.getRobotId());
+// 			  serial_pc::print(frame.getDistance());
+// 			  serial_pc::print((uint16_t)balise.getAngle());
+// 			} else {
+// 				serial_pc::print("ERROR");
+// 			}
+			
+		serial_pc::read(buffer,10);
 
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
 		if(COMPARE_BUFFER("?",1)){
 			serial_pc::print(2);
 		}
-		
-		if(COMPARE_BUFFER("frame",5)){
-			rawFrame=serial_radio::read_int();
-			Frame frame(rawFrame);
-			if(frame.isValid()){
- 			serial_pc::print(frame.getRobotId());
- 			serial_pc::print(frame.getDistance());
-			serial_pc::print(balise.getAngle());
-			} else {
-				serial_pc::print("ERROR");
-			}
+// 		
+		if(COMPARE_BUFFER("!",1)){
+			serial_radio::synchronize();
+			rawFrame=serial_radio::read_uint();
+			serial_pc::print(rawFrame);
+// 			Frame frame(rawFrame);
+// 			if(frame.isValid()){
+// 			  serial_pc::print(frame.getRobotId());
+// 			  serial_pc::print(frame.getDistance());
+// 			  serial_pc::print((uint16_t)balise.getAngle());
+// 			} else {
+// 				serial_pc::print("ERROR");
+// 			}
 		}
+		#undef COMPARE_BUFFER
 	}
 	
 }
