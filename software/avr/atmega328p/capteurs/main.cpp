@@ -54,7 +54,7 @@ int main() {
 		if(COMPARE_BUFFER("ultrason",8)){
 			Serial<0>::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
 		}
-		if(COMPARE_BUFFER("jumper",1)){
+		if(COMPARE_BUFFER("jumper",6)){
 			Serial<0>::print(rbi(PIND,PD7));
 		}
 	}
