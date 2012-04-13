@@ -188,11 +188,6 @@ class Strategie(decision.Decision, threading.Thread):
             
             
             
-            
-            
-            
-            
-            
     def gestionTourner(self, angle, instruction = ""):
         
         """
@@ -200,6 +195,16 @@ class Strategie(decision.Decision, threading.Thread):
         prend en paramètre l' angle à parcourir en radians
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
+        
+        #l'angle spécifié dans les scripts est valable pour un robot violet.
+        if __builtin__.constantes['couleur'] == "r":
+            angle = math.pi - angle
+        if angle > math.pi:
+            angle = angle - 2*math.pi
+        if angle < -math.pi:
+            angle = angle + 2*math.pi
+        
+        
         
         ret = self.asserInstance.tourner()
         
