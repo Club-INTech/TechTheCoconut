@@ -2,12 +2,13 @@
 
 import lib.log
 import robot
-import peripherique
+#import peripherique
 import asservissement
 import capteur
 import serial
 import serie_acquisition
 import script
+import attributions
 
 
 log =lib.log.Log(__name__)
@@ -28,6 +29,7 @@ class Instance:
         
         #liste (globale) des centres de robots adverses détectés
         self.liste_robots_adv = []
+        self.chemins = attributions.attribuer()
 
     def instanciation(self):
         self.instanciationRobot()
@@ -64,15 +66,20 @@ class Instance:
         
     def instanciationSerie(self):
         #Instance serie asservissement
-        cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
+        #cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
         #cheminAsser = '/dev/ttyUSB9'
+        cheminAsser = self.chemins[0]
         if cheminAsser:
             self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
             
         # Actionneurs ≠ Capteurs sur Arduino pour la Belgique.
-        cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
+        #cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
+        
+        cheminActionneur = self.chemins[4]
+        
+        
         if cheminActionneur :
             self.serieActionneurInstance = serial.Serial(cheminActionneur, 9600, timeout = 1)
         else :
@@ -80,8 +87,13 @@ class Instance:
         
         cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
         #cheminCapt = '/dev/ttyUSB0'
+        cheminCapt = self.chemins[1]
+        
         if cheminCapt:
-            self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
+            try:
+                self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
+            except :
+                pass
         else:
             log.logger.error("Le capteur n'est pas chargé")
         

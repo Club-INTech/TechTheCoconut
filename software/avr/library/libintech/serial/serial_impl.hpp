@@ -83,7 +83,7 @@ public:
 	buff[sizeof(T) * 8]='\0';
         int16_t j = sizeof(T) * 8 - 1;
         for(int16_t i=0 ; i<sizeof(T)*8 ; ++i){
-            if(val & (1 << i))
+            if(val & ((T)1 << i))
                buff[j] = '1';
             else
                buff[j] = '0';
@@ -154,14 +154,24 @@ public:
     	send_ln();
     }
     
+    static void synchronize(){
+      while(read_char()!='\n'){ asm("nop"); }
+    }
+    
     static inline int32_t read_int(void){
-        char buffer[20];
+        static char buffer[20];
+        buffer[read(buffer,20)] = '\0';
+        return atol(buffer);
+    }
+    
+    static inline uint32_t read_uint(void){
+        static char buffer[20];
         buffer[read(buffer,20)] = '\0';
         return atol(buffer);
     }
 
     static inline float read_float(){
-        char buffer[20];
+        static char buffer[20];
 	buffer[read(buffer,20)] = '\0';
         return atof(buffer);
     }
@@ -179,7 +189,8 @@ public:
         return i;
     }
     
-        static inline uint8_t read(char* string, uint8_t length){
+    
+    static inline uint8_t read(char* string, uint8_t length){
         uint8_t i = 0;
         for (; i < length; i++){
             while(!available()){ asm("nop"); }

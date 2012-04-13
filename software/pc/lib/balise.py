@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import threading
-import peripherique
+#import threading
+#import peripherique
+
 from filtre_kalman import FiltreKalman
-from numpy import array
-from numpy import matrix
+import numpy
 
 class Balise:
     """
@@ -19,8 +19,8 @@ class Balise:
 	self.filtre_kalman.F[1,3] = new_dt
 	self.filtre_kalman.F[2,4] = new_dt
 	
-    def __init__(self, robot):
-	self.serial = lib.serie.Serie(peripherique.chemin_de_peripherique("balise"),"balise",9600,5)
+    def __init__(self):
+	#self.serial = serial.Serial(peripherique.chemin_de_peripherique("balise"),"balise",9600,5)
 	dt_init = 0.1
 	x = numpy.array([0.,0.,0.,0.])[:, numpy.newaxis] #Vecteur d'état au départ
 	P =  numpy.matrix([[0.,0.,0.,0.],[0.,0.,0.,0.],[0.,0.,1000.,0.],[0.,0.,0.,1000.]])# initial uncertainty
@@ -29,10 +29,16 @@ class Balise:
 	R =   numpy.matrix([[0.1,0.],[0.,0.1]])# measurement uncertainty
 	self.filtre_kalman = FiltreKalman(x,P,F,H,R)
     
-    def tracker_robot_adverse(self):
+    def tracker_robot_adverse(self,x,y):
 	#Z = self.serial.readline(30)
-	self.filtre_kalman.filtrer(Z)
-	
-	
+	self.filtre_kalman.filtrer(numpy.array([x,y]))
+
+#robot = Robot()
+balise = Balise()
+balise.tracker_robot_adverse(0,0)
+balise.tracker_robot_adverse(1,2)
+balise.tracker_robot_adverse(3,4)
+balise.tracker_robot_adverse(8,30)
+print balise.filtre_kalman.x
 	
 	

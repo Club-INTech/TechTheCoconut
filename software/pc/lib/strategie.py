@@ -33,16 +33,13 @@ class Strategie(decision.Decision, threading.Thread):
         self.strategie = strategie
         self.timer = timer.Timer()
         self.actions = []
+        self.timerStrat = lib.timer.Timer()
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
         
         #--------------------------------
         #TODO : à mettre dans constantes
-        #vitesses en pwm pour les scripts
-        self.VITESSE_PRUDENCE_EVITEMENT = 80
-        self.VITESSE_NORMALE = 180
-        self.VITESSE_INSISTER = 255
         
         self.rayonRobotsAdverses = 200.0
         
@@ -94,8 +91,8 @@ class Strategie(decision.Decision, threading.Thread):
             orientation = self.asserInstance.MAJorientation()
             position = self.asserInstance.MAJposition()
             
-            #300 : distance au robot adverse à la detection, 200 : rayon moyen du robot adverse
-            adverse = outils_math.point.Point(position.x + (300+200)*math.cos(orientation),position.y + (300+200)*math.sin(orientation))
+            #300 : distance au robot adverse à la detection
+            adverse = outils_math.point.Point(position.x + (300+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (300+self.rayonRobotsAdverses)*math.sin(orientation))
             __builtin__.instance.ajouterRobotAdverse(adverse)
             
             if instruction == "sansRecursion":
@@ -105,20 +102,30 @@ class Strategie(decision.Decision, threading.Thread):
                 #stopper l'execution du script parent
                 raise Exception
             else:
-                pass
-                """
+                
                 ##3
                 #stopper le robot
-                asserInstance.immobiliser()
+                self.asserInstance.immobiliser()
                 #attente que la voie se libère
-                #début timer
-                #gestion timer
-                #gestion capteurs
-                while ROBOT_DEVANT and TIMER < 4sec :
-                    pass
-                if not ROBOT_DEVANT:
-                    #baisser pwm
-                   asserInstance.changerPWM("translation", VITESSE_PRUDENCE_EVITEMENT)
+                ennemi_en_vue = True
+                debut_timer = int(timerStrat.getTime())
+                while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
+                    self.asserInstance.CaptSerialInstance.write('ultrason\n')
+                    capteur = self.asserInstance.capteurInstance.mesurer()
+                    
+                    #if timerCourant - debutTimer == 8:
+                        #return "timeout"
+                    try:
+                        if int(capteur) < self.asserInstance.maxCapt:
+                            print 'CAPTEUR !'
+                        else :
+                            ennemi_en_vue = False
+                    except:
+                        pass
+                    
+                if not ennemi_en_vue:
+                    #baisser vitesse
+                    self.asserInstance.changerVitesse("translation", 1)
                     
                     #finir le déplacement
                     posApres = self.asserInstance.MAJposition()
@@ -126,14 +133,15 @@ class Strategie(decision.Decision, threading.Thread):
                     signe = distance/abs(distance)
                     gestionAvancer(distance-signe*dist)
                     
-                    #remettre pwm
-                   asserInstance.changerPWM("translation", VITESSE_NORMALE)
+                    
+                    #remettre vitesse
+                    self.asserInstance.changerVitesse("translation", 2)
+                    
                 else:
                     #mettre à jour l'attribut position du robot
                     
                     #stopper l'execution du script parent
                     raise Exception
-                """
                 
         if ret == "stoppe" and instruction == "sansRecursion":
             ##4
@@ -144,19 +152,20 @@ class Strategie(decision.Decision, threading.Thread):
             
         if ret == "stoppe" and instruction == "forcer":
             ##5
-            #augmenter pwm
-            asserInstance.changerPWM("translation", VITESSE_INSISTER)
+            
+            #augmenter vitesse
+            self.asserInstance.changerVitesse("translation", 3)
             
             #finir le déplacement
             posApres = self.asserInstance.MAJposition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
             signe = distance/abs(distance)
             gestionAvancer(distance-signe*dist)
-                    
-            #remettre pwm
-            asserInstance.changerPWM("translation", VITESSE_NORMALE)
             
-        
+            
+            #remettre vitesse
+            self.asserInstance.changerVitesse("translation", 2)
+            
     
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :

@@ -8,6 +8,7 @@ import outils_math.point
 import lib.log
 import os
 import math
+import actionneur
 
 log = lib.log.Log(__name__)
 
@@ -211,6 +212,10 @@ class Script:
     def testFonctions(self):
         
         raw_input()
+        serieActionneurs.changer_angle(130)
+        raw_input()
+        serieActionneurs.changer_angle(90)
+        raw_input()
         self.asserInstance.avancer(200)
         raw_input()
         changerVitesse("translation",1)
@@ -225,5 +230,28 @@ class Script:
         raw_input()
         
     def ramasserTotem(self):
-        pass
-        
+        angle_max = True
+        serieActionneurs.changer_angle(160)
+        while True :
+            print "a : avance, r : reculer, t : bouger angle, tt : spécifier angle, o : orientation"
+            choix = raw_input("~Sopal\'INT~ ")
+            if choix == "q":
+                break
+            elif choix == "a":
+                self.asserInstance.avancer(100)
+            elif choix == "r":
+                self.asserInstance.avancer(-200)
+            elif choix == "t":
+                if angle_max :
+                    serieActionneurs.changer_angle(135)
+                else :
+                    serieActionneurs.changer_angle(150)
+                angle_max = not angle_max
+            
+            elif choix == "tt":
+                angl = raw_input("angle ? ")
+                serieActionneurs.changer_angle(int(angl))
+            elif choix == "o":
+                orient = raw_input("orientation ? ")
+                self.asserInstance.tourner(float(orient))
+                
