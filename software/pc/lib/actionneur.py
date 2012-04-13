@@ -52,13 +52,13 @@ class Actionneur(serie.Serie):
             angle = constantes["Actionneurs"]["angleMin"]
                 
         # Envoi des infos
-        if position == "ALL" or position == "hg":
+        if position == "ALL" or "hg" in position:
             self.goto(self.ids["hg"], 180+3-angle)
-        if position == "ALL" or position == "hd":
+        if position == "ALL" or "hd" in position:
             self.goto(self.ids["hd"], angle)
-        if position == "ALL" or position == "bg":
+        if position == "ALL" or "bg" in position:
             self.goto(self.ids["bg"], angle+5)
-        if position == "ALL" or position == "bd":
+        if position == "ALL" or "bd" in position:
             self.goto(self.ids["bd"], 180+3-angle)
 
 
