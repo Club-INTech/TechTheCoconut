@@ -23,9 +23,8 @@ class Timer(threading.Thread):
     """
     
     def __init__(self):
-        Timer.origine  = time.time()  # Cette variable est crée par le lanceur
-                                           # TODO utiliser la variable crée par le bumper de démarrage
-                                           # 
+        Timer.origine  = time.time() 
+        Timer.origineStrategie = time.time()
         
         # Création du thread d'arrêt du robot
         threading.Thread.__init__(self, target=self.interrupt, name="arretRobot")
@@ -38,20 +37,26 @@ class Timer(threading.Thread):
         log.logger.info("Lancement du timer...")
         
         # Origine des temps pour self.getTime()
-        Timer.origine = time.time()
+        Timer.origineStrategie = time.time()
         
         # Lancement du thread d'arrêt du robot
         self.start()
         
         
-    def getTime(self) :
+    def getTime(self, strategie=True) :
         """
         Retourne le nombre de secondes écoulées depuis :
             - L'appel de self.lancer()
             - Le lancement de iPython si la dernière méthode n'a jamais été lancée
-        """
+            
+        :param strategie: A mettre à 1 si on veut retourner le temps utilisé depuis le lancement de la strat.
+        :type strategie: Bool
         
-        return time.time() - Timer.origine
+        """
+        if strategie:
+            return time.time() - Timer.origineStrategie
+        else :
+            return time.time() - Timer.origine
         
     def interrupt(self) :
         
