@@ -10,6 +10,15 @@ import threading
 class TimeoutError(Exception): pass
 
 
+class Plop(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+        i=0
+        while 1:
+           i+=1 
+        
+
 # Truc compliqué (décorateur) qui permet de faire un timeout sur des fonctions
 def timelimit(timeout):
     def internal(function):

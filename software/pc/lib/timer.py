@@ -4,6 +4,7 @@ import time
 import threading
 import robot
 import strategie
+import sys
 
 import log
 log = log.Log(__name__)
@@ -60,27 +61,39 @@ class Timer(threading.Thread):
         #TODO UTILISER LA METHODE self.stop() DE LA CLASSE ROBOT
         #TODO Pour l'intant, cette fonction ne fait rien.
         
+        sys.exit()
+        thread = threading.enumerate()
+        for th in thread:
+            try:
+                th.__Thread_stop()
+                ok = True
+            except:
+                ok = False
+                if th.name != "MainThread":
+                    log.logger.critical("Le thread "+th.name+" n'a pas réussi à s'arrêter")
+        if ok:
+            log.logger
+        sys.exit()
+        ## Arrêt de la prise de stratégie
+        #strategie.Strategie().arreterPrendreDecisions()
         
-        # Arrêt de la prise de stratégie
-        strategie.Strategie().arreterPrendreDecisions()
+        ## Arrêt de l'asservissement.
+        #try : 
+            #__builtin__.instance.asserInstance.setUnsetAsser("translation", 0)
+            #__builtin__.instance.asserInstance.setUnsetAsser("rotation", 0)
+        #except : log.logger.error("Impossible d'arreter l'asservissement")
         
-        # Arrêt de l'asservissement.
-        try : 
-            __builtin__.instance.asserInstance.setUnsetAsser("translation", 0)
-            __builtin__.instance.asserInstance.setUnsetAsser("rotation", 0)
-        except : log.logger.error("Impossible d'arreter l'asservissement")
+        ## Arrêt des actionneurs
+        #try :
+            #__builtin__.instance.actionInstance.stop()
+        #except :
+            #log.logger.error("Impossible d'arrêter les actionneurs")
         
-        # Arrêt des actionneurs
-        try :
-            __builtin__.instance.actionInstance.stop()
-        except :
-            log.logger.error("Impossible d'arrêter les actionneurs")
-        
-        # Arrêt des capteurs
-        try :
-            __builtin__.instance.serieCaptInstance.close()
-        except :
-            log.logger.error("Impossible d'arrêter les capteurs")
+        ## Arrêt des capteurs
+        #try :
+            #__builtin__.instance.serieCaptInstance.close()
+        #except :
+            #log.logger.error("Impossible d'arrêter les capteurs")
         
         
         log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
