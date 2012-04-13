@@ -340,15 +340,38 @@ class Strategie(decision.Decision, threading.Thread):
         self.actions.append(["ENFONCERPOUSSOIR", 1, 3])
         self.actions.append(["ENFONCERPOUSSOIR", 2, 3])
         
-        self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
-        self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
-        self.actions.append(["CHOPEROBJET", carte.disques[21].position, 3])  # disques du bas
-        self.actions.append(["CHOPEROBJET", carte.lingots[1].position, 1])
+        #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
+        #self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
+        #self.actions.append(["CHOPEROBJET", carte.disques[21].position, 3])  # disques du bas
+        #self.actions.append(["CHOPEROBJET", carte.lingots[1].position, 1])
         
         self.actions.append(["FAIRECHIERENNEMI", 1])
         
-    def changerPriorite(self, nomAction) :
-        pass
+    
+        
+    def changerPriorite(self, nomAction, params, nouvellePriorite) :
+        """
+        :param nomAction: NOM_DE_L_ACTION
+        :type nomAction: string
+        
+        :param params: Tableau contenant les paramètres optionels
+        :type params: tableau de trucs
+        
+        :param nouvellePriorite: Nouvelle priorité pour l'action
+        :type nouvellePriorite: int (entre 0 et 5)
+        """
+        for i in range(len(self.actions)) :
+            if self.actions[i][0] == nomAction :
+                found = 1
+                for j in range(len(params)) :
+                    if self.actions[i][j+1] != params[j] :
+                        
+                        found = 0
+                        break
+                if found :
+                    self.actions[i][1+len(params)] = nouvellePriorite
+                    return 1
+                    
     
     def strateg_scripts(self):
         if self.scriptInstance.scriptTestStruct0():
