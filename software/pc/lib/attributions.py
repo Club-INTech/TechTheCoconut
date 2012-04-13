@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import serial
+import log
+log = log.Log(__name__)
 
 def attribuer():
     peripheriques = [[0,"asservissement",9600],[1,"capteurs",57600],[2,"balise",9600],[4,"actionneurs",9600]]
@@ -31,5 +33,5 @@ def attribuer():
                     i+=1
             except :
                 i+=1
-    print chemins
+    log.logger.warn(str(chemins))
     return chemins
