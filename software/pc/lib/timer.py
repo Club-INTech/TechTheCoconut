@@ -5,6 +5,8 @@ import threading
 import robot
 import strategie
 import sys
+import signal
+import os
 
 import log
 log = log.Log(__name__)
@@ -58,22 +60,9 @@ class Timer(threading.Thread):
         
         time.sleep(tempsFinal)
         
-        #TODO UTILISER LA METHODE self.stop() DE LA CLASSE ROBOT
-        #TODO Pour l'intant, cette fonction ne fait rien.
+        # Suicide :D
+        os.kill(os.getpid(), signal.SIGUSR1)
         
-        sys.exit()
-        thread = threading.enumerate()
-        for th in thread:
-            try:
-                th.__Thread_stop()
-                ok = True
-            except:
-                ok = False
-                if th.name != "MainThread":
-                    log.logger.critical("Le thread "+th.name+" n'a pas réussi à s'arrêter")
-        if ok:
-            log.logger
-        sys.exit()
         ## Arrêt de la prise de stratégie
         #strategie.Strategie().arreterPrendreDecisions()
         
