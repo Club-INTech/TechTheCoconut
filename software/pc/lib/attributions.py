@@ -11,9 +11,9 @@ def attribuer():
     for periph in peripheriques:
         i=0
         instancie = False
-        while i<20 and not instancie :
+        while i<10 and not instancie :
             try :
-                serieCapt = serial.Serial("/dev/ttyUSB"+str(i), periph[2], timeout=0.1)
+                serieCapt = serial.Serial("/dev/ttyUSB"+str(i), periph[2], timeout=0.3)
                 serieCapt.write("\n\r")
                 #print "/dev/ttyUSB"+str(i)+" est occupé, ping..."
                 sent=False
