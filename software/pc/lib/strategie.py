@@ -14,6 +14,8 @@ log = log.Log(__name__)
 
 import __builtin__
 
+import action
+
 carte = carte.Carte()
 
 class Strategie(decision.Decision, threading.Thread):
@@ -34,6 +36,9 @@ class Strategie(decision.Decision, threading.Thread):
         self.timer = timer.Timer()
         self.actions = []
         self.timerStrat = timer.Timer()
+        
+        self.action = action.Action()
+        
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
@@ -289,6 +294,10 @@ class Strategie(decision.Decision, threading.Thread):
                         if success :
                             success = self.rafflerTotem(ennemi = True, nord = True)
                 
+                # Si on arrive là, c'est que le script d'origine est terminé.
+                # On appelle choisirAction tant que self.actions n'est pas vide
+                while self.actions != [] :
+                    self.choisirAction()
                 
                 if self.timer.time() <= 70 :
                     # Prise de décision selon ce qui n'a pas été prise
@@ -337,7 +346,7 @@ class Strategie(decision.Decision, threading.Thread):
         self.actions.append(["FARMERTOTEM", 1, 0, 4])
         self.actions.append(["FARMERTOTEM", 1, 1, 4])
         
-        self.actions.append(["ENFONCERPOUSSOIR", 1, 3])
+        self.actions.append(["ENFONCERPOUSSOIR", 1, 6])
         self.actions.append(["ENFONCERPOUSSOIR", 2, 3])
         
         #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
@@ -348,6 +357,32 @@ class Strategie(decision.Decision, threading.Thread):
         self.actions.append(["FAIRECHIERENNEMI", 1])
         
     
+    def choisirAction(self) :
+        """
+        CETTE FONCTION PERMET A LA STRATEGIE DE CHOISIR QUELLE ACTION CHOISIR
+        """
+        max = 0
+        maxID = -1
+        
+        for i in range(len(self.actions)) :
+            if self.actions[i][len(self.actions[i]) -1] > max :
+                max = self.actions[i][len(self.actions[i]) -1]
+                maxID = i
+                
+        # Si maxID == -1 c'est que il ne reste rien à faire.
+        # TODO FAIRE QUELQUE CHOSE BORDEL
+        if maxID == -1 :
+            log.logger.info("ZUT ALORS ! Plus d'actions à faire")
+        
+        # Sinon, on prend l'action
+        else :
+            if self.actions[maxID][0] == "FARMERTOTEM" :
+                self.action.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
+            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
+                self.action.enfoncerPoussoir(self.actions[maxID][1])
+        
+                
+        
         
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
         """
