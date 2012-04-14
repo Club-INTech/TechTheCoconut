@@ -50,15 +50,9 @@ class Asservissement:
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
-            
-        if hasattr(__builtin__.instance, 'strategieInstance'):
-            self.strategieInstance = __builtin__.instance.strategieInstance
-        else:
-            log.logger.error("l'instance de instance.strategieInstance n'est pas chargée")
-            
         self.maxCapt = 600
-        self.fins_ligne = ["\n","\r\n","\n\r"]
             
+    
     def goToScript(self, script):
         """
         Fonction qui envoie une liste de coordonnées à la carte d'asservissement sans utiliser la recherche de chemin
@@ -89,48 +83,39 @@ class Asservissement:
             return (depart)
             
         for i in chemin_python:
-            self.serialInstance.write("\n")
-            log.logger.info("écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-            for pat in self.fins_ligne:
+             for pat in self.fins_ligne:
+                self.serialInstance.write(pat)
+             log.logger.info("écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+             for pat in self.fins_ligne:
                 self.serialInstance.write("goto" + pat + str(float(i.x)) + pat + str(float(i.y)) + pat)
-            position = self.MAJorientation()
-            
-            debut_timer = self.strategieInstance.timerStrat.getTime()
-            acquittement = False
-            #debutTimer = lib.timer.getTime()
-            while not acquittement:
-                for pat in self.fins_ligne:
-                    self.serialInstance.write('acq'+pat)
-                reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-                print reponse
-                if reponse == "FIN_MVT":
-                    print reponse
-                    acquittement = True
-                    
-                elif reponse == "STOPPE":
-                    return "stoppe"
-                #timerCourant = lib.timer.getTime()
-                #if timerCourant - debutTimer == 8:
-                    #return "timeout"
-                capteur = self.capteurInstance.mesurer()
-                try:
-                    if int(capteur) < self.maxCapt:
-                        print 'CAPTEUR !'
-                        self.serialInstance.write('stop\n')
-                        self.robotInstance.obstacle = True
-                        return "obstacle"
-                except:
-                    pass
-                
-                if int(self.strategieInstance.timerStrat.getTime()) - int(debut_timer) > 8:
-                    print "timeoout !"
-                    return "timeout"
-                    
+             position = self.MAJorientation()
+             
+             debut_timer = self.strategieInstance.timerStrat.getTime()
+             acquittement = False
+             #debutTimer = lib.timer.getTime()
+             while not acquittement:
+                 for pat in self.fins_ligne:
+                     self.serialInstance.write('acq'+pat)
+                 reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+                 print reponse
+                 if reponse == "FIN_MVT":
+                     print 'FIN_MVT'
+                     acquittement = True
+                 capteur = self.capteurInstance.mesurer()
+                 try:
+                     if int(capteur) < self.maxCapt:
+                         return "obstacle"
+                 except:
+                     pass
+                 
+                 if int(self.strategieInstance.timerStrat.getTime()) - int(debut_timer) > 8:
+                     print "timeoout !"
+                     return "timeout"
+                     
         return "acquittement"
                     
                     
     def recalage(self):
-        
         self.serialInstance.write("\n\r")
         self.serialInstance.write("recal\n\r")
         
@@ -148,27 +133,25 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        
-        for pat in self.fins_ligne:
-            self.serialInstance.write('t' + pat + str(float(angle)) + pat)
+        self.serialInstance.write("\n\r")
+        self.serialInstance.write('t\n\r' + str(float(angle))+'\n\r')
         log.logger.info("Ordre de tourner à " + str(float(angle)))
         acquitement = False
-        debut_timer = self.strategieInstance.timerStrat.getTime()
+        #debutTimer = lib.timer.getTime()
         while not acquitement:
-            
-            for pat in self.fins_ligne:
-                self.serialInstance.write('acq'+pat)
-                reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-                if reponse == "FIN_MVT":
-                    print reponse
-                    acquitement = True
-                elif reponse == "STOPPE":
-                    return "stoppe"
-                
-                if int(self.strategieInstance.timerStrat.getTime()) - int(debut_timer) > 8:
-                    print "timeoout !"
-                    return "timeout"
-                    
+            self.serialInstance.write('acq\n')
+            self.serialInstance.write('acq\r\n')
+            self.serialInstance.write('acq\n\r')
+            reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+            if reponse == "FIN_MVT":
+                print reponse
+                acquitement = True
+            elif reponse == "STOPPE":
+                return "stoppe"
+                break
+            #timerCourant = lib.timer.getTime()
+            #if timerCourant - debutTimer == 8:
+                #return "timeout"
         return "acquittement"
     
     def avancer(self, distance):
@@ -177,61 +160,40 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-            
         self.serialInstance.write("\n\r")
-        #self.serialInstance.write('d\n\r' + str(float(distance))+'\n\r')
-        
-        recu = False
-        for pat in self.fins_ligne:
-            while not recu:
-                self.serialInstance.write('d' + pat + str(float(distance)) + pat)
-                
-                self.serialInstance.write('acq' + pat)
-                reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-                if reponse == "EN_MVT":
-                    recu = True
-                elif reponse == "FIN_MVT":
-                    return "acquittement"
-                elif reponse == "STOPPE":
-                    return "stoppe"
-        
-        
+        self.serialInstance.write('d\n\r' + str(float(distance))+'\n\r')
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
         acquitement = False
-        debut_timer = self.strategieInstance.timerStrat.getTime()
+        #debutTimer = lib.timer.getTime()
         while not acquitement:
+            self.serialInstance.write('acq\n')
+            self.serialInstance.write('acq\r\n')
+            self.serialInstance.write('acq\n\r')
+            reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             
-            for pat1 in self.fins_ligne:
-            
-                self.serialInstance.write('acq' + pat1)
-                reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-                
-                if reponse == "FIN_MVT":
-                    print reponse
-                    acquitement = True
-                elif reponse == "STOPPE":
-                    return "stoppe"
-            
-                capteur = 5000
-                
-                for pat2 in self.fins_ligne:
-                    try:
-                        self.CaptSerialInstance.write('ultrason' + pat2)
-                        capteur = self.capteurInstance.mesurer()
-                    except:
-                        pass
-                    
-                    if int(capteur) < self.maxCapt:
-                        print 'CAPTEUR !'
-                        for pat3 in self.fins_ligne:
-                            self.serialInstance.write('stop' + pat3)
-                        self.robotInstance.obstacle = True
-                        return "obstacle"
-                
-                if int(self.strategieInstance.timerStrat.getTime()) - int(debut_timer) > 8:
-                    print "timeout !"
-                    return "timeout"
-                
+            if reponse == "FIN_MVT":
+                print reponse
+                acquitement = True
+            elif reponse == "STOPPE":
+                return "stoppe"
+        
+        capteur = 5000
+        try:
+            self.CaptSerialInstance.write('ultrason\n')
+            capteur = self.capteurInstance.mesurer()
+        except:
+            pass
+            #timerCourant = lib.timer.getTime()
+            #if timerCourant - debutTimer == 8:
+                #return "timeout"
+            try:
+                if int(capteur) < self.maxCapt:
+                    print 'CAPTEUR !'
+                    self.serialInstance.write('stop\n')
+                    self.robotInstance.obstacle = True
+                    return "obstacle"
+            except:
+                pass
         return "acquittement"
         
     def setUnsetAsser(self, asservissement, mode):
@@ -244,25 +206,22 @@ class Asservissement:
         :type mode: int
         """
         if mode == 0:
-            mode = '0'
+            mode = 's\n'
         else:
-            mode = '1'
+            mode = 'd\n'
             
-        
         if asservissement == "rotation":
-            asservissement = 'cr'
+            asservissement = 'r\n'
         else:
-            asservissement = 'ct'
+            asservissement = 't\n'
         
-        for pat in self.fins_ligne:
-            self.serialInstance.write(asservissement + mode + pat)
+        self.serialInstance.write(mode + asservissement)
         
     def changerPWM(self, typeAsservissement, valeur):
-        for pat in self.fins_ligne:
-            if typeAsservissement == "rotation":
-                self.serialInstance.write("crm"+pat+str(float(valeur))+pat)
-            elif typeAsservissement == "translation":
-                self.serialInstance.write("ctm"+pat+str(float(valeur))+pat)
+        if typeAsservissement == "rotation":
+            self.serialInstance.write("crm\n"+str(float(valeur))+"\n")
+        elif typeAsservissement == "translation":
+            self.serialInstance.write("ctm\n"+str(float(valeur))+"\n")
             
     def changerVitesse(self, typeAsservissement, valeur):
         """
@@ -273,16 +232,15 @@ class Asservissement:
         3 : vitesse pour forcer
         """
         
-        for pat in self.fins_ligne:
-            if typeAsservissement == "rotation":
-                self.serialInstance.write("crv"+str(int(valeur))+pat)
-            elif typeAsservissement == "translation":
-                self.serialInstance.write("ctv"+str(int(valeur))+pat)
+        if typeAsservissement == "rotation":
+            self.serialInstance.write("crv"+str(int(valeur))+"\n")
+        elif typeAsservissement == "translation":
+            self.serialInstance.write("ctv"+str(int(valeur))+"\n")
         
 
     def MAJorientation(self):
-        for pat in self.fins_ligne:
-            self.serialInstance.write("eo"+pat)
+        for pat in ["eo\n","eo\r\n","eo\n\r"]:
+            self.serialInstance.write(pat)
             reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             import re
             if re.match("^[0-9]+$", reponse):
@@ -292,8 +250,8 @@ class Asservissement:
                 break
         
     def MAJposition(self):
-        for pat in self.fins_ligne:
-            self.serialInstance.write("pos"+pat)
+        for pat in ["pos\n","pos\r\n","pos\n\r"]:
+            self.serialInstance.write(pat)
             reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             try:
                 if reponse[4]== "+":
@@ -310,8 +268,7 @@ class Asservissement:
         
         
     def immobiliser(self):
-        for pat in self.fins_ligne:
-            self.serialInstance.write("stop"+pat)
+        self.serialInstance.write('stop\n')
         
     def calculRayon(self, angle):
         """

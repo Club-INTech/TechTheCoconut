@@ -46,11 +46,12 @@ class Instance:
         self.instanciationStrategie()
         
         
-    def ajouterRobotAdverse(self, position, vider = False):
+    def ajouterRobotAdverse(self, position):
         self.liste_robots_adv.append(position)
-        if vider:
-            self.liste_robots_adv = []
     
+    def viderRobotAdverse(self):
+            self.liste_robots_adv = []
+            
     def instanciationScript(self):
         self.scriptInstance = script.Script()
         
