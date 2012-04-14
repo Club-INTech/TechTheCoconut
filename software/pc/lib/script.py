@@ -318,6 +318,23 @@ class Script:
         
         """
         log.logger.info("Rafflage de totem en cours")
+        
+        if not ennemi and not nord :
+            self.actionInstance.deplacer(10)
+            self.asserInstance.goTo(outils_math.point.Point(-50, 605))
+            self.asserInstance.tourner(0)
+            
+            self.actionInstance.deplacer(150)
+            self.asserInstance.avancer(510)
+            self.actionInstance.deplacer(75)
+            self.asserInstance.tourner(0.535)
+            self.asserInstance.avancer(665)
+            self.asserInstance.tourner(0)
+            self.asserInstance.avancer(-450)
+            self.actionInstance.deplacer(10)
+            
+        #if not ennemi and nord :
+            #self.actionInstance(
     
     
     def enfoncerPoussoir(self, idPoussoir) :
