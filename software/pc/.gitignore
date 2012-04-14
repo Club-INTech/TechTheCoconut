@@ -1,6 +1,8 @@
 *.pyc
 *.log
 *.orig
+*.swp
 c
 libc
 lib/test*
+sauv_*

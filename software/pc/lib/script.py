@@ -403,7 +403,13 @@ class Script:
         self.asserInstance.goTo(outils_math.point.Point(0, 1400))
         self.asserInstance.goTo(outils_math.point.Point(405, 1480))
         self.asserInstance.goTo(outils_math.point.Point(900, 1000))
-        self.asserInstance.goTo(outils_math.point.Point(860, 650)) # On revient au point au départ du tour
+        self.asserInstance.goTo(outils_math.point.Point(890, 755))
+        self.actionInstance.deplacer(80) # On ferme les bras avant de tourner
+        self.asserInstance.tourner(0.755)
+        self.actionInstance.deplacer(120) # On ouvre les bras pour déposer
+        self.asserInstance.avancer(340) # On va dans la calle
+        self.asserInstance.avancer(-450) # On fait marche arrière pour se dégager
+        self.actionInstance.deplacer(100)
         log.logger.info("Fin tour de table")
         
     def defendreBase(self):
