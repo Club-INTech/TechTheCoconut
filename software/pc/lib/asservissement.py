@@ -190,13 +190,11 @@ class Asservissement:
                 if int(capteur) < self.maxCapt:
                     print 'CAPTEUR !'
                     self.serialInstance.write('stop\n')
-                    
                     self.serialInstance.write('stop\r\n')
-                    
                     self.serialInstance.write('stop\n\r')
                     self.robotInstance.obstacle = True
                     while 42:
-                        pass
+                        time.sleep(1)
                     return "obstacle"
             except:
                 pass
