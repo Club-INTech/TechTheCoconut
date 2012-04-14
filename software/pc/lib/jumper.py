@@ -40,8 +40,8 @@ class Jumper :
         """
         Se met en attente d'un 1
         """
-        lancer = False
-        while not lancer :
+        lancer = True
+        while lancer :
             lancer = self.getEtat()
         
         
@@ -50,8 +50,8 @@ class Jumper :
         """
         Se met en attente d'un 0
         """
-        attente = True
-        while attente :
+        attente = False
+        while not attente :
             attente = self.getEtat()
         
         

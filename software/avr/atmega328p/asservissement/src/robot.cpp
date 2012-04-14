@@ -95,201 +95,202 @@ void Robot::communiquer_pc(){
 	serial_t_::read(buffer,17);
 
 #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+    serial_t_::print(0);
 
-	if(COMPARE_BUFFER("?",1)){
-		serial_t_::print(0);
-	}
-
-	else if(COMPARE_BUFFER("ccr",3)){
-		couleur_ = 'r';
-	}
-	else if(COMPARE_BUFFER("ccv",3)){
-		couleur_ = 'v';
-	}
-	
-	else if(COMPARE_BUFFER("crp",3)){
-		rotation.kp(serial_t_::read_float());
-	}
-	else if(COMPARE_BUFFER("crd",3)){
-		rotation.kd(serial_t_::read_float());
-	}
-	else if(COMPARE_BUFFER("cri",3)){
-		rotation.ki(serial_t_::read_float());
-	}
-
-	else if(COMPARE_BUFFER("ctp",3)){
-		translation.kp(serial_t_::read_float());
-	}
-	else if(COMPARE_BUFFER("ctd",3)){
-		translation.kd(serial_t_::read_float());
-}	
-	else if(COMPARE_BUFFER("cti",3)){
-		translation.ki(serial_t_::read_float());
-	}
-	else if(COMPARE_BUFFER("ctm",3)){
-		translation.valeur_bridage(serial_t_::read_float());
-	}
-	else if(COMPARE_BUFFER("crm",3)){
-		rotation.valeur_bridage(serial_t_::read_float());
-	}
-	
-	else if(COMPARE_BUFFER("cx",2)){
-		x(serial_t_::read_float());
-	}
-	else if(COMPARE_BUFFER("cy",2)){
-		y(serial_t_::read_float());
-	}
-	
-	else if(COMPARE_BUFFER("co",2)){
-		changer_orientation(serial_t_::read_float());
-	}
-
-	else if(COMPARE_BUFFER("ec",2)){
-		serial_t_::print((char)couleur_);
-	}
-	
-	else if(COMPARE_BUFFER("erp",3)){
-		serial_t_::print(rotation.kp());
-	}
-	else if(COMPARE_BUFFER("erd",3)){
-		serial_t_::print(rotation.kd());
-	}
-	else if(COMPARE_BUFFER("eri",3)){
-		serial_t_::print(rotation.ki());
-	}
-	else if(COMPARE_BUFFER("erm",3)){
-		serial_t_::print(rotation.valeur_bridage());
-	}
-
-	else if(COMPARE_BUFFER("etp",3)){
-		serial_t_::print(translation.kp());
-	}
-	else if(COMPARE_BUFFER("etd",3)){
-		serial_t_::print(translation.kd());
-	}
-	else if(COMPARE_BUFFER("eti",3)){
-		serial_t_::print(translation.ki());
-	}
-	else if(COMPARE_BUFFER("etm",3)){
-		serial_t_::print(translation.valeur_bridage());
-	}
-	
-	else if(COMPARE_BUFFER("ex",2)){
-		serial_t_::print((int32_t)x());
-	}
-	else if(COMPARE_BUFFER("ey",2)){
-		serial_t_::print((int32_t)y());
-	}
-	else if(COMPARE_BUFFER("eo",2)){
-		serial_t_::print((int32_t)((float)angle_serie_ * 1000));
-	}
-	
-	else if(COMPARE_BUFFER("d",1)){
-		envoyer_acquittement(-1);
-		debut_translater_seul(serial_t_::read_float());
-		/*
-		debut_translater(serial_t_::read_float());
-		rotation_en_cours_ = true;
-		*/
-		
-		/*
-		float dist = serial_t_::read_float();
-		goto_attendu_ = true;
-		debut_translater(dist);
-		debut_tourner(angle_serie_);
-		*/
-	}
-	
-	else if(COMPARE_BUFFER("t",1)){
-		envoyer_acquittement(-1);
-		debut_tourner(serial_t_::read_float());
-	}
-	
-	else if(COMPARE_BUFFER("goto",4)){
-		envoyer_acquittement(-1);
-		
-		float co_x = serial_t_::read_float();
-		float co_y = serial_t_::read_float();      
-		gotoPos(co_x , co_y);
-	}
-	
-	else if(COMPARE_BUFFER("stop",4)){
-		stopper();
-	}
-	
-	//stopper asservissement rotation/translation
-	else if(COMPARE_BUFFER("cr0",3)){
-		etat_rot_ = false;
-	}
-	else if(COMPARE_BUFFER("ct0",3)){
-		etat_tra_ = false;
-	}
-	
-	//démarrer asservissement rotation/translation
-	else if(COMPARE_BUFFER("cr1",3)){
-		etat_rot_ = true;
-	}
-	else if(COMPARE_BUFFER("ct1",3)){
-		etat_tra_ = true;
-	}
-	
-	//recalage de la position
-	else if(COMPARE_BUFFER("recal",5)){
-		recalage();
-	}
-	//arrete l'envoi d'acquittement en boucle (protocole explicite...)
-	else if(COMPARE_BUFFER("TG",2)){
-		envoyer_acquittement(-1);
-	}
-	//demande d'acquittement
-	else if (COMPARE_BUFFER("acq",3)){
-		envoyer_acquittement();
-	}
-	else if (COMPARE_BUFFER("ok",2)){
-		envoyer_acquittement();
-	}
-	//demande de la position courante
-	else if (COMPARE_BUFFER("pos",3)){
-		envoyer_position();
-	}
-	
-	////////////////////////////////////////vitesses prédéfinies
-	else if (COMPARE_BUFFER("ctv1",4))
-	{
-		translation.valeur_bridage(50.0);
-		translation.kp(0.75);
-		translation.kd(2.0);
-	}
-	else if (COMPARE_BUFFER("ctv2",4))
-	{
-		translation.valeur_bridage(100.0);
-		translation.kp(0.75);
-		translation.kd(2.5);
-	}
-	else if (COMPARE_BUFFER("ctv3",4))
-	{
-		translation.valeur_bridage(200.0);
-		translation.kp(0.75);
-		translation.kd(3.5);
-	}
-	else if (COMPARE_BUFFER("crv1",4))
-	{
-		rotation.valeur_bridage(50.0);
-		rotation.kp(1.5);
-		rotation.kd(2.0);
-	}
-	else if (COMPARE_BUFFER("crv2",4))
-	{
-		rotation.valeur_bridage(100.0);
-		rotation.kp(1.2);
-		rotation.kd(3.5);
-	}
-	else if (COMPARE_BUFFER("crv3",4))
-	{
-		rotation.valeur_bridage(200.0);
-		rotation.kp(0.9);
-		rotation.kd(3.5);
-	}
+// 	if(COMPARE_BUFFER("?",1)){
+// 		serial_t_::print(0);
+// 	}
+// 
+// 	else if(COMPARE_BUFFER("ccr",3)){
+// 		couleur_ = 'r';
+// 	}
+// 	else if(COMPARE_BUFFER("ccv",3)){
+// 		couleur_ = 'v';
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("crp",3)){
+// 		rotation.kp(serial_t_::read_float());
+// 	}
+// 	else if(COMPARE_BUFFER("crd",3)){
+// 		rotation.kd(serial_t_::read_float());
+// 	}
+// 	else if(COMPARE_BUFFER("cri",3)){
+// 		rotation.ki(serial_t_::read_float());
+// 	}
+// 
+// 	else if(COMPARE_BUFFER("ctp",3)){
+// 		translation.kp(serial_t_::read_float());
+// 	}
+// 	else if(COMPARE_BUFFER("ctd",3)){
+// 		translation.kd(serial_t_::read_float());
+// }	
+// 	else if(COMPARE_BUFFER("cti",3)){
+// 		translation.ki(serial_t_::read_float());
+// 	}
+// 	else if(COMPARE_BUFFER("ctm",3)){
+// 		translation.valeur_bridage(serial_t_::read_float());
+// 	}
+// 	else if(COMPARE_BUFFER("crm",3)){
+// 		rotation.valeur_bridage(serial_t_::read_float());
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("cx",2)){
+// 		x(serial_t_::read_float());
+// 	}
+// 	else if(COMPARE_BUFFER("cy",2)){
+// 		y(serial_t_::read_float());
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("co",2)){
+// 		changer_orientation(serial_t_::read_float());
+// 	}
+// 
+// 	else if(COMPARE_BUFFER("ec",2)){
+// 		serial_t_::print((char)couleur_);
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("erp",3)){
+// 		serial_t_::print(rotation.kp());
+// 	}
+// 	else if(COMPARE_BUFFER("erd",3)){
+// 		serial_t_::print(rotation.kd());
+// 	}
+// 	else if(COMPARE_BUFFER("eri",3)){
+// 		serial_t_::print(rotation.ki());
+// 	}
+// 	else if(COMPARE_BUFFER("erm",3)){
+// 		serial_t_::print(rotation.valeur_bridage());
+// 	}
+// 
+// 	else if(COMPARE_BUFFER("etp",3)){
+// 		serial_t_::print(translation.kp());
+// 	}
+// 	else if(COMPARE_BUFFER("etd",3)){
+// 		serial_t_::print(translation.kd());
+// 	}
+// 	else if(COMPARE_BUFFER("eti",3)){
+// 		serial_t_::print(translation.ki());
+// 	}
+// 	else if(COMPARE_BUFFER("etm",3)){
+// 		serial_t_::print(translation.valeur_bridage());
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("ex",2)){
+// 		serial_t_::print((int32_t)x());
+// 	}
+// 	else if(COMPARE_BUFFER("ey",2)){
+// 		serial_t_::print((int32_t)y());
+// 	}
+// 	else if(COMPARE_BUFFER("eo",2)){
+// 		serial_t_::print((int32_t)((float)angle_serie_ * 1000));
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("d",1)){
+// 		envoyer_acquittement(-1);
+// 		debut_translater_seul(serial_t_::read_float());
+// 		/*
+// 		debut_translater(serial_t_::read_float());
+// 		rotation_en_cours_ = true;
+// 		*/
+// 		
+// 		/*
+// 		float dist = serial_t_::read_float();
+// 		goto_attendu_ = true;
+// 		debut_translater(dist);
+// 		debut_tourner(angle_serie_);
+// 		*/
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("t",1)){
+// 		envoyer_acquittement(-1);
+// 		debut_tourner(serial_t_::read_float());
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("goto",4)){
+// 		envoyer_acquittement(-1);
+// 		
+// 		float co_x = serial_t_::read_float();
+// 		float co_y = serial_t_::read_float();      
+// 		gotoPos(co_x , co_y);
+// 	}
+// 	
+// 	else if(COMPARE_BUFFER("stop",4)){
+// 		stopper();
+// 	}
+// 	
+// 	//stopper asservissement rotation/translation
+// 	else if(COMPARE_BUFFER("cr0",3)){
+// 		etat_rot_ = false;
+// 	}
+// 	else if(COMPARE_BUFFER("ct0",3)){
+// 		etat_tra_ = false;
+// 	}
+// 	
+// 	//démarrer asservissement rotation/translation
+// 	else if(COMPARE_BUFFER("cr1",3)){
+// 		etat_rot_ = true;
+// 	}
+// 	else if(COMPARE_BUFFER("ct1",3)){
+// 		etat_tra_ = true;
+// 	}
+// 	
+// 	//recalage de la position
+// 	else if(COMPARE_BUFFER("recal",5)){
+// 		recalage();
+// 	}
+// 	//arrete l'envoi d'acquittement en boucle (protocole explicite...)
+// 	else if(COMPARE_BUFFER("TG",2)){
+// 		envoyer_acquittement(-1);
+// 	}
+// 	//demande d'acquittement
+// 	else if (COMPARE_BUFFER("acq",3)){
+// 		envoyer_acquittement();
+// 	}
+// 	else if (COMPARE_BUFFER("ok",2)){
+// 		envoyer_acquittement();
+// 	}
+// 	//demande de la position courante
+// 	else if (COMPARE_BUFFER("pos",3)){
+// 		envoyer_position();
+// 	}
+// 	
+// 	////////////////////////////////////////vitesses prédéfinies
+// 	else if (COMPARE_BUFFER("ctv1",4))
+// 	{
+// 		translation.valeur_bridage(50.0);
+// 		translation.kp(0.75);
+// 		translation.kd(2.0);
+// 	}
+// 	else if (COMPARE_BUFFER("ctv2",4))
+// 	{
+// 		translation.valeur_bridage(100.0);
+// 		translation.kp(0.75);
+// 		translation.kd(2.5);
+// 	}
+// 	else if (COMPARE_BUFFER("ctv3",4))
+// 	{
+// 		translation.valeur_bridage(200.0);
+// 		translation.kp(0.75);
+// 		translation.kd(3.5);
+// 	}
+// 	else if (COMPARE_BUFFER("crv1",4))
+// 	{
+// 		rotation.valeur_bridage(50.0);
+// 		rotation.kp(1.5);
+// 		rotation.kd(2.0);
+// 	}
+// 	else if (COMPARE_BUFFER("crv2",4))
+// 	{
+// 		rotation.valeur_bridage(100.0);
+// 		rotation.kp(1.2);
+// 		rotation.kd(3.5);
+// 	}
+// 	else if (COMPARE_BUFFER("crv3",4))
+// 	{
+// 		rotation.valeur_bridage(200.0);
+// 		rotation.kp(0.9);
+// 		rotation.kd(3.5);
+// 	}
 	
 
 #undef COMPARE_BUFFER
