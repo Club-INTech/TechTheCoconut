@@ -135,7 +135,7 @@ class Strategie(decision.Decision, threading.Thread):
                 ennemi_en_vue = True
                 debut_timer = int(timerStrat.getTime())
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
-                    self.asserInstance.CaptSerialInstance.write('ultrason\n')
+                    self.asserInstance.CaptSerialInstance.write('ultrason\r')
                     capteur = self.asserInstance.capteurInstance.mesurer()
                     try:
                         if int(capteur) < self.asserInstance.maxCapt:

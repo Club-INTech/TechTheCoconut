@@ -63,23 +63,23 @@ class Script:
         largeur_robot = 200
         largeur_table = 3000
         
-        self.asser.serieInstance.ecrire("ctm\n50.0\n")
-        self.asser.serieInstance.ecrire("crm\n100.0\n")
+        self.asser.serieInstance.ecrire("ctm\r50.0\r")
+        self.asser.serieInstance.ecrire("crm\r100.0\r")
         
         self.asser.avancer(-300.0)
-        #self.asser.serieInstance.ecrire("cr0\n")
+        #self.asser.serieInstance.ecrire("cr0\r")
         self.asser.setUnsetAsser('rotation', 0)
         self.asser.avancer(-200.0)
         if couleur == 'R':
             self.asser.robotInstance.position.x = -largeur_table/2+largeur_robot/2
-            self.asser.serieInstance.ecrire("cx\n" + str(float(-largeur_table/2+largeur_robot/2)) + "\n")
+            self.asser.serieInstance.ecrire("cx\r" + str(float(-largeur_table/2+largeur_robot/2)) + "\r")
             self.asser.robotInstance.orientation = 0.0
-            self.asser.serieInstance.ecrire("co\n" + str(float(0.0)) + "\n")
+            self.asser.serieInstance.ecrire("co\r" + str(float(0.0)) + "\r")
         else:
             self.asser.robotInstance.position.x = largeur_table/2-largeur_robot/2
-            self.asser.serieInstance.ecrire("cx\n" + str(float(largeur_table/2-largeur_robot/2)) + "\n")
+            self.asser.serieInstance.ecrire("cx\r" + str(float(largeur_table/2-largeur_robot/2)) + "\r")
             self.asser.robotInstance.orientation = math.pi
-            self.asser.serieInstance.ecrire("co\n" + str(float(math.pi)) + "\n")
+            self.asser.serieInstance.ecrire("co\r" + str(float(math.pi)) + "\r")
         self.asser.setUnsetAsser('rotation', 1)
         self.asser.avancer(300.0)
         self.asser.tourner(math.pi/2)
@@ -87,17 +87,17 @@ class Script:
         self.asser.setUnsetAsser('rotation', 0)
         self.asser.avancer(-300)
         self.asser.robotInstance.position.y = largeur_robot/2
-        self.asser.serieInstance.ecrire("cy\n" + str(float(largeur_robot/2)) + "\n")
+        self.asser.serieInstance.ecrire("cy\r" + str(float(largeur_robot/2)) + "\r")
         self.asser.robotInstance.orientation = math.pi/2
-        self.asser.serieInstance.ecrire("co\n" + str(float(math.pi/2)) + "\n")
+        self.asser.serieInstance.ecrire("co\r" + str(float(math.pi/2)) + "\r")
         self.asser.setUnsetAsser('rotation', 1)
         self.asser.avancer(150.0)
-        self.asser.serieInstance.ecrire("crm\n120.0\n")
+        self.asser.serieInstance.ecrire("crm\r120.0\r")
         if couleur == 'R':
             self.asser.tourner(0.0)
         else:
             self.asser.tourner(math.pi)
-        self.asser.serieInstance.ecrire("ctm\n120.0\n")
+        self.asser.serieInstance.ecrire("ctm\r120.0\r")
         self.asser.setUnsetAsser('rotation', 0)
         self.asser.setUnsetAsser('translation', 0)
         """
@@ -137,12 +137,9 @@ class Script:
             print "detection capteur"
             reponse = "lulz"
             while not reponse == "STOPPE":
-		for pat in ["\n","\n\r","\r\n"]:
-		    self.asserInstance.serialInstance.write('stop'+pat)
-		    self.serialInstance.write('acq'+pat)
-		    reponse = str(self.asserInstance.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-		    if reponse == "STOPPE":
-			break
+		self.asserInstance.serialInstance.write('stop'+"\r")
+		self.serialInstance.write('acq'+"\r")
+		reponse = str(self.asserInstance.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
 	    
 	    print "robot stoppé"
         
@@ -182,20 +179,20 @@ class Script:
                 while True :
                     if (pas > 4):
                         pas = 0
-                        self.serialInstance.write("d\n-1500.0\n")
+                        self.serialInstance.write("d\r-1500.0\r")
                         
                     print "constantes rotation : p,d,i. q pour quitter."
                     cte = str(raw_input())
                     if cte == "q":
                         break
                     elif cte == "a":
-                        self.serialInstance.write("d\n300.0\n")
+                        self.serialInstance.write("d\r300.0\r")
                         pas+=1
                     else:
                         try:
                             val = str(float(raw_input()))
-                            self.serialInstance.write("cr"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
-                            self.serialInstance.write("d\n300.0\n")
+                            self.serialInstance.write("cr"+cte.replace("\r","").replace("\r","")+"\r"+val+"\r")
+                            self.serialInstance.write("d\r300.0\r")
                             pas+=1
                         except:
                             pass
@@ -204,20 +201,20 @@ class Script:
                 while True :
                     if (pas > 4):
                         pas = 0
-                        self.serialInstance.write("d\n-1500.0\n")
+                        self.serialInstance.write("d\r-1500.0\r")
                     
                     print "constantes translation : p,d,i. q pour quitter."
                     cte = str(raw_input())
                     if cte == "q":
                         break
                     elif cte == "a":
-                        self.serialInstance.write("d\n300.0\n")
+                        self.serialInstance.write("d\r300.0\r")
                         pas+=1
                     else:
                         try :
                             val = str(float(raw_input()))
-                            self.serialInstance.write("ct"+cte.replace("\r","").replace("\n","")+"\n"+val+"\n")
-                            self.serialInstance.write("d\n300.0\n")
+                            self.serialInstance.write("ct"+cte.replace("\r","").replace("\r","")+"\r"+val+"\r")
+                            self.serialInstance.write("d\r300.0\r")
                             pas+=1
                         except :
                             pass

@@ -14,19 +14,17 @@ def attribuer():
         while i<10 and not instancie :
             try :
                 serieCapt = serial.Serial("/dev/ttyUSB"+str(i), periph[2], timeout=0.3)
-                serieCapt.write("\n\r")
+                serieCapt.write("\r")
                 #print "/dev/ttyUSB"+str(i)+" est occupé, ping..."
                 sent=False
-                for pat in ["\n\r","\r\n","\n","\r"]:
-                    serieCapt.write("?"+pat)
-                    rep = str(serieCapt.readline())
-                    if rep.replace("\n","").replace("\r","").replace("\0","") == str(periph[0]):
-                        print periph[1]+" OK sur ttyUSB" + str(i)
-                        print periph[0]
-                        chemins[int(periph[0])] = "/dev/ttyUSB" + str(i)
-                        instancie = True
-                        sent=True
-                        break
+		serieCapt.write("?\r")
+		rep = str(serieCapt.readline())
+		if rep.replace("\n","").replace("\r","").replace("\0","") == str(periph[0]):
+		    print periph[1]+" OK sur ttyUSB" + str(i)
+		    print periph[0]
+		    chemins[int(periph[0])] = "/dev/ttyUSB" + str(i)
+		    instancie = True
+		    sent=True
                 if sent:
                     break
                 else:
