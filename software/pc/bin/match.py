@@ -17,13 +17,13 @@ log = lib.log.Log(__name__)
 couleur = __builtin__.constantes["couleur"]
 
 # Import d'un timer et du jumper
-timer       = lib.timer.Timer()
-jumper      = lib.jumper.Jumper()
-strategie   = lib.strategie.Strategie()
-asserv      = __builtin__.instance.asserInstance
-robot       = lib.robot.Robot()
-script      = __builtin__.instance.scriptInstance
-actionneur  = __builtin__.instance.actionInstance
+timer           = lib.timer.Timer()
+jumper          = lib.jumper.Jumper()
+strategie       = lib.strategie.Strategie()
+asserInstance   = __builtin__.instance.asserInstance
+robot           = lib.robot.Robot()
+script          = __builtin__.instance.scriptInstance
+actionneur      = __builtin__.instance.actionInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
 log.logger.info("Robot en attente du jumper pour recalage")
@@ -33,7 +33,7 @@ log.logger.info("Lancement du recalage...")
 #Lancement du recalage
 
 try :
-    asserv.recalage()
+    asserInstance.recalage()
 except :
     log.logger.error("Impossible de lancer le recalage")
     
@@ -44,33 +44,90 @@ jumper.scruterDepart()
 log.logger.info("Le Jumper a été retiré. Lancement de la stratégie")
 
 # C'est parti
-strategie.gestion_avancer(300)
-actionneur.deplacer(110, ["bg, bd"])
+def debut() :
+    # NOTE DONE
+    if couleur == "v" :
+        asserInstance.avancer(300)
+        actionneur.deplacer(130, "bd")
+        actionneur.deplacer(100, "bg") # NOTE switch pour changer couleur
+    else :
+        asserInstance.avancer(300)
+        actionneur.deplacer(100, "bd")
+        actionneur.deplacer(130, "bg")
+        
+def decharger() :
+    # NOTE DONE
+    if couleur == "v" :
+        actionneur.deplacer(80, ["bd", "bg"])
+        asserInstance.goTo(point.Point(830, 915))
+        asserInstance.tourner(0)
+        actionneur.deplacer(160, ["bg", "bd"])
+        asserInstance.avancer(270)
+        asserInstance.avancer(-270)
+        actionneur.deplacer(100, ["bg", "bd"])
 
-strategie.gestion_goTo(point.Point(-50, 445))
-strategie.gestion_tourner(0)
-actionneur.deplacer(150, ["bg, bd"])
-strategie.gestion_avancer(640)
-actionneur.deplacer(80, ["bg", "bd"])
-strategie.gestion_goTo(point.Point(915, 915))
-strategie.gestion_tourner(0)
-strategie.gestion_avancer(150)
-actionneur.deplacer(150)
-strategie.gestion_avancer(145)
-strategie.gestion_avancer(-425)
-actionneur.deplacer(20)
+    else :
+        actionneur.deplacer(80, ["bd", "bg"])
+        asserInstance.goTo(point.Point(-830, 915))
+        asserInstance.tourner(3.14)
+        actionneur.deplacer(160, ["bg", "bd"])
+        asserInstance.avancer(270)
+        asserInstance.avancer(-270)
+        actionneur.deplacer(100, ["bg", "bd"])
+        
+def farmerTotemHaut() :
+    # NOTE DONE
+    if couleur == "v" :
+        asserInstance.goTo(point.Point(-50, 445))
+        asserInstance.tourner(0)
+        actionneur.deplacer(150, ["bg, bd"])
+        asserInstance.avancer(640)
+        actionneur.deplacer(50, ["bg", "bd"])
+        
+    else :
+        asserInstance.goTo(point.Point(50, 445))
+        asserInstance.tourner(3.14)
+        actionneur.deplacer(150, ["bg, bd"])
+        asserInstance.avancer(640)
+        actionneur.deplacer(50, ["bg", "bd"])
+       
+def appuyerBouton(numero) :
+    # NOTE DONE 
+    if couleur == "v" and numero == 1 :
+        asserInstance.goTo(point.Point(880, 1590))
+        asserInstance.tourner(-1.571)
+        asserInstance.changerVitesse("translation",3)
+        asserInstance.avancer(-1000.0)
+        asserInstance.changerVitesse("translation",2)
+        asserInstance.avancer(200)
+    
+    elif couleur == "v" and numero == 2 :
+        asserInstance.goTo(point.Point(-365, 1590))
+        asserInstance.tourner(-1.571)
+        asserInstance.changerVitesse("translation",3)
+        asserInstance.avancer(-1000.0)
+        asserInstance.changerVitesse("translation",2)
+        asserInstance.avancer(200)
+        
+    elif couleur == "r" and numero == 1 :
+        asserInstance.goTo(point.Point(-880, 1590))
+        asserInstance.tourner(-1.571)
+        asserInstance.changerVitesse("translation",3)
+        asserInstance.avancer(-1000.0)
+        asserInstance.changerVitesse("translation",2)
+        asserInstance.avancer(200)
 
-strategie.gestion_goTo(point.Point(860, 1590))
-strategie.gestion_tourner(-1.571)
-asserv.changerVitesse("translation",3)
-strategie.gestion_avancer(-500.0)  # Pour l'enfoncer à fond
-asserv.changerVitesse("translation",2)
-strategie.gestion_avancer(1000)    # On se barre.
-
-
-
-
-
-# ET BIM !
-
-
+    elif couleur == "r" and numero == 2 :
+        asserInstance.goTo(point.Point(365, 1590))
+        asserInstance.tourner(-1.571)
+        asserInstance.changerVitesse("translation",3)
+        asserInstance.avancer(-1000.0)
+        asserInstance.changerVitesse("translation",2)
+        asserInstance.avancer(200)
+def farmerTotemBas() :
+    #NOTE loading...
+asserInstance.goTo(point.Point(-180,1470))
+asserInstance.tourner(0)
+actionneur.deplacer(160, ["bg", "bd"])
+asserInstance.goTo(point.Point(545, 1490))
+actionneur.deplacer(85, ["bg", "bd"])
