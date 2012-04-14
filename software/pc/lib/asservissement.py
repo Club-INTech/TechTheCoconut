@@ -50,7 +50,7 @@ class Asservissement:
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
-        self.maxCapt = 600
+        self.maxCapt = 400
             
     
     def goToScript(self, script):
@@ -187,7 +187,9 @@ class Asservissement:
             print capteur
             if capteur < self.maxCapt:
                 print 'CAPTEUR !'
-                self.immobiliser()
+                #self.immobiliser()
+		self.serialInstance.write('stop\n\r')
+                
                 self.robotInstance.obstacle = True
                 raise Exception
                 #return "obstacle"
