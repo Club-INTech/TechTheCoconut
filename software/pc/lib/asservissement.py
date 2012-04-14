@@ -177,9 +177,14 @@ class Asservissement:
             elif reponse == "STOPPE":
                 return "stoppe"
         
+            capteur = 5000
             self.CaptSerialInstance.write('ultrason\n')
+            self.CaptSerialInstance.write('ultrason\r\n')
+            self.CaptSerialInstance.write('ultrason\n\r')
+            time.sleep(0.01)
             capteur = self.capteurInstance.mesurer()
             
+            print capteur
             if int(capteur) < self.maxCapt:
                 print 'CAPTEUR !'
                 self.immobiliser()
