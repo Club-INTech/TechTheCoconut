@@ -73,7 +73,7 @@ __builtin__.robotInstance = lib.robot.Robot()
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes)) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]) : \n')
     first = False
     #try:
     if mode == '' or mode == 'console':
@@ -83,12 +83,15 @@ while first or erreur:
         import time
         __builtin__.constantes["t0"] = time.time()
         
+    if mode == 'h':
+        mode = "homologation"
     if mode == 'e':
         mode = 'etalonnage_constantes'
     log.logger.info("Chargement du fichier de lancement " + mode)
     exec('import bin.'+ mode)
     if mode == "visualisation_table":
         first = True
+        
     #except:
         #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
         #erreur = True
