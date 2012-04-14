@@ -177,12 +177,8 @@ class Asservissement:
             elif reponse == "STOPPE":
                 return "stoppe"
         
-        capteur = 5000
-        try:
             self.CaptSerialInstance.write('ultrason\n')
             capteur = self.capteurInstance.mesurer()
-        except:
-            pass
             #timerCourant = lib.timer.getTime()
             #if timerCourant - debutTimer == 8:
                 #return "timeout"
