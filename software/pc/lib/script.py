@@ -135,8 +135,16 @@ class Script:
             self.asserInstance.avancer(700)    # On se barre.
         except:
             print "detection capteur"
-            while 42:
-                time.sleep(0.01)
+            reponse = "lulz"
+            while not reponse == "STOPPE":
+		for pat in ["\n","\n\r","\r\n"]:
+		    self.asserInstance.serialInstance.write('stop'+pat)
+		    self.serialInstance.write('acq'+pat)
+		    reponse = str(self.asserInstance.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+		    if reponse == "STOPPE":
+			break
+	    
+	    print "robot stoppé"
         
         """
         #stocke le lingot et enfonce un poussoir
