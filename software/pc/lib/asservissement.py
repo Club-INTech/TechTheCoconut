@@ -91,13 +91,16 @@ class Asservissement:
         for i in chemin_python:
             self.serialInstance.write("\n")
             log.logger.info("écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
-            self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            for pat in self.fins_ligne:
+                self.serialInstance.write("goto" + pat + str(float(i.x)) + pat + str(float(i.y)) + pat)
             position = self.MAJorientation()
             
+            debut_timer = self.strategieInstance.timerStrat.getTime()
             acquittement = False
             #debutTimer = lib.timer.getTime()
             while not acquittement:
-                self.serialInstance.write('acq\n')
+                for pat in self.fins_ligne:
+                    self.serialInstance.write('acq'+pat)
                 reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
                 print reponse
                 if reponse == "FIN_MVT":
@@ -109,7 +112,6 @@ class Asservissement:
                 #timerCourant = lib.timer.getTime()
                 #if timerCourant - debutTimer == 8:
                     #return "timeout"
-                    """
                 capteur = self.capteurInstance.mesurer()
                 try:
                     if int(capteur) < self.maxCapt:
@@ -119,7 +121,11 @@ class Asservissement:
                         return "obstacle"
                 except:
                     pass
-                """
+                
+                if int(self.strategieInstance.timerStrat.getTime()) - int(debut_timer) > 8:
+                    print "timeoout !"
+                    return "timeout"
+                    
         return "acquittement"
                     
                     
