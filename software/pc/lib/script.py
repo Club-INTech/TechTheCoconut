@@ -48,6 +48,8 @@ class Script:
         else:
             log.logger.error("l'instance de instance.strategieInstance n'est pas chargée")
     
+        self.couleur = __builtin__.constantes["couleur"]
+        
     def recalage(self):
         """
         Fonction permettant de recaller le robot dans un coin de la table
@@ -101,10 +103,6 @@ class Script:
         """
         
     def homologation(self):
-        
-        couleur = 'V'
-        
-        
         #self.asserInstance.tourner(0.0)
         #self.asserInstance.tourner(1.57)
         #self.asserInstance.tourner(0.0)
@@ -116,7 +114,12 @@ class Script:
         self.asserInstance.avancer(300)     # On sort de la zone départ
         self.asserInstance.tourner(1.57)     # On se dirige vers le Nord
         self.asserInstance.avancer(500)     # On avance jusqu'au lingots
-        self.asserInstance.tourner(0.0)       # On se tourne vers l'Est
+        
+        if self.couleur == 'R':
+            self.asserInstance.tourner(0.0)
+        else :
+            self.asserInstance.tourner(math.pi)  # On se tourne vers l'Est
+            
         self.asserInstance.avancer(300)     # On le rentre dans la calle du Cap'taine
         self.asserInstance.avancer(-300)    # On ressort de la calle
         self.asserInstance.tourner(1.57)     # On se tourne vers le boutton poussoir
@@ -128,7 +131,7 @@ class Script:
         self.asserInstance.changerVitesse("translation",2)
         self.asserInstance.avancer(1000)    # On se barre.
         
-        if couleur == 'R':
+        if self.couleur == 'R':
             self.asserInstance.tourner(0.0)
         else :
             self.asserInstance.tourner(math.pi)
@@ -139,6 +142,7 @@ class Script:
         self.asserInstance.avancer(600.0)
         self.asserInstance.tourner(math.pi/2)
         """
+        
         
     def testPosition(self):
         self.recalage()
