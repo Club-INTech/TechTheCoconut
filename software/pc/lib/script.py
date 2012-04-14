@@ -111,14 +111,16 @@ class Script:
         #self.asserInstance.tourner(1.57)
         #time.sleep(1)
         
+        self.asserInstance.changerVitesse("translation",1)
+        self.asserInstance.changerVitesse("rotation",1)
         self.asserInstance.avancer(300)     # On sort de la zone départ
         self.asserInstance.tourner(1.57)     # On se dirige vers le Nord
         self.asserInstance.avancer(500)     # On avance jusqu'au lingots
         
-        if self.couleur == 'R':
-            self.asserInstance.tourner(0.0)
+        if self.couleur == 'r':
+            self.asserInstance.tourner(math.pi)
         else :
-            self.asserInstance.tourner(math.pi)  # On se tourne vers l'Est
+            self.asserInstance.tourner(0.0)  # On se tourne vers l'Est
             
         self.asserInstance.avancer(300)     # On le rentre dans la calle du Cap'taine
         self.asserInstance.avancer(-300)    # On ressort de la calle
@@ -126,16 +128,10 @@ class Script:
         self.asserInstance.avancer(650)     # On avance vers lui
         self.asserInstance.tourner(-1.57)    # On lui montre nos fesses
         self.asserInstance.avancer(-480)    # On recule pour lui mettre sa dose
-        self.asserInstance.changerVitesse("translation",3)
-        self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
         self.asserInstance.changerVitesse("translation",2)
-        self.asserInstance.avancer(1000)    # On se barre.
-        
-        if self.couleur == 'R':
-            self.asserInstance.tourner(0.0)
-        else :
-            self.asserInstance.tourner(math.pi)
-        self.asserInstance.avancer(-500.0)
+        self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
+        self.asserInstance.changerVitesse("translation",1)
+        self.asserInstance.avancer(700)    # On se barre.
         
         """
         #stocke le lingot et enfonce un poussoir
