@@ -21,7 +21,7 @@ robot       = lib.robot.Robot()
 script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
-log.logger.warn("Robot en attente du jumper pour recalage")
+log.logger.warning("Robot en attente du jumper pour recalage")
 jumper.demarrerRecalage()
 log.logger.info("Lancement du recalage...")
 
@@ -34,9 +34,9 @@ except :
     
     
 # On attends le réenlèvement du jumper
-log.logger.warn("Le recalage a été effectué")
+log.logger.warning("Le recalage a été effectué")
 jumper.scruterDepart()
-log.logger.warn("Le Jumper a été retiré. Lancement de la stratégie")
+log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
 # On lance le script d'homologation
 asserv.setUnsetAsser("translation",1)
