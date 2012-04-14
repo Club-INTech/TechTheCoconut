@@ -16,6 +16,7 @@ import outils_math.point
 import recherche_chemin.thetastar
 import peripherique
 import lib.log
+import outils_math
 import capteur
 log =lib.log.Log(__name__)
 
@@ -49,7 +50,7 @@ class Asservissement:
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
-        self.maxCapt = 0
+        self.maxCapt = 600
             
     
     def goToScript(self, script):
@@ -140,6 +141,8 @@ class Asservissement:
         acquitement = False
         #debutTimer = lib.timer.getTime()
         while not acquitement:
+            self.serialInstance.write('acq\n')
+            self.serialInstance.write('acq\r\n')
             self.serialInstance.write('acq\n\r')
             reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             if reponse == "FIN_MVT":
@@ -165,6 +168,8 @@ class Asservissement:
         acquitement = False
         #debutTimer = lib.timer.getTime()
         while not acquitement:
+            self.serialInstance.write('acq\n')
+            self.serialInstance.write('acq\r\n')
             self.serialInstance.write('acq\n\r')
             reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
             
@@ -236,23 +241,32 @@ class Asservissement:
         
 
     def MAJorientation(self):
-        self.serialInstance.write("eo\n")
-        reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-        orientation = float(reponse)/1000.0
-        self.robotInstance.setOrientation(orientation)
-        return orientation
+        for pat in ["eo\n","eo\r\n","eo\n\r"]:
+            self.serialInstance.write(pat)
+            reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+            import re
+            if re.match("^[0-9]+$", reponse):
+                orientation = float(reponse)/1000.0
+                self.robotInstance.setOrientation(orientation)
+                return orientation
+                break
         
     def MAJposition(self):
-        asser.serialInstance.write("pos\n")
-        reponse = str(asser.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-        if reponse[4]== "+":
-            reponse = reponse.split("+")
-            pos = outils_math.point.Point(float(reponse[1]),float(reponse[0]))
-        else:
-            reponse = reponse.split("-")
-            pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
-        self.robotInstance.setPosition(pos)
-        return pos
+        for pat in ["pos\n","pos\r\n","pos\n\r"]:
+            self.serialInstance.write(pat)
+            reponse = str(self.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+            try:
+                if reponse[4]== "+":
+                    reponse = reponse.split("+")
+                    pos = outils_math.point.Point(float(reponse[1]),float(reponse[0]))
+                else:
+                    reponse = reponse.split("-")
+                    pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
+                self.robotInstance.setPosition(pos)
+                return pos
+                break
+            except:
+                pass
         
         
     def immobiliser(self):

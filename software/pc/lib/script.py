@@ -42,6 +42,11 @@ class Script:
             self.actionInstance = __builtin__.instance.actionInstance
         else:
             log.logger.error("l'instance de instance.actionInstance n'est pas chargée")
+            
+        if hasattr(__builtin__.instance, 'strategieInstance') :
+            self.strategieInstance = __builtin__.instance.strategieInstance
+        else:
+            log.logger.error("l'instance de instance.strategieInstance n'est pas chargée")
     
     def recalage(self):
         """
@@ -99,20 +104,29 @@ class Script:
         
         couleur = 'V'
         
+        
+        #self.asserInstance.tourner(0.0)
+        #self.asserInstance.tourner(1.57)
+        #self.asserInstance.tourner(0.0)
+        #self.asserInstance.tourner(1.57)
+        #self.asserInstance.tourner(0.0)
+        #self.asserInstance.tourner(1.57)
+        #time.sleep(1)
+        
         self.asserInstance.avancer(300)     # On sort de la zone départ
-        self.asserInstance.tourner(math.pi/2)     # On se dirige vers le Nord
+        self.asserInstance.tourner(1.57)     # On se dirige vers le Nord
         self.asserInstance.avancer(500)     # On avance jusqu'au lingots
-        self.asserInstance.tourner(0)       # On se tourne vers l'Est
+        self.asserInstance.tourner(0.0)       # On se tourne vers l'Est
         self.asserInstance.avancer(300)     # On le rentre dans la calle du Cap'taine
         self.asserInstance.avancer(-300)    # On ressort de la calle
-        self.asserInstance.tourner(math.pi/2)     # On se tourne vers le boutton poussoir
+        self.asserInstance.tourner(1.57)     # On se tourne vers le boutton poussoir
         self.asserInstance.avancer(650)     # On avance vers lui
-        self.asserInstance.tourner(-math.pi/2)    # On lui montre nos fesses
+        self.asserInstance.tourner(-1.57)    # On lui montre nos fesses
         self.asserInstance.avancer(-480)    # On recule pour lui mettre sa dose
-        self.serialInstance.write("ctm\n120.0\n")   # .. Puis on force plus
+        self.asserInstance.changerVitesse("translation",3)
         self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
-        self.serialInstance.write("ctm\n250.0\n")   # On remet le couple maxi à sa valeur d'origine.
-        self.asserInstance.avancer(1500)    # On se barre.
+        self.asserInstance.changerVitesse("translation",2)
+        self.asserInstance.avancer(1000)    # On se barre.
         
         if couleur == 'R':
             self.asserInstance.tourner(0.0)
@@ -209,8 +223,9 @@ class Script:
         
         try :
             #script
-            asserInstance.gestionAvancer(300)
-            asserInstance.gestionAvancer(300,"forcer")
+            strategieInstance.gestionAvancer(300)
+            strategieInstance.gestionAvancer(-300)
+            #asserInstance.gestionAvancer(300,"forcer")
             
             actionInstance.deplacer(90)
             actionInstance.deplacer(160)

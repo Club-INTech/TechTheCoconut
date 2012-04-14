@@ -96,7 +96,7 @@ class Strategie(decision.Decision, threading.Thread):
         """
         
         posAvant = self.asserInstance.MAJposition()
-        ret = self.asserInstance.avancer()
+        ret = self.asserInstance.avancer(distance)
         
         if ret == "timeout" or (ret == "STOPPEE" and not instruction):
             ##1
@@ -108,7 +108,7 @@ class Strategie(decision.Decision, threading.Thread):
             #recommencer le déplacement
             gestionAvancer(distance,"sansRecursion")
         
-        if ret == obstacle :
+        if ret == "obstacle" :
             ##2 
             #ajoute un robot adverse sur la table, pour la recherche de chemin
             orientation = self.asserInstance.MAJorientation()
@@ -205,7 +205,7 @@ class Strategie(decision.Decision, threading.Thread):
         
         
         
-        ret = self.asserInstance.tourner()
+        ret = self.asserInstance.tourner(angle)
         
         orientAvant = self.asserInstance.MAJorientation()
         
