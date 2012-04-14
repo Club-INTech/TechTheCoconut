@@ -190,7 +190,8 @@ class Asservissement:
                     self.serialInstance.write('stop\n\r')
                     self.robotInstance.obstacle = True
                     while 42:
-                        time.sleep(1)
+                        time.sleep(0.01)
+                        print capteur
                     return "obstacle"
             except:
                 pass
