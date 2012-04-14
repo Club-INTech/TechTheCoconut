@@ -73,7 +73,7 @@ __builtin__.robotInstance = lib.robot.Robot()
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch] : \n')
     first = False
     #try:
     if mode == '' or mode == 'console':
@@ -87,6 +87,8 @@ while first or erreur:
         mode = "homologation"
     if mode == 'e':
         mode = 'etalonnage_constantes'
+    if mode == "m" :
+        mode = "match"
     log.logger.info("Chargement du fichier de lancement " + mode)
     exec('import bin.'+ mode)
     if mode == "visualisation_table":
