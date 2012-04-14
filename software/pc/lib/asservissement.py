@@ -179,22 +179,13 @@ class Asservissement:
         
             self.CaptSerialInstance.write('ultrason\n')
             capteur = self.capteurInstance.mesurer()
-            #timerCourant = lib.timer.getTime()
-            #if timerCourant - debutTimer == 8:
-                #return "timeout"
-            try:
-                if int(capteur) < self.maxCapt:
-                    print 'CAPTEUR !'
-                    self.serialInstance.write('stop\n')
-                    self.serialInstance.write('stop\r\n')
-                    self.serialInstance.write('stop\n\r')
-                    self.robotInstance.obstacle = True
-                    while 42:
-                        time.sleep(0.01)
-                        print capteur
-                    return "obstacle"
-            except:
-                pass
+            
+            if int(capteur) < self.maxCapt:
+                print 'CAPTEUR !'
+                self.immobiliser()
+                self.robotInstance.obstacle = True
+                raise Exception
+                #return "obstacle"
         return "acquittement"
         
     def setUnsetAsser(self, asservissement, mode):
@@ -272,6 +263,8 @@ class Asservissement:
         
     def immobiliser(self):
         self.serialInstance.write('stop\n')
+        self.serialInstance.write('stop\r\n')
+        self.serialInstance.write('stop\n\r')
         
     def calculRayon(self, angle):
         """
