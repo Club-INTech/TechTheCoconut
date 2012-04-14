@@ -1,0 +1,38 @@
+LES COMMANDES MAGIQUES
+   
+   Les commandes magiques sont spécifiques à IPython, elles sont toujours préfixées d'un '%'.
+   
+   Listes des commandes les plus utiles :
+   - %magic : affiche le mode d'emploi des commandes magiques.
+   
+   - %lsmagic : affiche la liste des commandes magiques disponibles.
+   
+   - %history ou %hist : affiche l'historique des commandes tapées.
+   
+   - %macro : permet de sauvegarder une portion de code dans un variable et de l'exécuter ultérieurement.
+        exemple d'utilisation :
+            [1]:nom = "foo"
+            [2]:print nom
+            foo
+            [3]:%macro maMacro 1-2
+            [4]:maMacro
+            foo
+   
+   - %run : execute un script python
+   
+   - %quickref : affiche une documentation succinte sur IPython
+            
+   - %save : sauvegarde les commandes sélectionnées dans un fichier
+        exemple d'utilisation :
+            %save monFichier 1 2 3-9
+            
+   - %store : permet de sauvegarder des variables pour les rendre persistantes et donc réutilisable même après fermeture de la console IPython.
+        '%store var' sauvegarde 'var'
+        '%store' affiche l'ensemble des variables sauvegardées
+        '%store -d var' pour suprimer une variable suvegardée.
+        
+   - %who : retourne la liste des variable de la session courante.
+   
+   - %alias : permet de créer des alias pour des commandes système.
+        exemple d'utilisation :
+            %alias monAlias dir "home/document/"

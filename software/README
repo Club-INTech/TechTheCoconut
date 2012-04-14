@@ -1,0 +1,5 @@
+Dans software, vous y mettez le code que vous faites. Pensez à bien l'organiser pour que cela reste propre. Créer un dossier par micro projet (entre autre pour la partie avr : 3 cartes ==> 3 codes ==> 3 dossiers)
+
+Pour builder le code sur µC :
+$ cd build
+$ cmake ../.

@@ -1,0 +1,23 @@
+History of updates to CMSISv2_LPC17xx
+=====================================
+
+10 February 2011
+----------------
+CMSIS files updated to match files released with CMSIS 2.0
+code bundle library released by NXP. Noteable changes include
+removal of redundant prefixes such as:
+LPC_ADC->ADDR0 changed to LPC_ADC->DR[0]
+library renamed from CMSISv1p30_LPC17xx to CMSISv2_LPC17xx
+
+19 January 2010
+---------------
+system_LPC17xx.c updated to new version (dated 11 January 2010)
+
+23 March 2010
+-------------
+system_LPC17xx.c updated to new version (1.07, dated 12 February
+2010) - with fix to check on value of CCLKCFG_Val to remove need
+for it to be odd only.
+
+Optimisation level of release build of project also changed from
+-O2 to -Os.

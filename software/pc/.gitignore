@@ -1,0 +1,6 @@
+*.pyc
+*.log
+*.orig
+c
+libc
+lib/test*

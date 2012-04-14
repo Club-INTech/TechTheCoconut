@@ -1,0 +1,23 @@
+LES FONCTIONS DE BASE ET CHOSES A SAVOIR POUR UTILISER IPYTHON
+        
+   A. Complétion :
+      La complétion est possible sur les mots clé du langage python (import, def, class, etc), les méthodes (ex : sys.exit()), les variables ou encore les chemins d'accés aux fichiers. La complétion est obtenue à l'aide de la touche <TAB>.
+      Exemple : lib/con<TAB> affichera lib/conf.py 
+                lib<TAB> affichera tous les fichiers contenus dans le répertoire lib.
+                
+   B. Information et code source d'une fonction:
+      En tapant le nom de la fonction suivie d'un point d'interrogation, il est possible d'obtenir la définition de la fonction. Par exemple %readme? affiche le docstring de la fonction %readme.
+   
+      En tapant le nom de la fonction suivie de deux points d'interrogation, vous obtenez son code source en plus de la définition de la fonction.
+      
+   C. Recherche de fichiers et de variable:
+      Vous pouvez chercher un fichier ou une variable à l'aide des opérateurs '*' et '?'. L'opérateur '*' a le même fonctionnement que pour les commandes bash. Exemple :
+         [1] nom = "foo"
+         [2] prenom = "bar"
+         [3] *nom?
+         nom
+         prenom
+         
+   D. Commandes dans le shell:
+      Il est possible d'utiliser le shell sans quitter IPython en préfixant la commande d'un point d'exclamation.
+        exemple : !cd ..
