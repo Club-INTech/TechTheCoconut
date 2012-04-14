@@ -125,9 +125,53 @@ def appuyerBouton(numero) :
         asserInstance.changerVitesse("translation",2)
         asserInstance.avancer(200)
 def farmerTotemBas() :
-    #NOTE loading...
-asserInstance.goTo(point.Point(-180,1470))
-asserInstance.tourner(0)
-actionneur.deplacer(160, ["bg", "bd"])
-asserInstance.goTo(point.Point(545, 1490))
-actionneur.deplacer(85, ["bg", "bd"])
+    #NOTE DONE
+    if couleur == "v" :
+        asserInstance.goTo(point.Point(-180,1470))
+        asserInstance.tourner(0)
+        actionneur.deplacer(160, ["bg", "bd"])
+        asserInstance.goTo(point.Point(545, 1490))
+        actionneur.deplacer(85, ["bg", "bd"])
+    else: 
+        asserInstance.goTo(point.Point(180,1470))
+        asserInstance.tourner(3.14)
+        actionneur.deplacer(160, ["bg", "bd"])
+        asserInstance.goTo(point.Point(-545, 1490))
+        actionneur.deplacer(85, ["bg", "bd"])
+        
+def prendreDisquesCentre() :
+    #NOTE MAJ
+    if couleur == "v" :
+        actionneur.deplacer(90, ["bg", "bd"])
+        asserInstance.goTo(point.Point(705, 1345))
+        asserInstance.tourner(3.14)
+        asserInstance.avancer(1090)
+        asserInstance.tourner(1.921)
+        asserInstance.avancer(335.0)
+        asserInstance.tourner(0.00)
+        actionneur.deplacer(140, ["bg", "bd"])
+        asserInstance.avancer(1020.0)
+        actionneur.deplacer(80, ["bg", "bd"])
+    else :
+        actionneur.deplacer(90, ["bg", "bd"])
+        asserInstance.goTo(point.Point(-705, 1345))
+        asserInstance.tourner(0)
+        asserInstance.avancer(1090)
+        asserInstance.tourner(3.14-1.921)
+        asserInstance.avancer(335.0)
+        asserInstance.tourner(3.14)
+        actionneur.deplacer(140, ["bg", "bd"])
+        asserInstance.avancer(1020.0)
+        actionneur.deplacer(80, ["bg", "bd"])
+        
+#-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+#-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+
+# Construction du script
+
+debut()
+farmerTotemHaut()
+
+decharger()
+
+appuyerBouton(1)
