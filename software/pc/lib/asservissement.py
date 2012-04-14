@@ -178,14 +178,14 @@ class Asservissement:
                 return "stoppe"
         
             capteur = 5000
-            self.CaptSerialInstance.write('ultrason\n')
-            self.CaptSerialInstance.write('ultrason\r\n')
-            self.CaptSerialInstance.write('ultrason\n\r')
-            time.sleep(0.01)
+            #self.CaptSerialInstance.write('ultrason\n')
+            #self.CaptSerialInstance.write('ultrason\r\n')
+            #self.CaptSerialInstance.write('ultrason\n\r')
+            #time.sleep(0.01)
             capteur = self.capteurInstance.mesurer()
             
             print capteur
-            if int(capteur) < self.maxCapt:
+            if capteur < self.maxCapt:
                 print 'CAPTEUR !'
                 self.immobiliser()
                 self.robotInstance.obstacle = True

@@ -135,8 +135,6 @@ class Script:
             self.asserInstance.avancer(700)    # On se barre.
         except:
             print "detection capteur"
-            while 42:
-                time.sleep(0.01)
         
         """
         #stocke le lingot et enfonce un poussoir
