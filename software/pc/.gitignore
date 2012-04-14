@@ -1,6 +1,8 @@
 *.pyc
 *.log
 *.orig
+*~
+*.kate-swp
 c
 libc
 lib/test*
