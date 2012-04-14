@@ -458,4 +458,53 @@ class Strategie(decision.Decision, threading.Thread):
         prend en paramètre le point d'arrivée
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
-        pass
+    
+        posAvant = self.asserInstance.MAJposition()
+        ret = self.asserInstance.goTo(arrivee)
+        
+        if ret == "acquittement":
+            #vider la liste des adverses rencontrés
+            __builtin__.instance.viderRobotAdverse()
+            
+        elif ret == "obstacle":
+            self.asserInstance.immobiliser()
+            #ajoute un robot adverse sur la table, pour la recherche de chemin
+            orientation = self.asserInstance.MAJorientation()
+            position = self.asserInstance.MAJposition()
+            
+            adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
+            __builtin__.instance.ajouterRobotAdverse(adverse)
+            
+            if instruction == "sansRecursion":
+                raise Exception
+            elif instruction == "":
+                #TODO tourner du premier angle
+                self.gestionGoto(arrivee)
+        elif ret == "timeout" :
+            if instruction == "sansRecursion":
+                raise Exception
+            elif not instruction :
+                self.gestionGoto(arrivee)
+        elif ret == "stoppe":
+            #vider la liste des adverses rencontrés
+            __builtin__.instance.viderRobotAdverse()
+            self.gestionAvancer(-100)
+            #TODO replier les bras
+            if instruction == "sansRecursion":
+                raise Exception
+            elif not instruction:
+                self.gestionGoto(arrivee,"sansRecursion")
+            
+            
+        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
+            ##1
+            #reculer de ce qui a été avancé
+            posApres = self.asserInstance.MAJposition()
+            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+            if distance != 0: 
+                signe = distance/abs(distance)
+            else:
+                signe = 1
+            gestionAvancer(-signe*dist,"sansRecursion")
+            #recommencer le déplacement
+            gestionAvancer(distance,"sansRecursion")
