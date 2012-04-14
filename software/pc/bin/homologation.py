@@ -3,6 +3,8 @@
 import sys
 from sys import argv
 import os
+import __builtin__
+import lib.instance
 
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -14,9 +16,9 @@ log = lib.log.Log(__name__)
 timer       = lib.timer.Timer()
 jumper      = lib.jumper.Jumper()
 strategie   = lib.strategie.Strategie()
-asserv      = lib.asservissement.Asservissement()
+asserv      = __builtin__.instance.asserInstance
 robot       = lib.robot.Robot()
-script      = lib.script.Script()
+script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
 log.logger.info("Robot en attente du jumper pour recalage")
@@ -24,7 +26,7 @@ jumper.demarrerRecalage()
 log.logger.info("Lancement du recalage...")
 
 #Lancement du recalage
-#TODO MONSIEUR DEBOC, FILE MOI LE PROTOCOLE
+
 try :
     asserv.recalage()
 except :
