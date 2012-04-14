@@ -211,11 +211,13 @@ class Asservissement:
             mode = '1'
             
         if asservissement == "rotation":
-            asservissement = 'cr'+mode+"\n\r\n"
+            asservissement = 'cr'
         else:
-            asservissement = 'ct'+mode+"\n\r\n"
+            asservissement = 'ct'
         
-        self.serialInstance.write(mode + asservissement)
+        self.serialInstance.write(asservissement+mode+'\n')
+        self.serialInstance.write(asservissement+mode+'\r\n')
+        self.serialInstance.write(asservissement+mode+'\n\r')
         
     def changerPWM(self, typeAsservissement, valeur):
         if typeAsservissement == "rotation":
