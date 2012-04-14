@@ -16,7 +16,7 @@ log = lib.log.Log(__name__)
 timer       = lib.timer.Timer()
 jumper      = lib.jumper.Jumper()
 strategie   = lib.strategie.Strategie()
-asserv      = __builtin__.instance.asserInstance
+asserInstance      = __builtin__.instance.asserInstance
 robot       = lib.robot.Robot()
 script      = __builtin__.instance.scriptInstance
 
@@ -28,7 +28,7 @@ log.logger.info("Lancement du recalage...")
 #Lancement du recalage
 
 try :
-    asserv.recalage()
+    asserInstance.recalage()
 except :
     log.logger.error("Impossible de lancer le recalage")
     
@@ -39,8 +39,8 @@ jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
 # On lance le script d'homologation
-asserv.setUnsetAsser("translation",1)
-asserv.setUnsetAsser("rotation",1)
+asserInstance.setUnsetAsser("translation",1)
+asserInstance.setUnsetAsser("rotation",1)
 script.homologation()
 
 # ET BIM !

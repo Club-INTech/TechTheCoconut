@@ -206,14 +206,14 @@ class Asservissement:
         :type mode: int
         """
         if mode == 0:
-            mode = 's\n'
+            mode = '0'
         else:
-            mode = 'd\n'
+            mode = '1'
             
         if asservissement == "rotation":
-            asservissement = 'r\n'
+            asservissement = 'cr'+mode+"\n\r\n"
         else:
-            asservissement = 't\n'
+            asservissement = 'ct'+mode+"\n\r\n"
         
         self.serialInstance.write(mode + asservissement)
         
