@@ -103,7 +103,10 @@ class Strategie(decision.Decision, threading.Thread):
             #reculer de ce qui a été avancé
             posApres = self.asserInstance.MAJposition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            signe = distance/abs(distance)
+            if distance != 0: 
+                signe = distance/abs(distance)
+            else:
+                signe = 1
             gestionAvancer(-signe*dist,"sansRecursion")
             #recommencer le déplacement
             gestionAvancer(distance,"sansRecursion")
@@ -149,7 +152,10 @@ class Strategie(decision.Decision, threading.Thread):
                     #finir le déplacement
                     posApres = self.asserInstance.MAJposition()
                     dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-                    signe = distance/abs(distance)
+                    if distance != 0:
+                        signe = distance/abs(distance)
+                    else:
+                        signe = 1
                     gestionAvancer(distance-signe*dist)
                     
                     
@@ -178,7 +184,10 @@ class Strategie(decision.Decision, threading.Thread):
             #finir le déplacement
             posApres = self.asserInstance.MAJposition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            signe = distance/abs(distance)
+            if distance != 0:
+                signe = distance/abs(distance)
+            else:
+                signe = 1
             gestionAvancer(distance-signe*dist)
             
             
@@ -213,7 +222,10 @@ class Strategie(decision.Decision, threading.Thread):
             ##1
             #tourner inversement à ce qui a été tourné
             orientApres = self.asserInstance.MAJorientation()
-            signe = angle/abs(angle)
+            if angle != 0:
+                signe = angle/abs(angle)
+            else:
+                signe = 1
             newangle = abs(orientAvant-orientApres)%(2*math.pi)
             if newangle > math.pi:
                 newangle = 2*math.pi - newangle
@@ -237,7 +249,10 @@ class Strategie(decision.Decision, threading.Thread):
             
             #finir le déplacement
             orientApres = self.asserInstance.MAJorientation()
-            signe = angle/abs(angle)
+            if angle != 0:
+                signe = angle/abs(angle)
+            else:
+                signe = 1
             newangle = abs(orientAvant-orientApres)%(2*math.pi)
             if newangle > math.pi:
                 newangle = 2*math.pi - newangle
@@ -437,4 +452,10 @@ class Strategie(decision.Decision, threading.Thread):
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
         
-        
+    def gestionGoto(self, arrivee, instruction=''):
+        """
+        méthode de haut niveau pour le goTo avec fonctionnalités avancées
+        prend en paramètre le point d'arrivée
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+        pass
