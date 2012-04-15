@@ -103,7 +103,10 @@ class Strategie(decision.Decision, threading.Thread):
             #reculer de ce qui a été avancé
             posApres = self.asserInstance.MAJposition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            signe = distance/abs(distance)
+            if distance != 0: 
+                signe = distance/abs(distance)
+            else:
+                signe = 1
             gestionAvancer(-signe*dist,"sansRecursion")
             #recommencer le déplacement
             gestionAvancer(distance,"sansRecursion")
@@ -132,7 +135,7 @@ class Strategie(decision.Decision, threading.Thread):
                 ennemi_en_vue = True
                 debut_timer = int(timerStrat.getTime())
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
-                    self.asserInstance.CaptSerialInstance.write('ultrason\n')
+                    self.asserInstance.CaptSerialInstance.write('ultrason\r')
                     capteur = self.asserInstance.capteurInstance.mesurer()
                     try:
                         if int(capteur) < self.asserInstance.maxCapt:
@@ -149,7 +152,10 @@ class Strategie(decision.Decision, threading.Thread):
                     #finir le déplacement
                     posApres = self.asserInstance.MAJposition()
                     dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-                    signe = distance/abs(distance)
+                    if distance != 0:
+                        signe = distance/abs(distance)
+                    else:
+                        signe = 1
                     gestionAvancer(distance-signe*dist)
                     
                     
@@ -178,7 +184,10 @@ class Strategie(decision.Decision, threading.Thread):
             #finir le déplacement
             posApres = self.asserInstance.MAJposition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            signe = distance/abs(distance)
+            if distance != 0:
+                signe = distance/abs(distance)
+            else:
+                signe = 1
             gestionAvancer(distance-signe*dist)
             
             
@@ -213,7 +222,10 @@ class Strategie(decision.Decision, threading.Thread):
             ##1
             #tourner inversement à ce qui a été tourné
             orientApres = self.asserInstance.MAJorientation()
-            signe = angle/abs(angle)
+            if angle != 0:
+                signe = angle/abs(angle)
+            else:
+                signe = 1
             newangle = abs(orientAvant-orientApres)%(2*math.pi)
             if newangle > math.pi:
                 newangle = 2*math.pi - newangle
@@ -237,7 +249,10 @@ class Strategie(decision.Decision, threading.Thread):
             
             #finir le déplacement
             orientApres = self.asserInstance.MAJorientation()
-            signe = angle/abs(angle)
+            if angle != 0:
+                signe = angle/abs(angle)
+            else:
+                signe = 1
             newangle = abs(orientAvant-orientApres)%(2*math.pi)
             if newangle > math.pi:
                 newangle = 2*math.pi - newangle
@@ -437,4 +452,59 @@ class Strategie(decision.Decision, threading.Thread):
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
         
+    def gestionGoto(self, arrivee, instruction=''):
+        """
+        méthode de haut niveau pour le goTo avec fonctionnalités avancées
+        prend en paramètre le point d'arrivée
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+    
+        posAvant = self.asserInstance.MAJposition()
+        ret = self.asserInstance.goTo(arrivee)
         
+        if ret == "acquittement":
+            #vider la liste des adverses rencontrés
+            __builtin__.instance.viderRobotAdverse()
+            
+        elif ret == "obstacle":
+            self.asserInstance.immobiliser()
+            #ajoute un robot adverse sur la table, pour la recherche de chemin
+            orientation = self.asserInstance.MAJorientation()
+            position = self.asserInstance.MAJposition()
+            
+            adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
+            __builtin__.instance.ajouterRobotAdverse(adverse)
+            
+            if instruction == "sansRecursion":
+                raise Exception
+            elif instruction == "":
+                #TODO tourner du premier angle
+                self.gestionGoto(arrivee)
+        elif ret == "timeout" :
+            if instruction == "sansRecursion":
+                raise Exception
+            elif not instruction :
+                self.gestionGoto(arrivee)
+        elif ret == "stoppe":
+            #vider la liste des adverses rencontrés
+            __builtin__.instance.viderRobotAdverse()
+            self.gestionAvancer(-100)
+            #TODO replier les bras
+            if instruction == "sansRecursion":
+                raise Exception
+            elif not instruction:
+                self.gestionGoto(arrivee,"sansRecursion")
+            
+            
+        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
+            ##1
+            #reculer de ce qui a été avancé
+            posApres = self.asserInstance.MAJposition()
+            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+            if distance != 0: 
+                signe = distance/abs(distance)
+            else:
+                signe = 1
+            gestionAvancer(-signe*dist,"sansRecursion")
+            #recommencer le déplacement
+            gestionAvancer(distance,"sansRecursion")
