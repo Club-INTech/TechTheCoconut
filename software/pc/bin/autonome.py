@@ -11,19 +11,22 @@ import lib.chargement_lib
 log = lib.log.Log(__name__)
 
 # Import d'un timer et du jumper
-timer       = lib.timer.Timer()
-jumper      = lib.jumper.Jumper()
-strategie   = lib.strategie.Strategie()
-asserv      = lib.asservissement.Asservissement()
-robot       = lib.robot.Robot()
-script      = lib.script.Script()
-
+timer           = lib.timer.Timer()
+jumper          = lib.jumper.Jumper()
+strategie       = lib.strategie.Strategie()
+asserInstance   = __builtin__.instance.asserInstance
+robot           = lib.robot.Robot()
+script          = __builtin__.instance.scriptInstance
+actionneur      = __builtin__.instance.actionInstance
 
 
 # On attend la mise en position du Jumper pour lancer le recalage
 log.logger.info("Robot en attente du jumper pour recalage")
 jumper.demarrerRecalage()
 log.logger.info("Lancement du recalage...")
+
+# TEST Actionneurs
+actionneur.test_demarrage()
 
 #Lancement du recalage
 #TODO MONSIEUR DEBOC, FILE MOI LE PROTOCOLE
