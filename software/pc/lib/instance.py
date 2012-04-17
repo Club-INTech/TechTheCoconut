@@ -2,7 +2,6 @@
 
 import lib.log
 import robot
-#import peripherique
 import asservissement
 import capteur
 import serial
@@ -11,9 +10,8 @@ import script
 import attributions
 import strategie
 import peripherique
-
-
-
+import threading
+from threading import Lock
 
 log =lib.log.Log(__name__)
 
@@ -113,4 +111,5 @@ class Instance:
         except:
             log.logger.error("L'acquisition n'est pas chargé")
 
-        
+    def instanciationMutex(self):
+        self.mutex = Lock()
