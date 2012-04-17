@@ -184,32 +184,11 @@ void Robot::communiquer_pc(){
 	}
 	
 	else if(COMPARE_BUFFER("d",1)){
-		envoyer_acquittement(-1);
-		debut_translater_seul(serial_t_::read_float());
-		/*
-		debut_translater(serial_t_::read_float());
-		rotation_en_cours_ = true;
-		*/
-		
-		/*
-		float dist = serial_t_::read_float();
-		goto_attendu_ = true;
-		debut_translater(dist);
-		debut_tourner(angle_serie_);
-		*/
+		translater(serial_t_::read_float());
 	}
 	
 	else if(COMPARE_BUFFER("t",1)){
-		envoyer_acquittement(-1);
-		debut_tourner(serial_t_::read_float());
-	}
-	
-	else if(COMPARE_BUFFER("goto",4)){
-		envoyer_acquittement(-1);
-		
-		float co_x = serial_t_::read_float();
-		float co_y = serial_t_::read_float();      
-		gotoPos(co_x , co_y);
+		tourner(serial_t_::read_float());
 	}
 	
 	else if(COMPARE_BUFFER("stop",4)){
@@ -236,17 +215,12 @@ void Robot::communiquer_pc(){
 	else if(COMPARE_BUFFER("recal",5)){
 		recalage();
 	}
-	//arrete l'envoi d'acquittement en boucle (protocole explicite...)
-	else if(COMPARE_BUFFER("TG",2)){
-		envoyer_acquittement(-1);
-	}
+
 	//demande d'acquittement
 	else if (COMPARE_BUFFER("acq",3)){
-		envoyer_acquittement();
+// 		envoyer_acquittement();
 	}
-	else if (COMPARE_BUFFER("ok",2)){
-		envoyer_acquittement();
-	}
+
 	//demande de la position courante
 	else if (COMPARE_BUFFER("pos",3)){
 		envoyer_position();
@@ -298,18 +272,17 @@ void Robot::communiquer_pc(){
 
 unsigned char Robot::couleur(void)
 {
-return couleur_;
+	return couleur_;
 }
 
 void Robot::couleur(unsigned char couleur)
 { 
-	if (couleur == 'r' || couleur == 'v')
-		couleur_ = couleur;
+	couleur_ = couleur;
 }
 
 float Robot::x(void)
 {
-return (float)x_;
+	return x_;
 }
 
 void Robot::x(float new_x)
@@ -319,7 +292,7 @@ void Robot::x(float new_x)
 
 float Robot::y(void)
 {
-return (float)y_;
+	return y_;
 }
 
 void Robot::y(float new_y)
@@ -329,7 +302,7 @@ void Robot::y(float new_y)
 
 int32_t Robot::mesure_angle(void)
 {
-return (int32_t)mesure_angle_;
+	return mesure_angle_;
 }
 void Robot::mesure_angle(int32_t new_angle)
 {
@@ -338,7 +311,7 @@ void Robot::mesure_angle(int32_t new_angle)
 
 int32_t Robot::mesure_distance(void)
 {
-return (int32_t)mesure_distance_;
+	return mesure_distance_;
 }
 void Robot::mesure_distance(int32_t new_distance)
 {
@@ -366,24 +339,6 @@ int32_t Robot::angle_optimal(int32_t angle, int32_t angleBkp)
 	return angle;
 }
 
-/*
-float Robot::angle_optimal(float angle, float angleBkp)
-{
-	float ang1 = abs(angle-angleBkp);
-	float ang2 = abs(angle+2*PI-angleBkp);
-	float ang3 = abs(angle-2*PI-angleBkp);
-    
-	if (!(ang1 < ang2 && ang1 < ang3))
-	{
-		if (ang2 < ang3)
-			angle += 2*PI;
-		else
-			angle -=  2*PI;
-	}
-	return angle;
-}
-*/
-
 int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 {
 	while (angle1 < 0)
@@ -404,61 +359,9 @@ void Robot::changer_orientation(float new_angle)
 	int32_t new_angle_tic = angle_optimal( new_angle/CONVERSION_TIC_RADIAN_, mesure_angle_ );
 	float new_angle_rad = new_angle_tic*CONVERSION_TIC_RADIAN_;
 	
-// 	float new_angle_rad = angle_optimal(new_angle, mesure_angle_*CONVERSION_TIC_RADIAN_);
-// 	int32_t new_angle_tic = new_angle_rad/CONVERSION_TIC_RADIAN_;
-	
 	mesure_angle_ = new_angle_tic;
 	angle_origine_ += new_angle_rad - angle_serie_;
 	angle_serie_ = new_angle_rad;
-}
-
-void Robot::envoyer_acquittement(int16_t instruction, const char *new_message)
-{
-	/*
-	 * les entiers envoi et instruction permettent d'accelerer la gestion de la nouvelle entrée string :
-	
-	 * l'entier envoi sauvegarde le type du dernier message envoyé :
-	 * 0 indique que le message ne sera pas envoyé
-	 * 1 indique qu'un message d'acquittement "FIN_..." est stocké dans message
-	 * 2 indique qu'un message d'acquittement goto "FIN_GOTO" est stocké dans message
-	 * 3 indique qu'un message d'arret "STOPPE" est stocké dans message
-	 
-	 * l'entier instruction modifie les variables statiques :
-	 * 1 indique qu'un nouveau message d'acquittement doit etre envoyé
-	 * 2 indique qu'un nouveau message d'acquittement goto doit etre envoyé
-	 * 3 indique qu'un nouveau message d'arrêt doit etre envoyé
-	 * 0 ne modifie pas le message envoyé (l'appel envoie juste l'ancien message sur la série)
-	 * -1 arrete l'envoi sur la série
-	*/
-	
-	static const char *message = "";
-	static int16_t envoi = 0;
-	
-	if (instruction)
-	{
-		if (instruction == -1)
-		{
-			envoi = 0;
-		}
-		else if (instruction == 1 && envoi < 2)
-		{
-			envoi = 1;
-			message = new_message;
-		}
-		else if (instruction == 2 && envoi < 3)
-		{
-			envoi = 2;
-			message = new_message;
-		}
-		else if (instruction == 3)
-		{
-			envoi = 3;
-			message = new_message;
-		}
-	}
-	if (envoi && not instruction)
-		Serial<0>::print(message);
-	
 }
 	
 void Robot::envoyer_position()
@@ -476,160 +379,21 @@ void Robot::envoyer_position_tic()
 
 ////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
 
-
-void Robot::gotoPos(float x, float y)
+void Robot::tourner(float angle)
 {
-	float delta_x = (x-x_);
-	float delta_y = (y-y_);
-	float angle = atan2(delta_y,delta_x);
-	goto_attendu_ = true;
-	debut_tourner(angle);
-	debut_translater(sqrt(delta_x*delta_x+delta_y*delta_y));
-	
+	float angle_rad = (angle - angle_origine_)/CONVERSION_TIC_RADIAN_;
+	rotation.consigne(angle_optimal( angle_rad, mesure_angle_ ));
 }
 
-void Robot::debut_tourner(float angle)
+void Robot::translater(float distance)
 {
-	envoyer_acquittement(-1);
-	int32_t new_angle = angle_optimal( (angle - angle_origine_)/CONVERSION_TIC_RADIAN_, mesure_angle_ );
-// 	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
-	
-	rotation_attendue_ = true;
-	rotation.consigne(new_angle);
-	envoyer_acquittement(1,"EN_MVT");
-}
-	
-	
-void Robot::fin_tourner()
-{
-	if (rotation_attendue_ && compare_angle_tic(mesure_angle_,rotation.consigne()) < 250)//250 tics : 10 degrés
-	{
-		rotation_attendue_ = false;
-		if (goto_attendu_)
-		{
-			translation_attendue_ = true;
-			translation.consigne(consigne_tra_);
-		}
-		else
-		{
-			/*
-			if (bascule_tou_)
-				envoyer_acquittement(1,"FIN_TOUA");
-			else
-				envoyer_acquittement(1,"FIN_TOUB");
-			bascule_tou_ = !bascule_tou_;
-			*/
-			envoyer_acquittement(1,"FIN_MVT");
-		}
-	}
-}
-
-void Robot::debut_translater_seul(float distance)
-{
-	translation_attendue_ = true;
-	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
 	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
-	envoyer_acquittement(1,"EN_MVT");
-}
-
-void Robot::debut_translater(float distance)
-{	
-	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
-}
-
-
-void Robot::fin_translater()
-{
-	if (translation_attendue_ && abs(mesure_distance_ - translation.consigne()) < 480 )//480 : 5cm
-	{
-		translation_attendue_ = false;
-
-		if (goto_attendu_)
-			goto_attendu_ = false;
-		envoyer_acquittement(1,"FIN_MVT");
-		/*
-		if (goto_attendu_)
-		{
-			goto_attendu_ = false;
-			if (bascule_goto_)
-				envoyer_acquittement(2,"FIN_GOTOA");
-			else
-				envoyer_acquittement(2,"FIN_GOTOB");
-			bascule_goto_ = !bascule_goto_;
-		}
-		else
-		{
-			if (bascule_tra_)
-				envoyer_acquittement(1,"FIN_TRAA");
-			else
-				envoyer_acquittement(1,"FIN_TRAB");
-			bascule_tra_ = !bascule_tra_;
-			
-		}
-		*/
-		
-	}
 }
 
 void Robot::stopper()
 {
-	/*
-	//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
 	rotation.consigne(mesure_angle_);
-	//stop en translation
-	consigne_tra_ = mesure_distance_;
 	translation.consigne(mesure_distance_);
- 	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
-		envoyer_acquittement(3,"STOPPE");
-	*/
-	
-	if (goto_attendu_ || translation_attendue_ || rotation_attendue_)
-	{
-		if (rotation_attendue_ && abs(mesure_angle_ - rotation.consigne())<25)
-			fin_tourner();
-		else if (translation_attendue_ && abs(mesure_distance_ - translation.consigne())<50)
-			fin_translater();
-		else 
-		{
-			envoyer_acquittement(3,"STOPPE");
-			//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
-			rotation.consigne(mesure_angle_);
-			//stop en translation
-			consigne_tra_ = mesure_distance_;
-			translation.consigne(mesure_distance_);
-		}
-	}
-	else
-	{
-		//stop en rotation. risque de tour sur lui meme ? (probleme +/- 2pi)
-		rotation.consigne(mesure_angle_);
-		//stop en translation
-		consigne_tra_ = mesure_distance_;
-		translation.consigne(mesure_distance_);
-	}
-}
-
-void Robot::atteinte_consignes()
-{
-	static bool translation_en_cours = false;
-	
-	if (abs(rotation.pwmCourant())>=10)
-		rotation_en_cours_ = true;
-
-	if (rotation_en_cours_ && abs(rotation.pwmCourant())<10)
-	{
-		rotation_en_cours_ = false;
-		fin_tourner();
-	}
-	
-	if (abs(translation.pwmCourant())>=10)
-		translation_en_cours = true;
-
-	if (translation_en_cours && abs(translation.pwmCourant())<10 && abs(mesure_distance_ - translation.consigne())<300)//3 cm
-	{
-		translation_en_cours = false;
-		fin_translater();
-	}
 }
 
 void Robot::gestion_stoppage()
@@ -701,7 +465,6 @@ void Robot::recalage()
 	rotation.valeur_bridage(250.0);
 	if (couleur_ == 'r') tourner_bloc(0.0); else tourner_bloc(PI);
 	translation.valeur_bridage(250.0);
-	envoyer_acquittement(2,"FIN_REC");
 	etat_rot_ = false;
 	etat_tra_ = false;
 	

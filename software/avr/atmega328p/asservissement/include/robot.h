@@ -93,20 +93,12 @@ public:
 	int32_t angle_optimal(int32_t angle, int32_t angleBkp);
 	int32_t compare_angle_tic(int32_t angle1,int32_t angle2);
 	
-	void envoyer_acquittement(int16_t instruction = 0, const char *new_message = NULL);
 	void envoyer_position(void);
 	
-	void gotoPos(float x, float y);
-	void debut_tourner(float angle);
-	void fin_tourner(void);
-	void debut_translater(float distance);
-	void fin_translater(void);
-	
-	void debut_translater_seul(float distance);
-	
-	
+	void tourner(float angle);
+	void translater(float distance);
+
 	void stopper();
-	void atteinte_consignes(void);
 	void gestion_stoppage();
 	
 	void recalage(void);
