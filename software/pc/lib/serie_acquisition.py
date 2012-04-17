@@ -35,5 +35,5 @@ class Serie_acquisition:
             reponse = self.serieAsserInstance.readline()
             reponse = str(reponse).replace("\n","").replace("\r","").replace("\0", "")
             #self.robotPosition = 
-            self.robotInstance.
+            self.robotInstance.position = reponse
             self.mutex.release()
