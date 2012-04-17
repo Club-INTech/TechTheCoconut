@@ -464,6 +464,7 @@ class Asservissement:
                     self.serialInstance.ecrire('?\r')
                     
             else:
+<<<<<<< HEAD
                 print "Il faut choisir une valeur contenue dans le menu.\r"
                 
     def test(self):
@@ -471,3 +472,6 @@ class Asservissement:
         self.serialInstance.ecrire("?\r")
         time.sleep(1)
         print ">"+self.serialInstance.lire()+"<"
+=======
+                print "Il faut choisir une valeur contenue dans le menu.\r"
+>>>>>>> 46fb56d2be6a0bbe391376d3048c22501c061b60
