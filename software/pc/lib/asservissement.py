@@ -182,12 +182,12 @@ class Asservissement:
         reponse = str(self.serialInstance.lire())
         try:
             if reponse[4]== "+":
-            reponse = reponse.split("+")
-            pos = outils_math.point.Point(float(reponse[1]),float(reponse[0]))
+                reponse = reponse.split("+")
+                pos = outils_math.point.Point(float(reponse[1]),float(reponse[0]))
             else:
-            reponse = reponse.split("-")
-            pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
-            self.robotInstance.setPosition(pos)
+                reponse = reponse.split("-")
+                pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
+                self.robotInstance.setPosition(pos)
             return pos
         except:
             self.getPosition()
@@ -216,10 +216,10 @@ class Asservissement:
     def changerPWM(self, typeAsservissement, valeur):
         if typeAsservissement == "rotation":
             self.serialInstance.ecrire("crm")
-            self.serialInstance.ecrire(str(float(valeur))))
+            self.serialInstance.ecrire(str(float(valeur)))
         elif typeAsservissement == "translation":
             self.serialInstance.ecrire("ctm")
-            self.serialInstance.ecrire(str(float(valeur))))
+            self.serialInstance.ecrire(str(float(valeur)))
             
             
     def changerVitesse(self, typeAsservissement, valeur):
@@ -233,11 +233,11 @@ class Asservissement:
         
         if typeAsservissement == "rotation":
             self.serialInstance.ecrire("crv")
-            self.serialInstance.ecrire(str(int(valeur))))
+            self.serialInstance.ecrire(str(int(valeur)))
             
         elif typeAsservissement == "translation":
             self.serialInstance.ecrire("ctv")
-            self.serialInstance.ecrire(str(int(valeur))))
+            self.serialInstance.ecrire(str(int(valeur)))
         
 
     def MAJorientation(self):
@@ -470,14 +470,5 @@ class Asservissement:
                     self.serialInstance.ecrire('?')
                     
             else:
-<<<<<<< HEAD
                 print "Il faut choisir une valeur contenue dans le menu."
                 
-    def test(self):
-        print "test"
-        self.serialInstance.ecrire("?")
-        time.sleep(1)
-        print ">"+self.serialInstance.lire()+"<"
-=======
-                print "Il faut choisir une valeur contenue dans le menu."
->>>>>>> 46fb56d2be6a0bbe391376d3048c22501c061b60
