@@ -92,7 +92,7 @@ class Actionneur(serie.Serie):
         
         """
         
-        if mode = "LONG" :
+        if mode == "LONG" :
             for i in range(4) :
                 self.goto(i, 80)
                 time.sleep(1)
@@ -111,7 +111,7 @@ class Actionneur(serie.Serie):
             self.changerVitesse(500)
             self.deplacer(0)
             
-        elif mode = "SHORT" :
+        elif mode == "SHORT" :
             self.deplacer(80)
             time.sleep(1)
             self.deplacer(0)

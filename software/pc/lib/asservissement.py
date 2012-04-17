@@ -48,7 +48,8 @@ class Asservissement:
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
-        self.maxCapt = 400
+        #self.maxCapt = 400
+        self.maxCapt = 0
             
     
     def goToScript(self, script):
