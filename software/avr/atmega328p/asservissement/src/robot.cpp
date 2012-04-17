@@ -18,6 +18,7 @@ Robot::Robot() : 		couleur_('v')
 				,angle_origine_(0.0)
 				,etat_rot_(true)
 				,etat_tra_(true)
+				,est_bloque_(false)
 				,translation(0.75,3.5,0.0)//(0.6,2.5,0.0)//(1.4,6.0,0.0)
 				,rotation(0.9,3.5,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
@@ -210,11 +211,17 @@ void Robot::communiquer_pc(){
 	}
 
 	//demande d'acquittement
-	else if (COMPARE_BUFFER("acq",3)){
-		bool rotation_stopped = compare_angle_tic(mesure_angle_,rotation.consigne()) < 250;
-		bool translation_stopped = translation.erreur() < 30;
-		serial_t_::print(rotation_stopped && translation_stopped);
-// 		envoyer_acquittement();
+	else if (COMPARE_BUFFER("acq",3))
+	{
+		if(est_stoppe())
+		{
+			if(est_bloque_)
+				serial_t_::print("STOPPE");
+			else
+				serial_t_::print("FIN_MVT");
+		}
+		else
+			serial_t_::print("EN_MVT");
 	}
 
 	//demande de la position courante
@@ -337,6 +344,7 @@ int32_t Robot::angle_optimal(int32_t angle, int32_t angleBkp)
 
 int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 {
+	//renvoit l'angle en tic minimisant le passage de angle1 à angle2
 	while (angle1 < 0)
 		angle1 += 8928;//2*pi
 	while (angle2 < 0)
@@ -372,18 +380,30 @@ void Robot::envoyer_position_tic()
 	serial_t_::print((int32_t)mesure_angle_);
 }
 
+bool Robot::est_stoppe()
+{
+	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 250;
+	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 30;
+	return rotation_stoppe && translation_stoppe;
+}
 
-////////////////////////////// DEPLACEMENTS ET STOPPAGE ///////////////////////////////////
+////////////////////////////// DEPLACEMENTS ET BLOCAGE ///////////////////////////////////
 
 void Robot::tourner(float angle)
 {
-	float angle_rad = (angle - angle_origine_)/CONVERSION_TIC_RADIAN_;
-	rotation.consigne(angle_optimal( angle_rad, mesure_angle_ ));
+	est_bloque_ = false;
+	float angle_tic = (angle - angle_origine_)/CONVERSION_TIC_RADIAN_;
+	rotation.consigne(angle_optimal( angle_tic, mesure_angle_ ));
+	while(compteur.value()>0){ asm("nop"); }
+	
 }
 
 void Robot::translater(float distance)
 {
-	translation.consigne(translation.consigne()+distance/CONVERSION_TIC_MM_);
+	est_bloque_ = false;
+	int32_t new_consigne = translation.consigne()+distance/CONVERSION_TIC_MM_;
+	translation.consigne(new_consigne);
+	while(compteur.value()>0){ asm("nop"); }
 }
 
 void Robot::stopper()
@@ -392,7 +412,7 @@ void Robot::stopper()
 	translation.consigne(mesure_distance_);
 }
 
-void Robot::gestion_stoppage()
+void Robot::gestion_blocage()
 {
 	
 	static float compteurBlocage=0;
@@ -414,6 +434,7 @@ void Robot::gestion_stoppage()
 			
 		if(compteurBlocage==20){
 			stopper();
+			est_bloque_ = true;
 			compteurBlocage=0;
 		}
 		else{
@@ -469,7 +490,6 @@ void Robot::recalage()
 void Robot::translater_bloc(float distance)
 {	
 	translater(distance);
-	while(compteur.value()>0){ asm("nop"); }
 	while(abs(translation.pwmCourant())> 10){
 		asm("nop");
 	}
@@ -478,7 +498,6 @@ void Robot::translater_bloc(float distance)
 void Robot::tourner_bloc(float angle)
 {
 	tourner(angle);
-	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
 		asm("nop");
 	}

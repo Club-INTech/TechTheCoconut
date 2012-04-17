@@ -34,6 +34,6 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.mesure_distance(infos[0]);
 	robot.mesure_angle(infos[1]);
 	robot.asservir();
-	robot.gestion_stoppage();
+	robot.gestion_blocage();
 	robot.update_position();
 }
