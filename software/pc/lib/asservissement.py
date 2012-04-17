@@ -6,7 +6,6 @@ import math
 import time
 import __builtin__
 import lib.timer
-#sys."\r"h.insert(0, os."\r"h.join(os."\r"h.dirname(__file__)))
 
 import log
 import outils_math.point as point
@@ -33,7 +32,6 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
@@ -165,9 +163,8 @@ class Asservissement:
             elif reponse == "STOPPE":
                 return "stoppe"
         
-            capteur = 5000
-            #self.CaptSerialInstance.write('ultrason\r')
-            #time.sleep(0.01)
+            self.CaptSerialInstance.write('ultrason\r')
+            time.sleep(0.01)
             capteur = self.capteurInstance.mesurer()
             
             print capteur
@@ -176,7 +173,7 @@ class Asservissement:
                 self.immobiliser()
                 self.robotInstance.obstacle = True
                 raise Exception
-                #return "obstacle"
+                
         return "acquittement"
         
     def setUnsetAsser(self, asservissement, mode):
