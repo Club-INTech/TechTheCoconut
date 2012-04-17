@@ -16,15 +16,8 @@ Robot::Robot() : 		couleur_('v')
 				,y_(0)
 				,angle_serie_(0.0)
 				,angle_origine_(0.0)
-				,bascule_goto_(true)
-				,bascule_tra_(true)
-				,bascule_tou_(true)
-				,translation_attendue_(false)
-				,rotation_attendue_(false)
-				,goto_attendu_(false)
 				,etat_rot_(true)
 				,etat_tra_(true)
-				,rotation_en_cours_(false)
 				,translation(0.75,3.5,0.0)//(0.6,2.5,0.0)//(1.4,6.0,0.0)
 				,rotation(0.9,3.5,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
@@ -218,6 +211,9 @@ void Robot::communiquer_pc(){
 
 	//demande d'acquittement
 	else if (COMPARE_BUFFER("acq",3)){
+		bool rotation_stopped = compare_angle_tic(mesure_angle_,rotation.consigne()) < 250;
+		bool translation_stopped = translation.erreur() < 30;
+		serial_t_::print(rotation_stopped && translation_stopped);
 // 		envoyer_acquittement();
 	}
 
@@ -472,8 +468,7 @@ void Robot::recalage()
 
 void Robot::translater_bloc(float distance)
 {	
-	consigne_tra_ = translation.consigne()+distance/CONVERSION_TIC_MM_;
-	translation.consigne(consigne_tra_);
+	translater(distance);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(translation.pwmCourant())> 10){
 		asm("nop");
@@ -482,10 +477,7 @@ void Robot::translater_bloc(float distance)
 
 void Robot::tourner_bloc(float angle)
 {
-	int32_t new_angle = angle_optimal( (angle - angle_origine_)/CONVERSION_TIC_RADIAN_, mesure_angle_ );
-// 	float new_angle = angle_optimal(angle - angle_origine_, mesure_angle_*CONVERSION_TIC_RADIAN_);
-	
-	rotation.consigne(new_angle);
+	tourner(angle);
 	while(compteur.value()>0){ asm("nop"); }
 	while(abs(rotation.pwmCourant())> 10){
 		asm("nop");

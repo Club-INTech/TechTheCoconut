@@ -27,8 +27,6 @@ int main()
 }
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
-	
-	
 	Robot & robot = Robot::Instance();
 	int32_t infos[2];
 	//info[0]=>distance courante ; info[1] => angle courant.
@@ -38,27 +36,4 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.asservir();
 	robot.gestion_stoppage();
 	robot.update_position();
-	
-	
-	/*
-	if (inc > 5)
-	{
-		//boucle d'envoi d'acquittement, en cas de perte sur la série
-		robot.envoyer_acquittement();
-		inc = 0;
-	}
-	
-	else
-	{
-		//mise à jour de la position réelle du robot dans la console python
-		robot.envoyer_position();
-		
-		//pour étalonnage
-// 		robot.envoyer_position_tic();
-		
-		inc++;
-	}
-	*/
-	
-	
 }

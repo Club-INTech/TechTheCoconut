@@ -41,21 +41,8 @@ private:
 	float angle_origine_;
 	void changer_orientation(float new_angle);
 	
-	//booléens pour envoyer un acquittement différent sur deux
-	bool bascule_goto_;
-	bool bascule_tra_;
-	bool bascule_tou_;
-	
-	bool translation_attendue_;
-	bool rotation_attendue_;
-	bool goto_attendu_;
-	
 	bool etat_rot_;
 	bool etat_tra_;
-	
-	int32_t consigne_tra_;
-	
-	bool rotation_en_cours_;
 	
 	int32_t mesure_distance_;
 	int32_t mesure_angle_;
