@@ -41,9 +41,8 @@ depart = outils_math.point.Point(0.0,0.0)
 asser = __builtin__.instance.asserInstance
 #écriture du point de départ initial
 
-asser.serialInstance.write("\n")
 
-asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
+asser.serialInstance.write("cx\r" + str(float(depart.x)) + "\rcy\r"+str(float(depart.y))+"\r")
 #robotInstance.setPosition
 #scriptInstance.homologation()
 #asser.avancer(500)
@@ -59,21 +58,21 @@ asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(de
 #asser.avancer(-500)
 
 while 42:
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(0)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(math.pi)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(0)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(math.pi)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(0)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(math.pi)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(0)
-    asser.avancer(400)
+    asser.avancer(200)
     asser.tourner(math.pi)
 
 """
