@@ -84,6 +84,11 @@ class Strategie(decision.Decision, threading.Thread):
         except :
             log.logger.error("Impossible d'importer l'instances globale de scripts")
             
+        try :
+            self.baliseInstance = __builtin__.instance.baliseInstance  # NOTE Convention ? (Thibaut)            
+        except :
+            log.logger.error("Impossible d'importer la balise capteur")
+            
         
             
             
@@ -358,13 +363,13 @@ class Strategie(decision.Decision, threading.Thread):
             PRIORITÉ DE L'ACTION : A coter de 1 à 5. La stratégie l'utilisera en cas de conflits.
         """
         log.logger.info("Initialisation des actions à faire")
-        self.actions.append(["FARMERTOTEM", 0, 0, 5])
-        self.actions.append(["FARMERTOTEM", 0, 1, 5])
-        self.actions.append(["FARMERTOTEM", 1, 0, 4])
-        self.actions.append(["FARMERTOTEM", 1, 1, 4])
+        self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
+        self.actions.append(["FARMERTOTEM", 0, 1,   9.9 ])
+        self.actions.append(["FARMERTOTEM", 1, 0,   9   ])
+        self.actions.append(["FARMERTOTEM", 1, 1,   9   ])
         
-        self.actions.append(["ENFONCERPOUSSOIR", 1, 6])
-        self.actions.append(["ENFONCERPOUSSOIR", 2, 3])
+        self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+        self.actions.append(["ENFONCERPOUSSOIR", 2, 5])
         
         #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
         #self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
@@ -373,30 +378,50 @@ class Strategie(decision.Decision, threading.Thread):
         
         self.actions.append(["FAIRECHIERENNEMI", 1])    #
         self.actions.append(["TOURDETABLE", 1])         #
-        self.actions.append(["DEFENDRE", 1])            #NOTE À mettre à 
+        self.actions.append(["DEFENDRE", 1])            #
     
     def choisirAction(self) :
         """
         CETTE FONCTION PERMET A LA STRATEGIE DE CHOISIR QUELLE ACTION CHOISIR
         """
+
+        
+        # TODO
+        # TODO associer la distance courante à celle de la balise.
+        # TODO
+        distance = 1
+        
+        # Poids du coefficient Nombre de Points / Durée
+        k1 = 1
+        
+        # Poids du coefficient "Adversaire proche de l'objectif" :
+        k2 = 1
+        
+        poids = []
+        # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
+        for i in range(len(self.actions)) :
+            poids.append(k1*self.actions[i][-1] + k2*distance)
+            
+        # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
+        # déjà fait. Ex : On a déjà farmé le totem.
         max = 0
         maxID = -1
         
-        
+        # On cherche l'action qui fait le meilleur score 
         for i in range(len(self.actions)) :
-            if self.actions[i][len(self.actions[i]) -1] > max :
-                max = self.actions[i][len(self.actions[i]) -1]
+            if poids[i] > max :
+                max = poids[i]
                 maxID = i
-        log.logger.error("OUPS")
                 
         # Si maxID == -1 c'est que il ne reste rien à faire.
-        # TODO FAIRE QUELQUE CHOSE BORDEL
-        if maxID == -1 :
+        # TODO Qu'est-ce qu'on fait dans ce cas là ?!
+        if maxID < -1 :
             log.logger.info("ZUT ALORS ! Plus d'actions à faire")
+            return
         
         
         # Sinon, on prend l'action
-        else :
+        try :
             if self.actions[maxID][0] == "FARMERTOTEM" :
                 self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
                 self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
@@ -416,7 +441,8 @@ class Strategie(decision.Decision, threading.Thread):
             elif self.actions[maxID][0] == "DEFENDRE":
                 self.scriptInstance.defendreBase()
                 self.changerPriorite("DEFENDRE", [], self.actions[maxID][-1]-0.01)
-                
+        except :
+            log.logger.error("La stratégie ne peut pas lancer d'actions")
         
         
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
