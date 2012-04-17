@@ -6,7 +6,6 @@ import math
 import time
 import __builtin__
 import lib.timer
-#sys."\r"h.insert(0, os."\r"h.join(os."\r"h.dirname(__file__)))
 
 import log
 import outils_math.point as point
@@ -33,7 +32,6 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
-        #self.capteursInstance = lib.capteur.Capteur('ultrason', 1)
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
@@ -50,7 +48,8 @@ class Asservissement:
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
             log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
-        self.maxCapt = 400
+        #self.maxCapt = 400
+        self.maxCapt = 0
             
     
     def goToScript(self, script):
@@ -84,15 +83,15 @@ class Asservissement:
             
         for i in chemin_python:
 	    log.logger.info("écrit sur série : "+"goto\r" + str(float(i.x)) + '\r' + str(float(i.y)) + '\r')
-	    self.serialInstance.write("goto" + "\r" + str(float(i.x)) + "\r" + str(float(i.y)) + "\r")
+	    self.serialInstance.ecrire("goto" + "\r" + str(float(i.x)) + "\r" + str(float(i.y)) + "\r")
 	    position = self.MAJorientation()
              
 	    debut_timer = self.strategieInstance.timerStrat.getTime()
 	    acquittement = False
 	    #debutTimer = lib.timer.getTime()
 	    while not acquittement:
-		self.serialInstance.write('acq'+"\r")
-		reponse = str(self.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
+		self.serialInstance.ecrire('acq'+"\r")
+		reponse = str(self.serialInstance.lire()).replace("\r","").replace("\n","").replace("\0", "")
 		print reponse
 		if reponse == "FIN_MVT":
 		    print 'FIN_MVT'
@@ -112,12 +111,12 @@ class Asservissement:
                     
                     
     def recalage(self):
-        self.serialInstance.write("\r")
-        self.serialInstance.write("recal\r")
+        self.serialInstance.ecrire("\r")
+        self.serialInstance.ecrire("recal\r")
         
         while not acquitement:
-            self.serialInstance.write('acq\r')
-            reponse = str(self.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
+            self.serialInstance.ecrire('acq\r')
+            reponse = str(self.serialInstance.lire()).replace("\r","").replace("\n","").replace("\0", "")
             if reponse == "FIN_REC":
                 print reponse
                 acquitement = True
@@ -129,13 +128,13 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write('t\r' + str(float(angle))+'\r')
+        self.serialInstance.ecrire('t\r' + str(float(angle))+'\r')
         log.logger.info("Ordre de tourner à " + str(float(angle)))
         acquitement = False
         #debutTimer = lib.timer.getTime()
         while not acquitement:
-            self.serialInstance.write('acq\r')
-            reponse = str(self.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
+            self.serialInstance.ecrire('acq\r')
+            reponse = str(self.serialInstance.lire()).replace("\r","").replace("\n","").replace("\0", "")
             if reponse == "FIN_MVT":
                 print reponse
                 acquitement = True
@@ -151,13 +150,13 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.serialInstance.write('d\r' + str(float(distance))+'\r')
+        self.serialInstance.ecrire('d\r' + str(float(distance))+'\r')
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
         acquitement = False
         #debutTimer = lib.timer.getTime()
         while not acquitement:
-            self.serialInstance.write('acq\r')
-            reponse = str(self.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
+            self.serialInstance.ecrire('acq\r')
+            reponse = str(self.serialInstance.lire()).replace("\r","").replace("\n","").replace("\0", "")
             
             if reponse == "FIN_MVT":
                 print reponse
@@ -165,9 +164,8 @@ class Asservissement:
             elif reponse == "STOPPE":
                 return "stoppe"
         
-            capteur = 5000
-            #self.CaptSerialInstance.write('ultrason\r')
-            #time.sleep(0.01)
+            self.CaptSerialInstance.ecrire('ultrason\r')
+            time.sleep(0.01)
             capteur = self.capteurInstance.mesurer()
             
             print capteur
@@ -176,7 +174,7 @@ class Asservissement:
                 self.immobiliser()
                 self.robotInstance.obstacle = True
                 raise Exception
-                #return "obstacle"
+                
         return "acquittement"
         
     def setUnsetAsser(self, asservissement, mode):
@@ -198,13 +196,13 @@ class Asservissement:
         else:
             asservissement = 'ct'
         
-        self.serialInstance.write(asservissement+mode+'\r')
+        self.serialInstance.ecrire(asservissement+mode+'\r')
         
     def changerPWM(self, typeAsservissement, valeur):
         if typeAsservissement == "rotation":
-            self.serialInstance.write("crm\r"+str(float(valeur))+"\r")
+            self.serialInstance.ecrire("crm\r"+str(float(valeur))+"\r")
         elif typeAsservissement == "translation":
-            self.serialInstance.write("ctm\r"+str(float(valeur))+"\r")
+            self.serialInstance.ecrire("ctm\r"+str(float(valeur))+"\r")
             
     def changerVitesse(self, typeAsservissement, valeur):
         """
@@ -216,14 +214,14 @@ class Asservissement:
         """
         
         if typeAsservissement == "rotation":
-            self.serialInstance.write("crv"+str(int(valeur))+"\r")
+            self.serialInstance.ecrire("crv"+str(int(valeur))+"\r")
         elif typeAsservissement == "translation":
-            self.serialInstance.write("ctv"+str(int(valeur))+"\r")
+            self.serialInstance.ecrire("ctv"+str(int(valeur))+"\r")
         
 
     def MAJorientation(self):
-	self.serialInstance.write("eo\r")
-	reponse = str(self.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
+	self.serialInstance.ecrire("eo\r")
+	reponse = str(self.serialInstance.lire()).replace("\r","").replace("\n","").replace("\0", "")
 	import re
 	if re.match("^[0-9]+$", reponse):
 	    orientation = float(reponse)/1000.0
@@ -231,8 +229,8 @@ class Asservissement:
 	    return orientation
         
     def MAJposition(self):
-	self.serialInstance.write("pos\r")
-	reponse = str(self.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
+	self.serialInstance.ecrire("pos\r")
+	reponse = str(self.serialInstance.lire()).replace("\r","").replace("\n","").replace("\0", "")
 	try:
 	    if reponse[4]== "+":
 		reponse = reponse.split("+")
@@ -247,7 +245,7 @@ class Asservissement:
         
         
     def immobiliser(self):
-        self.serialInstance.write('stop\r')
+        self.serialInstance.ecrire('stop\r')
         
     def calculRayon(self, angle):
         """
@@ -321,7 +319,7 @@ class Asservissement:
             elif choix == '1':
                 couleur = raw_input("Indiquer la zone de départ (r/v)\r")
                 message = 'c\rc\r' + str(couleur)
-                self.serialInstance.write(message)
+                self.serialInstance.ecrire(message)
                 self.afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
@@ -335,7 +333,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\r")
                         message += str(valeurs[choix]) + '\r' + str(constante)
-                        self.serialInstance.write(message)
+                        self.serialInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -352,7 +350,7 @@ class Asservissement:
                     if choix != '0':
                         constante = raw_input("Indiquer la valeur de la constante :\r")
                         message += valeurs[choix] + '\r' + str(constante)
-                        self.serialInstance.write(message)
+                        self.serialInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -363,12 +361,12 @@ class Asservissement:
                 coordonneX = raw_input("Rentrer a coordonée en x : \r")
                 if coordonneX:
                     message = 'cx' + str(coordonneX)
-                    self.serialInstance.write(message)
+                    self.serialInstance.ecrire(message)
                 
                 coordonneY = raw_input("Rentrer a coordonée en y: \r")
                 if coordonneY:
                     message = 'cy' + str(coordonneY)
-                    self.serialInstance.write(message)
+                    self.serialInstance.ecrire(message)
                 
                 self.afficherMenu()
             #Activer ou désactiver l'asservissement
@@ -385,16 +383,16 @@ class Asservissement:
                     constante = raw_input()
                     if constante == '1':
                         message = 's\rr\r'
-                        self.serialInstance.write(message)
+                        self.serialInstance.ecrire(message)
                     elif constante == '2':
                         message = 'd\rr\r'
-                        self.serialInstance.write(message)
+                        self.serialInstance.ecrire(message)
                     elif constante == '3':
                         message = 's\rt\r'
-                        self.serialInstance.write(message)
+                        self.serialInstance.ecrire(message)
                     elif constante == '4':
                         message = 'd\rt\r'
-                        self.serialInstance.write(message)
+                        self.serialInstance.ecrire(message)
                     elif constante == '0':
                         exit = True
                         self.afficherMenu()
@@ -429,7 +427,7 @@ class Asservissement:
                                 self.afficherMenu()
                             else:
                                 message = 'e\rr\r' + valeurs[choix]
-                                self.serialInstance.write(message)
+                                self.serialInstance.ecrire(message)
                     elif choix == '3':
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
@@ -441,20 +439,20 @@ class Asservissement:
                                 self.afficherMenu()
                             else:
                                 message = 'e\rt\r' + valeurs[choix]
-                                self.serialInstance.write(message)
+                                self.serialInstance.ecrire(message)
                     elif choix == '4':
-                        self.serialInstance.write('e\rs')
+                        self.serialInstance.ecrire('e\rs')
                     elif choix =='5':
                         exit = False
                         while not exit:
-                            self.serialInstance.write('ex')
+                            self.serialInstance.ecrire('ex')
                             answer = False
                             while not answer:
                                 while not self.serialInstance.file_attente.empty():
                                     print self.serialInstance.file_attente.get()
                                     answer = True
                                     self.afficherSousMenu()
-                            self.serialInstance.write('y\re')
+                            self.serialInstance.ecrire('y\re')
                             while not answer:
                                 while not self.serialInstance.file_attente.empty():
                                     print self.serialInstance.file_attente.get()
@@ -463,13 +461,17 @@ class Asservissement:
             elif choix == '7':
                 exit = False
                 while not exit:
-                    self.serialInstance.write('?\r')
+                    self.serialInstance.ecrire('?\r')
                     
             else:
+<<<<<<< HEAD
                 print "Il faut choisir une valeur contenue dans le menu.\r"
                 
     def test(self):
         print "test"
-        self.serialInstance.write("?\r")
+        self.serialInstance.ecrire("?\r")
         time.sleep(1)
-        print ">"+self.serialInstance.readline()+"<"
+        print ">"+self.serialInstance.lire()+"<"
+=======
+                print "Il faut choisir une valeur contenue dans le menu.\r"
+>>>>>>> 46fb56d2be6a0bbe391376d3048c22501c061b60

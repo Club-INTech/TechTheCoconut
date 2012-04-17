@@ -2,7 +2,6 @@
 
 import lib.log
 import robot
-#import peripherique
 import asservissement
 import capteur
 import serial
@@ -11,9 +10,8 @@ import script
 import attributions
 import strategie
 import peripherique
-
-
-
+import threading
+from threading import Lock
 
 log =lib.log.Log(__name__)
 
@@ -36,6 +34,7 @@ class Instance:
         self.chemins = attributions.attribuer()
 
     def instanciation(self):
+        self.instanciationMutex()
         self.instanciationRobot()
         self.instanciationSerie()
         self.instanciationCapteur()
@@ -79,18 +78,17 @@ class Instance:
         #cheminAsser = '/dev/ttyUSB9'
         cheminAsser = self.chemins[0]
         if cheminAsser:
-            self.serieAsserInstance = serial.Serial(cheminAsser, 9600, timeout=3)
+            self.serieAsserInstance = serie.Serie(cheminAsser, 9600, 3)
         else:
             log.logger.error("L'asservissement n'est pas chargé")
             
         # Actionneurs ≠ Capteurs sur Arduino pour la Belgique.
         #cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
-        
         cheminActionneur = self.chemins[4]
         
         
         if cheminActionneur :
-            self.serieActionneurInstance = serial.Serial(cheminActionneur, 9600, timeout = 1)
+            self.serieActionneurInstance = serie.Serie(cheminActionneur, 9600, 1)
         else :
             log.logger.error("Les actionneurs ne sont pas chargés")
         
@@ -113,4 +111,5 @@ class Instance:
         except:
             log.logger.error("L'acquisition n'est pas chargé")
 
-        
+    def instanciationMutex(self):
+        self.mutex = Lock()
