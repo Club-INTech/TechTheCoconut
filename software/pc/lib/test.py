@@ -10,7 +10,8 @@ import serial
 import instance
 import __builtin__
 import math
-
+import threading
+from threading import Lock
 """
 x = raw_input("Donner les coordonnées en x puis y du point de départ\n")
 y = raw_input()
@@ -35,15 +36,39 @@ robotInstance=robot.Robot()
 asser = Asservissement(robotInstance)
 asser.test()
 """
-scriptInstance = __builtin__.instance.scriptInstance
+#scriptInstance = __builtin__.instance.scriptInstance
 
-depart = outils_math.point.Point(0.0,0.0)
-asser = __builtin__.instance.asserInstance
+#depart = outils_math.point.Point(0.0,0.0)
+#asser = __builtin__.instance.asserInstance
+
+######################################################################
+#Test de mutex
+class Test:
+    def __init__(self):
+        self.huk = 0
+        mutex = __builtin__.instance.mutex
+
+        thread = threading.Thread(target = self.ecoute_thread)
+        thread.start()
+        threadd = threading.Thread(target = self.ecriture_thread)
+        threadd.start()
+    
+    def ecoute_thread(self):
+        while 42:
+            print self.huk
+
+    def ecriture_thread(self):
+        while 42:
+            self.huk += 1
+#######################################################################
+
+
+
 #écriture du point de départ initial
 
-asser.serialInstance.write("\n")
+#asser.serialInstance.write("\n")
 
-asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
+#asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
 #robotInstance.setPosition
 #scriptInstance.homologation()
 #asser.avancer(500)
@@ -58,23 +83,23 @@ asser.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(de
 #asser.avancer(500)
 #asser.avancer(-500)
 
-while 42:
-    asser.avancer(400)
-    asser.tourner(0)
-    asser.avancer(400)
-    asser.tourner(math.pi)
-    asser.avancer(400)
-    asser.tourner(0)
-    asser.avancer(400)
-    asser.tourner(math.pi)
-    asser.avancer(400)
-    asser.tourner(0)
-    asser.avancer(400)
-    asser.tourner(math.pi)
-    asser.avancer(400)
-    asser.tourner(0)
-    asser.avancer(400)
-    asser.tourner(math.pi)
+#while 42:
+    #asser.avancer(400)
+    #asser.tourner(0)
+    #asser.avancer(400)
+    #asser.tourner(math.pi)
+    #asser.avancer(400)
+    #asser.tourner(0)
+    #asser.avancer(400)
+    #asser.tourner(math.pi)
+    #asser.avancer(400)
+    #asser.tourner(0)
+    #asser.avancer(400)
+    #asser.tourner(math.pi)
+    #asser.avancer(400)
+    #asser.tourner(0)
+    #asser.avancer(400)
+    #asser.tourner(math.pi)
 
 """
 asser.avancer(300)
@@ -120,19 +145,19 @@ print 'FINI'
     
 #scriptInstance = script.Script(asser)
 #scriptInstance.huit()
-while(True):
-    x, y = '', ''
-    while x=='':
-        x = raw_input("x arrivé ?")
-    while y=='':
-        y = raw_input("y arrivé ?")
-    arrivee = outils_math.point.Point(int(x),int(y))
-    asser.goTo(depart, arrivee)
-    asser.serialInstance.write("pos\n")
-    depart = (asser.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
-    if depart[4]== "+":
-        depart = depart.split("+")
-    else:
-        depart = depart.split("-")
-    depart = outils_math.point.Point(depart[0],depart[1])
+#while(True):
+    #x, y = '', ''
+    #while x=='':
+        #x = raw_input("x arrivé ?")
+    #while y=='':
+        #y = raw_input("y arrivé ?")
+    #arrivee = outils_math.point.Point(int(x),int(y))
+    #asser.goTo(depart, arrivee)
+    #asser.serialInstance.write("pos\n")
+    #depart = (asser.serialInstance.readline()).replace("\n","").replace("\r","").replace("\0", "")
+    #if depart[4]== "+":
+        #depart = depart.split("+")
+    #else:
+        #depart = depart.split("-")
+    #depart = outils_math.point.Point(depart[0],depart[1])
     

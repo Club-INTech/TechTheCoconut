@@ -33,8 +33,8 @@ class Capteur():
 
     def mesurer(self):
         #retourne l'entier capté
-        self.serieInstance.write("ultrason\n\r")
-        mesure = int(str(self.serieInstance.readline()).replace("\n","").replace("\r","").replace("\0",""))
+        self.serieInstance.ecrire("ultrason\n\r")
+        mesure = int(str(self.serieInstance.lire()).replace("\n","").replace("\r","").replace("\0",""))
         return mesure
         
     def arreter(self):
