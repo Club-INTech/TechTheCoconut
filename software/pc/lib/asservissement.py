@@ -465,9 +465,3 @@ class Asservissement:
                     
             else:
                 print "Il faut choisir une valeur contenue dans le menu.\r"
-                
-    def test(self):
-        print "test"
-        self.serialInstance.write("?\r")
-        time.sleep(1)
-        print ">"+self.serialInstance.readline()+"<"
