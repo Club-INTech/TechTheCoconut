@@ -116,10 +116,10 @@ class Asservissement:
             if reponse == "FIN_MVT":
                 acquitement = True
             elif reponse == "STOPPE":
-                print "stoppé !"
+                print "tourner : stoppé !"
                 return "stoppe"
             if int(self.timerAsserv.getTime()) - debut_timer > 8:
-                print "timeout !"
+                print "tourner : timeout !"
                 return "timeout"
                 
         return "acquittement"

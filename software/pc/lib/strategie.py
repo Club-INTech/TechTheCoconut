@@ -218,25 +218,15 @@ class Strategie(threading.Thread):
         if angle < -math.pi:
             angle = angle + 2*math.pi
         
-        
-        
-        ret = self.asserInstance.tourner(angle)
+        print "#tourner à "+str(angle)+", "+instruction
         
         orientAvant = self.asserInstance.getOrientation()
+        ret = self.asserInstance.tourner(angle)
         
         if ret == "timeout" or (ret == "stoppe" and not instruction):
             ##1
             #tourner inversement à ce qui a été tourné
-            orientApres = self.asserInstance.getOrientation()
-            if angle != 0:
-                signe = angle/abs(angle)
-            else:
-                signe = 1
-            newangle = abs(orientAvant-orientApres)%(2*math.pi)
-            if newangle > math.pi:
-                newangle = 2*math.pi - newangle
-                
-            self.gestionTourner(-signe*newangle,"sansRecursion")
+            self.gestionTourner(orientAvant,"sansRecursion")
             #recommencer le déplacement
             self.gestionTourner(angle,"sansRecursion")
         
@@ -249,30 +239,13 @@ class Strategie(threading.Thread):
             
         if ret == "stoppe" and instruction == "forcer":
             ##5
-            
             #augmenter vitesse
             self.asserInstance.changerVitesse("rotation", 3)
-            
             #finir le déplacement
-            orientApres = self.asserInstance.getOrientation()
-            if angle != 0:
-                signe = angle/abs(angle)
-            else:
-                signe = 1
-            newangle = abs(orientAvant-orientApres)%(2*math.pi)
-            if newangle > math.pi:
-                newangle = 2*math.pi - newangle
-            self.gestionTourner(angle-signe*newangle)
-            
+            self.gestionTourner(angle)
             #remettre vitesse
             self.asserInstance.changerVitesse("rotation", 2)
             
-    
-    
-    
-    
-    
-    
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
             Strategie.prendreDecisions = True
