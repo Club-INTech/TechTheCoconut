@@ -1,7 +1,0 @@
-Todo liste pour l'asservissement :
-[X] Initialisation correcte de la couleur + déplacements :
-[X] couleur du lanceur : envoyer la couleur sur la série (ccr ou ccv) + orientation (pi pour violet et 0 pour rouge EN FLOAT : 'co\n' + string(float(valeur)))
-[X] Faire un goto propre
-- Ajout de l'écoute des capteurs en attendant l'acquittement de l'asservissement et pendant l'avance scriptée
-- Ajout de l'arrêt du robot suivant la valeur renvoyé par les capteurs + recul et recheche de chemin
-[X] ajout d'un thread timer de 90s. Au bout des 90s, asservir en position

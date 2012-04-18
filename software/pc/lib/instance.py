@@ -12,6 +12,7 @@ import attributions
 import strategie
 import peripherique
 import threading
+import actionneur
 from threading import Lock
 
 log =lib.log.Log(__name__)
@@ -40,39 +41,12 @@ class Instance:
         self.instanciationSerie()
         self.instanciationCapteur()
         self.instanciationAsservissement()
-        self.instanciationActionneur()
         self.instanciationAcquisition()
         self.instanciationScript()
         self.instanciationStrategie()
+        self.instanciationActionneur()
         
-        
-    def ajouterRobotAdverse(self, position):
-        self.liste_robots_adv.append(position)
     
-    def viderRobotAdverse(self):
-            self.liste_robots_adv = []
-            
-    def instanciationScript(self):
-        self.scriptInstance = script.Script()
-        
-    def instanciationStrategie(self):
-        self.strategieInstance = strategie.Strategie()
-
-    def instanciationCapteur(self):
-        try : self.capteurInstance = capteur.Capteur()
-        except : log.logger.error("Impossible d'instancier capteur")
-
-    def instanciationRobot(self):
-        self.robotInstance = robot.Robot()
-        
-    def instanciationAsservissement(self):
-        try : self.asserInstance = asservissement.Asservissement()
-        except : log.logger.error("Impossible d'instancier asservissement")
-
-    def instanciationActionneur(self):
-        try: self.actionInstance = actionneur.Actionneur()
-        except: log.logger.error("Impossible d'instancier actionneur")
-        
     def instanciationSerie(self):
         #Instance serie asservissement
         #cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
@@ -89,7 +63,7 @@ class Instance:
         
         
         if cheminActionneur :
-            self.serieActionneurInstance = serie.Serie(cheminActionneur, 9600, 1)
+            self.serieActionneurInstance = serial.Serial(cheminActionneur, 9600, timeout = 1)
         else :
             log.logger.error("Les actionneurs ne sont pas chargés")
         
@@ -105,6 +79,37 @@ class Instance:
         else:
             log.logger.error("Le capteur n'est pas chargé")
         
+        
+    def ajouterRobotAdverse(self, position):
+        self.liste_robots_adv.append(position)
+    
+    def viderRobotAdverse(self):
+            self.liste_robots_adv = []
+            
+    def instanciationScript(self):
+        self.scriptInstance = script.Script()
+        
+    def instanciationStrategie(self):
+        try:
+            self.strategieInstance = strategie.Strategie()
+        except:
+            log.logger.error("Impossible d'instancier la stratégie")
+
+    def instanciationCapteur(self):
+        try : self.capteurInstance = capteur.Capteur()
+        except : log.logger.error("Impossible d'instancier capteur")
+
+    def instanciationRobot(self):
+        self.robotInstance = robot.Robot()
+        
+    def instanciationAsservissement(self):
+        try : self.asserInstance = asservissement.Asservissement()
+        except : log.logger.error("Impossible d'instancier asservissement")
+
+    def instanciationActionneur(self):
+        try: self.actionInstance = actionneur.Actionneur()
+        except: log.logger.error("Impossible d'instancier actionneur")
+        
     def instanciationAcquisition(self):
         try :
             self.acquisitionInstance = serie_acquisition.Serie_acquisition()
@@ -114,3 +119,4 @@ class Instance:
 
     def instanciationMutex(self):
         self.mutex = Lock()
+    

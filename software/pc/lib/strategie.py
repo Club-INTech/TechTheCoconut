@@ -93,33 +93,35 @@ class Strategie(threading.Thread):
             
     def gestionAvancer(self, distance, instruction = ""):
         
+        print "#avancer à "+str(distance)+", "+instruction
+        
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
         
-        posAvant = self.asserInstance.MAJposition()
+        posAvant = self.asserInstance.getPosition()
         ret = self.asserInstance.avancer(distance)
         
-        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
+        if ret == "timeout" or (ret == "stoppe" and not instruction):
             ##1
             #reculer de ce qui a été avancé
-            posApres = self.asserInstance.MAJposition()
+            posApres = self.asserInstance.getPosition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
             if distance != 0: 
                 signe = distance/abs(distance)
             else:
                 signe = 1
-            gestionAvancer(-signe*dist,"sansRecursion")
+            self.gestionAvancer(-signe*dist,"sansRecursion")
             #recommencer le déplacement
-            gestionAvancer(distance,"sansRecursion")
+            self.gestionAvancer(distance,"sansRecursion")
         
         if ret == "obstacle" :
             ##2 
             #ajoute un robot adverse sur la table, pour la recherche de chemin
-            orientation = self.asserInstance.MAJorientation()
-            position = self.asserInstance.MAJposition()
+            orientation = self.asserInstance.getOrientation()
+            position = self.asserInstance.getPosition()
             
             adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
             __builtin__.instance.ajouterRobotAdverse(adverse)
@@ -153,13 +155,13 @@ class Strategie(threading.Thread):
                     self.asserInstance.changerVitesse("translation", 1)
                     
                     #finir le déplacement
-                    posApres = self.asserInstance.MAJposition()
+                    posApres = self.asserInstance.getPosition()
                     dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
                     if distance != 0:
                         signe = distance/abs(distance)
                     else:
                         signe = 1
-                    gestionAvancer(distance-signe*dist)
+                    self.gestionAvancer(distance-signe*dist)
                     
                     
                     #remettre vitesse
@@ -171,27 +173,28 @@ class Strategie(threading.Thread):
                     #stopper l'execution du script parent
                     raise Exception
                 
-        if ret == "STOPPEE" and instruction == "sansRecursion":
+        if ret == "stoppe" and instruction == "sansRecursion":
             ##4
             #mettre à jour l'attribut position du robot
             
             #stopper l'execution du script parent
+            
             raise Exception
             
-        if ret == "STOPPEE" and instruction == "forcer":
+        if ret == "stoppe" and instruction == "forcer":
             ##5
             
             #augmenter vitesse
             self.asserInstance.changerVitesse("translation", 3)
             
             #finir le déplacement
-            posApres = self.asserInstance.MAJposition()
+            posApres = self.asserInstance.getPosition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
             if distance != 0:
                 signe = distance/abs(distance)
             else:
                 signe = 1
-            gestionAvancer(distance-signe*dist)
+            self.gestionAvancer(distance-signe*dist)
             
             
             #remettre vitesse
@@ -219,12 +222,12 @@ class Strategie(threading.Thread):
         
         ret = self.asserInstance.tourner(angle)
         
-        orientAvant = self.asserInstance.MAJorientation()
+        orientAvant = self.asserInstance.getOrientation()
         
-        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
+        if ret == "timeout" or (ret == "stoppe" and not instruction):
             ##1
             #tourner inversement à ce qui a été tourné
-            orientApres = self.asserInstance.MAJorientation()
+            orientApres = self.asserInstance.getOrientation()
             if angle != 0:
                 signe = angle/abs(angle)
             else:
@@ -233,25 +236,25 @@ class Strategie(threading.Thread):
             if newangle > math.pi:
                 newangle = 2*math.pi - newangle
                 
-            gestionTourner(-signe*newangle,"sansRecursion")
+            self.gestionTourner(-signe*newangle,"sansRecursion")
             #recommencer le déplacement
-            gestionTourner(angle,"sansRecursion")
+            self.gestionTourner(angle,"sansRecursion")
         
-        if ret == "STOPPEE" and instruction == "sansRecursion":
+        if ret == "stoppe" and instruction == "sansRecursion":
             ##4
             #mettre à jour l'attribut orientation du robot
             
             #stopper l'execution du script parent
             raise Exception
             
-        if ret == "STOPPEE" and instruction == "forcer":
+        if ret == "stoppe" and instruction == "forcer":
             ##5
             
             #augmenter vitesse
             self.asserInstance.changerVitesse("rotation", 3)
             
             #finir le déplacement
-            orientApres = self.asserInstance.MAJorientation()
+            orientApres = self.asserInstance.getOrientation()
             if angle != 0:
                 signe = angle/abs(angle)
             else:
@@ -259,7 +262,7 @@ class Strategie(threading.Thread):
             newangle = abs(orientAvant-orientApres)%(2*math.pi)
             if newangle > math.pi:
                 newangle = 2*math.pi - newangle
-            gestionTourner(angle-signe*newangle)
+            self.gestionTourner(angle-signe*newangle)
             
             #remettre vitesse
             self.asserInstance.changerVitesse("rotation", 2)
@@ -483,7 +486,7 @@ class Strategie(threading.Thread):
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
     
-        posAvant = self.asserInstance.MAJposition()
+        posAvant = self.asserInstance.getPosition()
         ret = self.asserInstance.goTo(arrivee)
         
         if ret == "acquittement":
@@ -493,8 +496,8 @@ class Strategie(threading.Thread):
         elif ret == "obstacle":
             self.asserInstance.immobiliser()
             #ajoute un robot adverse sur la table, pour la recherche de chemin
-            orientation = self.asserInstance.MAJorientation()
-            position = self.asserInstance.MAJposition()
+            orientation = self.asserInstance.getOrientation()
+            position = self.asserInstance.getPosition()
             
             adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
             __builtin__.instance.ajouterRobotAdverse(adverse)
@@ -520,15 +523,15 @@ class Strategie(threading.Thread):
                 self.gestionGoto(arrivee,"sansRecursion")
             
             
-        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
+        if ret == "timeout" or (ret == "stoppe" and not instruction):
             ##1
             #reculer de ce qui a été avancé
-            posApres = self.asserInstance.MAJposition()
+            posApres = self.asserInstance.getPosition()
             dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
             if distance != 0: 
                 signe = distance/abs(distance)
             else:
                 signe = 1
-            gestionAvancer(-signe*dist,"sansRecursion")
+            self.gestionAvancer(-signe*dist,"sansRecursion")
             #recommencer le déplacement
-            gestionAvancer(distance,"sansRecursion")
+            self.gestionAvancer(distance,"sansRecursion")

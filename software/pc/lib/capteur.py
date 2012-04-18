@@ -32,13 +32,13 @@ class Capteur():
             self.serieInstance = __builtin__.instance.serieCaptInstance
 
     def mesurer(self):
-        #retourne l'entier capté
+        #retournes l'entier capté
         try:
             self.serieInstance.ecrire("ultrason")
-            mesure = int(str(self.serieInstance.lire()))
+            mesure = int(self.serieInstance.lire())
             return mesure
         except:
-            return 0
+            return 5000
         
     def arreter(self):
         """
