@@ -6,6 +6,7 @@ import asservissement
 import capteur
 import serial
 import serie_acquisition
+import serie
 import script
 import attributions
 import strategie
@@ -98,7 +99,7 @@ class Instance:
         
         if cheminCapt:
             try:
-                self.serieCaptInstance = serial.Serial(cheminCapt, 57600, timeout=1)
+                self.serieCaptInstance = serie.Serie(cheminCapt, 57600, timeout=1)
             except :
                 pass
         else:
