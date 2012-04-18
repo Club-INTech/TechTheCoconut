@@ -18,5 +18,4 @@ import lib.robot as mod_robot
 # Création du robot
 robot = mod_robot.Robot()
 
-robot.setPosition(point.Point(1000,1500))
 robot.setOrientation(0)

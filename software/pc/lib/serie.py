@@ -4,6 +4,8 @@ import serial
 import threading
 import Queue
 import sys, os
+import __builtin__
+import instance
 
 import log
 log = log.Log(__name__)
@@ -30,54 +32,29 @@ class Serie(threading.Thread, serial.Serial):
     :type parite: None|'PARITY_NONE'|'PARITY_EVEN'|'PARITY_ODD'|'PARITY_MARK'|'PARITY_SPACE'
     :TODO: Mettre le débit de Baud par défaut
     """
-    def __init__(self, peripherique, nom, debit = None, timeout = 0.5, parite=None):
-        if debit == None:
-            debit = constantes["Serie"]["peripheriques"][nom]
-        self.peripherique = peripherique
-        self.nom = nom
-        # File d'attente LIFO des messages venant de cette liaison
-        self.file_attente = Queue.LifoQueue()
-        log.logger.info("Initialisation de la liaison série threadée "+nom+" sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
-        if parite != None:
-            #exec("parite = serial."+parite)
-            pass
-        try:
-            threading.Thread.__init__(self, name=nom, target=self.lire)
-            self.active = True
-            if parite == None:
-                serial.Serial.__init__(self, peripherique, debit, timeout=timeout)
-            else:
-                serial.Serial.__init__(self, peripherique, debit, timeout=timeout, parity=parite)
-        except:
-            self.active = False
-            log.logger.error("Erreur d'initialisation de la liaison série threadée "+nom+" sur "+peripherique+" avec un débit de baud de "+str(debit)+" et un timeout de "+str(timeout))
-            self.stop()
+    def __init__(self, peripherique, debit, timeoutSerie):
+        self.serie = serial.Serial(peripherique, debit, timeout = timeoutSerie)
+        self.mutex = __builtin__.instance.mutex
 
     def lire(self):
         """
         Lire une information venant d'un périphérique jusqu'au retour à la ligne
         """
-        while self.active:
-            lu = self.readline()
-            lu = lu.split("\r\n")[0]
-            if lu != '':
-                log.logger.debug("Lecture sur la liaison série "+self.nom+" : "+lu)
-                self.file_attente.put(lu)
-
+        self.mutex.acquire()
+        reponse = self.serie.readline()
+        self.mutex.release()
+        reponse = str(reponse).replace("\n","").replace("\r","").replace("\0", "")
+        return reponse
     
-    def ecrire(self, msg):
+    def ecrire(self, message):
         """
         Écrire une information vers un périphérique puis retourner à la ligne
-        :param msg: message à donner au périphérique
-        :type msg: string
-        :return: Nombre de caractères envoyés
-        :rtype: int
+        :param message: message à donner au périphérique
+        :type message: string
         """
-        try:
-            log.logger.debug("Écrire sur la liaison série "+self.nom+" : "+msg)
-            return self.write(msg+"\r\n")
-        except:
-            log.logger.error("Échec écriture sur la liaison série "+self.nom+" : "+msg)
+        self.mutex.acquire()
+        self.serie.write(str(message) + '\r')
+        self.mutex.release()
         
     def stop(self):
         """

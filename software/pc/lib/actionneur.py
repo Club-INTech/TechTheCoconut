@@ -82,6 +82,43 @@ class Actionneur(serie.Serie):
         self.serieInstance.write("CH_VITESSE" + self.endmsg)
         self.serieInstance.write(str(int(nouvelleVitesse)) + self.endmsg)
         
+    def test_demarrage(self, mode = "LONG") :
+        """
+        Test de démarrage des bras Ax12. Un paramètre optionnel est mis en place pour
+        pouvoir régler la durée du test.
+        
+        :param mode: Type de test
+        :type mode: String "LONG" | "SHORT". Défault : "LONG"
+        
+        """
+        
+        if mode == "LONG" :
+            for i in range(4) :
+                self.goto(i, 80)
+                time.sleep(1)
+            log.logger.debug("Test Actionneurs goto : Fait.")
+            
+            for i in ["hd", "hg", "bg", "bd"] :
+                self.deplacer(50, i)
+                time.sleep(1)
+            log.logger.debug("Test Actionneurs déplacer : Fait")
+            
+            self.changerVitesse(100)
+            self.deplacer(20)
+            time.sleep(1)
+            
+            log.logger.debug("Test Actionneurs changerVitesse : Fait")
+            self.changerVitesse(500)
+            self.deplacer(0)
+            
+        elif mode == "SHORT" :
+            self.deplacer(80)
+            time.sleep(1)
+            self.deplacer(0)
+            time.sleep(1)
+            log.logger.debug("Test des bras : Fait")
+
+        
     def flash_id(self, nouvelID) :
         """
         Flashage de l'id
