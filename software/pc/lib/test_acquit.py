@@ -14,7 +14,6 @@ from outils_math.point import Point
 
 
 asserInstance = __builtin__.instance.asserInstance
-strategieInstance = __builtin__.instance.strategieInstance
 actionInstance = __builtin__.instance.actionInstance
 
 a = Point(200.0,200.0)
@@ -57,33 +56,33 @@ def console():
             dest = Point(float(x),float(y)) 
             asserInstance.goTo(dest)
         elif ordre == "q":
-            strategieInstance.gestionTourner(3.14)
+            asserInstance.gestionTourner(3.14)
         elif ordre == "s":
-            strategieInstance.gestionTourner(-1.57)
+            asserInstance.gestionTourner(-1.57)
         elif ordre == "d":
-            strategieInstance.gestionTourner(0)
+            asserInstance.gestionTourner(0)
         elif ordre == "z":
-            strategieInstance.gestionTourner(1.57)
+            asserInstance.gestionTourner(1.57)
             
         elif ordre == "u":
-            strategieInstance.gestionAvancer(100)
+            asserInstance.gestionAvancer(100)
         elif ordre == "j":
-            strategieInstance.gestionAvancer(-100)
+            asserInstance.gestionAvancer(-100)
             
         elif ordre == "i":
-            strategieInstance.gestionAvancer(200)
+            asserInstance.gestionAvancer(200)
         elif ordre == "k":
-            strategieInstance.gestionAvancer(-200)
+            asserInstance.gestionAvancer(-200)
             
         elif ordre == "o":
-            strategieInstance.gestionAvancer(300)
+            asserInstance.gestionAvancer(300)
         elif ordre == "l":
-            strategieInstance.gestionAvancer(-300)
+            asserInstance.gestionAvancer(-300)
             
         elif ordre == "p":
-            strategieInstance.gestionAvancer(400)
+            asserInstance.gestionAvancer(400)
         elif ordre == "m":
-            strategieInstance.gestionAvancer(-400)
+            asserInstance.gestionAvancer(-400)
             
         elif ordre == "n":
             actionInstance.deplacer(180)
@@ -108,27 +107,27 @@ def console():
 console()
         
 """
-strategieInstance.gestionAvancer(100)
-strategieInstance.gestionAvancer(300)
+asserInstance.gestionAvancer(100)
+asserInstance.gestionAvancer(300)
 raw_input("?")
-strategieInstance.gestionTourner(1.57)
+asserInstance.gestionTourner(1.57)
 raw_input("?")
-strategieInstance.gestionAvancer(400)
-strategieInstance.gestionTourner(0.0)
+asserInstance.gestionAvancer(400)
+asserInstance.gestionTourner(0.0)
 raw_input("?")
-strategieInstance.gestionTourner(math.pi)
+asserInstance.gestionTourner(math.pi)
 raw_input("?")
-strategieInstance.gestionTourner(-1.57)
-strategieInstance.gestionAvancer(400)
+asserInstance.gestionTourner(-1.57)
+asserInstance.gestionAvancer(400)
 raw_input("?")
-strategieInstance.gestionAvancer(200)
-strategieInstance.gestionAvancer(-200)
-strategieInstance.gestionAvancer(-200)
-strategieInstance.gestionAvancer(200)
+asserInstance.gestionAvancer(200)
+asserInstance.gestionAvancer(-200)
+asserInstance.gestionAvancer(-200)
+asserInstance.gestionAvancer(200)
 raw_input("?")
-strategieInstance.gestionTourner(math.pi)
-strategieInstance.gestionTourner(0)
-strategieInstance.gestionTourner(1.57)
-strategieInstance.gestionTourner(0)
+asserInstance.gestionTourner(math.pi)
+asserInstance.gestionTourner(0)
+asserInstance.gestionTourner(1.57)
+asserInstance.gestionTourner(0)
 raw_input("?")
 """

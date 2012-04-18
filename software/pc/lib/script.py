@@ -233,8 +233,8 @@ class Script:
         
         try :
             #script
-            strategieInstance.gestionAvancer(300)
-            strategieInstance.gestionAvancer(-300)
+            asserInstance.gestionAvancer(300)
+            asserInstance.gestionAvancer(-300)
             #asserInstance.gestionAvancer(300,"forcer")
             
             actionInstance.deplacer(90)

@@ -49,7 +49,12 @@ class Asservissement:
         self.maxCapt = 0
         
         #liste des centres de robots adverses repérés (liste de points)
+        
         self.liste_robots_adv = __builtin__.instance.liste_robots_adv
+        
+        #rayon moyen des robots adverses
+        #TODO : à mettre dans constantes
+        self.rayonRobotsAdverses = 200.0
         
         #timer pour les timeout
         self.timerAsserv = timer.Timer()
@@ -65,8 +70,8 @@ class Asservissement:
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
-        self.tourner(angle)
-        self.avancer(math.sqrt(delta_x**2+delta_y**2))
+        self.gestionTourner(angle)
+        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2))
     
     def goTo(self, arrivee):
         """
@@ -240,6 +245,178 @@ class Asservissement:
         
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
+        
+    def gestionAvancer(self, distance, instruction = ""):
+        """
+        méthode de haut niveau pour translater le robot
+        prend en paramètre la distance à parcourir en mm
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+        
+        print "#avancer à "+str(distance)+", "+instruction
+        
+        posAvant = self.getPosition()
+        retour = self.avancer(distance)
+        
+        if retour == "timeout" or (retour == "stoppe" and not instruction):
+            ##1
+            #stopper le robot
+            self.immobiliser()
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+                
+            else:
+                #reculer de ce qui a été avancé
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0: 
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(-signe*dist,"sansRecursion")
+                #recommencer le déplacement
+                self.gestionAvancer(distance,"sansRecursion")
+        
+        if retour == "obstacle" :
+            ##2 
+            #ajoute un robot adverse sur la table, pour la recherche de chemin
+            orientation = self.getOrientation()
+            position = self.getPosition()
+            
+            adverse = outils_math.point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
+            __builtin__.instance.ajouterRobotAdverse(adverse)
+            
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+            else:
+                
+                ##3
+                #stopper le robot
+                self.immobiliser()
+                #attente que la voie se libère
+                ennemi_en_vue = True
+                debut_timer = int(timerStrat.getTime())
+                while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
+                    capteur = self.capteurInstance.mesurer()
+                    if capteur < self.maxCapt:
+                        print 'gestionAvancer : capteur !'
+                    else :
+                        print 'gestionAvancer : la voie est libre !'
+                        ennemi_en_vue = False
+                    
+                if not ennemi_en_vue:
+                    #baisser vitesse
+                    self.changerVitesse("translation", 1)
+                    
+                    #finir le déplacement
+                    posApres = self.getPosition()
+                    dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                    if distance != 0:
+                        signe = distance/abs(distance)
+                    else:
+                        signe = 1
+                    self.gestionAvancer(distance-signe*dist)
+                    
+                    #remettre vitesse
+                    self.changerVitesse("translation", 2)
+                    
+                else:
+                    #mettre à jour l'attribut position du robot
+                    
+                    #stopper l'execution du script parent
+                    raise Exception
+                
+        if retour == "stoppe" and instruction == "sansRecursion":
+            ##4
+            #mettre à jour l'attribut position du robot
+            
+            #stopper l'execution du script parent
+            
+            raise Exception
+            
+        if retour == "stoppe" and instruction == "forcer":
+            ##5
+            
+            #augmenter vitesse
+            self.changerVitesse("translation", 3)
+            
+            #finir le déplacement
+            posApres = self.getPosition()
+            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+            if distance != 0:
+                signe = distance/abs(distance)
+            else:
+                signe = 1
+            self.gestionAvancer(distance-signe*dist)
+            
+            #remettre vitesse
+            self.changerVitesse("translation", 2)
+            
+            
+    def gestionTourner(self, angle, instruction = ""):
+        
+        """
+        méthode de haut niveau pour tourner le robot
+        prend en paramètre l'angle à parcourir en radians
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+        
+        #l'angle spécifié dans les scripts est valable pour un robot violet.
+        if __builtin__.constantes['couleur'] == "r":
+            angle = math.pi - angle
+        if angle > math.pi:
+            angle = angle - 2*math.pi
+        if angle < -math.pi:
+            angle = angle + 2*math.pi
+        
+        print "#tourner à "+str(angle)+", "+instruction
+        
+        orientAvant = self.getOrientation()
+        retour = self.tourner(angle)
+        
+        if retour == "timeout" or (retour == "stoppe" and not instruction):
+            
+            #stopper le robot
+            self.immobiliser()
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+                
+            else:
+                ##1
+                #tourner inversement à ce qui a été tourné
+                self.gestionTourner(orientAvant,"sansRecursion")
+                #recommencer le déplacement
+                self.gestionTourner(angle,"sansRecursion")
+        
+        if retour == "stoppe" and instruction == "sansRecursion":
+            ##4
+            #mettre à jour l'attribut orientation du robot
+            
+            #stopper l'execution du script parent
+            raise Exception
+            
+        if retour == "stoppe" and instruction == "forcer":
+            ##5
+            #augmenter vitesse
+            self.changerVitesse("rotation", 3)
+            #finir le déplacement
+            self.gestionTourner(angle)
+            #remettre vitesse
+            self.changerVitesse("rotation", 2)
+        
+        
         
     def calculRayon(self, angle):
         """
