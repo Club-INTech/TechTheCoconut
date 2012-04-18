@@ -41,7 +41,7 @@ def console():
     while True:
         try:
             ordre = raw_input("?")
-            if ordre == "?":
+            if ordre == "?" or ordre == "exit" :
                 break
             elif ordre == "q":
                 strategieInstance.gestionTourner(3.14)

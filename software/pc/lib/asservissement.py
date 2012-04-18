@@ -91,10 +91,7 @@ class Asservissement:
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
-            try:
-                self.goToSegment(outils_math.Point.point(i.x,i.y))
-            except:
-                raise Exception
+            self.goToSegment(outils_math.Point.point(i.x,i.y))
         return "chemin_termine"
          
         
@@ -108,7 +105,6 @@ class Asservissement:
         self.serieAsserInstance.ecrire(str(float(angle)))
         log.logger.info("Ordre de tourner à " + str(float(angle)))
         acquitement = False
-        
         debut_timer = int(self.timerAsserv.getTime())
         while not acquitement:
             self.serieAsserInstance.ecrire('acq')
@@ -134,7 +130,6 @@ class Asservissement:
         self.serieAsserInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
         acquitement = False
-
         debut_timer = int(self.timerAsserv.getTime())
         while not acquitement:
             self.serieAsserInstance.ecrire('acq')

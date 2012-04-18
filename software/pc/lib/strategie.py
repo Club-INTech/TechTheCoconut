@@ -88,36 +88,43 @@ class Strategie(threading.Thread):
         except :
             log.logger.error("Impossible d'importer la balise capteur")
             
-        
-            
             
     def gestionAvancer(self, distance, instruction = ""):
-        
-        print "#avancer à "+str(distance)+", "+instruction
-        
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
         
+        print "#avancer à "+str(distance)+", "+instruction
+        
         posAvant = self.asserInstance.getPosition()
-        ret = self.asserInstance.avancer(distance)
+        retour = self.asserInstance.avancer(distance)
         
-        if ret == "timeout" or (ret == "stoppe" and not instruction):
+        if retour == "timeout" or (retour == "stoppe" and not instruction):
             ##1
-            #reculer de ce qui a été avancé
-            posApres = self.asserInstance.getPosition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0: 
-                signe = distance/abs(distance)
+            #stopper le robot
+            self.asserInstance.immobiliser()
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+                
             else:
-                signe = 1
-            self.gestionAvancer(-signe*dist,"sansRecursion")
-            #recommencer le déplacement
-            self.gestionAvancer(distance,"sansRecursion")
+                #reculer de ce qui a été avancé
+                posApres = self.asserInstance.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0: 
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(-signe*dist,"sansRecursion")
+                #recommencer le déplacement
+                self.gestionAvancer(distance,"sansRecursion")
         
-        if ret == "obstacle" :
+        if retour == "obstacle" :
             ##2 
             #ajoute un robot adverse sur la table, pour la recherche de chemin
             orientation = self.asserInstance.getOrientation()
@@ -142,13 +149,11 @@ class Strategie(threading.Thread):
                 debut_timer = int(timerStrat.getTime())
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
                     capteur = self.capteurInstance.mesurer()
-                    try:
-                        if int(capteur) < self.asserInstance.maxCapt:
-                            print 'CAPTEUR !'
-                        else :
-                            ennemi_en_vue = False
-                    except:
-                        pass
+                    if capteur < self.asserInstance.maxCapt:
+                        print 'gestionAvancer : capteur !'
+                    else :
+                        print 'gestionAvancer : la voie est libre !'
+                        ennemi_en_vue = False
                     
                 if not ennemi_en_vue:
                     #baisser vitesse
@@ -163,7 +168,6 @@ class Strategie(threading.Thread):
                         signe = 1
                     self.gestionAvancer(distance-signe*dist)
                     
-                    
                     #remettre vitesse
                     self.asserInstance.changerVitesse("translation", 2)
                     
@@ -173,7 +177,7 @@ class Strategie(threading.Thread):
                     #stopper l'execution du script parent
                     raise Exception
                 
-        if ret == "stoppe" and instruction == "sansRecursion":
+        if retour == "stoppe" and instruction == "sansRecursion":
             ##4
             #mettre à jour l'attribut position du robot
             
@@ -181,7 +185,7 @@ class Strategie(threading.Thread):
             
             raise Exception
             
-        if ret == "stoppe" and instruction == "forcer":
+        if retour == "stoppe" and instruction == "forcer":
             ##5
             
             #augmenter vitesse
@@ -196,17 +200,15 @@ class Strategie(threading.Thread):
                 signe = 1
             self.gestionAvancer(distance-signe*dist)
             
-            
             #remettre vitesse
             self.asserInstance.changerVitesse("translation", 2)
-            
             
             
     def gestionTourner(self, angle, instruction = ""):
         
         """
         méthode de haut niveau pour tourner le robot
-        prend en paramètre l' angle à parcourir en radians
+        prend en paramètre l'angle à parcourir en radians
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
         
@@ -221,23 +223,34 @@ class Strategie(threading.Thread):
         print "#tourner à "+str(angle)+", "+instruction
         
         orientAvant = self.asserInstance.getOrientation()
-        ret = self.asserInstance.tourner(angle)
+        retour = self.asserInstance.tourner(angle)
         
-        if ret == "timeout" or (ret == "stoppe" and not instruction):
-            ##1
-            #tourner inversement à ce qui a été tourné
-            self.gestionTourner(orientAvant,"sansRecursion")
-            #recommencer le déplacement
-            self.gestionTourner(angle,"sansRecursion")
+        if retour == "timeout" or (retour == "stoppe" and not instruction):
+            
+            #stopper le robot
+            self.asserInstance.immobiliser()
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+                
+            else:
+                ##1
+                #tourner inversement à ce qui a été tourné
+                self.gestionTourner(orientAvant,"sansRecursion")
+                #recommencer le déplacement
+                self.gestionTourner(angle,"sansRecursion")
         
-        if ret == "stoppe" and instruction == "sansRecursion":
+        if retour == "stoppe" and instruction == "sansRecursion":
             ##4
             #mettre à jour l'attribut orientation du robot
             
             #stopper l'execution du script parent
             raise Exception
             
-        if ret == "stoppe" and instruction == "forcer":
+        if retour == "stoppe" and instruction == "forcer":
             ##5
             #augmenter vitesse
             self.asserInstance.changerVitesse("rotation", 3)
@@ -452,59 +465,3 @@ class Strategie(threading.Thread):
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
         
-    def gestionGoto(self, arrivee, instruction=''):
-        """
-        méthode de haut niveau pour le goTo avec fonctionnalités avancées
-        prend en paramètre le point d'arrivée
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
-        """
-    
-        posAvant = self.asserInstance.getPosition()
-        ret = self.asserInstance.goTo(arrivee)
-        
-        if ret == "acquittement":
-            #vider la liste des adverses rencontrés
-            __builtin__.instance.viderRobotAdverse()
-            
-        elif ret == "obstacle":
-            self.asserInstance.immobiliser()
-            #ajoute un robot adverse sur la table, pour la recherche de chemin
-            orientation = self.asserInstance.getOrientation()
-            position = self.asserInstance.getPosition()
-            
-            adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
-            __builtin__.instance.ajouterRobotAdverse(adverse)
-            
-            if instruction == "sansRecursion":
-                raise Exception
-            elif instruction == "":
-                #TODO tourner du premier angle
-                self.gestionGoto(arrivee)
-        elif ret == "timeout" :
-            if instruction == "sansRecursion":
-                raise Exception
-            elif not instruction :
-                self.gestionGoto(arrivee)
-        elif ret == "stoppe":
-            #vider la liste des adverses rencontrés
-            __builtin__.instance.viderRobotAdverse()
-            self.gestionAvancer(-100)
-            #TODO replier les bras
-            if instruction == "sansRecursion":
-                raise Exception
-            elif not instruction:
-                self.gestionGoto(arrivee,"sansRecursion")
-            
-            
-        if ret == "timeout" or (ret == "stoppe" and not instruction):
-            ##1
-            #reculer de ce qui a été avancé
-            posApres = self.asserInstance.getPosition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0: 
-                signe = distance/abs(distance)
-            else:
-                signe = 1
-            self.gestionAvancer(-signe*dist,"sansRecursion")
-            #recommencer le déplacement
-            self.gestionAvancer(distance,"sansRecursion")
