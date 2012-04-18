@@ -2,7 +2,6 @@
 
 import outils_math.point as point
 
-import decision
 import carte
 import robot
 import timer, time
@@ -18,7 +17,7 @@ import script
 
 carte = carte.Carte()
 
-class Strategie(decision.Decision, threading.Thread):
+class Strategie(threading.Thread):
     """
     Classe permettant de construire une stratégie
     
@@ -42,32 +41,18 @@ class Strategie(decision.Decision, threading.Thread):
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
         
-        #--------------------------------
-        #TODO : à mettre dans constantes
-        
-        self.rayonRobotsAdverses = 200.0
-        
-        #--------------------------------
-        
         # Résolution d'un bug de timer infini.
         if not hasattr(Strategie, "prendreDecisions") :
-
             log.logger.info("Lancement de la stratégie numéro " + str(strategie))
             
         #------------------------------#
         #-- Définition des instances --#
         #------------------------------#
         
-            
         try :
             self.asserInstance = __builtin__.instance.asserInstance
         except :
             log.logger.error("Impossible d'importer l'instances globale d'asservissement")
-            
-        try :
-            self.capteurInstance = __builtin__.instance.capteurInstance
-        except :
-            log.logger.error("Impossible d'importer l'instances globale des capteurs")
         
         try :
             self.actionInstance = __builtin__.instance.actionInstance
@@ -84,189 +69,12 @@ class Strategie(decision.Decision, threading.Thread):
         except :
             log.logger.error("Impossible d'importer l'instances globale de scripts")
             
-        
+        try :
+            self.baliseInstance = __builtin__.instance.baliseInstance  # NOTE Convention ? (Thibaut)            
+        except :
+            log.logger.error("Impossible d'importer la balise capteur")
             
             
-    def gestionAvancer(self, distance, instruction = ""):
-        
-        """
-        méthode de haut niveau pour translater le robot
-        prend en paramètre la distance à parcourir en mm
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
-        """
-        
-        posAvant = self.asserInstance.MAJposition()
-        ret = self.asserInstance.avancer(distance)
-        
-        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
-            ##1
-            #reculer de ce qui a été avancé
-            posApres = self.asserInstance.MAJposition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0: 
-                signe = distance/abs(distance)
-            else:
-                signe = 1
-            gestionAvancer(-signe*dist,"sansRecursion")
-            #recommencer le déplacement
-            gestionAvancer(distance,"sansRecursion")
-        
-        if ret == "obstacle" :
-            ##2 
-            #ajoute un robot adverse sur la table, pour la recherche de chemin
-            orientation = self.asserInstance.MAJorientation()
-            position = self.asserInstance.MAJposition()
-            
-            adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
-            __builtin__.instance.ajouterRobotAdverse(adverse)
-            
-            if instruction == "sansRecursion":
-                ##4
-                #mettre à jour l'attribut position du robot
-                
-                #stopper l'execution du script parent
-                raise Exception
-            else:
-                
-                ##3
-                #stopper le robot
-                self.asserInstance.immobiliser()
-                #attente que la voie se libère
-                ennemi_en_vue = True
-                debut_timer = int(timerStrat.getTime())
-                while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
-                    self.asserInstance.CaptSerialInstance.write('ultrason\r')
-                    capteur = self.asserInstance.capteurInstance.mesurer()
-                    try:
-                        if int(capteur) < self.asserInstance.maxCapt:
-                            print 'CAPTEUR !'
-                        else :
-                            ennemi_en_vue = False
-                    except:
-                        pass
-                    
-                if not ennemi_en_vue:
-                    #baisser vitesse
-                    self.asserInstance.changerVitesse("translation", 1)
-                    
-                    #finir le déplacement
-                    posApres = self.asserInstance.MAJposition()
-                    dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-                    if distance != 0:
-                        signe = distance/abs(distance)
-                    else:
-                        signe = 1
-                    gestionAvancer(distance-signe*dist)
-                    
-                    
-                    #remettre vitesse
-                    self.asserInstance.changerVitesse("translation", 2)
-                    
-                else:
-                    #mettre à jour l'attribut position du robot
-                    
-                    #stopper l'execution du script parent
-                    raise Exception
-                
-        if ret == "STOPPEE" and instruction == "sansRecursion":
-            ##4
-            #mettre à jour l'attribut position du robot
-            
-            #stopper l'execution du script parent
-            raise Exception
-            
-        if ret == "STOPPEE" and instruction == "forcer":
-            ##5
-            
-            #augmenter vitesse
-            self.asserInstance.changerVitesse("translation", 3)
-            
-            #finir le déplacement
-            posApres = self.asserInstance.MAJposition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0:
-                signe = distance/abs(distance)
-            else:
-                signe = 1
-            gestionAvancer(distance-signe*dist)
-            
-            
-            #remettre vitesse
-            self.asserInstance.changerVitesse("translation", 2)
-            
-            
-            
-    def gestionTourner(self, angle, instruction = ""):
-        
-        """
-        méthode de haut niveau pour tourner le robot
-        prend en paramètre l' angle à parcourir en radians
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
-        """
-        
-        #l'angle spécifié dans les scripts est valable pour un robot violet.
-        if __builtin__.constantes['couleur'] == "r":
-            angle = math.pi - angle
-        if angle > math.pi:
-            angle = angle - 2*math.pi
-        if angle < -math.pi:
-            angle = angle + 2*math.pi
-        
-        
-        
-        ret = self.asserInstance.tourner(angle)
-        
-        orientAvant = self.asserInstance.MAJorientation()
-        
-        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
-            ##1
-            #tourner inversement à ce qui a été tourné
-            orientApres = self.asserInstance.MAJorientation()
-            if angle != 0:
-                signe = angle/abs(angle)
-            else:
-                signe = 1
-            newangle = abs(orientAvant-orientApres)%(2*math.pi)
-            if newangle > math.pi:
-                newangle = 2*math.pi - newangle
-                
-            gestionTourner(-signe*newangle,"sansRecursion")
-            #recommencer le déplacement
-            gestionTourner(angle,"sansRecursion")
-        
-        if ret == "STOPPEE" and instruction == "sansRecursion":
-            ##4
-            #mettre à jour l'attribut orientation du robot
-            
-            #stopper l'execution du script parent
-            raise Exception
-            
-        if ret == "STOPPEE" and instruction == "forcer":
-            ##5
-            
-            #augmenter vitesse
-            self.asserInstance.changerVitesse("rotation", 3)
-            
-            #finir le déplacement
-            orientApres = self.asserInstance.MAJorientation()
-            if angle != 0:
-                signe = angle/abs(angle)
-            else:
-                signe = 1
-            newangle = abs(orientAvant-orientApres)%(2*math.pi)
-            if newangle > math.pi:
-                newangle = 2*math.pi - newangle
-            gestionTourner(angle-signe*newangle)
-            
-            #remettre vitesse
-            self.asserInstance.changerVitesse("rotation", 2)
-            
-    
-    
-    
-    
-    
-    
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
             Strategie.prendreDecisions = True
@@ -359,13 +167,13 @@ class Strategie(decision.Decision, threading.Thread):
             PRIORITÉ DE L'ACTION : A coter de 1 à 5. La stratégie l'utilisera en cas de conflits.
         """
         log.logger.info("Initialisation des actions à faire")
-        self.actions.append(["FARMERTOTEM", 0, 0, 5])
-        self.actions.append(["FARMERTOTEM", 0, 1, 5])
-        self.actions.append(["FARMERTOTEM", 1, 0, 4])
-        self.actions.append(["FARMERTOTEM", 1, 1, 4])
+        self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
+        self.actions.append(["FARMERTOTEM", 0, 1,   9.9 ])
+        self.actions.append(["FARMERTOTEM", 1, 0,   9   ])
+        self.actions.append(["FARMERTOTEM", 1, 1,   9   ])
         
-        self.actions.append(["ENFONCERPOUSSOIR", 1, 6])
-        self.actions.append(["ENFONCERPOUSSOIR", 2, 3])
+        self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+        self.actions.append(["ENFONCERPOUSSOIR", 2, 5])
         
         #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
         #self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
@@ -374,30 +182,50 @@ class Strategie(decision.Decision, threading.Thread):
         
         self.actions.append(["FAIRECHIERENNEMI", 1])    #
         self.actions.append(["TOURDETABLE", 1])         #
-        self.actions.append(["DEFENDRE", 1])            #NOTE À mettre à 
+        self.actions.append(["DEFENDRE", 1])            #
     
     def choisirAction(self) :
         """
         CETTE FONCTION PERMET A LA STRATEGIE DE CHOISIR QUELLE ACTION CHOISIR
         """
+
+        
+        # TODO
+        # TODO associer la distance courante à celle de la balise.
+        # TODO
+        distance = 1
+        
+        # Poids du coefficient Nombre de Points / Durée
+        k1 = 1
+        
+        # Poids du coefficient "Adversaire proche de l'objectif" :
+        k2 = 1
+        
+        poids = []
+        # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
+        for i in range(len(self.actions)) :
+            poids.append(k1*self.actions[i][-1] + k2*distance)
+            
+        # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
+        # déjà fait. Ex : On a déjà farmé le totem.
         max = 0
         maxID = -1
         
-        
+        # On cherche l'action qui fait le meilleur score 
         for i in range(len(self.actions)) :
-            if self.actions[i][len(self.actions[i]) -1] > max :
-                max = self.actions[i][len(self.actions[i]) -1]
+            if poids[i] > max :
+                max = poids[i]
                 maxID = i
-        log.logger.error("OUPS")
                 
         # Si maxID == -1 c'est que il ne reste rien à faire.
-        # TODO FAIRE QUELQUE CHOSE BORDEL
-        if maxID == -1 :
+        # TODO Qu'est-ce qu'on fait dans ce cas là ?!
+        if maxID < -1 :
             log.logger.info("ZUT ALORS ! Plus d'actions à faire")
+            return
         
         
         # Sinon, on prend l'action
-        else :
+        try :
             if self.actions[maxID][0] == "FARMERTOTEM" :
                 self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
                 self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
@@ -417,7 +245,8 @@ class Strategie(decision.Decision, threading.Thread):
             elif self.actions[maxID][0] == "DEFENDRE":
                 self.scriptInstance.defendreBase()
                 self.changerPriorite("DEFENDRE", [], self.actions[maxID][-1]-0.01)
-                
+        except :
+            log.logger.error("La stratégie ne peut pas lancer d'actions")
         
         
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
@@ -452,59 +281,3 @@ class Strategie(decision.Decision, threading.Thread):
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
         
-    def gestionGoto(self, arrivee, instruction=''):
-        """
-        méthode de haut niveau pour le goTo avec fonctionnalités avancées
-        prend en paramètre le point d'arrivée
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
-        """
-    
-        posAvant = self.asserInstance.MAJposition()
-        ret = self.asserInstance.goTo(arrivee)
-        
-        if ret == "acquittement":
-            #vider la liste des adverses rencontrés
-            __builtin__.instance.viderRobotAdverse()
-            
-        elif ret == "obstacle":
-            self.asserInstance.immobiliser()
-            #ajoute un robot adverse sur la table, pour la recherche de chemin
-            orientation = self.asserInstance.MAJorientation()
-            position = self.asserInstance.MAJposition()
-            
-            adverse = outils_math.point.Point(position.x + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.asserInstance.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
-            __builtin__.instance.ajouterRobotAdverse(adverse)
-            
-            if instruction == "sansRecursion":
-                raise Exception
-            elif instruction == "":
-                #TODO tourner du premier angle
-                self.gestionGoto(arrivee)
-        elif ret == "timeout" :
-            if instruction == "sansRecursion":
-                raise Exception
-            elif not instruction :
-                self.gestionGoto(arrivee)
-        elif ret == "stoppe":
-            #vider la liste des adverses rencontrés
-            __builtin__.instance.viderRobotAdverse()
-            self.gestionAvancer(-100)
-            #TODO replier les bras
-            if instruction == "sansRecursion":
-                raise Exception
-            elif not instruction:
-                self.gestionGoto(arrivee,"sansRecursion")
-            
-            
-        if ret == "timeout" or (ret == "STOPPEE" and not instruction):
-            ##1
-            #reculer de ce qui a été avancé
-            posApres = self.asserInstance.MAJposition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0: 
-                signe = distance/abs(distance)
-            else:
-                signe = 1
-            gestionAvancer(-signe*dist,"sansRecursion")
-            #recommencer le déplacement
-            gestionAvancer(distance,"sansRecursion")

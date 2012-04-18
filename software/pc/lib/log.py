@@ -126,7 +126,8 @@ class Log:
             self.configurer_stderr()
         if logs:
             self.creer_dossier(dossier_abs)
-            Log.revision = self.revision_disponible(dossier, Log.dossier_date)
+            if not hasattr(Log, 'revision'):
+                Log.revision = self.revision_disponible(dossier, Log.dossier_date)
             # Ajout du handler pour logs
             self.configurer_logs()
         # Création de l'entête dans stderr et logs
