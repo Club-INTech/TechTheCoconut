@@ -78,11 +78,11 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        position = self.getPosition()
+        depart = self.getPosition()
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(position,arrivee)
+        chemin_python = theta.rechercheChemin(depart,arrivee)
         
         try :
             chemin_python.remove(chemin_python[0])
@@ -91,7 +91,7 @@ class Asservissement:
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
-            self.goToSegment(outils_math.Point.point(i.x,i.y))
+            self.goToSegment(i)
         return "chemin_termine"
          
         
@@ -165,6 +165,12 @@ class Asservissement:
         except:
             self.getPosition()
             
+    def setPosition(self,position):
+        self.serieAsserInstance.ecrire("cx")
+        self.serieAsserInstance.ecrire(str(float(position.x)))
+        self.serieAsserInstance.ecrire("cy")
+        self.serieAsserInstance.ecrire(str(float(position.y)))
+            
     def getOrientation(self):
         self.serieAsserInstance.ecrire("eo")
         reponse = str(self.serieAsserInstance.lire())
@@ -174,6 +180,10 @@ class Asservissement:
             return orientation
         else:
             return self.getOrientation()
+            
+    def setOrientation(self,orientation):
+        self.serieAsserInstance.ecrire("co")
+        self.serieAsserInstance.ecrire(str(float(orientation)))
         
     def recalage(self):
         self.serieAsserInstance.ecrire("recal")
