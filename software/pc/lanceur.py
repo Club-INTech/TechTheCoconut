@@ -66,6 +66,8 @@ import lib.peripherique
 
 #lib.detection_peripheriques.Detection_peripheriques()
 
+import lib.chargement_lib
+
 # WARNING variable globale pour instancier le robot
 import lib.robot
 __builtin__.robotInstance = lib.robot.Robot()

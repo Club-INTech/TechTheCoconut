@@ -6,6 +6,7 @@ import termios
 import tty
 import select
 import time
+import threading
 
 import asservissement
 import outils_math
@@ -29,6 +30,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import lib.chargement_lib
 log = lib.log.Log(__name__)
 
+class Action(threading.Thread):
+    def init(self, action, valeur):
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        exec('strategieInstance.gestion'+action+'('+str(valeur)+')')
+
 def isData():
         return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
 
@@ -41,15 +49,21 @@ try:
                         c = sys.stdin.read(1)
                         print c
                         if c == "r": # haut
-                            strategieInstance.gestionAvancer(10)
+                            Action(Avancer, 500)
+                            #strategieInstance.gestionAvancer(10)
                         elif c == "f": # bas
-                            strategieInstance.gestionAvancer(-10)
+                            Action(Avancer, -500)
+                            #strategieInstance.gestionAvancer(-10)
                         elif c == "g": # droite
-                            strategieInstance.gestionTourner(0)
+                            Action(Tourner, 0)
+                            #strategieInstance.gestionTourner(0)
                         elif c == "d": # gauche
-                            strategieInstance.gestionTourner(math.pi)
+                            Action(Tourner, math.pi)
+                            #strategieInstance.gestionTourner(math.pi)
                         elif c == '\x1b':         # x1b is ESC
                                 break
+                        else:
+                            strategieInstance.immobiliser()
                 time.sleep(0.01)
 
 finally:
