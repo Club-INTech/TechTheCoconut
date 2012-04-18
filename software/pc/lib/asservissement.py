@@ -6,6 +6,7 @@ import math
 import time
 import __builtin__
 import lib.timer
+import re
 
 import log
 import outils_math.point as point
@@ -52,13 +53,21 @@ class Asservissement:
         self.maxCapt = 0
             
     
-    def goToScript(self, script):
+    def goToSegment(self, arrivee):
         """
-        Fonction qui envoie une liste de coordonnées à la carte d'asservissement sans utiliser la recherche de chemin
-        :param script: Script à lancer
-        :type script: string
+        Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
+        :param script: point d'arrivé
+        :type script: point
         """
-        pass
+        
+        
+        depart = self.getPosition()
+        
+        delta_x = (depart.x-arrivee.x)
+        delta_y = (depart.y-arrivee.y)
+        angle = math.atan2(delta_y,delta_x)
+        self.tourner(angle)
+        self.avancer(math.sqrt(delta_x**2+delta_y**2))
     
     def goTo(self, arrivee):
         """
@@ -70,7 +79,7 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        position = self.MAJorientation()
+        position = self.getPosition()
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar([])
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
@@ -84,7 +93,7 @@ class Asservissement:
         for i in chemin_python:
 	    log.logger.info("écrit sur série : "+"goto" + str(float(i.x)) + '' + str(float(i.y)) + '')
 	    self.serialInstance.ecrire("goto" + "" + str(float(i.x)) + "" + str(float(i.y)) + "")
-	    position = self.MAJorientation()
+	    position = self.getOrientation()
              
 	    debut_timer = self.strategieInstance.timerStrat.getTime()
 	    acquittement = False
@@ -128,7 +137,8 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.ecrire('t' + str(float(angle))+'')
+        self.serialInstance.ecrire("t")
+        self.serialInstance.ecrire(str(float(angle)))
         log.logger.info("Ordre de tourner à " + str(float(angle)))
         acquitement = False
         #debutTimer = lib.timer.getTime()
@@ -150,7 +160,8 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.serialInstance.ecrire('d' + str(float(distance))+'')
+        self.serialInstance.ecrire("d")
+        self.serialInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
         acquitement = False
         #debutTimer = lib.timer.getTime()
@@ -164,16 +175,16 @@ class Asservissement:
             elif reponse == "STOPPE":
                 return "stoppe"
         
-            self.CaptSerialInstance.ecrire('ultrason')
-            time.sleep(0.01)
-            capteur = self.capteurInstance.mesurer()
+            ##self.CaptSerialInstance.ecrire('ultrason')
+            ##time.sleep(0.01)
+            #capteur = self.capteurInstance.mesurer()
             
-            print capteur
-            if capteur < self.maxCapt:
-                print 'CAPTEUR !'
-                self.immobiliser()
-                self.robotInstance.obstacle = True
-                raise Exception
+            #print capteur
+            #if capteur < self.maxCapt:
+                #print 'CAPTEUR !'
+                #self.immobiliser()
+                #self.robotInstance.obstacle = True
+                #raise Exception
                 
         return "acquittement"
         
@@ -187,10 +198,19 @@ class Asservissement:
             else:
                 reponse = reponse.split("-")
                 pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
-                self.robotInstance.setPosition(pos)
             return pos
         except:
             self.getPosition()
+            
+    def getOrientation(self):
+        self.serialInstance.ecrire("eo")
+        reponse = str(self.serialInstance.lire())
+        if re.match("^[0-9]+$", reponse):
+            orientation = float(reponse)/1000.0
+            #self.robotInstance.setOrientation(orientation)
+            return orientation
+        else:
+            return self.getOrientation()
         
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -238,17 +258,6 @@ class Asservissement:
         elif typeAsservissement == "translation":
             self.serialInstance.ecrire("ctv")
             self.serialInstance.ecrire(str(int(valeur)))
-        
-
-    def MAJorientation(self):
-	self.serialInstance.ecrire("eo")
-	reponse = str(self.serialInstance.lire())
-	import re
-	if re.match("^[0-9]+$", reponse):
-	    orientation = float(reponse)/1000.0
-	    self.robotInstance.setOrientation(orientation)
-	    return orientation
-                
         
     def immobiliser(self):
         self.serialInstance.ecrire('stop')
