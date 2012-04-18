@@ -45,10 +45,8 @@ int main() {
 	
 	Balise & balise = Balise::Instance();
 	init();
-
 	//unsigned char rawFrame[3];
 	uint32_t rawFrame=0;
-	
 	while (1) {
 		
 		char buffer[10];
@@ -60,24 +58,37 @@ int main() {
 			serial_pc::print(2);
 		}
 // 		
-		if(COMPARE_BUFFER("!",1)){
+		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
-			Frame frame(0);
-			const int val=10;
-// 			serial_pc::print(val);
-			serial_radio::print(val);
-			serial_pc::print(serial_radio::read_int());
-// 			do{
-// // 				serial_radio::synchronize();
-// 				rawFrame=serial_radio::read_int();
-// 				serial_pc::print(rawFrame);
-// 				frame = rawFrame;
-// 				is_valid = frame.isValid();
-// 				serial_radio::print(is_valid);
-// 			}while(is_valid==false);
-// 			serial_pc::print(frame.getRobotId());
-// 			serial_pc::print(frame.getDistance());
-// 			serial_pc::print((uint16_t)balise.getAngle());
+			Frame frame = 0;
+			int16_t n_demandes = 0;
+			do{
+				serial_radio::print('v');
+				rawFrame=serial_radio::read_int();
+				frame = rawFrame;
+				is_valid = frame.isValid();
+				n_demandes++;
+				serial_pc::print(rawFrame);
+			}while(is_valid==false && n_demandes<5 && rawFrame!=0);
+			if(n_demandes==5){
+				serial_pc::print("ERREUR_CANAL");
+			}
+			else if(rawFrame==0){
+				serial_pc::print("NON_VISIBLE");
+			}
+			else{
+				char str[80] = {0};
+				char buff[20];
+				ltoa(frame.getRobotId(),buff,10);
+				strcat(str,buff);
+				strcat(str,".");
+				ltoa(frame.getDistance(),buff,10);
+				strcat(str,buff);
+				strcat(str,".");
+				ltoa(balise.getAngle(),buff,10);
+				strcat(str,buff);
+				serial_pc::print((const char *)str);
+			}
 		}
 		#undef COMPARE_BUFFER
 	}

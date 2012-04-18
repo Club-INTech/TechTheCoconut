@@ -16,7 +16,7 @@ Frame::Frame(uint32_t rawFrame) {
 }
 
 bool Frame::isValid() {
-	return (crc8(data_)==crc_) && (data_ != 0);
+	return (crc8(data_)==crc_);
 }
 
 unsigned char Frame::getRobotId() {

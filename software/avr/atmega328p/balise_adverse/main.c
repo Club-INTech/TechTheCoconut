@@ -1,10 +1,14 @@
 #include "main.h"
+#include <libintech/timer.hpp>
 
 volatile uint8_t WINDOW_OPENER = 0;
 volatile uint8_t WINDOW_FLAG = 0;
 volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
 volatile int16_t distance = 0;
+volatile Frame message = 0;
+
+typedef Timer<1,ModeCounter,64> timeout_timer;
 
 int main() 
 {
@@ -12,17 +16,13 @@ int main()
 	
 	while(1){
 		char buffer[10];
-		int16_t order = 0;
-// 		Serial<0>::read(order);
-		Serial<0>::print(order);
-// 		if(order==1){
-// 			sendData(distance);
-// 			int16_t ACK=0;
-// 			do{
-// 				sendData(distance);
-// 				ACK = Serial<0>::read_int();
-// 			}while(ACK!=1);
-// 		}
+		unsigned char order;
+		order = Serial<0>::read_char();
+		if(order=='v'){
+			if(timeout_timer::value()>20000)
+				message=0;
+			Serial<0>::print(message);
+		}
 	}
 	
 	return 0;
@@ -65,6 +65,7 @@ void setup()
 	Serial<0>::change_baudrate(9600);
 	//Initialisation table pour crc8
 	init_crc8();
+	timeout_timer::init();
 }
 
 //Interruption pour les PCINT8,9,10,11
@@ -78,16 +79,14 @@ ISR(PCINT1_vect)
     {
 		//Si on est dans une fenêtre encore active
 		if(WINDOW_FLAG)
-		{	
-			Frame message;
-		
+		{			
 			if(TCNT0*16>=TIME_THRESHOLD_MIN)
 			{		
 				if(changedbits == WINDOW_OPENER)
 				{
 					WINDOW_FLAG = 0;
 					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
-// 					message=makeFrame(distance);
+					message=makeFrame(distance);
 // 					sendFrame(message);
 				}
 			}
@@ -100,6 +99,7 @@ ISR(PCINT1_vect)
 			WINDOW_OPENER=changedbits;
 		}
 	}
+	timeout_timer::value(0);
 }
 
 //Interruption du TIMER0 sur overflow
@@ -107,4 +107,8 @@ ISR(TIMER0_OVF_vect)
 {
 	//On ferme la fenêtre
 	WINDOW_FLAG = 0;
+}
+
+ISR(TIMER1_OVF_vect)
+{
 }
