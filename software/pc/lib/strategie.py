@@ -2,7 +2,6 @@
 
 import outils_math.point as point
 
-import decision
 import carte
 import robot
 import timer, time
@@ -18,7 +17,7 @@ import script
 
 carte = carte.Carte()
 
-class Strategie(decision.Decision, threading.Thread):
+class Strategie(threading.Thread):
     """
     Classe permettant de construire une stratégie
     
