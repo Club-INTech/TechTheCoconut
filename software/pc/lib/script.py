@@ -20,33 +20,28 @@ class Script:
         if hasattr(__builtin__.instance, 'asserInstance'):
             self.asserInstance = __builtin__.instance.asserInstance
         else:
-            log.logger.error("l'instance de instance.asserInstance n'est pas chargée")
+            log.logger.error("script : ne peut importer instance.asserInstance")
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
-            log.logger.error("l'instance de instance.capteurInstance n'est pas chargée")
+            log.logger.error("script : ne peut importer instance.capteurInstance")
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
-            log.logger.error("l'instance de instance.robotInstance n'est pas chargée")
+            log.logger.error("script : ne peut importer instance.robotInstance")
         if hasattr(__builtin__.instance, 'serieAsserInstance'):
             self.serialInstance = __builtin__.instance.serieAsserInstance
         else:
-            log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
+            log.logger.error("script : ne peut importer instance.serieAsserInstance")
         if hasattr(__builtin__.instance, 'serieCaptInstance'):
             self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
         else:
-            log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
+            log.logger.error("script : ne peut importer instance.serieCaptInstance")
             
         if hasattr(__builtin__.instance, 'actionInstance') :
             self.actionInstance = __builtin__.instance.actionInstance
         else:
-            log.logger.error("l'instance de instance.actionInstance n'est pas chargée")
-            
-        if hasattr(__builtin__.instance, 'strategieInstance') :
-            self.strategieInstance = __builtin__.instance.strategieInstance
-        else:
-            log.logger.error("l'instance de instance.strategieInstance n'est pas chargée")
+            log.logger.error("script : ne peut importer instance.actionInstance")
     
         self.couleur = __builtin__.constantes["couleur"]
         

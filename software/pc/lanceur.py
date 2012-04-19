@@ -15,7 +15,7 @@ while first or couleur not in ['', 'r', 'v']:
 first = True
 while first or not profil.importation:
     first = False
-    conf = raw_input('Indiquer la configuration a importer (prod, [develop], developSimulUc) : \n')
+    conf = raw_input('Indiquer la configuration a importer (prod, [develop], developSimulUc) :')
 
     # tronque la string conf pour éviter les bugs à l'import
     conf = conf.split('.')
@@ -73,7 +73,7 @@ __builtin__.robotInstance = lib.robot.Robot()
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch] : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch] :')
     first = False
     #try:
     if mode == '' or mode == 'console':

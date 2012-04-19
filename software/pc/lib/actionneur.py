@@ -2,7 +2,6 @@
 
 import serie
 import log
-import peripherique
 import __builtin__
 
 import time

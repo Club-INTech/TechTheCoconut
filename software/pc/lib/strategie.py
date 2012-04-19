@@ -52,28 +52,29 @@ class Strategie(threading.Thread):
         try :
             self.asserInstance = __builtin__.instance.asserInstance
         except :
-            log.logger.error("Impossible d'importer l'instances globale d'asservissement")
+            log.logger.error("asservissement : ne peut importer instance.asserInstance")
         
         try :
             self.actionInstance = __builtin__.instance.actionInstance
         except :
-            log.logger.error("Impossible d'importer l'instances globale des actionneurs")
+            log.logger.error("asservissement : ne peut importer instance.actionInstance")
             
         try :
             self.robotInstance = __builtin__.instance.robotInstance
         except :
-            log.logger.error("Impossible d'importer l'instances globale du robot")
+            log.logger.error("asservissement : ne peut importer instance.robotInstance")
             
         try :
             self.scriptInstance = __builtin__.instance.scriptInstance
         except :
-            log.logger.error("Impossible d'importer l'instances globale de scripts")
+            log.logger.error("asservissement : ne peut importer instance.scriptInstance")
             
+        """
         try :
             self.baliseInstance = __builtin__.instance.baliseInstance  # NOTE Convention ? (Thibaut)            
         except :
-            log.logger.error("Impossible d'importer la balise capteur")
-            
+            log.logger.error("asservissement : ne peut importer instance.baliseInstance")
+        """
             
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
