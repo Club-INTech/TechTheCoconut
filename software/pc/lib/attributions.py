@@ -15,9 +15,11 @@ def attribuer():
             try :
                 serieCapt = serial.Serial("/dev/ttyUSB"+str(i), periph[2], timeout=0.3)
                 serieCapt.write("\n\r")
+                serieCapt.write("?\r")
+                serieCapt.write("?\r")
+                serieCapt.write("?\r")
                 #print "/dev/ttyUSB"+str(i)+" est occupé, ping..."
                 sent=False
-                serieCapt.write("?\r")
                 rep = str(serieCapt.readline())
                 if rep.replace("\n","").replace("\r","").replace("\0","") == str(periph[0]):
                     print periph[1]+"\tOK sur ttyUSB" + str(i)
@@ -30,5 +32,5 @@ def attribuer():
                     i+=1
             except :
                 i+=1
-    log.logger.warn(str(chemins))
+    log.logger.info(str(chemins))
     return chemins
