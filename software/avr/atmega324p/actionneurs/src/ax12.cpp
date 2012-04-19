@@ -35,7 +35,7 @@ byte ax12writeB(byte data){
     UDR1 = data;
     return data; 
 }
-q
+
 /** initializes serial0 transmit at baud, 8-N-1 */
 void ax12Init(long baud){
     

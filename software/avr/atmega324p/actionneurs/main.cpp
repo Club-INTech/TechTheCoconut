@@ -1,22 +1,51 @@
-#include <util/delay.h>
-#include "ax12.h"
-#include "actionneurs.h"
 
-// LIB INTECH
+// LIBRAIRIES STANDARD
+#include <util/delay.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+
+// LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
 
-
-
-// #define FLASH_ID_MODE
-// #define FLASH_BAUD_RATE_MODE
-#define T5e2d5d7e6e79357ce303c4c1a3a95bad16f01b86EST_NOSERIE_MODE
-//#define REANIMATION_MODE
-
+// LIBRAIRIES LOCALES
 #include "serial.h"
+#include "ax12.h"
+#include "actionneurs.h"
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
+/********************************
+ *           CONSTANTES         *
+ ********************************/
+
+#define BAUD_RATE_SERIE         9600
+#define BAUD_RATE_AX12          AX_BAUD_RATE_9600
+
+
+/******************************** 
+ *   MODES DE CONFIGURATION     *
+ ********************************/
+
+// Mode pour reflasher l'id des AX12 connectés. Attention à c'qu'on fait.
+    #define FLASH_ID_MODE           0
+
+// Mode pour reflasher le baud rate d'écoute des AX12. Warning. Achtung.
+    #define FLASH_BAUD_RATE_MODE    0
+
+// Mode pour tester les AX12 sans utiliser la liaison PC.
+    #define TEST_NOSERIE_MODE       0
+
+// Mode si l'AX12 ne répond pas alors qu'il le devrait. Vérifier la masse.
+// Si ce mode est utilisé, les diodes de l'AX12 clignotent 5 sec après un
+// petit bout de temps (de l'ordre de la minute) et sont alors reset.
+// Il faudra reflasher leur baud-rate après (en utilisant le mode ci dessus)
+// NOTE : Pour reflasher leur baud-rate, il faudra remettre le baud rate de la
+// série de la carte à 1.000.000. (c'est le baud-rate d'écoute 
+// Cette solution est dégueux : elle teste tous les baud rate possibles et
+// envoie un signal de réset. Si l'AX12 ne répond pas, c'est un problème
+// matériel.
+    #define REANIMATION_MODE      0
+
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -38,7 +67,7 @@ typedef Serial<0> serial_t_;
 int main()
 {
     Serial<0>::init();
-    Serial<0>::change_baudrate(9600);
+    Serial<0>::change_baudrate(BAUD_RATE_SERIE);
     
     uart_init();
     // REANIMATION_MODE :
@@ -126,6 +155,11 @@ int main()
         {
             int8_t id = serial_t_::read_int();
             AX12InitID(id);
+        }
+        
+        else if (COMPARE_BUFFER("jumper", 6))
+        {
+            serial_t_::print(rbi(PIND,PD7));
         }
         
             
