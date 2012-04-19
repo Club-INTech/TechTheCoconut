@@ -21,8 +21,12 @@
 #define AX_ID4                  4
 #define AX_BROADCAST            0xFE
 
+#define ANGLEMIN 0
+#define ANGLEMAX 160
+
+
 #define AX_ANGLECW              198
-#define AX_ANGLECCW             825
+#define AX_ANGLECCW             800
 #define AX_SPEED                1000
 
 #define BAUD_RATE_SERIE         9600
@@ -39,6 +43,11 @@ void AX12InitID(uint8_t ID);
 void AX12SetLeds(uint8_t ID, byte masque);
 void AX12Init (uint8_t ID, uint16_t angleCW, uint16_t angleCCW, uint16_t vitesse);
 void AX12GoTo (uint8_t ID, uint16_t angle);
+
+void AX12GOTO (uint8_t ID, uint16_t angle);
+
+void AX12Unasserv(uint8_t ID);
+
 
 // Extraction des données binaires
 void extraction(unsigned char x, char *id, char *angle);
