@@ -3,8 +3,13 @@
 import serie
 import log
 import __builtin__
-
+import outils_math.point as point
+import math
 import time
+import sys
+
+sys.path.append('../')
+import profils.develop.constantes
 
 # Ajout de constantes de develop si on ne passe pas par la console INTech
 if not hasattr(__builtin__, "constantes"):
@@ -26,13 +31,16 @@ class Actionneur(serie.Serie):
         self.ids        = {"hg":1, "hd":2, "bg":0, "bd":3}
         self.demarrer()
         
-        self.endmsg = "\n\r"
-        
     # Démarrage.
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            self.serieInstance = __builtin__.instance.serieActionneurInstance
+            self.serieActionneurInstance = __builtin__.instance.serieActionneurInstance
+            
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.robotInstance = __builtin__.instance.robotInstance
+        else:
+            log.logger.error("actionneur : ne peut importer instance.robotInstance")
         
     def deplacer(self, angle, position = "ALL"):
         """
@@ -51,6 +59,9 @@ class Actionneur(serie.Serie):
             angle = constantes["Actionneurs"]["angleMax"]
         elif angle <= constantes["Actionneurs"]["angleMin"] :
             angle = constantes["Actionneurs"]["angleMin"]
+        
+        #calcul du nouveau rayon du robot
+        self.calculRayon(math.pi*angle/180)
                 
         # Envoi des infos
         if position == "ALL" or "hg" in position:
@@ -61,9 +72,9 @@ class Actionneur(serie.Serie):
             self.goto(self.ids["bg"], angle+5)
         if position == "ALL" or "bd" in position:
             self.goto(self.ids["bd"], 180+3-angle)
-
-
         
+        #print "##################\n"+str(self.robotInstance.rayon)+"\n#############\n"
+
         
     def changerVitesse(self, nouvelleVitesse) :
         """
@@ -78,8 +89,8 @@ class Actionneur(serie.Serie):
         elif nouvelleVitesse <= 0 :
             nouvelleVitesse = 0
         
-        self.serieInstance.write("CH_VITESSE" + self.endmsg)
-        self.serieInstance.write(str(int(nouvelleVitesse)) + self.endmsg)
+        self.serieActionneurInstance.ecrire("CH_VITESSE")
+        self.serieActionneurInstance.ecrire(str(int(nouvelleVitesse)))
         
     def test_demarrage(self, mode = "LONG") :
         """
@@ -122,15 +133,15 @@ class Actionneur(serie.Serie):
         """
         Flashage de l'id
         """
-        self.serieInstance.write("FLASH_ID" + self.endmsg)
-        self.serieInstance.write(str(int(nouvelID)) + self.endmsg)
+        self.serieActionneurInstance.ecrire("FLASH_ID")
+        self.serieActionneurInstance.ecrire(str(int(nouvelID)))
         
         
     def stop(self):
         """
         Arrête l'actionneur en urgence
         """
-        self.serieInstance.write("UNASSERV" + self.endmsg)
+        self.serieActionneurInstance.ecrire("UNASSERV")
         
     #------------------------------------------------#
     #       METHODES BAS NIVEAU                      #
@@ -138,10 +149,37 @@ class Actionneur(serie.Serie):
     
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
-        self.serieInstance.write("GOTO" + self.endmsg)
+        self.serieActionneurInstance.ecrire("GOTO")
         time.sleep(0.01)
-        self.serieInstance.write(str(int(id)) + self.endmsg)
+        self.serieActionneurInstance.ecrire(str(int(id)))
         time.sleep(0.01)
-        self.serieInstance.write(str(int(angle))   + self.endmsg)
+        self.serieActionneurInstance.ecrire(str(int(angle)))
         time.sleep(0.01)
+        
+    def calculRayon(self, angle):
+        """
+        Modifie le rayon du cercle circonscrit au robot par rapport au centre d'origine (bras rabattus).
+        Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
+        
+        :param angle: angle entre la face avant du robot et les bras en bas du robot. Unité :  radian
+        :type angle: float
+        """
+        
+        #récupération des constantes nécessaires:
+        log.logger.info('Calcul du rayon et du centre du robot')
+        
+        #[]la longueur est sur x, largeur sur y
+        longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
+        largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
+        longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
+        
+        rayon_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
+        proj_x = -longueur_bras*math.cos(float(angle))
+        proj_y = longueur_bras*math.sin(float(angle))
+        
+        #point à l'extremité du bras droit
+        sommet_bras = point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
+        rayon_avec_bras = math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
+        
+        self.robotInstance.rayon = max(rayon_avec_bras,rayon_original)
         

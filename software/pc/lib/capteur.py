@@ -29,13 +29,13 @@ class Capteur():
         
         if not hasattr(self, 'initialise') or not self.initialise:
             self.initialise = True
-            self.serieInstance = __builtin__.instance.serieCaptInstance
+            self.serieCaptInstance = __builtin__.instance.serieCaptInstance
 
     def mesurer(self):
         #retournes l'entier capté
         try:
-            self.serieInstance.ecrire("ultrason")
-            mesure = int(self.serieInstance.lire())
+            self.serieCaptInstance.ecrire("ultrason")
+            mesure = int(self.serieCaptInstance.lire())
             return mesure
         except:
             return 5000

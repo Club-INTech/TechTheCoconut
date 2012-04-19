@@ -11,7 +11,6 @@ import log
 import outils_math.point as point
 import actionneur
 import robot
-import outils_math.point
 import recherche_chemin.thetastar
 import lib.log
 import outils_math
@@ -58,18 +57,26 @@ class Asservissement:
         self.timerAsserv = timer.Timer()
             
     
-    def goToSegment(self, arrivee):
+    def goToSegment(self, arrivee, avecRechercheChemin = False):
         """
         Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
         :param script: point d'arrivé
         :type script: point
+        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin
+        :type avecRechercheChemin: booléen
         """
         depart = self.getPosition()
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
         self.gestionTourner(angle)
-        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2))
+        
+        """
+        appel d'une translation de la distance euclidienne depart->arrivée
+        sans instruction particulière
+        avec un booléen codant l'utilisation de la recherche de chemin
+        """
+        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
     
     def goTo(self, arrivee):
         """
@@ -94,7 +101,9 @@ class Asservissement:
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
-            self.goToSegment(i)
+            
+            #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
+            self.goToSegment(i,True)
         return "chemin_termine"
          
         
@@ -160,10 +169,10 @@ class Asservissement:
         try:
             if reponse[4]== "+":
                 reponse = reponse.split("+")
-                pos = outils_math.point.Point(float(reponse[1]),float(reponse[0]))
+                pos = point.Point(float(reponse[1]),float(reponse[0]))
             else:
                 reponse = reponse.split("-")
-                pos = outils_math.point.Point(-float(reponse[1]),float(reponse[0]))
+                pos = point.Point(-float(reponse[1]),float(reponse[0]))
             return pos
         except:
             self.getPosition()
@@ -244,7 +253,7 @@ class Asservissement:
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
         
-    def gestionAvancer(self, distance, instruction = ""):
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
@@ -285,11 +294,14 @@ class Asservissement:
             orientation = self.getOrientation()
             position = self.getPosition()
             
-            adverse = outils_math.point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
+            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
             __builtin__.instance.ajouterRobotAdverse(adverse)
             
-            if instruction == "sansRecursion":
+            
+            if instruction == "sansRecursion" or avecRechercheChemin:
                 ##4
+                #stopper le robot
+                self.immobiliser()
                 #mettre à jour l'attribut position du robot
                 
                 #stopper l'execution du script parent
@@ -311,6 +323,9 @@ class Asservissement:
                         ennemi_en_vue = False
                     
                 if not ennemi_en_vue:
+                    #vider la liste des robots adverses repérés
+                    __builtin__.instance.viderListeRobotsAdv()
+                    
                     #baisser vitesse
                     self.changerVitesse("translation", 1)
                     
@@ -414,44 +429,6 @@ class Asservissement:
             #remettre vitesse
             self.changerVitesse("rotation", 2)
         
-        
-        
-    def calculRayon(self, angle):
-        """
-        Modifie le rayon du cercle circonscrit au robot par rapport au centre d'origine (bras rabattus).
-        Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
-        
-        
-        :param angle: angle entre la face avant du robot et les bras en bas du robot. Unité :  radian
-        :type angle: float
-        """
-        
-        #récupération des constantes nécessaires:
-        log.logger.info('Calcul du rayon et du centre du robot')
-        
-        longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
-        largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
-        longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
-        
-        diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
-        proj_x = -longueur_bras*math.cos(float(angle))
-        proj_y = longueur_bras*math.sin(float(angle))
-        
-        
-        #[]la longueur est sur x, largeur sur y
-        #point à l'extremité du bras droit
-        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + math.sqrt(proj_y ** 2))
-        #point au sommet bas gauche du robot
-        sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
-        
-        diam_avec_bras = 2*math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
-        
-        if diam_avec_bras > diam_original:
-            self.robotInstance.rayon = diam_avec_bras/2
-            
-        else:
-            self.robotInstance.rayon = diam_original/2
-            
     def afficherMenu(self):
         print """
         Indiquer l'action à effectuer :
@@ -459,7 +436,7 @@ class Asservissement:
         Zone de départ------------------------[1]
         Constante de rotation-----------------[2]
         Constante de translation--------------[3]
-        Changer la osition courante-----------[4]
+        Changer la position courante-----------[4]
         Activer/Désactiver l'asservissement---[5]
         Afficher des valeurs------------------[6]
         Ping de la liaison série--------------[7]

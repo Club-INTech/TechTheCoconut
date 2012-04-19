@@ -88,7 +88,7 @@ class Instance:
     def ajouterRobotAdverse(self, position):
         self.liste_robots_adv.append(position)
     
-    def viderRobotAdverse(self):
+    def viderListeRobotsAdv(self):
             self.liste_robots_adv = []
             
     def instanciationScript(self):
