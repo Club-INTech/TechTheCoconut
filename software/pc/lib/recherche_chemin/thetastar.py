@@ -22,6 +22,8 @@ from math import sqrt
 import profils.develop.injection.elements_jeu
 import profils.develop.constantes
 from lib.carte import Carte
+import __builtin__
+import lib.instance
 
 import lib.visualisation.visu_threads as visu_threads
 
@@ -44,7 +46,7 @@ class Thetastar:
     :type liste_robots_adv: list de Point
     """
     
-    initialise = False
+    lastRayon = 0
     
     # Constantes du robot Coconut
     tableLargeur = constantes["Coconut"]["longueur"]
@@ -52,7 +54,7 @@ class Thetastar:
     rayonRobotsA = constantes["Recherche_Chemin"]["rayonRobotsA"]
     nCotesRobotsA = constantes["Recherche_Chemin"]["nCotesRobotsA"]
     
-    #à remplacer 
+    #TODO à remplacer 
     coteRobot = constantes["Coconut"]["coteRobot"]
     rayonRobot=coteRobot*sqrt(2)
     
@@ -94,11 +96,16 @@ class Thetastar:
     def __init__(self, liste_robots_adv):
         Thetastar.liste_robots_adv = liste_robots_adv
         
-        if not Thetastar.initialise:
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.rayonRobot = __builtin__.instance.robotInstance.rayon
+        else:
+            log.logger.error("thetastar : ne peut importer instance.robotInstance")
+        
+        if not Thetastar.lastRayon == self.rayonRobot:
             #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
             for rect in Thetastar.listeRectangles:
-                rect.wx += Thetastar.rayonRobot
-                rect.wy += Thetastar.rayonRobot
+                rect.wx += self.rayonRobot
+                rect.wy += self.rayonRobot
                 
             #conversion des rectangles en polygones de 4 sommets
             for rect in Thetastar.listeRectangles:
@@ -108,7 +115,7 @@ class Thetastar:
                 for angle in RectangleToPoly(rect):
                     listePoints.append(Point(angle.x,angle.y))
                 Thetastar.listeObjets.append(listePoints)
-            Thetastar.initialise = True
+            Thetastar.lastRayon = self.rayonRobot
 
     def rechercheChemin(self, depart, arrive):
         """
@@ -122,16 +129,16 @@ class Thetastar:
         self.chargeGraphe()
         log.logger.info("Recherche de chemin entre ("+str(depart.x)+", "+str(depart.y)+") et ("+str(arrive.x)+", "+str(arrive.y)+")")
 
-        if not (depart.x > -Thetastar.tableLongueur/2+Thetastar.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-Thetastar.rayonRobot/2 and depart.y < Thetastar.tableLargeur-Thetastar.rayonRobot/2 and depart.y > 0.+Thetastar.rayonRobot/2):
+        if not (depart.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and depart.y < Thetastar.tableLargeur-self.rayonRobot/2 and depart.y > 0.+self.rayonRobot/2):
             log.logger.error("Le point de départ n'est pas dans l'aire de jeu")
-        if not (arrive.x > -Thetastar.tableLongueur/2+Thetastar.rayonRobot/2 and arrive.x < Thetastar.tableLongueur/2-Thetastar.rayonRobot/2 and arrive.y < Thetastar.tableLargeur-Thetastar.rayonRobot/2 and arrive.y > 0.+Thetastar.rayonRobot/2):
+        if not (arrive.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and arrive.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and arrive.y < Thetastar.tableLargeur-self.rayonRobot/2 and arrive.y > 0.+self.rayonRobot/2):
             log.logger.critical("le point d'arrivée n'est pas dans l'aire de jeu !")
 
         
         #création des robots adverses
         robotsA=[]
         for centre in Thetastar.liste_robots_adv:
-            robotsA.append(polygone(centre,Thetastar.rayonRobotsA,Thetastar.nCotesRobotsA))
+            robotsA.append(polygone(centre,self.rayonRobotsA,Thetastar.nCotesRobotsA))
             
         
         k=Thetastar.g.num_vertices()
@@ -150,7 +157,7 @@ class Thetastar:
                             break
                     if not touche:
                         for robotA in Thetastar.liste_robots_adv:
-                            if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),polygone(robotA,Thetastar.rayonRobotsA,Thetastar.nCotesRobotsA)):
+                            if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),polygone(robotA,self.rayonRobotsA,Thetastar.nCotesRobotsA)):
                                 touche = True
                                 break
                     if not touche:
@@ -398,7 +405,7 @@ class Thetastar:
         for objet in Thetastar.listeObjets:
             #ajoute 4 noeuds : les angles de l'objet rectangulaire
             for angle in objet:
-                if (angle.x > -Thetastar.tableLongueur/2+Thetastar.rayonRobot/2 and angle.x < Thetastar.tableLongueur/2-Thetastar.rayonRobot/2 and angle.y < Thetastar.tableLargeur-Thetastar.rayonRobot/2 and angle.y > 0.+Thetastar.rayonRobot/2):
+                if (angle.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and angle.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and angle.y < Thetastar.tableLargeur-self.rayonRobot/2 and angle.y > 0.+self.rayonRobot/2):
                     Thetastar.g.add_vertex()
                     Thetastar.posX[Thetastar.g.vertex(k)] = angle.x
                     Thetastar.posY[Thetastar.g.vertex(k)] = angle.y

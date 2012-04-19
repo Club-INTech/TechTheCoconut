@@ -108,8 +108,10 @@ class Instance:
         self.robotInstance = robot.Robot()
         
     def instanciationAsservissement(self):
-        try : self.asserInstance = asservissement.Asservissement()
-        except : log.logger.error("instance : asserInstance n'est pas chargé")
+        try : 
+            self.asserInstance = asservissement.Asservissement()
+        except :
+            log.logger.error("instance : asserInstance n'est pas chargé")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneur.Actionneur()
