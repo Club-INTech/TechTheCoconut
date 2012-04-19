@@ -22,7 +22,7 @@ class Capteur():
         if hasattr(__builtin__.instance, 'serieCaptInstance'):  
             self.demarrer()
         else:
-            log.logger.error("l'instance de lib.capteur.Capteur n'est pas chargée")
+            log.logger.error("capteur : ne peut importer instance.serieCaptInstance")
         self.distance  = 400
 
     def demarrer(self):

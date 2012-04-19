@@ -10,7 +10,6 @@ import serie
 import script
 import attributions
 import strategie
-import peripherique
 import threading
 import actionneur
 from threading import Lock
@@ -41,10 +40,10 @@ class Instance:
         self.instanciationSerie()
         self.instanciationCapteur()
         self.instanciationAsservissement()
-        self.instanciationAcquisition()
+        self.instanciationActionneur()
+        #self.instanciationAcquisition()
         self.instanciationScript()
         self.instanciationStrategie()
-        self.instanciationActionneur()
         
     
     def instanciationSerie(self):
@@ -53,9 +52,12 @@ class Instance:
         #cheminAsser = '/dev/ttyUSB9'
         cheminAsser = self.chemins[0]
         if cheminAsser:
-            self.serieAsserInstance = serie.Serie(cheminAsser, 9600, 3)
+            try:
+                self.serieAsserInstance = serie.Serie(cheminAsser, 9600, 3)
+            except :
+                log.logger.error("instance : serieAsserInstance n'est pas chargé. pb d'instanciation de la série.")
         else:
-            log.logger.error("L'asservissement n'est pas chargé")
+            log.logger.error("instance : serieAsserInstance n'est pas chargé. pas de chemin trouvé.")
             
         # Actionneurs ≠ Capteurs sur Arduino pour la Belgique.
         #cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
@@ -63,21 +65,24 @@ class Instance:
         
         
         if cheminActionneur :
-            self.serieActionneurInstance = serial.Serial(cheminActionneur, 9600, timeout = 1)
+            try:
+                self.serieActionneurInstance = serie.Serie(cheminActionneur, 9600, 1)
+            except :
+                log.logger.error("instance : serieActionneurInstance n'est pas chargé. pb d'instanciation de la série.")
         else :
-            log.logger.error("Les actionneurs ne sont pas chargés")
+            log.logger.error("instance : serieActionneurInstance n'est pas chargé. pas de chemin trouvé.")
         
-        cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
+        #cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
         #cheminCapt = '/dev/ttyUSB0'
         cheminCapt = self.chemins[1]
         
         if cheminCapt:
             try:
-                self.serieCaptInstance = serie.Serie(cheminCapt, 57600, timeout=1)
+                self.serieCaptInstance = serie.Serie(cheminCapt, 57600, 1)
             except :
-                pass
+                log.logger.error("instance : serieCaptInstance n'est pas chargé. pb d'instanciation de la série.")
         else:
-            log.logger.error("Le capteur n'est pas chargé")
+            log.logger.error("instance : serieCaptInstance n'est pas chargé. pas de chemin trouvé.")
         
         
     def ajouterRobotAdverse(self, position):
@@ -93,29 +98,29 @@ class Instance:
         try:
             self.strategieInstance = strategie.Strategie()
         except:
-            log.logger.error("Impossible d'instancier la stratégie")
+            log.logger.error("instance : strategieInstance n'est pas chargé")
 
     def instanciationCapteur(self):
         try : self.capteurInstance = capteur.Capteur()
-        except : log.logger.error("Impossible d'instancier capteur")
+        except : log.logger.error("instance : capteurInstance n'est pas chargé")
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
         
     def instanciationAsservissement(self):
         try : self.asserInstance = asservissement.Asservissement()
-        except : log.logger.error("Impossible d'instancier asservissement")
+        except : log.logger.error("instance : asserInstance n'est pas chargé")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneur.Actionneur()
-        except: log.logger.error("Impossible d'instancier actionneur")
+        except: log.logger.error("instance : actionInstance n'est pas chargé")
         
     def instanciationAcquisition(self):
         try :
             self.acquisitionInstance = serie_acquisition.Serie_acquisition()
 
         except:
-            log.logger.error("L'acquisition n'est pas chargé")
+            log.logger.error("instance : acquisitionInstance n'est pas chargé")
 
     def instanciationMutex(self):
         self.mutex = Lock()

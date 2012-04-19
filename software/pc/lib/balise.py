@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #import threading
-#import peripherique
 
 from filtre_kalman import FiltreKalman
 import numpy

@@ -5,11 +5,11 @@ import os, signal, threading
 ip = IPython.ipapi.get()
 
 
-print """
-Bienvenue dans la console IPython.
-Pour voir la liste des commandes faites pour INTech, taper %commandes.
-Pour voir le tutoriel pour débuter, taper %tuto.
-"""
+#print """
+#Bienvenue dans la console IPython.
+#Pour voir la liste des commandes faites pour INTech, taper %commandes.
+#Pour voir le tutoriel pour débuter, taper %tuto.
+#"""
 
 def readme(self, arg):
     """

@@ -7,14 +7,12 @@ import time
 import __builtin__
 import timer
 import re
-
 import log
 import outils_math.point as point
 import actionneur
 import robot
 import outils_math.point
 import recherche_chemin.thetastar
-import peripherique
 import lib.log
 import outils_math
 import capteur
@@ -34,15 +32,15 @@ class Asservissement:
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
-            log.logger.error("l'instance de instance.capteurInstance n'est pas chargée")
+            log.logger.error("asservissement : ne peut importer instance.capteurInstance")
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
-            log.logger.error("l'instance de instance.robotInstance n'est pas chargée")
+            log.logger.error("asservissement : ne peut importer instance.robotInstance")
         if hasattr(__builtin__.instance, 'serieAsserInstance'):
             self.serieAsserInstance = __builtin__.instance.serieAsserInstance
         else:
-            log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
+            log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
             
         #distance seuil de detection pour les ultrasons
         #self.maxCapt = 400
