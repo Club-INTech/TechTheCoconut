@@ -4,7 +4,7 @@ import log
 import sys
 import __builtin__
 import time
-import outils_math.point
+from outils_math.point import Point
 import lib.log
 import os
 import math
@@ -152,9 +152,9 @@ class Script:
         raw_input()
         self.asserInstance.tourner(math.pi)
         raw_input()
-        self.asserInstance.goTo(outils_math.point.Point(100, 1500))
+        self.asserInstance.goTo(Point(100, 1500))
         raw_input()
-        self.asserInstance.goTo(outils_math.point.Point(800, 250))
+        self.asserInstance.goTo(Point(800, 250))
         raw_input()
         self.asserInstance.tourner(2*math.pi)
         raw_input()
@@ -242,9 +242,6 @@ class Script:
             return "BAD_TRIP"
             
         
-        
-        
-        
             
     def testFonctions(self):
         
@@ -263,7 +260,7 @@ class Script:
         raw_input()
         self.asserInstance.tourner(1.57)
         raw_input()
-        self.asserInstance.goTo(outils_math.point.Point(300, 300))
+        self.asserInstance.goTo(Point(300, 300))
         raw_input()
         
     def ramasserTotem(self):
@@ -341,7 +338,7 @@ class Script:
         
         if not ennemi and not nord :
             self.actionInstance.deplacer(10)
-            self.asserInstance.goTo(outils_math.point.Point(-50, 605))
+            self.asserInstance.goTo(Point(-50, 605))
             self.asserInstance.tourner(0)
             
             self.actionInstance.deplacer(150)
@@ -370,9 +367,9 @@ class Script:
         log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" en cours")
         self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la position
         if idPoussoir == 0:
-            self.asserInstance.goTo(outils_math.point.Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
+            self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
         elif idPoussoir == 1:
-            self.asserInstance.goTo(outils_math.point.Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+            self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
         self.asserInstance.tourner(-math.pi/2) # on s'oriente vers les poussoir
         self.asserInstance.avancer(290) # on avance au point de rotation
         self.asserInstance.tourner(-1.5)    # On lui montre nos fesses
@@ -395,16 +392,16 @@ class Script:
         """
         log.logger.info("Tour de table")
         self.actionInstance.deplacer(120) # On ouvre les bras
-        self.asserInstance.goTo(outils_math.point.Point(860, 650)) # On va se placer à un de départ près de notre base
-        self.asserInstance.goTo(outils_math.point.Point(395, 505))
-        self.asserInstance.goTo(outils_math.point.Point(10, 580))
-        self.asserInstance.goTo(outils_math.point.Point(-425, 480))
-        self.asserInstance.goTo(outils_math.point.Point(-900, 970))
-        self.asserInstance.goTo(outils_math.point.Point(410, 1480))
-        self.asserInstance.goTo(outils_math.point.Point(0, 1400))
-        self.asserInstance.goTo(outils_math.point.Point(405, 1480))
-        self.asserInstance.goTo(outils_math.point.Point(900, 1000))
-        self.asserInstance.goTo(outils_math.point.Point(890, 755))
+        self.asserInstance.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
+        self.asserInstance.goTo(Point(395, 505))
+        self.asserInstance.goTo(Point(10, 580))
+        self.asserInstance.goTo(Point(-425, 480))
+        self.asserInstance.goTo(Point(-900, 970))
+        self.asserInstance.goTo(Point(410, 1480))
+        self.asserInstance.goTo(Point(0, 1400))
+        self.asserInstance.goTo(Point(405, 1480))
+        self.asserInstance.goTo(Point(900, 1000))
+        self.asserInstance.goTo(Point(890, 755))
         self.actionInstance.deplacer(80) # On ferme les bras avant de tourner
         self.asserInstance.tourner(0.755)
         self.actionInstance.deplacer(120) # On ouvre les bras pour déposer
@@ -418,3 +415,25 @@ class Script:
         Si l'ennemi est très bon, il faudra penser à défendre la base
         """
         log.logger.info("Défense de la base")
+        
+    def testTourdeTable(self):
+        #position initiale du robot
+        asserInstance.setPosition(Point(0,400))
+        
+        while True:
+            try:
+                self.asserInstance.gestionTourner(0.256)
+                self.asserInstance.gestionAvancer(790.0)
+                self.asserInstance.gestionTourner(1.147)
+                self.asserInstance.gestionAvancer(449.0)
+                self.asserInstance.gestionTourner(2.092)
+                self.asserInstance.gestionAvancer(743.0)
+                self.asserInstance.gestionTourner(3.123)
+                self.asserInstance.gestionAvancer(1075.0)
+                self.asserInstance.gestionTourner(-2.162)
+                self.asserInstance.gestionAvancer(861.0)
+                self.asserInstance.gestionTourner(-0.866)
+                self.asserInstance.gestionAvancer(695.0)
+            except:
+                print "ca chie"
+        
