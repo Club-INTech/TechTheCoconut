@@ -422,6 +422,16 @@ class Script:
         
         while True:
             try:
+                self.asserInstance.goToSegment(Point(710,680))
+                self.asserInstance.goToSegment(Point(710,1290))
+                self.asserInstance.goToSegment(Point(-710,1290))
+                self.asserInstance.goToSegment(Point(-710,680))
+            except:
+                print "ca chie"
+                
+        """
+        while True:
+            try:
                 self.asserInstance.goToSegment(Point(0,400))
                 self.asserInstance.gestionTourner(0.256)
                 self.asserInstance.gestionAvancer(790.0)
@@ -437,4 +447,5 @@ class Script:
                 self.asserInstance.gestionAvancer(695.0)
             except:
                 print "ca chie"
+        """
         
