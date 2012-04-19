@@ -45,7 +45,7 @@ int main() {
 	
 	Balise & balise = Balise::Instance();
 	init();
-	//unsigned char rawFrame[3];
+	
 	uint32_t rawFrame=0;
 	while (1) {
 		
@@ -68,7 +68,6 @@ int main() {
 				frame = rawFrame;
 				is_valid = frame.isValid();
 				n_demandes++;
-				serial_pc::print(rawFrame);
 			}while(is_valid==false && n_demandes<5 && rawFrame!=0);
 			if(n_demandes==5){
 				serial_pc::print("ERREUR_CANAL");
