@@ -54,10 +54,10 @@ void setup()
 
 	//Active les PCINT
 	sbi(PCMSK1,PCINT8);
-    sbi(PCMSK1,PCINT9);
-    sbi(PCMSK1,PCINT10);
-    sbi(PCMSK1,PCINT11);
-    sbi(PCICR,PCIE1);//active PCINT port C
+	sbi(PCMSK1,PCINT9);
+	sbi(PCMSK1,PCINT10);
+	sbi(PCMSK1,PCINT11);
+	sbi(PCICR,PCIE1);//active PCINT port C
 	
 	//Réglages du TIMER0
 	//Prescaler de 256
@@ -88,14 +88,12 @@ ISR(PCINT1_vect)
     {
 		//Si on est dans une fenêtre encore active
 		if(WINDOW_FLAG)
-		{
-			WINDOW_FLAG = 0;			
-// 			uint16_t distance;
-		
+		{		
 			if(TCNT0*16>=TIME_THRESHOLD_MIN)
 			{
 				if(changedbits == WINDOW_OPENER)
 				{
+					WINDOW_FLAG = 0;	
 					//TCNT0*16 = écart de temps en µs
 					Serial<0>::print(TCNT0*16);
 				}
