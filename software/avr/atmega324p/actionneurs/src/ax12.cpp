@@ -29,33 +29,13 @@ int status_data;
 // making these volatile keeps the compiler from optimizing loops of available()
 volatile byte ax_rx_Pointer;                       
 
-/** helper functions to emulate half-duplex */
-// void setTX(){
-//     bitClear(UCSR0B, RXCIE0);
-//     bitClear(UCSR0B, RXEN0); 
-//     bitSet(UCSR0B, TXEN0); 
-// }
-// void setRX(){
-//     bitClear(UCSR0B, TXEN0);
-//     bitSet(UCSR0B, RXEN0);
-//     bitSet(UCSR0B, RXCIE0); 
-//     ax_rx_Pointer = 0;
-// }
-
 /** Sends a character out the serial port */
 byte ax12writeB(byte data){
-//     while (bit_is_clear(UCSR1A, UDRE1));
     while (!( UCSR1A & (1<<UDRE1)));
     UDR1 = data;
     return data; 
 }
-
-/** We have a one-way recieve buffer, which is reset after each packet is receieved.
-    A wrap-around buffer does not appear to be fast enough to catch all bytes at 1Mbps. */
-// ISR(USART_RX_vect){  
-//     ax_rx_buffer[(ax_rx_Pointer++)] = UDR0;
-// }
-
+q
 /** initializes serial0 transmit at baud, 8-N-1 */
 void ax12Init(long baud){
     
@@ -66,13 +46,7 @@ void ax12Init(long baud){
 
     UCSR1B = (1<<RXEN1)|(1<<TXEN1);
 //     UCSR1C = (1<<USBS1)|(3<<UCSZ10);
-
-
-
-     
-    ax_rx_Pointer = 0;                                    
-    // enable rx
-//     setRX();    
+    ax_rx_Pointer = 0;
 }
 
 /******************************************************************************
