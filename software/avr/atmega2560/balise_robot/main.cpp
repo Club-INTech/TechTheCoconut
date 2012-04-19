@@ -123,7 +123,7 @@ void init()
 	sbi(TCCR0B,CS00);
 	//Seuil (cf formule datasheet)
 	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
-	OCR0A= 199;
+	OCR0A= 120;
 	
 	//Initialisation table pour crc8
 	init_crc8();
