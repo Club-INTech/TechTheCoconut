@@ -29,37 +29,36 @@ while 42:
 """
     
 
-"""  
-import robot
-import asservissement
-robotInstance=robot.Robot()
-asser = Asservissement(robotInstance)
-asser.test()
-"""
+
+#import robot
+#import asservissement
+#robotInstance=robot.Robot()
+#asser = asservissement.Asservissement(robotInstance)
+
 #scriptInstance = __builtin__.instance.scriptInstance
 
 #depart = outils_math.point.Point(0.0,0.0)
-#asser = __builtin__.instance.asserInstance
+asser = __builtin__.instance.asserInstance
 
 ######################################################################
 #Test de mutex
-class Test:
-    def __init__(self):
-        self.huk = 0
-        mutex = __builtin__.instance.mutex
+#class Test:
+    #def __init__(self):
+        #self.huk = 0
+        #mutex = __builtin__.instance.mutex
 
-        thread = threading.Thread(target = self.ecoute_thread)
-        thread.start()
-        threadd = threading.Thread(target = self.ecriture_thread)
-        threadd.start()
+        #thread = threading.Thread(target = self.ecoute_thread)
+        #thread.start()
+        #threadd = threading.Thread(target = self.ecriture_thread)
+        #threadd.start()
     
-    def ecoute_thread(self):
-        while 42:
-            print self.huk
+    #def ecoute_thread(self):
+        #while 42:
+            #print self.huk
 
-    def ecriture_thread(self):
-        while 42:
-            self.huk += 1
+    #def ecriture_thread(self):
+        #while 42:
+            #self.huk += 1
 #######################################################################
 
 
@@ -83,23 +82,23 @@ class Test:
 #asser.avancer(500)
 #asser.avancer(-500)
 
-#while 42:
-    #asser.avancer(400)
-    #asser.tourner(0)
-    #asser.avancer(400)
-    #asser.tourner(math.pi)
-    #asser.avancer(400)
-    #asser.tourner(0)
-    #asser.avancer(400)
-    #asser.tourner(math.pi)
-    #asser.avancer(400)
-    #asser.tourner(0)
-    #asser.avancer(400)
-    #asser.tourner(math.pi)
-    #asser.avancer(400)
-    #asser.tourner(0)
-    #asser.avancer(400)
-    #asser.tourner(math.pi)
+while 42:
+    asser.avancer(400)
+    asser.tourner(0)
+    asser.avancer(400)
+    asser.tourner(math.pi)
+    asser.avancer(400)
+    asser.tourner(0)
+    asser.avancer(400)
+    asser.tourner(math.pi)
+    asser.avancer(400)
+    asser.tourner(0)
+    asser.avancer(400)
+    asser.tourner(math.pi)
+    asser.avancer(400)
+    asser.tourner(0)
+    asser.avancer(400)
+    asser.tourner(math.pi)
     
 """
 asser.avancer(300)
