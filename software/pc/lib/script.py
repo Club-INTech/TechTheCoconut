@@ -422,6 +422,7 @@ class Script:
         
         while True:
             try:
+                self.asserInstance.goToSegment(Point(0,400))
                 self.asserInstance.gestionTourner(0.256)
                 self.asserInstance.gestionAvancer(790.0)
                 self.asserInstance.gestionTourner(1.147)
