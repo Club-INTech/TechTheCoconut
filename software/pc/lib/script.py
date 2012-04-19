@@ -418,7 +418,7 @@ class Script:
         
     def testTourdeTable(self):
         #position initiale du robot
-        asserInstance.setPosition(Point(0,400))
+        self.asserInstance.setPosition(Point(0,400))
         
         while True:
             try:
