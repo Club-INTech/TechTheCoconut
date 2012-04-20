@@ -14,12 +14,16 @@
 #include "utils.h"
 
 class Balise : public Singleton<Balise>{
+	public:
+		typedef Serial<0> serial_pc;
+		typedef Serial<1> serial_radio;
 	private:
 		volatile uint32_t max_counter_;
 		volatile uint32_t toptour_;
 		typedef Timer<2,ModeFastPwm,1> T_2;
 		Moteur< T_2, AVR_PORTD<PORTD4> > moteur_;
 		Asservissement asservissement_moteur_;
+		typedef Timer<0,ModeCounter,1> T_TopTour;
 		typedef Timer<1,ModeCounter,64> T_Asservissement;
 		
 	public:

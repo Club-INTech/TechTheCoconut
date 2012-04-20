@@ -3,6 +3,7 @@
  */
 #include "balise.h"
 #include <libintech/serial/serial_0.hpp>
+#include <libintech/serial/serial_1.hpp>
 
 void Balise::max_counter(uint16_t valeur){
 	max_counter_ = valeur;
@@ -15,8 +16,12 @@ uint16_t Balise::getAngle() {
 Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
 {
 	asservissement_moteur_.consigne(0);
-	Serial<0>::init();
+	serial_pc::init();
+	serial_pc::change_baudrate(9600);
+	serial_radio::init();
+	serial_radio::change_baudrate(9600);
 	T_Asservissement::init();
+	T_TopTour::init();
 	
 }
 

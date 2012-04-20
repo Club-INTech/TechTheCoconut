@@ -39,8 +39,6 @@ volatile uint8_t dernier_etat_b;
 volatile int32_t codeur;
 volatile int32_t last_codeur = 0;
 
-typedef Serial<1> serial_radio;
-typedef Serial<0> serial_pc;
 int main() {
 	
 	Balise & balise = Balise::Instance();
@@ -50,12 +48,12 @@ int main() {
 	while (1) {
 		
 		char buffer[10];
-		serial_pc::read(buffer,10);
+		Balise::Balise::serial_pc::read(buffer,10);
 		
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
 		if(COMPARE_BUFFER("?",1)){
-			serial_pc::print(2);
+			Balise::serial_pc::print(2);
 		}
 // 		
 		if(COMPARE_BUFFER("v",1)){
@@ -63,17 +61,17 @@ int main() {
 			Frame frame = 0;
 			int16_t n_demandes = 0;
 			do{
-				serial_radio::print('v');
-				rawFrame=serial_radio::read_int();
+				Balise::serial_radio::print('v');
+				rawFrame=Balise::serial_radio::read_int();
 				frame = rawFrame;
 				is_valid = frame.isValid();
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5 && rawFrame!=0);
 			if(n_demandes==5){
-				serial_pc::print("ERREUR_CANAL");
+				Balise::serial_pc::print("ERREUR_CANAL");
 			}
 			else if(rawFrame==0){
-				serial_pc::print("NON_VISIBLE");
+				Balise::serial_pc::print("NON_VISIBLE");
 			}
 			else{
 				char str[80] = {0};
@@ -86,7 +84,7 @@ int main() {
 				strcat(str,".");
 				ltoa(balise.getAngle(),buff,10);
 				strcat(str,buff);
-				serial_pc::print((const char *)str);
+				Balise::serial_pc::print((const char *)str);
 			}
 		}
 		#undef COMPARE_BUFFER
@@ -96,11 +94,6 @@ int main() {
 
 void init()
 {
-  	ClasseTimer::init();
-	serial_pc::init();
-	serial_pc::change_baudrate(9600);
-	serial_radio::init();
-	serial_radio::change_baudrate(9600);
 	
 	//5V sur la pin 12 (B6) pour la direction laser
 	sbi(DDRB,PORTB6);
