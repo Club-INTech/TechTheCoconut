@@ -17,23 +17,24 @@ class Balise : public Singleton<Balise>{
 	public:
 		typedef Serial<0> serial_pc;
 		typedef Serial<1> serial_radio;
+		typedef Timer<3,ModeCounter,256> T_TopTour;
+		typedef Timer<1,ModeCounter,64> T_Asservissement;
 	private:
 		volatile uint32_t max_counter_;
-		volatile uint32_t toptour_;
+// 		volatile uint32_t toptour_;
 		typedef Timer<2,ModeFastPwm,1> T_2;
 		Moteur< T_2, AVR_PORTD<PORTD4> > moteur_;
 		Asservissement asservissement_moteur_;
-		typedef Timer<0,ModeCounter,1> T_TopTour;
-		typedef Timer<1,ModeCounter,64> T_Asservissement;
 		
 	public:
 		Balise();
 		void asservir(int32_t vitesse_courante);
 		void max_counter(uint16_t valeur);
-		uint16_t  getAngle();
-		void incremente_toptour();
-		void reset_toptour();
-		uint16_t toptour();
+		uint16_t max_counter();
+		uint16_t  getAngle(int16_t offset);
+// 		void incremente_toptour();
+// 		void reset_toptour();
+// 		uint16_t toptour();
 		
 };
 

@@ -45,12 +45,28 @@ struct TimerRegisters<2, ModeCounter<2> >{
     }
 };
 
-template<uint8_t ID_,template<uint8_t> class MODE_, uint8_t PRESCALER_RATIO_>
+#if	 defined (__AVR_ATmega2560__)\
+	|| defined (__AVR_ATmega2561__)
+
+template<>
+struct TimerRegisters<3, ModeCounter<3> >{
+    static uint16_t get_TCNT(){
+        return TCNT3;
+    }
+
+    static void set_TCNT( uint16_t new_tcnt){
+       TCNT3 = new_tcnt;
+    }
+};
+
+#endif
+
+template<uint8_t ID_,template<uint8_t> class MODE_, uint16_t PRESCALER_RATIO_>
 class Timer{
 	
 public:
   static const uint8_t ID = ID_;
-  static const uint8_t PRESCALER_RATIO = PRESCALER_RATIO_;
+  static const uint16_t PRESCALER_RATIO = PRESCALER_RATIO_;
   typedef MODE_<ID_> MODE;
   
 private:
@@ -68,11 +84,11 @@ public:
 	}
 
 	
-  static inline uint16_t value(){
+  static inline uint32_t value(){
       return TimerRegisters<ID_,MODE_<ID_> >::get_TCNT();
   }
 
-  static inline void value(uint16_t new_value){
+  static inline void value(uint32_t new_value){
       TimerRegisters<ID_,MODE_<ID_> >::set_TCNT(new_value);
   }
 };

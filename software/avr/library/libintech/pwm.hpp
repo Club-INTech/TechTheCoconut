@@ -44,6 +44,22 @@ struct ModeCounter<2>{
   }
 };
 
+#if	 defined (__AVR_ATmega2560__)\
+	|| defined (__AVR_ATmega2561__)
+
+template<>
+struct ModeCounter<3>{
+  static void seuil(uint16_t seuil){
+    OCR3A = seuil;
+  }
+
+  static void set(){
+    sbi(TIMSK3,TOIE3);
+  }
+};
+
+#endif
+
 template<uint8_t timer_id>
 struct ModeFastPwm;
 
@@ -101,6 +117,28 @@ struct ModeFastPwm<2>{
 	TCCR2B &= ~( 1 << WGM22 );
   }
 };
+
+#if	 defined (__AVR_ATmega2560__)\
+	|| defined (__AVR_ATmega2561__)
+	
+template<>
+struct ModeFastPwm<3>{
+  static void seuil(uint8_t seuil){
+    OCR3B = seuil;
+  }
+  static void set(){
+	// Initialisation pin 6
+	DDRD |= ( 1 << PORTD3 );
+	TCCR3A &= ~( 1 << COM3B0 );
+	TCCR3A |= ( 1 << COM3B1 );
+	// Fast PWM
+	TCCR3A |= ( 1 << WGM30 );
+	TCCR3A |= ( 1 << WGM31 );
+	TCCR3B &= ~( 1 << WGM32 );
+  }
+};
+
+#endif
 
 
 #endif

@@ -9,8 +9,12 @@ void Balise::max_counter(uint16_t valeur){
 	max_counter_ = valeur;
 }
 
-uint16_t Balise::getAngle() {
-	return toptour_*360/max_counter_;
+uint16_t Balise::max_counter(){
+	return max_counter_;
+}
+
+uint16_t Balise::getAngle(int16_t offset) {
+	return ((Balise::T_TopTour::value() - offset)%max_counter_)*360/max_counter_;
 }
 
 Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
@@ -22,7 +26,7 @@ Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
 	serial_radio::change_baudrate(9600);
 	T_Asservissement::init();
 	T_TopTour::init();
-	
+	sei();
 }
 
 void Balise::asservir(int32_t vitesse_courante)
@@ -32,17 +36,17 @@ void Balise::asservir(int32_t vitesse_courante)
 	moteur_.envoyerPwm(pwm);
 }
 
-void Balise::incremente_toptour()
-{
-	toptour_++;
-}
-
-void Balise::reset_toptour()
-{
-	toptour_=1;
-}
-
-uint16_t Balise::toptour()
-{
-	return toptour_;
-}
+// void Balise::incremente_toptour()
+// {
+// 	toptour_++;
+// }
+// 
+// void Balise::reset_toptour()
+// {
+// 	toptour_=1;
+// }
+// 
+// uint16_t Balise::toptour()
+// {
+// 	return toptour_;
+// }

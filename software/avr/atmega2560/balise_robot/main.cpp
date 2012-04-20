@@ -40,10 +40,8 @@ volatile int32_t codeur;
 volatile int32_t last_codeur = 0;
 
 int main() {
-	
 	Balise & balise = Balise::Instance();
 	init();
-	
 	uint32_t rawFrame=0;
 	while (1) {
 		
@@ -53,9 +51,10 @@ int main() {
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
 		if(COMPARE_BUFFER("?",1)){
+// 			Balise::serial_pc::print(Balise::T_TopTour::value());
 			Balise::serial_pc::print(2);
 		}
-// 		
+		
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
 			Frame frame = 0;
@@ -82,7 +81,7 @@ int main() {
 				ltoa(frame.getDistance(),buff,10);
 				strcat(str,buff);
 				strcat(str,".");
-				ltoa(balise.getAngle(),buff,10);
+				ltoa(balise.getAngle(0),buff,10);
 				strcat(str,buff);
 				Balise::serial_pc::print((const char *)str);
 			}
@@ -138,13 +137,7 @@ void init()
 	// Activer les interruptions
 	//PCICR |= (1 << PCIE0);
 	
-	sei();
-}
-
-ISR(TIMER0_OVF_vect)
-{
-	Balise::Instance().incremente_toptour();
-// 	Balise::Instance().asservir(codeur - last_codeur);
+// 	sei();
 }
 
 ISR(TIMER1_OVF_vect)
@@ -154,13 +147,21 @@ ISR(TIMER1_OVF_vect)
 	last_codeur = codeur;
 }
 
+ISR(TIMER3_OVF_vect)
+{
+// 	Balise::serial_pc::print(12);
+// 	Balise::Instance().incremente_toptour();
+// 	Balise::Instance().asservir(codeur - last_codeur);
+}
+
 //INT0
 ISR(INT0_vect)
 {
+	Balise::serial_pc::print(Balise::T_TopTour::value());
 	Balise & balise = Balise::Instance();
-	if(balise.toptour()>=100)
-		balise.max_counter(balise.toptour());
-	balise.reset_toptour();
+	if(Balise::T_TopTour::value()>=30)
+		balise.max_counter(Balise::T_TopTour::value());
+	Balise::T_TopTour::value(0);
 }
 
 ISR(PCINT0_vect)
