@@ -8,7 +8,6 @@ from outils_math.point import Point
 import lib.log
 import os
 import math
-import actionneur
 
 log = lib.log.Log(__name__)
 
@@ -17,10 +16,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 class Script:
     
     def __init__(self):
-        if hasattr(__builtin__.instance, 'asserInstance'):
-            self.asserInstance = __builtin__.instance.asserInstance
+        if hasattr(__builtin__.instance, 'self.asserInstance'):
+            self.asserInstance = __builtin__.instance.self.asserInstance
         else:
-            log.logger.error("script : ne peut importer instance.asserInstance")
+            log.logger.error("script : ne peut importer instance.self.asserInstance")
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
@@ -29,19 +28,10 @@ class Script:
             self.robotInstance = __builtin__.instance.robotInstance
         else:
             log.logger.error("script : ne peut importer instance.robotInstance")
-        if hasattr(__builtin__.instance, 'serieAsserInstance'):
-            self.serialInstance = __builtin__.instance.serieAsserInstance
+        if hasattr(__builtin__.instance, 'self.actionInstance') :
+            self.actionInstance = __builtin__.instance.self.actionInstance
         else:
-            log.logger.error("script : ne peut importer instance.serieAsserInstance")
-        if hasattr(__builtin__.instance, 'serieCaptInstance'):
-            self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
-        else:
-            log.logger.error("script : ne peut importer instance.serieCaptInstance")
-            
-        if hasattr(__builtin__.instance, 'actionInstance') :
-            self.actionInstance = __builtin__.instance.actionInstance
-        else:
-            log.logger.error("script : ne peut importer instance.actionInstance")
+            log.logger.error("script : ne peut importer instance.self.actionInstance")
     
         self.couleur = __builtin__.constantes["couleur"]
         
@@ -52,113 +42,47 @@ class Script:
         
         self.asserInstance.recalage()
         
-        
-        """
-        couleur = profils.develop.constantes.constantes["couleur"]
-        largeur_robot = 200
-        largeur_table = 3000
-        
-        self.asser.serieInstance.ecrire("ctm\r50.0\r")
-        self.asser.serieInstance.ecrire("crm\r100.0\r")
-        
-        self.asser.avancer(-300.0)
-        #self.asser.serieInstance.ecrire("cr0\r")
-        self.asser.setUnsetAsser('rotation', 0)
-        self.asser.avancer(-200.0)
-        if couleur == 'R':
-            self.asser.robotInstance.position.x = -largeur_table/2+largeur_robot/2
-            self.asser.serieInstance.ecrire("cx\r" + str(float(-largeur_table/2+largeur_robot/2)) + "\r")
-            self.asser.robotInstance.orientation = 0.0
-            self.asser.serieInstance.ecrire("co\r" + str(float(0.0)) + "\r")
-        else:
-            self.asser.robotInstance.position.x = largeur_table/2-largeur_robot/2
-            self.asser.serieInstance.ecrire("cx\r" + str(float(largeur_table/2-largeur_robot/2)) + "\r")
-            self.asser.robotInstance.orientation = math.pi
-            self.asser.serieInstance.ecrire("co\r" + str(float(math.pi)) + "\r")
-        self.asser.setUnsetAsser('rotation', 1)
-        self.asser.avancer(300.0)
-        self.asser.tourner(math.pi/2)
-        self.asser.avancer(-300.0)
-        self.asser.setUnsetAsser('rotation', 0)
-        self.asser.avancer(-300)
-        self.asser.robotInstance.position.y = largeur_robot/2
-        self.asser.serieInstance.ecrire("cy\r" + str(float(largeur_robot/2)) + "\r")
-        self.asser.robotInstance.orientation = math.pi/2
-        self.asser.serieInstance.ecrire("co\r" + str(float(math.pi/2)) + "\r")
-        self.asser.setUnsetAsser('rotation', 1)
-        self.asser.avancer(150.0)
-        self.asser.serieInstance.ecrire("crm\r120.0\r")
-        if couleur == 'R':
-            self.asser.tourner(0.0)
-        else:
-            self.asser.tourner(math.pi)
-        self.asser.serieInstance.ecrire("ctm\r120.0\r")
-        self.asser.setUnsetAsser('rotation', 0)
-        self.asser.setUnsetAsser('translation', 0)
-        """
-        
     def homologation(self):
-        #self.asserInstance.tourner(0.0)
-        #self.asserInstance.tourner(1.57)
-        #self.asserInstance.tourner(0.0)
-        #self.asserInstance.tourner(1.57)
-        #self.asserInstance.tourner(0.0)
-        #self.asserInstance.tourner(1.57)
-        #time.sleep(1)
+        
+        #stocke le lingot et enfonce un poussoir
         
         try:
             self.asserInstance.changerVitesse("translation",1)
             self.asserInstance.changerVitesse("rotation",1)
-            self.asserInstance.avancer(300)     # On sort de la zone départ
-            self.asserInstance.tourner(1.57)     # On se dirige vers le Nord
-            self.asserInstance.avancer(500)     # On avance jusqu'au lingots
+            self.asserInstance.gestionAvancer(300)     # On sort de la zone départ
+            self.asserInstance.gestionTourner(1.57)     # On se dirige vers le Nord
+            self.asserInstance.gestionAvancer(500)     # On avance jusqu'au lingots
             
             if self.couleur == 'r':
-                self.asserInstance.tourner(math.pi)
+                self.asserInstance.gestionTourner(math.pi)  # On se tourne vers le lingot
             else :
-                self.asserInstance.tourner(0.0)  # On se tourne vers l'Est
+                self.asserInstance.gestionTourner(0.0)  
                 
-            self.asserInstance.avancer(300)     # On le rentre dans la calle du Cap'taine
-            self.asserInstance.avancer(-300)    # On ressort de la calle
-            self.asserInstance.tourner(1.57)     # On se tourne vers le boutton poussoir
-            self.asserInstance.avancer(650)     # On avance vers lui
-            self.asserInstance.tourner(-1.57)    # On lui montre nos fesses
-            self.asserInstance.avancer(-480)    # On recule pour lui mettre sa dose
+            self.asserInstance.gestionAvancer(300)     # On le rentre dans la calle
+            self.asserInstance.gestionAvancer(-300)    # On ressort de la calle
+            self.asserInstance.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
+            self.asserInstance.gestionAvancer(650)     # On avance vers lui
+            self.asserInstance.gestionTourner(-1.57)    # On lui montre nos fesses
+            self.asserInstance.gestionAvancer(-480)    # On recule pour lui mettre sa dose
             self.asserInstance.changerVitesse("translation",2)
-            self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
+            self.asserInstance.gestionAvancer(-500.0)  # Pour l'enfoncer à fond
             self.asserInstance.changerVitesse("translation",1)
-            self.asserInstance.avancer(700)    # On se barre.
+            self.asserInstance.gestionAvancer(200)
+            self.asserInstance.gestionTourner(-1.57)    # réorientation du robot
+            self.asserInstance.gestionAvancer(500)    # On se barre.
+            
         except:
             print "detection capteur"
             reponse = "lulz"
             while not reponse == "STOPPE":
-		self.asserInstance.serialInstance.write('stop'+"\r")
-		self.serialInstance.write('acq'+"\r")
-		reponse = str(self.asserInstance.serialInstance.readline()).replace("\r","").replace("\n","").replace("\0", "")
-	    
-	    print "robot stoppé"
+                self.asserInstance.serieAsserInstance.ecrire('stop')
+                self.asserInstance.serieAsserInstance.ecrire('acq')
+                reponse = self.asserInstance.serieAsserInstance.lire()
+
+            print "robot stoppé, fin de l'homologation"
+            while 42:
+                time.sleep(0.1)
         
-        """
-        #stocke le lingot et enfonce un poussoir
-        self.asserInstance.avancer(600.0)
-        self.asserInstance.tourner(math.pi/2)
-        """
-        
-        
-    def testPosition(self):
-        self.recalage()
-        raw_input()
-        self.asserInstance.avancer(600)
-        raw_input()
-        self.asserInstance.tourner(math.pi)
-        raw_input()
-        self.asserInstance.goTo(Point(100, 1500))
-        raw_input()
-        self.asserInstance.goTo(Point(800, 250))
-        raw_input()
-        self.asserInstance.tourner(2*math.pi)
-        raw_input()
-        self.asserInstance.avancer(-400)
         
     def etalonnageAsserv(self):
         pas = 0
@@ -174,20 +98,24 @@ class Script:
                 while True :
                     if (pas > 4):
                         pas = 0
-                        self.serialInstance.write("d\r-1500.0\r")
+                        self.asserInstance.serieAsserInstance.ecrire("d")
+                        self.asserInstance.serieAsserInstance.ecrire("-1500.0")
                         
                     print "constantes rotation : p,d,i. q pour quitter."
                     cte = str(raw_input())
                     if cte == "q":
                         break
                     elif cte == "a":
-                        self.serialInstance.write("d\r300.0\r")
+                        self.asserInstance.serieAsserInstance.ecrire("d")
+                        self.asserInstance.serieAsserInstance.ecrire("300.0")
                         pas+=1
                     else:
                         try:
                             val = str(float(raw_input()))
-                            self.serialInstance.write("cr"+cte.replace("\r","").replace("\r","")+"\r"+val+"\r")
-                            self.serialInstance.write("d\r300.0\r")
+                            self.asserInstance.serieAsserInstance.ecrire("cr"+cte)
+                            self.asserInstance.serieAsserInstance.ecrire(val)
+                            self.asserInstance.serieAsserInstance.ecrire("d")
+                            self.asserInstance.serieAsserInstance.ecrire("300.0")
                             pas+=1
                         except:
                             pass
@@ -196,100 +124,52 @@ class Script:
                 while True :
                     if (pas > 4):
                         pas = 0
-                        self.serialInstance.write("d\r-1500.0\r")
+                        self.asserInstance.serieAsserInstance.ecrire("d")
+                        self.asserInstance.serieAsserInstance.ecrire("-1500.0")
                     
                     print "constantes translation : p,d,i. q pour quitter."
                     cte = str(raw_input())
                     if cte == "q":
                         break
                     elif cte == "a":
-                        self.serialInstance.write("d\r300.0\r")
+                        self.asserInstance.serieAsserInstance.ecrire("d")
+                        self.asserInstance.serieAsserInstance.ecrire("300.0")
                         pas+=1
                     else:
                         try :
                             val = str(float(raw_input()))
-                            self.serialInstance.write("ct"+cte.replace("\r","").replace("\r","")+"\r"+val+"\r")
-                            self.serialInstance.write("d\r300.0\r")
+                            self.asserInstance.serieAsserInstance.ecrire("ct"+cte)
+                            self.asserInstance.serieAsserInstance.ecrire(val)
+                            self.asserInstance.serieAsserInstance.ecrire("d")
+                            self.asserInstance.serieAsserInstance.ecrire("300.0")
                             pas+=1
                         except :
                             pass
         
-    def lire(self):
-        """
-        Permet de lire un message de ltestPosition'asservissement autre que celui lu par le thread d'acquisition.
-        """
-        while not self.robotInstance.new_message:
-            time.sleep(0.01)
-        self.robotInstance.new_message = False
-        return self.robotInstance.message
-        
-        
     def scriptPipeauNewStrategie(self):
         
         try :
-            #script
-            asserInstance.gestionAvancer(300)
-            asserInstance.gestionAvancer(-300)
-            #asserInstance.gestionAvancer(300,"forcer")
+            #déplacements
+            self.asserInstance.gestionAvancer(300)
+            self.asserInstance.gestionAvancer(300,"forcer")
+            changerVitesse("translation",1)
             
-            actionInstance.deplacer(90)
-            actionInstance.deplacer(160)
-            actionInstance.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
-            actionInstance.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
-            actionInstance.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
-            return "scriptOK"
+            self.asserInstance.gestionTourner(math.pi)
+            changerVitesse("rotation",3)
+            
+            self.asserInstance.goTo(Point(800, 250))
+            
+            #exemples bras
+            self.actionInstance.deplacer(90)
+            self.actionInstance.deplacer(160)
+            self.actionInstance.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
+            self.actionInstance.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
+            self.actionInstance.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
+            return True
         except :
-            return "BAD_TRIP"
-            
-        
-            
-    def testFonctions(self):
-        
-        raw_input()
-        serieActionneurs.changer_angle(130)
-        raw_input()
-        serieActionneurs.changer_angle(90)
-        raw_input()
-        self.asserInstance.avancer(200)
-        raw_input()
-        changerVitesse("translation",1)
-        self.asserInstance.avancer(-200)
-        raw_input()
-        changerVitesse("translation",2)
-        self.asserInstance.avancer(200)
-        raw_input()
-        self.asserInstance.tourner(1.57)
-        raw_input()
-        self.asserInstance.goTo(Point(300, 300))
-        raw_input()
-        
-    def ramasserTotem(self):
-        angle_max = True
-        serieActionneurs.changer_angle(160)
-        while True :
-            print "a : avance, r : reculer, t : bouger angle, tt : spécifier angle, o : orientation"
-            choix = raw_input("~Sopal\'INT~ ")
-            if choix == "q":
-                break
-            elif choix == "a":
-                self.asserInstance.avancer(100)
-            elif choix == "r":
-                self.asserInstance.avancer(-200)
-            elif choix == "t":
-                if angle_max :
-                    serieActionneurs.changer_angle(135)
-                else :
-                    serieActionneurs.changer_angle(150)
-                angle_max = not angle_max
-            
-            elif choix == "tt":
-                angl = raw_input("angle ? ")
-                serieActionneurs.changer_angle(int(angl))
-            elif choix == "o":
-                orient = raw_input("orientation ? ")
-                self.asserInstance.tourner(float(orient))
+            return False
                 
-                
+    #TEST enchainement des scripts
     def scriptTestStruct0(self):
         try:
             #1ère action effectuée
@@ -298,8 +178,6 @@ class Script:
             return True
         except:
             return False
-            
-    
     def scriptTestStruct1(self):
         try:
             #1ère action effectuée
@@ -312,7 +190,33 @@ class Script:
             return True
         except:
             return False
+    
+    
+    def testRamasserTotem(self):
+        angle_max = True
+        self.actionInstance.deplacer(160)
+        while True :
+            print "a : avance, r : reculer, t : bouger angle, tt : spécifier angle, o : orientation"
+            choix = raw_input("~Sopal\'INT~ ")
+            if choix == "q":
+                break
+            elif choix == "a":
+                self.asserInstance.gestionAvancer(100)
+            elif choix == "r":
+                self.asserInstance.gestionAvancer(-200)
+            elif choix == "t":
+                if angle_max :
+                    self.actionInstance.deplacer(135)
+                else :
+                    self.actionInstance.deplacer(150)
+                angle_max = not angle_max
             
+            elif choix == "tt":
+                angl = raw_input("angle ? ")
+                self.actionInstance.deplacer(int(angl))
+            elif choix == "o":
+                orient = raw_input("orientation ? ")
+                self.asserInstance.gestionTourner(float(orient))
             
             
     #-------------------------------------------------------------------#
@@ -339,15 +243,15 @@ class Script:
         if not ennemi and not nord :
             self.actionInstance.deplacer(10)
             self.asserInstance.goTo(Point(-50, 605))
-            self.asserInstance.tourner(0)
+            self.asserInstance.gestionTourner(0)
             
             self.actionInstance.deplacer(150)
-            self.asserInstance.avancer(510)
+            self.asserInstance.gestionAvancer(510)
             self.actionInstance.deplacer(75)
-            self.asserInstance.tourner(0.535)
-            self.asserInstance.avancer(665)
-            self.asserInstance.tourner(0)
-            self.asserInstance.avancer(-450)
+            self.asserInstance.gestionTourner(0.535)
+            self.asserInstance.gestionAvancer(665)
+            self.asserInstance.gestionTourner(0)
+            self.asserInstance.gestionAvancer(-450)
             self.actionInstance.deplacer(10)
             
         #if not ennemi and nord :
@@ -370,13 +274,13 @@ class Script:
             self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
         elif idPoussoir == 1:
             self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
-        self.asserInstance.tourner(-math.pi/2) # on s'oriente vers les poussoir
-        self.asserInstance.avancer(290) # on avance au point de rotation
-        self.asserInstance.tourner(-1.5)    # On lui montre nos fesses
+        self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
+        self.asserInstance.gestionAvancer(290) # on avance au point de rotation
+        self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
         self.asserInstance.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        self.asserInstance.avancer(-470.0)  # Pour l'enfoncer à fond
+        self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
         self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        self.asserInstance.avancer(450)    # On se barre.
+        self.asserInstance.gestionAvancer(450)    # On se barre.
         log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" fini")
         
         
@@ -402,11 +306,11 @@ class Script:
         self.asserInstance.goTo(Point(405, 1480))
         self.asserInstance.goTo(Point(900, 1000))
         self.asserInstance.goTo(Point(890, 755))
-        self.actionInstance.deplacer(80) # On ferme les bras avant de tourner
-        self.asserInstance.tourner(0.755)
+        self.actionInstance.deplacer(80) # On ferme les bras avant de gestionTourner
+        self.asserInstance.gestionTourner(0.755)
         self.actionInstance.deplacer(120) # On ouvre les bras pour déposer
-        self.asserInstance.avancer(340) # On va dans la calle
-        self.asserInstance.avancer(-450) # On fait marche arrière pour se dégager
+        self.asserInstance.gestionAvancer(340) # On va dans la calle
+        self.asserInstance.gestionAvancer(-450) # On fait marche arrière pour se dégager
         self.actionInstance.deplacer(100)
         log.logger.info("Fin tour de table")
         

@@ -32,11 +32,8 @@ class Strategie(threading.Thread):
 
         
         self.strategie = strategie
-        self.timer = timer.Timer()
-        self.actions = []
         self.timerStrat = timer.Timer()
-        
-        
+        self.actions = []
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
@@ -81,7 +78,7 @@ class Strategie(threading.Thread):
             Strategie.prendreDecisions = True
             
             # Lancement du timer.
-            self.timer.lancer()
+            self.timerStrat.lancer()
         
             # Lancer la de prise de décision
             self.prendreDecision()
@@ -113,20 +110,17 @@ class Strategie(threading.Thread):
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
-                success = self.rafflerTotem()
-                if success :
-                    success = self.rafflerTotem(ennemi = True)
-                    if success :
-                        success = self.rafflerTotem(nord = True)
-                        if success :
-                            success = self.rafflerTotem(ennemi = True, nord = True)
+                if self.rafflerTotem() :
+                    if self.rafflerTotem(ennemi = True) :
+                        if self.rafflerTotem(nord = True) :
+                            self.rafflerTotem(ennemi = True, nord = True)
                 
                 # Si on arrive là, c'est que le script d'origine est terminé.
                 # On appelle choisirAction tant que self.actions n'est pas vide
                 while self.actions != [] :
                     self.choisirAction()
                 
-                if self.timer.time() <= 70 :
+                if self.timerStrat.time() <= 70 :
                     # Prise de décision selon ce qui n'a pas été prise
                     pass
                 
@@ -231,7 +225,7 @@ class Strategie(threading.Thread):
                 self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
                 self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
                 
-            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
+            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :actions
                 self.scriptInstance.enfoncerPoussoir(self.actions[maxID][1])
                 self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
                 
@@ -277,7 +271,7 @@ class Strategie(threading.Thread):
                     self.actions[i][1+len(params)] = nouvellePriorite
                     return 1
                     
-    
+    #TEST
     def strateg_scripts(self):
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
