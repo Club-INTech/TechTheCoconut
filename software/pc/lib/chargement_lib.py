@@ -4,8 +4,16 @@ import __builtin__
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+try:
+    #instances pour une simulation
+    if __builtin__.simulation:
+        print "INSTANCES DE SIMULATION"
+        __builtin__.instance = instance.Instance()
+    else:
+        __builtin__.instance = instance.Instance()
+except:
+    __builtin__.instance = instance.Instance()
 
-__builtin__.instance = instance.Instance()
 __builtin__.instance.instanciation()
 
 modules = []
