@@ -45,16 +45,6 @@ class Strategie(threading.Thread):
         #------------------------------#
         #-- Définition des instances --#
         #------------------------------#
-        
-        try :
-            self.asserInstance = __builtin__.instance.asserInstance
-        except :
-            log.logger.error("stratégie : ne peut importer instance.asserInstance")
-        
-        try :
-            self.actionInstance = __builtin__.instance.actionInstance
-        except :
-            log.logger.error("stratégie : ne peut importer instance.actionInstance")
             
         try :
             self.robotInstance = __builtin__.instance.robotInstance
@@ -141,13 +131,6 @@ class Strategie(threading.Thread):
         log.logger.info("ARRET DEFINITIF STRATEGIE")
         
         
-
-    # L'utiliser avec goTo(arrivee=trucmuche)
-    def goTo(self, arrivee, depart = None):
-        if depart == None:
-            depart = self.depart
-        return self.asserInstance.goTo(depart, arrivee)
-        
     def initialiserActionsAFaire(self) :
         """
         Thibaut.
@@ -225,7 +208,7 @@ class Strategie(threading.Thread):
                 self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
                 self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
                 
-            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :actions
+            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
                 self.scriptInstance.enfoncerPoussoir(self.actions[maxID][1])
                 self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
                 
