@@ -23,16 +23,16 @@ class Jumper :
     def demarrer(self):
         if not hasattr(self, 'initialise') or not self.initialise:
             self.initialise = True
-            self.serieInstance = __builtin__.instance.serieCaptInstance
+            self.serieCaptInstance = __builtin__.instance.serieCaptInstance
             
     def getEtat(self) :
         """
         Retourne l'état du Jumper (1 si enfoncé, 0 sinon)
         """
         while 1:
-            self.serieInstance.write("jumper\n\r")
+            self.serieCaptInstance.ecrire("jumper")
             try :
-                return int(self.serieInstance.readline().replace("\n", "").replace("\r", "").replace("\0", "").replace("\n", ""))
+                return int(self.serieCaptInstance.lire())
             except :
                 time.sleep(0.01)
         
