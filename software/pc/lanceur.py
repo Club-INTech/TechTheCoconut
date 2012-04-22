@@ -70,6 +70,9 @@ import lib.peripherique
 import lib.robot
 __builtin__.robotInstance = lib.robot.Robot()
 
+import lib.tests_mecha
+Tests_mecha = lib.tests_mecha.Tests_mecha()
+
 first = True
 erreur = False
 while first or erreur:

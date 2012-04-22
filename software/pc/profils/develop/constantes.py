@@ -43,7 +43,7 @@ constantes = \
 		# le :: est volontaire, le nom du module sera inséré par la suite du programme
 		"logs_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
 		"stderr": True,
-		"stderr_level": "WARNING",
+		"stderr_level": "DEBUG",
                 # le :: est volontaire, le nom du module sera inséré par la suite du programme
 		"stderr_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
 		"dossier": "logs"
@@ -77,4 +77,17 @@ constantes = \
         "angleMin": 0,
         
     },
+    "Tests_mecha":
+    {
+        "batterie_test": True,
+        "batterie_contraintes":
+        {
+            "pourcentage_min": 10,
+            "minutes_min": 20,
+        },
+        "actionneurs_test": True,
+        "deplacement_test": True,
+        "recalage_test": True,
+        "capteurs_test": True,
+    }
 }

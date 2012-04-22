@@ -62,4 +62,23 @@ constantes = \
         },
     },
     "DureeJeu": 88,
+    "Actionneurs":
+    {
+        "angleMax": 160,
+        "angleMin": 0,
+        
+    },
+    "Tests_mecha":
+    {
+        "batterie_test": True,
+        "batterie_contraintes":
+        {
+            "pourcentage_min": 10,
+            "minutes_min": 20,
+        },
+        "actionneurs_test": True,
+        "deplacement_test": True,
+        "recalage_test": True,
+        "capteurs_test": True,
+    }
 }
