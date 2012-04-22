@@ -6,5 +6,4 @@
 *.swp
 c
 libc
-lib/test*
 sauv_*
