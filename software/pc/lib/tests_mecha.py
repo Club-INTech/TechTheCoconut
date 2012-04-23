@@ -5,6 +5,7 @@ import re
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+import lolilol
 import log
 log = log.Log(__name__)
 
@@ -32,6 +33,7 @@ class Tests_mecha():
         :return: Test réussi ? True si réussi, False si échec
         :rtype: bool
         """
+        lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test des batteries ...")
         p = os.popen('acpi')
         string = p.readline().replace('\n', '')
@@ -63,6 +65,7 @@ class Tests_mecha():
         :return: Test réussi ? True si réussi, False si échec
         :rtype: bool
         """
+        lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test des actionneurs ...")
         #TODO Coder la méthode
         if False: #TODO à modifier
@@ -78,6 +81,7 @@ class Tests_mecha():
         :return: Test réussi ? True si réussi, False si échec
         :rtype: bool
         """
+        lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test du déplacement ...")
         #TODO Coder la méthode
         if False: #TODO à modifier
@@ -93,6 +97,7 @@ class Tests_mecha():
         :return: Test réussi ? True si réussi, False si échec
         :rtype: bool
         """
+        lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test du recalage ...")
         #TODO Coder la méthode
         if False: #TODO à modifier
@@ -108,6 +113,7 @@ class Tests_mecha():
         :return: Test réussi ? True si réussi, False si échec
         :rtype: bool
         """
+        lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test des capteurs ...")
         #TODO Coder la méthode
         if False: #TODO à modifier

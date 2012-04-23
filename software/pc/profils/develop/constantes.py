@@ -89,5 +89,10 @@ constantes = \
         "deplacement_test": True,
         "recalage_test": True,
         "capteurs_test": True,
-    }
+    },
+    "Lolilol":
+    {
+        "musique_active": True,
+        "musique_dossier": "/home/netantho/intech/multimedia_lolilol/",
+    },
 }

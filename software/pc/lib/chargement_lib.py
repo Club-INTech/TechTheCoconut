@@ -42,7 +42,7 @@ modules.append("recherche_chemin.thetastar")
 modules.append("timer")
 modules.append("jumper")
 modules.append("script")
-
+modules.append('lolilol')
 
 for module in modules:
     try:
