@@ -60,5 +60,10 @@ demande avec 'acq'
 renvoit "FIN_MVT" si dernier mouvement terminé,
 renvoit "EN_MVT" sinon
 
+changer le mode de vitesse :
+translation : ctv
+rotation : crv
+valeurs possibles : 1, 2, 3
+
 demande de position :
 'pos'
