@@ -11,9 +11,7 @@
 #include <libintech/serial/serial_0.hpp>
 
 // LIBRAIRIES LOCALES
-// #include "ultrason.h"
-
-#include "serial.h"
+#include "ultrason.h"
 #include "ax12.h"
 #include "actionneurs.h"
 
@@ -109,8 +107,6 @@ int main()
     sbi(EICRA,ISC10);
     sbi(EIMSK,INT1);//Activation proprement dite
     
-    
-    uart_init();
     // REANIMATION_MODE :
     byte debug_baudrate = 0x00;
         
