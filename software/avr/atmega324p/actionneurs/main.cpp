@@ -5,14 +5,19 @@
 #include <avr/interrupt.h>
 
 
+
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
 
 // LIBRAIRIES LOCALES
+// #include "ultrason.h"
+
 #include "serial.h"
 #include "ax12.h"
 #include "actionneurs.h"
+
+
 
 /********************************
  *           CONSTANTES         *
@@ -152,26 +157,15 @@ int main()
             // GoTo angle
             else if (COMPARE_BUFFER("GOTO", 4))
             {
-                #ifdef TEST_NOPYTHON_MODE
-                    serial_t_::print("GOTO MODE");
-                #endif
                 int8_t id = serial_t_::read_int();
                 int16_t angle = serial_t_::read_int();
-                
-                #ifdef TEST_NOPYTHON_MODE
-                    serial_t_::print(id);
-                    serial_t_::print(angle);
-                #endif
-                    
+
                 AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
             }
         
             // Changement de vitesse
             else if (COMPARE_BUFFER("CH_VITESSE", 10))
             {
-                #ifdef TEST_NOPYTHON_MODE
-                    serial_t_::print("CH_VITESSE MODE");
-                #endif
                 int16_t speed = serial_t_::read_int();
 
                 AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
