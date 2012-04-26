@@ -180,12 +180,22 @@ int main()
                 AX12InitID(id);
             }
             
+            // Jumper
             else if (COMPARE_BUFFER("jumper", 6))
             {
                 serial_t_::print(rbi(PIND,PD7));
+            }
+            
+            // ultrasons
+            else if (COMPARE_BUFFER("ultrason", 8))
+            {
+                serial_t_::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
             }
         }
     }
     return 0;
 }
 
+ISR(TIMER1_OVF_vect){
+    asm("nop");
+}
