@@ -158,6 +158,34 @@ public:
       while(read_char()!='\n'){ asm("nop"); }
     }
     
+     static inline void read(long & t){
+        static char buffer[20];
+        buffer[read(buffer,20)] = '\0';
+        t = atol(buffer);
+     }
+
+     static inline void read(int & t){
+        static char buffer[20];
+        buffer[read(buffer,20)] = '\0';
+        t = atoi(buffer);
+     }
+
+     static inline void read(float & t){
+        static char buffer[20];
+        buffer[read(buffer,20)] = '\0';
+        t = atof(buffer);
+     }
+     
+     static inline void read(char & t){
+	while(!available()){ asm("nop"); }
+	t = read_char();
+    }
+    
+    static inline void read(unsigned char & t){
+	while(!available()){ asm("nop"); }
+	t = read_char();
+    }
+    
     static inline int32_t read_int(void){
         static char buffer[20];
         buffer[read(buffer,20)] = '\0';
