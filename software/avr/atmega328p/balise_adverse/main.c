@@ -17,7 +17,7 @@ int main()
 	while(1){
 		char buffer[10];
 		unsigned char order;
-		order = Serial<0>::read_char();
+		Serial<0>::read(order);
 		if(order=='v'){
 			if(timeout_timer::value()>20000)
 				message=0;
