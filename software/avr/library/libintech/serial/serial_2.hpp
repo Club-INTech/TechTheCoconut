@@ -26,6 +26,7 @@
 		Serial<2>::PLEASE_INCLUDE_SERIAL_INTERRUPT();
 		static bool is_init = false;
 		if(is_init == false){
+			sei();
 			uint16_t UBRR  = (F_CPU/8/INIT_BAUDRATE_2 - 1)/2;
 			UBRR2H = (unsigned char)(UBRR >> 8);
 			UBRR2L = (unsigned char)UBRR;
