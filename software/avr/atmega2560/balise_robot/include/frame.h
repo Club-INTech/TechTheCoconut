@@ -20,7 +20,8 @@ class Frame {
 		uint8_t getCrc();
 
 	private:
-		volatile uint16_t offset;
+		volatile uint32_t rawframe_;
+		volatile uint16_t offset_;
 		volatile uint16_t distance_;
 		volatile uint8_t crc_;
 };
