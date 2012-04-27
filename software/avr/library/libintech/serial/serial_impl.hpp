@@ -10,6 +10,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include <stdlib.h>
 #include <string.h>
 #include <libintech/singleton.hpp>
@@ -35,10 +36,24 @@ private:
 
     static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	
+    static inline void send_char(unsigned char byte);
     
     static inline bool available(void)
     {
     		return (rx_buffer__SIZE + rx_buffer_.head - rx_buffer_.tail) % rx_buffer__SIZE;
+    }
+    
+    static inline unsigned char read_char(){
+			if (rx_buffer_.head == rx_buffer_.tail)
+			{
+				return -1;
+			}
+			else
+			{
+				unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
+				rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
+				return c;
+			}
     }
     
     static inline void send_ln(){
@@ -51,8 +66,6 @@ public:
     static inline void init();
 	
     static inline void change_baudrate(uint32_t BAUD_RATE);
-
-    static inline void send_char(unsigned char byte);
 
     static inline void store_char(unsigned char c)
     {
@@ -88,7 +101,12 @@ public:
     template<class T>
     static inline void print(T val){
     	char buffer[10];
-	ltoa(val,buffer,10);
+	if(sizeof(T)==4){
+		ltoa(val,buffer,10);
+	}
+	else{
+		itoa(val,buffer,10);
+	}
     	print((const char *)buffer);
     }
     
@@ -136,12 +154,8 @@ public:
     	send_ln();
     }
     
-    
-    static inline unsigned char read_char(){
-	while(!available()){ asm("nop"); }
-	unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
-	rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
-	return c;
+    static void synchronize(){
+      while(read_char()!='\n'){ asm("nop"); }
     }
     
     static inline int32_t read_int(void){
@@ -165,6 +179,7 @@ public:
     static inline uint8_t read(unsigned char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
+        	while(!available()){ asm("nop"); }
         	unsigned char tmp = read_char();
         	if(tmp == '\r'){
         		return i;
