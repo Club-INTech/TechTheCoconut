@@ -75,7 +75,7 @@ int main() {
 			else{
 				char str[80] = {0};
 				char buff[20];
-				ltoa(frame.getRobotId(),buff,10);
+				//ltoa(frame.getRobotId(),buff,10); ==> l'id ne provient plus de la frame mais du numéro de la série
 				strcat(str,buff);
 				strcat(str,".");
 				ltoa(frame.getDistance(),buff,10);

@@ -6,7 +6,6 @@
 #ifndef _FRAME_TYPEDEF_
 #define _FRAME_TYPEDEF_
 typedef uint32_t Frame;
-typedef uint16_t Data;
 typedef uint8_t Crc;
 #endif
 
@@ -15,6 +14,6 @@ typedef uint8_t Crc;
 
 void init_crc8();
 void crc8_byte(Crc *crc, uint8_t byte);
-Crc crc8(Data data);
+Crc crc8(Frame frame);
 
 #endif

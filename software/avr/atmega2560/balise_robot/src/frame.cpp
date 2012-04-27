@@ -7,24 +7,21 @@
 
 Frame::Frame(uint32_t rawFrame) {
 	 
-	data_ = (uint16_t) (rawFrame >> 16);
-	crc_ = (uint8_t) (rawFrame >> 8);
-	//Récupération du bit robot
-	robotId_ = (unsigned char) (data_ >> 15);
-	//Mise à 0 du bit identifiant le robot
-	distance_ = (uint16_t) (data_ & ~(1 << (15)));
+	distance_ = (uint16_t) (rawFrame >> 20);//12 bits de poids les plus forts
+	offset_ = ((uint16_t) (rawFrame >> 8)) && 0b0000111111111111 ;//12 bits entre
+	crc_ = (uint8_t) (rawFrame);//8 bits de poids les plus faible	
 }
 
 bool Frame::isValid() {
 	return (crc8(data_)==crc_);
 }
 
-unsigned char Frame::getRobotId() {
-	return robotId_;
-}
-
 uint16_t Frame::getDistance() {
 	return distance_;
+}
+
+uint16_t Frame::getOffset() {
+	return offset_;
 }
 
 uint8_t Frame::getCrc() {

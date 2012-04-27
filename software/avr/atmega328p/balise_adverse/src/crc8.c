@@ -29,15 +29,15 @@ void crc8_byte(Crc *crc, uint8_t byte)
 }
 
 
-Crc crc8(Data data)
+Crc crc8(Frame frame)
 {
-	unsigned int i,s=sizeof(data);
+	unsigned int i,s=sizeof(frame);
 	Crc crc=0;
 	uint8_t byte=0;
 	
 	for(i=s;i>0;i--)
 	{
-		byte = (uint8_t) (data >> 8*(i-1));
+		byte = (uint8_t) (frame >> 8*(i-1));
 		crc8_byte(&crc,byte);
 	}
 	

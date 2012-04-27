@@ -7,22 +7,6 @@
  */
 #define TIME_THRESHOLD_MIN 100
 
-/**
- * Défini l'id du "gros" robot adverse
- * @def GROS_ROBOT
- */
-#define GROS_ROBOT 0
-/**
- * Défini l'id du "petit" robot adverse
- * @def PETIT_ROBOT
- */
-#define PETIT_ROBOT 1
-/**
- * Défini l'id du robot adverse sur lequelle est placé ce code
- * @def ROBOT
- */
-#define ROBOT GROS_ROBOT
-
 #ifndef _FRAME_TYPEDEF_
 #define _FRAME_TYPEDEF_
 /**
