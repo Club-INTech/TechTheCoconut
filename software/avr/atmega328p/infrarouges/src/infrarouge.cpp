@@ -2,14 +2,19 @@
 #include "infrarouge.h"
 
 
-#define NB_VAL_ECHANTILLONAGE  8
-uint16_t    val_ADCH[]   = {170, 150, 120, 100, 80,  50 , 30 , 20 };
-uint16_t    val_mm[]     = {50 , 70 , 100, 130, 160, 280, 500, 650};
+#define NB_VAL_ECHANTILLONAGE  9
+uint16_t    val_ADCH[]   = {170, 150, 120, 100, 80,  50 , 30 , 20 , 0};
+uint16_t    val_mm[]     = {50 , 70 , 100, 130, 160, 280, 500, 650, 1500};
 
 uint16_t conversion(uint16_t adch)
 {
-        uint8_t ind = indiceTab(adch);
-        return regLin(val_ADCH[ind], val_ADCH[ind+1], val_mm[ind], val_mm[ind+1], adch);        
+    // PATCH SPECIAL PHILIPPE
+//     if (adch <= 15)
+//         return 1500;
+    
+    uint8_t ind = indiceTab(adch);
+//     return ind;
+    return regLin(val_ADCH[ind], val_ADCH[ind+1], val_mm[ind], val_mm[ind+1], adch);        
 }
 
 
