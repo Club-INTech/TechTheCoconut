@@ -18,6 +18,8 @@
 #define rbi(port,bit) ((port & (1 << bit)) >> bit)
 #endif
 
+extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
+extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
 int main() {
 	Serial<0>::init();
