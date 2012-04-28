@@ -11,7 +11,7 @@
 #include <libintech/serial/serial_0.hpp>
 
 // LIBRAIRIES LOCALES
-#include "ultrason.h"
+#include <libintech/ultrason.hpp>
 #include "ax12.h"
 #include "actionneurs.h"
 
@@ -189,7 +189,7 @@ int main()
             // ultrasons
             else if (COMPARE_BUFFER("ultrason", 8))
             {
-                serial_t_::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
+                serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
             }
         }
     }

@@ -5,7 +5,7 @@
 #include <libintech/timer.hpp>
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/ring_buffer.hpp>
-#include "ultrason.h"
+#include <libintech/ultrason.hpp>
 
 //Fonctions de lecture/écriture de bit
 #ifndef sbi
@@ -51,7 +51,7 @@ int main() {
 			Serial<0>::print(1);
 		}
 		if(COMPARE_BUFFER("ultrason",8)){
-			Serial<0>::print(max(ultrason_g.mediane(),ultrason_d.mediane()));
+			Serial<0>::print(max(ultrason_g.value(),ultrason_d.value()));
 		}
 		if(COMPARE_BUFFER("jumper",6)){
 			Serial<0>::print(rbi(PIND,PD7));
