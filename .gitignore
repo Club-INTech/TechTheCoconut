@@ -123,3 +123,4 @@
 /software/Makefile
 /software/pc/lib/trace_x_y
 /software/pc/lib/test_serie.py
+/software/pc/lib/test_infra.py
