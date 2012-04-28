@@ -20,6 +20,13 @@ void bubble_sort(ring_buffer<T,BUFFER_SIZE> & buff)
   }
 }
 
+template<typename T>
+uint32_t regression_lin(T x1, T x2, T y1, T y2, T x)
+{
+    uint32_t pourcentage = (uint32_t)((x1-x)*100)/(x1-x2);
+    return (pourcentage*y2 + (100-pourcentage)*y1)/100;
+}
+
 template<typename T,uint16_t BUFFER_SIZE>
 uint16_t mediane(ring_buffer<T,BUFFER_SIZE> & buff){
   bubble_sort(buff);

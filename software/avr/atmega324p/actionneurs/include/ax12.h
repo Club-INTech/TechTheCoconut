@@ -8,6 +8,7 @@
 #define ax12_h
 
 #include <stdint.h>
+#include <avr/io.h>
 
 #define AX12_MAX_SERVOS             18
 #define AX12_BUFFER_SIZE            32
