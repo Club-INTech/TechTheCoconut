@@ -105,12 +105,25 @@ int main()
     cbi(EICRA,ISC01);
     sbi(EICRA,ISC00);
     sbi(EIMSK,INT0);//Activation proprement dite
-    
     cbi(DDRD,PORTD3);
     //Activation des interruptions pour tout changement logique pour pin3
     cbi(EICRA,ISC11);
     sbi(EICRA,ISC10);
     sbi(EIMSK,INT1);//Activation proprement dite
+    
+
+
+    // Initialisation des infrarouges
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescalar to 128 - 125KHz sample rate @ 16MHz 
+    ADMUX |= (1 << REFS0); // Set ADC reference to AVCC 
+    ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading 
+    ADCSRA |= (1 << 5);  // Set ADC to Free-Running Mode 
+    ADCSRA |= (1 << ADEN);  // Enable ADC 
+    ADCSRA |= (1 << ADSC);  // Start A2D Conversions 
+    
+    
+    
+    
     
     // REANIMATION_MODE :
     byte debug_baudrate = 0x00;
@@ -127,9 +140,6 @@ int main()
         
     // Initialisation de tous les AX12
     AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED); 
-    
-    // Variable d'utilisation des infrarouges
-    char use_infra = 0;
         
         
     while (1)
@@ -199,28 +209,10 @@ int main()
             {
                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
             }
-            
-            // Message à envoyer si l'on veut utiliser les  infrarouges dans les
-            // mesures de distance
-            else if (COMPARE_BUFFER("use_infra", 9))
-            {
-                use_infra = 1;
-                
-                ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescalar to 128 - 125KHz sample rate @ 16MHz 
 
-                ADMUX |= (1 << REFS0); // Set ADC reference to AVCC 
-                ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading 
-
-                // No MUX values needed to be changed to use ADC0 
-                    
-                ADCSRA |= (1 << 5);  // Set ADC to Free-Running Mode 
-                ADCSRA |= (1 << ADEN);  // Enable ADC 
-                ADCSRA |= (1 << ADSC);  // Start A2D Conversions 
-            }
-                
             // infrarouge
-            else if (COMPARE_BUFFER("infra"))
-                serial_t_::print(conversion(ADCH))
+            else if (COMPARE_BUFFER("infra", 5))
+                serial_t_::print(conversion(ADCH));
         }
     }
     return 0;
