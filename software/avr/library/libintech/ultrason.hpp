@@ -18,6 +18,19 @@ public:
     Timer::init();
   }
   
+  template<typename T,uint16_t BUFFER_SIZE>
+  void update(ring_buffer<T,BUFFER_SIZE> & mesures){
+    if(Pin::read()){
+		derniere_valeur_ = Timer::value();
+    }else{//Front descendant
+	// prescaler/fcpu*inchToCm/tempsParInch
+	if(Timer::value() <derniere_valeur_)
+	  mesures.append((Timer::value() + 65536 - derniere_valeur_  )*0.0884353741496);
+	else
+	  mesures.append((Timer::value() - derniere_valeur_ )*0.0884353741496);
+    }
+  }
+  
   void update(){
     if(Pin::read()){
 		derniere_valeur_ = Timer::value();
