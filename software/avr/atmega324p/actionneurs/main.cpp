@@ -56,6 +56,7 @@
 // matériel.
     #define REANIMATION_MODE        0
 
+    #define TEST_INTECH 1
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -136,6 +137,10 @@ int main()
         
         else if (TEST_NOSERIE_MODE) 
             AX12Init(0xFE, 0,0,1200);
+        
+        else if (TEST_INTECH)
+            while (1)
+                serial_t_::print(1);
         
         else
         {
