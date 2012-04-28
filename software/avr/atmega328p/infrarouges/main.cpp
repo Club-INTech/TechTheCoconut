@@ -46,6 +46,10 @@ int main (void)
         serial_t_::read(buffer,17);
         #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
         
+        // ping
+        if (COMPARE_BUFFER("?", 1))
+            serial_t_::print(5);
+            
         if(COMPARE_BUFFER("infra", 5)){
             serial_t_::print(conversion(ADCH));
         }

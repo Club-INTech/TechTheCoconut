@@ -2,9 +2,9 @@
 #include "infrarouge.h"
 
 
-#define NB_VAL_ECHANTILLONAGE  9
-uint16_t    val_ADCH[]   = {170, 150, 120, 100, 80,  50 , 30 , 20 , 0};
-uint16_t    val_mm[]     = {50 , 70 , 100, 130, 160, 280, 500, 650, 1500};
+#define NB_VAL_ECHANTILLONAGE  10
+uint16_t    val_ADCH[]   = {170, 150, 120, 100, 80,  50 , 30 , 20 , 10, 0};
+uint16_t    val_mm[]     = {50 , 70 , 100, 130, 160, 280, 500, 650, 1500, 1800};
 
 uint16_t conversion(uint16_t adch)
 {
@@ -34,9 +34,10 @@ uint16_t indiceTab(uint16_t adch)
     
 }
 
-uint16_t regLin(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t x)
+uint32_t regLin(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t x)
 {
-    uint16_t pourcentage = ((x1-x)*100)/(x1-x2);
-//     return pourcentage;
+    uint32_t pourcentage = (uint32_t)((x1-x)*100)/(x1-x2);
+//     return x;
+//     pourcentage = 100;
     return (pourcentage*y2 + (100-pourcentage)*y1)/100;
 }

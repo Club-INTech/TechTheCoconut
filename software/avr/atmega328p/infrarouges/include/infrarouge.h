@@ -22,7 +22,7 @@
         
 // Cette fonction réalise la regression linéaire des points M1(x1, y1) et M2(x2, y2)
 // pour le point M d'abscisse x.
-        uint16_t regLin(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t x);
+        uint32_t regLin(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t x);
 
 
 #endif
