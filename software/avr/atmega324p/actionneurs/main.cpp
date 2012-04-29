@@ -10,11 +10,12 @@
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/ultrason.hpp>
+#include <libintech/infrarouge.hpp>
 
 // LIBRAIRIES LOCALES
-#include "infrarouge.h"
 #include "ax12.h"
 #include "actionneurs.h"
+#include "capteurs_vieux.h"
 
 
 
@@ -24,6 +25,8 @@
 
 #define BAUD_RATE_SERIE         9600
 #define BAUD_RATE_AX12          AX_BAUD_RATE_9600
+
+#define PIN_VIEUX_ULTRASON       (1 << PORTD6)
 
 
 /******************************** 
@@ -114,15 +117,7 @@ int main()
 
 
     // Initialisation des infrarouges
-    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescalar to 128 - 125KHz sample rate @ 16MHz 
-    ADMUX |= (1 << REFS0); // Set ADC reference to AVCC 
-    ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading 
-    ADCSRA |= (1 << 5);  // Set ADC to Free-Running Mode 
-    ADCSRA |= (1 << ADEN);  // Enable ADC 
-    ADCSRA |= (1 << ADSC);  // Start A2D Conversions 
-    
-    
-    
+    infrarouge::init();
     
     
     // REANIMATION_MODE :
@@ -163,9 +158,8 @@ int main()
             #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
             // Ping
-            if(COMPARE_BUFFER("?", 1)){
+            if(COMPARE_BUFFER("?", 1))
                 serial_t_::print(4);
-            }
 
             
             // GoTo angle
@@ -173,7 +167,6 @@ int main()
             {
                 int8_t id = serial_t_::read_int();
                 int16_t angle = serial_t_::read_int();
-
                 AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
             }
         
@@ -181,15 +174,12 @@ int main()
             else if (COMPARE_BUFFER("CH_VITESSE", 10))
             {
                 int16_t speed = serial_t_::read_int();
-
                 AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
             }
             
             // Désasservissement de tous les servos branchés
             else if (COMPARE_BUFFER("UNASSERV", 8))
-            {
                 AX12Unasserv(0xFE);
-            }
             
             // Reflashage de tous les servos branchés
             else if (COMPARE_BUFFER("FLASH_ID", 8))
@@ -200,19 +190,20 @@ int main()
             
             // Jumper
             else if (COMPARE_BUFFER("jumper", 6))
-            {
                 serial_t_::print(rbi(PIND,PD7));
-            }
             
             // ultrasons
             else if (COMPARE_BUFFER("ultrason", 8))
-            {
                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
-            }
+            
 
             // infrarouge
             else if (COMPARE_BUFFER("infra", 5))
-                serial_t_::print(conversion(ADCH));
+                serial_t_::print(infrarouge::value());
+            
+            // Vieux ultrasons
+            else if (COMPARE_BUFFER("vieux", 5))
+                serial_t_::print(ping_capt(PIN_VIEUX_ULTRASON));
         }
     }
     return 0;

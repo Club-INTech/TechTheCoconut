@@ -1,12 +1,9 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include "capteurs_vieux.h"
 
-#include "capteurs.h"
-
-volatile uint16_t ultrason;
-
-uint16_t ping(uint8_t pin)
+uint16_t ping_capt(uint8_t pin)
 {
     // Envoi d'une impulsion dans le capteur
     DDRD |= pin;
