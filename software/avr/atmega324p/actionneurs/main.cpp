@@ -9,9 +9,10 @@
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
+#include <libintech/ultrason.hpp>
 
 // LIBRAIRIES LOCALES
-#include <libintech/ultrason.hpp>
+#include "infrarouge.h"
 #include "ax12.h"
 #include "actionneurs.h"
 
@@ -56,7 +57,6 @@
 // matériel.
     #define REANIMATION_MODE        0
 
-    #define TEST_INTECH 1
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -64,7 +64,9 @@
  *  La série 1 est dédiée à la communication Carte  ->  AX12
  *  La série 0 est dédiée à la communication Carte <->   PC
  *  Le pin 7 est dédié au jumper.
- * 
+ *  Le pin analog0 est dédiée aux infrarouges.
+ *          Les infrarouges ne sont pas utilisés au démarrage de la carte. Pour les prendre
+ *          en compte dans les calculs, envoyer le message "use_infra" à la carte.
  * 
  * 
  * 
@@ -103,12 +105,25 @@ int main()
     cbi(EICRA,ISC01);
     sbi(EICRA,ISC00);
     sbi(EIMSK,INT0);//Activation proprement dite
-    
     cbi(DDRD,PORTD3);
     //Activation des interruptions pour tout changement logique pour pin3
     cbi(EICRA,ISC11);
     sbi(EICRA,ISC10);
     sbi(EIMSK,INT1);//Activation proprement dite
+    
+
+
+    // Initialisation des infrarouges
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescalar to 128 - 125KHz sample rate @ 16MHz 
+    ADMUX |= (1 << REFS0); // Set ADC reference to AVCC 
+    ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading 
+    ADCSRA |= (1 << 5);  // Set ADC to Free-Running Mode 
+    ADCSRA |= (1 << ADEN);  // Enable ADC 
+    ADCSRA |= (1 << ADSC);  // Start A2D Conversions 
+    
+    
+    
+    
     
     // REANIMATION_MODE :
     byte debug_baudrate = 0x00;
@@ -124,7 +139,7 @@ int main()
         AX12InitID(FLASH_ID_MODE);
         
     // Initialisation de tous les AX12
-    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
+    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED); 
         
         
     while (1)
@@ -139,10 +154,6 @@ int main()
         
         else if (TEST_NOSERIE_MODE) 
             AX12Init(0xFE, 0,0,1200);
-        
-        else if (TEST_INTECH)
-            while (1)
-                serial_t_::print(1);
         
         else
         {
@@ -198,6 +209,10 @@ int main()
             {
                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
             }
+
+            // infrarouge
+            else if (COMPARE_BUFFER("infra", 5))
+                serial_t_::print(conversion(ADCH));
         }
     }
     return 0;
