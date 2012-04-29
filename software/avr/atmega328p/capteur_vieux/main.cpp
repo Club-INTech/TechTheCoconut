@@ -13,31 +13,23 @@ typedef Serial<0> serial_t_;
 
 int main()
 {
-//     // Initialisation I2C
-//     TWI_Init();
     serial_t_::init();
     serial_t_::change_baudrate(9600);
     
-    volatile uint16_t temp1 = ping(PIN_ULTRASON1);
-//     _delay_ms(50);
-//     volatile uint16_t temp2 = ping(PIN_ULTRASON2);
-    
-    while(1) {
+    while(1) 
+    {
+        char buffer[17];
+        serial_t_::read(buffer,17);
+        #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
         
-        _delay_ms(15);
-//         if ( temp2 < temp1 )
-//             ultrason = temp2;
-        temp1 = ping(PIN_ULTRASON1);
+        // ping
+        if (COMPARE_BUFFER("?", 1))
+            serial_t_::print(5);
         
-        serial_t_::print(temp1);
-        
-//         _delay_ms(15);
-//         if ( temp1 < temp2 )
-//             ultrason = temp1;
-//         temp2 = ping(PIN_ULTRASON2);
-//         
-//         serial_t_::print(temp2);
+        if (COMPARE_BUFFER("vieux", 5))
+            serial_t_::print(ping(PIN_ULTRASON1));
     }
+
     
     return 0;
 }
