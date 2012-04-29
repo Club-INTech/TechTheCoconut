@@ -55,33 +55,44 @@ int main() {
 			Balise::serial_pc::print(2);
 		}
 		
+		if(COMPARE_BUFFER("!",1)){
+			Balise::serial_radio::print('?');
+// 			char buffer[10] = {0};
+// 			Balise::Balise::serial_radio::read(buffer,10);
+			Balise::serial_pc::print(Balise::serial_radio::read_int());
+		}
+		
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
-			Frame frame = 0;
+// 			Frame frame = 0;
 			int16_t n_demandes = 0;
+			int32_t distance;
+			int32_t offset;
 			do{
 				Balise::serial_radio::print('v');
-				rawFrame=Balise::serial_radio::read_int();
-				frame = rawFrame;
-				is_valid = frame.isValid();
+				distance = Balise::serial_radio::read_int();
+				offset = Balise::serial_radio::read_int();
+				is_valid = true;
 				n_demandes++;
-			}while(is_valid==false && n_demandes<5 && rawFrame!=0);
+			}while(is_valid==false && n_demandes<5);
 			if(n_demandes==5){
 				Balise::serial_pc::print("ERREUR_CANAL");
 			}
-			else if(rawFrame==0){
-				Balise::serial_pc::print("NON_VISIBLE");
+			else if(distance==0){
+				//Distance écrasée par le timeout côté balise (distance périmée).
+				Balise::serial_pc::print("NON_VISIBLE"); 
 			}
 			else{
 				char str[80] = {0};
 				char buff[20];
-				//ltoa(frame.getRobotId(),buff,10); ==> l'id ne provient plus de la frame mais du numéro de la série
+				Balise::serial_pc::print(offset);
+				ltoa(1,buff,10);
 				strcat(str,buff);
 				strcat(str,".");
-				ltoa(frame.getDistance(),buff,10);
+				ltoa(distance,buff,10);
 				strcat(str,buff);
 				strcat(str,".");
-				ltoa(balise.getAngle(0),buff,10);
+				ltoa(balise.getAngle(offset),buff,10);
 				strcat(str,buff);
 				Balise::serial_pc::print((const char *)str);
 			}
@@ -157,7 +168,7 @@ ISR(TIMER3_OVF_vect)
 //INT0
 ISR(INT0_vect)
 {
-	Balise::serial_pc::print(Balise::T_TopTour::value());
+// 	Balise::serial_pc::print(Balise::T_TopTour::value());
 	Balise & balise = Balise::Instance();
 	if(Balise::T_TopTour::value()>=30)
 		balise.max_counter(Balise::T_TopTour::value());

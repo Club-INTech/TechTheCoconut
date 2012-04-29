@@ -11,7 +11,6 @@ inline void Serial<0>::init(){
 	Serial<0>::PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	static bool is_init = false;
 	if(is_init == false){
-		sei();
 		uint16_t UBRR  =(F_CPU/8/INIT_BAUDRATE_0 - 1)/2;
 		UBRR0H = (unsigned char)(UBRR >> 8);
 		UBRR0L = (unsigned char)UBRR;

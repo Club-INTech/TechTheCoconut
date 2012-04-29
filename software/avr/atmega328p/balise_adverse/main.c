@@ -16,12 +16,13 @@ int main()
 	
 	while(1){
 		char buffer[10];
-		unsigned char order;
-		Serial<0>::read(order);
+		unsigned char order= Serial<0>::read_char();
 		if(order=='v'){
-			if(timeout_timer::value()>20000)
-				message=0;
-			Serial<0>::print(message);
+			Serial<0>::print(distance);
+			Serial<0>::print(timeout_timer::value());
+		}
+		else if(order=='?'){
+			Serial<0>::print(timeout_timer::value());
 		}
 	}
 	
@@ -87,6 +88,7 @@ ISR(PCINT1_vect)
 					WINDOW_FLAG = 0;
 					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
 					message=makeFrame(distance,timeout_timer::value());
+					timeout_timer::value(0);
 				}
 			}
 		}
@@ -98,7 +100,6 @@ ISR(PCINT1_vect)
 			WINDOW_OPENER=changedbits;
 		}
 	}
-	timeout_timer::value(0);
 }
 
 //Interruption du TIMER0 sur overflow
@@ -110,4 +111,5 @@ ISR(TIMER0_OVF_vect)
 
 ISR(TIMER1_OVF_vect)
 {
+	distance = 0; //La distance est périmée.
 }

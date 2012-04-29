@@ -13,8 +13,15 @@ uint16_t Balise::max_counter(){
 	return max_counter_;
 }
 
-uint16_t Balise::getAngle(int16_t offset) {
-	return ((Balise::T_TopTour::value() - offset)%max_counter_)*360/max_counter_;
+uint32_t Balise::getAngle(uint16_t offset) {
+// 	return max_counter_;
+	int32_t diff = ((int32_t)Balise::T_TopTour::value() - (int32_t)offset*16/20);
+	while(diff<0){ //Assez mystère...
+	  diff+=(int32_t)max_counter_;
+	}
+	return diff/**(float)360/(float)max_counter_*/;
+
+// 	return (((int32_t)Balise::T_TopTour::value() - (int32_t)offset*16/20)%max_counter_)*360/max_counter_;
 }
 
 Balise::Balise() : asservissement_moteur_(0.5,0.5,0)

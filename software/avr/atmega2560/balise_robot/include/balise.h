@@ -17,7 +17,7 @@ class Balise : public Singleton<Balise>{
 	public:
 		typedef Serial<0> serial_pc;
 		typedef Serial<1> serial_radio;
-		typedef Timer<3,ModeCounter,256> T_TopTour;
+		typedef Timer<3,ModeCounter,64> T_TopTour;
 		typedef Timer<1,ModeCounter,64> T_Asservissement;
 	private:
 		volatile uint32_t max_counter_;
@@ -31,7 +31,7 @@ class Balise : public Singleton<Balise>{
 		void asservir(int32_t vitesse_courante);
 		void max_counter(uint16_t valeur);
 		uint16_t max_counter();
-		uint16_t  getAngle(int16_t offset);
+		uint32_t  getAngle(uint16_t offset);
 // 		void incremente_toptour();
 // 		void reset_toptour();
 // 		uint16_t toptour();
