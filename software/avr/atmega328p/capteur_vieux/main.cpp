@@ -6,8 +6,7 @@
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
-#include <libintech/infrarouge.hpp>
-#include "capteurs.h"
+#include <libintech/capteur_vieux.hpp>
 
 typedef Serial<0> serial_t_;
 
@@ -15,6 +14,7 @@ int main()
 {
     serial_t_::init();
     serial_t_::change_baudrate(9600);
+    capteur_vieux::init();
     
     while(1) 
     {
@@ -27,7 +27,7 @@ int main()
             serial_t_::print(5);
         
         if (COMPARE_BUFFER("vieux", 5))
-            serial_t_::print(ping(PIN_ULTRASON1));
+            serial_t_::print(capteur_vieux::value_brut());
     }
 
     
