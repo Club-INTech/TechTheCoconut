@@ -39,29 +39,29 @@ private:
         static const uint8_t pin = pin_capteur_vieux;
         
         // Envoi d'une impulsion dans le capteur
-        DDRD |= pin;
-        PORTD &= ~pin;
+        DDRC |= pin;
+        PORTC &= ~pin;
         _delay_us(2);
-        PORTD |= pin;
+        PORTC |= pin;
         _delay_us(5);
-        PORTD &= ~pin;
+        PORTC &= ~pin;
         // Reception de la duree
-        DDRD &= ~pin;
+        DDRC &= ~pin;
 
         uint8_t masque = pin;
         uint32_t duree = 0;
         uint16_t duree_max = TIMEOUT;
         
         // Attente de la fin de l'impulsion precedente
-        while ((PIND & pin) == masque)
+        while ((PINC & pin) == masque)
             if (duree++ == duree_max)
                 return 0;
         // Attente du demarrage de l'impulsion
-        while ((PIND & pin) != masque)
+        while ((PINC & pin) != masque)
             if (duree++ == duree_max)
                 return 0; 
         // Attente de la fin de l'impulsion
-        while ((PIND & pin) == masque)
+        while ((PINC & pin) == masque)
                 duree++;
         return duree;
   }
