@@ -11,11 +11,11 @@
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/ultrason.hpp>
 #include <libintech/infrarouge.hpp>
+#include <libintech/capteur_vieux.hpp>
 
 // LIBRAIRIES LOCALES
 #include "ax12.h"
 #include "actionneurs.h"
-#include "capteurs_vieux.h"
 
 
 
@@ -26,7 +26,6 @@
 #define BAUD_RATE_SERIE         9600
 #define BAUD_RATE_AX12          AX_BAUD_RATE_9600
 
-#define PIN_VIEUX_ULTRASON       (1 << PORTD6)
 
 
 /******************************** 
@@ -95,8 +94,9 @@ extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
 int main()
 {
-    Serial<0>::init();
-    Serial<0>::change_baudrate(BAUD_RATE_SERIE);
+    // Initialisation de la liaison série PC <-> Carte.
+    serial_t_::init();
+    serial_t_::change_baudrate(BAUD_RATE_SERIE);
     
     // GESTION DES INTERRUPTIONS POUR LA PARTIE CAPTEUR + JUMPER
     //Pin D2 en INPUT
@@ -119,6 +119,8 @@ int main()
     // Initialisation des infrarouges
     infrarouge::init();
     
+    // Initialisation des capteur à ultrason de l'an dernier (SRF05)
+    capteur_vieux::init();
     
     // REANIMATION_MODE :
     byte debug_baudrate = 0x00;
@@ -203,7 +205,7 @@ int main()
             
             // Vieux ultrasons
             else if (COMPARE_BUFFER("vieux", 5))
-                serial_t_::print(ping_capt(PIN_VIEUX_ULTRASON));
+                serial_t_::print(capteur_vieux::value_brut());
         }
     }
     return 0;
