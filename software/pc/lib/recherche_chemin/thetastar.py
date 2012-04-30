@@ -29,6 +29,7 @@ import lib.visualisation.visu_threads as visu_threads
 
 #bibliothèque pour la gestion des graphes 
 try:
+    #from graph_tool.all import Graph,new_vertex_property,new_edge_property,num_vertices,add_vertex,vertex,source,target,remove_edge,add_edge,edge,astar_search,load_graph,edges,vertices,save
     from graph_tool.all import *
 except:
     log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
@@ -53,12 +54,6 @@ class Thetastar:
     tableLongueur = constantes["Coconut"]["largeur"]
     rayonRobotsA = constantes["Recherche_Chemin"]["rayonRobotsA"]
     nCotesRobotsA = constantes["Recherche_Chemin"]["nCotesRobotsA"]
-    
-    #TODO à remplacer 
-    coteRobot = constantes["Coconut"]["coteRobot"]
-    rayonRobot=coteRobot*sqrt(2)
-    
-    #par rayonRobot=lib.robot.Robot.rayon
     
     carte = Carte()
     
