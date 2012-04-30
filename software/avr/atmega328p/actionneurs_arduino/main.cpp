@@ -13,7 +13,6 @@
 // #define REANIMATION_MODE
 // #define TEST_NOPYTHON_MODE
 
-#include "serial.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -22,10 +21,9 @@ typedef Serial<0> serial_t_;
 
 int main()
 {
-    Serial<0>::init();
-    Serial<0>::change_baudrate(9600);
+    serial_t_::init();
+    serial_t_::change_baudrate(9600);
     
-    uart_init();
     // REANIMATION_MODE :
     #ifdef REANIMATION_MODE
         byte debug_baudrate = 0x00;
@@ -61,9 +59,9 @@ int main()
         #else
             
             
-    char buffer[17];
-    serial_t_::read(buffer,17);
-    #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+        char buffer[17];
+        serial_t_::read(buffer,17);
+        #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
         // Ping
         if(COMPARE_BUFFER("?", 1)){
