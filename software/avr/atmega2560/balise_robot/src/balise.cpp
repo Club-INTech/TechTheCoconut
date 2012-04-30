@@ -15,12 +15,13 @@ uint16_t Balise::max_counter(){
 
 uint32_t Balise::getAngle(uint16_t offset) {
 // 	return max_counter_;
-	int32_t diff = ((int32_t)Balise::T_TopTour::value() - (int32_t)offset*16/20);
+	int32_t diff = ((int32_t)Balise::T_TopTour::value() - (int32_t)offset*4/5);
 	while(diff<0){ //Assez mystère...
 	  diff+=(int32_t)max_counter_;
 	}
-	return diff/**(float)360/(float)max_counter_*/;
-
+// 	return  (int32_t)offset*4/5;
+	return diff *(float)360/(float)max_counter_ ;
+// 	return max_counter_;
 // 	return (((int32_t)Balise::T_TopTour::value() - (int32_t)offset*16/20)%max_counter_)*360/max_counter_;
 }
 

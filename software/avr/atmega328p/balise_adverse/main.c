@@ -5,7 +5,7 @@ volatile uint8_t WINDOW_OPENER = 0;
 volatile uint8_t WINDOW_FLAG = 0;
 volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
-volatile int16_t distance = 0;
+volatile uint16_t distance = 0;
 volatile Frame message = 0;
 
 typedef Timer<1,ModeCounter,64> timeout_timer;
@@ -18,8 +18,9 @@ int main()
 		char buffer[10];
 		unsigned char order= Serial<0>::read_char();
 		if(order=='v'){
+// 			uint16_t n_distance = distance;
 			Serial<0>::print(distance);
-			Serial<0>::print(timeout_timer::value());
+			Serial<0>::print( timeout_timer::value());
 		}
 		else if(order=='?'){
 			Serial<0>::print(timeout_timer::value());
@@ -87,7 +88,8 @@ ISR(PCINT1_vect)
 				{
 					WINDOW_FLAG = 0;
 					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
-					message=makeFrame(distance,timeout_timer::value());
+// 					distance = timeout_timer::value();
+// 					message=makeFrame(distance,timeout_timer::value());
 					timeout_timer::value(0);
 				}
 			}
