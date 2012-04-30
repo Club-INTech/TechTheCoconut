@@ -19,10 +19,6 @@ constantes = \
 		#sans compter les bras
 		"largeurRobot" : 200.,
 		"longueurRobot" : 360.,
-		
-                #TODO : à enlever...
-                #longueur du coté du robot, en mm
-                "coteRobot" : 350.
 	},
 	"Anna": {},
     "Objets_Table": {
