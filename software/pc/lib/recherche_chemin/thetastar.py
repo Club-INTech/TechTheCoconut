@@ -29,9 +29,9 @@ import lib.visualisation.visu_threads as visu_threads
 
 #bibliothèque pour la gestion des graphes 
 try:
-    import graph_tool
-    from graph_tool.all import Graph,new_vertex_property,new_edge_property,num_vertices,add_vertex,vertex,source,target,remove_edge,add_edge,edge,astar_search,load_graph,edges,vertices,save
     #from graph_tool.all import *
+    from graph_tool import Graph,load_graph
+    from graph_tool.all import AStarVisitor,astar_search
 except:
     log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 
@@ -74,7 +74,7 @@ class Thetastar:
     listeRectangles = [r1,r2,r3,r4,p,t1,t2]
 
     #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
-    g = graph_tool.all.Graph(directed=False)
+    g = Graph(directed=False)
     posX = g.new_vertex_property("double")
     posY = g.new_vertex_property("double")
     poids = g.new_edge_property("double")
@@ -435,7 +435,7 @@ class Thetastar:
         Thetastar.g.save("sauv_g.xml")
 
         
-class VisitorExample(graph_tool.all.AStarVisitor):
+class VisitorExample(AStarVisitor):
     def __init__(self, touched_v, touched_e, target):
         self.touched_v = touched_v
         self.touched_e = touched_e
