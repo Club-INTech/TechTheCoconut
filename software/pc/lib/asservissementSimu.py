@@ -29,7 +29,7 @@ class Asservissement:
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
-            log.logger.error("asservissement : ne peut importer instance.robotInstance")
+            log.logger.error("[asservissement] ne peut importer instance.robotInstance")
             
         
         #liste des centres de robots adverses repérés (liste de points)
@@ -86,9 +86,9 @@ class Asservissement:
         :type chemin: liste de points
         """
         depart = self.getPosition()
-        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
+        log.logger.info("[asservissement] Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        log.logger.info("[asservissement] Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         try :
@@ -111,7 +111,7 @@ class Asservissement:
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        log.logger.info("Ordre de tourner à " + str(float(angle)))
+        log.logger.info("[asservissement] Ordre de tourner à " + str(float(angle)))
         return "acquittement"
     
     def avancer(self, distance):
@@ -120,7 +120,7 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        log.logger.info("Ordre d'avancer de " + str(float(distance)))
+        log.logger.info("[asservissement] Ordre d'avancer de " + str(float(distance)))
         return "acquittement"
         
     def getPosition(self):
@@ -128,27 +128,34 @@ class Asservissement:
             
     def setPosition(self,position):
         self.position = position
+        log.logger.info("[asservissement] Changement de la position enregistrée dans le robot à la position : x = " + position.x + " y = " + position.y)
             
     def getOrientation(self):
         return self.orientation
             
     def setOrientation(self,orientation):
         self.orientation = orientation
+        log.logger.info("[asservissement] Changement de l'orientation enregistrée dans le robot à l'angle : " + orientation
         
     def recalage(self):
+        log.logger.info("[asservissement] Lancement du recalage")
         pass
         
     def setUnsetAsser(self, asservissement, mode):
+        log.logger.info("[asservissement] L'asservissement " + asservissement + " passe en mode " + mode)
         pass
         
     def changerPWM(self, typeAsservissement, valeur):
+        log.logger.info("[asservissement] Changement de la valeur du PWM de " + typeAsservissement + " à " + valeur)
         pass
             
             
     def changerVitesse(self, typeAsservissement, valeur):
+        log.logger.info("[asservissement] Changement de la vitesse de " + typeAsservissement + " à " + valeur)
         pass
         
     def immobiliser(self):
+        log.logger.info("[asservissement] Immobilisation du robot")
         pass
         
     def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
@@ -158,7 +165,7 @@ class Asservissement:
         et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
         """
         
-        print "#avancer à "+str(distance)+", "+instruction
+        log.logger.info("[asservissement] avancer à "+str(distance)+", "+instruction)
         
         posAvant = self.getPosition()
         retour = self.avancer(distance)
@@ -215,9 +222,9 @@ class Asservissement:
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
                     capteur = self.capteurInstance.mesurer()
                     if capteur < self.maxCapt:
-                        print 'gestionAvancer : capteur !'
+                        log.logger.info("[asservissement] gestionAvancer : capteur !")
                     else :
-                        print 'gestionAvancer : la voie est libre !'
+                        log.logger.info("[asservissement] gestionAvancer : la voie est libre !")
                         ennemi_en_vue = False
                     
                 if not ennemi_en_vue:
@@ -288,7 +295,7 @@ class Asservissement:
         if angle < -math.pi:
             angle = angle + 2*math.pi
         
-        print "#tourner à "+str(angle)+", "+instruction
+        log.logger.info("[asservissement] tourner à "+str(angle)+", "+instruction)
         
         orientAvant = self.getOrientation()
         retour = self.tourner(angle)

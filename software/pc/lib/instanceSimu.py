@@ -21,7 +21,7 @@ class Instance:
     """
     
     def __init__(self):
-        log.logger.info("Instanciation de la classe Instance")
+        log.logger.info("[Instance] Instanciation de la classe Instance")
         
         #liste (globale) des centres de robots adverses détectés
         self.liste_robots_adv = []
@@ -48,7 +48,7 @@ class Instance:
         try:
             self.strategieInstance = strategie.Strategie()
         except:
-            log.logger.error("instance : strategieInstance n'est pas chargé")
+            log.logger.error("[Instance] strategieInstance n'est pas chargé")
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
@@ -57,11 +57,11 @@ class Instance:
         try : 
             self.asserInstance = asservissementSimu.Asservissement()
         except :
-            log.logger.error("instance : asserInstance n'est pas chargé")
+            log.logger.error("[Instance] asserInstance n'est pas chargé")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneurSimu.Actionneur()
-        except: log.logger.error("instance : actionInstance n'est pas chargé")
+        except: log.logger.error("[Instance] actionInstance n'est pas chargé")
         
     def instanciationMutex(self):
         self.mutex = Lock()
