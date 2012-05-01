@@ -54,10 +54,13 @@ class Asservissement_duree:
         
         self.modeRotation = 2
         self.modeTranslation = 2
+        self.orientation = getOrientation()
+        self.position = self.getPosition()
     
     def goTo(self, arrivee):
         log.logger.info("Calcul de la durée de déplacement")
         theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
+        depart = self.position
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         self.majVitesse(self.modeDeplacement)
@@ -95,18 +98,18 @@ class Asservissement_duree:
                 #MAJ des variables
                 depart = i
             
+            position = arrivee
             return dureeRotation + dureeTranslation
          
       
     def gestionTourner(self, angle):
         self.majVitesse(self.modeDeplacement)
-        if orientation:
-            return math.abs(orientation - angle)/self.vitesseRotation
-        else:
-            return 0.5
+        return math.abs(self.orientation - angle)/self.vitesseRotation
     
     def gestionAvancer(self, distance):
         self.majVitesse(self.modeDeplacement)
+        self.position.x += distance*math.cos(self.orientation)
+        self.position.y += distance*math.sin(self.orientation)
         return distance/self.vitesseTranslation
     
     def changerVitesse(self, modeDeplacement):
