@@ -22,10 +22,10 @@ class Script:
             else:
                 log.logger.error("script : ne peut importer instance.self.asserInstance")
         else:
-            if hasattr(__builtin__.instance, 'self.asserInstance'):
+            if hasattr(__builtin__.instance, 'self.asserInstanceDuree'):
                 self.asserInstance = __builtin__.instance.self.asserInstanceDuree
             else:
-                log.logger.error("script : ne peut importer instance.self.asserInstance")
+                log.logger.error("script : ne peut importer instance.self.asserInstanceDuree")
             
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance

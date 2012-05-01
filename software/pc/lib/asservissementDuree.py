@@ -152,7 +152,6 @@ class Asservissement_duree:
         reponse = str(self.serieAsserInstance.lire())
         if re.match("^[0-9]+$", reponse):
             orientation = float(reponse)/1000.0
-            #self.robotInstance.setOrientation(orientation)
             return orientation
         else:
             return self.getOrientation()

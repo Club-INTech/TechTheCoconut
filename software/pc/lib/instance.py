@@ -115,7 +115,7 @@ class Instance:
         try : 
             self.asserInstanceDuree = asservissementDuree.Asservissement_duree()
         except :
-            log.logger.error("instance : asserInstance n'est pas chargé")
+            log.logger.error("instance : asserInstanceDuree n'est pas chargé")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneur.Actionneur()
