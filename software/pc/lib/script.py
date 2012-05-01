@@ -15,11 +15,18 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 class Script:
     
-    def __init__(self):
-        if hasattr(__builtin__.instance, 'self.asserInstance'):
-            self.asserInstance = __builtin__.instance.self.asserInstance
+    def __init__(self, duree = False):
+        if duree == False:
+            if hasattr(__builtin__.instance, 'self.asserInstance'):
+                self.asserInstance = __builtin__.instance.self.asserInstance
+            else:
+                log.logger.error("script : ne peut importer instance.self.asserInstance")
         else:
-            log.logger.error("script : ne peut importer instance.self.asserInstance")
+            if hasattr(__builtin__.instance, 'self.asserInstance'):
+                self.asserInstance = __builtin__.instance.self.asserInstanceDuree
+            else:
+                log.logger.error("script : ne peut importer instance.self.asserInstance")
+            
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
