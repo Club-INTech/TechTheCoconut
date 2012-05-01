@@ -15,7 +15,7 @@ while first or couleur not in ['', 'r', 'v']:
 first = True
 while first or not profil.importation:
     first = False
-    conf = raw_input('Indiquer la configuration a importer (prod, [develop], developSimulUc) : \n')
+    conf = raw_input('Indiquer la configuration a importer (prod, [develop], developSimulUc) :')
 
     # tronque la string conf pour éviter les bugs à l'import
     conf = conf.split('.')
@@ -53,7 +53,7 @@ else:
     exec('import profils.'+conf+'.injection')
 
 import lib.peripherique
-import lib.detection_peripheriques
+#import lib.detection_peripheriques
 
 # Association manuelle des périphériques
 #for p in constantes['Serie']['peripheriques']:
@@ -63,16 +63,19 @@ import lib.detection_peripheriques
 # Fin association manuelle des périphériques
 
 # Association automatique des périphériques
-lib.detection_peripheriques.Detection_peripheriques()
+
+#lib.detection_peripheriques.Detection_peripheriques()
 
 # WARNING variable globale pour instancier le robot
 import lib.robot
 __builtin__.robotInstance = lib.robot.Robot()
 
+import lib.chargement_lib
+
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes)) : \n')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch], t[est] :')
     first = False
     #try:
     if mode == '' or mode == 'console':
@@ -82,12 +85,24 @@ while first or erreur:
         import time
         __builtin__.constantes["t0"] = time.time()
         
+    if mode == 'h':
+        mode = "homologation"
     if mode == 'e':
         mode = 'etalonnage_constantes'
+    if mode == "m" :
+        mode = "match"
+    if mode == "t":
+        mode = "tests_mecha"
     log.logger.info("Chargement du fichier de lancement " + mode)
     exec('import bin.'+ mode)
     if mode == "visualisation_table":
         first = True
+        
+    if hasattr(bin, "tests_mecha"):
+        Tests_mecha = bin.tests_mecha.Tests_mecha()
+    else:
+        pass
+
     #except:
         #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
         #erreur = True

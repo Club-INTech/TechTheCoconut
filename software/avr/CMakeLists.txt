@@ -24,11 +24,12 @@ macro(add_microcontrolers MMCU MICROCONTROLEURS)
                             ARGS -O ihex -R .eeprom ${MICROCONTROLEUR}.out ${MICROCONTROLEUR}.hex
                             )
         add_custom_target(upload_${MICROCONTROLEUR} DEPENDS ${MICROCONTROLEUR}.hex)
-        add_custom_command(TARGET upload_${MICROCONTROLEUR}
+        add_custom_command(	TARGET upload_${MICROCONTROLEUR}
                             COMMAND avrdude
-                            ARGS -c usbasp -p ${MMCU} -U flash:w:${MICROCONTROLEUR}.hex)
+                            ARGS -c usbasp -p ${MMCU} -F -U flash:w:${MICROCONTROLEUR}.hex)
    endforeach()
 endmacro()
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/atmega324p)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/atmega328p)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/atmega2560)

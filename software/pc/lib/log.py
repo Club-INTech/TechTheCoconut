@@ -126,7 +126,8 @@ class Log:
             self.configurer_stderr()
         if logs:
             self.creer_dossier(dossier_abs)
-            Log.revision = self.revision_disponible(dossier, Log.dossier_date)
+            if not hasattr(Log, 'revision'):
+                Log.revision = self.revision_disponible(dossier, Log.dossier_date)
             # Ajout du handler pour logs
             self.configurer_logs()
         # Création de l'entête dans stderr et logs
@@ -169,7 +170,8 @@ class Log:
         """
         Crée l'entête dans les logs au niveau INFO
         """
-        self.logger.info("Début des logs")
+        #self.logger.info("Début des logs")
+        pass
     
     def configurer_logs(self):
         """

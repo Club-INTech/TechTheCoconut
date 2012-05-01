@@ -2,18 +2,21 @@
 
 import outils_math.point as point
 
-import decision
 import carte
 import robot
 import timer, time
-import threading
+import math
 
 import log
 log = log.Log(__name__)
 
 import __builtin__
+import script
 
-class Strategie(decision.Decision, threading.Thread):
+
+carte = carte.Carte()
+
+class Strategie():
     """
     Classe permettant de construire une stratégie
     
@@ -28,25 +31,46 @@ class Strategie(decision.Decision, threading.Thread):
 
         
         self.strategie = strategie
-        self.timer = timer.Timer() 
+        self.timerStrat = timer.Timer()
+        self.actions = []
+        
+        # Remplir le tableau actions d'actions à faire (Thibaut)
+        self.initialiserActionsAFaire()
         
         # Résolution d'un bug de timer infini.
         if not hasattr(Strategie, "prendreDecisions") :
-
             log.logger.info("Lancement de la stratégie numéro " + str(strategie))
             
-
+        #------------------------------#
+        #-- Définition des instances --#
+        #------------------------------#
+            
+        try :
+            self.robotInstance = __builtin__.instance.robotInstance
+        except :
+            log.logger.error("stratégie : ne peut importer instance.robotInstance")
+            
+        try :
+            self.scriptInstance = __builtin__.instance.scriptInstance
+        except :
+            log.logger.error("stratégie : ne peut importer instance.scriptInstance")
+            
+        """
+        try :
+            self.baliseInstance = __builtin__.instance.baliseInstance  # NOTE Convention ? (Thibaut)            
+        except :
+            log.logger.error("stratégie : ne peut importer instance.baliseInstance")
+        """
             
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
             Strategie.prendreDecisions = True
             
             # Lancement du timer.
-            self.timer.lancer()
+            self.timerStrat.lancer()
         
-            # Lancer le thread de prise de décision
-            threading.Thread.__init__(self, name="prendreDecision", target=self.prendreDecision)
-            self.start()
+            # Lancer la de prise de décision
+            self.prendreDecision()
         
         
     def arreterPrendreDecisions(self) :
@@ -64,17 +88,6 @@ class Strategie(decision.Decision, threading.Thread):
         Retourne la décision prise par le robot. Pour les conventions, voir pc/lib/decision.py
         """
         
-        #------------------------------#
-        #-- Définition des instances --#
-        #------------------------------#
-        
-        try :
-            self.asservissement = __builtin__.instance.asserInstance
-            self.capteur        = __builtin__.instance.capteurInstance
-            self.actionneur     = __builtin__.instance.actionInstance
-            self.robot          = __builtin__.instance.robotInstance
-        except :
-            log.logger.error("Impossible d'importer les instances globales d'asservissement, capteur, et actionneur")
             
         #------------------------------------#
         #-- STRATEGIE NUMERO 1 : En carton --#
@@ -82,30 +95,27 @@ class Strategie(decision.Decision, threading.Thread):
         
         if self.strategie == 1 :
             # Position de départ.
-            self.depart = self.robot.position()     #TODO A tester sur le vrai EeePC       
+            #self.depart = self.robotInstance.position()     
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
-                success = self.rafflerTotem()
-                if success :
-                    success = self.rafflerTotem(ennemi = True)
-                    if success :
-                        success = self.rafflerTotem(nord = True)
-                        if success :
-                            success = self.rafflerTotem(ennemi = True, nord = True)
+                if self.rafflerTotem() :
+                    if self.rafflerTotem(ennemi = True) :
+                        if self.rafflerTotem(nord = True) :
+                            self.rafflerTotem(ennemi = True, nord = True)
                 
+                # Si on arrive là, c'est que le script d'origine est terminé.
+                # On appelle choisirAction tant que self.actions n'est pas vide
+                while self.actions != [] :
+                    self.choisirAction()
                 
-                if self.timer.time() <= 70 :
+                if self.timerStrat.time() <= 70 :
                     # Prise de décision selon ce qui n'a pas été prise
                     pass
                 
                 else :
                     # Faire un "tour de piste"
                     pass
-                    
-                
-                   
-                    
 
         #--------------------------------------#
         #-- STRATEGIE NUMERO 2: Un peu mieux --#
@@ -120,33 +130,131 @@ class Strategie(decision.Decision, threading.Thread):
         log.logger.info("ARRET DEFINITIF STRATEGIE")
         
         
-    def rafflerTotem(self, ennemi = False, nord = False, versLaCalle = True) :
+    def initialiserActionsAFaire(self) :
         """
-        Le robot se déplace de façon à raffler un totem
+        Thibaut.
         
-        :param ennemi: A mettre à True si on veut raffler le totem ennemi
-        :type ennemi: Bool
-        
-        :param nord: Partie Nord ou Sud du Totem qu'on veut raffler
-        :type nord: Bool
-        
-        :param versLaCalle: A changer si on veut Parcourir le totem de D à G ou l'inverse
-        :type versLaCalle: Bool        
-        
+        TYPE D'ACTIONS : [NOM_DE_L_ACTION, +paramètresOptionnels, PRIORITÉ DE L'ACTION]
+            NOM_DE_L_ACTION :   "FARMERTOTEM"   +param1 : ennemi, +param2: Nord
+                                "ENFONCERPOUSSOIR"                +param : id poussoir
+                                "CHOPEROBJET"  (lingot ou disque) +param : Point
+                                "FAIRECHIERENNEMI"                +param : AUCUN
+                                
+                                
+            PRIORITÉ DE L'ACTION : A coter de 1 à 5. La stratégie l'utilisera en cas de conflits.
         """
-        pass
+        log.logger.info("Initialisation des actions à faire")
+        self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
+        self.actions.append(["FARMERTOTEM", 0, 1,   9.9 ])
+        self.actions.append(["FARMERTOTEM", 1, 0,   9   ])
+        self.actions.append(["FARMERTOTEM", 1, 1,   9   ])
+        
+        self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+        self.actions.append(["ENFONCERPOUSSOIR", 2, 5])
+        
+        #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
+        #self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
+        #self.actions.append(["CHOPEROBJET", carte.disques[21].position, 3])  # disques du bas
+        #self.actions.append(["CHOPEROBJET", carte.lingots[1].position, 1])
+        
+        self.actions.append(["FAIRECHIERENNEMI", 1])    #
+        self.actions.append(["TOURDETABLE", 1])         #
+        self.actions.append(["DEFENDRE", 1])            #
     
-    # L'utiliser avec goTo(arrivee=trucmuche)
-    def goTo(self, depart = None, arrivee):
-        if depart == None:
-            depart = self.depart
-        return self.asservissement.goTo(depart, arrivee)
-        
-    def enfoncerPoussoir(self, idPoussoir) :
+    def choisirAction(self) :
         """
-        Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
-        
-        :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
-        :type idPoussoir: int
+        CETTE FONCTION PERMET A LA STRATEGIE DE CHOISIR QUELLE ACTION CHOISIR
         """
-        pass
+
+        
+        # TODO
+        # TODO associer la distance courante à celle de la balise.
+        # TODO
+        distance = 1
+        
+        # Poids du coefficient Nombre de Points / Durée
+        k1 = 1
+        
+        # Poids du coefficient "Adversaire proche de l'objectif" :
+        k2 = 1
+        
+        poids = []
+        # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
+        for i in range(len(self.actions)) :
+            poids.append(k1*self.actions[i][-1] + k2*distance)
+            
+        # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
+        # déjà fait. Ex : On a déjà farmé le totem.
+        max = 0
+        maxID = -1
+        
+        # On cherche l'action qui fait le meilleur score 
+        for i in range(len(self.actions)) :
+            if poids[i] > max :
+                max = poids[i]
+                maxID = i
+                
+        # Si maxID == -1 c'est que il ne reste rien à faire.
+        # TODO Qu'est-ce qu'on fait dans ce cas là ?!
+        if maxID < -1 :
+            log.logger.info("ZUT ALORS ! Plus d'actions à faire")
+            return
+        
+        
+        # Sinon, on prend l'action
+        try :
+            if self.actions[maxID][0] == "FARMERTOTEM" :
+                self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
+                self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
+                
+            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
+                self.scriptInstance.enfoncerPoussoir(self.actions[maxID][1])
+                self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
+                
+            elif self.actions[maxID][0] == "FAIRECHIERENNEMI" :
+                self.scriptInstance.faireChierEnnemi()
+                self.changerPriorite("FAIRECHIERENNEMI", [], self.actions[maxID][-1]-0.01)
+                
+            elif self.actions[maxID][0] == "TOURDETABLE":
+                self.scriptInstance.tourDeTable()
+                self.changerPriorite("TOURDETABLE", [], self.actions[maxID][-1]-0.01)
+                
+            elif self.actions[maxID][0] == "DEFENDRE":
+                self.scriptInstance.defendreBase()
+                self.changerPriorite("DEFENDRE", [], self.actions[maxID][-1]-0.01)
+        except :
+            log.logger.error("La stratégie ne peut pas lancer d'actions")
+        
+        
+    def changerPriorite(self, nomAction, params, nouvellePriorite) :
+        """
+        
+        Change la priorité d'une action dans le tableau self.actions
+        
+        
+        :param nomAction: NOM_DE_L_ACTION
+        :type nomAction: string
+        
+        :param params: Tableau contenant les paramètres optionels
+        :type params: tableau de trucs
+        
+        :param nouvellePriorite: Nouvelle priorité pour l'action
+        :type nouvellePriorite: int (entre 0 et 5)
+        """
+        for i in range(len(self.actions)) :
+            if self.actions[i][0] == nomAction :
+                found = 1
+                for j in range(len(params)) :
+                    if self.actions[i][j+1] != params[j] :
+                        
+                        found = 0
+                        break
+                if found :
+                    self.actions[i][1+len(params)] = nouvellePriorite
+                    return 1
+                    
+    #TEST
+    def strateg_scripts(self):
+        if self.scriptInstance.scriptTestStruct0():
+            self.scriptInstance.scriptTestStruct1()
+        

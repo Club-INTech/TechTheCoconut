@@ -13,15 +13,15 @@
 class Frame {
 	
 	public:
-		Frame(unsigned char rawFrame[3]);
+		Frame(uint32_t rawFrame);
 		bool isValid();
-		unsigned char getRobotId();
 		uint16_t getDistance();
+		uint16_t getOffset();
 		uint8_t getCrc();
 
 	private:
-		volatile uint16_t data_;
-		volatile unsigned char robotId_;
+		volatile uint32_t rawframe_;
+		volatile uint16_t offset_;
 		volatile uint16_t distance_;
 		volatile uint8_t crc_;
 };

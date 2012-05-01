@@ -50,7 +50,8 @@ class Detection_peripheriques():
                             ping = -1
                             for i in xrange(10):
                                 serie.ecrire('?')
-                                ping = serie.lire()
+                                #ping = serie.lire()
+                                ping = str(serie.lire()).replace("\n","").replace("\r","").replace("\0","")
                                 if re.match(constantes["Serie"]["peripheriques_association"][peripherique], ping):
                                     p_obj = lib.peripherique.Peripherique(peripherique)
                                     p_obj.chemin = chemin

@@ -1,3 +1,3 @@
 include(atmega328p.cmake)
-set(MICROCONTROLEURS asservissement compteur capteurs tests actionneurs)
+set(MICROCONTROLEURS actionneurs_arduino asservissement compteur capteurs balise_adverse table_maker print_serial mesure_impulsion infrarouges capteur_vieux)
 add_microcontrolers(m328p "${MICROCONTROLEURS}")

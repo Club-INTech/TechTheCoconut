@@ -33,7 +33,7 @@ constantes = \
         "logs_level": "DEBUG",
         #   %(processName)s pour ajouter nom du processus
         # le :: est volontaire, le nom du module sera inséré par la suite du programme
-        "logs_format": "%(asctime)s::%(levelname)s:%(threadName)s:%(message)s",
+        "logs_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
         "stderr": True,
         "stderr_level": "WARNING",
         # le :: est volontaire, le nom du module sera inséré par la suite du programme
@@ -55,10 +55,35 @@ constantes = \
             "balise": 9600,
         },
         "peripheriques_association": {
-            "asservissement": "^[0-9]{4}(\+|-)[0-9]{4}$",
+            "asservissement": "^([0-9]{4}(\+|-)[0-9]{4}|0)$",
             "capteur_actionneur": "^1$",
             "balise": "^2$",
+            "actionneur": "^4$",
         },
     },
-    "DureeJeu": 90,
+    "DureeJeu": 88,
+    "Actionneurs":
+    {
+        "angleMax": 160,
+        "angleMin": 0,
+        
+    },
+    "Tests_mecha":
+    {
+        "batterie_test": True,
+        "batterie_contraintes":
+        {
+            "pourcentage_min": 10,
+            "minutes_min": 20,
+        },
+        "actionneurs_test": True,
+        "deplacement_test": True,
+        "recalage_test": True,
+        "capteurs_test": True,
+    },
+    "Lolilol":
+    {
+        "musique_active": False,
+        "musique_dossier": "/home/netantho/intech/multimedia_lolilol/",
+    },
 }

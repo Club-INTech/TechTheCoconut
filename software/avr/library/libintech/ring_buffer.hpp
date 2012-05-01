@@ -13,7 +13,7 @@ public:
     
     ring_buffer() : current_element(0) {
     }
-
+  
     ~ring_buffer() { }
 
     void append(T value) {

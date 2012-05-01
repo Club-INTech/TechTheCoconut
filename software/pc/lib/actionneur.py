@@ -2,126 +2,184 @@
 
 import serie
 import log
-import peripherique
 import __builtin__
+import outils_math.point as point
+import math
+import time
+import sys
+
+sys.path.append('../')
+import profils.develop.constantes
+
+# Ajout de constantes de develop si on ne passe pas par la console INTech
+if not hasattr(__builtin__, "constantes"):
+    import profils.develop.constantes
+    __builtin__.constantes = profils.develop.constantes.constantes
 
 log = log.Log(__name__)
 
-# Conversion du chiffre décimal a en chaîne de caract. de 0 et de 1, de longueur nbBits
-def bin(a, nbBits) :
-    s = ''
-    t = {'0' : '000', '1' : '001', '2':'010', '3':'011', '4':'100', '5':'101', '6':'110', '7':'111'}
-    for c in oct(a)[1:] :
-        s += t[c]
-    l = len(s.lstrip('0'))
-    result = '0'*(nbBits - l)
-    return result+s.lstrip('0')
 
 class Actionneur(serie.Serie):
     """
     Classe permettant de gérer un actionneur
     
-    :param nom: nom du moteur concerné. Utiliser les lettres h (haut) b (bas) g (gauche) et d (droite). Exemple : hd ou bg. (On choisit gauche et droite dans le repère du rorbot)
-    :type nom: string
-    
-    :param vitesse: Vitesse de déplacement de l'actionneur
-    :type vitesse: int (entre 0 et 500) DEFAUT : 500
-    
-    :param position: Position du moteur par rapport au robot vu de derrière
-    :type position: string du type "hg", "hd", "bg" ou "bd".
-    
-    :param id: id de l'actionneur (de 0 à 3 normalement)
-    :type id: int
+    :param ids: Dico contenant l'id de l'AX12 en fct° de sa position
     
     """
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
-    def __init__(self, position, id, vitesse = 500):
-        self.angle      = 0
-        self.vitesse    = vitesse
-        self.position   = position
-        self.id         = id
-        
+    def __init__(self):
+        self.ids        = {"hg":1, "hd":2, "bg":0, "bd":3}
         self.demarrer()
         
+    # Démarrage.
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            self.serieInstance = __builtin__.instance.serieCaptInstance
+            self.serieActionneurInstance = __builtin__.instance.serieActionneurInstance
+            
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.robotInstance = __builtin__.instance.robotInstance
+        else:
+            log.logger.error("actionneur : ne peut importer instance.robotInstance")
         
-    def deplacer(self, angle):
+    def deplacer(self, angle, position = "ALL"):
         """
         Envoyer un ordre à l'actionneur
         
         :param angle: angle à atteindre (angle mesuré entre la face avant du robot et le bras)
-        :type angle: int (entre 0 et 180)
+        :type angle: int (entre 0 et ANGLEMAXI)
+        
+        :param position: Position de l'actionneur à tourner (OPTIONEL)
+        :type position: string "hg" | "hd" | "bg" | "bd". Défaut : ALL
 
         """
+        
+        # Pas d'overflow, pas de trucs dégueux
+        if angle >= constantes["Actionneurs"]["angleMax"] :
+            angle = constantes["Actionneurs"]["angleMax"]
+        elif angle <= constantes["Actionneurs"]["angleMin"] :
+            angle = constantes["Actionneurs"]["angleMin"]
+        
+        #calcul du nouveau rayon du robot
+        self.calculRayon(math.pi*angle/180)
+                
+        # Envoi des infos
+        if position == "ALL" or "hg" in position:
+            self.goto(self.ids["hg"], 180+3-angle)
+        if position == "ALL" or "hd" in position:
+            self.goto(self.ids["hd"], angle)
+        if position == "ALL" or "bg" in position:
+            self.goto(self.ids["bg"], angle+5)
+        if position == "ALL" or "bd" in position:
+            self.goto(self.ids["bd"], 180+3-angle)
+        
+        #print "##################\n"+str(self.robotInstance.rayon)+"\n#############\n"
 
-        if angle >= 0 and angle <= 180 :
-            angle /= 180.
-            angle *= 31             # On se rapporte à un nombre codé sur 5 bits (2^5 = 32)
-            angle = int(angle)
-            
-            # Si le moteur est monté à l'envers ou est à droite (et vice-versa)
-            if (self.position[0] == 'hd' or self.position == 'bg') :
-                angle = 31-angle
-            
-            self.serieCaptInstance.write(chr('0' + bin(self.id, 2) + bin(angle, 5), 2))
-            
-        else :
-            log.logger.error("L'angle cible de l'actionneur doit être compris entre 0 et 500")
         
     def changerVitesse(self, nouvelleVitesse) :
         """
         Changer la vitesse de rotation de TOUS les actionneurs branchés
         
         :param nouvelleVitesse: Nouvelle vitesse des actionneurs
-        :type nouvelleVitesse: int (entre 0 et 500)
+        :type nouvelleVitesse: int (entre 0 et 1000)
         """
-        if nouvelleVitesse >= 0 and nouvelleVitesse <= 500 :
-            nouvelleVitesse = nouvelleVitesse/500.
-            nouvelleVitesse *= 31                   # Codage sur 5 bits
-            nouvelleVitesse = int(nouvelleVitesse)
-            self.serieCaptInstance.write(chr(int('1' + '00' + bin(nouvelleVitesse, 5), 2)))
-            log.logger.info("La vitesse des actionneurs a été changée")
+        
+        if nouvelleVitesse >= 1000 :
+            nouvelleVitesse = 1000
+        elif nouvelleVitesse <= 0 :
+            nouvelleVitesse = 0
+        
+        self.serieActionneurInstance.ecrire("CH_VITESSE")
+        self.serieActionneurInstance.ecrire(str(int(nouvelleVitesse)))
+        
+    def test_demarrage(self, mode = "LONG") :
+        """
+        Test de démarrage des bras Ax12. Un paramètre optionnel est mis en place pour
+        pouvoir régler la durée du test.
+        
+        :param mode: Type de test
+        :type mode: String "LONG" | "SHORT". Défault : "LONG"
+        
+        """
+        
+        if mode == "LONG" :
+            for i in range(4) :
+                self.goto(i, 80)
+                time.sleep(1)
+            log.logger.debug("Test Actionneurs goto : Fait.")
             
-        else :
-            log.logger.error("La nouvelle vitesse de l'actionneur doit être comprise entre 0 et 500")
-        
-    def getAngle(self):
-        """
-        Envoie une requête pour obtenir la position de chaque bras.
-        NOTE Ne marcheras sans doute jamais. :'(
-        """
-        self.serieCaptInstance.write(self.nom + '\n '+ '0' + '\n '  + '0')
-        #serie.Serie.lire()
-        self.angle = self.file_attente.get(lu)
-        
-    def change_id(self, nouvel_id) :
-        """
-        Permet de changer l'ID de tous les actionneurs branchés
-        WARNING Cette méthode change TOUS les IDs de TOUS les actionneurs branchés.
-        
-        :param nouvel_id: Nouvel ID des actionneurs branchés
-        :type nouvel_id: int (entre 0 et 3)
-        """
-        if nouvel_id >= 0 and nouvel_id <= 3 :
-            self.serieCaptInstance.write(chr(int('1' + '01' + '000' + bin(int(nouvel_id), 2), 2)))
-        
-        else :
-            log.logger.error("Le nouvel id des actionneurs doit être compris entre 0 et 3")
+            for i in ["hd", "hg", "bg", "bd"] :
+                self.deplacer(50, i)
+                time.sleep(1)
+            log.logger.debug("Test Actionneurs déplacer : Fait")
+            
+            self.changerVitesse(100)
+            self.deplacer(20)
+            time.sleep(1)
+            
+            log.logger.debug("Test Actionneurs changerVitesse : Fait")
+            self.changerVitesse(500)
+            self.deplacer(0)
+            
+        elif mode == "SHORT" :
+            self.deplacer(80)
+            time.sleep(1)
+            self.deplacer(0)
+            time.sleep(1)
+            log.logger.debug("Test des bras : Fait")
 
-    def reset(self):
+        
+    def flash_id(self, nouvelID) :
         """
-        Réinitialise l'actionneur
+        Flashage de l'id
         """
-        self.deplacer(90)
+        self.serieActionneurInstance.ecrire("FLASH_ID")
+        self.serieActionneurInstance.ecrire(str(int(nouvelID)))
+        
         
     def stop(self):
         """
         Arrête l'actionneur en urgence
         """
-        self.serieInstance.write(self.nom + '\n '+ '1' + '\n '  + '0')#TODO modifier selon convention
-        #self.getAngle()
-        serie.Serie.stop()
+        self.serieActionneurInstance.ecrire("UNASSERV")
+        
+    #------------------------------------------------#
+    #       METHODES BAS NIVEAU                      #
+    #------------------------------------------------#  
+    
+    def goto(self, id, angle) :
+        # On considère que angle est dans les bonnes valeurs.
+        self.serieActionneurInstance.ecrire("GOTO")
+        time.sleep(0.01)
+        self.serieActionneurInstance.ecrire(str(int(id)))
+        time.sleep(0.01)
+        self.serieActionneurInstance.ecrire(str(int(angle)))
+        time.sleep(0.01)
+        
+    def calculRayon(self, angle):
+        """
+        Modifie le rayon du cercle circonscrit au robot par rapport au centre d'origine (bras rabattus).
+        Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
+        
+        :param angle: angle entre la face avant du robot et les bras en bas du robot. Unité :  radian
+        :type angle: float
+        """
+        
+        #récupération des constantes nécessaires:
+        log.logger.info('Calcul du rayon et du centre du robot')
+        
+        #[]la longueur est sur x, largeur sur y
+        longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
+        largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
+        longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
+        
+        rayon_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
+        proj_x = -longueur_bras*math.cos(float(angle))
+        proj_y = longueur_bras*math.sin(float(angle))
+        
+        #point à l'extremité du bras droit
+        sommet_bras = point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
+        rayon_avec_bras = math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
+        
+        self.robotInstance.rayon = max(rayon_avec_bras,rayon_original)
         

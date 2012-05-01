@@ -54,3 +54,16 @@ Ordres :
  'recal' initialise la position du robot par recalage
 	renvoi "FIN_REC" en fin de recalage (et le robot est non asservi)
  'TG' arrete l'envoi d'acquittement en boucle (protocole explicite...)
+
+test de nouvel acquittement :
+demande avec 'acq'
+renvoit "FIN_MVT" si dernier mouvement terminé,
+renvoit "EN_MVT" sinon
+
+changer le mode de vitesse :
+translation : ctv
+rotation : crv
+valeurs possibles : 1, 2, 3
+
+demande de position :
+'pos'

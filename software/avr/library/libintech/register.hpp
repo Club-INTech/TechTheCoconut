@@ -12,6 +12,9 @@ struct AVR_PORTD{
 	static void clear(){
 		PORTD &= ~(1 << bit);
 	}
+	static uint8_t read(){
+		return ( (PIND & (1 << bit)) >> bit );
+	}
 };
 
 template<uint16_t bit>
@@ -21,6 +24,9 @@ struct AVR_PORTB{
 	}
 	static void clear(){
 		PORTB &= ~(1 << bit);
+	}
+	static void read(){
+		return ( (PINB & (1 << bit)) >> bit );
 	}
 };
 

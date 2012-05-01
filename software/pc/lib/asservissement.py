@@ -5,33 +5,21 @@ import os
 import math
 import time
 import __builtin__
-
-#sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-import profils.develop.constantes
-
+import timer
+import re
 import log
 import outils_math.point as point
 import actionneur
 import robot
-import outils_math.point
 import recherche_chemin.thetastar
-import peripherique
 import lib.log
-import conf
+import outils_math
 import capteur
-import threading
-import serie_acquisition
-import script
-from threading import Lock
-
 log =lib.log.Log(__name__)
 
 sys.path.append('../')
 
 import profils.develop.constantes
-
-import serial
-
 
 class Asservissement:
     """
@@ -43,71 +31,54 @@ class Asservissement:
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
-            log.logger.error("l'instance de instance.capteurInstance n'est pas chargée")
+            log.logger.error("asservissement : ne peut importer instance.capteurInstance")
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
-            log.logger.error("l'instance de instance.robotInstance n'est pas chargée")
+            log.logger.error("asservissement : ne peut importer instance.robotInstance")
         if hasattr(__builtin__.instance, 'serieAsserInstance'):
-            self.serialInstance = __builtin__.instance.serieAsserInstance
+            self.serieAsserInstance = __builtin__.instance.serieAsserInstance
         else:
-            log.logger.error("l'instance de instance.serieAsserInstance n'est pas chargée")
-        if hasattr(__builtin__.instance, 'serieCaptInstance'):
-            self.CaptSerialInstance = __builtin__.instance.serieCaptInstance
-        else:
-            log.logger.error("l'instance de instance.serieCaptInstance n'est pas chargée")
-        self.couleur = __builtin__.constantes['couleur']
-        self.scriptInstance = script.Script
-        self.procheEvite = False
+            log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
+            
+        #distance seuil de detection pour les ultrasons
+        #self.maxCapt = 400
         self.maxCapt = 0
-        self.mutex = Lock()
-        depart = outils_math.point.Point(0.0,400.0)
-        self.serialInstance.write("cx\n" + str(float(depart.x)) + "\ncy\n"+str(float(depart.y)))
-        self.serialInstance.write('TG\n')
-        """
-        self.serialInstance.write("\n")
-        self.serialInstance.write("cc"+self.couleur+"\n")
-        if self.couleur == 'v':
-            orientation = 3.1415
-        else:
-            orientation = 0
-        self.serialInstance.write('co\n' + str(float(orientation)))
-        """
-
-    def test(self):
-        self.var = 1
-        while 42:
-            self.var += 1
-
+        
+        #liste des centres de robots adverses repérés (liste de points)
+        
+        self.liste_robots_adv = __builtin__.instance.liste_robots_adv
+        
+        #rayon moyen des robots adverses
+        #TODO : à mettre dans constantes
+        self.rayonRobotsAdverses = 200.0
+        
+        #timer pour les timeout
+        self.timerAsserv = timer.Timer()
+            
     
-    def recalage(self):
+    def goToSegment(self, arrivee, avecRechercheChemin = False):
         """
-        Fonction qui envoie le protocole de recallage à l'AVR
+        Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
+        :param script: point d'arrivé
+        :type script: point
+        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin
+        :type avecRechercheChemin: booléen
         """
-        self.serialInstance.write('recal\n')
+        depart = self.getPosition()
+        delta_x = (arrivee.x-depart.x)
+        delta_y = (arrivee.y-depart.y)
+        angle = math.atan2(delta_y,delta_x)
+        self.gestionTourner(angle)
         
-        
-        raw_input()
-        
-        #On redémarre l'asservissement
-        self.serialInstance.write('cr1\n')
-        self.serialInstance.write('ct1\n')
-        #On demande la position :
-        self.serialInstance.write('ex\n')
-        self.robotInstance.position.x = self.lire()
-        self.serialInstance.write('ey\n')
-        self.robotInstance.position.y = self.lire()
-                         
-    def lire(self):
         """
-        Permet de lire un message de l'asservissement autre que celui lu par le thread d'acquisition.
+        appel d'une translation de la distance euclidienne depart->arrivée
+        sans instruction particulière
+        avec un booléen codant l'utilisation de la recherche de chemin
         """
-        while not self.robotInstance.new_message:
-            time.sleep(0.01)
-        self.robotInstance.new_message = False
-        return self.robotInstance.message
-  
-    def goTo(self, arrivee, centre_robotA = None):
+        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
+    
+    def goTo(self, arrivee):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -117,70 +88,124 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        depart = outils_math.point.Point(self.robotInstance.position.x,self.robotInstance.position.y)
-        self.robotInstance.obstacle = False
+        depart = self.getPosition()
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        theta = recherche_chemin.thetastar.Thetastar([])
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(self.robotInstance.position.x)+","+str(self.robotInstance.position.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
-        
         
         try :
             chemin_python.remove(chemin_python[0])
         except :
-            return self.robotInstance.position
-            log.logger.error("Impossible de trouver un chemin")
+            return (depart)
             
         for i in chemin_python:
-            print self.robotInstance.acquitemment
-            self.robotInstance.est_arrete = False
-            print "écrit sur série : "+"goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n'
-            self.serialInstance.write('TG\n')   
-            self.serialInstance.write("goto\n" + str(float(i.x)) + '\n' + str(float(i.y)) + '\n')
+            log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
             
-            self.robotInstance.acquitemment = False
-            while not self.robotInstance.acquitemment :
-                self.CaptSerialInstance.write('ultrason\n')
-                self.capteur = self.capteurInstance.mesurer()
-                try:
-                    if int(self.capteur) < self.maxCapt:
-                        self.serialInstance.write('stop\n')
-                        self.robotInstance.obstacle = True
-                        centreEnnemi = point.Point(0,0)
-                        centreEnnemi = self.calculCentreEnemi()
-                        print centreEnnemi
-                        return centreEnnemi
-                except:
-                    pass
-                if self.robotInstance.est_arrete:
-                    break
-            print self.robotInstance.acquitemment
-            print 'stop'
-            print self.robotInstance.est_arrete
-            print 'message'
-            print self.robotInstance.message
+            #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
+            self.goToSegment(i,True)
+        return "chemin_termine"
+         
+    def dureeGoTo(self, depart, arrivee, modeDeplacement):
+        log.logger.info("Calcul de la durée de déplacement")
+        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
+        chemin_python = theta.rechercheChemin(depart,arrivee)
+        
+        if modeDeplacement == 1:
+            vitesseRotation = 1.5
+            vitesseTranslation = 148
+        elif modeDeplacement == 2:
+            vitesseRotation = 0.4
+            vitesseTranslation = 368
+        else:
+            vitesseRotation = 0.2
+            vitesseTranslation = 573
+        
+        try :
+            chemin_python.remove(chemin_python[0])
+        except :
+            return (depart)
+        angleSauv = 1000
+        for i in chemin_python:
+            if angleSauv!= 1000:
+                #DUREE ROTATION
+                delta_x = (arrivee.x-depart.x)
+                delta_y = (arrivee.y-depart.y)
+                angle = math.atan2(delta_y,delta_x)
+                dureeRotation = abs(angle - angleSauv)/vitesseRotation
+                
+                #DUREE TRANSLATION
+                dureeTranslation = vitesseTranslation*math.sqrt(delta_x**2+delta_y**2)
+                
+                #MAJ des variables
+                angleSauv = angle
+                depart = i
+                
+            else:
+                #DUREE DE ROTATION = constante
+                delta_x = (arrivee.x-depart.x)
+                delta_y = (arrivee.y-depart.y)
+                angleSauv = math.atan2(delta_y,delta_x)
+                dureeRotation = 0.5
+                
+                #TRANSLATION
+                dureeTranslation = math.sqrt(delta_x**2+delta_y**2)/vitesseTranslation
+                
+                #MAJ des variables
+                depart = i
             
-            print 'depart :'
-            print self.robotInstance.position.x
-            print self.robotInstance.position.y
+            return dureeRotation + dureeTranslation
             
-            chemin_python = chemin_python [:0]
-
-    
+    def dureeTranslation(self, distance, modeDeplacement):
+        if modeDeplacement == 1:
+            vitesseTranslation = 148
+        elif modeDeplacement == 2:
+            vitesseTranslation = 368
+        else:
+            vitesseTranslation = 573
+            
+        return distance/vitesseTranslation
+        
+    def dureeRotation(self, modeDeplacement, angle, orientation = False):
+        if modeDeplacement == 1:
+            vitesseRotation = 0
+        elif modeDeplacement == 2:
+            vitesseRotation = 1
+        else:
+            vitesseRotation = 2
+            
+        if orientation:
+            return math.abs(orientation - angle)/vitesseRotation
+        else:
+            return 0.5
+        
+        
+            
+        
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
         :param angle: Angle à atteindre
         :type angle: Float
         """
-        self.serialInstance.write("t\n" + str(float(angle))+"\n")
-        print 'ordre tourner'
-        self.robotInstance.fin_rotation = False
-        print self.robotInstance.fin_rotation
-        while not self.robotInstance.fin_rotation:
-            #print self.robotInstance.fin_rotation
-            time.sleep(0.01)
-        print 'fini tourner'
+        self.serieAsserInstance.ecrire("t")
+        self.serieAsserInstance.ecrire(str(float(angle)))
+        log.logger.info("Ordre de tourner à " + str(float(angle)))
+        acquitement = False
+        debut_timer = int(self.timerAsserv.getTime())
+        while not acquitement:
+            self.serieAsserInstance.ecrire('acq')
+            reponse = str(self.serieAsserInstance.lire())
+            if reponse == "FIN_MVT":
+                acquitement = True
+            elif reponse == "STOPPE":
+                print "tourner : stoppé !"
+                return "stoppe"
+            if int(self.timerAsserv.getTime()) - debut_timer > 8:
+                print "tourner : timeout !"
+                return "timeout"
+                
+        return "acquittement"
     
     def avancer(self, distance):
         """
@@ -188,27 +213,74 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        self.serialInstance.write("d\n" + str(float(distance))+"\n")
-        print 'ordre'
-        self.robotInstance.fin_translation = False
-        while not self.robotInstance.fin_translation :
-            self.CaptSerialInstance.write('ultrason\n')
-            capteur = self.capteurInstance.mesurer() 
-            try:
-                if int(capteur) < self.maxCapt:
-                    print 'CAPTEUR !'
-                    self.serialInstance.write('stop\n')
-                    self.robotInstance.obstacle = True
-                    break
-            except:
-                pass
-            if self.robotInstance.est_arrete:
-                break
-            time.sleep(0.01)
-        print 'fini avancer'
-
-    def calculCentreEnemi(self):
-        return self.capteur+(profils.develop.constantes.constantes["Recherche_Chemin"]["rayonRobotsA"]/2)
+        self.serieAsserInstance.ecrire("d")
+        self.serieAsserInstance.ecrire(str(float(distance)))
+        log.logger.info("Ordre d'avancer de " + str(float(distance)))
+        acquitement = False
+        debut_timer = int(self.timerAsserv.getTime())
+        while not acquitement:
+            self.serieAsserInstance.ecrire('acq')
+            reponse = str(self.serieAsserInstance.lire())
+            if reponse == "FIN_MVT":
+                acquitement = True
+            elif reponse == "STOPPE":
+                print "avancer : stoppé !"
+                return "stoppe"
+            if int(self.timerAsserv.getTime()) - debut_timer > 8:
+                print "avancer : timeout !"
+                return "timeout"
+        
+            capteur = self.capteurInstance.mesurer()
+            #print capteur
+            if capteur < self.maxCapt:
+                print 'avancer : capteur !'
+                return "obstacle"
+                
+        return "acquittement"
+        
+    def getPosition(self):
+        self.serieAsserInstance.ecrire("pos")
+        reponse = str(self.serieAsserInstance.lire())
+        try:
+            if reponse[4]== "+":
+                reponse = reponse.split("+")
+                pos = point.Point(float(reponse[1]),float(reponse[0]))
+            else:
+                reponse = reponse.split("-")
+                pos = point.Point(-float(reponse[1]),float(reponse[0]))
+            return pos
+        except:
+            self.getPosition()
+            
+    def setPosition(self,position):
+        self.serieAsserInstance.ecrire("cx")
+        self.serieAsserInstance.ecrire(str(float(position.x)))
+        self.serieAsserInstance.ecrire("cy")
+        self.serieAsserInstance.ecrire(str(float(position.y)))
+            
+    def getOrientation(self):
+        self.serieAsserInstance.ecrire("eo")
+        reponse = str(self.serieAsserInstance.lire())
+        if re.match("^[0-9]+$", reponse):
+            orientation = float(reponse)/1000.0
+            #self.robotInstance.setOrientation(orientation)
+            return orientation
+        else:
+            return self.getOrientation()
+            
+    def setOrientation(self,orientation):
+        self.serieAsserInstance.ecrire("co")
+        self.serieAsserInstance.ecrire(str(float(orientation)))
+        
+    def recalage(self):
+        self.serieAsserInstance.ecrire("recal")
+        while not acquitement:
+            self.serieAsserInstance.ecrire('acq')
+            reponse = self.serieAsserInstance.lire()
+            if reponse == "FIN_REC":
+                print reponse
+                acquitement = True
+            #TODO : gestion stop ?
         
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -220,85 +292,218 @@ class Asservissement:
         :type mode: int
         """
         if mode == 0:
-            mode = "0"
+            mode = '0'
         else:
-            mode = "1"
+            mode = '1'
             
         if asservissement == "rotation":
-            asservissement = "r"
-        elif asservissement == "translation":
-            asservissement = "t"
-        
-        self.serialInstance.ecrire("c"+asservissement+mode)
-
-
-    def immobiliser(self):
-        """
-        Fonction pour demander l'immombilisation du robot
-        """
-        self.serialInstance.ecrire('stop\n')
-        
-    def calculRayon(self, angle):
-        """
-        Modifie le rayon du cercle circonscrit au robot et retourne les coordonnées du nouveau centre par rapport au centre d'origine (bras rabattus).
-        Le calcul ne se fait que sur un bras (inférieur droit dans le repère du robot) puisque le tout est symétrique.
-        
-        
-        :param longueur_bras: longueur des bras du robot
-        :type longueur_bras: int
-        :param largeur_robot: largueur du robot
-        :type largeur_robot: int
-        :param angle: angle entre la face avant du robot et les bras en bas du robot. Unité : la radian
-        :type angle: float
-        :param proj_x/proj_y: projection sur x et y d'un bras du robot
-        :type proj_x/proj_y : float
-        :param sommet_bras : coordonnées du sommet du bras droit
-        :type sommet_bras: Point
-        :param segment_centre_bras: distance entre le centre original du cercle circonscrit au robot et le sommet du bras.
-        :type segment_centre_bras: float
-        """
-        
-        #récupération des constantes nécessaires:
-        log.logger.info('Calcul du rayon et du centre du robot')
-        
-        #[pierre] j'ai modifié des constantes...
-        #désolé mais c'était nécessaire : ta "largeur" était en fait celle de la table
-        #et toute facon constantes.py manquait de clarté
-        
-        longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
-        largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
-        longueur_robot = profils.develop.constantes.constantes["Coconut"]["longueurRobot"]
-        
-        #Commenté pour les tests !
-        #angle = robot.actionneur['bd'].angle
-        
-        #[]ouais, on pourrait le mettre dans constantes..
-        diam_original = math.sqrt((longueur_robot/2) ** 2 + (largeur_robot/2) ** 2)
-        print diam_original
-        #projection du bras sur x et y
-        
-        #[]c'est quoi la convention pour l'angle des bras ?
-        #moi j'aurais pensé à mettre angle = 0 vers l'avant du robot, sur l'axe y.
-        proj_x = -longueur_bras*math.cos(float(angle))
-        proj_y = longueur_bras*math.sin(float(angle))
-        #[]la longueur est sur x, largeur sur y
-        sommet_bras = outils_math.point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + math.sqrt(proj_y ** 2))
-        sommet_robot = outils_math.point.Point(-longueur_robot/2, -largeur_robot/2)
-        #longueur du segment entre le centre du robot avec les bras fermés et le sommet du bras
-        #segment_centre_bras = math.sqrt(math.pow(sommet_bras.x, 2) + math.pow(sommet_bras.y, 2))
-        
-        #[] le diamètre mesuré (segment le plus long) doit etre pris entre deux extremités du robot.
-        #là tu considères que le milieu du diamètre est le centre_original
-        #en gros faut raisonner sur les diamètres, par sur les rayons ^^
-        diam_avec_bras = 2*math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
-        if diam_avec_bras > diam_original:
-            self.robotInstance.rayon = diam_avec_bras/2
-            
+            asservissement = 'cr'
         else:
-            self.robotInstance.rayon = diam_original/2
+            asservissement = 'ct'
+        
+        self.serieAsserInstance.ecrire(asservissement+mode)
+        
+    def changerPWM(self, typeAsservissement, valeur):
+        if typeAsservissement == "rotation":
+            self.serieAsserInstance.ecrire("crm")
+            self.serieAsserInstance.ecrire(str(float(valeur)))
+        elif typeAsservissement == "translation":
+            self.serieAsserInstance.ecrire("ctm")
+            self.serieAsserInstance.ecrire(str(float(valeur)))
             
-        print self.robotInstance.rayon
             
+    def changerVitesse(self, typeAsservissement, valeur):
+        """
+        spécifie une vitesse prédéfinie en translation ou rotation
+        une valeur 1,2,3 est attendue
+        1 : vitesse "prudente"
+        2 : vitesse normale
+        3 : vitesse pour forcer
+        """
+        if typeAsservissement == "rotation":
+            self.serieAsserInstance.ecrire("crv"+str(int(valeur)))
+        elif typeAsservissement == "translation":
+            self.serieAsserInstance.ecrire("ctv"+str(int(valeur)))
+        
+    def immobiliser(self):
+        self.serieAsserInstance.ecrire('stop')
+        
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
+        """
+        méthode de haut niveau pour translater le robot
+        prend en paramètre la distance à parcourir en mm
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+        
+        print "#avancer à "+str(distance)+", "+instruction
+        
+        posAvant = self.getPosition()
+        retour = self.avancer(distance)
+        
+        if retour == "timeout" or (retour == "stoppe" and not instruction):
+            ##1
+            #stopper le robot
+            self.immobiliser()
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+                
+            else:
+                #reculer de ce qui a été avancé
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0: 
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(-signe*dist,"sansRecursion")
+                #recommencer le déplacement
+                self.gestionAvancer(distance,"sansRecursion")
+        
+        if retour == "obstacle" :
+            ##2 
+            #ajoute un robot adverse sur la table, pour la recherche de chemin
+            orientation = self.getOrientation()
+            position = self.getPosition()
+            
+            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
+            __builtin__.instance.ajouterRobotAdverse(adverse)
+            
+            
+            if instruction == "sansRecursion" or avecRechercheChemin:
+                ##4
+                #stopper le robot
+                self.immobiliser()
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+            else:
+                
+                ##3
+                #stopper le robot
+                self.immobiliser()
+                #attente que la voie se libère
+                ennemi_en_vue = True
+                debut_timer = int(timerStrat.getTime())
+                while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
+                    capteur = self.capteurInstance.mesurer()
+                    if capteur < self.maxCapt:
+                        print 'gestionAvancer : capteur !'
+                    else :
+                        print 'gestionAvancer : la voie est libre !'
+                        ennemi_en_vue = False
+                    
+                if not ennemi_en_vue:
+                    #vider la liste des robots adverses repérés
+                    __builtin__.instance.viderListeRobotsAdv()
+                    
+                    #baisser vitesse
+                    self.changerVitesse("translation", 1)
+                    
+                    #finir le déplacement
+                    posApres = self.getPosition()
+                    dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                    if distance != 0:
+                        signe = distance/abs(distance)
+                    else:
+                        signe = 1
+                    self.gestionAvancer(distance-signe*dist)
+                    
+                    #remettre vitesse
+                    self.changerVitesse("translation", 2)
+                    
+                else:
+                    #mettre à jour l'attribut position du robot
+                    
+                    #stopper l'execution du script parent
+                    raise Exception
+                
+        if retour == "stoppe" and instruction == "sansRecursion":
+            ##4
+            #mettre à jour l'attribut position du robot
+            
+            #stopper l'execution du script parent
+            
+            raise Exception
+            
+        if retour == "stoppe" and instruction == "forcer":
+            ##5
+            
+            #augmenter vitesse
+            self.changerVitesse("translation", 3)
+            
+            #finir le déplacement
+            posApres = self.getPosition()
+            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+            if distance != 0:
+                signe = distance/abs(distance)
+            else:
+                signe = 1
+            self.gestionAvancer(distance-signe*dist)
+            
+            #remettre vitesse
+            self.changerVitesse("translation", 2)
+            
+            
+    def gestionTourner(self, angle, instruction = ""):
+        
+        """
+        méthode de haut niveau pour tourner le robot
+        prend en paramètre l'angle à parcourir en radians
+        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        """
+        
+        #l'angle spécifié dans les scripts est valable pour un robot violet.
+        if __builtin__.constantes['couleur'] == "r":
+            angle = math.pi - angle
+        if angle > math.pi:
+            angle = angle - 2*math.pi
+        if angle < -math.pi:
+            angle = angle + 2*math.pi
+        
+        print "#tourner à "+str(angle)+", "+instruction
+        
+        orientAvant = self.getOrientation()
+        retour = self.tourner(angle)
+        
+        if retour == "timeout" or (retour == "stoppe" and not instruction):
+            
+            #stopper le robot
+            self.immobiliser()
+            if instruction == "sansRecursion":
+                ##4
+                #mettre à jour l'attribut position du robot
+                
+                #stopper l'execution du script parent
+                raise Exception
+                
+            else:
+                ##1
+                #tourner inversement à ce qui a été tourné
+                self.gestionTourner(orientAvant,"sansRecursion")
+                #recommencer le déplacement
+                self.gestionTourner(angle,"sansRecursion")
+        
+        if retour == "stoppe" and instruction == "sansRecursion":
+            ##4
+            #mettre à jour l'attribut orientation du robot
+            
+            #stopper l'execution du script parent
+            raise Exception
+            
+        if retour == "stoppe" and instruction == "forcer":
+            ##5
+            #augmenter vitesse
+            self.changerVitesse("rotation", 3)
+            #finir le déplacement
+            self.gestionTourner(angle)
+            #remettre vitesse
+            self.changerVitesse("rotation", 2)
+        
     def afficherMenu(self):
         print """
         Indiquer l'action à effectuer :
@@ -306,10 +511,10 @@ class Asservissement:
         Zone de départ------------------------[1]
         Constante de rotation-----------------[2]
         Constante de translation--------------[3]
-        Changer la osition courante-----------[4]
+        Changer la position courante-----------[4]
         Activer/Désactiver l'asservissement---[5]
         Afficher des valeurs------------------[6]
-        Ping de la liaison série--------------[7]\n
+        Ping de la liaison série--------------[7]
         """
 
     def afficherSousMenu(self):
@@ -318,7 +523,7 @@ class Asservissement:
         Changer la dérivée--------------------[1]
         Changer l'intégration-----------------[2]
         Changer le proportionnel--------------[3]
-        Mettre le max du PWM------------------[4]\n
+        Mettre le max du PWM------------------[4]
         """
         
     def modifierConstantes(self):
@@ -333,9 +538,9 @@ class Asservissement:
                 pass
             #Définir la zone de départ
             elif choix == '1':
-                couleur = raw_input("Indiquer la zone de départ (r/v)\n")
-                message = 'c\nc\n' + str(couleur)
-                self.serialInstance.ecrire(message)
+                couleur = raw_input("Indiquer la zone de départ (r/v)")
+                message = 'cc' + str(couleur)
+                self.serieAsserInstance.ecrire(message)
                 self.afficherMenu()
             #Définir les constantes de rotation
             elif choix == '2':
@@ -344,12 +549,12 @@ class Asservissement:
                 while not exit:
                     self.afficherSousMenu()
                     choix = raw_input()
-                    message = "c\nr\n"
+                    message = "cr"
                     
                     if choix != '0':
-                        constante = raw_input("Indiquer la valeur de la constante :\n")
-                        message += str(valeurs[choix]) + '\n' + str(constante)
-                        self.serialInstance.ecrire(message)
+                        constante = raw_input("Indiquer la valeur de la constante :")
+                        message += str(valeurs[choix]) + '' + str(constante)
+                        self.serieAsserInstance.ecrire(message)
                     
                     else:
                         exit = True
@@ -361,28 +566,28 @@ class Asservissement:
                 while not exit:
                     self.afficherSousMenu()
                     choix = raw_input()
-                    message = "c\nt\n"
+                    message = "ct"
                     
                     if choix != '0':
-                        constante = raw_input("Indiquer la valeur de la constante :\n")
-                        message += valeurs[choix] + '\n' + str(constante)
-                        self.serialInstance.ecrire(message)
+                        constante = raw_input("Indiquer la valeur de la constante :")
+                        message += valeurs[choix] + '' + str(constante)
+                        self.serieAsserInstance.ecrire(message)
                     
                     else:
                         exit = True
                         self.afficherMenu()
             #Définir la position courante
             elif choix == '4':
-                print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR\n"
-                coordonneX = raw_input("Rentrer a coordonée en x : \n")
+                print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR"
+                coordonneX = raw_input("Rentrer a coordonée en x : ")
                 if coordonneX:
                     message = 'cx' + str(coordonneX)
-                    self.serialInstance.ecrire(message)
+                    self.serieAsserInstance.ecrire(message)
                 
-                coordonneY = raw_input("Rentrer a coordonée en y: \n")
+                coordonneY = raw_input("Rentrer a coordonée en y: ")
                 if coordonneY:
                     message = 'cy' + str(coordonneY)
-                    self.serialInstance.ecrire(message)
+                    self.serieAsserInstance.ecrire(message)
                 
                 self.afficherMenu()
             #Activer ou désactiver l'asservissement
@@ -394,21 +599,21 @@ class Asservissement:
                     Activer la rotation-------------------[1]
                     Désactiver la rotation----------------[2]
                     Activer la translation----------------[3]
-                    Désactiver la translation-------------[4]\n
+                    Désactiver la translation-------------[4]
                     """
                     constante = raw_input()
                     if constante == '1':
-                        message = 's\nr\n'
-                        self.serialInstance.ecrire(message)
+                        message = 'sr'
+                        self.serieAsserInstance.ecrire(message)
                     elif constante == '2':
-                        message = 'd\nr\n'
-                        self.serialInstance.ecrire(message)
+                        message = 'dr'
+                        self.serieAsserInstance.ecrire(message)
                     elif constante == '3':
-                        message = 's\nt\n'
-                        self.serialInstance.ecrire(message)
+                        message = 'st'
+                        self.serieAsserInstance.ecrire(message)
                     elif constante == '4':
-                        message = 'd\nt\n'
-                        self.serialInstance.ecrire(message)
+                        message = 'dt'
+                        self.serieAsserInstance.ecrire(message)
                     elif constante == '0':
                         exit = True
                         self.afficherMenu()
@@ -422,7 +627,7 @@ class Asservissement:
                     Afficher la rotation-------------------------------[2]
                     Afficher la translation----------------------------[3]
                     Afficher le type d'asservissement------------------[4]
-                    Afficher les coordonnées enregistrées--------------[5]\n
+                    Afficher les coordonnées enregistrées--------------[5]
                     """
                     choix = raw_input()
                     if choix == '0':
@@ -430,7 +635,7 @@ class Asservissement:
                         self.afficherMenu()
                         
                     elif choix == '1':
-                        message = 'e\nc'
+                        message = 'ec'
                         
                     elif choix == '2':
                         exit = False
@@ -442,8 +647,8 @@ class Asservissement:
                                 exit = True
                                 self.afficherMenu()
                             else:
-                                message = 'e\nr\n' + valeurs[choix]
-                                self.serialInstance.ecrire(message)
+                                message = 'er' + valeurs[choix]
+                                self.serieAsserInstance.ecrire(message)
                     elif choix == '3':
                         exit = False
                         valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
@@ -454,30 +659,31 @@ class Asservissement:
                                 exit = True
                                 self.afficherMenu()
                             else:
-                                message = 'e\nt\n' + valeurs[choix]
-                                self.serialInstance.ecrire(message)
+                                message = 'et' + valeurs[choix]
+                                self.serieAsserInstance.ecrire(message)
                     elif choix == '4':
-                        self.serialInstance.ecrire('e\ns')
+                        self.serieAsserInstance.ecrire('es')
                     elif choix =='5':
                         exit = False
                         while not exit:
-                            self.serialInstance.ecrire('ex')
+                            self.serieAsserInstance.ecrire('ex')
                             answer = False
                             while not answer:
-                                while not self.serialInstance.file_attente.empty():
-                                    print self.serialInstance.file_attente.get()
+                                while not self.serieAsserInstance.file_attente.empty():
+                                    print self.serieAsserInstance.file_attente.get()
                                     answer = True
                                     self.afficherSousMenu()
-                            self.serialInstance.ecrire('y\ne')
+                            self.serieAsserInstance.ecrire('ye')
                             while not answer:
-                                while not self.serialInstance.file_attente.empty():
-                                    print self.serialInstance.file_attente.get()
+                                while not self.serieAsserInstance.file_attente.empty():
+                                    print self.serieAsserInstance.file_attente.get()
                                     answer = True
                                     self.afficherSousMenu()
             elif choix == '7':
                 exit = False
                 while not exit:
-                    self.serialInstance.ecrire('?\n')
+                    self.serieAsserInstance.ecrire('?')
                     
             else:
-                print "Il faut choisir une valeur contenue dans le menu.\n"
+                print "Il faut choisir une valeur contenue dans le menu."
+                

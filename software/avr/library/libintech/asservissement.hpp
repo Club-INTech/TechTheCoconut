@@ -26,6 +26,9 @@ class Asservissement {
 			en_=consigne_ - positionReelle;
 			
 			pwmCourant_+=kp_*(en_ - enm1_) + ki_*en_ + kd_*(en_ - 2*enm1_ + enm2_);
+			
+// 			if (abs(en_)<eps)
+//  				return 0;
 
 			if(pwmCourant_> valeur_bridage_)
 				return  valeur_bridage_;

@@ -19,10 +19,6 @@ constantes = \
 		#sans compter les bras
 		"largeurRobot" : 200.,
 		"longueurRobot" : 360.,
-		
-                #TODO : à enlever...
-                #longueur du coté du robot, en mm
-                "coteRobot" : 350.
 	},
 	"Anna": {},
     "Objets_Table": {
@@ -41,11 +37,11 @@ constantes = \
 		"logs_level": "DEBUG",
 		# 	%(processName)s pour ajouter nom du processus
 		# le :: est volontaire, le nom du module sera inséré par la suite du programme
-		"logs_format": "%(asctime)s::%(levelname)s:%(threadName)s:%(message)s",
+		"logs_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
 		"stderr": True,
 		"stderr_level": "DEBUG",
                 # le :: est volontaire, le nom du module sera inséré par la suite du programme
-		"stderr_format": "%(asctime)s::%(levelname)s:%(threadName)s:%(message)s",
+		"stderr_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
 		"dossier": "logs"
 	},
 	"Recherche_Chemin":
@@ -66,7 +62,33 @@ constantes = \
             "asservissement": "^([0-9]{4}(\+|-)[0-9]{4}|0)$",
             "capteur_actionneur": "^1$",
             "balise": "^2$",
+            "actionneur": "^4$",
         },
     },
     "DureeJeu": 5,
+    
+    "Actionneurs":
+    {
+        "angleMax": 160,
+        "angleMin": 0,
+        
+    },
+    "Tests_mecha":
+    {
+        "batterie_test": True,
+        "batterie_contraintes":
+        {
+            "pourcentage_min": 10,
+            "minutes_min": 20,
+        },
+        "actionneurs_test": True,
+        "deplacement_test": True,
+        "recalage_test": True,
+        "capteurs_test": True,
+    },
+    "Lolilol":
+    {
+        "musique_active": True,
+        "musique_dossier": "/home/netantho/intech/multimedia_lolilol/",
+    },
 }

@@ -10,7 +10,6 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
 #include <stdlib.h>
 #include <string.h>
 #include <libintech/singleton.hpp>
@@ -36,28 +35,14 @@ private:
 
     static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
 	
-    static inline void send_char(unsigned char byte);
     
     static inline bool available(void)
     {
     		return (rx_buffer__SIZE + rx_buffer_.head - rx_buffer_.tail) % rx_buffer__SIZE;
     }
     
-    static inline unsigned char read_char(){
-			if (rx_buffer_.head == rx_buffer_.tail)
-			{
-				return -1;
-			}
-			else
-			{
-				unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
-				rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
-				return c;
-			}
-    }
-    
     static inline void send_ln(){
-    	send_char('\r');
+	send_char('\r');
     	send_char('\n');
     }
 
@@ -66,6 +51,8 @@ public:
     static inline void init();
 	
     static inline void change_baudrate(uint32_t BAUD_RATE);
+
+    static inline void send_char(unsigned char byte);
 
     static inline void store_char(unsigned char c)
     {
@@ -79,10 +66,11 @@ public:
 
     template<class T>
     static inline void print_binary(T val){
-        static char buff[sizeof(T) * 8];
-        int j = sizeof(T) * 8 - 1;
-        for(int i=0 ; i<sizeof(T)*8 ; ++i){
-            if(val & (1 << i))
+        static char buff[sizeof(T) * 8 + 1];
+	buff[sizeof(T) * 8]='\0';
+        int16_t j = sizeof(T) * 8 - 1;
+        for(int16_t i=0 ; i<sizeof(T)*8 ; ++i){
+            if(val & ((T)1 << i))
                buff[j] = '1';
             else
                buff[j] = '0';
@@ -91,23 +79,33 @@ public:
         print((const char *)buff);
     }
     
-    static inline void print(int16_t val){
-    	char buffer[6];
-    	itoa(val,buffer,10);
-    	print((const char *)buffer);
+    static inline void print_binary(unsigned char * val, int16_t len){
+        for(int16_t i = 0 ; i<len ; ++i){
+		print_binary(val[i]);
+	}
     }
-
-     static inline void print(uint16_t val){
-    	char buffer[6];
-    	ltoa(val,buffer,10);
+    
+    template<class T>
+    static inline void print(T val){
+    	char buffer[10];
+	ltoa(val,buffer,10);
     	print((const char *)buffer);
     }
     
-     static inline void print(int32_t val){
-    	char buffer[10];
-    	ltoa(val,buffer,10);
-    	print((const char *)buffer);
+    static inline void print(char val){
+    	send_char(val);
+    	send_ln();
     }
+
+    static inline void print(const char * val)
+    {
+    	for(uint16_t i = 0 ; i < strlen(val) ; i++)
+    	{
+    		send_char(val[i]);
+    	}
+    	send_ln();
+    }
+
     
     static inline void print(int32_t posX, int32_t posY){
     	char bufX[10];
@@ -138,58 +136,53 @@ public:
     	send_ln();
     }
     
-     static inline void print(uint32_t val){
-    	char buffer[10];
-    	ltoa(val,buffer,10);
-    	print((const char *)buffer);
+    
+    static inline unsigned char read_char(){
+	while(!available()){ asm("nop"); }
+	unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
+	rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
+	return c;
     }
     
-    static inline void print(char val){
-    	send_char(val);
-    	send_ln();
-    }
-
-    static inline void print(const char * val)
-    {
-    	for(unsigned int i = 0 ; i < strlen(val) ; i++)
-    	{
-    		send_char(val[i]);
-    	}
-    	send_ln();
-    }
-
     static inline int32_t read_int(void){
-        char buffer[20];
-        read(buffer,20);
+        static char buffer[20];
+        buffer[read(buffer,20)] = '\0';
+        return atol(buffer);
+    }
+    
+    static inline uint32_t read_uint(void){
+        static char buffer[20];
+        buffer[read(buffer,20)] = '\0';
         return atol(buffer);
     }
 
     static inline float read_float(){
-        char buffer[20];
-//      print(read(buffer,20));
-	read(buffer,20);
+        static char buffer[20];
+	buffer[read(buffer,20)] = '\0';
         return atof(buffer);
     }
 
     static inline uint8_t read(unsigned char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
-        	while(!available()){ asm("nop"); }
         	unsigned char tmp = read_char();
-        	if(tmp == '\0' || tmp == '\n' || tmp == '\r')
+        	if(tmp == '\r'){
         		return i;
+		}
         	string[i] = tmp;
         }
         return i;
     }
     
-        static inline uint8_t read(char* string, uint8_t length){
+    
+    static inline uint8_t read(char* string, uint8_t length){
         uint8_t i = 0;
         for (; i < length; i++){
             while(!available()){ asm("nop"); }
             char tmp = static_cast<char>(read_char());
-            if(tmp == '\0' || tmp == '\n' || tmp == '\r')
+            if(tmp == '\r'){
                 return i;
+	    }
             string[i] = tmp;
         }
         return i;
