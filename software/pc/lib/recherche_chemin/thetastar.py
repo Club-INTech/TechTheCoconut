@@ -74,7 +74,7 @@ class Thetastar:
     listeRectangles = [r1,r2,r3,r4,p,t1,t2]
 
     #déclaration du graphe, avec tables de propriétés : structure de données optimale pour les noeuds
-    g = Graph(directed=False)
+    g = graph_tool.all.Graph(directed=False)
     posX = g.new_vertex_property("double")
     posY = g.new_vertex_property("double")
     poids = g.new_edge_property("double")
