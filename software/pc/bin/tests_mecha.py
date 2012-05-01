@@ -108,10 +108,8 @@ class Tests_mecha():
         """
         lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test du recalage ...")
-        #TODO Coder la méthode
-        if False: #TODO à modifier
-            log.logger.critical("Test du recalage ERREUR")
-            return False
+        asserInstance = __builtin__.instance.asserInstance
+        asserInstance.recalage()
         log.logger.warn("Test du recalage terminé")
         return True
 
