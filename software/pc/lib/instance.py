@@ -83,6 +83,15 @@ class Instance:
                 log.logger.error("instance : serieCaptInstance n'est pas chargé. pb d'instanciation de la série.")
         else:
             log.logger.error("instance : serieCaptInstance n'est pas chargé. pas de chemin trouvé.")
+            
+        cheminBalise = self.chemins[2]
+        if cheminBalise:
+            try:
+                self.serieBaliseInstance = serie.Serie(cheminBalise, 9600, 1)
+            except :
+                log.logger.error("instance : serieBaliseInstance n'est pas chargé. pb d'instanciation de la série.")
+        else:
+            log.logger.error("instance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.")
         
         
     def ajouterRobotAdverse(self, position):

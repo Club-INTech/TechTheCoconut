@@ -25,7 +25,7 @@ from lib.carte import Carte
 import __builtin__
 import lib.instance
 
-import lib.visualisation.visu_threads as visu_threads
+#import lib.visualisation.visu_threads as visu_threads
 
 #bibliothèque pour la gestion des graphes 
 try:
@@ -319,9 +319,9 @@ class Thetastar:
                     log.logger.info("(" + str(p.x) + ", " + str(p.y) + ")")
                     chemin.append(Point(int(p.x),int(p.y)))
                     
-                visu_table = visu_threads.Visu_threads.rechercheThread('visu_table')
-                if visu_table is not None:
-                    visu_table.creerChemin(chemin)
+                #visu_table = visu_threads.Visu_threads.rechercheThread('visu_table')
+                #if visu_table is not None:
+                    #visu_table.creerChemin(chemin)
 
                 return chemin
 

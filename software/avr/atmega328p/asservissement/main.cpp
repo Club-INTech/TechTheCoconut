@@ -21,6 +21,7 @@ int main()
     Robot & robot = Robot::Instance();
 	while(1)
 	{
+//         Serial<0>::print(10);
  		robot.communiquer_pc();
 	}
 	return 0;
