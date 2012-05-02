@@ -70,13 +70,12 @@ import lib.peripherique
 import lib.robot
 __builtin__.robotInstance = lib.robot.Robot()
 
-import lib.tests_mecha
-Tests_mecha = lib.tests_mecha.Tests_mecha()
+import lib.chargement_lib
 
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch] :')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch], t[est] :')
     first = False
     #try:
     if mode == '' or mode == 'console':
@@ -92,11 +91,18 @@ while first or erreur:
         mode = 'etalonnage_constantes'
     if mode == "m" :
         mode = "match"
+    if mode == "t":
+        mode = "tests_mecha"
     log.logger.info("Chargement du fichier de lancement " + mode)
     exec('import bin.'+ mode)
     if mode == "visualisation_table":
         first = True
         
+    if hasattr(bin, "tests_mecha"):
+        Tests_mecha = bin.tests_mecha.Tests_mecha()
+    else:
+        pass
+
     #except:
         #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
         #erreur = True

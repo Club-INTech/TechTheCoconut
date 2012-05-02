@@ -40,17 +40,17 @@ while 42:
 depart = outils_math.point.Point(0.0,400)
 asser = __builtin__.instance.asserInstance
 
-arrivee = outils_math.point.Point(100,1500)
-print asser.dureeGoTo(depart, arrivee, 2)
-depart = outils_math.point.Point(0.0,841)
-arrivee = outils_math.point.Point(0,800)
-print asser.dureeGoTo(depart, arrivee, 1)
-depart = arrivee
-arrivee = outils_math.point.Point(0,100)
-print asser.dureeGoTo(depart, arrivee, 1)
-depart = arrivee
-arrivee = outils_math.point.Point(0,1000)
-print asser.dureeGoTo(depart, arrivee, 1)
+#arrivee = outils_math.point.Point(100,1500)
+#print asser.dureeGoTo(depart, arrivee, 2)
+#depart = outils_math.point.Point(0.0,841)
+#arrivee = outils_math.point.Point(0,800)
+#print asser.dureeGoTo(depart, arrivee, 1)
+#depart = arrivee
+#arrivee = outils_math.point.Point(0,100)
+#print asser.dureeGoTo(depart, arrivee, 1)
+#depart = arrivee
+#arrivee = outils_math.point.Point(0,1000)
+#print asser.dureeGoTo(depart, arrivee, 1)
 
 ######################################################################
 #Test de mutex

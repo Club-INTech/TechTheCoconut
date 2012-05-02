@@ -2,10 +2,13 @@
 
 import sys, os
 import re
+import time
+import __builtin__
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import lolilol
+import instance
 import log
 log = log.Log(__name__)
 
@@ -67,12 +70,9 @@ class Tests_mecha():
         """
         lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test des actionneurs ...")
-        #TODO Coder la méthode
-        if False: #TODO à modifier
-            log.logger.critical("Test des actionneurs ERREUR")
-            return False
-        log.logger.warn("Test des actionneurs OK")
-        return True
+        actionneurInstance = __builtin__.instance.actionInstance
+        actionneurInstance.test_demarrage()
+        log.logger.warn("Test des actionneurs terminé")
     
     def test_deplacement(self):
         """
@@ -83,11 +83,20 @@ class Tests_mecha():
         """
         lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test du déplacement ...")
-        #TODO Coder la méthode
-        if False: #TODO à modifier
-            log.logger.critical("Test du déplacement ERREUR")
-            return False
-        log.logger.warn("Test du déplacement OK")
+        asserInstance = __builtin__.instance.asserInstance
+        log.logger.info("Déplacement de +300mm...")
+        asserInstance.gestionAvancer(300)
+        time.sleep(2)
+        log.logger.info("Déplacement de -300mm...")
+        asserInstance.gestionAvancer(-300)
+        time.sleep(2)
+        log.logger.info("Rotation à 3.15 radians...")
+        asserInstance.gestionTourner(3.15)
+        time.sleep(2)
+        log.logger.info("Rotation à 0 radians...")
+        asserInstance.gestionTourner(3.15)
+        time.sleep(2)
+        log.logger.warn("Test du déplacement terminé")
         return True
 
     def test_recalage(self):
@@ -99,11 +108,9 @@ class Tests_mecha():
         """
         lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test du recalage ...")
-        #TODO Coder la méthode
-        if False: #TODO à modifier
-            log.logger.critical("Test du recalage ERREUR")
-            return False
-        log.logger.warn("Test du recalage OK")
+        asserInstance = __builtin__.instance.asserInstance
+        asserInstance.recalage()
+        log.logger.warn("Test du recalage terminé")
         return True
 
     def test_capteurs(self):
@@ -115,9 +122,20 @@ class Tests_mecha():
         """
         lolilol.son('bruitages/jackpot.mp3')
         log.logger.info("Test des capteurs ...")
-        #TODO Coder la méthode
-        if False: #TODO à modifier
-            log.logger.critical("Test des capteurs ERREUR")
-            return False
-        log.logger.warn("Test des capteurs OK")
+        
+        capteurInstance = __builtin__.instance.capteurInstance
+        log.logger.info("Placer un objet à plus de 20cm du capteur puis appuyer sur 'entrée'")
+        raw_input()
+        mesure = capteurInstance.mesurer()
+        log.logger.info("Reculer l'objet puis appuyer sur 'entrée'")
+        raw_input()
+        mesure2 = capteurInstance.mesurer()
+        
+        if(mesure < mesure2):
+            log.logger.info("L'ordre de grandeur des deux mesures est bon")
+        else:
+            log.logger.warn("La deuxième valeur mesurée n'est pas supérieure à la première : il y a un problème !")
+            print "Première valeur :" + mesure
+            print "deuxième vlaeur :" + mesure2
+        log.logger.warn("Test des capteurs terminés")
         return True

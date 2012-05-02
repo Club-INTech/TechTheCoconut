@@ -29,8 +29,9 @@ import lib.instance
 
 #bibliothèque pour la gestion des graphes 
 try:
-    #from graph_tool.all import Graph,new_vertex_property,new_edge_property,num_vertices,add_vertex,vertex,source,target,remove_edge,add_edge,edge,astar_search,load_graph,edges,vertices,save
-    from graph_tool.all import *
+    #from graph_tool.all import *
+    from graph_tool import Graph,load_graph
+    from graph_tool.all import AStarVisitor,astar_search
 except:
     log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 
@@ -433,12 +434,8 @@ class Thetastar:
         marshal.dump(Tpoids, open("sauv_poids", 'wb'))
         Thetastar.g.save("sauv_g.xml")
 
-
-
-
-
+        
 class VisitorExample(AStarVisitor):
-
     def __init__(self, touched_v, touched_e, target):
         self.touched_v = touched_v
         self.touched_e = touched_e

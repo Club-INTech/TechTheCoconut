@@ -14,6 +14,7 @@ try:
 except:
     __builtin__.instance = instance.Instance()
 
+    
 __builtin__.instance.instanciation()
 
 modules = []
