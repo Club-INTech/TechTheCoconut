@@ -61,7 +61,10 @@ class Timer(threading.Thread):
     def interrupt(self) :
         
         # Durée du math
-        tempsFinal = constantes["DureeJeu"]
+        try:
+            tempsFinal = constantes["DureeJeu"]
+        except:
+            tempsFinal = 87;
         
         time.sleep(tempsFinal)
         
@@ -85,8 +88,10 @@ class Timer(threading.Thread):
         except:
             log.logger.error("Impossible d'arrêter les capteurs")
         
-        
-        log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
+        try:
+            log.logger.info("Arrêt du robot après " + str(tempsFinal) + " secondes")
+        except:
+            pass
 
         # Suicide :D
         os.kill(os.getpid(), signal.SIGUSR1)
