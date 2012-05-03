@@ -150,11 +150,11 @@ class Actionneur(serie.Serie):
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
         self.serieActionneurInstance.ecrire("GOTO")
-        time.sleep(0.01)
+        time.sleep(0.03)
         self.serieActionneurInstance.ecrire(str(int(id)))
-        time.sleep(0.01)
+        time.sleep(0.03)
         self.serieActionneurInstance.ecrire(str(int(angle)))
-        time.sleep(0.01)
+        time.sleep(0.03)
         
     def calculRayon(self, angle):
         """
