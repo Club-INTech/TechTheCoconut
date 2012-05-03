@@ -136,7 +136,7 @@ int main()
         AX12InitID(FLASH_ID_MODE);
         
     // Initialisation de tous les AX12
-    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED); 
+    AX12Init (AX_BROADCAST, 0, 1023, AX_SPEED); 
         
         
     while (1)
@@ -172,13 +172,22 @@ int main()
                 int16_t angle = serial_t_::read_int();
                 AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
             }
-        
-            // Changement de vitesse
-            else if (COMPARE_BUFFER("CH_VITESSE", 10))
+            
+            else if (COMPARE_BUFFER("A", 1))
             {
-                int16_t speed = serial_t_::read_int();
-                AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
+                int8_t id = serial_t_::read_int();
+                int16_t angle = serial_t_::read_int();
+                AX12GoTo(id, angle);
+
             }
+            
+//             // Changement de vitesse
+//             else if (COMPARE_BUFFER("CH_VITESSE", 10))
+//             {
+//                 int16_t speed = serial_t_::read_int();
+// 
+//                 AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
+//             }
             
             // Désasservissement de tous les servos branchés
             else if (COMPARE_BUFFER("UNASSERV", 8))
@@ -193,20 +202,19 @@ int main()
             
 //             // Jumper
 //             else if (COMPARE_BUFFER("jumper", 6))
+//             {
 //                 serial_t_::print(rbi(PIND,PD7));
+//             }
 //             
 //             // ultrasons
 //             else if (COMPARE_BUFFER("ultrason", 8))
+//             {
 //                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
-//             
+//             }
 // 
 //             // infrarouge
 //             else if (COMPARE_BUFFER("infra", 5))
-//                 serial_t_::print(infrarouge::value());
-            
-//             // Vieux ultrasons
-//             else if (COMPARE_BUFFER("vieux", 5))
-//                 serial_t_::print(capteur_vieux::value());
+//                 serial_t_::print(conversion(ADCH));
         }
     }
     return 0;
