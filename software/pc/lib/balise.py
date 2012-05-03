@@ -57,10 +57,10 @@ class Balise:
 
 #robot = Robot()
 balise = Balise()
-balise.tracker_robot_adverse(0,0)
-balise.tracker_robot_adverse(1,2)
-balise.tracker_robot_adverse(3,4)
-balise.tracker_robot_adverse(8,30)
+balise.tracker_robot_adverse()
+balise.tracker_robot_adverse()
+balise.tracker_robot_adverse()
+balise.tracker_robot_adverse()
 print balise.filtre_kalman.x
 	
 	
