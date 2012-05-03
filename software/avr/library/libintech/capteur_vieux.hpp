@@ -19,11 +19,11 @@
 #endif
 
 
-typedef Timer<1,ModeCounter,64> timerCapteur;
+typedef Timer<1,ModeCounter,1> timerCapteur;
 typedef Serial<0> serial_t_;
 
-uint8_t CAPTEUR_VIEUX_BUSY = 0;
-uint8_t craineau = 0;
+uint8_t craineau    = 0;
+uint8_t FLAG        = 0;
 
 
 class capteur_vieux{
@@ -77,7 +77,7 @@ public:
   static void init()
   {
       timerCapteur::init();
-//       sbi(DDRD, PORTD5);
+      sbi(DDRD, PORTD5);
   }
   
   static uint16_t value()
@@ -88,10 +88,10 @@ public:
   static void test()
   {
       // Si on n'est pas busy busy
-      if (!CAPTEUR_VIEUX_BUSY)
+      if (FLAG == 0)
       {
         serial_t_::print("TEST");
-        CAPTEUR_VIEUX_BUSY = 1;
+        FLAG = 1;
         
         
         // Port "port" en output
@@ -122,36 +122,42 @@ public:
   {
       serial_t_::print("test2");
         if (craineau)
-            sbi(DDRD, PORTD5);
+            sbi(PORTD, PORTD5);
         else
-            cbi(DDRD, PORTD5);
+            cbi(PORTD, PORTD5);
         craineau =  1 - craineau;
-        _delay_us(500000);
   }
   
 };
 
 ISR(PCINT2_vect)
 {
-//     changedbits = PIND ^ portchistory;
-//     portchistory = PIND;
-//     serial_t_::print("ISR");
-//     // Début de l'impulsion
-//     if (rbi(PIND, PORTD6))
-//     {
-//         serial_t_::print("ISR_MONTANT");
-//         timerCapteur::value(0);
-//     }
-//     
-//     // Fin de l'impulsion
-//     else
-//     {
-//         serial_t_::print("ISR_DESCENDANT");
-//         serial_t_::print(timerCapteur::value());
-//         CAPTEUR_VIEUX_BUSY = 0;
-//     }
+    serial_t_::print("ISR WESH");
+    // Début de l'impulsion
+    if (rbi(PIND, PORTD6) && (FLAG == 1 || FLAG == 2))
+    {
+        serial_t_::print("ISR1");
+        timerCapteur::value(0);
+        FLAG = 3;
+    }
+    
+    else if (!rbi(PIND, PORTD6) && FLAG == 1)
+    {
+        serial_t_::print("ISR2");
+        FLAG = 2;
+    }
+    
+    // Fin de l'impulsion
+    else if (!rbi(PIND, PORTD6) && FLAG == 3)
+    {
+        serial_t_::print("ISR3");
+        serial_t_::print(timerCapteur::value());
+        sbi(PCICR,PCIE2);
+        FLAG = 0;
+    }
     
     
 }
+
 
 #endif

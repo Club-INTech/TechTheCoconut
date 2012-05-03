@@ -15,8 +15,6 @@ int main()
     serial_t_::init();
     serial_t_::change_baudrate(9600);
     capteur_vieux::init();
-    capteur_vieux::test();
-    serial_t_::print("ET MERDE");
     
     while(1) 
     {
@@ -31,15 +29,18 @@ int main()
 //         if (COMPARE_BUFFER("vieux", 5))
 //             serial_t_::print(capteur_vieux::value_brut());
 
-
-            serial_t_::print("Dans la boucle");
-//             capteur_vieux::test2();
-            _delay_ms(1000);
+            capteur_vieux::test();
 
         
     }
 
     
     return 0;
+}
+
+
+ISR(TIMER1_OVF_vect)
+{
+    
 }
 
