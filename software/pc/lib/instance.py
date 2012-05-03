@@ -47,9 +47,8 @@ class Instance:
         
     
     def instanciationSerie(self):
+        
         #Instance serie asservissement
-        #cheminAsser = lib.peripherique.chemin_de_peripherique("asservissement")
-        #cheminAsser = '/dev/ttyUSB9'
         cheminAsser = self.chemins[0]
         if cheminAsser:
             try:
@@ -59,31 +58,7 @@ class Instance:
         else:
             log.logger.error("instance : serieAsserInstance n'est pas chargé. pas de chemin trouvé.")
             
-        # Actionneurs ≠ Capteurs sur Arduino pour la Belgique.
-        #cheminActionneur = lib.peripherique.chemin_de_peripherique("actionneur")
-        cheminActionneur = self.chemins[4]
-        
-        
-        if cheminActionneur :
-            try:
-                self.serieActionneurInstance = serie.Serie(cheminActionneur, 9600, 1)
-            except :
-                log.logger.error("instance : serieActionneurInstance n'est pas chargé. pb d'instanciation de la série.")
-        else :
-            log.logger.error("instance : serieActionneurInstance n'est pas chargé. pas de chemin trouvé.")
-        
-        #cheminCapt = peripherique.chemin_de_peripherique("capteur_actionneur")
-        #cheminCapt = '/dev/ttyUSB0'
-        cheminCapt = self.chemins[1]
-        
-        if cheminCapt:
-            try:
-                self.serieCaptInstance = serie.Serie(cheminCapt, 57600, 1)
-            except :
-                log.logger.error("instance : serieCaptInstance n'est pas chargé. pb d'instanciation de la série.")
-        else:
-            log.logger.error("instance : serieCaptInstance n'est pas chargé. pas de chemin trouvé.")
-            
+        #Instance serie Balise
         cheminBalise = self.chemins[2]
         if cheminBalise:
             try:
@@ -92,7 +67,39 @@ class Instance:
                 log.logger.error("instance : serieBaliseInstance n'est pas chargé. pb d'instanciation de la série.")
         else:
             log.logger.error("instance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.")
+            
+        #Instance serie Capteur-Actionneurs (une seule carte)
+        cheminCapteurs_actionneurs = self.chemins[3]
+        if cheminCapteurs_actionneurs:
+            try:
+                self.serieCaptInstance = serie.Serie(cheminCapteurs_actionneurs, 9600, 1)
+                self.serieActionneurInstance = self.serieCaptInstance
+            except :
+                log.logger.error("instance : serieCaptInstance et serieActionneurInstance ne sont pas chargés. pb d'instanciation de la série.")
+        else:
+            log.logger.error("instance : serieCaptInstance et serieActionneurInstance ne sont pas chargés. pas de chemin trouvé.")
         
+        """
+        #Instance serie Capteurs indépendants (sur Arduino)
+        cheminCapt = self.chemins[1]
+        if cheminCapt:
+            try:
+                self.serieCaptInstance = serie.Serie(cheminCapt, 57600, 1)
+            except :
+                log.logger.error("instance : serieCaptInstance n'est pas chargé. pb d'instanciation de la série.")
+        else:
+            log.logger.error("instance : serieCaptInstance n'est pas chargé. pas de chemin trouvé.")
+            
+        #Instance serie Actionneurs indépendants (sur Arduino)
+        cheminActionneur = self.chemins[4]
+        if cheminActionneur :
+            try:
+                self.serieActionneurInstance = serie.Serie(cheminActionneur, 9600, 1)
+            except :
+                log.logger.error("instance : serieActionneurInstance n'est pas chargé. pb d'instanciation de la série.")
+        else :
+            log.logger.error("instance : serieActionneurInstance n'est pas chargé. pas de chemin trouvé.")
+        """
         
     def ajouterRobotAdverse(self, position):
         self.liste_robots_adv.append(position)
