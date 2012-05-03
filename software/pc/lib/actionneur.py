@@ -71,7 +71,7 @@ class Actionneur(serie.Serie):
         if position == "ALL" or "bg" in position:
             self.goto(self.ids["bg"], angle+5)
         if position == "ALL" or "bd" in position:
-            self.goto(self.ids["bd"], 180+3-angle)
+            self.goto(self.ids["bd"], 180+9-angle)
         
         #print "##################\n"+str(self.robotInstance.rayon)+"\n#############\n"
 
