@@ -15,19 +15,28 @@ int main()
     serial_t_::init();
     serial_t_::change_baudrate(9600);
     capteur_vieux::init();
+    capteur_vieux::test();
+    serial_t_::print("ET MERDE");
     
     while(1) 
     {
-        char buffer[17];
-        serial_t_::read(buffer,17);
-        #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+//         char buffer[17];
+//         serial_t_::read(buffer,17);
+//         #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+//         
+//         // ping
+//         if (COMPARE_BUFFER("?", 1))
+//             serial_t_::print(5);
+//         
+//         if (COMPARE_BUFFER("vieux", 5))
+//             serial_t_::print(capteur_vieux::value_brut());
+
+
+            serial_t_::print("Dans la boucle");
+//             capteur_vieux::test2();
+            _delay_ms(1000);
+
         
-        // ping
-        if (COMPARE_BUFFER("?", 1))
-            serial_t_::print(5);
-        
-        if (COMPARE_BUFFER("vieux", 5))
-            serial_t_::print(capteur_vieux::value_brut());
     }
 
     
