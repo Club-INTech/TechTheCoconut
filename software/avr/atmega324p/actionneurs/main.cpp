@@ -9,11 +9,10 @@
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
-// #include <libintech/ultrason.hpp>
-// #include <libintech/infrarouge.hpp>
-// #include <libintech/capteur_vieux.hpp>
+#include <libintech/ultrason.hpp>
 
 // LIBRAIRIES LOCALES
+#include "infrarouge.h"
 #include "ax12.h"
 #include "actionneurs.h"
 
@@ -25,7 +24,6 @@
 
 #define BAUD_RATE_SERIE         9600
 #define BAUD_RATE_AX12          AX_BAUD_RATE_9600
-
 
 
 /******************************** 
@@ -88,39 +86,44 @@
 
 typedef Serial<0> serial_t_;
 
-// extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
-// extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
+extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
+extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
 
 int main()
 {
-    // Initialisation de la liaison série PC <-> Carte.
-    serial_t_::init();
-    serial_t_::change_baudrate(BAUD_RATE_SERIE);
+    Serial<0>::init();
+    Serial<0>::change_baudrate(BAUD_RATE_SERIE);
     
-//     // GESTION DES INTERRUPTIONS POUR LA PARTIE CAPTEUR + JUMPER
-//     //Pin D2 en INPUT
-//     cbi(DDRD,DD2);
-//     //Pin D7 en INPUT
-//     cbi(DDRD,PD7);
-//     cbi(PORTD,PD7);//Pull up disabled
-//     //Activation des interruptions pour tout changement logique pour pin2
-//     cbi(EICRA,ISC01);
-//     sbi(EICRA,ISC00);
-//     sbi(EIMSK,INT0);//Activation proprement dite
-//     cbi(DDRD,PORTD3);
-//     //Activation des interruptions pour tout changement logique pour pin3
-//     cbi(EICRA,ISC11);
-//     sbi(EICRA,ISC10);
-//     sbi(EIMSK,INT1);//Activation proprement dite
+    // GESTION DES INTERRUPTIONS POUR LA PARTIE CAPTEUR + JUMPER
+    //Pin D2 en INPUT
+    cbi(DDRD,DD2);
+    //Pin D7 en INPUT
+    cbi(DDRD,PD7);
+    cbi(PORTD,PD7);//Pull up disabled
+    //Activation des interruptions pour tout changement logique pour pin2
+    cbi(EICRA,ISC01);
+    sbi(EICRA,ISC00);
+    sbi(EIMSK,INT0);//Activation proprement dite
+    cbi(DDRD,PORTD3);
+    //Activation des interruptions pour tout changement logique pour pin3
+    cbi(EICRA,ISC11);
+    sbi(EICRA,ISC10);
+    sbi(EIMSK,INT1);//Activation proprement dite
     
 
 
     // Initialisation des infrarouges
-//     infrarouge::init();
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescalar to 128 - 125KHz sample rate @ 16MHz 
+    ADMUX |= (1 << REFS0); // Set ADC reference to AVCC 
+    ADMUX |= (1 << ADLAR); // Left adjust ADC result to allow easy 8 bit reading 
+    ADCSRA |= (1 << 5);  // Set ADC to Free-Running Mode 
+    ADCSRA |= (1 << ADEN);  // Enable ADC 
+    ADCSRA |= (1 << ADSC);  // Start A2D Conversions 
     
-    // Initialisation des capteur à ultrason de l'an dernier (SRF05)
-//     capteur_vieux::init();
+    
+    
+    
     
     // REANIMATION_MODE :
     byte debug_baudrate = 0x00;
@@ -136,7 +139,7 @@ int main()
         AX12InitID(FLASH_ID_MODE);
         
     // Initialisation de tous les AX12
-    AX12Init (AX_BROADCAST, 0, 1023, AX_SPEED); 
+    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED); 
         
         
     while (1)
@@ -154,15 +157,15 @@ int main()
         
         else
         {
-            serial_t_::print("oohhohohhho");
+            
             char buffer[17];
             serial_t_::read(buffer,17);
             #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
-            serial_t_::print("aaaaaaahahaha");
-            
+
             // Ping
-            if(COMPARE_BUFFER("?", 1))
-                serial_t_::print(3);
+            if(COMPARE_BUFFER("?", 1)){
+                serial_t_::print(4);
+            }
 
             
             // GoTo angle
@@ -170,28 +173,23 @@ int main()
             {
                 int8_t id = serial_t_::read_int();
                 int16_t angle = serial_t_::read_int();
+
                 AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
             }
-            
-            else if (COMPARE_BUFFER("A", 1))
+        
+            // Changement de vitesse
+            else if (COMPARE_BUFFER("CH_VITESSE", 10))
             {
-                int8_t id = serial_t_::read_int();
-                int16_t angle = serial_t_::read_int();
-                AX12GoTo(id, angle);
+                int16_t speed = serial_t_::read_int();
 
+                AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
             }
-            
-//             // Changement de vitesse
-//             else if (COMPARE_BUFFER("CH_VITESSE", 10))
-//             {
-//                 int16_t speed = serial_t_::read_int();
-// 
-//                 AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
-//             }
             
             // Désasservissement de tous les servos branchés
             else if (COMPARE_BUFFER("UNASSERV", 8))
+            {
                 AX12Unasserv(0xFE);
+            }
             
             // Reflashage de tous les servos branchés
             else if (COMPARE_BUFFER("FLASH_ID", 8))
@@ -200,26 +198,26 @@ int main()
                 AX12InitID(id);
             }
             
-//             // Jumper
-//             else if (COMPARE_BUFFER("jumper", 6))
-//             {
-//                 serial_t_::print(rbi(PIND,PD7));
-//             }
-//             
-//             // ultrasons
-//             else if (COMPARE_BUFFER("ultrason", 8))
-//             {
-//                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
-//             }
-// 
-//             // infrarouge
-//             else if (COMPARE_BUFFER("infra", 5))
-//                 serial_t_::print(conversion(ADCH));
+            // Jumper
+            else if (COMPARE_BUFFER("jumper", 6))
+            {
+                serial_t_::print(rbi(PIND,PD7));
+            }
+            
+            // ultrasons
+            else if (COMPARE_BUFFER("ultrason", 8))
+            {
+                serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
+            }
+
+            // infrarouge
+            else if (COMPARE_BUFFER("infra", 5))
+                serial_t_::print(conversion(ADCH));
         }
     }
     return 0;
 }
 
-// ISR(TIMER1_OVF_vect){
-//     asm("nop");
-// }
+ISR(TIMER1_OVF_vect){
+    asm("nop");
+}
