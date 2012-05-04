@@ -19,79 +19,31 @@
 #endif
 
 
-typedef Timer<1,ModeCounter,1> timerCapteur;
+typedef Timer<1,ModeCounter,256> timerCapteur;
 typedef Serial<0> serial_t_;
-
-uint8_t craineau    = 0;
-uint8_t FLAG        = 0;
-
 
 class capteur_vieux{
 private:
-    static const uint8_t        port                        = PORTD6;
-    static const uint16_t       TIMEOUT                     = 1500;
+    static const uint8_t        port            = PORTD6;
+    static const uint16_t       TIMEOUT         = 1500;
+    static volatile bool busy;
     
-    
-    static const uint8_t        pin_capteur_vieux           = (1 << port);
-
-  
-  static uint32_t ping()
-  {
-        static const uint8_t pin = pin_capteur_vieux;
-        
-        // Envoi d'une impulsion dans le capteur
-        DDRC |= pin;
-        PORTC &= ~pin;
-        _delay_us(2);
-        PORTC |= pin;
-        _delay_us(5);
-        PORTC &= ~pin;
-        // Reception de la duree
-        DDRC &= ~pin;
-
-        uint8_t masque = pin;
-        uint32_t duree = 0;
-        uint16_t duree_max = TIMEOUT;
-        
-        // Attente de la fin de l'impulsion precedente
-        while ((PINC & pin) == masque)
-            if (duree++ == duree_max)
-                return 0;
-            
-        // Attente du demarrage de l'impulsion
-        while ((PINC & pin) != masque)
-            if (duree++ == duree_max)
-                return 0; 
-            
-        // Attente de la fin de l'impulsion
-        while ((PINC & pin) == masque)
-                duree++;
-        
-        return duree;
-  }
-  
-
-
-  
 public:
   static void init()
   {
       timerCapteur::init();
+      
+      // La pin D5 est là pour génerer un craîneau (optionel)
       sbi(DDRD, PORTD5);
-  }
-  
-  static uint16_t value()
-  {
-      return ping();
   }
   
   static void test()
   {
+//       serial_t_::print(flag);
       // Si on n'est pas busy busy
-      if (FLAG == 0)
+      if (not busy)
       {
-        serial_t_::print("TEST");
-        FLAG = 1;
+//         serial_t_::print("TEST");
         
         
         // Port "port" en output
@@ -103,7 +55,7 @@ public:
         
         // On met un "un" sur la pin pour 5 µs
         sbi(PORTD, port);
-        _delay_us(5);
+        _delay_us(10);
         
         // On remet un zéro puis on la met en input
         cbi(PORTD, port);
@@ -113,50 +65,48 @@ public:
         sbi(PCMSK2,PCINT22); // WARNING PCINT22 est SPECIAL POUR LE PORT PD6 TODO TODO A CHANGER POUR
                             // PORTER LE CODE SUR LA CARTE (mettre PCINT16 pour PortC0)
         sbi(PCICR,PCIE2);//active PCINT port D
-        sei(); // Activation de toutes les interruptions
+        sei();
+        
+        busy = true;
       }
+
   }
   
-  
-  static void test2()
-  {
-      serial_t_::print("test2");
-        if (craineau)
-            sbi(PORTD, PORTD5);
-        else
-            cbi(PORTD, PORTD5);
-        craineau =  1 - craineau;
-  }
+    // Fonction appellée par l'interruption
+    static void interruption()
+    {
+            uint8_t bit = rbi(PIND, PORTD6);
+            
+            // Début de l'impulsion
+            if (bit)
+            {
+                timerCapteur::value(0);
+            }
+                
+            // Fin de l'impulsion
+            else// if (!bit && flag != 1)
+            {
+                serial_t_::print(timerCapteur::value());
+                busy = false;
+                // Désactivation des interruptions
+                cbi(PCICR,PCIE2);
+                cbi(PCMSK2,PCINT22);
+                
+            }
+
+
+    }
+
   
 };
 
+volatile bool capteur_vieux::busy = false;
+
+
+// Interruption pour un changement d'état sur la pin.
 ISR(PCINT2_vect)
 {
-    serial_t_::print("ISR WESH");
-    // Début de l'impulsion
-    if (rbi(PIND, PORTD6) && (FLAG == 1 || FLAG == 2))
-    {
-        serial_t_::print("ISR1");
-        timerCapteur::value(0);
-        FLAG = 3;
-    }
-    
-    else if (!rbi(PIND, PORTD6) && FLAG == 1)
-    {
-        serial_t_::print("ISR2");
-        FLAG = 2;
-    }
-    
-    // Fin de l'impulsion
-    else if (!rbi(PIND, PORTD6) && FLAG == 3)
-    {
-        serial_t_::print("ISR3");
-        serial_t_::print(timerCapteur::value());
-        sbi(PCICR,PCIE2);
-        FLAG = 0;
-    }
-    
-    
+    capteur_vieux::interruption();
 }
 
 
