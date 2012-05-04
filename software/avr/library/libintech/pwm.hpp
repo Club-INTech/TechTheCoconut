@@ -58,6 +58,28 @@ struct ModeCounter<3>{
   }
 };
 
+template<>
+struct ModeCounter<4>{
+  static void seuil(uint16_t seuil){
+    OCR4A = seuil;
+  }
+
+  static void set(){
+    sbi(TIMSK4,TOIE4);
+  }
+};
+
+template<>
+struct ModeCounter<5>{
+  static void seuil(uint16_t seuil){
+    OCR5A = seuil;
+  }
+
+  static void set(){
+    sbi(TIMSK5,TOIE5);
+  }
+};
+
 #endif
 
 template<uint8_t timer_id>
@@ -137,6 +159,41 @@ struct ModeFastPwm<3>{
 	TCCR3B &= ~( 1 << WGM32 );
   }
 };
+
+template<>
+struct ModeFastPwm<4>{
+  static void seuil(uint8_t seuil){
+    OCR4B = seuil;
+  }
+  static void set(){
+        // Initialisation pin 6
+        DDRD |= ( 1 << PORTD3 );
+        TCCR4A &= ~( 1 << COM4B0 );
+        TCCR4A |= ( 1 << COM4B1 );
+        // Fast PWM
+        TCCR4A |= ( 1 << WGM40 );
+        TCCR4A |= ( 1 << WGM41 );
+        TCCR4B &= ~( 1 << WGM42 );
+  }
+};
+
+template<>
+struct ModeFastPwm<5>{
+  static void seuil(uint8_t seuil){
+    OCR5B = seuil;
+  }
+  static void set(){
+        // Initialisation pin 6
+        DDRD |= ( 1 << PORTD3 );
+        TCCR5A &= ~( 1 << COM5B0 );
+        TCCR5A |= ( 1 << COM5B1 );
+        // Fast PWM
+        TCCR5A |= ( 1 << WGM50 );
+        TCCR5A |= ( 1 << WGM51 );
+        TCCR5B &= ~( 1 << WGM52 );
+  }
+};
+
 
 #endif
 

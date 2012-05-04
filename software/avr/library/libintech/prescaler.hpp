@@ -151,6 +151,70 @@ struct Prescaler<3,1024>{
   static void set() { sbi(TCCR3B,CS32); cbi(TCCR3B,CS31); sbi(TCCR3B,CS30); }
 };
 
+//Prescalers timer 4
+
+template<>
+struct Prescaler<4,0>{
+  static void set() { cbi(TCCR4B,CS42); cbi(TCCR4B,CS41); cbi(TCCR4B,CS40); }
+};
+
+template<>
+struct Prescaler<4,1>{
+  static void set() { cbi(TCCR4B,CS42); cbi(TCCR4B,CS41); sbi(TCCR4B,CS40); }
+};
+
+template<>
+struct Prescaler<4,8>{
+  static void set() { cbi(TCCR4B,CS42); sbi(TCCR4B,CS41); cbi(TCCR4B,CS40); }
+};
+
+template<>
+struct Prescaler<4,64>{
+  static void set() { cbi(TCCR4B,CS42); sbi(TCCR4B,CS41); sbi(TCCR4B,CS40); }
+};
+
+template<>
+struct Prescaler<4,256>{
+  static void set() { sbi(TCCR4B,CS42); cbi(TCCR4B,CS41); cbi(TCCR4B,CS40); }
+};
+
+template<>
+struct Prescaler<4,1024>{
+  static void set() { sbi(TCCR4B,CS42); cbi(TCCR4B,CS41); sbi(TCCR4B,CS40); }
+};
+
+//Prescalers timer 5
+
+template<>
+struct Prescaler<5,0>{
+  static void set() { cbi(TCCR5B,CS52); cbi(TCCR5B,CS51); cbi(TCCR5B,CS50); }
+};
+
+template<>
+struct Prescaler<5,1>{
+  static void set() { cbi(TCCR5B,CS52); cbi(TCCR5B,CS51); sbi(TCCR5B,CS50); }
+};
+
+template<>
+struct Prescaler<5,8>{
+  static void set() { cbi(TCCR5B,CS52); sbi(TCCR5B,CS51); cbi(TCCR5B,CS50); }
+};
+
+template<>
+struct Prescaler<5,64>{
+  static void set() { cbi(TCCR5B,CS52); sbi(TCCR5B,CS51); sbi(TCCR5B,CS50); }
+};
+
+template<>
+struct Prescaler<5,256>{
+  static void set() { sbi(TCCR5B,CS52); cbi(TCCR5B,CS51); cbi(TCCR5B,CS50); }
+};
+
+template<>
+struct Prescaler<5,1024>{
+  static void set() { sbi(TCCR5B,CS52); cbi(TCCR5B,CS51); sbi(TCCR5B,CS50); }
+};
+
 #endif
 
 #endif

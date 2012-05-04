@@ -59,6 +59,28 @@ struct TimerRegisters<3, ModeCounter<3> >{
     }
 };
 
+template<>
+struct TimerRegisters<4, ModeCounter<4> >{
+    static uint16_t get_TCNT(){
+        return TCNT4;
+    }
+
+    static void set_TCNT( uint16_t new_tcnt){
+       TCNT4 = new_tcnt;
+    }
+};
+
+template<>
+struct TimerRegisters<5, ModeCounter<5> >{
+    static uint16_t get_TCNT(){
+        return TCNT4;
+    }
+
+    static void set_TCNT( uint16_t new_tcnt){
+       TCNT4 = new_tcnt;
+    }
+};
+
 #endif
 
 template<uint8_t ID_,template<uint8_t> class MODE_, uint16_t PRESCALER_RATIO_>
