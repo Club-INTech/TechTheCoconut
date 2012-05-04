@@ -92,8 +92,7 @@ extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
 int main()
 {
-    Serial<0>::init();
-    Serial<0>::change_baudrate(BAUD_RATE_SERIE);
+
     
     // GESTION DES INTERRUPTIONS POUR LA PARTIE CAPTEUR + JUMPER
     //Pin D2 en INPUT
@@ -130,6 +129,10 @@ int main()
         
     // BAUD RATE de la série (envoi)
     ax12Init(BAUD_RATE_SERIE);
+
+    // Initialisation de la série carte <-> PC
+    serial_t_::init();
+    serial_t_::change_baudrate(BAUD_RATE_SERIE);
     
     if (FLASH_BAUD_RATE_MODE)
         // BAUD RATE de l'AX12 (réception)
