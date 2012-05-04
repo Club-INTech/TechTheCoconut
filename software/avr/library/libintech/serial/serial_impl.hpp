@@ -45,6 +45,14 @@ private:
 	send_char('\r');
     	send_char('\n');
     }
+    
+        
+    static inline unsigned char read_single_char(){
+    while(!available()){ asm("nop"); }
+    unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
+    rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
+    return c;
+    }
 
 public:
 
@@ -86,24 +94,30 @@ public:
     }
     
     template<class T>
-    static inline void print(T val){
+    static inline void print_noln(T val){
     	char buffer[10];
 	ltoa(val,buffer,10);
-    	print((const char *)buffer);
+    	print_noln((const char *)buffer);
     }
     
-    static inline void print(char val){
+    static inline void print_noln(char val){
     	send_char(val);
-    	send_ln();
+    	send_char('\r');
     }
 
-    static inline void print(const char * val)
+    static inline void print_noln(const char * val)
     {
     	for(uint16_t i = 0 ; i < strlen(val) ; i++)
     	{
     		send_char(val[i]);
     	}
-    	send_ln();
+    	send_char('\r');
+    }
+    
+    template<class T>
+    static inline void print(T val){
+        print_noln(val);
+        send_char('\n');
     }
 
     
@@ -136,13 +150,7 @@ public:
     	send_ln();
     }
     
-    
-    static inline unsigned char read_char(){
-	while(!available()){ asm("nop"); }
-	unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
-	rx_buffer_.tail = (rx_buffer_.tail + 1) % rx_buffer__SIZE;
-	return c;
-    }
+
     
     static inline int32_t read_int(void){
         static char buffer[20];
@@ -162,10 +170,17 @@ public:
         return atof(buffer);
     }
 
+    static inline unsigned char read_char(){
+        unsigned char res = read_single_char();
+        //Lecture \r
+        read_single_char();
+        return res;
+    }
+    
     static inline uint8_t read(unsigned char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
-        	unsigned char tmp = read_char();
+        	unsigned char tmp = read_single_char();
         	if(tmp == '\r'){
         		return i;
 		}
@@ -179,7 +194,7 @@ public:
         uint8_t i = 0;
         for (; i < length; i++){
             while(!available()){ asm("nop"); }
-            char tmp = static_cast<char>(read_char());
+            char tmp = static_cast<char>(read_single_char());
             if(tmp == '\r'){
                 return i;
 	    }
