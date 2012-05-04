@@ -104,7 +104,7 @@ class capteur_srf05
         // Fin de l'impulsion
         else// if (!bit && flag != 1)
         {
-            serial_t_::print(timerCapteur::value());
+            serial_t_::print(timerCapteur::value()*500/184);
             busy = false;
             // Désactivation des interruptions
             cbi(PCICR,PCIE2);
