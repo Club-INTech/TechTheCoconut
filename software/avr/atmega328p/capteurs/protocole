@@ -1,7 +1,7 @@
 Noms des actionneurs : 'hd, 'hg', 'bd', 'bg', 'tt' : tous les actionneurs en même temps
 
 ping de la carte : '?'
-La carte doit retourner : '1'
+La carte doit retourner : '4'
 
 Commande de déplacement : nom + angle + '\n' + vitesse + '\n'
 *Paramètre vitesse facultatif

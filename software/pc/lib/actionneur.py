@@ -71,7 +71,7 @@ class Actionneur(serie.Serie):
         if position == "ALL" or "bg" in position:
             self.goto(self.ids["bg"], angle+5)
         if position == "ALL" or "bd" in position:
-            self.goto(self.ids["bd"], 180+3-angle)
+            self.goto(self.ids["bd"], 180+9-angle)
         
         #print "##################\n"+str(self.robotInstance.rayon)+"\n#############\n"
 
@@ -150,11 +150,11 @@ class Actionneur(serie.Serie):
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
         self.serieActionneurInstance.ecrire("GOTO")
-        time.sleep(0.01)
+        time.sleep(0.03)
         self.serieActionneurInstance.ecrire(str(int(id)))
-        time.sleep(0.01)
+        time.sleep(0.03)
         self.serieActionneurInstance.ecrire(str(int(angle)))
-        time.sleep(0.01)
+        time.sleep(0.03)
         
     def calculRayon(self, angle):
         """

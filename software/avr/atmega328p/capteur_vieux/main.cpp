@@ -18,19 +18,29 @@ int main()
     
     while(1) 
     {
-        char buffer[17];
-        serial_t_::read(buffer,17);
-        #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+//         char buffer[17];
+//         serial_t_::read(buffer,17);
+//         #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+//         
+//         // ping
+//         if (COMPARE_BUFFER("?", 1))
+//             serial_t_::print(5);
+//         
+//         if (COMPARE_BUFFER("vieux", 5))
+//             serial_t_::print(capteur_vieux::value_brut());
+
+            capteur_vieux::test();
+
         
-        // ping
-        if (COMPARE_BUFFER("?", 1))
-            serial_t_::print(5);
-        
-        if (COMPARE_BUFFER("vieux", 5))
-            serial_t_::print(capteur_vieux::value_brut());
     }
 
     
     return 0;
+}
+
+
+ISR(TIMER1_OVF_vect)
+{
+    
 }
 
