@@ -3,6 +3,7 @@
 import lib.log
 import robot
 import asservissement
+import asservissementDuree
 import capteur
 import serial
 import serie_acquisition
@@ -131,7 +132,7 @@ class Instance:
         try : 
             self.asserInstanceDuree = asservissementDuree.Asservissement_duree()
         except :
-            log.logger.error("instance : asserInstanceDuree n'est pas chargé")
+            log.logger.critical("instance : asserInstanceDuree n'est pas chargé")
 
     def instanciationActionneur(self):
         try: self.actionInstance = actionneur.Actionneur()

@@ -32,10 +32,6 @@ class Asservissement_duree:
             self.robotInstance = __builtin__.instance.robotInstance
         else:
             log.logger.error("asservissement : ne peut importer instance.robotInstance")
-        if hasattr(__builtin__.instance, 'serieAsserInstance'):
-            self.serieAsserInstance = __builtin__.instance.serieAsserInstance
-        else:
-            log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
             
         #distance seuil de detection pour les ultrasons
         #self.maxCapt = 400
@@ -52,134 +48,127 @@ class Asservissement_duree:
         #timer pour les timeout
         self.timerAsserv = timer.Timer()
         
+        self.vitesseRotation = 0.4
+        self.vitesseTranslation = 368.
         self.modeRotation = 2
         self.modeTranslation = 2
-        self.orientation = getOrientation()
-        self.position = self.getPosition()
+        self.orientation = 0
+        self.position = point.Point(0,400)
+        self.duree = 0
+    
+    def lancerChrono(self):
+        self.duree = 0
+        
+    def mesurerChrono(self):
+        return self.duree
+        
+    def goToSegment(self, arrivee, avecRechercheChemin = False):
+        """
+        Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
+        :param script: point d'arrivé
+        :type script: point
+        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin
+        :type avecRechercheChemin: booléen
+        """
+        depart = self.getPosition()
+        delta_x = (arrivee.x-depart.x)
+        delta_y = (arrivee.y-depart.y)
+        angle = math.atan2(delta_y,delta_x)
+        self.gestionTourner(angle)
+        
+        """
+        appel d'une translation de la distance euclidienne depart->arrivée
+        sans instruction particulière
+        avec un booléen codant l'utilisation de la recherche de chemin
+        """
+        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
     
     def goTo(self, arrivee):
-        log.logger.info("Calcul de la durée de déplacement")
+        """
+        Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
+        :param depart: point de départ
+        :type depart: Point
+        :param arrivee: point d'arrivée
+        :type arrivee: Point
+        :param chemin: chemin renvoyé par la recherche de chemin
+        :type chemin: liste de points
+        """
+        depart = self.getPosition()
+        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
-        depart = self.position
+        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
-        
-        self.majVitesse(self.modeDeplacement)
         
         try :
             chemin_python.remove(chemin_python[0])
         except :
             return (depart)
-        angleSauv = 1000
-        for i in chemin_python:
-            if angleSauv!= 1000:
-                #DUREE ROTATION
-                delta_x = (arrivee.x-depart.x)
-                delta_y = (arrivee.y-depart.y)
-                angle = math.atan2(delta_y,delta_x)
-                dureeRotation = abs(angle - angleSauv)/self.vitesseRotation
-                
-                #DUREE TRANSLATION
-                dureeTranslation = self.vitesseTranslation*math.sqrt(delta_x**2+delta_y**2)
-                
-                #MAJ des variables
-                angleSauv = angle
-                depart = i
-                
-            else:
-                #DUREE DE ROTATION = constante
-                delta_x = (arrivee.x-depart.x)
-                delta_y = (arrivee.y-depart.y)
-                angleSauv = math.atan2(delta_y,delta_x)
-                dureeRotation = 0.5
-                
-                #TRANSLATION
-                dureeTranslation = math.sqrt(delta_x**2+delta_y**2)/self.vitesseTranslation
-                
-                #MAJ des variables
-                depart = i
             
-            position = arrivee
-            return dureeRotation + dureeTranslation
-         
-      
-    def gestionTourner(self, angle):
-        self.majVitesse(self.modeDeplacement)
-        return math.abs(self.orientation - angle)/self.vitesseRotation
-    
-    def gestionAvancer(self, distance):
-        self.majVitesse(self.modeDeplacement)
+        for i in chemin_python:
+            log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
+            
+            #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
+            self.goToSegment(i,True)
+        return "chemin_termine"
+        
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
         self.position.x += distance*math.cos(self.orientation)
         self.position.y += distance*math.sin(self.orientation)
-        return distance/self.vitesseTranslation
+        self.duree +=  distance/self.vitesseTranslation
+        print "temps de translation\tde "+str(int(distance*10)/10.)+",   \tvitesse "+str(self.modeTranslation)+":\t"+str(distance/self.vitesseTranslation)
     
-    def changerVitesse(self, modeDeplacement):
-        if modeRotation == 1:
-            self.vitesseRotation = 1.5
-        elif modeRotation == 2:
-            self.vitesseRotation = 0.4
-        else:
-            modeRotation = 0.2
-            
-        if modeTranslation == 1:
-            self.vitesseTranslation = 148
-        elif modeTranslation == 2:
-            self.vitesseTranslation = 368
-        else:
-            self.vitesseTranslation = 573
-    
+    def gestionTourner(self, angle, instruction = ""):
+        if __builtin__.constantes['couleur'] == "r":
+            angle = math.pi - angle
+        
+        deltaAngle = abs(self.orientation - angle)
+        while deltaAngle >= 2*math.pi:
+            deltaAngle -= 2*math.pi
+        while deltaAngle > math.pi:
+            deltaAngle = 2*math.pi - deltaAngle
+        self.orientation = angle
+        self.duree += deltaAngle/self.vitesseRotation
+        print "temps de rotation\tà "+str(int(angle*1000)/1000.)+",   \tvitesse "+str(self.modeRotation)+":\t"+str(deltaAngle/self.vitesseRotation)
+        
     def getPosition(self):
-        self.serieAsserInstance.ecrire("pos")
-        reponse = str(self.serieAsserInstance.lire())
-        try:
-            if reponse[4]== "+":
-                reponse = reponse.split("+")
-                pos = point.Point(float(reponse[1]),float(reponse[0]))
-            else:
-                reponse = reponse.split("-")
-                pos = point.Point(-float(reponse[1]),float(reponse[0]))
-            return pos
-        except:
-            self.getPosition()
-            
+        return point.Point(self.position.x,self.position.y)
+    
     def setPosition(self,position):
-        self.serieAsserInstance.ecrire("cx")
-        self.serieAsserInstance.ecrire(str(float(position.x)))
-        self.serieAsserInstance.ecrire("cy")
-        self.serieAsserInstance.ecrire(str(float(position.y)))
+        self.position.x = position.x
+        self.position.y = position.y
             
     def getOrientation(self):
-        self.serieAsserInstance.ecrire("eo")
-        reponse = str(self.serieAsserInstance.lire())
-        if re.match("^[0-9]+$", reponse):
-            orientation = float(reponse)/1000.0
-            return orientation
-        else:
-            return self.getOrientation()
+        return self.orientation
             
     def setOrientation(self,orientation):
-        self.serieAsserInstance.ecrire("co")
-        self.serieAsserInstance.ecrire(str(float(orientation)))
-        
-    def recalage(self):
-        self.serieAsserInstance.ecrire("recal")
-        while not acquitement:
-            self.serieAsserInstance.ecrire('acq')
-            reponse = self.serieAsserInstance.lire()
-            if reponse == "FIN_REC":
-                print reponse
-                acquitement = True
-            #TODO : gestion stop ?
-        
-    def setUnsetAsser(self, asservissement, mode):
-        pass
-            
-            
+        self.orientation = orientation
+     
     def changerVitesse(self, typeAsservissement, valeur):
+        
         if typeAsservissement == "rotation":
             self.modeRotation = valeur
+            if self.modeRotation == 1:
+                self.vitesseRotation = 0.2
+            elif self.modeRotation == 2:
+                self.vitesseRotation = 0.4
+            else:
+                self.vitesseRotation = 1.5
+                
         elif typeAsservissement == "translation":
             self.modeTranslation = valeur
-        
+            if self.modeTranslation == 1:
+                self.vitesseTranslation = 148.
+            elif self.modeTranslation == 2:
+                self.vitesseTranslation = 368.
+            else:
+                self.vitesseTranslation = 573.
+                
     def immobiliser(self):
+        pass
+       
+    def recalage(self):
+        pass
+        
+    def setUnsetAsser(self, asservissement, mode):
         pass
         

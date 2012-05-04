@@ -31,7 +31,7 @@ import lib.instance
 try:
     #from graph_tool.all import *
     from graph_tool import Graph,load_graph
-    from graph_tool.all import AStarVisitor,astar_search
+    from graph_tool.all import AStarVisitor,astar_search,StopSearch
 except:
     log.logger.error("Vous devez installer graph-tool, plus d'informations sur le README")
 

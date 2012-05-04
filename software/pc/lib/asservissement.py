@@ -55,6 +55,9 @@ class Asservissement:
         
         #timer pour les timeout
         self.timerAsserv = timer.Timer()
+        
+        self.vitesseTranslation = 2
+        self.vitesseRotation = 2
             
     
     def goToSegment(self, arrivee, avecRechercheChemin = False):
@@ -95,6 +98,7 @@ class Asservissement:
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
         try :
+            #NOTE on devrait peut etre laisser l'exception remonter dans le script...
             chemin_python.remove(chemin_python[0])
         except :
             return (depart)
@@ -105,83 +109,7 @@ class Asservissement:
             #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
             self.goToSegment(i,True)
         return "chemin_termine"
-         
-    def dureeGoTo(self, depart, arrivee, modeDeplacement):
-        log.logger.info("Calcul de la durée de déplacement")
-        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
-        chemin_python = theta.rechercheChemin(depart,arrivee)
-        
-        if modeDeplacement == 1:
-            vitesseRotation = 1.5
-            vitesseTranslation = 148
-        elif modeDeplacement == 2:
-            vitesseRotation = 0.4
-            vitesseTranslation = 368
-        else:
-            vitesseRotation = 0.2
-            vitesseTranslation = 573
-        
-        try :
-            chemin_python.remove(chemin_python[0])
-        except :
-            return (depart)
-        angleSauv = 1000
-        for i in chemin_python:
-            if angleSauv!= 1000:
-                #DUREE ROTATION
-                delta_x = (arrivee.x-depart.x)
-                delta_y = (arrivee.y-depart.y)
-                angle = math.atan2(delta_y,delta_x)
-                dureeRotation = abs(angle - angleSauv)/vitesseRotation
-                
-                #DUREE TRANSLATION
-                dureeTranslation = vitesseTranslation*math.sqrt(delta_x**2+delta_y**2)
-                
-                #MAJ des variables
-                angleSauv = angle
-                depart = i
-                
-            else:
-                #DUREE DE ROTATION = constante
-                delta_x = (arrivee.x-depart.x)
-                delta_y = (arrivee.y-depart.y)
-                angleSauv = math.atan2(delta_y,delta_x)
-                dureeRotation = 0.5
-                
-                #TRANSLATION
-                dureeTranslation = math.sqrt(delta_x**2+delta_y**2)/vitesseTranslation
-                
-                #MAJ des variables
-                depart = i
-            
-            return dureeRotation + dureeTranslation
-            
-    def dureeTranslation(self, distance, modeDeplacement):
-        if modeDeplacement == 1:
-            vitesseTranslation = 148
-        elif modeDeplacement == 2:
-            vitesseTranslation = 368
-        else:
-            vitesseTranslation = 573
-            
-        return distance/vitesseTranslation
-        
-    def dureeRotation(self, modeDeplacement, angle, orientation = False):
-        if modeDeplacement == 1:
-            vitesseRotation = 0
-        elif modeDeplacement == 2:
-            vitesseRotation = 1
-        else:
-            vitesseRotation = 2
-            
-        if orientation:
-            return math.abs(orientation - angle)/vitesseRotation
-        else:
-            return 0.5
-        
-        
-            
-        
+
     def tourner(self, angle):
         """
         Fonction de script pour faire tourner le robot sur lui même.
@@ -311,7 +239,6 @@ class Asservissement:
             self.serieAsserInstance.ecrire("ctm")
             self.serieAsserInstance.ecrire(str(float(valeur)))
             
-            
     def changerVitesse(self, typeAsservissement, valeur):
         """
         spécifie une vitesse prédéfinie en translation ou rotation
@@ -322,8 +249,16 @@ class Asservissement:
         """
         if typeAsservissement == "rotation":
             self.serieAsserInstance.ecrire("crv"+str(int(valeur)))
+            self.vitesseRotation = int(valeur)
         elif typeAsservissement == "translation":
             self.serieAsserInstance.ecrire("ctv"+str(int(valeur)))
+            self.vitesseTranslation = int(valeur)
+            
+    def getVitesse(self, typeAsservissement):
+        if typeAsservissement == "rotation":
+            return self.vitesseRotation
+        elif typeAsservissement == "translation":
+            return self.vitesseTranslation
         
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')

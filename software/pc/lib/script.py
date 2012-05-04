@@ -15,17 +15,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 class Script:
     
-    def __init__(self, duree = False):
-        if duree == False:
-            if hasattr(__builtin__.instance, 'self.asserInstance'):
-                self.asserInstance = __builtin__.instance.self.asserInstance
-            else:
-                log.logger.error("script : ne peut importer instance.self.asserInstance")
+    def __init__(self):
+        if hasattr(__builtin__.instance, 'asserInstance'):
+            self.asserInstance = __builtin__.instance.asserInstance
         else:
-            if hasattr(__builtin__.instance, 'self.asserInstanceDuree'):
-                self.asserInstance = __builtin__.instance.self.asserInstanceDuree
-            else:
-                log.logger.error("script : ne peut importer instance.self.asserInstanceDuree")
+            log.logger.error("script : ne peut importer instance.asserInstance")
+            
+        if hasattr(__builtin__.instance, 'asserInstanceDuree'):
+            self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
+        else:
+            log.logger.error("script : ne peut importer instance.asserInstanceDuree")
             
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
@@ -35,10 +34,10 @@ class Script:
             self.robotInstance = __builtin__.instance.robotInstance
         else:
             log.logger.error("script : ne peut importer instance.robotInstance")
-        if hasattr(__builtin__.instance, 'self.actionInstance') :
-            self.actionInstance = __builtin__.instance.self.actionInstance
+        if hasattr(__builtin__.instance, 'actionInstance') :
+            self.actionInstance = __builtin__.instance.actionInstance
         else:
-            log.logger.error("script : ne peut importer instance.self.actionInstance")
+            log.logger.error("script : ne peut importer instance.actionInstance")
     
         self.couleur = __builtin__.constantes["couleur"]
         
@@ -153,28 +152,77 @@ class Script:
                         except :
                             pass
         
-    def scriptPipeauNewStrategie(self):
+    def test1(self,asserv):
+        asserv.gestionAvancer(300,"forcer")
         
+    def test2(self,asserv):
+        asserv.changerVitesse("translation",1)
+        asserv.gestionAvancer(300,"forcer")
+    
+    def test3(self,asserv):
+        asserv.gestionTourner(math.pi/2)
+        
+    def test4(self,asserv):
+        asserv.changerVitesse("rotation",3)
+        asserv.gestionTourner(-math.pi/2)
+        
+    def test5(self,asserv):
+        asserv.gestionAvancer(300)
+        asserv.gestionAvancer(300)
+        asserv.changerVitesse("rotation",3)
+        asserv.gestionTourner(0)
+        
+    def test6(self,asserv):
+        asserv.goTo(Point(800, 250))
+        
+    def gestionScripts(self,script,chrono = False):
+        if chrono:
+            #instance pour le calcul de durée
+            asserv = self.asserInstanceDuree
+            #initialisations
+            if hasattr(__builtin__.instance, 'serieAsserInstance'):
+                asserv.setPosition(self.asserInstance.getPosition())
+                asserv.setOrientation(self.asserInstance.getOrientation())
+            asserv.changerVitesse("rotation",2)
+            asserv.changerVitesse("translation",2)
+            
+            #début du calcul de durée du script
+            asserv.lancerChrono()
+        else:
+            #instance pour les déplacements réels
+            asserv = self.asserInstance
+            
         try :
-            #déplacements
-            self.asserInstance.gestionAvancer(300)
-            self.asserInstance.gestionAvancer(300,"forcer")
-            changerVitesse("translation",1)
-            
-            self.asserInstance.gestionTourner(math.pi)
-            changerVitesse("rotation",3)
-            
-            self.asserInstance.goTo(Point(800, 250))
-            
-            #exemples bras
-            self.actionInstance.deplacer(90)
-            self.actionInstance.deplacer(160)
-            self.actionInstance.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
-            self.actionInstance.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
-            self.actionInstance.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
-            return True
+            #execution du script
+            script(asserv)
+            if chrono:
+                #retour de la durée totale d'execution du script
+                return asserv.mesurerChrono()
+            else:
+                #bon déroulement du script (pour des déplacements réels)
+                return True
         except :
+            #spécifie un déroulement problématique
             return False
+
+            
+    def scriptPipeauNewStrategie(self,chrono = "false"):
+        #déplacements
+        asserv.gestionAvancer(300)
+        asserv.gestionAvancer(300,"forcer")
+        asserv.changerVitesse("translation",1)
+        
+        asserv.gestionTourner(math.pi)
+        asserv.changerVitesse("rotation",3)
+        
+        asserv.goTo(Point(800, 250))
+        
+        #exemples bras
+        self.actionInstance.deplacer(90)
+        self.actionInstance.deplacer(160)
+        self.actionInstance.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
+        self.actionInstance.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
+        self.actionInstance.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
                 
     #TEST enchainement des scripts
     def scriptTestStruct0(self):
@@ -360,3 +408,11 @@ class Script:
                 print "ca chie"
         """
         
+        
+"""
+import __builtin__
+import instance
+sc = __builtin__.instance.scriptInstance
+sc.gestionScripts(sc.test1)
+sc.gestionScripts(sc.test1,True)
+"""
