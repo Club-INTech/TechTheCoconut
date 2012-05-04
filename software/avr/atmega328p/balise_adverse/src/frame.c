@@ -1,10 +1,10 @@
 #include "frame.h"
 
-Frame makeFrame(uint16_t distance, uint16_t offset)
+int32_t makeFrame(uint16_t distance, uint16_t offset)
 {
-	Frame frame=0;
-	Crc crc=0;
-	Data data = distance;
+	int32_t frame=0;
+	uint8_t crc=0;
+	int32_t data = distance;
 	
 	if(offset > 4096 || distance > 4096)
 	  return 0;
@@ -19,7 +19,7 @@ Frame makeFrame(uint16_t distance, uint16_t offset)
 	return frame;
 }
 
-void sendFrame(Frame frame)
+void sendFrame(int32_t frame)
 {
 	Serial<0>::print(frame);
 }

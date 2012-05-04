@@ -69,6 +69,7 @@ int main() {
 			int32_t distance;
 			int32_t offset = 0;
 			int32_t angle = 0;
+			int32_t crc = 0;
 			do{
 				Balise::serial_radio::print('v');
 				
@@ -76,14 +77,15 @@ int main() {
 				int32_t t1 = Balise::T_TopTour::value();
 				distance = Balise::serial_radio::read_int();
 				offset = Balise::serial_radio::read_int();
-				int32_t t2 = Balise::T_TopTour::value();
+				crc = Balise::serial_radio::read_int();
+				int32_t t2 = Balise::T_TopTour::value();			
 				
 				if(t2 < t1){
 				  t2+=balise.max_counter();
 				}
 				angle = balise.getAngle(offset + (t2 - t1)*5/4);
 				
-				is_valid = true;
+				is_valid = (crc==crc8((distance << 16) + offset));
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5);
 			if(n_demandes==5){
