@@ -5,6 +5,13 @@
 #include "algorithm.hpp"
 #include <libintech/timer.hpp>
 
+/** @file libintech/capteur_vieux.hpp
+ *  @brief Ce fichier crée une classe capteur_srf05 pour pouvoir utiliser simplement les capteurs SRF05.
+ *  @author Thibaut ~MissFrance~
+ *  @date 04 mai 2012
+ */ 
+
+/** Fonctions de lecture et écriture de bits. */
 // Set bit
 #ifndef sbi
 #define sbi(port,bit) (port) |= (1 << (bit))
@@ -22,77 +29,88 @@
 typedef Timer<1,ModeCounter,256> timerCapteur;
 typedef Serial<0> serial_t_;
 
-class capteur_vieux{
-private:
+/** @class capteur_srf05
+ *  \brief Classe pour pouvoir gérer facilement les capteurs srf05.
+ *  La classe gère la récupération d'une distance entre le capteur et un obstacle.
+ */
+
+class capteur_srf05
+{
+   private:
     static const uint8_t        port            = PORTD6;
     static const uint16_t       TIMEOUT         = 1500;
     static volatile bool busy;
     
-public:
-  static void init()
-  {
-      timerCapteur::init();
-      
-      // La pin D5 est là pour génerer un craîneau (optionel)
-      sbi(DDRD, PORTD5);
-  }
-  
-  static void test()
-  {
-//       serial_t_::print(flag);
-      // Si on n'est pas busy busy
-      if (not busy)
-      {
-//         serial_t_::print("TEST");
-        
-        
-        // Port "port" en output
-        sbi(DDRD, port);
-        
-        // On met un zéro sur la pin pour 2 µs
-        cbi(PORTD, port);
-        _delay_us(2);
-        
-        // On met un "un" sur la pin pour 5 µs
-        sbi(PORTD, port);
-        _delay_us(10);
-        
-        // On remet un zéro puis on la met en input
-        cbi(PORTD, port);
-        cbi(DDRD, port);
+   public:
+    /** S'occupe d'initialiser le capteur.
+     */
+    static void init()
+    {
+        // Initialisation du timer. C'est tout.
+        timerCapteur::init();
+    }
+    
+    /** Envoie une impulsion dans la pin, puis active les interruptions de changement
+     *  d'état sur cette pin.
+     */
+    static void value()
+    {
+        // Si on n'est pas busy (càd si on n'est pas en train d'attendre
+        // l'impulsion retour du capteur).
+        if (not busy)
+        {      
+            // Port "port" en output
+            sbi(DDRD, port);
+            
+            // On met un zéro sur la pin pour 2 µs
+            cbi(PORTD, port);
+            _delay_us(2);
+            
+            // On met un "un" sur la pin pour 5 µs
+            sbi(PORTD, port);
+            _delay_us(10);
+            
+            // On remet un zéro puis on la met en input
+            cbi(PORTD, port);
+            cbi(DDRD, port);
 
-        // On lance l'interruption qui gèrera la sortie du capteur
-        sbi(PCMSK2,PCINT22); // WARNING PCINT22 est SPECIAL POUR LE PORT PD6 TODO TODO A CHANGER POUR
-                            // PORTER LE CODE SUR LA CARTE (mettre PCINT16 pour PortC0)
-        sbi(PCICR,PCIE2);//active PCINT port D
-        sei();
-        
-        busy = true;
-      }
+            // On lance l'interruption qui gèrera la sortie du capteur
+            sbi(PCMSK2,PCINT22); // WARNING PCINT22 est SPECIAL POUR LE PORT PD6 TODO TODO A CHANGER POUR
+                                // PORTER LE CODE SUR LA CARTE (mettre PCINT16 pour PortC0)
+            sbi(PCICR,PCIE2);//active PCINT port D
+            sei();
+            
+            // On est busy en attendant l'interruption.
+            busy = true;
+        }
 
-  }
+    }
   
-    // Fonction appellée par l'interruption
+    /** Fonction appellée par l'interruption. S'occupe d'envoyer la valeur de la longueur
+     *  de l'impulsion retournée par le capteur dans la série.
+     */
     static void interruption()
     {
-            uint8_t bit = rbi(PIND, PORTD6);
+        // Front montant si bit == 1, descendant sinon.
+        uint8_t bit = rbi(PIND, PORTD6);
+        
+        // Début de l'impulsion
+        if (bit)
+        {
+            // Initialisation du capteur.
+            timerCapteur::value(0);
+        }
             
-            // Début de l'impulsion
-            if (bit)
-            {
-                timerCapteur::value(0);
-            }
-                
-            // Fin de l'impulsion
-            else// if (!bit && flag != 1)
-            {
-                serial_t_::print(timerCapteur::value());
-                busy = false;
-                // Désactivation des interruptions
-                cbi(PCICR,PCIE2);
-                cbi(PCMSK2,PCINT22);
-                
-            }
+        // Fin de l'impulsion
+        else// if (!bit && flag != 1)
+        {
+            serial_t_::print(timerCapteur::value());
+            busy = false;
+            // Désactivation des interruptions
+            cbi(PCICR,PCIE2);
+            cbi(PCMSK2,PCINT22);
+            
+        }
 
 
     }
@@ -100,13 +118,14 @@ public:
   
 };
 
-volatile bool capteur_vieux::busy = false;
+volatile bool capteur_srf05::busy = false;
 
 
-// Interruption pour un changement d'état sur la pin.
+/** Interruption pour un changement d'état sur la pin.
+ */
 ISR(PCINT2_vect)
 {
-    capteur_vieux::interruption();
+    capteur_srf05::interruption();
 }
 
 

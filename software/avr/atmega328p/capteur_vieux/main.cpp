@@ -9,29 +9,20 @@
 #include <libintech/capteur_vieux.hpp>
 
 typedef Serial<0> serial_t_;
+typedef Timer<1,ModeCounter,256> timerCapteur;
+
+// typedef capteur_vieux<PORTD, PORTD6, timerCapteur, serial_t_>;
 
 int main()
 {
     serial_t_::init();
     serial_t_::change_baudrate(9600);
-    capteur_vieux::init();
+    capteur_srf05::init();
     
     while(1) 
     {
-//         char buffer[17];
-//         serial_t_::read(buffer,17);
-//         #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
-//         
-//         // ping
-//         if (COMPARE_BUFFER("?", 1))
-//             serial_t_::print(5);
-//         
-//         if (COMPARE_BUFFER("vieux", 5))
-//             serial_t_::print(capteur_vieux::value_brut());
-
-            capteur_vieux::test();
-
-        
+            capteur_srf05::value();
+            _delay_ms(100);
     }
 
     

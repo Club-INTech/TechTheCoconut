@@ -10,6 +10,7 @@
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/ultrason.hpp>
+#include <libintech/infrarouge.hpp>
 
 // LIBRAIRIES LOCALES
 #include "infrarouge.h"
