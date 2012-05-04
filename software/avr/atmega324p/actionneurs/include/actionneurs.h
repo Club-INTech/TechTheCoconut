@@ -21,8 +21,12 @@
 #define AX_ID4                  4
 #define AX_BROADCAST            0xFE
 
-#define AX_ANGLECW              196
-#define AX_ANGLECCW             900
+#define ANGLEMIN 0
+#define ANGLEMAX 160
+
+
+#define AX_ANGLECW              198
+#define AX_ANGLECCW             800
 #define AX_SPEED                1000
 
 #define BAUD_RATE_SERIE         9600
