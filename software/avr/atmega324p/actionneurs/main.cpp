@@ -175,13 +175,39 @@ int main()
                 serial_t_::print(3);
             }
             
+            
             // Easter Egg
-            else if (COMPARE_BUFFER("s", 1))
+            else if (COMPARE_BUFFER("sopa", 4))
             {
                 serial_t_::print("SOPAL'INT\n\r-------\n\n\rSopal'INT VA VOUS METTRE\n\r\
                                     LA RACE !!!!\n\r***********");
+                serial_t_::print("STOP SOPA ! START SOPAL'INT");
             }
+            
+            // AIDE
+            else if (COMPARE_BUFFER("!", 1))
+            {
+                serial_t_::print("→ GOTO   +id +angle   : goto en degré");
+                serial_t_::print("→ g          +angle   : goto broadcast");
+                serial_t_::print("→ a      +id +angle   : goto en tics (0 -> 1024)");
+                serial_t_::print("→ CH_VIT +id +vitesse : changement de vitesse");
+                serial_t_::print("→ c          +vitesse : changement en broadcast");
+                serial_t_::print("→ m          +angle   : angle min en tics");
+                serial_t_::print("→ M          +angle   : angle max en tics");
+                serial_t_::print("→ u                   : unasserv");
+                serial_t_::print("→ f      +id          : reflache l'id de tous les AX12");
+                serial_t_::print("******************************************************");
+                serial_t_::print("→ jumper    : valeur du jumper");
+                serial_t_::print("→ ultrason  : valeur des ultrason MAX");
+                serial_t_::print("→ infra     : valeur des infrarouges");
+                serial_t_::print("→ SRF       : valeur des ultrason SRF05");
+            }
+            
+            // In
 
+            /// *********************************************** ///
+            ///                 ACTIONNEURS                     ///
+            /// *********************************************** ///
             // GoTo angle
             else if (COMPARE_BUFFER("GOTO", 4))
             {
@@ -268,6 +294,7 @@ int main()
             // Ultrasons SRF05
             else if (COMPARE_BUFFER("SRF", 3))
                 capteur_srf05_t_::value();
+            
                 
         }
     }
