@@ -7,23 +7,4 @@
  */
 #define TIME_THRESHOLD_MIN 100
 
-#ifndef _FRAME_TYPEDEF_
-#define _FRAME_TYPEDEF_
-/**
- * Défini le type Frame sur 32 bits
- * @def Frame
- */
-typedef uint32_t Frame;
-/**
- * Défini le type Data sur 16 bits
- * @def Data
- */
-typedef uint16_t Data;
-/**
- * Défini le type Crc sur 8 bits
- * @def Crc
- */
-typedef uint8_t Crc;
-#endif
-
 #endif

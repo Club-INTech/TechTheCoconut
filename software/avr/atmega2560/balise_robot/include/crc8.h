@@ -5,7 +5,7 @@
 
 #ifndef _FRAME_TYPEDEF_
 #define _FRAME_TYPEDEF_
-typedef uint16_t Data;
+typedef int32_t Data;
 typedef uint8_t Crc;
 #endif
 

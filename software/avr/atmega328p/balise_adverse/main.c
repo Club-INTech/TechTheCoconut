@@ -6,7 +6,7 @@ volatile uint8_t WINDOW_FLAG = 0;
 volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
 volatile uint16_t distance = 0;
-volatile Frame message = 0;
+volatile int32_t message = 0;
 
 typedef Timer<1,ModeCounter,64> timeout_timer;
 
@@ -19,8 +19,10 @@ int main()
 		unsigned char order= Serial<0>::read_char();
 		if(order=='v'){
 // 			uint16_t n_distance = distance;
+			uint16_t offset=timeout_timer::value();
 			Serial<0>::print(distance);
-			Serial<0>::print( timeout_timer::value());
+			Serial<0>::print(offset);
+			Serial<0>::print(crc8((((uint32_t) distance) << 16) + offset));
 		}
 		else if(order=='?'){
 			Serial<0>::print(timeout_timer::value());

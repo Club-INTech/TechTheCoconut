@@ -6,32 +6,24 @@
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
-#include <libintech/capteur_srf05.hpp>
-#include <libintech/timer.hpp>
+#include <libintech/jumper.hpp>
+#include <libintech/register.hpp>
 
 typedef Serial<0> serial_t_;
-typedef Timer<1,ModeCounter,256> timerCapteur;
-typedef capteur_srf05< timerCapteur, serial_t_ > capteur_srf05_t_;
+typedef jumper< AVR_PORTD<PORTD7> > jumper_t_;
 
 int main()
 {
     serial_t_::init();
     serial_t_::change_baudrate(9600);
-    capteur_srf05_t_::init();
+    jumper_t_::init();
     
     while(1) 
     {
-            capteur_srf05_t_::value();
-            _delay_ms(100);
+            serial_t_::print(jumper_t_::value());
     }
 
-    
     return 0;
 }
 
-// Interruption pour le timer1
-ISR(TIMER1_OVF_vect)
-{
-    
-}
 
