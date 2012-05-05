@@ -64,19 +64,18 @@ class Actionneur(serie.Serie):
         self.calculRayon(math.pi*angle/180)
                 
         # Envoi des infos
-        if position == "ALL" or "hg" in position:
+        if "hg" in position:
             self.goto(self.ids["hg"], 180+3-angle)
-        if position == "ALL" or "hd" in position:
+        if "hd" in position:
             self.goto(self.ids["hd"], angle)
-        if position == "ALL" or "bg" in position:
+        if "bg" in position:
             self.goto(self.ids["bg"], angle+5)
-        if position == "ALL" or "bd" in position:
+        if "bd" in position:
             self.goto(self.ids["bd"], 180+9-angle)
         
-        #print "##################\n"+str(self.robotInstance.rayon)+"\n#############\n"
 
         
-    def changerVitesse(self, nouvelleVitesse) :
+    def changerVitesse(self, nouvelleVitesse, position = ["hg", "hd", "bg", "bd"]) :
         """
         Changer la vitesse de rotation de TOUS les actionneurs branchés
         
@@ -89,8 +88,14 @@ class Actionneur(serie.Serie):
         elif nouvelleVitesse <= 0 :
             nouvelleVitesse = 0
         
-        self.serieActionneurInstance.ecrire("CH_VITESSE")
-        self.serieActionneurInstance.ecrire(str(int(nouvelleVitesse)))
+        if "hd" in position :
+            self.ecrireVitesse(self.ids["hd"], nouvelleVitesse)
+        if "hg" in position :
+            self.ecrireVitesse(self.ids["hg"], nouvelleVitesse)
+        if "bd" in position :
+            self.ecrireVitesse(self.ids["bd"], nouvelleVitesse)
+        if "bg" in position :
+            self.ecrireVitesse(self.ids["bg"], nouvelleVitesse)
         
     def test_demarrage(self, mode = "LONG") :
         """
@@ -133,7 +138,7 @@ class Actionneur(serie.Serie):
         """
         Flashage de l'id
         """
-        self.serieActionneurInstance.ecrire("FLASH_ID")
+        self.serieActionneurInstance.ecrire("f")
         self.serieActionneurInstance.ecrire(str(int(nouvelID)))
         
         
@@ -141,7 +146,7 @@ class Actionneur(serie.Serie):
         """
         Arrête l'actionneur en urgence
         """
-        self.serieActionneurInstance.ecrire("UNASSERV")
+        self.serieActionneurInstance.ecrire("u")
         
     #------------------------------------------------#
     #       METHODES BAS NIVEAU                      #
@@ -155,6 +160,15 @@ class Actionneur(serie.Serie):
         time.sleep(0.04)
         self.serieActionneurInstance.ecrire(str(int(angle)))
         time.sleep(0.04)
+    
+    def ecrireVitesse(self, id, vitesse) :
+        # On considère que  les valeurs données sont bonnes.
+        self.serieActionneurInstance.ecrire("CH_VIT")
+        time.sleep(0.01)
+        self.serieActionneurInstance.ecrire(str(int(id)))
+        time.sleep(0.01)
+        self.serieActionneurInstance.ecrire(str(int(id)))
+        time.sleep(0.01)
         
     def calculRayon(self, angle):
         """
