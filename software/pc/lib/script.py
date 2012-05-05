@@ -204,7 +204,26 @@ class Script:
         except :
             #spécifie un déroulement problématique
             return False
-
+    def allerRetour(self):
+        
+        self.asserInstance.changerVitesse("translation", 2)
+        while 42:
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(0)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(math.pi)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(0)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(math.pi)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(0)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(math.pi)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(0)
+            self.asserInstance.gestionAvancer(400)
+            self.asserInstance.gestionTourner(math.pi)
             
     def scriptPipeauNewStrategie(self,chrono = "false"):
         #déplacements
@@ -297,7 +316,7 @@ class Script:
         
         if not ennemi and not nord :
             self.actionInstance.deplacer(10)
-            self.asserInstance.goTo(Point(-50, 605))
+            self.asserInstance.goTo(Point(-50, 255))
             self.asserInstance.gestionTourner(0)
             
             self.actionInstance.deplacer(150)
