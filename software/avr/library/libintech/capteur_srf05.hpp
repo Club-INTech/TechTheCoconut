@@ -1,12 +1,19 @@
-#ifndef CAPTEUR_VIEUX_HPP
-#define CAPTEUR_VIEUX_HPP
+#ifndef CAPTEUR_SRF05_HPP
+#define CAPTEUR_SRF05_HPP
+
+// Librairie standard :
 #include <stdint.h>
 #include <avr/io.h>
-#include "algorithm.hpp"
-#include <libintech/timer.hpp>
 #include <util/delay.h>
 
-/** @file libintech/capteur_vieux.hpp
+// Librairie INTech :: Timer
+#include <libintech/timer.hpp>
+
+// Librairie INTech spéciale série
+#include <libintech/serial/serial_0.hpp>
+
+
+/** @file libintech/capteur_srf05.hpp
  *  @brief Ce fichier crée une classe capteur_srf05 pour pouvoir utiliser simplement les capteurs SRF05.
  *  @author Thibaut ~MissFrance~
  *  @date 05 mai 2012
@@ -26,16 +33,24 @@
 #define rbi(port,bit) ((port & (1 << bit)) >> bit)
 #endif
 
-
-// typedef Timer<1,ModeCounter,256> timerCapteur;
-typedef Serial<0> serial_t_;
-
 /** @class capteur_srf05
  *  \brief Classe pour pouvoir gérer facilement les capteurs srf05.
+ * 
+ *  \param Timer    L'instance de Timer utilisé pour le calcul de distance.
+ *  \param Serial   L'instance de Série utilisée pour communiquer le résultat.
+ * 
  *  La classe gère la récupération d'une distance entre le capteur et un obstacle.
+ *  
+ *  Protocole de ces capteurs :
+ *  ---------------------------
+ *
+ *  La carte envoie une impulsion sur la pin pendant une durée de ~10µs. Puis, après
+ *  une durée inconnue, le capteur envoie une impulsion sur cette même pin. La durée
+ *  de cette impulsion est proportionnelle à la distance entre les capteurs et l'objet
+ *  détecté.  
  */
 
-template< class Timer >
+template< class Timer , class Serial>
 class capteur_srf05
 {
    private:
@@ -49,7 +64,6 @@ class capteur_srf05
     {
         // Initialisation du timer. C'est tout.
         Timer::init();
-        busy = false;
     }
     
     /** Envoie une impulsion dans la pin, puis active les interruptions de changement
@@ -99,25 +113,24 @@ class capteur_srf05
         // Début de l'impulsion
         if (bit)
         {
-            // Initialisation du capteur.
+            // Réinitialisation du capteur.
             Timer::value(0);
         }
             
         // Fin de l'impulsion
-        else// if (!bit && flag != 1)
+        else
         {
-            serial_t_::print(Timer::value()*500/184);
+            /// Envoi de la valeur mesurée sur la série. 
+            Serial::print(Timer::value()*500/184);
+            
+            // On n'est plus busy et on peut recevoir un nouvel ordre.
             busy = false;
+            
             // Désactivation des interruptions
             cbi(PCICR,PCIE2);
             cbi(PCMSK2,PCINT22);
-            
         }
-
-
     }
-
-  
 };
 
 #endif

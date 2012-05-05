@@ -27,7 +27,13 @@ while 42:
     print capteurInstance.mesurer()
     time.sleep(0.1)
 """
-    
+import __builtin__
+import instance
+
+asser = asservissement.Asservissement()
+asser.changerVitesse("translation", 2)
+sc = __builtin__.instance.scriptInstance
+sc.gestionScripts(sc.rafflerTotem())
 
 
 #import robot

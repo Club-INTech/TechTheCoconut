@@ -29,26 +29,9 @@ int main() {
     serial_t_::init();
     serial_t_::change_baudrate(9600);
     
-    //Pin D2 en INPUT
-    cbi(DDRD,DD2);
-    //Pin D7 en INPUT
-    cbi(DDRD,PD7);
-    cbi(PORTD,PD7);//Pull up disabled
-    //Activation des interruptions pour tout changement logique pour pin2
-    cbi(EICRA,ISC01);
-    sbi(EICRA,ISC00);
-    sbi(EIMSK,INT0);//Activation proprement dite
-
-    cbi(DDRD,PORTD3);
-    //Activation des interruptions pour tout changement logique pour pin3
-    cbi(EICRA,ISC11);
-    sbi(EICRA,ISC10);
-    sbi(EIMSK,INT1);//Activation proprement dite
-
-    sei();
+    ultrason_d.init();
+    ultrason_g.init();
     
-    
-
     while(1) 
     { 
         char buffer[17];

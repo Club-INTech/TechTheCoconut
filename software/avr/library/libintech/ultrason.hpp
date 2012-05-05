@@ -20,6 +20,24 @@ class ultrason
     static void init()
     {
         Timer::init();
+        
+        /// Initialisation des entrées-sortie.
+        //Pin D2 et D3en INPUT
+        cbi(DDRD,PORTD2);
+        cbi(DDRD,PORTD3);
+
+        //Activation des interruptions pour tout changement logique pour pin2
+        cbi(EICRA,ISC01);
+        sbi(EICRA,ISC00);
+        sbi(EIMSK,INT0);//Activation proprement dite
+
+        //Activation des interruptions pour tout changement logique pour pin3
+        cbi(EICRA,ISC11);
+        sbi(EICRA,ISC10);
+        sbi(EIMSK,INT1);//Activation proprement dite
+    
+        /// Activation de toutes les interruptions.
+        sei();
     }
     
     /** Fonction update */
