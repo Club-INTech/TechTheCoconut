@@ -14,7 +14,7 @@ typedef Timer<1,ModeCounter,256> timerCapteur;
 
 // typedef capteur_vieux<PORTD, PORTD6, timerCapteur, serial_t_>;
 
-typedef capteur_srf05< timerCapteur > capteur_srf05_t_;
+typedef capteur_srf05< timerCapteur, serial_t_ > capteur_srf05_t_;
 
 int main()
 {
