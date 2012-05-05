@@ -25,7 +25,7 @@ struct AVR_PORTB{
 	static void clear(){
 		PORTB &= ~(1 << bit);
 	}
-	static void read(){
+	static uint8_t read(){
 		return ( (PINB & (1 << bit)) >> bit );
 	}
 };
