@@ -194,17 +194,47 @@ int main()
             // Goto Broadcast
             else if (COMPARE_BUFFER("g", 1))
             {
-                int8_t angle = serial_t_::read_int();
+                int16_t angle = serial_t_::read_int();
                 
                 AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*angle/180.));
+            }
+            
+            // Goto brut
+            else if (COMPARE_BUFFER("a", 1))
+            {
+                int8_t id = serial_t_::read_int();
+                int16_t angle = serial_t_::read_int();
+                AX12GoTo(id, angle);
             }
         
             // Changement de vitesse
             else if (COMPARE_BUFFER("CH_VITESSE", 10))
             {
+                int8_t  id    = serial_t_::read_int();
+                int16_t speed = serial_t_::read_int();
+                AX12ChangeSpeed(id, speed);
+            }
+            
+            // Changement de vitesse broadcast
+            else if (COMPARE_BUFFER("c", 1))
+            {
                 int16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(0xFE, speed);
             }
+            
+            // Changement de l'angleCW (min)
+            else if (COMPARE_BUFFER("m", 1))
+            {
+                int16_t angle = serial_t_::read_int();
+                AX12ChangeAngleMIN(0xFE, angle);
+            }
+            
+            else if (COMPARE_BUFFER("M", 1))
+            {
+                int16_t angle = serial_t_::read_int();
+                AX12ChangeAngleMAX(0xFE, angle);
+            }
+               
             
             // Reflashage de tous les servos branchés
             else if (COMPARE_BUFFER("FLASH_ID", 8))
@@ -214,7 +244,7 @@ int main()
             }
             
             // Désasservissement de tous les servos branchés
-            else if (COMPARE_BUFFER("UNASSERV", 8))
+            else if (COMPARE_BUFFER("UNASSERV", 8) || COMPARE_BUFFER("u", 1) || COMPARE_BUFFER("", 0))
                 AX12Unasserv(0xFE);
             
 
