@@ -7,21 +7,24 @@
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/capteur_vieux.hpp>
+#include <libintech/timer.hpp>
 
 typedef Serial<0> serial_t_;
 typedef Timer<1,ModeCounter,256> timerCapteur;
 
 // typedef capteur_vieux<PORTD, PORTD6, timerCapteur, serial_t_>;
 
+typedef capteur_srf05< timerCapteur > capteur_srf05_t_;
+
 int main()
 {
     serial_t_::init();
     serial_t_::change_baudrate(9600);
-    capteur_srf05::init();
+    capteur_srf05_t_::init();
     
     while(1) 
     {
-            capteur_srf05::value();
+            capteur_srf05_t_::value();
             _delay_ms(100);
     }
 

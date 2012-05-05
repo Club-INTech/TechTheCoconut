@@ -4,11 +4,12 @@
 #include <avr/io.h>
 #include "algorithm.hpp"
 #include <libintech/timer.hpp>
+#include <util/delay.h>
 
 /** @file libintech/capteur_vieux.hpp
  *  @brief Ce fichier crée une classe capteur_srf05 pour pouvoir utiliser simplement les capteurs SRF05.
  *  @author Thibaut ~MissFrance~
- *  @date 04 mai 2012
+ *  @date 05 mai 2012
  */ 
 
 /** Fonctions de lecture et écriture de bits. */
@@ -26,7 +27,7 @@
 #endif
 
 
-typedef Timer<1,ModeCounter,256> timerCapteur;
+// typedef Timer<1,ModeCounter,256> timerCapteur;
 typedef Serial<0> serial_t_;
 
 /** @class capteur_srf05
@@ -34,11 +35,11 @@ typedef Serial<0> serial_t_;
  *  La classe gère la récupération d'une distance entre le capteur et un obstacle.
  */
 
+template< class Timer >
 class capteur_srf05
 {
    private:
-    static const uint8_t        port            = PORTD6;
-    static const uint16_t       TIMEOUT         = 1500;
+    static const uint8_t port = PORTD6;
     static volatile bool busy;
     
    public:
@@ -47,7 +48,8 @@ class capteur_srf05
     static void init()
     {
         // Initialisation du timer. C'est tout.
-        timerCapteur::init();
+        Timer::init();
+        busy = false;
     }
     
     /** Envoie une impulsion dans la pin, puis active les interruptions de changement
@@ -98,13 +100,13 @@ class capteur_srf05
         if (bit)
         {
             // Initialisation du capteur.
-            timerCapteur::value(0);
+            Timer::value(0);
         }
             
         // Fin de l'impulsion
         else// if (!bit && flag != 1)
         {
-            serial_t_::print(timerCapteur::value()*500/184);
+            serial_t_::print(Timer::value()*500/184);
             busy = false;
             // Désactivation des interruptions
             cbi(PCICR,PCIE2);
@@ -117,16 +119,5 @@ class capteur_srf05
 
   
 };
-
-volatile bool capteur_srf05::busy = false;
-
-
-/** Interruption pour un changement d'état sur la pin.
- */
-ISR(PCINT2_vect)
-{
-    capteur_srf05::interruption();
-}
-
 
 #endif
