@@ -1,16 +1,24 @@
 
+/** @file avr/atmega324p/actionneurs/main.cpp
+ *  @brief Ce fichier s'occupe de gérer l'AVR Capteur-actionneurs
+ *  @author Thibaut ~MissFrance~
+ *  @date 05 mai 2012
+ */ 
+
 // LIBRAIRIES STANDARD
 #include <util/delay.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-
-
-// LIBRAIRIE INTECH
+// LIBRAIRIE INTECH :: Série
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
+
+// LIBRAIRIE INTECH :: Capteurs
 #include <libintech/ultrason.hpp>
 #include <libintech/infrarouge.hpp>
+#include <libintech/capteur_srf05.hpp>
+#include <libintech/jumper.hpp>
 
 // LIBRAIRIES LOCALES
 #include "ax12.h"
@@ -24,7 +32,6 @@
 
 #define BAUD_RATE_SERIE         9600
 #define BAUD_RATE_AX12          AX_BAUD_RATE_9600
-
 
 /******************************** 
  *   MODES DE CONFIGURATION     *   
@@ -44,6 +51,8 @@
 // Mode pour tester les AX12 sans utiliser la liaison PC.
 // A mettre à 1 pour l'utiliser, à 0 sinon. Si le mode est mis à 1, l'AX12
 // tournera en continu.
+// WARNING Ce mode fait tourner en rond et en continue les AX12. Donc pensez
+//         à les désolidariser du robot avant de lancer ce mode.
     #define TEST_NOSERIE_MODE       0
 
 // Mode si l'AX12 ne répond pas alors qu'il le devrait. Vérifier la masse.
@@ -57,6 +66,21 @@
 // matériel.
     #define REANIMATION_MODE        0
 
+///Fonctions de lecture/écriture de bit (utile pour capteurs & jumper)
+// Set Bit
+#ifndef sbi
+#define sbi(port,bit) (port) |= (1 << (bit))
+#endif
+
+// Clear Bit
+#ifndef cbi
+#define cbi(port,bit) (port) &= ~(1 << (bit))
+#endif
+
+// Read Bit
+#ifndef rbi
+#define rbi(port,bit) ((port & (1 << bit)) >> bit)
+#endif
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -67,64 +91,39 @@
  *  Le pin analog0 est dédiée aux infrarouges.
  *          Les infrarouges ne sont pas utilisés au démarrage de la carte. Pour les prendre
  *          en compte dans les calculs, envoyer le message "use_infra" à la carte.
- * 
- * 
- * 
  */
 
-//Fonctions de lecture/écriture de bit (utile pour capteurs & jumper)
-#ifndef sbi
-#define sbi(port,bit) (port) |= (1 << (bit))
-#endif
-#ifndef cbi
-#define cbi(port,bit) (port) &= ~(1 << (bit))
-#endif
-#ifndef rbi
-#define rbi(port,bit) ((port & (1 << bit)) >> bit)
-#endif
-
-
+// Liaison série
 typedef Serial<0> serial_t_;
 
+// Ultrasons
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
+// Ultrasons SRF05
+typedef Timer<1,ModeCounter,256> timerCapteurSRF;
+typedef capteur_srf05< timerCapteurSRF, serial_t_ > capteur_srf05_t_;
 
+// Jumper
+typedef jumper< AVR_PORTD<PORTD7> > jumper_t_;
+
+/// **************************
+/// *     FONCTION MAIN      *
+/// **************************
 int main()
 {
-
+    // Initialisations de tous les objets.
+    infrarouge          ::init();
+    jumper_t_           ::init();
+    capteur_srf05_t_    ::init();
+    serial_t_           ::init();
+    ultrason_d           .init();
+    ultrason_g           .init();
     
-    // GESTION DES INTERRUPTIONS POUR LA PARTIE CAPTEUR + JUMPER
-    //Pin D2 en INPUT
-    cbi(DDRD,DD2);
-    //Pin D7 en INPUT
-    cbi(DDRD,PD7);
-    cbi(PORTD,PD7);//Pull up disabled
-    //Activation des interruptions pour tout changement logique pour pin2
-    cbi(EICRA,ISC01);
-    sbi(EICRA,ISC00);
-    sbi(EIMSK,INT0);//Activation proprement dite
-    cbi(DDRD,PORTD3);
-    //Activation des interruptions pour tout changement logique pour pin3
-    cbi(EICRA,ISC11);
-    sbi(EICRA,ISC10);
-    sbi(EIMSK,INT1);//Activation proprement dite
-    
-
-    infrarouge::init();
-    
-    
-    
-    
-    
-    // REANIMATION_MODE :
-    byte debug_baudrate = 0x00;
-        
-    // BAUD RATE de la série (envoi)
+    // Changement du BAUD RATE de la série carte <-> AX12
     ax12Init(BAUD_RATE_SERIE);
 
-    // Initialisation de la série carte <-> PC
-    serial_t_::init();
+    // Changement du BAUD RATE de la série carte <-> PC
     serial_t_::change_baudrate(BAUD_RATE_SERIE);
     
     if (FLASH_BAUD_RATE_MODE)
@@ -134,13 +133,20 @@ int main()
     if (FLASH_ID_MODE >= 0)
         AX12InitID(FLASH_ID_MODE);
         
-    // Initialisation de tous les AX12
-    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED); 
+    // Initialisation de tous les AX12 en angle max, angle min et vitesse
+    // de rotation
+    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
+    
+    // Variable utilisée uniquement pour le REANIMATION_MODE :
+    byte debug_baudrate = 0x00;
         
+    // Activation de toutes les interruptions (notamment les 
+    sei();
         
+    /// BOUCLE PRINCIPALE
     while (1)
     {
-        
+        /// Mode de réanimatio, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
         {
             ax12Init(2000000/(debug_baudrate + 1));
@@ -148,12 +154,17 @@ int main()
             debug_baudrate++;
         }
         
+        /// Test des AX12 sans communiquer avec eux via la liaison série.
+        /// Ils sont censés tourner en boucle, donc désolidarisez-les du
+        /// robot avant ;)
         else if (TEST_NOSERIE_MODE) 
             AX12Init(0xFE, 0,0,1200);
         
+        /// ******************************************
+        /// **          PROGRAMME PRINCIPALE        **
+        /// ******************************************
         else
         {
-            
             char buffer[17];
             serial_t_::read(buffer,17);
             #define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
@@ -162,8 +173,14 @@ int main()
             if(COMPARE_BUFFER("?", 1)){
                 serial_t_::print(3);
             }
-
             
+            // Easter Egg
+            else if (COMPARE_BUFFER("s", 1))
+            {
+                serial_t_::print("SOPAL'INT\n\r-------\n\n\rSopal'INT VA VOUS METTRE\n\r\
+                                    LA RACE !!!!\n\r***********");
+            }
+
             // GoTo angle
             else if (COMPARE_BUFFER("GOTO", 4))
             {
@@ -171,6 +188,14 @@ int main()
                 int16_t angle = serial_t_::read_int();
 
                 AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
+            }
+            
+            // Goto Broadcast
+            else if (COMPARE_BUFFER("g", 1))
+            {
+                int8_t angle = serial_t_::read_int();
+                
+                AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*angle/180.));
             }
         
             // Changement de vitesse
@@ -181,12 +206,6 @@ int main()
                 AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
             }
             
-            // Désasservissement de tous les servos branchés
-            else if (COMPARE_BUFFER("UNASSERV", 8))
-            {
-                AX12Unasserv(0xFE);
-            }
-            
             // Reflashage de tous les servos branchés
             else if (COMPARE_BUFFER("FLASH_ID", 8))
             {
@@ -194,26 +213,39 @@ int main()
                 AX12InitID(id);
             }
             
+            // Désasservissement de tous les servos branchés
+            else if (COMPARE_BUFFER("UNASSERV", 8))
+                AX12Unasserv(0xFE);
+            
+
+            
+            /// *********************************************** ///
+            ///                 CAPTEURS                        ///
+            /// *********************************************** ///
+            
             // Jumper
             else if (COMPARE_BUFFER("jumper", 6))
-            {
-                serial_t_::print(rbi(PIND,PD7));
-            }
+                serial_t_::print(jumper_t_::value());
             
             // ultrasons
             else if (COMPARE_BUFFER("ultrason", 8))
-            {
                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
-            }
-
+            
             // infrarouge
             else if (COMPARE_BUFFER("infra", 5))
                 serial_t_::print(infrarouge::value());
+            
+            // Ultrasons SRF05
+            else if (COMPARE_BUFFER("SRF", 3))
+                capteur_srf05_t_::value();
+                
         }
     }
     return 0;
 }
 
+
+// Overflow du timer 1
 ISR(TIMER1_OVF_vect){
-    asm("nop");
+    
 }
