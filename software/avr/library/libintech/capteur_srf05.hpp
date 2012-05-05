@@ -1,18 +1,19 @@
-#ifndef CAPTEUR_VIEUX_HPP
-#define CAPTEUR_VIEUX_HPP
+#ifndef CAPTEUR_SRF05_HPP
+#define CAPTEUR_SRF05_HPP
 
 // Librairie standard :
 #include <stdint.h>
 #include <avr/io.h>
+#include <util/delay.h>
 
 // Librairie INTech :: Timer
 #include <libintech/timer.hpp>
 
 // Librairie INTech spéciale série
 #include <libintech/serial/serial_0.hpp>
-#include <util/delay.h>
 
-/** @file libintech/capteur_vieux.hpp
+
+/** @file libintech/capteur_srf05.hpp
  *  @brief Ce fichier crée une classe capteur_srf05 pour pouvoir utiliser simplement les capteurs SRF05.
  *  @author Thibaut ~MissFrance~
  *  @date 05 mai 2012

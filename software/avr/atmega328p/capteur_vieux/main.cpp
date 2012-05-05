@@ -6,7 +6,7 @@
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
-#include <libintech/capteur_vieux.hpp>
+#include <libintech/capteur_srf05.hpp>
 #include <libintech/timer.hpp>
 
 typedef Serial<0> serial_t_;

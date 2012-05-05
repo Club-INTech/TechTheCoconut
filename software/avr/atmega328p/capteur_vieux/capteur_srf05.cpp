@@ -1,4 +1,4 @@
-#include <libintech/capteur_vieux.hpp>
+#include <libintech/capteur_srf05.hpp>
 // #include <libintech/serial/serial_0.hpp>
 // #include <libintech/serial/serial_0_interrupt.hpp>
 
