@@ -121,7 +121,7 @@ int main()
     ultrason_g           .init();
     
     // Changement du BAUD RATE de la série carte <-> AX12
-    ax12Init(BAUD_RATE_SERIE);
+    AX12_Serial_Init(BAUD_RATE_SERIE);
 
     // Changement du BAUD RATE de la série carte <-> PC
     serial_t_::change_baudrate(BAUD_RATE_SERIE);
@@ -140,7 +140,8 @@ int main()
     // Variable utilisée uniquement pour le REANIMATION_MODE :
     byte debug_baudrate = 0x00;
         
-    // Activation de toutes les interruptions (notamment les 
+    // Activation de toutes les interruptions (notamment les interruptions
+    // de la liaison série carte <-> carte.
     sei();
         
     /// BOUCLE PRINCIPALE
@@ -149,7 +150,7 @@ int main()
         /// Mode de réanimatio, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
         {
-            ax12Init(2000000/(debug_baudrate + 1));
+            AX12_Serial_Init(2000000/(debug_baudrate + 1));
             reset(0xFE);
             debug_baudrate++;
         }
@@ -202,8 +203,7 @@ int main()
             else if (COMPARE_BUFFER("CH_VITESSE", 10))
             {
                 int16_t speed = serial_t_::read_int();
-
-                AX12Init(AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW , speed);
+                AX12ChangeSpeed(0xFE, speed);
             }
             
             // Reflashage de tous les servos branchés
