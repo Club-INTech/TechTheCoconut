@@ -6,6 +6,16 @@
 
 template<uint16_t bit>
 struct AVR_PORTD{
+    static void set_input()
+    {
+        DDRD  |= (1 << bit);
+    }
+    
+    static void set_output()
+    {
+        DDRD &= ~(1 << bit);
+    }
+    
 	static void set(){
 		PORTD |= (1 << bit);
 	}
@@ -19,6 +29,15 @@ struct AVR_PORTD{
 
 template<uint16_t bit>
 struct AVR_PORTB{
+    static void set_input()
+    {
+        DDRB  |= (1 << bit);
+    }
+    
+    static void set_output()
+    {
+        DDRB &= ~(1 << bit);
+    }
 	static void set(){
 		PORTB |= (1 << bit);
 	}
