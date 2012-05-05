@@ -1,6 +1,12 @@
 #include "actionneurs.h"
 #include "ax12.h"
 
+/** @file avr/atmega324p/actionneurs/include/actionneurs.cpp
+ *  @brief Ce fichier crée les constantes haut niveau pour les actionneurs.
+ *  @author Thibaut ~MissFrance~
+ *  @date 05 mai 2012
+ */ 
+// Librairie INTech
 #include <libintech/serial/serial_0.hpp>
 
 /// Initialisation de l'ID de tous les AX12 branchés.
