@@ -22,7 +22,7 @@ class Balise:
     def update_dt(self, new_dt):
         self.filtre_kalman.F[1,3] = new_dt
         self.filtre_kalman.F[2,4] = new_dt
-	
+    
     def __init__(self, visualisation=None):
         self.robotInstance = __builtin__.instance.robotInstance
         
@@ -79,5 +79,3 @@ class Balise:
 #balise.tracker_robot_adverse()
 #balise.tracker_robot_adverse()
 #print balise.filtre_kalman.x
-	
-	

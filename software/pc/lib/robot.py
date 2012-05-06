@@ -14,6 +14,7 @@ import lib.log
 import asservissement
 import __builtin__
 import instance
+import threading
 
 log = lib.log.Log(__name__)
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -62,6 +63,7 @@ class Robot:
         if not hasattr(self, 'new_message'):
             self.new_message = False
         
+        self.mutex = threading.Lock()
         #self.mutex = __builtin__.instance.mutex
         
         # Pour avoir l'angle
@@ -69,28 +71,28 @@ class Robot:
 
         log.logger.info('Création du robot')
         
-    #def getPosition(self):
-        #"""
-        #Défini la position du robot
+    def getPosition(self):
+        """
+        Défini la position du robot
 
-        #:param position: Position du robot
-        #:type position: Point
-        #"""
-        #self.mutex.acquire()
-        #position = self.position
-        #self.mutex.release()
-        #return position
+        :param position: Position du robot
+        :type position: Point
+        """
+        self.mutex.acquire()
+        position = self.position
+        self.mutex.release()
+        return position
     
-    #def setPosition(self, position):
-        #"""
-        #Défini la position du robot
+    def setPosition(self, position):
+        """
+        Défini la position du robot
 
-        #:param position: Position du robot
-        #:type position: Point
-        #"""
-        #self.mutex.acquire()
-        #self.position = position
-        #self.mutex.release()
+        :param position: Position du robot
+        :type position: Point
+        """
+        self.mutex.acquire()
+        self.position = position
+        self.mutex.release()
         
     def setOrientation(self, orientation):
         """

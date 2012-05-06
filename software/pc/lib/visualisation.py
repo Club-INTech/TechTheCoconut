@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import pygame, time, sys, os, math, threading, lib.log,random
-
+import lib.robot
 
 # Ajout de ../.. au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 log = lib.log.Log(__name__)
+robotInstance = lib.robot.Robot()
 
 #:TODO: Import et utilisation des logs
 
-class Visu_table( threading.Thread):
+class Visu_table(threading.Thread):
     """
     Classe permettant de visualiser la table de jeu avec les zones, les éléments de jeu, les robots utilisant un thread (ie non bloquante)\n
     Pour la démarrer utiliser la méthode start()\n
@@ -97,6 +98,8 @@ class Visu_table( threading.Thread):
         #print current
         #print futur
         pygame.draw.line(pygame.display.get_surface(), Visu_table.couleur['NOIR'], current, futur,3);
+        position_robot = robotInstance.getPosition()
+        pygame.draw.rect(self.screen, Visu_table.couleur['BLANC'], (position_robot.x,position_robot.y,0.1*self.scale*constantes["Coconut"]["largeur"],0.1*self.scale*constantes["Coconut"]["longueur"]), 2)
         #pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['bleuMarine'], False, []);
         pygame.display.flip()
         
