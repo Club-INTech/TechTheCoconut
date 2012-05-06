@@ -73,6 +73,8 @@ public:
 	void envoyer_position_tic(void);
 	bool est_stoppe();
 	
+// 	void acquittement();
+	
 	void asservir();
 	void update_position();
 	void communiquer_pc();

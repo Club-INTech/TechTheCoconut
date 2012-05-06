@@ -14,7 +14,7 @@
 #include "robot.h"
 
 
-int8_t inc = 0;
+// int8_t i = 0;
 
 int main()
 {
@@ -37,4 +37,14 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.asservir();
 	robot.gestion_blocage();
 	robot.update_position();
+	
+	/*
+	if (i>6)
+	{
+		robot.acquittement();
+		i = 0;
+	}
+	else
+		i++;
+	*/
 }

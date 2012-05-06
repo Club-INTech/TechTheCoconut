@@ -129,7 +129,7 @@ class Asservissement:
             elif reponse == "STOPPE":
                 print "tourner : stoppé !"
                 return "stoppe"
-            if int(self.timerAsserv.getTime()) - debut_timer > 8:
+            elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                 print "tourner : timeout !"
                 return "timeout"
                 
@@ -154,15 +154,14 @@ class Asservissement:
             elif reponse == "STOPPE":
                 print "avancer : stoppé !"
                 return "stoppe"
-            if int(self.timerAsserv.getTime()) - debut_timer > 8:
-                print "avancer : timeout !"
-                return "timeout"
-        
-            capteur = self.capteurInstance.mesurer()
-            #print capteur
-            if capteur < self.maxCapt:
-                print 'avancer : capteur !'
-                return "obstacle"
+            else:
+                capteur = self.capteurInstance.mesurer()
+                if capteur < self.maxCapt:
+                    print 'avancer : capteur !'
+                    return "obstacle"
+                elif int(self.timerAsserv.getTime()) - debut_timer > 8:
+                    print "avancer : timeout !"
+                    return "timeout"
                 
         return "acquittement"
         

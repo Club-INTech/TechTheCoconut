@@ -382,10 +382,25 @@ void Robot::envoyer_position_tic()
 
 bool Robot::est_stoppe()
 {
-	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 250;
-	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 30;
+	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 400;//250;
+	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 100;//30
 	return rotation_stoppe && translation_stoppe;
 }
+
+/*
+void Robot::acquittement()
+{
+	if(est_stoppe())
+	{
+		if(est_bloque_)
+			serial_t_::print("STOPPE");
+		else
+			serial_t_::print("FIN_MVT");
+	}
+	else
+		serial_t_::print("EN_MVT");
+}
+*/
 
 ////////////////////////////// DEPLACEMENTS ET BLOCAGE ///////////////////////////////////
 
