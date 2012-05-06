@@ -12,6 +12,13 @@ constantes = \
         "largeur": 3000,
         #: Longueur en mm
         "longueur": 2000,
+
+        #longueur d'un bras
+        "longueurBras" : 180.,
+        
+        #sans compter les bras
+        "largeurRobot" : 200.,
+        "longueurRobot" : 360.,
         
         #longueur du coté du robot, en mm
         "coteRobot" : 350.,        
