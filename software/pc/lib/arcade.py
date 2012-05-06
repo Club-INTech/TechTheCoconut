@@ -72,35 +72,47 @@ def arcade():
             
             #pour bande arcade !
             
-            if event.type == KEYDOWN and event.key == K_UP:
-                asserInstance.moteurDroit(vitesse)
+            if event.type == KEYDOWN:
+                if event.key == K_UP:
+                    asserInstance.moteurDroit(vitesse)
+                if event.key == K_DOWN:
+                    asserInstance.moteurDroit(-vitesse)
+                if event.key == K_r:
+                    asserInstance.moteurGauche(vitesse)
+                if event.key == K_f:
+                    asserInstance.moteurGauche(-vitesse)
+                if event.key == K_LCTRL:
+                    vitesse = 50 
+                if event.key == K_LALT:
+                    vitesse = 80
+                if event.key == K_SPACE:
+                    vitesse = 120
+                if event.key == K_LSHIFT:
+                    vitesse = 150
+                if event.key == K_z:
+                    vitesse = 200
+                if event.key == K_x:
+                    vitesse = 250
                 
-            if event.type == KEYDOWN and event.key == K_DOWN:
-                asserInstance.moteurDroit(-vitesse)
+                if event.key == K_RIGHT:
+                    actionInstance.deplacer(160, ["hd","bd"])
+                if event.key == K_LEFT:
+                    actionInstance.deplacer(0, ["hd","bd"])
+                    
+                if event.key == K_d:
+                    actionInstance.deplacer(160, ["hg","bg"])
+                if event.key == K_g:
+                    actionInstance.deplacer(0, ["hg","bg"])
                 
-            if event.type == KEYDOWN and event.key == K_r:
-                asserInstance.moteurGauche(vitesse)
-                
-            if event.type == KEYDOWN and event.key == K_f:
-                asserInstance.moteurGauche(-vitesse)
-                
-            if event.type == KEYUP and (event.key == K_r or event.key == K_f):
-                asserInstance.moteurGauche(0)
-                
-            if event.type == KEYUP and (event.key == K_UP or event.key == K_DOWN):
-                asserInstance.moteurDroit(0)
-                
-            if event.type == KEYDOWN and event.key == K_LCTRL:
-                vitesse = 50 
-            if event.type == KEYDOWN and event.key == K_LALT:
-                vitesse = 80
-            if event.type == KEYDOWN and event.key == K_SPACE:
-                vitesse = 120
-            if event.type == KEYDOWN and event.key == K_LSHIFT:
-                vitesse = 150
-            if event.type == KEYDOWN and event.key == K_z:
-                vitesse = 200
-            if event.type == KEYDOWN and event.key == K_x:
-                vitesse = 250
+            if event.type == KEYUP 
+                if (event.key == K_r or event.key == K_f):
+                    asserInstance.moteurGauche(0)
+                if(event.key == K_UP or event.key == K_DOWN):
+                    asserInstance.moteurDroit(0)
+                    
+                if event.key == K_d or event.key == K_g:
+                    actionInstance.stop(["hg","bg"])
+                if event.key == K_LEFT or event.key == K_RIGHT:
+                    actionInstance.stop(["hd","bd"])
                 
 arcade()
