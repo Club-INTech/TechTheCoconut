@@ -21,20 +21,23 @@ def attribuer():
     
     for periph in peripheriques:
         for source in sources:
-            serieCapt = serial.Serial(source, periph[2], timeout=0.3)
-            #clean serie
-            serieCapt.write("\n\r")
-            serieCapt.write("?\r")
-            serieCapt.readline()
-            serieCapt.write("?\r")
-            serieCapt.readline()
-            
-            serieCapt.write("?\r")
-            rep = str(serieCapt.readline())
-            if rep.replace("\n","").replace("\r","").replace("\0","") == str(periph[0]):
-                print periph[1]+"\tOK sur " + source
-                chemins[int(periph[0])] = source
-                sources.remove(source)
-                break
+            try:
+                serieCapt = serial.Serial(source, periph[2], timeout=0.3)
+                #clean serie
+                serieCapt.write("\n\r")
+                serieCapt.write("?\r")
+                serieCapt.readline()
+                serieCapt.write("?\r")
+                serieCapt.readline()
+                
+                serieCapt.write("?\r")
+                rep = str(serieCapt.readline())
+                if rep.replace("\n","").replace("\r","").replace("\0","") == str(periph[0]):
+                    print periph[1]+"\tOK sur " + source
+                    chemins[int(periph[0])] = source
+                    sources.remove(source)
+                    break
+            except :
+                pass
     log.logger.info(str(chemins))
     return chemins
