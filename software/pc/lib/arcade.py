@@ -35,6 +35,12 @@ def arcade():
         pygame.time.Clock().tick(40)
         for event in pygame.event.get():
             
+            
+            if event.type == KEYDOWN and (event.key == K_QUESTION or event.key == K_ESCAPE):
+                break
+                
+            """
+            #pour pc
             if event.type == KEYDOWN and event.key == K_r:
                 asserInstance.moteurGauche(vitesse)
             if event.type == KEYDOWN and event.key == K_f:
@@ -51,8 +57,6 @@ def arcade():
             if event.type == KEYUP and (event.key == K_i or event.key == K_j):
                 asserInstance.moteurDroit(0)
                 
-            if event.type == KEYDOWN and (event.key == K_QUESTION or event.key == K_ESCAPE):
-                break
                 
             if event.type == KEYDOWN and event.key == K_x:
                 vitesse = 50
@@ -64,6 +68,33 @@ def arcade():
                 vitesse = 150
             if event.type == KEYDOWN and event.key == K_n:
                 vitesse = 200
+            """
+            
+            #pour bande arcade !
+            
+            if event.type == KEYDOWN and event.key == K_UP:
+                asserInstance.moteurGauche(vitesse)
                 
-
+            if event.type == KEYDOWN and event.key == K_DOWN:
+                asserInstance.moteurGauche(-vitesse)
+                
+            if event.type == KEYDOWN and event.key == K_r:
+                asserInstance.moteurDroit(vitesse)
+                
+            if event.type == KEYDOWN and event.key == K_f:
+                asserInstance.moteurDroit(-vitesse)
+                
+            if event.type == KEYDOWN and event.key == K_LCTRL:
+                vitesse = 50 
+            if event.type == KEYDOWN and event.key == K_LALT:
+                vitesse = 80
+            if event.type == KEYDOWN and event.key == K_SPACE:
+                vitesse = 120
+            if event.type == KEYDOWN and event.key == K_LSHIFT:
+                vitesse = 150
+            if event.type == KEYDOWN and event.key == K_z:
+                vitesse = 200
+            if event.type == KEYDOWN and event.key == K_x:
+                vitesse = 250
+                
 arcade()
