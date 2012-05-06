@@ -15,6 +15,7 @@ from outils_math.point import Point
 import pygame
 from pygame.locals import *
 
+import lolilol
 
 if hasattr(__builtin__.instance, 'asserInstance'):
     asserInstance = __builtin__.instance.asserInstance
@@ -74,14 +75,19 @@ def arcade():
             
             if event.type == KEYDOWN:
                 if event.key == K_UP:
+                    lolilol.son("bruitages/vroom.mp3")
                     asserInstance.moteurDroit(vitesse)
                 if event.key == K_DOWN:
+                    lolilol.son("bruitages/klaxon_tour_de_france.mp3")
                     asserInstance.moteurDroit(-vitesse)
                 if event.key == K_r:
+                    lolilol.son("bruitages/vroom.mp3")
                     asserInstance.moteurGauche(vitesse)
                 if event.key == K_f:
+                    lolilol.son("bruitages/klaxon_tour_de_france.mp3")
                     asserInstance.moteurGauche(-vitesse)
                 if event.key == K_LCTRL:
+                    lolilol.son("bruitages/freiner.MP3")
                     vitesse = 50 
                 if event.key == K_LALT:
                     vitesse = 80
@@ -92,16 +98,21 @@ def arcade():
                 if event.key == K_z:
                     vitesse = 200
                 if event.key == K_x:
+                    lolilol.son("bruitages/klaxon_tour_de_france.mp3")
                     vitesse = 250
                 
                 if event.key == K_RIGHT:
+                    lolilol.son("bruitages/klaxon_fun.mp3")
                     actionInstance.deplacer(160, ["hd","bd"])
                 if event.key == K_LEFT:
+                    lolilol.son("bruitages/klaxon_fun.mp3")
                     actionInstance.deplacer(0, ["hd","bd"])
                     
                 if event.key == K_d:
+                    lolilol.son("bruitages/klaxon_camion.mp3")
                     actionInstance.deplacer(160, ["hg","bg"])
                 if event.key == K_g:
+                    lolilol.son("bruitages/klaxon_camion.mp3")
                     actionInstance.deplacer(0, ["hg","bg"])
                 
             if event.type == KEYUP 

@@ -27,6 +27,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import lib.chargement_lib
 log = lib.log.Log(__name__)
 
+import lib.lolilol
+
 pygame.init()
 screen = pygame.display.set_mode([100,100])
 asserInstance.changerVitesse('translation', 1)
