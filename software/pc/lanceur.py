@@ -75,27 +75,27 @@ import lib.chargement_lib
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation]), m[atch], t[est] :')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
     first = False
+    # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
+    import time
+    __builtin__.constantes["t0"] = time.time()
     #try:
-    if mode == '' or mode == 'console':
+    if mode == '':
         mode = 'console'
-        
-        # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
-        import time
-        __builtin__.constantes["t0"] = time.time()
-        
     if mode == 'h':
         mode = "homologation"
-    if mode == 'e':
+    elif mode == 'j':
+        mode = "joystick"
+    elif mode == 'e':
         mode = 'etalonnage_constantes'
-    if mode == "m" :
+    elif mode == "m" :
         mode = "match"
-    if mode == "t":
+    elif mode == "t":
         mode = "tests_mecha"
-    if mode == "b":
+    elif mode == "b":
         mode = "balise"
-    if mode == "v":
+    elif mode == "v":
         mode = "visualisation_table"
     first=True
     log.logger.info("Chargement du fichier de lancement " + mode)
