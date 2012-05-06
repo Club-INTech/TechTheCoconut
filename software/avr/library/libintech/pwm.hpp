@@ -45,7 +45,8 @@ struct ModeCounter<2>{
 };
 
 #if	 defined (__AVR_ATmega2560__)\
-	|| defined (__AVR_ATmega2561__)
+    || defined (__AVR_ATmega2561__)\
+    || defined (__AVR_ATmega1280__)
 
 template<>
 struct ModeCounter<3>{

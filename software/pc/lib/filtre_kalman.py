@@ -25,5 +25,6 @@ class FiltreKalman:
     S = self.H * self.P * self.H.transpose() + self.R
     
     K = self.P * self.H.transpose() * numpy.linalg.inv(S)
+    print K
     self.x = self.x + (K * y)
     self.P = (numpy.identity(self.x.shape[0]) - (K * self.H)) * self.P

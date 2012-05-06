@@ -46,7 +46,9 @@ struct TimerRegisters<2, ModeCounter<2> >{
 };
 
 #if	 defined (__AVR_ATmega2560__)\
-	|| defined (__AVR_ATmega2561__)
+	|| defined (__AVR_ATmega2561__)\
+	|| defined (__AVR_ATmega1280__)
+
 
 template<>
 struct TimerRegisters<3, ModeCounter<3> >{

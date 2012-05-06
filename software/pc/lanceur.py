@@ -75,7 +75,7 @@ import lib.chargement_lib
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], visualisation_table, e (etalonnage_constantes), h[omologation]), m[atch], t[est] :')
+    mode = raw_input('Indiquer le mode de lancement (autonome, [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation]), m[atch], t[est] :')
     first = False
     #try:
     if mode == '' or mode == 'console':
@@ -93,10 +93,14 @@ while first or erreur:
         mode = "match"
     if mode == "t":
         mode = "tests_mecha"
+    if mode == "b":
+        mode = "balise"
+    if mode == "v":
+        mode = "visualisation_table"
+    first=True
     log.logger.info("Chargement du fichier de lancement " + mode)
     exec('import bin.'+ mode)
-    if mode == "visualisation_table":
-        first = True
+    
         
     if hasattr(bin, "tests_mecha"):
         Tests_mecha = bin.tests_mecha.Tests_mecha()

@@ -117,7 +117,8 @@ struct Prescaler<2,1024>{
 };
 
 #if	 defined (__AVR_ATmega2560__)\
-	|| defined (__AVR_ATmega2561__)
+    || defined (__AVR_ATmega2561__)\
+    || defined (__AVR_ATmega1280__)
 	
 //Prescalers timer 3
 

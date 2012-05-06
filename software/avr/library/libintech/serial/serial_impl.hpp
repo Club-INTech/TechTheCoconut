@@ -96,7 +96,7 @@ public:
     template<class T>
     static inline void print_noln(T val){
     	char buffer[10];
-	ltoa(val,buffer,10);
+        ltoa(val,buffer,10);
     	print_noln((const char *)buffer);
     }
     
@@ -104,7 +104,12 @@ public:
     	send_char(val);
     	send_char('\r');
     }
-
+    
+    static inline void print_noln(unsigned char val){
+        send_char(val);
+        send_char('\r');
+    }
+    
     static inline void print_noln(const char * val)
     {
     	for(uint16_t i = 0 ; i < strlen(val) ; i++)
