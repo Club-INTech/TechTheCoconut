@@ -289,6 +289,12 @@ int main()
             else if (COMPARE_BUFFER("UNASSERV", 8) || COMPARE_BUFFER("u", 1) || COMPARE_BUFFER("", 0))
                 AX12Unasserv(0xFE);
             
+            else if (COMPARE_BUFFER("U", 1))
+            {
+                uint8_t id = serial_t_::read_int();
+                AX12Unasserv(id);
+            }
+            
             // Changement de T° MAX.
             else if (COMPARE_BUFFER("t", 1))
             {
@@ -297,11 +303,32 @@ int main()
                 serial_t_::print("ok");
             }
 
+            // LEDs d'alarme.
             else if (COMPARE_BUFFER("LED", 3))
             {
                 uint8_t type = serial_t_::read_int();
                 
                 writeData(0xFE, AX_ALARM_LED, 1, type);
+                serial_t_::print("ok");
+            }
+            
+            // Message générique.
+            else if (COMPARE_BUFFER("MESS", 4))
+            {
+                // On lit l'id
+                uint8_t id = serial_t_::read_int();
+                
+                // On lit l'adresse de début
+                uint8_t adresse = serial_t_::read_int();
+                
+                // On lit le nombre d'octets
+                uint8_t n = serial_t_::read_int();
+                
+                // On lit la valeur à écrire
+                uint16_t val = serial_t_::read_int();
+                
+                writeData(id, adresse, n, val);
+                
                 serial_t_::print("ok");
             }
 
