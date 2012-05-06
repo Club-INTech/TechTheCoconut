@@ -56,6 +56,13 @@ class Serie(threading.Thread, serial.Serial):
         self.serie.write(str(message) + '\r')
         self.mutex.release()
         
+    def clean(self):
+        """
+        réinitialise le buffer d'envoi
+        """
+        self.ecrire("")
+        self.lire()
+        
     def stop(self):
         """
         Arrête la liaison série
