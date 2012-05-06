@@ -42,7 +42,7 @@ class Actionneur(serie.Serie):
         else:
             log.logger.error("actionneur : ne peut importer instance.robotInstance")
         
-    def deplacer(self, angle, position = "ALL"):
+    def deplacer(self, angle, position = ["hg", "hd", "bg", "bd"]):
         """
         Envoyer un ordre à l'actionneur
         
@@ -155,20 +155,21 @@ class Actionneur(serie.Serie):
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
         self.serieActionneurInstance.ecrire("GOTO")
-        time.sleep(0.04)
+        #time.sleep(0.04)
         self.serieActionneurInstance.ecrire(str(int(id)))
-        time.sleep(0.04)
+        #time.sleep(0.04)
         self.serieActionneurInstance.ecrire(str(int(angle)))
-        time.sleep(0.04)
+        #time.sleep(0.04)
     
     def ecrireVitesse(self, id, vitesse) :
         # On considère que  les valeurs données sont bonnes.
         self.serieActionneurInstance.ecrire("CH_VIT")
-        time.sleep(0.01)
         self.serieActionneurInstance.ecrire(str(int(id)))
-        time.sleep(0.01)
-        self.serieActionneurInstance.ecrire(str(int(id)))
-        time.sleep(0.01)
+        self.serieActionneurInstance.ecrire(str(int(vitesse)))
+        
+    def envoyer(self, message) :
+        # Envoi d'un message brut
+        self.serieActionneurInstance.ecrire(str(message))
         
     def calculRayon(self, angle):
         """
@@ -200,9 +201,9 @@ class Actionneur(serie.Serie):
     def test(self, temps = 0.3) :
         i = 0
         while 1 :
-            self.deplacer((i%16)*10)
+            self.deplacer((i%10)*10 + 90)
             time.sleep(temps)
-            if i%16 == 0 :
+            if i%10 == 0 :
                 time.sleep(1)
             i += 1
         
