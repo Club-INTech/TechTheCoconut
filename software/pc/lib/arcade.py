@@ -36,7 +36,7 @@ def arcade():
         for event in pygame.event.get():
             
             
-            if event.type == KEYDOWN and (event.key == K_QUESTION or event.key == K_ESCAPE):
+            if (event.type == KEYDOWN and (event.key == K_QUESTION or event.key == K_ESCAPE)) or event.type == QUIT:
                 break
                 
             """
@@ -73,16 +73,22 @@ def arcade():
             #pour bande arcade !
             
             if event.type == KEYDOWN and event.key == K_UP:
-                asserInstance.moteurGauche(vitesse)
-                
-            if event.type == KEYDOWN and event.key == K_DOWN:
-                asserInstance.moteurGauche(-vitesse)
-                
-            if event.type == KEYDOWN and event.key == K_r:
                 asserInstance.moteurDroit(vitesse)
                 
-            if event.type == KEYDOWN and event.key == K_f:
+            if event.type == KEYDOWN and event.key == K_DOWN:
                 asserInstance.moteurDroit(-vitesse)
+                
+            if event.type == KEYDOWN and event.key == K_r:
+                asserInstance.moteurGauche(vitesse)
+                
+            if event.type == KEYDOWN and event.key == K_f:
+                asserInstance.moteurGauche(-vitesse)
+                
+            if event.type == KEYUP and (event.key == K_r or event.key == K_f):
+                asserInstance.moteurGauche(0)
+                
+            if event.type == KEYUP and (event.key == K_UP or event.key == K_DOWN):
+                asserInstance.moteurDroit(0)
                 
             if event.type == KEYDOWN and event.key == K_LCTRL:
                 vitesse = 50 
