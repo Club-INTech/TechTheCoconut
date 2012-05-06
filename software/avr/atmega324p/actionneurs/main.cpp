@@ -143,6 +143,8 @@ int main()
     // Activation de toutes les interruptions (notamment les interruptions
     // de la liaison série carte <-> carte.
     sei();
+    
+    serial_t_::print("RESET");
         
     /// BOUCLE PRINCIPALE
     while (1)
@@ -232,9 +234,23 @@ int main()
                 int16_t angle = serial_t_::read_int();
                 AX12GoTo(id, angle);
             }
-        
+            
+            else if (COMPARE_BUFFER("z", 1))
+            {
+                
+                AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*80/180.));
+                serial_t_::print("z");
+            }
+            
+            else if (COMPARE_BUFFER("e", 1))
+            {
+                
+                AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*100/180.));
+                serial_t_::print("e");
+            }
+            
             // Changement de vitesse
-            else if (COMPARE_BUFFER("CH_VITESSE", 10))
+            else if (COMPARE_BUFFER("CH_VIT", 6))
             {
                 int8_t  id    = serial_t_::read_int();
                 int16_t speed = serial_t_::read_int();
@@ -263,7 +279,7 @@ int main()
                
             
             // Reflashage de tous les servos branchés
-            else if (COMPARE_BUFFER("FLASH_ID", 8))
+            else if (COMPARE_BUFFER("f", 8))
             {
                 int8_t id = serial_t_::read_int();
                 AX12InitID(id);
@@ -273,6 +289,21 @@ int main()
             else if (COMPARE_BUFFER("UNASSERV", 8) || COMPARE_BUFFER("u", 1) || COMPARE_BUFFER("", 0))
                 AX12Unasserv(0xFE);
             
+            // Changement de T° MAX.
+            else if (COMPARE_BUFFER("t", 1))
+            {
+                writeData(0xFE, AX_LIMIT_TEMPERATURE, 1, 120);
+                writeData(0xFE, AX_UP_LIMIT_VOLTAGE,  1, 180);
+                serial_t_::print("ok");
+            }
+
+            else if (COMPARE_BUFFER("LED", 3))
+            {
+                uint8_t type = serial_t_::read_int();
+                
+                writeData(0xFE, AX_ALARM_LED, 1, type);
+                serial_t_::print("ok");
+            }
 
             
             /// *********************************************** ///
@@ -294,6 +325,9 @@ int main()
             // Ultrasons SRF05
             else if (COMPARE_BUFFER("SRF", 3))
                 capteur_srf05_t_::value();
+            
+            else if (COMPARE_BUFFER("ABCDEFGHI", 9))
+                serial_t_::print("BANDE DE NOOBS");
             
                 
         }
