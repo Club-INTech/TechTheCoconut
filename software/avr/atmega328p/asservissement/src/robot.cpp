@@ -382,8 +382,8 @@ void Robot::envoyer_position_tic()
 
 bool Robot::est_stoppe()
 {
-	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 400;//250;
-	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 100;//30
+	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 250;//250;
+	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 40;//30
 	return rotation_stoppe && translation_stoppe;
 }
 
