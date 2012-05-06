@@ -24,18 +24,14 @@ if hasattr(__builtin__.instance, 'actionInstance'):
 
 def arcade():
     print "echap ou ? pour sortir |  avancer gauche : r  | avancer droite : i"
-    print "  vitesse : w -> n    |  reculer gauche : f  | reculer droite : j"
+    print "   vitesse : w -> n    |  reculer gauche : f  | reculer droite : j"
     
-    #position initiale du robot
-    asserInstance.setPosition(Point(0,400))
     pygame.init()
     screen = pygame.display.set_mode([100,100])
-    
     vitesse = 80
     while True:
         pygame.time.Clock().tick(40)
         for event in pygame.event.get():
-            
             
             if (event.type == KEYDOWN and (event.key == K_QUESTION or event.key == K_ESCAPE)) or event.type == QUIT:
                 break
@@ -72,7 +68,6 @@ def arcade():
             """
             
             #pour bande arcade !
-            
             if event.type == KEYDOWN:
                 if event.key == K_UP:
                     lolilol.son("bruitages/vroom.mp3")
@@ -107,7 +102,6 @@ def arcade():
                 if event.key == K_LEFT:
                     lolilol.son("bruitages/klaxon_fun.mp3")
                     actionInstance.deplacer(0, ["hd","bd"])
-                    
                 if event.key == K_d:
                     lolilol.son("bruitages/klaxon_camion.mp3")
                     actionInstance.deplacer(160, ["hg","bg"])
