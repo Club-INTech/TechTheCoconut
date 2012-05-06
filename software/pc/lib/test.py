@@ -30,10 +30,36 @@ while 42:
 import __builtin__
 import instance
 
-asser = asservissement.Asservissement()
-asser.changerVitesse("translation", 2)
+asser = __builtin__.instance.asserInstance
 sc = __builtin__.instance.scriptInstance
-sc.gestionScripts(sc.rafflerTotem())
+depart = outils_math.point.Point(0.0,400)
+#sc.gestionScripts(sc.rafflerTotem())
+
+def test():
+    while 42 :
+        print "getPosition.........p"
+        print "getOrientation......o"
+        print "sortir..............q"
+        ordre = raw_input()
+        if ordre == "q":
+            break
+        elif ordre == "p":
+            while 69:
+                print "pos ?\n"
+                attend = raw_input()
+                if attend == "q":
+                    break
+                else:
+                    pos = asser.getPosition()
+                    print "("+str(int(pos.x))+", "+str(int(pos.y))+")\n"
+        elif ordre == "o":
+            while 1337:
+                print "orient ?\n"
+                attend = raw_input()
+                if attend == "q":
+                    break
+                else:
+                    print str(asser.getOrientation())+"\n"
 
 
 #import robot
@@ -43,8 +69,6 @@ sc.gestionScripts(sc.rafflerTotem())
 
 #scriptInstance = __builtin__.instance.scriptInstance
 
-depart = outils_math.point.Point(0.0,400)
-asser = __builtin__.instance.asserInstance
 
 #arrivee = outils_math.point.Point(100,1500)
 #print asser.dureeGoTo(depart, arrivee, 2)

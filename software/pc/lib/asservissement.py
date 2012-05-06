@@ -141,6 +141,7 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
+        print "def avancer"
         self.serieAsserInstance.ecrire("d")
         self.serieAsserInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
@@ -164,36 +165,50 @@ class Asservissement:
                     return "timeout"
                 
         return "acquittement"
-        
+            
     def getPosition(self):
-        self.serieAsserInstance.ecrire("pos")
-        reponse = str(self.serieAsserInstance.lire())
-        try:
-            if reponse[4]== "+":
-                reponse = reponse.split("+")
-                pos = point.Point(float(reponse[1]),float(reponse[0]))
-            else:
-                reponse = reponse.split("-")
-                pos = point.Point(-float(reponse[1]),float(reponse[0]))
-            return pos
-        except:
-            self.getPosition()
+        while 42:
+            try:
+                reponse = ""
+                while len(reponse)<9:
+                    print "ecrire...\n"
+                    self.serieAsserInstance.ecrire("pos")
+                    print "lecture...\n"
+                    reponse = self.serieAsserInstance.lire()
+                    print ">"+reponse+"<\n"
+                if reponse[4]== "+":
+                    reponse = reponse.split("+")
+                    pos = point.Point(float(reponse[1]),float(reponse[0]))
+                else:
+                    reponse = reponse.split("-")
+                    pos = point.Point(-float(reponse[1]),float(reponse[0]))
+                print "("+str(pos.x)+", "+str(pos.y)+")\n"
+                return pos
+            except:
+                print "exception !"
+                pass
             
     def setPosition(self,position):
         self.serieAsserInstance.ecrire("cx")
         self.serieAsserInstance.ecrire(str(float(position.x)))
         self.serieAsserInstance.ecrire("cy")
         self.serieAsserInstance.ecrire(str(float(position.y)))
-            
+    
     def getOrientation(self):
-        self.serieAsserInstance.ecrire("eo")
-        reponse = str(self.serieAsserInstance.lire())
-        if re.match("^[0-9]+$", reponse):
-            orientation = float(reponse)/1000.0
-            #self.robotInstance.setOrientation(orientation)
-            return orientation
-        else:
-            return self.getOrientation()
+        while 42:
+            try:
+                reponse = ""
+                while not re.match("^(-[0-9]+|[0-9]+)$", reponse):
+                    print "ecrire...\n"
+                    self.serieAsserInstance.ecrire("eo")
+                    print "lecture...\n"
+                    reponse = self.serieAsserInstance.lire()
+                    print ">"+reponse+"<\n"
+                orientation = float(reponse)/1000.0
+                #self.robotInstance.setOrientation(orientation)
+                return orientation
+            except:
+                pass
             
     def setOrientation(self,orientation):
         self.serieAsserInstance.ecrire("co")
@@ -621,3 +636,10 @@ class Asservissement:
             else:
                 print "Il faut choisir une valeur contenue dans le menu."
                 
+    def moteurGauche(self, vitesse):
+        self.serieAsserInstance.ecrire("pwmG")
+        self.serieAsserInstance.ecrire(str(vitesse))
+        
+    def moteurDroit(self, vitesse):
+        self.serieAsserInstance.ecrire("pwmD")
+        self.serieAsserInstance.ecrire(str(vitesse))                
