@@ -2,9 +2,6 @@
 
 import sys
 import os
-import termios
-import tty
-import select
 import time
 
 import asservissement
@@ -18,6 +15,7 @@ import instance
 import __builtin__
 import math
 import pygame
+import threading
 
 #asserInstance = __builtin__.instance.asserInstance
 #strategieInstance = __builtin__.instance.strategieInstance
@@ -40,16 +38,20 @@ while 42:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_z:
                 print "Avance !"
-                #asserInstance.gestionAvancer(1000)
+                #asserInstance.serieAsserInstance.ecrire("d")
+                #asserInstance.serieAsserInstance.ecrire("1000")
             elif event.key == pygame.K_s:
                 print "Recule !"
-                #asserInstance.gestionAvancer(-1000)
+                #asserInstance.serieAsserInstance.ecrire("d")
+                #asserInstance.serieAsserInstance.ecrire("-1000")
             elif event.key == pygame.K_q:
                 print "Tourne à gauche !"
-                #asserInstance.gestionTourner(math.pi)
+                #asserInstance.serieAsserInstance.ecrire("t")
+                #asserInstance.serieAsserInstance.ecrire(str(math.pi))
             elif event.key == pygame.K_d:
                 print "Tourne à droite !"
-                #asserInstance.gestionTourner(0)
+                #asserInstance.serieAsserInstance.ecrire("t")
+                #asserInstance.serieAsserInstance.ecrire(str(math.pi))
             elif event.key == pygame.K_o:
                 print "Actionneur hg vers l'extérieur"
                 #actionInstance.deplacer(160, ["hg"])
