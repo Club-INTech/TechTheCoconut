@@ -25,11 +25,6 @@ class Script:
             self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
         else:
             log.logger.error("script : ne peut importer instance.asserInstanceDuree")
-            
-        if hasattr(__builtin__.instance, 'capteurInstance'):
-            self.capteurInstance = __builtin__.instance.capteurInstance
-        else:
-            log.logger.error("script : ne peut importer instance.capteurInstance")
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:

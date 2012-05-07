@@ -134,7 +134,8 @@ class Asservissement:
                 print "tourner : timeout !"
                 return "timeout"
             time.sleep(0.05)
-                
+            
+        print "acq tourner"
         return "acquittement"
     
     def avancer(self, distance):
@@ -143,7 +144,6 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        print "def avancer"
         self.serieAsserInstance.ecrire("d")
         self.serieAsserInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
@@ -158,7 +158,9 @@ class Asservissement:
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
+                print "\n##########"+str(hasattr(self, 'capteurInstance'))+"\n##############\n"
                 if hasattr(self, 'capteurInstance'):
+                    print "yes"
                     capteur = self.capteurInstance.mesurer()
                     if capteur < self.maxCapt:
                         print 'avancer : capteur !'
@@ -167,11 +169,13 @@ class Asservissement:
                         print "avancer : timeout !"
                         return "timeout"
                 else:
+                    print "no"
                     if int(self.timerAsserv.getTime()) - debut_timer > 8:
                         print "avancer : timeout !"
                         return "timeout"
             time.sleep(0.05)
                 
+        print "acq avancer"
         return "acquittement"
             
     def getPosition(self):
@@ -179,9 +183,7 @@ class Asservissement:
             try:
                 reponse = ""
                 while len(reponse)<9:
-                    print "ecrire...\n"
                     self.serieAsserInstance.ecrire("pos")
-                    print "lecture...\n"
                     reponse = self.serieAsserInstance.lire()
                     print ">"+reponse+"<\n"
                 if reponse[4]== "+":
@@ -193,7 +195,6 @@ class Asservissement:
                 print "("+str(pos.x)+", "+str(pos.y)+")\n"
                 return pos
             except:
-                print "exception !"
                 pass
             
     def setPosition(self,position):
@@ -207,9 +208,7 @@ class Asservissement:
             try:
                 reponse = ""
                 while not re.match("^(-[0-9]+|[0-9]+)$", reponse):
-                    print "ecrire...\n"
                     self.serieAsserInstance.ecrire("eo")
-                    print "lecture...\n"
                     reponse = self.serieAsserInstance.lire()
                     print ">"+reponse+"<\n"
                 orientation = float(reponse)/1000.0

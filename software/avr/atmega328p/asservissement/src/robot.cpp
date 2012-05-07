@@ -553,8 +553,8 @@ void Robot::recalage()
 	changerVitesseTra1();
 	translater_bloc(150.0);
 	if (couleur_ == 'r') tourner_bloc(0.0); else tourner_bloc(PI);
-	etat_rot_ = false;
-	etat_tra_ = false;
+// 	etat_rot_ = false;
+// 	etat_tra_ = false;
 	changerVitesseTra2();
 	changerVitesseRot2();
 	serial_t_::print("FIN_REC");
