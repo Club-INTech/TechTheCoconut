@@ -142,11 +142,18 @@ class Actionneur(serie.Serie):
         self.serieActionneurInstance.ecrire(str(int(nouvelID)))
         
         
-    def stop(self):
+    def stop(self, position = ["hd", "hg", "bd", "bg"]):
         """
         Arrête l'actionneur en urgence
         """
-        self.serieActionneurInstance.ecrire("u")
+        if "hd" in position :
+            self.ecrireStop(self.ids["hd"])
+        if "hg" in position :
+            self.ecrireStop(self.ids["hg"])
+        if "bd" in position :
+            self.ecrireStop(self.ids["bd"])
+        if "bg" in position :
+            self.ecrireStop(self.ids["bg"])
         
     #------------------------------------------------#
     #       METHODES BAS NIVEAU                      #
@@ -166,6 +173,10 @@ class Actionneur(serie.Serie):
         self.serieActionneurInstance.ecrire("CH_VIT")
         self.serieActionneurInstance.ecrire(str(int(id)))
         self.serieActionneurInstance.ecrire(str(int(vitesse)))
+        
+    def ecrireStop(self, id) :
+        self.serieActionneurInstance.ecrire("U")
+        self.serieActionneurInstance.ecrire(str(int(id)))
         
     def envoyer(self, message) :
         # Envoi d'un message brut
