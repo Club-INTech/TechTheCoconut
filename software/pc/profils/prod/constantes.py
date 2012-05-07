@@ -90,7 +90,6 @@ constantes = \
     },
     "Lolilol":
     {
-        "musique_active": False,
-        "musique_dossier": "/home/netantho/intech/multimedia_lolilol/",
+        "musique_active": False
     },
 }
