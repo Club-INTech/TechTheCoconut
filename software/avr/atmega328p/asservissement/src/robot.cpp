@@ -527,6 +527,7 @@ void Robot::recalage()
 	translation.valeur_bridage(250.0);
 	etat_rot_ = false;
 	etat_tra_ = false;
+	serial_t_::print("FIN_REC");
 	
 }
 
