@@ -14,6 +14,8 @@
 #include "robot.h"
 
 
+// int8_t i = 0;
+
 int main()
 {
     Robot & robot = Robot::Instance();
@@ -27,5 +29,22 @@ int main()
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	Robot & robot = Robot::Instance();
-	robot.bandeArcade();
+	int32_t infos[2];
+	//info[0]=>distance courante ; info[1] => angle courant.
+	get_all(infos);
+	robot.mesure_distance(infos[0]);
+	robot.mesure_angle(infos[1]);
+	robot.asservir();
+	robot.gestion_blocage();
+	robot.update_position();
+	
+	/*
+	if (i>6)
+	{
+		robot.acquittement();
+		i = 0;
+	}
+	else
+		i++;
+	*/
 }
