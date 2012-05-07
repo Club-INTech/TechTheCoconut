@@ -115,7 +115,7 @@ def arcade():
                     lolilol.son("bruitages/klaxon_camion.mp3")
                     actionInstance.deplacer(0, ["hg","bg"])
                 
-            if event.type == KEYUP 
+            if event.type == KEYUP:
                 if (event.key == K_r or event.key == K_f):
                     asserInstance.moteurGauche(0)
                 if(event.key == K_UP or event.key == K_DOWN):
