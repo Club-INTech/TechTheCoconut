@@ -44,14 +44,20 @@ volatile int32_t last_codeur = 0;
 
 int main() {
 	
-	// Désactivation du watchdog
-	WDT_off();
-			
 	Balise & balise = Balise::Instance();
-	init();
-	uint32_t rawFrame=0;
 	
-    Balise::serial_pc::print("reset");
+	// En cas de reset par le watchdog
+	if (rbi(MCUSR,WDRF))
+	{
+		// Envoi du timeout au PC
+		Balise::serial_pc::print("timeout");
+	
+		// Désactivation du watchdog
+		WDT_off();
+	}
+	
+	init();
+	uint32_t rawFrame=0;    
     
 	while (1) {
 		char buffer[10];
