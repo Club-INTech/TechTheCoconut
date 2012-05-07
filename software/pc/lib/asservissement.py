@@ -28,6 +28,7 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
+        
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
@@ -157,13 +158,18 @@ class Asservissement:
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
-                capteur = self.capteurInstance.mesurer()
-                if capteur < self.maxCapt:
-                    print 'avancer : capteur !'
-                    return "obstacle"
-                elif int(self.timerAsserv.getTime()) - debut_timer > 8:
-                    print "avancer : timeout !"
-                    return "timeout"
+                if hasattr(self, 'capteurInstance'):
+                    capteur = self.capteurInstance.mesurer()
+                    if capteur < self.maxCapt:
+                        print 'avancer : capteur !'
+                        return "obstacle"
+                    elif int(self.timerAsserv.getTime()) - debut_timer > 8:
+                        print "avancer : timeout !"
+                        return "timeout"
+                else:
+                    if int(self.timerAsserv.getTime()) - debut_timer > 8:
+                        print "avancer : timeout !"
+                        return "timeout"
             time.sleep(0.05)
                 
         return "acquittement"
@@ -343,12 +349,13 @@ class Asservissement:
                 ennemi_en_vue = True
                 debut_timer = int(timerStrat.getTime())
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
-                    capteur = self.capteurInstance.mesurer()
-                    if capteur < self.maxCapt:
-                        print 'gestionAvancer : capteur !'
-                    else :
-                        print 'gestionAvancer : la voie est libre !'
-                        ennemi_en_vue = False
+                    if hasattr(self, 'capteurInstance'):
+                        capteur = self.capteurInstance.mesurer()
+                        if capteur < self.maxCapt:
+                            print 'gestionAvancer : capteur !'
+                        else :
+                            print 'gestionAvancer : la voie est libre !'
+                            ennemi_en_vue = False
                     
                 if not ennemi_en_vue:
                     #vider la liste des robots adverses repérés
