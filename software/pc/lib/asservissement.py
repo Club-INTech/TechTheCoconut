@@ -224,7 +224,7 @@ class Asservissement:
         while not acquittement:
             reponse = self.serieAsserInstance.lire()
             if reponse == "FIN_REC":
-                print "fin du recalage"
+                log.logger.info("fin du recalage")
                 acquittement = True
             time.sleep(0.05)
         
