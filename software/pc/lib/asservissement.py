@@ -132,6 +132,7 @@ class Asservissement:
             elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                 print "tourner : timeout !"
                 return "timeout"
+            time.sleep(0.05)
                 
         return "acquittement"
     
@@ -163,6 +164,7 @@ class Asservissement:
                 elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                     print "avancer : timeout !"
                     return "timeout"
+            time.sleep(0.05)
                 
         return "acquittement"
             
