@@ -44,6 +44,7 @@ private:
 	bool etat_rot_;
 	bool etat_tra_;
 	bool est_bloque_;
+	bool envoi_stop_;
 	
 	int32_t mesure_distance_;
 	int32_t mesure_angle_;
@@ -73,7 +74,7 @@ public:
 	void envoyer_position_tic(void);
 	bool est_stoppe();
 	
-// 	void acquittement();
+	void acquittement();
 	
 	void asservir();
 	void update_position();
