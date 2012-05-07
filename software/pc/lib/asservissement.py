@@ -119,13 +119,13 @@ class Asservissement:
         self.serieAsserInstance.ecrire("t")
         self.serieAsserInstance.ecrire(str(float(angle)))
         log.logger.info("Ordre de tourner à " + str(float(angle)))
-        acquitement = False
+        acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
-        while not acquitement:
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             if reponse == "FIN_MVT":
-                acquitement = True
+                acquittement = True
             elif reponse == "STOPPE":
                 print "tourner : stoppé !"
                 return "stoppe"
@@ -146,13 +146,13 @@ class Asservissement:
         self.serieAsserInstance.ecrire("d")
         self.serieAsserInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
-        acquitement = False
+        acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
-        while not acquitement:
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             if reponse == "FIN_MVT":
-                acquitement = True
+                acquittement = True
             elif reponse == "STOPPE":
                 print "avancer : stoppé !"
                 return "stoppe"
@@ -216,15 +216,18 @@ class Asservissement:
         self.serieAsserInstance.ecrire("co")
         self.serieAsserInstance.ecrire(str(float(orientation)))
         
+            
     def recalage(self):
         self.serieAsserInstance.ecrire("recal")
-        while not acquitement:
+        log.logger.info("début du recalage")
+        acquittement = False
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = self.serieAsserInstance.lire()
             if reponse == "FIN_REC":
-                print reponse
-                acquitement = True
-            #TODO : gestion stop ?
+                print "fin du recalage"
+                acquittement = True
+            time.sleep(0.05)
         
     def setUnsetAsser(self, asservissement, mode):
         pass
