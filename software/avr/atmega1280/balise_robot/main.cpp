@@ -167,9 +167,12 @@ void init()
 	cbi(TCCR0B,CS02);
 	cbi(TCCR0B,CS01);
 	sbi(TCCR0B,CS00);
+	
 	//Seuil (cf formule datasheet)
 	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
-	OCR0A= 120;
+	//OCR0A= 120;
+	// Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
+	OCR0A= 170;
 	
 	//Initialisation table pour crc8
 	init_crc8();
