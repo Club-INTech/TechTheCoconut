@@ -34,6 +34,7 @@
 								<option id="gnu.c.compiler.option.misc.other.606169700" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.562207686" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1717964627" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="/USBCDC_dev/src"/>
 								</option>
@@ -45,6 +46,9 @@
 								<option id="com.crt.advproject.gas.thumb.874016007" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.both.asm.option.flags.crt.2006002395" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" value="-c -x assembler-with-cpp -D__REDLIB__ " valueType="string"/>
 								<option id="com.crt.advproject.gas.hdrlib.1818945935" name="Use headers for C library" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
+								<option id="gnu.both.asm.option.include.paths.1672465387" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx}&quot;"/>
+								</option>
 								<inputType id="com.crt.advproject.assembler.input.1846293697" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
 							</tool>
 							<tool id="com.crt.advproject.link.cpp.exe.debug.1761116808" name="MCU C++ Linker" superClass="com.crt.advproject.link.cpp.exe.debug"/>
@@ -80,6 +84,7 @@
 							<tool id="com.crt.advproject.cpp.exe.debug.1242469883" name="MCU C++ Compiler" superClass="com.crt.advproject.cpp.exe.debug.866568150"/>
 							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.crt.advproject.gcc.exe.debug.1046206576" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug.588091704">
 								<option id="gnu.c.compiler.option.include.paths.1851382312" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/USBCDC_dev/src}&quot;"/>
 								</option>
@@ -96,6 +101,7 @@
 						<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.crt.advproject.gcc.exe.debug.588091704.985657598" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug.588091704">
 							<option id="gnu.c.compiler.option.optimization.flags.766567858" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="-Os" valueType="string"/>
 							<option id="gnu.c.compiler.option.include.paths.320412064" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx}&quot;"/>
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2_LPC17xx/inc}&quot;"/>
 								<listOptionValue builtIn="false" value="&quot;${workspace_loc:/USBCDC_dev/src}&quot;"/>
 							</option>
@@ -107,7 +113,14 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="CMSISv2_LPC17xx;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/CMSISv2_LPC17xx"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/CMSISv2_LPC17xx/Debug"/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="scannerConfiguration">
@@ -2006,11 +2019,11 @@
 	<storageModule moduleId="com.crt.config">
 		<projectStorage>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;TargetConfig&gt;
-&lt;Properties property_0="" property_1="" property_2="" property_3="NXP" property_4="LPC1768" property_count="5" version="1"/&gt;
+&lt;Properties property_0="" property_1="" property_2="" property_3="NXP" property_4="LPC1769" property_count="5" version="1"/&gt;
 &lt;infoList vendor="NXP"&gt;
-&lt;info chip="LPC1768" match_id="0x00013f37,0x26013F37,0x26113F37" name="LPC1768" package="lpc17_lqfp100.xml"&gt;
+&lt;info chip="LPC1769" match_id="0x26113F37" name="LPC1769" package="lpc17_lqfp100.xml"&gt;
 &lt;chip&gt;
-&lt;name&gt;LPC1768&lt;/name&gt;
+&lt;name&gt;LPC1769&lt;/name&gt;
 &lt;family&gt;LPC17xx&lt;/family&gt;
 &lt;vendor&gt;NXP (formerly Philips)&lt;/vendor&gt;
 &lt;reset board="None" core="Real" sys="Real"/&gt;

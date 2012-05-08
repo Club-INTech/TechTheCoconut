@@ -24,7 +24,6 @@
 // See crp.h header for more information
 __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
 
-#define __JEREM__
 #include "LPC17xx.h"    
 #include "type.h"
 #include "bootloader.h"
@@ -40,6 +39,8 @@ __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
 
 #include "_LPC17xx.h"
 #include "uart.h"
+#include "gpio.h"
+#include "delay.h"
 
 int debug_endpoint = 0;
 
@@ -334,12 +335,21 @@ int main (void)
 	SystemClockUpdate();
 
 	VCOM_Init();                              // VCOM Initialization
+	gpio_init();
+	delay_init();
 
-	USB_Init();                               // USB Initialization
-	USB_Reset();
-	USB_Connect(TRUE);                        // USB Connect
-	while (!USB_Configuration) ;              // wait until USB is configured
+//	USB_Init();                               // USB Initialization
+//	USB_Reset();
+//	USB_Connect(TRUE);                        // USB Connect
+//	while (!USB_Configuration) ;              // wait until USB is configured
 
+	while(1)
+	{
+		gpio_led_reset_on();
+		delay_delay(1000);
+		gpio_led_reset_off();
+		delay_delay(1000);
+	}
 
 
 	while (1)
