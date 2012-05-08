@@ -33,33 +33,34 @@ import instance
 asser = __builtin__.instance.asserInstance
 sc = __builtin__.instance.scriptInstance
 depart = outils_math.point.Point(0.0,400)
-#sc.gestionScripts(sc.rafflerTotem())
+sc.gestionScripts(sc.recalage())
+sc.gestionScripts(sc.homologation())
 
-def test():
-    while 42 :
-        print "getPosition.........p"
-        print "getOrientation......o"
-        print "sortir..............q"
-        ordre = raw_input()
-        if ordre == "q":
-            break
-        elif ordre == "p":
-            while 69:
-                print "pos ?\n"
-                attend = raw_input()
-                if attend == "q":
-                    break
-                else:
-                    pos = asser.getPosition()
-                    print "("+str(int(pos.x))+", "+str(int(pos.y))+")\n"
-        elif ordre == "o":
-            while 1337:
-                print "orient ?\n"
-                attend = raw_input()
-                if attend == "q":
-                    break
-                else:
-                    print str(asser.getOrientation())+"\n"
+#def test():
+    #while 42 :
+        #print "getPosition.........p"
+        #print "getOrientation......o"
+        #print "sortir..............q"
+        #ordre = raw_input()
+        #if ordre == "q":
+            #break
+        #elif ordre == "p":
+            #while 69:
+                #print "pos ?\n"
+                #attend = raw_input()
+                #if attend == "q":
+                    #break
+                #else:
+                    #pos = asser.getPosition()
+                    #print "("+str(int(pos.x))+", "+str(int(pos.y))+")\n"
+        #elif ordre == "o":
+            #while 1337:
+                #print "orient ?\n"
+                #attend = raw_input()
+                #if attend == "q":
+                    #break
+                #else:
+                    #print str(asser.getOrientation())+"\n"
 
 
 #import robot
