@@ -26,7 +26,7 @@ int main (void)
 { 
     serial_t_::init();
     serial_t_::change_baudrate(9600);
-    infrarouge::init();
+    capteur_infrarouge::init();
     
    while (1)  // Loop Forever 
    {
@@ -39,7 +39,7 @@ int main (void)
             serial_t_::print(5);
             
         if(COMPARE_BUFFER("infra", 5)){
-            serial_t_::print(infrarouge::value());
+            serial_t_::print(capteur_infrarouge::value());
         }
         
         
