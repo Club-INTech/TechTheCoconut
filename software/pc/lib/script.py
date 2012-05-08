@@ -55,9 +55,9 @@ class Script:
         try:
             self.asserInstance.changerVitesse("translation",1)
             self.asserInstance.changerVitesse("rotation",1)
-            self.asserInstance.gestionAvancer(300)     # On sort de la zone départ
+            self.asserInstance.gestionAvancer(250)     # On sort de la zone départ
             self.asserInstance.gestionTourner(1.57)     # On se dirige vers le Nord
-            self.asserInstance.gestionAvancer(500)     # On avance jusqu'au lingots
+            self.asserInstance.gestionAvancer(650)     # On avance jusqu'au lingots
             
             if self.couleur == 'r':
                 self.asserInstance.gestionTourner(math.pi)  # On se tourne vers le lingot
@@ -69,9 +69,9 @@ class Script:
             self.asserInstance.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
             self.asserInstance.gestionAvancer(650)     # On avance vers lui
             self.asserInstance.gestionTourner(-1.57)    # On lui montre nos fesses
-            self.asserInstance.gestionAvancer(-480)    # On recule pour lui mettre sa dose
+            self.asserInstance.gestionAvancer(-400)    # On recule pour lui mettre sa dose
             self.asserInstance.changerVitesse("translation",2)
-            self.asserInstance.gestionAvancer(-500.0)  # Pour l'enfoncer à fond
+            self.asserInstance.avancer(-500.0)  # Pour l'enfoncer à fond
             self.asserInstance.changerVitesse("translation",1)
             self.asserInstance.gestionAvancer(200)
             self.asserInstance.gestionTourner(-1.57)    # réorientation du robot
@@ -316,16 +316,17 @@ class Script:
         
         if not ennemi and not nord :
             self.actionInstance.deplacer(10)
-            self.asserInstance.goTo(Point(-50, 255))
-            self.asserInstance.gestionTourner(0)
+            #self.asserInstance.goTo(Point(-50, 255))
+            #self.asserInstance.gestionTourner(0)
             
             self.actionInstance.deplacer(150)
-            self.asserInstance.gestionAvancer(510)
+            #self.asserInstance.gestionAvancer(510)
+            time.sleep(1)
             self.actionInstance.deplacer(75)
-            self.asserInstance.gestionTourner(0.535)
-            self.asserInstance.gestionAvancer(665)
-            self.asserInstance.gestionTourner(0)
-            self.asserInstance.gestionAvancer(-450)
+            #self.asserInstance.gestionTourner(0.535)
+            #self.asserInstance.gestionAvancer(665)
+            #self.asserInstance.gestionTourner(0)
+            #self.asserInstance.gestionAvancer(-450)
             self.actionInstance.deplacer(10)
             
         #if not ennemi and nord :
