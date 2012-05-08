@@ -44,7 +44,7 @@ class Asservissement:
             
         #distance seuil de detection pour les ultrasons
         #self.maxCapt = 400
-        self.maxCapt = 0
+        self.maxCapt = -50000
         
         #liste des centres de robots adverses repérés (liste de points)
         
@@ -158,9 +158,9 @@ class Asservissement:
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
-                print "\n##########"+str(hasattr(self, 'capteurInstance'))+"\n##############\n"
+                #print "\n##########"+str(hasattr(self, 'capteurInstance'))+"\n##############\n"
                 if hasattr(self, 'capteurInstance'):
-                    print "yes"
+                    #print "yes"
                     capteur = self.capteurInstance.mesurer()
                     if capteur < self.maxCapt:
                         print 'avancer : capteur !'
@@ -169,7 +169,7 @@ class Asservissement:
                         print "avancer : timeout !"
                         return "timeout"
                 else:
-                    print "no"
+                    #print "no"
                     if int(self.timerAsserv.getTime()) - debut_timer > 8:
                         print "avancer : timeout !"
                         return "timeout"
@@ -225,12 +225,12 @@ class Asservissement:
     def recalage(self):
         self.serieAsserInstance.ecrire("recal")
         log.logger.info("début du recalage")
-        acquittement = False
-        while not acquittement:
+        acquitement = False
+        while not acquitement:
             reponse = self.serieAsserInstance.lire()
             if reponse == "FIN_REC":
                 log.logger.info("fin du recalage")
-                acquittement = True
+                acquitement = True
             time.sleep(0.05)
         
     def setUnsetAsser(self, asservissement, mode):
@@ -418,11 +418,12 @@ class Asservissement:
         
         #l'angle spécifié dans les scripts est valable pour un robot violet.
         if __builtin__.constantes['couleur'] == "r":
-            angle = math.pi - angle
-        if angle > math.pi:
-            angle = angle - 2*math.pi
-        if angle < -math.pi:
-            angle = angle + 2*math.pi
+            angle = math.pi - angle 
+            print angle
+        #if angle > math.pi:
+            #angle = angle - 2*math.pi
+        #if angle < -math.pi:
+            #angle = angle + 2*math.pi
         
         print "#tourner à "+str(angle)+", "+instruction
         
