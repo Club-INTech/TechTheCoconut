@@ -2,7 +2,7 @@
 /** @file avr/atmega324p/actionneurs/main.cpp
  *  @brief Ce fichier s'occupe de gérer l'AVR Capteur-actionneurs
  *  @author Thibaut ~MissFrance~
- *  @date 05 mai 2012
+ *  @date 08 mai 2012
  */ 
 
 // LIBRAIRIES STANDARD
@@ -53,7 +53,7 @@
 // tournera en continu.
 // WARNING Ce mode fait tourner en rond et en continue les AX12. Donc pensez
 //         à les désolidariser du robot avant de lancer ce mode.
-    #define TEST_NOSERIE_MODE       0
+    #define NOSERIE_MODE       0
 
 // Mode si l'AX12 ne répond pas alors qu'il le devrait. Vérifier la masse.
 // Si ce mode est utilisé, les diodes de l'AX12 clignotent 5 sec après un
@@ -139,9 +139,12 @@ int main()
     if (FLASH_ID_MODE >= 0)
         AX12InitID(FLASH_ID_MODE);
         
-    
+    AX12Init (AX_BROADCAST, current_CW, current_CCW, 50);
+
     // Variable utilisée uniquement pour le REANIMATION_MODE :
-    byte debug_baudrate = 0x00;
+    uint8_t debug_baudrate = 0x00;
+    // Variable utilisée uniquement pour le NOSERIE_MODE :
+    uint8_t debug_noserie = 0x00;
         
     // Activation de toutes les interruptions (notamment les interruptions
     // de la liaison série carte <-> carte).
@@ -162,9 +165,12 @@ int main()
         /// Test des AX12 sans communiquer avec eux via la liaison série.
         /// Ils sont censés tourner en boucle, donc désolidarisez-les du
         /// robot avant ;)
-        else if (TEST_NOSERIE_MODE)
+        else if (NOSERIE_MODE)
         {
-            AX12Init (AX_BROADCAST, 0, 0, 100);
+            debug_noserie = 1- debug_noserie;
+            AX12GoTo(0xFE, current_CW + (int16_t)(600.*(90-10*debug_noserie)/180.));
+            _delay_ms(500);
+
         }
         
         /// ******************************************
@@ -385,5 +391,5 @@ int main()
 
 // Overflow du timer 1 (utilisé notamment par les ultrasons SRF05
 ISR(TIMER1_OVF_vect){
-    serial_t_::print("OVF");
+    
 }
