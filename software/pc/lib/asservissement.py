@@ -43,7 +43,7 @@ class Asservissement:
             
         #distance seuil de detection pour les ultrasons
         #self.maxCapt = 400
-        self.maxCapt = 0
+        self.maxCapt = -50000
         
         #liste des centres de robots adverses repérés (liste de points)
         
@@ -216,6 +216,7 @@ class Asservissement:
         
     def recalage(self):
         self.serieAsserInstance.ecrire("recal")
+        acquitement = False
         while not acquitement:
             self.serieAsserInstance.ecrire('acq')
             reponse = self.serieAsserInstance.lire()
