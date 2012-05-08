@@ -47,11 +47,11 @@ while 42:
             elif event.key == pygame.K_q:
                 print "Tourne à gauche !"
                 asserInstance.serieAsserInstance.ecrire("t")
-                asserInstance.serieAsserInstance.ecrire(str(float(-math.pi+asserInstance.getOrientation())))
+                asserInstance.serieAsserInstance.ecrire(str(float(0)))
             elif event.key == pygame.K_d:
                 print "Tourne à droite !"
                 asserInstance.serieAsserInstance.ecrire("t")
-                asserInstance.serieAsserInstance.ecrire(str(float(math.pi+asserInstance.getOrientation())))
+                asserInstance.serieAsserInstance.ecrire(str(float(math.pi)))
             elif event.key == pygame.K_o:
                 print "Actionneur hg vers l'extérieur"
                 actionInstance.deplacer(160, ["hg"])
