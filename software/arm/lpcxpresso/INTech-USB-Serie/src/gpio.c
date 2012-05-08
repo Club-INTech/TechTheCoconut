@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "gpio.h"
+#include "delay.h"
 
 void gpio_init()
 {
@@ -32,4 +33,11 @@ void gpio_led_reset_on()
 void gpio_led_reset_off()
 {
 	LPC_GPIO4->FIOCLR |= ( 1L << 29 );
+}
+
+void gpio_reset()
+{
+	gpio_led_reset_on();
+	delay_delay(1000);
+	gpio_led_reset_off();
 }

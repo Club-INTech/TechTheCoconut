@@ -284,7 +284,7 @@ void USBHwConnect(int fConnect)
 void VCOM_Usb2Usb4(void)
 {
 	static char serBuf [32];
-	int  numBytesToRead, numBytesRead, numAvailByte;
+	int  numBytesToRead, numBytesRead, numAvailByte, i;
 
 	/* Get USB VCOM received bytes */
 	CDC4_OutBufAvailChar (&numAvailByte);
@@ -292,7 +292,13 @@ void VCOM_Usb2Usb4(void)
 	{
 		numBytesToRead = numAvailByte > 32 ? 32 : numAvailByte;
 		numBytesRead = CDC4_RdOutBuf (&serBuf[0], &numBytesToRead);
-
+		for (i=0 ; i<numBytesToRead ; i++)
+		{
+			if ( serBuf[i] == 'r')
+			{
+				gpio_reset();
+			}
+		}
 		USB_WriteEP (CDC4_DEP_IN, (unsigned char *)&serBuf[0], numBytesRead);
 	}
 }
@@ -337,19 +343,13 @@ int main (void)
 	VCOM_Init();                              // VCOM Initialization
 	gpio_init();
 	delay_init();
+	gpio_led_reset_off();
 
-//	USB_Init();                               // USB Initialization
-//	USB_Reset();
-//	USB_Connect(TRUE);                        // USB Connect
-//	while (!USB_Configuration) ;              // wait until USB is configured
+	USB_Init();                               // USB Initialization
+	USB_Reset();
+	USB_Connect(TRUE);                        // USB Connect
+	while (!USB_Configuration) ;              // wait until USB is configured
 
-	while(1)
-	{
-		gpio_led_reset_on();
-		delay_delay(1000);
-		gpio_led_reset_off();
-		delay_delay(1000);
-	}
 
 
 	while (1)
@@ -360,8 +360,8 @@ int main (void)
 		VCOM1_Serial1_2_Usb();                // read serial port and initiate USB event
 		VCOM1_Usb_2_Serial1();
 
-		VCOM2_Serial2_2_Usb();                // read serial port and initiate USB event
-		VCOM2_Usb_2_Serial2();
+		//VCOM2_Serial2_2_Usb();                // read serial port and initiate USB event
+		//VCOM2_Usb_2_Serial2();
 
 		VCOM3_Serial3_2_Usb();                // read serial port and initiate USB event
 		VCOM3_Usb_2_Serial3();
