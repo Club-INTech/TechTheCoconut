@@ -6,7 +6,7 @@
 // LIBRAIRIE INTECH
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
-#include <libintech/infrarouge.hpp>
+#include <libintech/capteur_infrarouge.hpp>
 
 //Fonctions de lecture/écriture de bit (utile pour capteurs & jumper)
 #ifndef sbi

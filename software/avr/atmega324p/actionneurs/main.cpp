@@ -16,7 +16,7 @@
 
 // LIBRAIRIE INTECH :: Capteurs
 #include <libintech/capteur_max.hpp>
-#include <libintech/infrarouge.hpp>
+#include <libintech/capteur_infrarouge.hpp>
 #include <libintech/capteur_srf05.hpp>
 #include <libintech/jumper.hpp>
 
@@ -113,7 +113,7 @@ typedef jumper< AVR_PORTD<PORTD7> > jumper_t_;
 int main()
 {
     // Initialisations de tous les objets.
-    infrarouge          ::init();
+    capteur_infrarouge  ::init();
     jumper_t_           ::init();
     capteur_srf05_t_    ::init();
     serial_t_           ::init();
@@ -142,9 +142,9 @@ int main()
     AX12Init (AX_BROADCAST, current_CW, current_CCW, 50);
 
     // Variable utilisée uniquement pour le REANIMATION_MODE :
-    uint8_t debug_baudrate = 0x00;
+    uint8_t debug_baudrate  = 0x00;
     // Variable utilisée uniquement pour le NOSERIE_MODE :
-    uint8_t debug_noserie = 0x00;
+    uint8_t debug_noserie   = 0x00;
         
     // Activation de toutes les interruptions (notamment les interruptions
     // de la liaison série carte <-> carte).
@@ -373,7 +373,7 @@ int main()
             
             // infrarouge
             else if (COMPARE_BUFFER("infra", 5))
-                serial_t_::print(infrarouge::value());
+                serial_t_::print(capteur_infrarouge::value());
             
             // Ultrasons SRF05
             else if (COMPARE_BUFFER("SRF", 3))
