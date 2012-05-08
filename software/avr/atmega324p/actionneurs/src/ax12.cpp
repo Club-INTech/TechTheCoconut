@@ -56,23 +56,16 @@ byte ax12writeB(byte data){
 /// les normes utilisées.
 void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
     byte checksum = 0;
-    _delay_us(50);
     ax12writeB(0xFF);
-    _delay_us(50);
     ax12writeB(0xFF);
     checksum += ax12writeB(id);
-    _delay_us(50);
     checksum += ax12writeB(datalength + 2);
-    _delay_us(50);
     checksum += ax12writeB(instruction);
-    _delay_us(50);
 
     byte f;
     for (f=0; f<datalength; f++) {
-        _delay_us(50);
       checksum += ax12writeB(data[f]);
     }
-    _delay_us(50);
     ax12writeB(~checksum);
 }
 
