@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 #include <util/delay.h>
 #include "balise.h"
 #include "frame.h"
@@ -33,6 +34,8 @@
 #define READ_CANAL_B() rbi(PINB,PORTB5)
 
 void init();
+void WDT_off(void);
+void WDT_Prescaler_Change(void);
 
 volatile uint8_t dernier_etat_a;
 volatile uint8_t dernier_etat_b;
@@ -40,10 +43,16 @@ volatile int32_t codeur;
 volatile int32_t last_codeur = 0;
 
 int main() {
+	
+	// Désactivation du watchdog
+	WDT_off();
+			
 	Balise & balise = Balise::Instance();
 	init();
 	uint32_t rawFrame=0;
-    Balise::serial_pc::print("init");
+	
+    Balise::serial_pc::print("reset");
+    
 	while (1) {
 		char buffer[10];
 		Balise::Balise::serial_pc::read(buffer,10);
@@ -56,11 +65,20 @@ int main() {
 		}
 		
 		if(COMPARE_BUFFER("!",1)){
+			// Timeout pour la requête de 0,25s
+			WDT_Prescaler_Change();
+			
+			// Activation du watchdog en mode system reset
+			sbi(WDTCSR,WDE);
+			
+			// Envoi du ping à la balise
 			Balise::serial_radio::print_noln('?');
-// 			char buffer[10] = {0};
-// 			Balise::Balise::serial_radio::read(buffer,10);
 			Balise::serial_pc::print(Balise::serial_radio::read_int());
+			
+			// Désactivation du watchdog
+			WDT_off();
 		}
+		
 		
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
@@ -71,7 +89,15 @@ int main() {
 			int32_t angle = 0;
 			int32_t crc = 0;
 			do{
+				// Timeout pour la requête de 0,25s
+				WDT_Prescaler_Change();
+			
+				// Activation du watchdog en mode system reset
+				sbi(WDTCSR,WDE);
+				
+				// Envoi à la balise d'une demande de mise à jour
 				Balise::serial_radio::print_noln('v');
+				
 				
 				//Calcul du temps des read pour correction de l'offset
 				int32_t t1 = Balise::T_TopTour::value();
@@ -89,6 +115,10 @@ int main() {
                 is_valid = true;
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5);
+			
+			// Désactivation du watchdog
+			WDT_off();
+			
 			if(n_demandes==5){
 				Balise::serial_pc::print("ERREUR_CANAL");
 			}
@@ -164,6 +194,42 @@ void init()
 	
 // 	sei();
 }
+
+void WDT_off(void)
+{
+	// Désactivation des interruptions
+	cli();
+	
+	/* Clear WDRF in MCUSR */
+	MCUSR &= ~(1<<WDRF);
+	
+	/* Write logical one to WDCE and WDE */
+	/* Keep old prescaler setting to prevent unintentional time-out */
+	WDTCSR |= (1<<WDCE) | (1<<WDE);
+	
+	/* Turn off WDT */
+	WDTCSR = 0x00;
+	
+	// Réactivation des interruptions
+	sei();
+}
+
+
+void WDT_Prescaler_Change(void)
+{
+	// Désactivation des interruptions
+	cli();
+	
+	/* Start timed sequence */
+	WDTCSR |= (1<<WDCE) | (1<<WDE);
+	
+	/* Mise à jour du prescaler */
+	WDTCSR = (1<<WDP2);
+	
+	// Réactivation des interruptions
+	sei();
+}
+
 
 ISR(TIMER1_OVF_vect)
 {

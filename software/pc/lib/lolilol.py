@@ -8,16 +8,20 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import log
 log = log.Log(__name__)
 
+#print os.path.dirname(__file__)
+
 def son(fichier):
     s = Son(fichier)
     s.play()
 
 class Son(object):
-    def __init__(self, fichier, dossier=constantes['Lolilol']['musique_dossier']):
+    def __init__(self, fichier, dossier=None):
         self.actif = constantes['Lolilol']['musique_active']
+        if dossier == None:
+            dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))+"/multimedia_lolilol/"
         if not os.access(dossier+fichier, os.F_OK):
             self.actif = False
-            #log.logger.error("Fichier de son "+dossier+fichier+" non trouvé")
+            log.logger.error("Fichier de son "+dossier+fichier+" non trouvé")
         self.fichier = fichier
         self.dossier = dossier
         if self.actif:
