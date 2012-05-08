@@ -96,7 +96,7 @@
 // Liaison série
 typedef Serial<0> serial_t_;
 
-// Ultrasons
+// Ultrasons MAX
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
@@ -120,6 +120,12 @@ int main()
     ultrason_d           .init();
     ultrason_g           .init();
     
+    // Variables pour les AX12 :
+    // (définies dans actionneurs.h)
+    uint16_t current_CW     = AX_ANGLECW;
+    uint16_t current_CCW    = AX_ANGLECCW;
+    uint16_t current_speed  = AX_SPEED;
+    
     // Changement du BAUD RATE de la série carte <-> AX12
     AX12_Serial_Init(BAUD_RATE_SERIE);
 
@@ -133,23 +139,19 @@ int main()
     if (FLASH_ID_MODE >= 0)
         AX12InitID(FLASH_ID_MODE);
         
-    // Initialisation de tous les AX12 en angle max, angle min et vitesse
-    // de rotation
-    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
     
     // Variable utilisée uniquement pour le REANIMATION_MODE :
     byte debug_baudrate = 0x00;
         
     // Activation de toutes les interruptions (notamment les interruptions
-    // de la liaison série carte <-> carte.
+    // de la liaison série carte <-> carte).
     sei();
     
-    serial_t_::print("RESET");
         
     /// BOUCLE PRINCIPALE
     while (1)
     {
-        /// Mode de réanimatio, lorsque plus rien d'autre ne marche.
+        /// Mode de réanimation, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
         {
             AX12_Serial_Init(2000000/(debug_baudrate + 1));
@@ -160,11 +162,13 @@ int main()
         /// Test des AX12 sans communiquer avec eux via la liaison série.
         /// Ils sont censés tourner en boucle, donc désolidarisez-les du
         /// robot avant ;)
-        else if (TEST_NOSERIE_MODE) 
-            AX12Init(0xFE, 0,0,1200);
+        else if (TEST_NOSERIE_MODE)
+        {
+            AX12Init (AX_BROADCAST, 0, 0, 100);
+        }
         
         /// ******************************************
-        /// **          PROGRAMME PRINCIPALE        **
+        /// **          PROGRAMME PRINCIPAL         **
         /// ******************************************
         else
         {
@@ -210,13 +214,22 @@ int main()
             /// *********************************************** ///
             ///                 ACTIONNEURS                     ///
             /// *********************************************** ///
+            
+            // Initialisation des AX12
+            else if (COMPARE_BUFFER("i", 1))
+            {
+                // Initialisation de tous les AX12 en angle max, angle min et vitesse
+                // de rotation
+                AX12Init (AX_BROADCAST, current_CW, current_CCW, current_speed);
+            }
+                
             // GoTo angle
             else if (COMPARE_BUFFER("GOTO", 4))
             {
                 int8_t id = serial_t_::read_int();
                 int16_t angle = serial_t_::read_int();
 
-                AX12GoTo(id, AX_ANGLECW + (int16_t)(600.*angle/180.));
+                AX12GoTo(id, current_CW + (int16_t)(600.*angle/180.));
             }
             
             // Goto Broadcast
@@ -224,7 +237,7 @@ int main()
             {
                 int16_t angle = serial_t_::read_int();
                 
-                AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*angle/180.));
+                AX12GoTo(0xFE, current_CW + (int16_t)(600.*angle/180.));
             }
             
             // Goto brut
@@ -235,13 +248,15 @@ int main()
                 AX12GoTo(id, angle);
             }
             
+            // TEST e goto
             else if (COMPARE_BUFFER("z", 1))
             {
                 
-                AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*80/180.));
+                AX12GoTo(0xFE, current_CW + (int16_t)(600.*80/180.));
                 serial_t_::print("z");
             }
             
+            // TEST de goto
             else if (COMPARE_BUFFER("e", 1))
             {
                 
@@ -255,6 +270,7 @@ int main()
                 int8_t  id    = serial_t_::read_int();
                 int16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(id, speed);
+                current_speed = speed;
             }
             
             // Changement de vitesse broadcast
@@ -262,6 +278,7 @@ int main()
             {
                 int16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(0xFE, speed);
+                current_speed = speed;
             }
             
             // Changement de l'angleCW (min)
@@ -269,12 +286,15 @@ int main()
             {
                 int16_t angle = serial_t_::read_int();
                 AX12ChangeAngleMIN(0xFE, angle);
+                current_CW = angle;
             }
             
+            // Changement de l'angle CCW (max)
             else if (COMPARE_BUFFER("M", 1))
             {
                 int16_t angle = serial_t_::read_int();
                 AX12ChangeAngleMAX(0xFE, angle);
+                current_CCW = angle;
             }
                
             
@@ -286,9 +306,11 @@ int main()
             }
             
             // Désasservissement de tous les servos branchés
-            else if (COMPARE_BUFFER("UNASSERV", 8) || COMPARE_BUFFER("u", 1) || COMPARE_BUFFER("", 0))
+            else if ((COMPARE_BUFFER("UNASSERV", 8)) || (COMPARE_BUFFER("u", 1)))
                 AX12Unasserv(0xFE);
             
+            
+            // Désasservissement d'un servo donné
             else if (COMPARE_BUFFER("U", 1))
             {
                 uint8_t id = serial_t_::read_int();
@@ -309,10 +331,9 @@ int main()
                 uint8_t type = serial_t_::read_int();
                 
                 writeData(0xFE, AX_ALARM_LED, 1, type);
-                serial_t_::print("ok");
             }
             
-            // Message générique.
+            // Message générique. Utilisable pour modifier n'importe quoi.
             else if (COMPARE_BUFFER("MESS", 4))
             {
                 // On lit l'id
@@ -329,7 +350,6 @@ int main()
                 
                 writeData(id, adresse, n, val);
                 
-                serial_t_::print("ok");
             }
 
             
@@ -363,7 +383,7 @@ int main()
 }
 
 
-// Overflow du timer 1
+// Overflow du timer 1 (utilisé notamment par les ultrasons SRF05
 ISR(TIMER1_OVF_vect){
-    
+    serial_t_::print("OVF");
 }
