@@ -15,7 +15,7 @@
 #include <libintech/serial/serial_0.hpp>
 
 // LIBRAIRIE INTECH :: Capteurs
-#include <libintech/ultrason.hpp>
+#include <libintech/capteur_max.hpp>
 #include <libintech/infrarouge.hpp>
 #include <libintech/capteur_srf05.hpp>
 #include <libintech/jumper.hpp>
