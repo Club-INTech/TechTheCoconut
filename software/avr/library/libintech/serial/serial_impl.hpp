@@ -28,25 +28,25 @@ private:
         int head;
         int tail;
     };
-    
+
     static volatile ring_buffer rx_buffer_;
-    
+
 private:
 
     static void PLEASE_INCLUDE_SERIAL_INTERRUPT();
-	
-    
+
+
     static inline bool available(void)
     {
     		return (rx_buffer__SIZE + rx_buffer_.head - rx_buffer_.tail) % rx_buffer__SIZE;
     }
-    
+
     static inline void send_ln(){
 	send_char('\r');
     	send_char('\n');
     }
-    
-        
+
+
     static inline unsigned char read_single_char(){
     while(!available()){ asm("nop"); }
     unsigned char c = rx_buffer_.buffer[rx_buffer_.tail];
@@ -57,7 +57,7 @@ private:
 public:
 
     static inline void init();
-	
+
     static inline void change_baudrate(uint32_t BAUD_RATE);
 
     static inline void send_char(unsigned char byte);
@@ -86,30 +86,30 @@ public:
         }
         print((const char *)buff);
     }
-    
+
     static inline void print_binary(unsigned char * val, int16_t len){
         for(int16_t i = 0 ; i<len ; ++i){
 		print_binary(val[i]);
 	}
     }
-    
+
     template<class T>
     static inline void print_noln(T val){
     	char buffer[10];
         ltoa(val,buffer,10);
     	print_noln((const char *)buffer);
     }
-    
+
     static inline void print_noln(char val){
     	send_char(val);
     	send_char('\r');
     }
-    
+
     static inline void print_noln(unsigned char val){
         send_char(val);
         send_char('\r');
     }
-    
+
     static inline void print_noln(const char * val)
     {
     	for(uint16_t i = 0 ; i < strlen(val) ; i++)
@@ -118,51 +118,19 @@ public:
     	}
     	send_char('\r');
     }
-    
+
     template<class T>
     static inline void print(T val){
         print_noln(val);
         send_char('\n');
     }
 
-    
-    static inline void print(int32_t posX, int32_t posY){
-    	char bufX[10];
-	char bufY[10];
-    	ltoa(abs(posX),bufX,10);
-    	ltoa(abs(posY),bufY,10);
-	
-	for(unsigned int i = 0 ; i < 4-strlen(bufY)  ; i++)
-    	{
-    		send_char('0');
-    	}
-	for(unsigned int i = 0 ; i < strlen(bufY)  ; i++)
-    	{
-    		send_char(bufY[i]);
-    	}
-    	if (posX < 0)
-		send_char('-');
-	else
-		send_char('+');
-	for(unsigned int i = 0 ; i < 4-strlen(bufX)  ; i++)
-    	{
-    		send_char('0');
-    	}
-	for(unsigned int i = 0 ; i < strlen(bufX)  ; i++)
-    	{
-    		send_char(bufX[i]);
-    	}
-    	send_ln();
-    }
-    
-
-    
     static inline int32_t read_int(void){
         static char buffer[20];
         buffer[read(buffer,20)] = '\0';
         return atol(buffer);
     }
-    
+
     static inline uint32_t read_uint(void){
         static char buffer[20];
         buffer[read(buffer,20)] = '\0';
@@ -181,7 +149,7 @@ public:
         read_single_char();
         return res;
     }
-    
+
     static inline uint8_t read(unsigned char* string, uint8_t length){
     	uint8_t i = 0;
     	for (; i < length; i++){
@@ -193,8 +161,8 @@ public:
         }
         return i;
     }
-    
-    
+
+
     static inline uint8_t read(char* string, uint8_t length){
         uint8_t i = 0;
         for (; i < length; i++){

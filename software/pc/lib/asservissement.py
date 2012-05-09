@@ -181,17 +181,15 @@ class Asservissement:
     def getPosition(self):
         while 42:
             try:
-                reponse = ""
-                while len(reponse)<9:
+                reponseX = ""
+                reponseY = ""
+                while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^([0-9]+)$", reponseY)):
                     self.serieAsserInstance.ecrire("pos")
-                    reponse = self.serieAsserInstance.lire()
-                    print ">"+reponse+"<\n"
-                if reponse[4]== "+":
-                    reponse = reponse.split("+")
-                    pos = point.Point(float(reponse[1]),float(reponse[0]))
-                else:
-                    reponse = reponse.split("-")
-                    pos = point.Point(-float(reponse[1]),float(reponse[0]))
+                    print "@@@@@ POS @@@@@\n"
+                    reponseX = self.serieAsserInstance.lire()
+                    reponseY = self.serieAsserInstance.lire()
+                    print ">"+str(reponseX)+"<>"+str(reponseY)+"<\n"
+                pos = point.Point(float(reponseX),float(reponseY))
                 print "("+str(pos.x)+", "+str(pos.y)+")\n"
                 return pos
             except:
