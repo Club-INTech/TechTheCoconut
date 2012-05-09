@@ -54,8 +54,7 @@ int main() {
 		WDT_off();
 	}
 	
-	init();
-	uint32_t rawFrame=0;    
+	init(); 
     
 	while (1) {
 		char buffer[10];
@@ -64,7 +63,6 @@ int main() {
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
 		if(COMPARE_BUFFER("?",1)){
-// 			Balise::serial_pc::print(Balise::T_TopTour::value());
 			Balise::serial_pc::print(2);
 		}
 		
@@ -86,12 +84,11 @@ int main() {
 		
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
-// 			Frame frame = 0;
 			int16_t n_demandes = 0;
 			int32_t distance;
 			int32_t offset = 0;
 			int32_t angle = 0;
-			int32_t crc = 0;
+			int32_t crc;
 			do{
 				// Timeout pour la requête de 0,25s
 				WDT_set_prescaler();
@@ -106,21 +103,15 @@ int main() {
 				int32_t t1 = Balise::T_TopTour::value();
 				distance = Balise::serial_radio::read_int();
 				offset = Balise::serial_radio::read_int();
- 				int32_t brut = Balise::serial_radio::read_int();
 				crc = Balise::serial_radio::read_int();
-				Balise::serial_pc::print(brut);
-				Balise::serial_pc::print((distance << 16) + offset);
-				Balise::serial_pc::print(crc);
-				Balise::serial_pc::print(crc8((distance << 16) + offset));
 				int32_t t2 = Balise::T_TopTour::value();			
 				
 				if(t2 < t1){
 				  t2+=balise.max_counter();
 				}
  				angle = balise.getAngle(offset + (t2 - t1)*5/4);
-				
-				//is_valid = (crc==crc8((distance << 16) + offset));
-				is_valid = true;
+				is_valid = (crc==((int32_t) crc8((distance << 16) + offset)));
+
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5);
 			

@@ -21,12 +21,11 @@ int main()
 
 			uint16_t offset=timeout_timer::value();
 			distance=1;
-			offset=12;
+			offset=13;
 			Serial<0>::print_noln(distance);
 			Serial<0>::print_noln(offset);
-			uint16_t data=(((uint32_t) distance) << 16) + offset;
-			Serial<0>::print_noln(data);
-			Serial<0>::print_noln(crc8(data));
+			uint32_t data = (((uint32_t) distance) << 16) + offset;
+			Serial<0>::print_noln((int) crc8(data));
 		}
 		else if(order=='?'){
 			Serial<0>::print_noln(40000000);
