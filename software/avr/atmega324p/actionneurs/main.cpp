@@ -114,12 +114,6 @@ int main()
     ultrason_d           .init();
     ultrason_g           .init();
     
-    // Variables pour les AX12 :
-    // (définies dans actionneurs.h)
-    uint16_t current_CW     = AX_ANGLECW;
-    uint16_t current_CCW    = AX_ANGLECCW;
-    uint16_t current_speed  = AX_SPEED;
-    
     // Changement du BAUD RATE de la série carte <-> PC
     serial_t_::change_baudrate(BAUD_RATE_SERIE);
     // Changement du baud rate de la série carte <-> AX12
@@ -178,7 +172,7 @@ int main()
         else if (NOSERIE_MODE)
         {
             debug_noserie = 1- debug_noserie;
-            AX12GoTo(0xFE, current_CW + (uint16_t)(600.*(90-10*debug_noserie)/180.));
+            AX12GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*(90-10*debug_noserie)/180.));
             _delay_ms(500);
 
         }
@@ -232,7 +226,7 @@ int main()
                 uint8_t id = serial_t_::read_int();
                 uint16_t angle = serial_t_::read_int();
 
-                AX12GoTo(id, current_CW + (uint16_t)(600.*angle/180.));
+                AX12GoTo(id, AX_ANGLECW + (uint16_t)(600.*angle/180.));
             }
             
             // Goto Broadcast
@@ -240,7 +234,7 @@ int main()
             {
                 uint16_t angle = serial_t_::read_int();
                 
-                AX12GoTo(0xFE, current_CW + (uint16_t)(600.*angle/180.));
+                AX12GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*angle/180.));
             }
             
             // Goto brut
@@ -255,7 +249,7 @@ int main()
             else if (COMPARE_BUFFER("z", 1))
             {
                 
-                AX12GoTo(0xFE, current_CW + (uint16_t)(600.*80/180.));
+                AX12GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*80/180.));
                 serial_t_::print("z");
             }
             
@@ -273,7 +267,6 @@ int main()
                 uint8_t  id    = serial_t_::read_int();
                 uint16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(id, speed);
-                current_speed = speed;
             }
             
             // Changement de vitesse broadcast
@@ -281,7 +274,6 @@ int main()
             {
                 uint16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(0xFE, speed);
-                current_speed = speed;
             }
             
             // Changement de l'angleCW (min)
@@ -289,7 +281,6 @@ int main()
             {
                 uint16_t angle = serial_t_::read_int();
                 AX12ChangeAngleMIN(0xFE, angle);
-                current_CW = angle;
             }
             
             // Changement de l'angle CCW (max)
@@ -297,7 +288,6 @@ int main()
             {
                 uint16_t angle = serial_t_::read_int();
                 AX12ChangeAngleMAX(0xFE, angle);
-                current_CCW = angle;
             }
                
             
