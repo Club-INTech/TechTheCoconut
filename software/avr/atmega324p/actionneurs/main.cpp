@@ -66,23 +66,7 @@
 // matériel.
 // NOTE : Il semble que la carte actionneur ne permette pas d'atteindre un tel baudrate
 // de 1.000.000. Utiliser un arduilol.
-    #define REANIMATION_MODE        0
-
-///Fonctions de lecture/écriture de bit (utile pour capteurs & jumper)
-// // Set Bit
-// #ifndef sbi
-// #define sbi(port,bit) (port) |= (1 << (bit))
-// #endif
-// 
-// // Clear Bit
-// #ifndef cbi
-// #define cbi(port,bit) (port) &= ~(1 << (bit))
-// #endif
-// 
-// // Read Bit
-// #ifndef rbi
-// #define rbi(port,bit) ((port & (1 << bit)) >> bit)
-// #endif
+    #define REANIMATION_MODE        0   
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
