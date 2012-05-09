@@ -7,7 +7,7 @@
 #include <avr/interrupt.h>
 
 #include <libintech/timer.hpp>
-#include <libintech/ultrason.hpp>
+#include <libintech/capteur_max.hpp>
 
 //Fonctions de lecture/écriture de bit
 #ifndef sbi

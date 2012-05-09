@@ -28,6 +28,7 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
+        
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
@@ -43,7 +44,7 @@ class Asservissement:
             
         #distance seuil de detection pour les ultrasons
         #self.maxCapt = 400
-        self.maxCapt = 0
+        self.maxCapt = -50000
         
         #liste des centres de robots adverses repérés (liste de points)
         
@@ -119,13 +120,13 @@ class Asservissement:
         self.serieAsserInstance.ecrire("t")
         self.serieAsserInstance.ecrire(str(float(angle)))
         log.logger.info("Ordre de tourner à " + str(float(angle)))
-        acquitement = False
+        acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
-        while not acquitement:
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             if reponse == "FIN_MVT":
-                acquitement = True
+                acquittement = True
             elif reponse == "STOPPE":
                 print "tourner : stoppé !"
                 return "stoppe"
@@ -133,7 +134,8 @@ class Asservissement:
                 print "tourner : timeout !"
                 return "timeout"
             time.sleep(0.05)
-                
+            
+        print "acq tourner"
         return "acquittement"
     
     def avancer(self, distance):
@@ -142,52 +144,55 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        print "def avancer"
         self.serieAsserInstance.ecrire("d")
         self.serieAsserInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
-        acquitement = False
+        acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
-        while not acquitement:
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             if reponse == "FIN_MVT":
-                acquitement = True
+                acquittement = True
             elif reponse == "STOPPE":
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
-                capteur = self.capteurInstance.mesurer()
-                if capteur < self.maxCapt:
-                    print 'avancer : capteur !'
-                    return "obstacle"
-                elif int(self.timerAsserv.getTime()) - debut_timer > 8:
-                    print "avancer : timeout !"
-                    return "timeout"
+                #print "\n##########"+str(hasattr(self, 'capteurInstance'))+"\n##############\n"
+                if hasattr(self, 'capteurInstance'):
+                    #print "yes"
+                    capteur = self.capteurInstance.mesurer()
+                    if capteur < self.maxCapt:
+                        print 'avancer : capteur !'
+                        return "obstacle"
+                    elif int(self.timerAsserv.getTime()) - debut_timer > 8:
+                        print "avancer : timeout !"
+                        return "timeout"
+                else:
+                    #print "no"
+                    if int(self.timerAsserv.getTime()) - debut_timer > 8:
+                        print "avancer : timeout !"
+                        return "timeout"
             time.sleep(0.05)
                 
+        print "acq avancer"
         return "acquittement"
             
     def getPosition(self):
         while 42:
             try:
-                reponse = ""
-                while len(reponse)<9:
-                    print "ecrire...\n"
+                reponseX = ""
+                reponseY = ""
+                while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^([0-9]+)$", reponseY)):
                     self.serieAsserInstance.ecrire("pos")
-                    print "lecture...\n"
-                    reponse = self.serieAsserInstance.lire()
-                    print ">"+reponse+"<\n"
-                if reponse[4]== "+":
-                    reponse = reponse.split("+")
-                    pos = point.Point(float(reponse[1]),float(reponse[0]))
-                else:
-                    reponse = reponse.split("-")
-                    pos = point.Point(-float(reponse[1]),float(reponse[0]))
+                    print "@@@@@ POS @@@@@\n"
+                    reponseX = self.serieAsserInstance.lire()
+                    reponseY = self.serieAsserInstance.lire()
+                    print ">"+str(reponseX)+"<>"+str(reponseY)+"<\n"
+                pos = point.Point(float(reponseX),float(reponseY))
                 print "("+str(pos.x)+", "+str(pos.y)+")\n"
                 return pos
             except:
-                print "exception !"
                 pass
             
     def setPosition(self,position):
@@ -201,9 +206,7 @@ class Asservissement:
             try:
                 reponse = ""
                 while not re.match("^(-[0-9]+|[0-9]+)$", reponse):
-                    print "ecrire...\n"
                     self.serieAsserInstance.ecrire("eo")
-                    print "lecture...\n"
                     reponse = self.serieAsserInstance.lire()
                     print ">"+reponse+"<\n"
                 orientation = float(reponse)/1000.0
@@ -216,15 +219,17 @@ class Asservissement:
         self.serieAsserInstance.ecrire("co")
         self.serieAsserInstance.ecrire(str(float(orientation)))
         
+            
     def recalage(self):
         self.serieAsserInstance.ecrire("recal")
+        log.logger.info("début du recalage")
+        acquitement = False
         while not acquitement:
-            self.serieAsserInstance.ecrire('acq')
             reponse = self.serieAsserInstance.lire()
             if reponse == "FIN_REC":
-                print reponse
+                log.logger.info("fin du recalage")
                 acquitement = True
-            #TODO : gestion stop ?
+            time.sleep(0.05)
         
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -341,12 +346,13 @@ class Asservissement:
                 ennemi_en_vue = True
                 debut_timer = int(timerStrat.getTime())
                 while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
-                    capteur = self.capteurInstance.mesurer()
-                    if capteur < self.maxCapt:
-                        print 'gestionAvancer : capteur !'
-                    else :
-                        print 'gestionAvancer : la voie est libre !'
-                        ennemi_en_vue = False
+                    if hasattr(self, 'capteurInstance'):
+                        capteur = self.capteurInstance.mesurer()
+                        if capteur < self.maxCapt:
+                            print 'gestionAvancer : capteur !'
+                        else :
+                            print 'gestionAvancer : la voie est libre !'
+                            ennemi_en_vue = False
                     
                 if not ennemi_en_vue:
                     #vider la liste des robots adverses repérés
@@ -410,11 +416,12 @@ class Asservissement:
         
         #l'angle spécifié dans les scripts est valable pour un robot violet.
         if __builtin__.constantes['couleur'] == "r":
-            angle = math.pi - angle
-        if angle > math.pi:
-            angle = angle - 2*math.pi
-        if angle < -math.pi:
-            angle = angle + 2*math.pi
+            angle = math.pi - angle 
+            print angle
+        #if angle > math.pi:
+            #angle = angle - 2*math.pi
+        #if angle < -math.pi:
+            #angle = angle + 2*math.pi
         
         print "#tourner à "+str(angle)+", "+instruction
         

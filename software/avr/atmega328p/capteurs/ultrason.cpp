@@ -1,4 +1,4 @@
-#include <libintech/ultrason.hpp>
+#include <libintech/capteur_max.hpp>
 
 ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
 ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
