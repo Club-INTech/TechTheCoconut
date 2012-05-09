@@ -102,21 +102,25 @@ int main() {
 				// Envoi à la balise d'une demande de mise à jour
 				Balise::serial_radio::print_noln('v');
 				
-				
 				//Calcul du temps des read pour correction de l'offset
 				int32_t t1 = Balise::T_TopTour::value();
 				distance = Balise::serial_radio::read_int();
 				offset = Balise::serial_radio::read_int();
-// 				crc = Balise::serial_radio::read_int();
+ 				int32_t brut = Balise::serial_radio::read_int();
+				crc = Balise::serial_radio::read_int();
+				Balise::serial_pc::print(brut);
+				Balise::serial_pc::print((distance << 16) + offset);
+				Balise::serial_pc::print(crc);
+				Balise::serial_pc::print(crc8((distance << 16) + offset));
 				int32_t t2 = Balise::T_TopTour::value();			
 				
 				if(t2 < t1){
 				  t2+=balise.max_counter();
 				}
-				angle = balise.getAngle(offset + (t2 - t1)*5/4);
+ 				angle = balise.getAngle(offset + (t2 - t1)*5/4);
 				
-// 				is_valid = (crc==crc8((distance << 16) + offset));
-                is_valid = true;
+				//is_valid = (crc==crc8((distance << 16) + offset));
+				is_valid = true;
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5);
 			
@@ -133,7 +137,6 @@ int main() {
 			else{
 				char str[80] = {0};
 				char buff[20];
-// 				Balise::serial_pc::print(offset);
 				ltoa(1,buff,10);
 				strcat(str,buff);
 				strcat(str,".");
@@ -199,7 +202,7 @@ void init()
 	// Activer les interruptions
 	//PCICR |= (1 << PCIE0);
 	
-// 	sei();
+ 	sei();
 }
 
 

@@ -18,14 +18,18 @@ int main()
 		char buffer[10];
 		unsigned char order= Serial<0>::read_char();
 		if(order=='v'){
-// 			uint16_t n_distance = distance;
+
 			uint16_t offset=timeout_timer::value();
+			distance=1;
+			offset=12;
 			Serial<0>::print_noln(distance);
 			Serial<0>::print_noln(offset);
-// 			Serial<0>::print(crc8((((uint32_t) distance) << 16) + offset));
+			uint16_t data=(((uint32_t) distance) << 16) + offset;
+			Serial<0>::print_noln(data);
+			Serial<0>::print_noln(crc8(data));
 		}
 		else if(order=='?'){
-			Serial<0>::print_noln(40);
+			Serial<0>::print_noln(40000000);
 		}
 	}
 	

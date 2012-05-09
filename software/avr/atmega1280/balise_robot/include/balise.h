@@ -31,7 +31,7 @@ class Balise : public Singleton<Balise>{
 		void asservir(int32_t vitesse_courante);
 		void max_counter(uint16_t valeur);
 		uint16_t max_counter();
-		uint32_t  getAngle(uint16_t offset);
+		int16_t  getAngle(uint16_t offset);
 // 		void incremente_toptour();
 // 		void reset_toptour();
 // 		uint16_t toptour();

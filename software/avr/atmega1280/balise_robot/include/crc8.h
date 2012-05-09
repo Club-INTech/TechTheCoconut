@@ -3,17 +3,10 @@
 
 #include <avr/io.h>
 
-#ifndef _FRAME_TYPEDEF_
-#define _FRAME_TYPEDEF_
-typedef int32_t Data;
-typedef uint8_t Crc;
-#endif
-
-
 #define POLYNOMIAL  0x07
 
 void init_crc8();
-void crc8_byte(Crc *crc, uint8_t byte);
-Crc crc8(Data data);
+void crc8_byte(uint8_t *crc, uint8_t byte);
+uint8_t crc8(int32_t data);
 
 #endif
