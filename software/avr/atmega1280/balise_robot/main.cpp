@@ -66,6 +66,28 @@ int main() {
 			Balise::serial_pc::print(2);
 		}
 		
+		if(COMPARE_BUFFER("loff",4)){
+		    cbi(TCCR0A,WGM00);
+		    cbi(TCCR0A,WGM01);
+		    cbi(TCCR0B,WGM02);
+		    
+		    cbi(TCCR0A,COM0A0);
+		    cbi(TCCR0A,COM0A1);
+		    
+		    Balise::serial_pc::print("laser off");
+		}
+		
+		if(COMPARE_BUFFER("lon",3)){
+		    cbi(TCCR0A,WGM00);
+		    sbi(TCCR0A,WGM01);
+		    cbi(TCCR0B,WGM02);
+		    
+		    sbi(TCCR0A,COM0A0);
+		    cbi(TCCR0A,COM0A1);
+		    Balise::serial_pc::print("laser on");
+		}				    
+
+		
 		if(COMPARE_BUFFER("!",1)){
 			// Timeout pour la requête de 0,25s
 			WDT_set_prescaler();
@@ -139,6 +161,11 @@ int main() {
 				Balise::serial_pc::print((const char *)str);
 			}
 		}
+		
+		if(COMPARE_BUFFER("troll",5)){
+			Balise::serial_pc::print("MER IL ET FOU ! ENKULE DE RIRE");
+		}
+		
 		#undef COMPARE_BUFFER*/
 	}
 	
@@ -168,7 +195,6 @@ void init()
 	
 	//Seuil (cf formule datasheet)
 	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
-	//OCR0A= 120;
 	// Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
 	OCR0A= 170;
 	
