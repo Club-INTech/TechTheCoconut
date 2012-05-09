@@ -25,18 +25,18 @@
 // Mode pour reflasher l'id des AX12 connectés. Attention à c'qu'on fait.
 // Si ce mode est positif, il reflashera l'id des AX12 à la valeur du mode.
 // Pour ne pas reflasher l'id des AX12 connectés, mettre une valeur négative.
-    #define FLASH_ID_MODE           2
+    #define FLASH_ID_MODE           -1
 
 // Mode pour reflasher le baud rate d'écoute des AX12. Warning. Achtung.
 // Mettre à 0 pour ne pas le reflasher, à 1 sinon. Si ce mode est à 1,
 // la carte reflashera le baud rate d'écoute de l'AX12 à la valeur
 // BAUD_RATE_AX12 (définie un peu plus haut)
-    #define FLASH_BAUD_RATE_MODE    1
+    #define FLASH_BAUD_RATE_MODE    0
 
 // Mode pour tester les AX12 sans utiliser la liaison PC.
 // A mettre à 1 pour l'utiliser, à 0 sinon. Si le mode est mis à 1, l'AX12
-// tournera en continu.
-    #define TEST_NOSERIE_MODE       1
+// ira à un angle de 90°
+    #define TEST_NOSERIE_MODE       0
 
 // Mode si l'AX12 ne répond pas alors qu'il le devrait. Vérifier la masse.
 // Si ce mode est utilisé, les diodes de l'AX12 clignotent 5 sec après un
