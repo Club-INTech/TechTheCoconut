@@ -12,41 +12,40 @@ import __builtin__
 import math
 from outils_math.point import Point
 
-
 if hasattr(__builtin__.instance, 'asserInstance'):
     asserInstance = __builtin__.instance.asserInstance
 if hasattr(__builtin__.instance, 'actionInstance'):
     actionInstance = __builtin__.instance.actionInstance
+
+def scriptTotem():
+    asserInstance.goTo(Point(0.,660.))
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(110)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(0)
+    time.sleep(0.5)
     
-
-a = Point(200.0,200.0)
-b = Point(300.0,500.0) 
-
-"""
-while True:
-    a.x = float(raw_input("x ?"))
-    a.y = float(raw_input("y ?"))
-    asserInstance.goToSegment(a)
-"""
     
-
-"""
-raw_input("?")
-asserInstance.avancer(100)
-raw_input("?")
-asserInstance.goToSegment(a)
-raw_input("?")
-asserInstance.goToSegment(b)
-raw_input("?")
-"""
-
 def console():
     print "### bienvenue dans la console $0p@l1z7 ###"
     print "exit ou ? pour sortir |     goto avec g     |   orienter avec z,q,s,d "
     print "avancer avec u -> p   | reculer avec j -> m | déplacer bras avec w -> n"
     
     #position initiale du robot
-    asserInstance.setPosition(Point(0,400))
+    asserInstance.setPosition(Point(70,400))
+    asserInstance.setOrientation(0)
     
     while True:
         try:
@@ -59,33 +58,33 @@ def console():
                 dest = Point(float(x),float(y)) 
                 asserInstance.goTo(dest)
             elif ordre == "q":
-                asserInstance.gestionTourner(3.14)
+                asserInstance.gestionTourner(3.14,instruction = "auStopNeRienFaire")
             elif ordre == "s":
-                asserInstance.gestionTourner(-1.57)
+                asserInstance.gestionTourner(-1.57,instruction = "auStopNeRienFaire")
             elif ordre == "d":
-                asserInstance.gestionTourner(0)
+                asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
             elif ordre == "z":
-                asserInstance.gestionTourner(1.57)
+                asserInstance.gestionTourner(1.57,instruction = "auStopNeRienFaire")
                 
             elif ordre == "u":
-                asserInstance.gestionAvancer(100)
+                asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
             elif ordre == "j":
-                asserInstance.gestionAvancer(-100)
+                asserInstance.gestionAvancer(-100,instruction = "auStopNeRienFaire")
                 
             elif ordre == "i":
-                asserInstance.gestionAvancer(200)
+                asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
             elif ordre == "k":
-                asserInstance.gestionAvancer(-200)
+                asserInstance.gestionAvancer(-200,instruction = "auStopNeRienFaire")
                 
             elif ordre == "o":
-                asserInstance.gestionAvancer(300)
+                asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
             elif ordre == "l":
-                asserInstance.gestionAvancer(-300)
+                asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
                 
             elif ordre == "p":
-                asserInstance.gestionAvancer(400)
+                asserInstance.gestionAvancer(400,instruction = "auStopNeRienFaire")
             elif ordre == "m":
-                asserInstance.gestionAvancer(-400)
+                asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
                 
             elif ordre == "n":
                 actionInstance.deplacer(180)
@@ -99,6 +98,26 @@ def console():
                 actionInstance.deplacer(100)
             elif ordre == "w":
                 actionInstance.deplacer(0)
+                
+            #vitesses rotation
+            elif ordre == "f":
+                asserInstance.changerVitesse("rotation", 1)
+            elif ordre == "g":
+                asserInstance.changerVitesse("rotation", 2)
+            elif ordre == "h":
+                asserInstance.changerVitesse("rotation", 3)
+                
+            #vitesses translation
+            elif ordre == "r":
+                asserInstance.changerVitesse("translation", 1)
+            elif ordre == "t":
+                asserInstance.changerVitesse("translation", 2)
+            elif ordre == "y":
+                asserInstance.changerVitesse("translation", 3)
+                
+            elif ordre == "a":
+                scriptTotem()
+                
             else:
                 try:
                     actionInstance.deplacer(int(ordre))
@@ -108,29 +127,3 @@ def console():
             print "--- exception levée ---"
 
 console()
-        
-"""
-asserInstance.gestionAvancer(100)
-asserInstance.gestionAvancer(300)
-raw_input("?")
-asserInstance.gestionTourner(1.57)
-raw_input("?")
-asserInstance.gestionAvancer(400)
-asserInstance.gestionTourner(0.0)
-raw_input("?")
-asserInstance.gestionTourner(math.pi)
-raw_input("?")
-asserInstance.gestionTourner(-1.57)
-asserInstance.gestionAvancer(400)
-raw_input("?")
-asserInstance.gestionAvancer(200)
-asserInstance.gestionAvancer(-200)
-asserInstance.gestionAvancer(-200)
-asserInstance.gestionAvancer(200)
-raw_input("?")
-asserInstance.gestionTourner(math.pi)
-asserInstance.gestionTourner(0)
-asserInstance.gestionTourner(1.57)
-asserInstance.gestionTourner(0)
-raw_input("?")
-"""
