@@ -2,7 +2,7 @@
 /** @file avr/atmega324p/actionneurs/main.cpp
  *  @brief Ce fichier s'occupe de gérer l'AVR Capteur-actionneurs
  *  @author Thibaut ~MissFrance~
- *  @date 08 mai 2012
+ *  @date 09 mai 2012
  */ 
 
 // LIBRAIRIES STANDARD
@@ -21,10 +21,10 @@
 #include <libintech/capteur_infrarouge.hpp>
 #include <libintech/capteur_srf05.hpp>
 #include <libintech/jumper.hpp>
+#include <libintech/ax12.hpp>
 
 // LIBRAIRIES LOCALES
-#include "ax12.h"
-#include "actionneurs.h"
+// #include "actionneurs.h"
 
 
 
@@ -33,7 +33,13 @@
  ********************************/
 
 #define BAUD_RATE_SERIE         9600
-#define BAUD_RATE_AX12          AX_BAUD_RATE_9600
+
+// Angles MIN et MAX en tics (compris entre 0 et 1024, cf. datasheet)
+#define AX_ANGLECW              198
+#define AX_ANGLECCW             800
+
+// Vitesse de rotation des AX12 (je crois entre 0 et 1024, pas sûr)
+#define AX_SPEED                1000
 
 /******************************** 
  *   MODES DE CONFIGURATION     *   
@@ -68,7 +74,11 @@
 // matériel.
 // NOTE : Il semble que la carte actionneur ne permette pas d'atteindre un tel baudrate
 // de 1.000.000. Utiliser un arduilol.
-    #define REANIMATION_MODE        0   
+    #define REANIMATION_MODE        0 
+    
+    
+// Baud Rate à flasher sur l'AX12 si le mode FLASH_BAUD_RATE_MODE est mis à 1
+#define BAUD_RATE_AX12 (2000000/(BAUD_RATE_SERIE + 1))
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -77,8 +87,6 @@
  *  La série 0 est dédiée à la communication Carte <->   PC
  *  Le pin 7 est dédié au jumper.
  *  Le pin analog0 est dédiée aux infrarouges.
- *          Les infrarouges ne sont pas utilisés au démarrage de la carte. Pour les prendre
- *          en compte dans les calculs, envoyer le message "use_infra" à la carte.
  */
 
 // Liaison série Carte <-> PC
@@ -86,6 +94,8 @@ typedef Serial<0> serial_t_;
 // Liaison série Carte <-> AX12
 typedef Serial<1> serial_ax_;
 
+// Système d'AX12
+extern AX12<serial_ax_, BAUD_RATE_SERIE> AX;
 
 // Ultrasons MAX
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
@@ -97,6 +107,8 @@ typedef capteur_srf05< timerCapteurSRF, serial_t_ > capteur_srf05_t_;
 
 // Jumper
 typedef jumper< AVR_PORTD<PORTD7> > jumper_t_;
+
+
 
 /// **************************
 /// *     FONCTION MAIN      *
@@ -112,26 +124,21 @@ int main()
     ultrason_d           .init();
     ultrason_g           .init();
     
-    // Variables pour les AX12 :
-    // (définies dans actionneurs.h)
-    uint16_t current_CW     = AX_ANGLECW;
-    uint16_t current_CCW    = AX_ANGLECCW;
-    uint16_t current_speed  = AX_SPEED;
+    AX.init(AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
     
     // Changement du BAUD RATE de la série carte <-> PC
     serial_t_::change_baudrate(BAUD_RATE_SERIE);
     // Changement du baud rate de la série carte <-> AX12
-    serial_ax_::change_baudrate(BAUD_RATE_SERIE);
+//     serial_ax_::change_baudrate(BAUD_RATE_SERIE);
     
     if (FLASH_BAUD_RATE_MODE)
         // BAUD RATE de l'AX12 (réception)
-        writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
+//         writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
+        AX.writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
     
     if (FLASH_ID_MODE >= 0)
-        AX12InitID(0xFE, FLASH_ID_MODE);
+        AX.initID(0xFE, FLASH_ID_MODE);
         
-    // Initialisation en angle min/max et en vitesse des AX12
-    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
 
     // Variable utilisée uniquement pour le REANIMATION_MODE :
     uint8_t debug_baudrate  = 0x00;
@@ -149,9 +156,25 @@ int main()
         /// Mode de réanimation, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
         {
-            serial_ax_::change_baudrate(2000000/(debug_baudrate + 1));
-            reset(0xFE);
-            debug_baudrate++;
+            // On brute-force le baud rate des AX12, et on leur envoie pour chaque baud rate
+            // d'écoute un signal de reset.
+            while (debug_baudrate < 0xFF)
+            {
+                serial_ax_::change_baudrate(2000000/(debug_baudrate + 1));
+                AX.reset(0xFE);
+                debug_baudrate++;
+            }
+            
+            // Une fois que le signal de reset a été reçu, l'AX12 écoute à 1.000.000 bps.
+            // Donc à ce baud rate, on reflash le baud rate d'écoute de l'AX12.
+            serial_ax_::change_baudrate(1000000);
+            AX.writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
+            
+            // Puis on revient à la valeur initiale, et on lui donne un angle consigne.
+            serial_ax_::change_baudrate(BAUD_RATE_SERIE);
+            AX.init (AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
+            AX.GoTo (AX_BROADCAST, 512);
+            
         }
         
         /// Test des AX12 sans communiquer avec eux via la liaison série.
@@ -160,7 +183,7 @@ int main()
         else if (NOSERIE_MODE)
         {
             debug_noserie = 1- debug_noserie;
-            AX12GoTo(0xFE, current_CW + (uint16_t)(600.*(90-10*debug_noserie)/180.));
+            AX.GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*(90-10*debug_noserie)/180.));
             _delay_ms(500);
 
         }
@@ -194,8 +217,6 @@ int main()
                 serial_t_::print("Salut vieux ! Comment vas-tu aujourd'hui ?");
             }
             
-            // In
-
             /// *********************************************** ///
             ///                 ACTIONNEURS                     ///
             /// *********************************************** ///
@@ -205,7 +226,7 @@ int main()
             {
                 // Initialisation de tous les AX12 en angle max, angle min et vitesse
                 // de rotation
-                AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
+                AX.init (AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
             }
                 
             // GoTo angle
@@ -214,7 +235,7 @@ int main()
                 uint8_t id = serial_t_::read_int();
                 uint16_t angle = serial_t_::read_int();
 
-                AX12GoTo(id, current_CW + (uint16_t)(600.*angle/180.));
+                AX.GoTo(id, AX_ANGLECW + (uint16_t)(600.*angle/180.));
             }
             
             // Goto Broadcast
@@ -222,7 +243,7 @@ int main()
             {
                 uint16_t angle = serial_t_::read_int();
                 
-                AX12GoTo(0xFE, current_CW + (uint16_t)(600.*angle/180.));
+                AX.GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*angle/180.));
             }
             
             // Goto brut
@@ -230,14 +251,14 @@ int main()
             {
                 uint8_t id = serial_t_::read_int();
                 uint16_t angle = serial_t_::read_int();
-                AX12GoTo(id, angle);
+                AX.GoTo(id, angle);
             }
             
             // TEST e goto
             else if (COMPARE_BUFFER("z", 1))
             {
                 
-                AX12GoTo(0xFE, current_CW + (uint16_t)(600.*80/180.));
+                AX.GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*80/180.));
                 serial_t_::print("z");
             }
             
@@ -245,7 +266,7 @@ int main()
             else if (COMPARE_BUFFER("e", 1))
             {
                 
-                AX12GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*100/180.));
+                AX.GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*100/180.));
                 serial_t_::print("e");
             }
             
@@ -254,32 +275,28 @@ int main()
             {
                 uint8_t  id    = serial_t_::read_int();
                 uint16_t speed = serial_t_::read_int();
-                AX12ChangeSpeed(id, speed);
-                current_speed = speed;
+                AX.changeSpeed(id, speed);
             }
             
             // Changement de vitesse broadcast
             else if (COMPARE_BUFFER("c", 1))
             {
                 uint16_t speed = serial_t_::read_int();
-                AX12ChangeSpeed(0xFE, speed);
-                current_speed = speed;
+                AX.changeSpeed(0xFE, speed);
             }
             
             // Changement de l'angleCW (min)
             else if (COMPARE_BUFFER("m", 1))
             {
                 uint16_t angle = serial_t_::read_int();
-                AX12ChangeAngleMIN(0xFE, angle);
-                current_CW = angle;
+                AX.changeAngleMIN(0xFE, angle);
             }
             
             // Changement de l'angle CCW (max)
             else if (COMPARE_BUFFER("M", 1))
             {
                 uint16_t angle = serial_t_::read_int();
-                AX12ChangeAngleMAX(0xFE, angle);
-                current_CCW = angle;
+                AX.changeAngleMAX(0xFE, angle);
             }
                
             
@@ -288,26 +305,26 @@ int main()
             {
                 uint8_t ancien_id = serial_t_::read_int();
                 uint8_t nouvel_id = serial_t_::read_int();
-                AX12InitID(ancien_id, nouvel_id);
+                AX.initID(ancien_id, nouvel_id);
             }
             
             // Désasservissement de tous les servos branchés
             else if ((COMPARE_BUFFER("UNASSERV", 8)) || (COMPARE_BUFFER("u", 1)))
-                AX12Unasserv(0xFE);
+                AX.unasserv(0xFE);
             
             
             // Désasservissement d'un servo donné
             else if (COMPARE_BUFFER("U", 1))
             {
                 uint8_t id = serial_t_::read_int();
-                AX12Unasserv(id);
+                AX.unasserv(id);
             }
             
             // Changement de T° MAX.
             else if (COMPARE_BUFFER("t", 1))
             {
-                writeData(0xFE, AX_LIMIT_TEMPERATURE, 1, 120);
-                writeData(0xFE, AX_UP_LIMIT_VOLTAGE,  1, 180);
+                AX.writeData(0xFE, AX_LIMIT_TEMPERATURE, 1, 120);
+                AX.writeData(0xFE, AX_UP_LIMIT_VOLTAGE,  1, 180);
                 serial_t_::print("ok");
             }
 
@@ -316,7 +333,7 @@ int main()
             {
                 uint8_t type = serial_t_::read_int();
                 
-                writeData(0xFE, AX_ALARM_LED, 1, type);
+                AX.writeData(0xFE, AX_ALARM_LED, 1, type);
             }
             
             // Message générique. Utilisable pour modifier n'importe quoi.
@@ -334,7 +351,7 @@ int main()
                 // On lit la valeur à écrire
                 uint16_t val = serial_t_::read_int();
                 
-                writeData(id, adresse, n, val);
+                AX.writeData(id, adresse, n, val);
                 
             }
 

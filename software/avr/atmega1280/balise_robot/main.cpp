@@ -6,11 +6,11 @@
 
 #include <stdint.h>
 #include <avr/interrupt.h>
-#include <avr/wdt.h>
 #include <util/delay.h>
 #include "balise.h"
 #include "frame.h"
 #include "crc8.h"
+#include "watchdog.h"
 #include "utils.h"
 
 //Fonctions de modifications de bits
@@ -34,8 +34,6 @@
 #define READ_CANAL_B() rbi(PINB,PORTB5)
 
 void init();
-void WDT_off(void);
-void WDT_Prescaler_Change(void);
 
 volatile uint8_t dernier_etat_a;
 volatile uint8_t dernier_etat_b;
@@ -44,14 +42,20 @@ volatile int32_t last_codeur = 0;
 
 int main() {
 	
-	// Désactivation du watchdog
-	WDT_off();
-			
 	Balise & balise = Balise::Instance();
-	init();
-	uint32_t rawFrame=0;
 	
-    Balise::serial_pc::print("reset");
+	// En cas de reset par le watchdog
+	if (WDT_is_reset())
+	{
+		// Envoi du timeout au PC
+		Balise::serial_pc::print("timeout");
+	
+		// Désactivation du watchdog
+		WDT_off();
+	}
+	
+	init();
+	uint32_t rawFrame=0;    
     
 	while (1) {
 		char buffer[10];
@@ -66,10 +70,10 @@ int main() {
 		
 		if(COMPARE_BUFFER("!",1)){
 			// Timeout pour la requête de 0,25s
-			WDT_Prescaler_Change();
+			WDT_set_prescaler();
 			
 			// Activation du watchdog en mode system reset
-			sbi(WDTCSR,WDE);
+			WDT_on();
 			
 			// Envoi du ping à la balise
 			Balise::serial_radio::print_noln('?');
@@ -90,10 +94,10 @@ int main() {
 			int32_t crc = 0;
 			do{
 				// Timeout pour la requête de 0,25s
-				WDT_Prescaler_Change();
+				WDT_set_prescaler();
 			
 				// Activation du watchdog en mode system reset
-				sbi(WDTCSR,WDE);
+				WDT_on();
 				
 				// Envoi à la balise d'une demande de mise à jour
 				Balise::serial_radio::print_noln('v');
@@ -167,9 +171,12 @@ void init()
 	cbi(TCCR0B,CS02);
 	cbi(TCCR0B,CS01);
 	sbi(TCCR0B,CS00);
+	
 	//Seuil (cf formule datasheet)
 	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
-	OCR0A= 120;
+	//OCR0A= 120;
+	// Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
+	OCR0A= 170;
 	
 	//Initialisation table pour crc8
 	init_crc8();
@@ -195,40 +202,7 @@ void init()
 // 	sei();
 }
 
-void WDT_off(void)
-{
-	// Désactivation des interruptions
-	cli();
-	
-	/* Clear WDRF in MCUSR */
-	MCUSR &= ~(1<<WDRF);
-	
-	/* Write logical one to WDCE and WDE */
-	/* Keep old prescaler setting to prevent unintentional time-out */
-	WDTCSR |= (1<<WDCE) | (1<<WDE);
-	
-	/* Turn off WDT */
-	WDTCSR = 0x00;
-	
-	// Réactivation des interruptions
-	sei();
-}
 
-
-void WDT_Prescaler_Change(void)
-{
-	// Désactivation des interruptions
-	cli();
-	
-	/* Start timed sequence */
-	WDTCSR |= (1<<WDCE) | (1<<WDE);
-	
-	/* Mise à jour du prescaler */
-	WDTCSR = (1<<WDP2);
-	
-	// Réactivation des interruptions
-	sei();
-}
 
 
 ISR(TIMER1_OVF_vect)
