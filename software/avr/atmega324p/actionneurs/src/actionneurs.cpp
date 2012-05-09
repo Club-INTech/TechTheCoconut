@@ -9,10 +9,10 @@
 // Librairie INTech
 #include <libintech/serial/serial_0.hpp>
 
-/// Initialisation de l'ID de tous les AX12 branchés.
-void AX12InitID(uint8_t ID)
+/// Réinitialisation de l'ID de l'AX12
+void AX12InitID(uint8_t ancien_id, uint8_t nouvel_id)
 {
-    writeData (0xFE, AX_ID, 1, ID);
+    writeData (ancien_id, AX_ID, 1, nouvel_id);
 }
 
 /// Initialisation de l'AX12

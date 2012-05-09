@@ -64,23 +64,25 @@
 // Cette solution est dégueux : elle teste tous les baud rate possibles et
 // envoie un signal de réset. Si l'AX12 ne répond pas, c'est un problème
 // matériel.
+// NOTE : Il semble que la carte actionneur ne permette pas d'atteindre un tel baudrate
+// de 1.000.000. Utiliser un arduilol.
     #define REANIMATION_MODE        0
 
 ///Fonctions de lecture/écriture de bit (utile pour capteurs & jumper)
-// Set Bit
-#ifndef sbi
-#define sbi(port,bit) (port) |= (1 << (bit))
-#endif
-
-// Clear Bit
-#ifndef cbi
-#define cbi(port,bit) (port) &= ~(1 << (bit))
-#endif
-
-// Read Bit
-#ifndef rbi
-#define rbi(port,bit) ((port & (1 << bit)) >> bit)
-#endif
+// // Set Bit
+// #ifndef sbi
+// #define sbi(port,bit) (port) |= (1 << (bit))
+// #endif
+// 
+// // Clear Bit
+// #ifndef cbi
+// #define cbi(port,bit) (port) &= ~(1 << (bit))
+// #endif
+// 
+// // Read Bit
+// #ifndef rbi
+// #define rbi(port,bit) ((port & (1 << bit)) >> bit)
+// #endif
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -137,9 +139,9 @@ int main()
         writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
     
     if (FLASH_ID_MODE >= 0)
-        AX12InitID(FLASH_ID_MODE);
+        AX12InitID(0xFE, FLASH_ID_MODE);
         
-    AX12Init (AX_BROADCAST, current_CW, current_CCW, 50);
+    AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
 
     // Variable utilisée uniquement pour le REANIMATION_MODE :
     uint8_t debug_baudrate  = 0x00;
@@ -168,7 +170,7 @@ int main()
         else if (NOSERIE_MODE)
         {
             debug_noserie = 1- debug_noserie;
-            AX12GoTo(0xFE, current_CW + (int16_t)(600.*(90-10*debug_noserie)/180.));
+            AX12GoTo(0xFE, current_CW + (uint16_t)(600.*(90-10*debug_noserie)/180.));
             _delay_ms(500);
 
         }
@@ -199,20 +201,7 @@ int main()
             // AIDE
             else if (COMPARE_BUFFER("!", 1))
             {
-                serial_t_::print("→ GOTO   +id +angle   : goto en degré");
-                serial_t_::print("→ g          +angle   : goto broadcast");
-                serial_t_::print("→ a      +id +angle   : goto en tics (0 -> 1024)");
-                serial_t_::print("→ CH_VIT +id +vitesse : changement de vitesse");
-                serial_t_::print("→ c          +vitesse : changement en broadcast");
-                serial_t_::print("→ m          +angle   : angle min en tics");
-                serial_t_::print("→ M          +angle   : angle max en tics");
-                serial_t_::print("→ u                   : unasserv");
-                serial_t_::print("→ f      +id          : reflache l'id de tous les AX12");
-                serial_t_::print("******************************************************");
-                serial_t_::print("→ jumper    : valeur du jumper");
-                serial_t_::print("→ ultrason  : valeur des ultrason MAX");
-                serial_t_::print("→ infra     : valeur des infrarouges");
-                serial_t_::print("→ SRF       : valeur des ultrason SRF05");
+                serial_t_::print("Salut vieux ! Comment vas-tu aujourd'hui ?");
             }
             
             // In
@@ -226,31 +215,31 @@ int main()
             {
                 // Initialisation de tous les AX12 en angle max, angle min et vitesse
                 // de rotation
-                AX12Init (AX_BROADCAST, current_CW, current_CCW, current_speed);
+                AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
             }
                 
             // GoTo angle
             else if (COMPARE_BUFFER("GOTO", 4))
             {
-                int8_t id = serial_t_::read_int();
-                int16_t angle = serial_t_::read_int();
+                uint8_t id = serial_t_::read_int();
+                uint16_t angle = serial_t_::read_int();
 
-                AX12GoTo(id, current_CW + (int16_t)(600.*angle/180.));
+                AX12GoTo(id, current_CW + (uint16_t)(600.*angle/180.));
             }
             
             // Goto Broadcast
             else if (COMPARE_BUFFER("g", 1))
             {
-                int16_t angle = serial_t_::read_int();
+                uint16_t angle = serial_t_::read_int();
                 
-                AX12GoTo(0xFE, current_CW + (int16_t)(600.*angle/180.));
+                AX12GoTo(0xFE, current_CW + (uint16_t)(600.*angle/180.));
             }
             
             // Goto brut
             else if (COMPARE_BUFFER("a", 1))
             {
-                int8_t id = serial_t_::read_int();
-                int16_t angle = serial_t_::read_int();
+                uint8_t id = serial_t_::read_int();
+                uint16_t angle = serial_t_::read_int();
                 AX12GoTo(id, angle);
             }
             
@@ -258,7 +247,7 @@ int main()
             else if (COMPARE_BUFFER("z", 1))
             {
                 
-                AX12GoTo(0xFE, current_CW + (int16_t)(600.*80/180.));
+                AX12GoTo(0xFE, current_CW + (uint16_t)(600.*80/180.));
                 serial_t_::print("z");
             }
             
@@ -266,15 +255,15 @@ int main()
             else if (COMPARE_BUFFER("e", 1))
             {
                 
-                AX12GoTo(0xFE, AX_ANGLECW + (int16_t)(600.*100/180.));
+                AX12GoTo(0xFE, AX_ANGLECW + (uint16_t)(600.*100/180.));
                 serial_t_::print("e");
             }
             
             // Changement de vitesse
             else if (COMPARE_BUFFER("CH_VIT", 6))
             {
-                int8_t  id    = serial_t_::read_int();
-                int16_t speed = serial_t_::read_int();
+                uint8_t  id    = serial_t_::read_int();
+                uint16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(id, speed);
                 current_speed = speed;
             }
@@ -282,7 +271,7 @@ int main()
             // Changement de vitesse broadcast
             else if (COMPARE_BUFFER("c", 1))
             {
-                int16_t speed = serial_t_::read_int();
+                uint16_t speed = serial_t_::read_int();
                 AX12ChangeSpeed(0xFE, speed);
                 current_speed = speed;
             }
@@ -290,7 +279,7 @@ int main()
             // Changement de l'angleCW (min)
             else if (COMPARE_BUFFER("m", 1))
             {
-                int16_t angle = serial_t_::read_int();
+                uint16_t angle = serial_t_::read_int();
                 AX12ChangeAngleMIN(0xFE, angle);
                 current_CW = angle;
             }
@@ -298,17 +287,18 @@ int main()
             // Changement de l'angle CCW (max)
             else if (COMPARE_BUFFER("M", 1))
             {
-                int16_t angle = serial_t_::read_int();
+                uint16_t angle = serial_t_::read_int();
                 AX12ChangeAngleMAX(0xFE, angle);
                 current_CCW = angle;
             }
                
             
-            // Reflashage de tous les servos branchés
+            // Reflashage des Ids de tous les servos branchés
             else if (COMPARE_BUFFER("f", 8))
             {
-                int8_t id = serial_t_::read_int();
-                AX12InitID(id);
+                uint8_t ancien_id = serial_t_::read_int();
+                uint8_t nouvel_id = serial_t_::read_int();
+                AX12InitID(ancien_id, nouvel_id);
             }
             
             // Désasservissement de tous les servos branchés

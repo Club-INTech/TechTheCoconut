@@ -46,10 +46,10 @@ void AX12Init (uint8_t ID, uint16_t angleCW, uint16_t angleCCW, uint16_t vitesse
 
 
 /// \brief Cette fonction réinitialise l'ID d'un AX12 branché.
-/// \param ID       Nouvel ID à donner à l'AX12 branché
-/// Tous les AX12 branchés changeront leurs ID actuels pour ce nouvel ID.
-
-void AX12InitID(uint8_t ID);
+/// \param ancien_id       Ancien ID de l'AX12.
+/// \param nouvel_id       Nouvel ID à donner à l'AX12 branché
+/// \warning Tous les AX12 branchés changeront leurs ID actuels pour ce nouvel ID.
+void AX12InitID(uint8_t ancien_id, uint8_t nouvel_id);
 
 
 /// \brief Cette fonction desasservit un AX12
