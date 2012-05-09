@@ -26,7 +26,7 @@ macro(add_microcontrolers MMCU MICROCONTROLEURS)
         add_custom_target(upload_${MICROCONTROLEUR} DEPENDS ${MICROCONTROLEUR}.hex)
         add_custom_command(	TARGET upload_${MICROCONTROLEUR}
                             COMMAND avrdude
-                            ARGS -c usbasp -p ${MMCU} -U flash:w:${MICROCONTROLEUR}.hex)
+                            ARGS -c usbasp -p ${MMCU} -F -U  flash:w:${MICROCONTROLEUR}.hex)
    endforeach()
 endmacro()
 
