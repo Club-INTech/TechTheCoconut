@@ -40,7 +40,7 @@ log.logger.warning("Le recalage a été effectué")
 jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
-farmage_ennemi = False
+farmage_ennemi = True
 
 if not farmage_ennemi :
     actionInstance.deplacer(0)

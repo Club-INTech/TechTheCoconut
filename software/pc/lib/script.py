@@ -800,7 +800,7 @@ class Script:
         asser.changerVitesse("translation", 3)
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
         asser.changerVitesse("translation", 2)
-        asser.gestionAvancer(-500,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
         action.deplacer(0)
         asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
         #asser.goTo(Point(850.,1600.))
@@ -809,7 +809,7 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-392.227979275,1445.0))
+        asser.goTo(Point(-80,1300))
         ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -944,12 +944,12 @@ class Script:
     def enfoncerPoussoir0(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goTo(Point(751.344262295,1445.0))
+        asser.goTo(Point(830,1400))
         asser.gestionTourner(math.pi/2)
-        action.deplacer(150, "bd")
+        action.deplacer(120, "bd")
         asser.attendre(0.5)
         asser.gestionAvancer(20)
-        asser.gestionTourner(-math.pi)
+        asser.gestionTourner(math.pi)
         asser.gestionTourner(-math.pi/2)
         
         asser.gestionAvancer(-3000, "auStopNeRienFaire")

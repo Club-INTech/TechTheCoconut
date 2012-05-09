@@ -17,7 +17,7 @@ def afficherwelcome() :
 def afficheraide() :
     print "Un peu d'aide pour les n00bs....."
     print " Raffler totem :: 00 | 01 | 10"
-    print " Boutons pouss ::  0 | 1"
+    print " Boutons pouss :: p0 | p1"
     print " Bourrer Cale  :: bc"
     print " Vider Ennemi  :: e "
     
