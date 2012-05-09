@@ -2,7 +2,7 @@
 /** @file avr/atmega324p/actionneurs/main.cpp
  *  @brief Ce fichier s'occupe de gérer l'AVR Capteur-actionneurs
  *  @author Thibaut ~MissFrance~
- *  @date 08 mai 2012
+ *  @date 09 mai 2012
  */ 
 
 // LIBRAIRIES STANDARD
@@ -23,7 +23,6 @@
 #include <libintech/jumper.hpp>
 
 // LIBRAIRIES LOCALES
-#include "ax12.h"
 #include "actionneurs.h"
 
 
@@ -33,7 +32,6 @@
  ********************************/
 
 #define BAUD_RATE_SERIE         9600
-#define BAUD_RATE_AX12          AX_BAUD_RATE_9600
 
 /******************************** 
  *   MODES DE CONFIGURATION     *   
@@ -68,7 +66,11 @@
 // matériel.
 // NOTE : Il semble que la carte actionneur ne permette pas d'atteindre un tel baudrate
 // de 1.000.000. Utiliser un arduilol.
-    #define REANIMATION_MODE        0   
+    #define REANIMATION_MODE        0 
+    
+    
+// Baud Rate à flasher sur l'AX12 si le mode FLASH_BAUD_RATE_MODE est mis à 1
+#define BAUD_RATE_AX12 (2000000/(BAUD_RATE_SERIE + 1))
 
 /** Ce fichier gère la carte qui fait le lien entre les AX12, les capteurs ultrasons,
  *  le jumper de début de match et la carte PCI.
@@ -149,9 +151,25 @@ int main()
         /// Mode de réanimation, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
         {
-            serial_ax_::change_baudrate(2000000/(debug_baudrate + 1));
-            reset(0xFE);
-            debug_baudrate++;
+            // On brute-force le baud rate des AX12, et on leur envoie pour chaque baud rate
+            // d'écoute un signal de reset.
+            while (debug_baudrate < 0xFF)
+            {
+                serial_ax_::change_baudrate(2000000/(debug_baudrate + 1));
+                reset(0xFE);
+                debug_baudrate++;
+            }
+            
+            // Une fois que le signal de reset a été reçu, l'AX12 écoute à 1.000.000 bps.
+            // Donc à ce baud rate, on reflash le baud rate d'écoute de l'AX12.
+            serial_ax_::change_baudrate(1000000);
+            writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
+            
+            // Puis on revient à la valeur initiale, et on lui donne un angle consigne.
+            serial_ax_::change_baudrate(BAUD_RATE_SERIE);
+            AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
+            AX12GoTo (AX_BROADCAST, 512);
+            
         }
         
         /// Test des AX12 sans communiquer avec eux via la liaison série.

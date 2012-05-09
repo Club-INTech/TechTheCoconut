@@ -1,5 +1,4 @@
-#include "actionneurs.h"
-#include "ax12.h"
+
 
 /** @file avr/atmega324p/actionneurs/include/actionneurs.cpp
  *  @brief Ce fichier crée les constantes haut niveau pour les actionneurs.
@@ -8,6 +7,17 @@
  */ 
 // Librairie INTech
 #include <libintech/serial/serial_0.hpp>
+
+// Librairie Standard
+#include <avr/interrupt.h>
+#include <avr/io.h>
+#include <util/delay.h>
+
+// Librairie INTech.
+#include <libintech/serial/serial_1.hpp>
+
+// Librairie locale.
+#include "actionneurs.h"
 
 /// Réinitialisation de l'ID de l'AX12
 void AX12InitID(uint8_t ancien_id, uint8_t nouvel_id)
@@ -51,6 +61,55 @@ void AX12ChangeSpeed(uint8_t ID, uint16_t vitesse)
 void AX12Unasserv(uint8_t ID)
 {
     writeData (ID, AX_TORQUE_ENABLE, 1, 0);
+}
+
+
+
+// Liaison série Carte <-> AX12
+typedef Serial<1> serial_ax_;
+
+/******************************************************************************
+ * Packet Level
+ ******************************************************************************/
+
+/// Envoi d'un packet vers les AX12, voir datasheet pour comprendre
+/// les normes utilisées.
+void ax12SendPacket (uint8_t id, uint8_t datalength, uint8_t instruction, uint8_t *data){
+    uint8_t checksum = 0;
+    serial_ax_::send_char(0xFF);
+    serial_ax_::send_char(0xFF);
+    
+    serial_ax_::send_char(id);
+    serial_ax_::send_char(datalength + 2);
+    serial_ax_::send_char(instruction);
+    
+    checksum += id + datalength + 2 + instruction;
+
+    uint8_t f;
+    for (f=0; f<datalength; f++) {
+      checksum += data[f];
+      serial_ax_::send_char(data[f]);
+    }
+    serial_ax_::send_char(~checksum);
+}
+
+/******************************************************************************
+ * Instruction Level
+ ******************************************************************************/
+
+/** reset */
+void reset (uint8_t id) {
+     uint8_t *data = 0;
+     ax12SendPacket (id, 0, AX_RESET, data);  
+}
+
+
+/** write data */
+void writeData (uint8_t id, uint8_t regstart, uint8_t reglength, uint16_t value) {
+    uint8_t data [reglength+1];
+    data [0] = regstart; data [1] = value&0xFF;
+    if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
+    ax12SendPacket (id, reglength+1, AX_WRITE_DATA, data);
 }
 
     
