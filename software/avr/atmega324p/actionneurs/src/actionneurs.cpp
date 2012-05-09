@@ -3,8 +3,9 @@
 /** @file avr/atmega324p/actionneurs/include/actionneurs.cpp
  *  @brief Ce fichier crée les constantes haut niveau pour les actionneurs.
  *  @author Thibaut ~MissFrance~
- *  @date 05 mai 2012
+ *  @date 09 mai 2012
  */ 
+
 // Librairie INTech
 #include <libintech/serial/serial_0.hpp>
 
@@ -69,7 +70,7 @@ void AX12Unasserv(uint8_t ID)
 typedef Serial<1> serial_ax_;
 
 /******************************************************************************
- * Packet Level
+ * Packet Level  ***  FONCTIONS TRÈS BAS NIVEAU
  ******************************************************************************/
 
 /// Envoi d'un packet vers les AX12, voir datasheet pour comprendre

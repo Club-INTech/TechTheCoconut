@@ -2,9 +2,9 @@
 #define ACTIONNEURS_H
 
 /** @file avr/atmega324p/actionneurs/include/actionneurs.hpp
- *  @brief Ce fichier crée les constantes haut niveau pour les actionneurs.
+ *  @brief Ce fichier crée les méthodes pour contrôller les AX12
  *  @author Thibaut ~MissFrance~
- *  @date 05 mai 2012
+ *  @date 09 mai 2012
  */ 
 
 // Librairies standard
@@ -145,8 +145,23 @@ void AX12ChangeAngleMAX(uint8_t ID, uint16_t angleCCW);
 
 void AX12ChangeSpeed(uint8_t ID, uint16_t vitesse);
 
+// ***************************************************
+// **           FONCTIONS DE BAS NIVEAU             **
+// ***************************************************
+
+/// \brief Envoi un signal de reset à l'AX12
+/// \param ID L'ID de l'AX12 connecté à reset.
+/// \note Après être reset, l'AX12 écoute à un baud-rate de 1.000.000
 
 void reset (uint8_t id);
+
+
+/// \brief Ecris une trame de données pour modifier les registres internes de l'AX12
+/// \param ID           ID de l'AX12 qui interprètera cette trame.
+/// \param regstart     Début de la zone registre de l'AX12 à modifier
+/// \param reglength    Longueure de cette zone registre.
+/// \param value        Valeur à écrire.
+
 void writeData (uint8_t id, uint8_t regstart, uint8_t reglength, uint16_t value);
 
 
