@@ -13,6 +13,8 @@
 // LIBRAIRIE INTECH :: Série
 #include <libintech/serial/serial_0_interrupt.hpp>
 #include <libintech/serial/serial_0.hpp>
+#include <libintech/serial/serial_1_interrupt.hpp>
+#include <libintech/serial/serial_1.hpp>
 
 // LIBRAIRIE INTECH :: Capteurs
 #include <libintech/capteur_max.hpp>
@@ -79,8 +81,11 @@
  *          en compte dans les calculs, envoyer le message "use_infra" à la carte.
  */
 
-// Liaison série
+// Liaison série Carte <-> PC
 typedef Serial<0> serial_t_;
+// Liaison série Carte <-> AX12
+typedef Serial<1> serial_ax_;
+
 
 // Ultrasons MAX
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
@@ -103,6 +108,7 @@ int main()
     jumper_t_           ::init();
     capteur_srf05_t_    ::init();
     serial_t_           ::init();
+    serial_ax_          ::init();
     ultrason_d           .init();
     ultrason_g           .init();
     
@@ -112,11 +118,10 @@ int main()
     uint16_t current_CCW    = AX_ANGLECCW;
     uint16_t current_speed  = AX_SPEED;
     
-    // Changement du BAUD RATE de la série carte <-> AX12
-    AX12_Serial_Init(BAUD_RATE_SERIE);
-
     // Changement du BAUD RATE de la série carte <-> PC
     serial_t_::change_baudrate(BAUD_RATE_SERIE);
+    // Changement du baud rate de la série carte <-> AX12
+    serial_ax_::change_baudrate(BAUD_RATE_SERIE);
     
     if (FLASH_BAUD_RATE_MODE)
         // BAUD RATE de l'AX12 (réception)
@@ -125,6 +130,7 @@ int main()
     if (FLASH_ID_MODE >= 0)
         AX12InitID(0xFE, FLASH_ID_MODE);
         
+    // Initialisation en angle min/max et en vitesse des AX12
     AX12Init (AX_BROADCAST, AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
 
     // Variable utilisée uniquement pour le REANIMATION_MODE :
@@ -143,7 +149,7 @@ int main()
         /// Mode de réanimation, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
         {
-            AX12_Serial_Init(2000000/(debug_baudrate + 1));
+            serial_ax_::change_baudrate(2000000/(debug_baudrate + 1));
             reset(0xFE);
             debug_baudrate++;
         }

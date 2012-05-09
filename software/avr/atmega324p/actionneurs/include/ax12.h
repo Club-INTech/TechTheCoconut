@@ -99,16 +99,10 @@
 #define AX_BAUD_RATE_9600           207
 
 
-typedef unsigned char byte;
 
-void AX12_Serial_Init(long baud);
+void ping (uint8_t id);
+void reset (uint8_t id);
+void writeData (uint8_t id, uint8_t regstart, uint8_t reglength, uint16_t value);
 
-void ping (byte id);
-void reset (byte id);
-void writeData (byte id, byte regstart, byte reglength, int value);
-
-extern int status_id;
-extern int status_error;
-extern int status_data;
 
 #endif

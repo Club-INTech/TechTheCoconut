@@ -9,14 +9,21 @@
  *  @date 05 mai 2012
  */ 
 
-// Librairie INTech
+// Librairie Standard
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
+// Librairie INTech.
+#include <libintech/serial/serial_1.hpp>
+
 // Librairie locale.
 #include "ax12.h"
 #include "actionneurs.h"
+
+// Liaison série Carte <-> AX12
+typedef Serial<1> serial_ax_;
+
 
 
 /******************************************************************************
@@ -24,27 +31,11 @@
  *  you should not use the Arduino Serial library.
  ******************************************************************************/
 
-byte ax_rx_buffer[AX12_BUFFER_SIZE];
-int status_id;
-int status_error;
-int status_data;
-
-// making these volatile keeps the compiler from optimizing loops of available()
-volatile byte ax_rx_Pointer;                       
-
-/// Initialisation de la liaison série AX12 <-> carte.
-void AX12_Serial_Init(long baud){
-    UBRR1H = (long)((F_CPU / 16 + baud / 2) / baud - 1) >> 8;
-    UBRR1L = ((F_CPU / 16 + baud / 2) / baud - 1);
-    UCSR1B = (1<<RXEN1)|(1<<TXEN1);
-    ax_rx_Pointer = 0;
-}
 
 /** Sends a character out the serial port */
-byte ax12writeB(byte data){
-    while (!( UCSR1A & (1<<UDRE1)));
-    UDR1 = data;
-    return data; 
+uint8_t ax12writeB(uint8_t data){
+    serial_ax_::send_char(data);
+    return data;
 }
 
 
@@ -54,15 +45,15 @@ byte ax12writeB(byte data){
 
 /// Envoi d'un packet vers les AX12, voir datasheet pour comprendre
 /// les normes utilisées.
-void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
-    byte checksum = 0;
+void ax12SendPacket (uint8_t id, uint8_t datalength, uint8_t instruction, uint8_t *data){
+    uint8_t checksum = 0;
     ax12writeB(0xFF);
     ax12writeB(0xFF);
     checksum += ax12writeB(id);
     checksum += ax12writeB(datalength + 2);
     checksum += ax12writeB(instruction);
 
-    byte f;
+    uint8_t f;
     for (f=0; f<datalength; f++) {
       checksum += ax12writeB(data[f]);
     }
@@ -74,35 +65,35 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
  ******************************************************************************/
 
 /** ping */
-void ping (byte id) {
-     byte *data = 0;
+void ping (uint8_t id) {
+     uint8_t *data = 0;
      ax12SendPacket (id, 0, AX_PING, data);  
 }
 
 /** reset */
-void reset (byte id) {
-     byte *data = 0;
+void reset (uint8_t id) {
+     uint8_t *data = 0;
      ax12SendPacket (id, 0, AX_RESET, data);  
 }
 
 /** action */
-void action (byte id) {
-     byte *data = 0;
+void action (uint8_t id) {
+     uint8_t *data = 0;
      ax12SendPacket (id, 0, AX_ACTION, data); 
 }
 
 
 /** write data */
-void writeData (byte id, byte regstart, byte reglength, int value) {
-    byte data [reglength+1];
+void writeData (uint8_t id, uint8_t regstart, uint8_t reglength, uint16_t value) {
+    uint8_t data [reglength+1];
     data [0] = regstart; data [1] = value&0xFF;
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
     ax12SendPacket (id, reglength+1, AX_WRITE_DATA, data);
 }
 
 /** reg write */
-void regWrite (byte id, byte regstart, byte reglength, int value) {
-    byte data [reglength+1];
+void regWrite (uint8_t id, uint8_t regstart, uint8_t reglength, uint16_t value) {
+    uint8_t data [reglength+1];
     data [0] = regstart; data [1] = value&0xFF;
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
     ax12SendPacket (id, reglength+1, AX_REG_WRITE, data);
