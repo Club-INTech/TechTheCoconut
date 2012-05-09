@@ -6,11 +6,11 @@
 
 #include <stdint.h>
 #include <avr/interrupt.h>
-#include <avr/wdt.h>
 #include <util/delay.h>
 #include "balise.h"
 #include "frame.h"
 #include "crc8.h"
+#include "watchdog.h"
 #include "utils.h"
 
 //Fonctions de modifications de bits
@@ -34,8 +34,6 @@
 #define READ_CANAL_B() rbi(PINB,PORTB5)
 
 void init();
-void WDT_off(void);
-void WDT_Prescaler_Change(void);
 
 volatile uint8_t dernier_etat_a;
 volatile uint8_t dernier_etat_b;
@@ -47,7 +45,7 @@ int main() {
 	Balise & balise = Balise::Instance();
 	
 	// En cas de reset par le watchdog
-	if (rbi(MCUSR,WDRF))
+	if (WDT_is_reset())
 	{
 		// Envoi du timeout au PC
 		Balise::serial_pc::print("timeout");
@@ -72,10 +70,10 @@ int main() {
 		
 		if(COMPARE_BUFFER("!",1)){
 			// Timeout pour la requête de 0,25s
-			WDT_Prescaler_Change();
+			WDT_set_prescaler();
 			
 			// Activation du watchdog en mode system reset
-			sbi(WDTCSR,WDE);
+			WDT_on();
 			
 			// Envoi du ping à la balise
 			Balise::serial_radio::print_noln('?');
@@ -96,10 +94,10 @@ int main() {
 			int32_t crc = 0;
 			do{
 				// Timeout pour la requête de 0,25s
-				WDT_Prescaler_Change();
+				WDT_set_prescaler();
 			
 				// Activation du watchdog en mode system reset
-				sbi(WDTCSR,WDE);
+				WDT_on();
 				
 				// Envoi à la balise d'une demande de mise à jour
 				Balise::serial_radio::print_noln('v');
@@ -204,40 +202,7 @@ void init()
 // 	sei();
 }
 
-void WDT_off(void)
-{
-	// Désactivation des interruptions
-	cli();
-	
-	/* Clear WDRF in MCUSR */
-	MCUSR &= ~(1<<WDRF);
-	
-	/* Write logical one to WDCE and WDE */
-	/* Keep old prescaler setting to prevent unintentional time-out */
-	WDTCSR |= (1<<WDCE) | (1<<WDE);
-	
-	/* Turn off WDT */
-	WDTCSR = 0x00;
-	
-	// Réactivation des interruptions
-	sei();
-}
 
-
-void WDT_Prescaler_Change(void)
-{
-	// Désactivation des interruptions
-	cli();
-	
-	/* Start timed sequence */
-	WDTCSR |= (1<<WDCE) | (1<<WDE);
-	
-	/* Mise à jour du prescaler */
-	WDTCSR = (1<<WDP2);
-	
-	// Réactivation des interruptions
-	sei();
-}
 
 
 ISR(TIMER1_OVF_vect)
