@@ -122,7 +122,7 @@ class capteur_srf05
         // Fin de l'impulsion
         else
         {
-            // Si le timerOverflow n'a pas été lancé.
+            // Si le timerOverflow n'a pas été lancé. sdfmodsfkgmodsj
             if (busy)
                 /// Envoi de la valeur mesurée sur la série. 
                 Serial::print(Timer::value()*500./7200);

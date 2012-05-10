@@ -13,8 +13,8 @@
     ------------------------|-----------------------|----------------------------------------
             ;i              |                       |   Renvoie la valeur du capteur infrarouge (mm)
             ;i_             |                       |   Renvoie la valeur brut du capteur infra (bof)
-            ;s              |                       |   Renvoie la valeur du capteur SRF, ou "OVF" si
-                            |                       |      il y a un problème.
+            ;s              |                       |   Renvoie la valeur du capteur SRF, ou "noresponse"
+                            |                       |      si il y a un problème.
             ;j              |                       |   Renvoie la valeur du jumper ( 0 / 1 )
             ;u              |                       |   Renvoie la valeur du capteur ultrason (MAXtronic,
                             |                       |       normalement pas utilisés à la coupe 
