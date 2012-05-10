@@ -16,5 +16,4 @@ try:
     ipshell()
 except:
     log.logger.error("La dépendance Ipython n'est pas installée. Taper sudo apt-get install ipython")
-    print "si vous êtes sous BeagleBoard, executez /usr/bin/ipython lanceur.py"
 
