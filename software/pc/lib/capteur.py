@@ -39,7 +39,7 @@ class Capteur():
             try:
                 self.serieCaptInstance.ecrire("ultrason")
                 mesure = int(self.serieCaptInstance.lire())
-                self.listUltrason.append(mesure)
+                self.listUltrason.append(int(mesure))
             except:
                 pass
             
@@ -47,7 +47,7 @@ class Capteur():
             try:
                 self.serieCaptInstance.ecrire("ultrason")
                 mesure = int(self.serieCaptInstance.lire())
-                self.listInfrarouge.append(mesure)
+                self.listInfrarouge.append(int(mesure))
             except:
                 pass
             
@@ -56,7 +56,7 @@ class Capteur():
             mesure = int(self.serieCaptInstance.lire())
             if(string(mesure) == "norespone"):
                 mesure = 0
-            self.listUltrason.append(mesure)
+            self.listUltrason.append(int(mesure))
             self.listUltrason.pop(0)
                 
         except:
@@ -65,7 +65,7 @@ class Capteur():
         try:
             self.serieCaptInstance.ecrire(";i")
             mesure = int(self.serieCaptInstance.lire())
-            self.listInfrarouge.append(mesure)
+            self.listInfrarouge.append(int(mesure))
             self.listInfrarouge.pop(0)
         except:
             pass
