@@ -102,7 +102,7 @@ extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
 extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
 // Ultrasons SRF05
-typedef Timer<1,ModeCounter,256> timerCapteurSRF;
+typedef Timer<1,ModeCounter, 256> timerCapteurSRF;
 typedef capteur_srf05< timerCapteurSRF, serial_t_ > capteur_srf05_t_;
 
 // Jumper
@@ -361,19 +361,22 @@ int main()
             /// *********************************************** ///
             
             // Jumper
-            else if (COMPARE_BUFFER("jumper", 6))
+            else if (COMPARE_BUFFER(";j", 2))
                 serial_t_::print(jumper_t_::value());
             
             // ultrasons
-            else if (COMPARE_BUFFER(":", 1))
+            else if (COMPARE_BUFFER(";u", 2))
                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
             
             // infrarouge
-            else if (COMPARE_BUFFER(";", 1))
+            else if (COMPARE_BUFFER(";i", 2))
                 serial_t_::print(capteur_infrarouge::value());
             
+            else if (COMPARE_BUFFER(".", 1))
+                serial_t_::print(capteur_infrarouge::value_brut());
+            
             // Ultrasons SRF05
-            else if (COMPARE_BUFFER("SRF", 3))
+            else if (COMPARE_BUFFER(";s", 2))
                 capteur_srf05_t_::value();          // /!\ Pas de serial_t_::print()
                                                     // C'est une interruption qui s'occupe d'afficher
                                                     // la valeur.
@@ -385,5 +388,5 @@ int main()
 
 // Overflow du timer 1 (utilisé notamment par les ultrasons SRF05
 ISR(TIMER1_OVF_vect){
-    capteur_srf05_t_::setUnbusy();
+    capteur_srf05_t_::timerOverflow();
 }
