@@ -370,7 +370,10 @@ int main()
             
             // infrarouge
             else if (COMPARE_BUFFER("infra", 5))
+            {
                 serial_t_::print(capteur_infrarouge::value());
+                serial_t_::print("ccc");
+            
             
             // Ultrasons SRF05
             else if (COMPARE_BUFFER("SRF", 3))
