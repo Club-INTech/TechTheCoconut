@@ -286,11 +286,11 @@ class Asservissement:
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
         
-    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False, numTentatives = 1):
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        et en facultatif une instruction "auStopNeRienFaire" ou "finir"
         """
         
         print "#avancer à "+str(distance)+", "+instruction
@@ -375,44 +375,69 @@ class Asservissement:
                     self.changerVitesse("translation", 2)
                     
                 else:
-                    #mettre à jour l'attribut position du robot
-                    
                     #stopper l'execution du script parent
                     raise Exception
                 
         if retour == "stoppe" and instruction == "sansRecursion":
-            ##4
-            #mettre à jour l'attribut position du robot
-            
             #stopper l'execution du script parent
-            
             raise Exception
             
-        if retour == "stoppe" and instruction == "forcer":
-            ##5
+        if retour == "stoppe" and instruction == "finir":
             
-            #augmenter vitesse
-            self.changerVitesse("translation", 3)
-            
-            #finir le déplacement
-            posApres = self.getPosition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0:
-                signe = distance/abs(distance)
-            else:
-                signe = 1
-            self.gestionAvancer(distance-signe*dist)
-            
-            #remettre vitesse
-            self.changerVitesse("translation", 2)
-            
+            if numTentatives <= 2:
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+            elif numTentatives == 3:
+                #reculer et tourner un peu
+                self.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+                orientation = self.getOrientation()
+                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire")
+                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire")
+                self.gestionTourner(orientation)
+                
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+            elif numTentatives == 4:
+                #replier un peu les bras
+                if hasattr(__builtin__.instance, 'actionInstance'):
+                    actionInstance = __builtin__.instance.actionInstance
+                    actionInstance.deplacer(110)
+                    time.sleep(0.5)
+                    actionInstance.deplacer(130)
+                    time.sleep(0.5)
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+            elif numTentatives >= 5:
+                #soucis
+                raise Exception
             
     def gestionTourner(self, angle, instruction = "", avecGotoSegment = False):
         
         """
         méthode de haut niveau pour tourner le robot
         prend en paramètre l'angle à parcourir en radians
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        et en facultatif une instruction "auStopNeRienFaire" ou "finir"
         ainsi qu'un booléen indiquant que la rotation est induite par un segment (ie : pas de symétrie selon la couleur)
         """
         
@@ -457,7 +482,7 @@ class Asservissement:
             #stopper l'execution du script parent
             raise Exception
             
-        if retour == "stoppe" and instruction == "forcer":
+        if retour == "stoppe" and instruction == "finir":
             ##5
             #augmenter vitesse
             self.changerVitesse("rotation", 3)
