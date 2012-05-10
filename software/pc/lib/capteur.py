@@ -24,6 +24,8 @@ class Capteur():
         else:
             log.logger.error("[Capteurs] ne peut importer instance.serieCaptInstance")
         self.distance  = 400
+        self.listUltrason
+        self.listInfrarouge
 
     def demarrer(self):
         
@@ -33,12 +35,51 @@ class Capteur():
 
     def mesurer(self):
         #retournes l'entier capté
+        while len(self.listUltrason) < 3:
+            try:
+                self.serieCaptInstance.ecrire("ultrason")
+                mesure = int(self.serieCaptInstance.lire())
+                self.listUltrason.append(mesure)
+            except:
+                pass
+            
+        while len(self.listInfrarouge) < 3:
+            try:
+                self.serieCaptInstance.ecrire("ultrason")
+                mesure = int(self.serieCaptInstance.lire())
+                self.listInfrarouge.append(mesure)
+            except:
+                pass
+            
         try:
-            self.serieCaptInstance.ecrire("ultrason")
+            self.serieCaptInstance.ecrire(";s")
             mesure = int(self.serieCaptInstance.lire())
-            return mesure
+            if(string(mesure) == "norespone"):
+                mesure = 0
+            self.listUltrason.append(mesure)
+            self.listUltrason.pop(0)
+                
         except:
-            return 5000
+            pass
+        
+        try:
+            self.serieCaptInstance.ecrire(";i")
+            mesure = int(self.serieCaptInstance.lire())
+            self.listInfrarouge.append(mesure)
+            self.listInfrarouge.pop(0)
+        except:
+            pass
+        listCopyInfr = self.listInfrarouge
+        listCopyUltra = self.listUltrason
+        
+        self.listInfrarouge.sort()
+        self.listUltrason.sort()
+        
+        if self.listInfrarouge[1] > self.listUltrason[1]:
+            return self.listInfrarouge
+        else:
+            return self.listUltrason
+        
         
     def arreter(self):
         """
