@@ -22,26 +22,69 @@ def scriptTotem():
     asserInstance.gestionTourner(0)
     actionInstance.deplacer(130)
     time.sleep(0.5)
-    asserInstance.gestionAvancer(200,instruction = "finir")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(120)
     time.sleep(0.5)
     asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-    asserInstance.gestionAvancer(200,instruction = "finir")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(110)
     time.sleep(0.5)
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
     asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-    asserInstance.gestionAvancer(300,instruction = "finir")
-    asserInstance.gestionAvancer(-100,instruction = "finir")
-    asserInstance.gestionAvancer(300,instruction = "finir")
-    asserInstance.gestionAvancer(-300,instruction = "finir")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(600,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(80)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(math.pi/2)
+    actionInstance.deplacer(100)
+    time.sleep(0.5)
+    
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0)
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-100,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(500,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-300)
     actionInstance.deplacer(0)
     time.sleep(0.5)
+    asserInstance.gestionTourner(math.pi/2)
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(0)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(math.pi/2)
+    asserInstance.goTo(Point(850.,1600.))
+    asserInstance.changerVitesse("translation", 3)
+    asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
+    asserInstance.changerVitesse("translation", 2)
+    asserInstance.gestionAvancer(500,instruction = "auStopNeRienFaire")
+    
+    
+    #asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    #actionInstance.deplacer(80)
+    #time.sleep(0.5)
+    
+    #asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
+    #actionInstance.deplacer(0)
+    #time.sleep(0.5)
+    
+    
+    
     
     
 def console():
-    print "### bienvenue dans la console $0p@l1z7 ###"
-    print "exit ou ? pour sortir |     goto avec g     |   orienter avec z,q,s,d "
-    print "avancer avec u -> p   | reculer avec j -> m | déplacer bras avec w -> n"
+    print "            ~~###~~ bienvenue dans la console $0p@l1z7 ~~###~~"
+    print "exit ou ? pour sortir |         goto avec g         |   orienter avec z,q,s,d "
+    print "avancer avec u -> p   |     reculer avec j -> m     | déplacer bras avec w -> n"
+    print "   a : farmer totem   |  r,t,y : vitesses rotation  | ; : ! vitesses translation"
     
     #position initiale du robot
     asserInstance.setPosition(Point(70,400))
@@ -100,19 +143,19 @@ def console():
                 actionInstance.deplacer(0)
                 
             #vitesses rotation
-            elif ordre == "f":
+            elif ordre == "r":
                 asserInstance.changerVitesse("rotation", 1)
-            elif ordre == "g":
+            elif ordre == "t":
                 asserInstance.changerVitesse("rotation", 2)
-            elif ordre == "h":
+            elif ordre == "y":
                 asserInstance.changerVitesse("rotation", 3)
                 
             #vitesses translation
-            elif ordre == "r":
+            elif ordre == ";":
                 asserInstance.changerVitesse("translation", 1)
-            elif ordre == "t":
+            elif ordre == ":":
                 asserInstance.changerVitesse("translation", 2)
-            elif ordre == "y":
+            elif ordre == "!":
                 asserInstance.changerVitesse("translation", 3)
                 
             elif ordre == "a":
