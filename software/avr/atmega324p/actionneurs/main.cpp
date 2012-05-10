@@ -106,7 +106,7 @@ typedef Timer<1,ModeCounter, 256> timerCapteurSRF;
 typedef capteur_srf05< timerCapteurSRF, serial_t_ > capteur_srf05_t_;
 
 // Jumper
-typedef jumper< AVR_PORTD<PORTD7> > jumper_t_;
+typedef jumper< AVR_PORTC<PORTC2> > jumper_t_;
 
 
 
