@@ -74,7 +74,11 @@ class capteur_srf05
         // Si on n'est pas busy (càd si on n'est pas en train d'attendre
         // l'impulsion retour du capteur).
         if (not busy)
-        {      
+        {
+            // Désactivation des interruptions
+            cbi(PCICR,PCIE2);
+            cbi(PCMSK2,PCINT18);
+            
             // Port "port" en output
             sbi(DDRC, port);
             
@@ -108,7 +112,6 @@ class capteur_srf05
     {
         // Front montant si bit == 1, descendant sinon.
         uint8_t bit = rbi(PINC, port);
-        
         // Début de l'impulsion
         if (bit)
         {
@@ -119,8 +122,10 @@ class capteur_srf05
         // Fin de l'impulsion
         else
         {
-            /// Envoi de la valeur mesurée sur la série. 
-            Serial::print(Timer::value()*500./7200);
+            // Si le timerOverflow n'a pas été lancé.
+            if (busy)
+                /// Envoi de la valeur mesurée sur la série. 
+                Serial::print(Timer::value()*500./7200);
             
             // On n'est plus busy et on peut recevoir un nouvel ordre.
             busy = false;
@@ -131,9 +136,25 @@ class capteur_srf05
         }
     }
     
-    static void setUnbusy()
+    /// Overflow du timer.
+    static void timerOverflow()
     {
+        // Trame d'overflow
+        if (busy == true)
+        {
+            Serial::print("noresponse");
+        }
+        
+        else
+        {
+            // Désactivation des interruptions
+            cbi(PCICR,PCIE2);
+            cbi(PCMSK2,PCINT18);
+        }
+        
         busy = false;
+        
+
     }
 };
 
