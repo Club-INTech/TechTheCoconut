@@ -47,17 +47,17 @@ void Balise::asservir(int32_t vitesse_courante)
 	moteur_.envoyerPwm(pwm);
 }
 
-// void Balise::incremente_toptour()
-// {
-// 	toptour_++;
-// }
-// 
-// void Balise::reset_toptour()
-// {
-// 	toptour_=1;
-// }
-// 
-// uint16_t Balise::toptour()
-// {
-// 	return toptour_;
-// }
+void Balise::incremente_toptour()
+{
+	toptour_++;
+}
+
+void Balise::reset_toptour()
+{
+	toptour_=1;
+}
+
+uint16_t Balise::toptour()
+{
+	return toptour_;
+}

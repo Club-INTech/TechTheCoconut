@@ -93,8 +93,6 @@ ISR(PCINT1_vect)
 				{
 					WINDOW_FLAG = 0;
 					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
-// 					distance = timeout_timer::value();
-// 					message=makeFrame(distance,timeout_timer::value());
 					timeout_timer::value(0);
 				}
 			}

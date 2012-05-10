@@ -62,32 +62,37 @@ int main() {
 		
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
+		//Ping
 		if(COMPARE_BUFFER("?",1)){
 			Balise::serial_pc::print(2);
 		}
 		
+		//Speed
+		if(COMPARE_BUFFER("s",1)){
+			Balise::serial_pc::print(balise.max_counter());
+		}
+		
+		//Laser off
 		if(COMPARE_BUFFER("loff",4)){
 		    cbi(TCCR0A,WGM00);
 		    cbi(TCCR0A,WGM01);
 		    cbi(TCCR0B,WGM02);
-		    
 		    cbi(TCCR0A,COM0A0);
 		    cbi(TCCR0A,COM0A1);
-		    
 		    Balise::serial_pc::print("laser off");
 		}
 		
+		//Laser on
 		if(COMPARE_BUFFER("lon",3)){
 		    cbi(TCCR0A,WGM00);
 		    sbi(TCCR0A,WGM01);
 		    cbi(TCCR0B,WGM02);
-		    
 		    sbi(TCCR0A,COM0A0);
 		    cbi(TCCR0A,COM0A1);
 		    Balise::serial_pc::print("laser on");
-		}				    
+		}		    
 
-		
+		//Ping balise adverse
 		if(COMPARE_BUFFER("!",1)){
 			// Timeout pour la requête de 0,25s
 			WDT_set_prescaler();
@@ -103,7 +108,7 @@ int main() {
 			WDT_off();
 		}
 		
-		
+		//Valeurs
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
 			int16_t n_demandes = 0;
@@ -162,11 +167,12 @@ int main() {
 			}
 		}
 		
+		//Easter egg
 		if(COMPARE_BUFFER("troll",5)){
 			Balise::serial_pc::print("MER IL ET FOU ! ENKULE DE RIRE");
 		}
 		
-		#undef COMPARE_BUFFER*/
+		#undef COMPARE_BUFFER
 	}
 	
 }
@@ -219,7 +225,7 @@ void init()
 	// Activer les interruptions
 	//PCICR |= (1 << PCIE0);
 	
- 	sei();
+	sei();
 }
 
 
@@ -234,9 +240,7 @@ ISR(TIMER1_OVF_vect)
 
 ISR(TIMER3_OVF_vect)
 {
-// 	Balise::serial_pc::print(12);
-// 	Balise::Instance().incremente_toptour();
-// 	Balise::Instance().asservir(codeur - last_codeur);
+	//Balise::Instance().incremente_toptour();
 }
 
 //INT0
