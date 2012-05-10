@@ -50,8 +50,6 @@ public:
   }
   
   static uint16_t value(){
-  //     if (ADCH <= 15)
-  //         return 1500;
       return conversion(ADCH);
   }
   

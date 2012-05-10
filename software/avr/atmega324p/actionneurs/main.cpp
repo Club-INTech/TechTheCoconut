@@ -365,25 +365,16 @@ int main()
                 serial_t_::print(jumper_t_::value());
             
             // ultrasons
-            else if (COMPARE_BUFFER("ultrason", 8))
+            else if (COMPARE_BUFFER(":", 1))
                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
             
             // infrarouge
-            else if (COMPARE_BUFFER("infra", 5))
-            {
+            else if (COMPARE_BUFFER(";", 1))
                 serial_t_::print(capteur_infrarouge::value());
-                serial_t_::print("ccc");
-            }
-            
             
             // Ultrasons SRF05
             else if (COMPARE_BUFFER("SRF", 3))
                 capteur_srf05_t_::value();
-            
-            else if (COMPARE_BUFFER("ABCDEFGHI", 9))
-                serial_t_::print("BANDE DE NOOBS");
-            
-                
         }
     }
     return 0;
