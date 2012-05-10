@@ -373,6 +373,7 @@ int main()
             {
                 serial_t_::print(capteur_infrarouge::value());
                 serial_t_::print("ccc");
+            }
             
             
             // Ultrasons SRF05
