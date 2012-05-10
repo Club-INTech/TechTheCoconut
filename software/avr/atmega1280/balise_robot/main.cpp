@@ -108,6 +108,22 @@ int main() {
 			WDT_off();
 		}
 		
+		//Table
+		if(COMPARE_BUFFER("t",1)){
+			// Timeout pour la requête de 0,25s
+			WDT_set_prescaler();
+			
+			// Activation du watchdog en mode system reset
+			WDT_on();
+			
+			// Envoi du ping à la balise
+			Balise::serial_radio::print_noln('t');
+			Balise::serial_pc::print(Balise::serial_radio::read_int());
+			
+			// Désactivation du watchdog
+			WDT_off();
+		}
+		
 		//Valeurs
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
@@ -240,14 +256,14 @@ ISR(TIMER1_OVF_vect)
 
 ISR(TIMER3_OVF_vect)
 {
-	//Balise::Instance().incremente_toptour();
 }
 
 //INT0
 ISR(INT0_vect)
 {
 	Balise & balise = Balise::Instance();
-	if(Balise::T_TopTour::value()>=30){
+	//On ignore les impulsions quand l'aimant est encore trop proche du capteur
+	if(Balise::T_TopTour::value()>=balise.max_counter()/3){
 		balise.max_counter(Balise::T_TopTour::value());
 		Balise::T_TopTour::value(0);
 	}

@@ -7,7 +7,9 @@ volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
 volatile uint16_t distance = 0;
 volatile int32_t message = 0;
+volatile int16_t timer=0;
 
+typedef Timer<0,ModeCounter,1024> window_timer;
 typedef Timer<1,ModeCounter,64> timeout_timer;
 
 int main() 
@@ -20,15 +22,17 @@ int main()
 		if(order=='v'){
 
 			uint16_t offset=timeout_timer::value();
-			distance=1;
-			offset=13;
 			Serial<0>::print_noln(distance);
 			Serial<0>::print_noln(offset);
 			uint32_t data = (((uint32_t) distance) << 16) + offset;
 			Serial<0>::print_noln((int) crc8(data));
 		}
+		else if(order=='t')
+		{
+		    Serial<0>::print_noln(timer);
+		}
 		else if(order=='?'){
-			Serial<0>::print_noln(40000000);
+			Serial<0>::print_noln(40);
 		}
 	}
 	
@@ -56,14 +60,6 @@ void setup()
 	sbi(PCMSK1,PCINT11);
 	sbi(PCICR,PCIE1);//active PCINT port C
 	
-	//Réglages du TIMER0
-	//Prescaler de 256
-	sbi(TCCR0B,CS02);
-	cbi(TCCR0B,CS01);
-	cbi(TCCR0B,CS00);
-	//Active interruptions sur overflow du TIMER0
-	sbi(TIMSK0,TOIE0);
-	
 	//Active globalement les interruptions
 	sei();
 	
@@ -73,6 +69,7 @@ void setup()
 	//Initialisation table pour crc8
 	init_crc8();
 	timeout_timer::init();
+	window_timer::init();
 }
 
 //Interruption pour les PCINT8,9,10,11
@@ -92,7 +89,8 @@ ISR(PCINT1_vect)
 				if(changedbits == WINDOW_OPENER)
 				{
 					WINDOW_FLAG = 0;
-					distance=getDistance(TCNT0*16);//TCNT0*16 = écart de temps en µs
+					distance=getDistance(window_timer::value());
+					timer=window_timer::value();
 					timeout_timer::value(0);
 				}
 			}
@@ -101,7 +99,7 @@ ISR(PCINT1_vect)
 		{
 			//On ouvre une fenêtre et initialise le TIMER0
 			WINDOW_FLAG = 1;
-			TCNT0=0;
+			window_timer::value(0);
 			WINDOW_OPENER=changedbits;
 		}
 	}
@@ -116,5 +114,5 @@ ISR(TIMER0_OVF_vect)
 
 ISR(TIMER1_OVF_vect)
 {
-	distance = 0; //La distance est périmée.
+ 	distance = 0; //La distance est périmée.
 }
