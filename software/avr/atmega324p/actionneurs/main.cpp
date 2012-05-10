@@ -374,7 +374,9 @@ int main()
             
             // Ultrasons SRF05
             else if (COMPARE_BUFFER("SRF", 3))
-                capteur_srf05_t_::value();
+                capteur_srf05_t_::value();          // /!\ Pas de serial_t_::print()
+                                                    // C'est une interruption qui s'occupe d'afficher
+                                                    // la valeur.
         }
     }
     return 0;
@@ -383,5 +385,5 @@ int main()
 
 // Overflow du timer 1 (utilisé notamment par les ultrasons SRF05
 ISR(TIMER1_OVF_vect){
-    
+    capteur_srf05_t_::setUnbusy();
 }
