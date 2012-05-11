@@ -99,10 +99,6 @@ class Strategie():
             
             # Tant qu'on peut prendre des décisions
             while Strategie.prendreDecisions :
-                if self.rafflerTotem() :
-                    if self.rafflerTotem(ennemi = True) :
-                        if self.rafflerTotem(nord = True) :
-                            self.rafflerTotem(ennemi = True, nord = True)
                 
                 # Si on arrive là, c'est que le script d'origine est terminé.
                 # On appelle choisirAction tant que self.actions n'est pas vide
@@ -201,11 +197,11 @@ class Strategie():
         # Sinon, on prend l'action
         try :
             if self.actions[maxID][0] == "FARMERTOTEM" :
-                exec ("self.scriptInstance.rafflerTotem"+str(self.actions[maxID][1])+str(self.actions[maxID][2])+"()")
+                exec ("self.scriptInstance.gestionScript(self.scriptInstance.rafflerTotem"+str(self.actions[maxID][1])+str(self.actions[maxID][2])+")")
                 self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
                 
             elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
-                exec ("self.scriptInstance.enfoncerPoussoir"+str(self.actions[maxID][1])+"()")
+                exec ("self.scriptInstance.gestionScript(enfoncerPoussoir"+str(self.actions[maxID][1])+")")
                 self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
                 
             elif self.actions[maxID][0] == "FAIRECHIERENNEMI" :
