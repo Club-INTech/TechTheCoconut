@@ -1,0 +1,15 @@
+#monde physique
+couper alim et USB
+mettre alim
+mettre USB
+
+#bash
+cd git/techthecoconut/software/pc
+python lanceur.py
+
+#lanceur python
+entrée jusqu'à l'invite (vérifier que asservissement et capteurs OK)
+import test_acquit
+
+#console $0p@1!z7
+lire la notice...
