@@ -115,6 +115,14 @@ public:
   static inline void value(uint32_t new_value){
       TimerRegisters<ID_,MODE_<ID_> >::set_TCNT(new_value);
   }
+  
+  static inline void disable(){
+      Prescaler<ID_,0>::set();
+  }
+  
+  static inline void enable(){
+      prescaler_::set();
+  }
 };
 
 #endif
