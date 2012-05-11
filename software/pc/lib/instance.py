@@ -4,6 +4,7 @@ import lib.log
 import robot
 import asservissement
 import asservissementDuree
+import balise
 import capteur
 import serial
 import serie_acquisition
@@ -45,6 +46,7 @@ class Instance:
         #self.instanciationAcquisition()
         self.instanciationScript()
         self.instanciationStrategie()
+        self.baliseInstance = balise.Balise()
         
     
     def instanciationSerie(self):

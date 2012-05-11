@@ -3,6 +3,7 @@
 #import threading
 
 from filtre_kalman import FiltreKalman
+import outils_math.point as point
 import numpy
 from threading import Thread, Lock
 import __builtin__
@@ -23,14 +24,12 @@ class Balise:
         self.filtre_kalman.F[1,3] = new_dt
         self.filtre_kalman.F[2,4] = new_dt
     
-    def __init__(self, visualisation=None):
-        self.robotInstance = __builtin__.instance.robotInstance
-        
-        if hasattr(__builtin__.instance, 'serieBaliseInstance'):
-            self.serieBaliseInstance = __builtin__.instance.serieBaliseInstance
+    def __init__(self):
+        self.instances = __builtin__.instance
+        if hasattr(self.instances, 'serieBaliseInstance'):
+            self.serieBaliseInstance = self.instances.serieBaliseInstance
         else:
             log.logger.error("balise : ne peut importer instance.serieBaliseInstance")
-        self.visualisation = visualisation
         #self.serial = serial.Serial(peripherique.chemin_de_peripherique("balise"),"balise",9600,5)
         self.dt = 0.2
         self.timeout_serie = 0.25
@@ -44,6 +43,20 @@ class Balise:
         self.filtre_kalman = FiltreKalman(x,P,F,H,R,Q)
         self.mutex = Lock()
     
+    def getPosition(self):
+        self.mutex.acquire()
+        state = self.filtre_kalman.x;
+        nouvelle_pos = point.Point(state[0], state[1])
+        self.mutex.release()
+        return nouvelle_pos
+    
+    def getVitesse(self):
+        self.mutex.acquire()
+        state = self.filtre_kalman.x;
+        nouvelle_vitesse = [ state[2], state[3] ]
+        self.mutex.release()
+        return nouvelle_vitesse
+                
     def tracker_robot_adverse(self):
         while(1):
             time.sleep(self.dt)
@@ -52,6 +65,9 @@ class Balise:
             self.serieBaliseInstance.ecrire("v")
             retour = self.serieBaliseInstance.lire()
             log.logger.info("Balise : Trame Reçue")
+            
+            #Prediction de Kalman.
+            self.filtre_kalman.prediction()
             if(retour == "ERREUR_CANAL"):
                log.logger.error("balise : canal pourri.")
             elif(retour == "NON_VISIBLE"):
@@ -59,27 +75,22 @@ class Balise:
             elif(retour == "timeout"):
                 pass
             else:
+                #La mesure est bonne, on peut ajouter la mesure au filtre de Kalman
                 log.logger.info("Balise : Trame intègre")
                 vals = retour.split('.')
-                print vals
                 dist = vals[1]
                 angle = vals[2]
                 angle_rad = int(angle)*math.pi/180
+                
+                # x_adverse = x_robot + dist*cos(angle+angle_robot)
+                # y_adverse = y_robot + dist*sin(angle+angle_robot)
                 x = int(dist)*math.cos(angle_rad)
                 y = int(dist)*math.sin(angle_rad)
-                new_x = 1500+x;
-                new_y = 1000+y;
-                log.logger.info("Balise : Mise à jour des coordonnées par Kalman : " + str(new_x) + ", " + str(new_y) )
-                self.filtre_kalman.filtrer(numpy.array([new_x,new_y])[:, numpy.newaxis])
-                state = self.filtre_kalman.x;
-                if self.visualisation != None:
-                    nouvelle_pos = [ state[0], state[1] ]
-                    nouvelle_vitesse = [ state[2], state[3] ]
-                    #nouvelle_pos = [new_x, new_y]
-                    #nouvelle_vitesse = [0, 0]
-                    self.visualisation.ajouter_pos_adversaire(nouvelle_pos)
-                    self.visualisation.modifierVitesseAdversaire(nouvelle_vitesse)
-                print state
+                pos = point.Point(x,y) + self.instances.robotInstance.getPosition()
+                log.logger.info("Balise : Mise à jour des coordonnées par Kalman : " + pos )
+                self.mutex.acquire()
+                self.filtre_kalman.measurement(numpy.array([pos.x,pos.y])[:, numpy.newaxis])
+                self.mutex.release()
     
 ##robot = Robot()
 #balise = Balise()

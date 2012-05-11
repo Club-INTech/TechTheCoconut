@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import pygame, time, sys, os, math, threading, lib.log,random
-import lib.robot
+import outils_math.point as point
+import __builtin__
 
 # Ajout de ../.. au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 
 log = lib.log.Log(__name__)
-robotInstance = lib.robot.Robot()
 
 #:TODO: Import et utilisation des logs
 
@@ -33,7 +33,7 @@ class Visu_table(threading.Thread):
     fps = 2
     scale = 0.3
     
-    def __init__(self):
+    def __init__(self,instances):
         """
         Constructeur
 
@@ -65,7 +65,7 @@ class Visu_table(threading.Thread):
         # Limite le rafraichissement
         self.clock.tick(Visu_table.fps)
 
-        self.robot = robotInstance
+        self.instances = instances
         #self.chemin = []
         try:
             threading.Thread.__init__(self, name=self.nomThread, target=self.start)
@@ -73,32 +73,36 @@ class Visu_table(threading.Thread):
         except:
             self.quit()
         
-        self.infos = { 'pathfinding' : [],  'positionRobotAdverse' : [[300,400]], 'vitesseRobotAdverse' : [20,30] }
+        self.infos = { 'pathfinding' : []
+                        ,  'positionBaliseKalman' : [point.Point(0,0)]
+                        ,  'positionBaliseBrut' : [point.Point(0,0)]
+                        , 'vitesseRobotAdverse' : point.Point(0,0) }
 
-    def ajouter_pos_adversaire(self, pos):
-        positions = self.infos['positionRobotAdverse']
-        positions.append(pos)
+    def ajouter_pos(self, nomListe, pos):
+        positions = self.infos[nomListe]
+        positions.append(pos*self.scale)
         if(len(positions) > 1):
             positions.pop(0)
     
     def modifierVitesseAdversaire(self,vitesse):
-        self.infos['vitesseRobotAdverse'] = vitesse
+        self.infos['vitesseRobotAdverse'] = vitesse*self.scale
        
     def refresh(self):
         self.screen.blit(self.imageTable, [0,0])
+        balise = self.instances.baliseInstance;
+        ajouter_pos(balise.getPosition())
+        modifierVitesseAdversaire(balise.getVitesse())
         positions = self.infos['positionRobotAdverse']
         vitesse = self.infos['vitesseRobotAdverse']
         #pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['NOIR'], False,[[10,10]]);
         for pos in positions:
-            pos = [int(pos[0]*self.scale),int(pos[1]*self.scale)]
-            pygame.draw.circle(pygame.display.get_surface(), self.couleur['rouge'],pos,3)
+            pygame.draw.circle(pygame.display.get_surface(), self.couleur['rouge'],pos.to_list(),3)
         current = positions[len(positions)-1]
-        current = [int(c*self.scale) for c in current]
-        futur = [int(current[i]+vitesse[i]) for i in range(2)]
+        futur = current + vitesse
         #print current
         #print futur
-        pygame.draw.line(pygame.display.get_surface(), Visu_table.couleur['NOIR'], current, futur,3);
-        position_robot = robotInstance.getPosition()
+        pygame.draw.line(pygame.display.get_surface(), Visu_table.couleur['NOIR'], current.to_list(), futur.to_list(),3);
+        position_robot = self.instances.asserInstance.getPosition()
         pygame.draw.rect(self.screen, Visu_table.couleur['BLANC'], (position_robot.x,position_robot.y,0.1*self.scale*constantes["Coconut"]["largeur"],0.1*self.scale*constantes["Coconut"]["longueur"]), 2)
         #pygame.draw.lines( pygame.display.get_surface(), Visu_table.couleur['bleuMarine'], False, []);
         pygame.display.flip()
