@@ -80,10 +80,9 @@ while first or erreur:
     # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
     import time
     __builtin__.constantes["t0"] = time.time()
-    #try:
     if mode == '':
-        mode = 'console'
-    if mode == 'h':
+        mode = "console"
+    elif mode == 'h':
         mode = "homologation"
     elif mode == 'j':
         mode = "joystick"
@@ -97,15 +96,14 @@ while first or erreur:
         mode = "balise"
     elif mode == "v":
         mode = "visualisation_table"
-    first=True
-    log.logger.info("Chargement du fichier de lancement " + mode)
-    exec('import bin.'+ mode)
+    else:
+        first=True
     
-        
     if hasattr(bin, "tests_mecha"):
         Tests_mecha = bin.tests_mecha.Tests_mecha()
-    else:
-        pass
+        
+log.logger.info("Chargement du fichier de lancement " + mode)
+exec('import bin.'+ mode)
 
     #except:
         #log.logger.warning("Le mode '" + mode + "' n'a pas pu etre charge")
