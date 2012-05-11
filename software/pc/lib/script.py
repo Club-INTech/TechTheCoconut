@@ -25,6 +25,7 @@ class Script:
             self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
         else:
             log.logger.error("script : ne peut importer instance.asserInstanceDuree")
+            
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
@@ -33,7 +34,10 @@ class Script:
             self.actionInstance = __builtin__.instance.actionInstance
         else:
             log.logger.error("script : ne peut importer instance.actionInstance")
-    
+        if hasattr(__builtin__.instance, 'actionInstanceSimu'):
+            self.actionInstanceSimu = __builtin__.instance.actionInstanceSimu
+        else:
+            log.logger.error("script : ne peut importer instance.actionInstanceSimu")
         self.couleur = __builtin__.constantes["couleur"]
         
         
@@ -53,32 +57,38 @@ class Script:
         if chrono:
             #instance pour le calcul de durée
             asserv = self.asserInstanceDuree
+            action = self.actionInstanceSimu
             #initialisations
             if hasattr(__builtin__.instance, 'serieAsserInstance'):
                 asserv.setPosition(self.asserInstance.getPosition())
                 asserv.setOrientation(self.asserInstance.getOrientation())
-            
+            else :
+                #NOTE : pour tests (sans série)
+                asserv.setPosition(Point(70,400))
+                asserv.setOrientation(0)
+                
             #début du calcul de durée du script
             asserv.lancerChrono()
         else:
             #instance pour les déplacements réels
             asserv = self.asserInstance
+            action = self.actionInstance
             
         #vitesses normales
         asserv.changerVitesse("rotation",2)
         asserv.changerVitesse("translation",2)
-        try :
-            #execution du script
-            script(asserv)
-            if chrono:
-                #retour de la durée totale d'execution du script
-                return asserv.mesurerChrono()
-            else:
-                #bon déroulement du script (pour des déplacements réels)
-                return True
-        except :
+        #try :
+        #execution du script
+        script(asserv,action)
+        if chrono:
+            #retour de la durée totale d'execution du script
+            return asserv.mesurerChrono()
+        else:
+            #bon déroulement du script (pour des déplacements réels)
+            return True
+        #except :
             #spécifie un déroulement problématique
-            return False
+        return False
             
 ####################################################################################################################
 ###########################################     SCRIPTS SPECIAUX      ##############################################
@@ -181,9 +191,53 @@ class Script:
 ###########################################      SCRIPTS DE TESTS     ##############################################
 ####################################################################################################################
 
-
+    def scriptTotem(self,asser,action):
+        asser.setPosition(Point(70,400))
+        asser.setOrientation(math.pi/2)
+        asser.goTo(Point(0.,660.))
+        #début notre totem sud
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        time.sleep(0.5)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        time.sleep(0.5)
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        #mettre dans la cale
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.2)
+        action.deplacer(110)
+        time.sleep(0.2)
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+        asser.goTo(Point(850.,1600.))
+    
     def test1(self,asserv):
-        asserv.gestionAvancer(300,"forcer")
+        xd = raw_input("x départ? ")
+        yd = raw_input("y départ? ")
+        asserv.setPosition(Point(xd,yd))
+        asserv.setOrientation(math.pi/2)
+        xa = raw_input("x arrivée? ")
+        ya = raw_input("y arrivée? ")
+        asserv.goTo(Point(float(xa),float(ya)))
         
     def test2(self,asserv):
         asserv.changerVitesse("translation",1)

@@ -4,11 +4,11 @@ from point import Point
 from vecteur import Vecteur
 from math import cos,sin,pi
     
-def polygone(centre,rayonRobotsA,nCotesRobotsA):
+def polygone(centre,rayon,nbCotes):
     #un polygone doit etre défini par une liste de sommets (points), dans le sens inverse des aiguilles d'une montre
     poly=[]
-    for i in range(nCotesRobotsA):
-        poly.append(Point(centre.x+rayonRobotsA*cos(i*2*pi/nCotesRobotsA),centre.y+rayonRobotsA*sin(i*2*pi/nCotesRobotsA)))
+    for i in range(nbCotes):
+        poly.append(Point(centre.x+rayon*cos(i*2*pi/nbCotes),centre.y+rayon*sin(i*2*pi/nbCotes)))
     return poly
     
 def polygoneInscrit(poly):

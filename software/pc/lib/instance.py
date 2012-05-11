@@ -13,6 +13,7 @@ import attributions
 import strategie
 import threading
 import actionneur
+import actionneurSimu
 from threading import Lock
 
 log =lib.log.Log(__name__)
@@ -42,7 +43,6 @@ class Instance:
         self.instanciationCapteur()
         self.instanciationAsservissement()
         self.instanciationActionneur()
-        #self.instanciationAcquisition()
         self.instanciationScript()
         self.instanciationStrategie()
         
@@ -73,12 +73,11 @@ class Instance:
         cheminCapteurs_actionneurs = self.chemins[3]
         if cheminCapteurs_actionneurs:
             try:
-                self.serieCaptInstance = serie.Serie(cheminCapteurs_actionneurs, 9600, 1)
-                self.serieActionneurInstance = self.serieCaptInstance
+                self.serieCaptActionneurInstance = serie.Serie(cheminCapteurs_actionneurs, 9600, 1)
             except :
-                log.logger.error("instance : serieCaptInstance et serieActionneurInstance ne sont pas chargés. pb d'instanciation de la série.")
+                log.logger.error("instance : serieCaptActionneurInstance n'est pas chargé. pb d'instanciation de la série.")
         else:
-            log.logger.error("instance : serieCaptInstance et serieActionneurInstance ne sont pas chargés. pas de chemin trouvé.")
+            log.logger.error("instance : serieCaptActionneurInstance n'est pas chargé. pas de chemin trouvé.")
         
         """
         #Instance serie Capteurs indépendants (sur Arduino)
@@ -118,8 +117,8 @@ class Instance:
             log.logger.error("instance : strategieInstance n'est pas chargé")
 
     def instanciationCapteur(self):
-        try : self.capteurInstance = capteur.Capteur()
-        except : log.logger.error("instance : capteurInstance n'est pas chargé")
+        self.capteurInstance = capteur.Capteur()
+        #except : log.logger.error("instance : capteurInstance n'est pas chargé")
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
@@ -135,8 +134,14 @@ class Instance:
             log.logger.critical("instance : asserInstanceDuree n'est pas chargé")
 
     def instanciationActionneur(self):
-        try: self.actionInstance = actionneur.Actionneur()
-        except: log.logger.error("instance : actionInstance n'est pas chargé")
+        try:
+            self.actionInstance = actionneur.Actionneur()
+        except:
+            log.logger.error("instance : actionInstance n'est pas chargé")
+        #try:
+        self.actionInstanceSimu = actionneurSimu.Actionneur_simu()
+        #except:
+            #log.logger.error("instance : actionInstanceSimu n'est pas chargé")
         
     def instanciationAcquisition(self):
         try :

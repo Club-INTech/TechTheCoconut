@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import serie
 import log
 import __builtin__
 import outils_math.point as point
@@ -19,7 +18,7 @@ if not hasattr(__builtin__, "constantes"):
 log = log.Log(__name__)
 
 
-class Actionneur(serie.Serie):
+class Actionneur_simu():
     """
     Classe permettant de gérer un actionneur
     
@@ -33,8 +32,8 @@ class Actionneur(serie.Serie):
         
     # Démarrage.
     def demarrer(self):
-        if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
-            Actionneur.initialise = True
+        if not hasattr(Actionneur_simu, 'initialise') or not Actionneur_simu.initialise:
+            Actionneur_simu.initialise = True
             
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
@@ -61,19 +60,22 @@ class Actionneur(serie.Serie):
         
         #calcul du nouveau rayon du robot
         self.calculRayon(math.pi*angle/180)
-                
-        # Envoi des infos
-        if position == "ALL" or "hg" in position:
-            log.logger.info("[Actionneurs] On bouge hg de : " + 180+3-angle)
-        if position == "ALL" or "hd" in position:
-            log.logger.info("[Actionneurs] On bouge hd de : " + angle)
-        if position == "ALL" or "bg" in position:
-            log.logger.info("[Actionneurs] On bouge bg de : " + angle+5)
-        if position == "ALL" or "bd" in position:
-            log.logger.info("[Actionneurs] On bouge bd de : " + 180+3-angle)
         
-        #print "##################\n"+str(self.robotInstance.rayon)+"\n#############\n"
-
+        if position == "ALL":
+            log.logger.info("[Actionneurs] 4 bras à : " + str(angle))
+        elif position == "G":
+            log.logger.info("[Actionneurs] bras gauches à : " + str(angle))
+        elif position == "D":
+            log.logger.info("[Actionneurs] bras droits à : " + str(angle))
+        else:
+            if "hg" in position:
+                log.logger.info("[Actionneurs] hg à : " + str(angle))
+            if "hd" in position:
+                log.logger.info("[Actionneurs] hd à : " + str(angle))
+            if "bg" in position:
+                log.logger.info("[Actionneurs] bg à : " + str(angle))
+            if "bd" in position:
+                log.logger.info("[Actionneurs] bd à : " + str(angle))
         
     def changerVitesse(self, nouvelleVitesse) :
         """
@@ -88,7 +90,7 @@ class Actionneur(serie.Serie):
         elif nouvelleVitesse <= 0 :
             nouvelleVitesse = 0
         
-        log.logger.info("[Actionneurs] Changement de la vitesse à la nouvelle vitesse : " + vitesse)
+        log.logger.info("[Actionneurs] Changement de la vitesse à la nouvelle vitesse : " + str(vitesse))
         
 
         
@@ -96,7 +98,7 @@ class Actionneur(serie.Serie):
         """
         Flashage de l'id
         """
-        log.logger.info("[Actionneurs] Flashage de l'ID à l'ID : " + nouvelID)
+        log.logger.info("[Actionneurs] Flashage de l'ID à l'ID : " + str(nouvelID))
         
         
     def stop(self):
@@ -111,7 +113,7 @@ class Actionneur(serie.Serie):
     
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
-        log.logger.info("[Actionneurs] Goto à l'angle :" + angle);
+        log.logger.info("[Actionneurs] Goto à l'angle :" + str(angle));
         
     def calculRayon(self, angle):
         """
