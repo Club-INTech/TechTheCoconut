@@ -13,3 +13,9 @@ import test_acquit
 
 #console $0p@1!z7
 lire la notice...
+
+     "            ~~###~~ bienvenue dans la console $0p@1!z7 ~~###~~"
+     "exit ou ? pour sortir |  a : lancer script   | e : enregistrer derniere action  "
+     "avancer avec u -> p   | reculer avec j -> m  | ; : ! vitesses translation"
+     "             orienter avec z,q,s,d | r,t,y : vitesses rotation  "
+     "                 g : goto position | déplacer bras avec w -> n "     
