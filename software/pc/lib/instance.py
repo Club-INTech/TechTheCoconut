@@ -13,6 +13,7 @@ import attributions
 import strategie
 import threading
 import actionneur
+import actionneurSimu
 from threading import Lock
 
 log =lib.log.Log(__name__)
@@ -133,8 +134,14 @@ class Instance:
             log.logger.critical("instance : asserInstanceDuree n'est pas chargé")
 
     def instanciationActionneur(self):
-        try: self.actionInstance = actionneur.Actionneur()
-        except: log.logger.error("instance : actionInstance n'est pas chargé")
+        try:
+            self.actionInstance = actionneur.Actionneur()
+        except:
+            log.logger.error("instance : actionInstance n'est pas chargé")
+        #try:
+        self.actionInstanceSimu = actionneurSimu.Actionneur_simu()
+        #except:
+            #log.logger.error("instance : actionInstanceSimu n'est pas chargé")
         
     def instanciationAcquisition(self):
         try :

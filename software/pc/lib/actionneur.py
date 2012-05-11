@@ -64,6 +64,11 @@ class Actionneur(serie.Serie):
         #calcul du nouveau rayon du robot
         self.calculRayon(math.pi*angle/180)
                 
+        if position == "G":
+            position = ["hg", "bg"]
+        elif position == "D":
+            position = ["hd", "bd"]
+        
         # Envoi des infos
         if "hg" in position:
             self.goto(self.ids["hg"], 180+3-angle)
@@ -162,6 +167,7 @@ class Actionneur(serie.Serie):
     
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
+        
         self.serieCaptActionneurInstance.ecrire("GOTO")
         time.sleep(self.serie_sleep_time)
         self.serieCaptActionneurInstance.ecrire(str(int(id)))

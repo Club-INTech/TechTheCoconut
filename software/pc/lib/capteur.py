@@ -29,7 +29,10 @@ class Capteur():
     def demarrer(self):
         if not hasattr(Capteur, 'initialise') or not Capteur.initialise:
             Capteur.initialise = True
-            self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
+            if hasattr(__builtin__.instance, 'serieCaptActionneurInstance'):
+                self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
+            else:
+                log.logger.error("[Capteurs] impossible d'acceder à serieCaptActionneurInstance")
 
     def mesurer(self):
         #retournes l'entier capté
