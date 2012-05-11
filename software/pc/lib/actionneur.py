@@ -36,7 +36,7 @@ class Actionneur(serie.Serie):
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            self.serieActionneurInstance = __builtin__.instance.serieActionneurInstance
+            self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
             
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
@@ -139,8 +139,8 @@ class Actionneur(serie.Serie):
         """
         Flashage de l'id
         """
-        self.serieActionneurInstance.ecrire("f")
-        self.serieActionneurInstance.ecrire(str(int(nouvelID)))
+        self.serieCaptActionneurInstance.ecrire("f")
+        self.serieCaptActionneurInstance.ecrire(str(int(nouvelID)))
         
         
     def stop(self, position = ["hd", "hg", "bd", "bg"]):
@@ -162,31 +162,31 @@ class Actionneur(serie.Serie):
     
     def goto(self, id, angle) :
         # On considère que angle est dans les bonnes valeurs.
-        self.serieActionneurInstance.ecrire("GOTO")
+        self.serieCaptActionneurInstance.ecrire("GOTO")
         time.sleep(self.serie_sleep_time)
-        self.serieActionneurInstance.ecrire(str(int(id)))
+        self.serieCaptActionneurInstance.ecrire(str(int(id)))
         time.sleep(self.serie_sleep_time)
-        self.serieActionneurInstance.ecrire(str(int(angle)))
+        self.serieCaptActionneurInstance.ecrire(str(int(angle)))
         time.sleep(self.serie_sleep_time)
     
     def ecrireVitesse(self, id, vitesse) :
         # On considère que  les valeurs données sont bonnes.
-        self.serieActionneurInstance.ecrire("CH_VIT")
+        self.serieCaptActionneurInstance.ecrire("CH_VIT")
         time.sleep(self.serie_sleep_time)
-        self.serieActionneurInstance.ecrire(str(int(id)))
+        self.serieCaptActionneurInstance.ecrire(str(int(id)))
         time.sleep(self.serie_sleep_time)
-        self.serieActionneurInstance.ecrire(str(int(vitesse)))
+        self.serieCaptActionneurInstance.ecrire(str(int(vitesse)))
         time.sleep(self.serie_sleep_time)
         
     def ecrireStop(self, id) :
-        self.serieActionneurInstance.ecrire("U")
+        self.serieCaptActionneurInstance.ecrire("U")
         time.sleep(self.serie_sleep_time)
-        self.serieActionneurInstance.ecrire(str(int(id)))
+        self.serieCaptActionneurInstance.ecrire(str(int(id)))
         time.sleep(self.serie_sleep_time)
         
     def envoyer(self, message) :
         # Envoi d'un message brut
-        self.serieActionneurInstance.ecrire(str(message))
+        self.serieCaptActionneurInstance.ecrire(str(message))
         time.sleep(self.serie_sleep_time)
         
     def calculRayon(self, angle):

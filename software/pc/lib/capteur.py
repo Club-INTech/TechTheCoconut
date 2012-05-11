@@ -18,44 +18,46 @@ class Capteur():
     :param distance: Distance capté en mm à partir de laquelle on prévoit un évitemment
     :type distance: long
     """
+        
     def __init__(self):
-        if hasattr(__builtin__.instance, 'serieCaptInstance'):  
-            self.demarrer()
-        else:
-            log.logger.error("[Capteurs] ne peut importer instance.serieCaptInstance")
+        
+        self.demarrer()
         self.distance  = 400
-        self.listUltrason
-        self.listInfrarouge
+        self.listUltrason = []
+        self.listInfrarouge = []
 
     def demarrer(self):
-        
-        if not hasattr(self, 'initialise') or not self.initialise:
-            self.initialise = True
-            self.serieCaptInstance = __builtin__.instance.serieCaptInstance
+        if not hasattr(Capteur, 'initialise') or not Capteur.initialise:
+            Capteur.initialise = True
+            self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
 
     def mesurer(self):
         #retournes l'entier capté
         while len(self.listUltrason) < 3:
             try:
-                self.serieCaptInstance.ecrire("ultrason")
-                mesure = int(self.serieCaptInstance.lire())
+                self.serieCaptActionneurInstance.ecrire(";s")
+                mesure = int(self.serieCaptActionneurInstance.lire())
                 self.listUltrason.append(int(mesure))
             except:
                 pass
             
         while len(self.listInfrarouge) < 3:
             try:
-                self.serieCaptInstance.ecrire("ultrason")
-                mesure = int(self.serieCaptInstance.lire())
+                self.serieCaptActionneurInstance.ecrire(";i")
+                mesure = int(self.serieCaptActionneurInstance.lire())
                 self.listInfrarouge.append(int(mesure))
             except:
                 pass
             
         try:
-            self.serieCaptInstance.ecrire(";s")
-            mesure = int(self.serieCaptInstance.lire())
-            if(string(mesure) == "norespone"):
-                mesure = 0
+            self.serieCaptActionneurInstance.ecrire(";s")
+            mesure = int(self.serieCaptActionneurInstance.lire())
+            try:
+                if(string(mesure) == "norespone"):
+                    mesure = 0
+            except:
+                pass
+            print "ultrason : >"+str(mesure)+"<"
             self.listUltrason.append(int(mesure))
             self.listUltrason.pop(0)
                 
@@ -63,22 +65,24 @@ class Capteur():
             pass
         
         try:
-            self.serieCaptInstance.ecrire(";i")
-            mesure = int(self.serieCaptInstance.lire())
-            self.listInfrarouge.append(int(mesure))
+            self.serieCaptActionneurInstance.ecrire(";i")
+            mesure = int(self.serieCaptActionneurInstance.lire())
+            if mesure > 1000:
+                mesure = 0
+            print "infrarouge : >"+str(mesure)+"<"
+            self.listInfrarouge.append(mesure)
             self.listInfrarouge.pop(0)
         except:
             pass
-        listCopyInfr = self.listInfrarouge
-        listCopyUltra = self.listUltrason
         
-        self.listInfrarouge.sort()
-        self.listUltrason.sort()
+        listCopyInfr = self.listInfrarouge[:]
+        listCopyUltra = self.listUltrason[:]
         
-        if self.listInfrarouge[1] > self.listUltrason[1]:
-            return self.listInfrarouge
-        else:
-            return self.listUltrason
+        listCopyInfr.sort()
+        listCopyUltra.sort()
+        
+        print "résultat : "+str(max(listCopyInfr[1],listCopyUltra[1]))+"\n"
+        return max(listCopyInfr[1],listCopyUltra[1])
         
         
     def arreter(self):
