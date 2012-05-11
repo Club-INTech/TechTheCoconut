@@ -85,7 +85,7 @@ class Thetastar:
 
     #pour activer les déviations automatiques en cas de départ/arrivée inaccessible
     effectuer_deviation_negligeable = True
-    effectuer_deviation_segment = True
+    effectuer_deviation_segment = False
 
     listeObjets = []
 
@@ -127,8 +127,10 @@ class Thetastar:
 
         if not (depart.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and depart.y < Thetastar.tableLargeur-self.rayonRobot/2 and depart.y > 0.+self.rayonRobot/2):
             log.logger.error("Le point de départ n'est pas dans l'aire de jeu")
+            raise Exception
         if not (arrive.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and arrive.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and arrive.y < Thetastar.tableLargeur-self.rayonRobot/2 and arrive.y > 0.+self.rayonRobot/2):
             log.logger.critical("le point d'arrivée n'est pas dans l'aire de jeu !")
+            raise Exception
 
         
         #création des robots adverses
@@ -197,7 +199,8 @@ class Thetastar:
             
             if Thetastar.effectuer_deviation_negligeable :
                 #on retente depuis un point de départ voisin, sur un cercle (hexagone) de faible rayon
-                for redir in polygone(depart,10.,6):
+                deviationDepart_reussie = False
+                for redir in polygone(depart,25.,6):
                     touche_tr = False
                     for poly in Thetastar.listeObjets:
                         if collisionPolyPoint(poly,redir):
@@ -210,9 +213,12 @@ class Thetastar:
                                     break
                     if not touche_tr :
                         log.logger.warning("deviation négligeable depuis ("+str(redir.x)+","+str(redir.y)+")")
+                        deviationDepart_reussie = True
                         return self.rechercheChemin(redir,arrive)
                         break
-            
+                if not deviationDepart_reussie:
+                    #impossible de trouver une position de départ
+                    raise Exception
             
         else :
             touche_ta = False
@@ -232,10 +238,10 @@ class Thetastar:
                 if Thetastar.effectuer_deviation_negligeable :
                     
                     #on retente une destination voisine de celle recherchée
-                    
+                    deviationArrive_reussie = False
                     #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
                     touche_cercle_A=True
-                    for redir in polygone(arrive,10.,6):
+                    for redir in polygone(arrive,25.,6):
                         touche_tr = False
                         for poly in Thetastar.listeObjets:
                             if collisionPolyPoint(poly,redir):
@@ -249,6 +255,7 @@ class Thetastar:
                         if not touche_tr :
                             touche_cercle_A=False
                             log.logger.warning("deviation négligeable vers --> ("+str(redir.x)+","+str(redir.y)+")")
+                            deviationArrive_reussie = True
                             return self.rechercheChemin(depart,redir)
                             break
                     
@@ -265,8 +272,14 @@ class Thetastar:
                                     pCollision=collisionSegmentPoly(depart,arrive,poly)
                                     if pCollision:
                                         break
+                            
                             log.logger.warning("deviation vers --> ("+str(pCollision[1].x)+","+str(pCollision[1].y)+")")
+                            deviationArrive_reussie = True
                             return self.rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y))
+                            
+                    if not deviationArrive_reussie:
+                        #impossible de trouver une position d'arrivée
+                        raise Exception
                 
                 
                 
