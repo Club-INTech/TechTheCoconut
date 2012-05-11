@@ -362,12 +362,12 @@ int initUart2(int baudRate) {
 	LPC_SC->PCLKSEL1 &= ~(PCLK_UART2_MASK);
 	LPC_SC->PCLKSEL1 |=  (1 << PCLK_UART2);     // PCLK_periph = CCLK
 
-	// Set PINSEL0 so that P0.10 = TXD2
-	LPC_PINCON->PINSEL0 &= ~( 0x3 << 20);
-	LPC_PINCON->PINSEL0 |= ( 1L << 20);
-	// Set PINSEL0 so that P0.11 = RXD2
-	LPC_PINCON->PINSEL0 &= ~( 0x3 << 22);
-	LPC_PINCON->PINSEL0 |= ( 1L << 22);
+	// Set PINSEL0 so that P2.8 = TXD2
+	LPC_PINCON->PINSEL4 &= ~( 0x3 << 16);
+	LPC_PINCON->PINSEL4 |= ( 2L << 16);
+	// Set PINSEL0 so that P2.9 = RXD2
+	LPC_PINCON->PINSEL4 &= ~( 0x3 << 18);
+	LPC_PINCON->PINSEL4 |= ( 2L << 18);
 
 	//LPC_UART2->LCR = 0x83;		// 8 bits, no Parity, 1 Stop bit, DLAB=1
 	LPC_UART2->LCR = 0x80 | 0x03 | 0x18 | 0x00;  // lcr_d Data bits, lcr_p Parity,   lcr_s Stop bit
@@ -464,10 +464,12 @@ int initUart3(int baudRate) {
 	LPC_SC->PCLKSEL1 &= ~(PCLK_UART3_MASK);
 	LPC_SC->PCLKSEL1 |=  (1 << PCLK_UART3);     // PCLK_periph = CCLK
 
-	// Set PINSEL0 so that P4.28 = TXD3
-	LPC_PINCON->PINSEL9 |= ( 0x3 << 24);
-	// Set PINSEL0 so that P4.29 = RXD3
-	LPC_PINCON->PINSEL9 |= ( 0x3 << 26);
+	// Set PINSEL0 so that P0.0 = TXD2
+	LPC_PINCON->PINSEL0 &= ~( 0x3 << 0);
+	LPC_PINCON->PINSEL0 |= ( 2L << 0);
+	// Set PINSEL0 so that P0.1 = RXD2
+	LPC_PINCON->PINSEL0 &= ~( 0x3 << 2);
+	LPC_PINCON->PINSEL0 |= ( 2L << 2);
 
 	LPC_UART3->LCR = 0x83;		// 8 bits, no Parity, 1 Stop bit, DLAB=1
 	LPC_UART3->DLM = dlEest / 256;

@@ -78,7 +78,7 @@ class Visu_table(threading.Thread):
     def ajouter_pos_adversaire(self, pos):
         positions = self.infos['positionRobotAdverse']
         positions.append(pos)
-        if(len(positions) > 5):
+        if(len(positions) > 1):
             positions.pop(0)
     
     def modifierVitesseAdversaire(self,vitesse):

@@ -74,6 +74,13 @@ public:
 	void envoyer_position_tic(void);
 	bool est_stoppe();
 	
+	void changerVitesseTra1();
+	void changerVitesseTra2();
+	void changerVitesseTra3();
+	void changerVitesseRot1();
+	void changerVitesseRot2();
+	void changerVitesseRot3();
+	
 	void acquittement();
 	
 	void asservir();

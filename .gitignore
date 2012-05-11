@@ -5,6 +5,7 @@
 *.o
 *.hex
 *.out
+*.d
 /software/nbproject/private//software/pc/sauv_g.xml
 /software/pc/sauv_poids
 /software/pc/sauv_posX
@@ -124,3 +125,7 @@
 /software/pc/lib/trace_x_y
 /software/pc/lib/test_serie.py
 /software/pc/lib/test_infra.py
+/software/arm/lpcxpresso/CMSISv2_LPC17xx/Debug/*
+/software/arm/lpcxpresso/CMSISv2_LPC17xx/Release/*
+/software/arm/lpcxpresso/INTech-USB-Serie/Debug/src/*
+/software/arm/lpcxpresso/INTech-USB-Serie/Debug/*

@@ -4,10 +4,15 @@
 #include <avr/io.h>
 #include "algorithm.hpp"
 
+/** @file libintech/capteur_infrarouge.hpp
+ *  @brief Ce fichier crée une classe capteur_infrarouge pour pouvoir utiliser simplement les capteurs SRF05.
+ *  @author Thibaut ~MissFrance~
+ *  @date 08 mai 2012
+ */
 
-class infrarouge{
+class capteur_infrarouge{
 private:
-  static const uint16_t NB_ECHANTILLON =  10;
+  static const uint16_t NB_ECHANTILLON =  6;
   static const uint16_t    val_ADCH[NB_ECHANTILLON];
   static const uint16_t    val_mm[NB_ECHANTILLON] ;
   
@@ -45,14 +50,17 @@ public:
   }
   
   static uint16_t value(){
-  //     if (ADCH <= 15)
-  //         return 1500;
       return conversion(ADCH);
+  }
+  
+  static uint16_t value_brut()
+  {
+      return ADCH;
   }
   
 };
 
-const uint16_t    infrarouge::val_ADCH[NB_ECHANTILLON]   = {170, 150, 120, 100, 80,  50 , 30 , 20 , 10, 0};
-const uint16_t    infrarouge::val_mm[NB_ECHANTILLON]     = {50 , 70 , 100, 130, 160, 280, 500, 650, 1500, 1800};
+const uint16_t    capteur_infrarouge::val_ADCH[NB_ECHANTILLON]   = {64, 36, 22, 17, 13, 9};
+const uint16_t    capteur_infrarouge::val_mm[NB_ECHANTILLON]     = {100, 200, 300, 400, 500, 600};
 
 #endif

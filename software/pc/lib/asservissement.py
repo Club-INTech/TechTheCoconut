@@ -28,6 +28,7 @@ class Asservissement:
     def __init__(self):
         theta = recherche_chemin.thetastar.Thetastar([])
         theta.enregistreGraphe()
+        
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
         else:
@@ -42,11 +43,14 @@ class Asservissement:
             log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
             
         #distance seuil de detection pour les ultrasons
-        #self.maxCapt = 400
-        self.maxCapt = 0
+        self.maxCapt = 400
+        
+        #couleur du robot
+        if __builtin__.constantes['couleur'] == "r":
+            self.serieAsserInstance.ecrire('ccr')
+        
         
         #liste des centres de robots adverses repérés (liste de points)
-        
         self.liste_robots_adv = __builtin__.instance.liste_robots_adv
         
         #rayon moyen des robots adverses
@@ -72,7 +76,13 @@ class Asservissement:
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
-        self.gestionTourner(angle)
+        
+        """
+        oriente le robot pour le segment à parcourir
+        sans instruction particulière
+        avec un booléen spécifiant que la rotation est demandée par un segment
+        """
+        self.gestionTourner(angle,"",True)
         
         """
         appel d'une translation de la distance euclidienne depart->arrivée
@@ -91,17 +101,23 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
-        depart = self.getPosition()
+        
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
+        
+        #récupération de la position de départ
+        depart = self.getPosition()
+        
+        #éventuelle symétrie sur la position d'arrivée
+        if __builtin__.constantes['couleur'] == "r":
+            arrivee.x *= -1
+            
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         chemin_python = theta.rechercheChemin(depart,arrivee)
         
-        try :
-            #NOTE on devrait peut etre laisser l'exception remonter dans le script...
-            chemin_python.remove(chemin_python[0])
-        except :
-            return (depart)
+        #supprime le point de départ du chemin.
+        #une exception est levée ici en cas de chemin non trouvé
+        chemin_python.remove(chemin_python[0])
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
@@ -119,13 +135,13 @@ class Asservissement:
         self.serieAsserInstance.ecrire("t")
         self.serieAsserInstance.ecrire(str(float(angle)))
         log.logger.info("Ordre de tourner à " + str(float(angle)))
-        acquitement = False
+        acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
-        while not acquitement:
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             if reponse == "FIN_MVT":
-                acquitement = True
+                acquittement = True
             elif reponse == "STOPPE":
                 print "tourner : stoppé !"
                 return "stoppe"
@@ -133,7 +149,7 @@ class Asservissement:
                 print "tourner : timeout !"
                 return "timeout"
             time.sleep(0.05)
-                
+            
         return "acquittement"
     
     def avancer(self, distance):
@@ -142,28 +158,29 @@ class Asservissement:
         :param distance: Distance à parcourir
         :type angle: Float
         """
-        print "def avancer"
         self.serieAsserInstance.ecrire("d")
         self.serieAsserInstance.ecrire(str(float(distance)))
         log.logger.info("Ordre d'avancer de " + str(float(distance)))
-        acquitement = False
+        acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
-        while not acquitement:
+        while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             if reponse == "FIN_MVT":
-                acquitement = True
+                acquittement = True
             elif reponse == "STOPPE":
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
-                capteur = self.capteurInstance.mesurer()
-                if capteur < self.maxCapt:
-                    print 'avancer : capteur !'
-                    return "obstacle"
-                elif int(self.timerAsserv.getTime()) - debut_timer > 8:
+                if int(self.timerAsserv.getTime()) - debut_timer > 8:
                     print "avancer : timeout !"
                     return "timeout"
+                elif distance > 0 :
+                    capteur = self.capteurInstance.mesurer()
+                    if capteur < self.maxCapt:
+                        print 'avancer : capteur !'
+                        return "obstacle"
+                
             time.sleep(0.05)
                 
         return "acquittement"
@@ -171,23 +188,16 @@ class Asservissement:
     def getPosition(self):
         while 42:
             try:
-                reponse = ""
-                while len(reponse)<9:
-                    print "ecrire...\n"
+                reponseX = ""
+                reponseY = ""
+                while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^([0-9]+)$", reponseY)):
                     self.serieAsserInstance.ecrire("pos")
-                    print "lecture...\n"
-                    reponse = self.serieAsserInstance.lire()
-                    print ">"+reponse+"<\n"
-                if reponse[4]== "+":
-                    reponse = reponse.split("+")
-                    pos = point.Point(float(reponse[1]),float(reponse[0]))
-                else:
-                    reponse = reponse.split("-")
-                    pos = point.Point(-float(reponse[1]),float(reponse[0]))
-                print "("+str(pos.x)+", "+str(pos.y)+")\n"
+                    reponseX = self.serieAsserInstance.lire()
+                    reponseY = self.serieAsserInstance.lire()
+                    print ">"+str(reponseX)+", "+str(reponseY)+"<\n"
+                pos = point.Point(float(reponseX),float(reponseY))
                 return pos
             except:
-                print "exception !"
                 pass
             
     def setPosition(self,position):
@@ -201,11 +211,8 @@ class Asservissement:
             try:
                 reponse = ""
                 while not re.match("^(-[0-9]+|[0-9]+)$", reponse):
-                    print "ecrire...\n"
                     self.serieAsserInstance.ecrire("eo")
-                    print "lecture...\n"
                     reponse = self.serieAsserInstance.lire()
-                    print ">"+reponse+"<\n"
                 orientation = float(reponse)/1000.0
                 #self.robotInstance.setOrientation(orientation)
                 return orientation
@@ -216,15 +223,17 @@ class Asservissement:
         self.serieAsserInstance.ecrire("co")
         self.serieAsserInstance.ecrire(str(float(orientation)))
         
+            
     def recalage(self):
         self.serieAsserInstance.ecrire("recal")
+        log.logger.info("début du recalage")
+        acquitement = False
         while not acquitement:
-            self.serieAsserInstance.ecrire('acq')
             reponse = self.serieAsserInstance.lire()
             if reponse == "FIN_REC":
-                print reponse
+                log.logger.info("fin du recalage")
                 acquitement = True
-            #TODO : gestion stop ?
+            time.sleep(0.05)
         
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -279,11 +288,11 @@ class Asservissement:
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
         
-    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False, numTentatives = 1):
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        et en facultatif une instruction "auStopNeRienFaire" ou "finir"
         """
         
         print "#avancer à "+str(distance)+", "+instruction
@@ -339,8 +348,8 @@ class Asservissement:
                 self.immobiliser()
                 #attente que la voie se libère
                 ennemi_en_vue = True
-                debut_timer = int(timerStrat.getTime())
-                while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
+                debut_timer = int(self.timerAsserv.getTime())
+                while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
                     capteur = self.capteurInstance.mesurer()
                     if capteur < self.maxCapt:
                         print 'gestionAvancer : capteur !'
@@ -368,53 +377,82 @@ class Asservissement:
                     self.changerVitesse("translation", 2)
                     
                 else:
-                    #mettre à jour l'attribut position du robot
-                    
                     #stopper l'execution du script parent
                     raise Exception
                 
         if retour == "stoppe" and instruction == "sansRecursion":
-            ##4
-            #mettre à jour l'attribut position du robot
-            
             #stopper l'execution du script parent
-            
             raise Exception
             
-        if retour == "stoppe" and instruction == "forcer":
-            ##5
+        if retour == "stoppe" and instruction == "finir":
             
-            #augmenter vitesse
-            self.changerVitesse("translation", 3)
+            if numTentatives <= 2:
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+            elif numTentatives == 3:
+                #reculer et tourner un peu
+                self.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+                orientation = self.getOrientation()
+                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire")
+                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire")
+                self.gestionTourner(orientation)
+                
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+            elif numTentatives == 4:
+                #replier un peu les bras
+                if hasattr(__builtin__.instance, 'actionInstance'):
+                    actionInstance = __builtin__.instance.actionInstance
+                    actionInstance.deplacer(110)
+                    time.sleep(0.5)
+                    actionInstance.deplacer(130)
+                    time.sleep(0.5)
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+            elif numTentatives >= 5:
+                #soucis
+                raise Exception
             
-            #finir le déplacement
-            posApres = self.getPosition()
-            dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-            if distance != 0:
-                signe = distance/abs(distance)
-            else:
-                signe = 1
-            self.gestionAvancer(distance-signe*dist)
-            
-            #remettre vitesse
-            self.changerVitesse("translation", 2)
-            
-            
-    def gestionTourner(self, angle, instruction = ""):
+    def gestionTourner(self, angle, instruction = "", avecGotoSegment = False):
         
         """
         méthode de haut niveau pour tourner le robot
         prend en paramètre l'angle à parcourir en radians
-        et en facultatif une instruction "auStopNeRienFaire" ou "forcer"
+        et en facultatif une instruction "auStopNeRienFaire" ou "finir"
+        ainsi qu'un booléen indiquant que la rotation est induite par un segment (ie : pas de symétrie selon la couleur)
         """
         
-        #l'angle spécifié dans les scripts est valable pour un robot violet.
-        if __builtin__.constantes['couleur'] == "r":
-            angle = math.pi - angle
-        if angle > math.pi:
-            angle = angle - 2*math.pi
-        if angle < -math.pi:
-            angle = angle + 2*math.pi
+        if not avecGotoSegment:
+            #l'angle spécifié dans les scripts est valable pour un robot violet.
+            if __builtin__.constantes['couleur'] == "r":
+                angle = math.pi - angle 
+
+        #angle dans ]-pi,pi]
+        while angle > math.pi:
+            angle -= 2*math.pi
+        while angle < -math.pi:
+            angle += 2*math.pi
         
         print "#tourner à "+str(angle)+", "+instruction
         
@@ -446,7 +484,7 @@ class Asservissement:
             #stopper l'execution du script parent
             raise Exception
             
-        if retour == "stoppe" and instruction == "forcer":
+        if retour == "stoppe" and instruction == "finir":
             ##5
             #augmenter vitesse
             self.changerVitesse("rotation", 3)
@@ -638,6 +676,10 @@ class Asservissement:
             else:
                 print "Il faut choisir une valeur contenue dans le menu."
                 
+    """
+    accesseurs direct au PWM pour la borne d'arcade
+    (nécessite un flash spécial)
+    """
     def moteurGauche(self, vitesse):
         self.serieAsserInstance.ecrire("pwmG")
         self.serieAsserInstance.ecrire(str(vitesse))

@@ -12,9 +12,7 @@ class Jumper :
     classe gérant le Jumper
     """
     
-    def __init__(self) :
-        self.endmsg = "\n\r"
-        
+    def __init__(self) :        
         if hasattr(__builtin__.instance, 'serieCaptInstance'):  
             self.demarrer()
         else:
@@ -30,7 +28,7 @@ class Jumper :
         Retourne l'état du Jumper (1 si enfoncé, 0 sinon)
         """
         while 1:
-            self.serieCaptInstance.ecrire("jumper")
+            self.serieCaptInstance.ecrire(";j")
             try :
                 return int(self.serieCaptInstance.lire())
             except :

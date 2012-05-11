@@ -21,7 +21,6 @@ class Balise : public Singleton<Balise>{
 		typedef Timer<1,ModeCounter,64> T_Asservissement;
 	private:
 		volatile uint32_t max_counter_;
-// 		volatile uint32_t toptour_;
 		typedef Timer<2,ModeFastPwm,1> T_2;
 		Moteur< T_2, AVR_PORTD<PORTD4> > moteur_;
 		Asservissement asservissement_moteur_;
@@ -31,10 +30,7 @@ class Balise : public Singleton<Balise>{
 		void asservir(int32_t vitesse_courante);
 		void max_counter(uint16_t valeur);
 		uint16_t max_counter();
-		uint32_t  getAngle(uint16_t offset);
-// 		void incremente_toptour();
-// 		void reset_toptour();
-// 		uint16_t toptour();
+		int16_t  getAngle(uint16_t offset);
 		
 };
 

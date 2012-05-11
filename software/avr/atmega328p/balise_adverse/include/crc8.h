@@ -3,7 +3,6 @@
 
 #include <avr/io.h>
 
-
 #define POLYNOMIAL  0x07
 
 void init_crc8();

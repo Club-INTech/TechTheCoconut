@@ -10,6 +10,7 @@
 #include "balise.h"
 #include "frame.h"
 #include "crc8.h"
+#include "watchdog.h"
 #include "utils.h"
 
 //Fonctions de modifications de bits
@@ -40,55 +41,126 @@ volatile int32_t codeur;
 volatile int32_t last_codeur = 0;
 
 int main() {
+	
 	Balise & balise = Balise::Instance();
-	init();
-	uint32_t rawFrame=0;
-    Balise::serial_pc::print("init");
+	
+	// En cas de reset par le watchdog
+	if (WDT_is_reset())
+	{
+		// Envoi du timeout au PC
+		Balise::serial_pc::print("timeout");
+	
+		// Désactivation du watchdog
+		WDT_off();
+	}
+	
+	init(); 
+    
 	while (1) {
 		char buffer[10];
 		Balise::Balise::serial_pc::read(buffer,10);
 		
 		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
 
+		//Ping
 		if(COMPARE_BUFFER("?",1)){
-// 			Balise::serial_pc::print(Balise::T_TopTour::value());
 			Balise::serial_pc::print(2);
 		}
 		
-		if(COMPARE_BUFFER("!",1)){
-			Balise::serial_radio::print_noln('?');
-// 			char buffer[10] = {0};
-// 			Balise::Balise::serial_radio::read(buffer,10);
-			Balise::serial_pc::print(Balise::serial_radio::read_int());
+		//Speed
+		if(COMPARE_BUFFER("s",1)){
+			Balise::serial_pc::print(balise.max_counter());
 		}
 		
+		//Laser off
+		if(COMPARE_BUFFER("loff",4)){
+		    cbi(TCCR0A,WGM00);
+		    cbi(TCCR0A,WGM01);
+		    cbi(TCCR0B,WGM02);
+		    cbi(TCCR0A,COM0A0);
+		    cbi(TCCR0A,COM0A1);
+		    Balise::serial_pc::print("laser off");
+		}
+		
+		//Laser on
+		if(COMPARE_BUFFER("lon",3)){
+		    cbi(TCCR0A,WGM00);
+		    sbi(TCCR0A,WGM01);
+		    cbi(TCCR0B,WGM02);
+		    sbi(TCCR0A,COM0A0);
+		    cbi(TCCR0A,COM0A1);
+		    Balise::serial_pc::print("laser on");
+		}		    
+
+		//Ping balise adverse
+		if(COMPARE_BUFFER("!",1)){
+			// Timeout pour la requête de 0,25s
+			WDT_set_prescaler();
+			
+			// Activation du watchdog en mode system reset
+			WDT_on();
+			
+			// Envoi du ping à la balise
+			Balise::serial_radio::print_noln('?');
+			Balise::serial_pc::print(Balise::serial_radio::read_int());
+			
+			// Désactivation du watchdog
+			WDT_off();
+		}
+		
+		//Table
+		if(COMPARE_BUFFER("t",1)){
+			// Timeout pour la requête de 0,25s
+			WDT_set_prescaler();
+			
+			// Activation du watchdog en mode system reset
+			WDT_on();
+			
+			// Envoi du ping à la balise
+			Balise::serial_radio::print_noln('t');
+			Balise::serial_pc::print(Balise::serial_radio::read_int());
+			
+			// Désactivation du watchdog
+			WDT_off();
+		}
+		
+		//Valeurs
 		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
-// 			Frame frame = 0;
 			int16_t n_demandes = 0;
 			int32_t distance;
 			int32_t offset = 0;
 			int32_t angle = 0;
-			int32_t crc = 0;
+			int32_t crc;
 			do{
+				// Timeout pour la requête de 0,25s
+				WDT_set_prescaler();
+			
+				// Activation du watchdog en mode system reset
+				WDT_on();
+				
+				// Envoi à la balise d'une demande de mise à jour
 				Balise::serial_radio::print_noln('v');
 				
 				//Calcul du temps des read pour correction de l'offset
 				int32_t t1 = Balise::T_TopTour::value();
 				distance = Balise::serial_radio::read_int();
 				offset = Balise::serial_radio::read_int();
-// 				crc = Balise::serial_radio::read_int();
+				crc = Balise::serial_radio::read_int();
 				int32_t t2 = Balise::T_TopTour::value();			
 				
 				if(t2 < t1){
 				  t2+=balise.max_counter();
 				}
-				angle = balise.getAngle(offset + (t2 - t1)*5/4);
-				
-// 				is_valid = (crc==crc8((distance << 16) + offset));
-                is_valid = true;
+ 				angle = balise.getAngle(offset + (t2 - t1)*5/4);
+				is_valid = (crc==((int32_t) crc8((distance << 16) + offset)));
+
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5);
+			
+			// Désactivation du watchdog
+			WDT_off();
+			
 			if(n_demandes==5){
 				Balise::serial_pc::print("ERREUR_CANAL");
 			}
@@ -99,7 +171,6 @@ int main() {
 			else{
 				char str[80] = {0};
 				char buff[20];
-// 				Balise::serial_pc::print(offset);
 				ltoa(1,buff,10);
 				strcat(str,buff);
 				strcat(str,".");
@@ -111,7 +182,13 @@ int main() {
 				Balise::serial_pc::print((const char *)str);
 			}
 		}
-		#undef COMPARE_BUFFER*/
+		
+		//Easter egg
+		if(COMPARE_BUFFER("troll",5)){
+			Balise::serial_pc::print("MER IL ET FOU ! ENKULE DE RIRE");
+		}
+		
+		#undef COMPARE_BUFFER
 	}
 	
 }
@@ -137,9 +214,11 @@ void init()
 	cbi(TCCR0B,CS02);
 	cbi(TCCR0B,CS01);
 	sbi(TCCR0B,CS00);
+	
 	//Seuil (cf formule datasheet)
 	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
-	OCR0A= 120;
+	// Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
+	OCR0A= 170;
 	
 	//Initialisation table pour crc8
 	init_crc8();
@@ -162,8 +241,11 @@ void init()
 	// Activer les interruptions
 	//PCICR |= (1 << PCIE0);
 	
-// 	sei();
+	sei();
 }
+
+
+
 
 ISR(TIMER1_OVF_vect)
 {
@@ -174,16 +256,14 @@ ISR(TIMER1_OVF_vect)
 
 ISR(TIMER3_OVF_vect)
 {
-// 	Balise::serial_pc::print(12);
-// 	Balise::Instance().incremente_toptour();
-// 	Balise::Instance().asservir(codeur - last_codeur);
 }
 
 //INT0
 ISR(INT0_vect)
 {
 	Balise & balise = Balise::Instance();
-	if(Balise::T_TopTour::value()>=30){
+	//On ignore les impulsions quand l'aimant est encore trop proche du capteur
+	if(Balise::T_TopTour::value()>=balise.max_counter()/3){
 		balise.max_counter(Balise::T_TopTour::value());
 		Balise::T_TopTour::value(0);
 	}

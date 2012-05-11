@@ -11,126 +11,229 @@ import instance
 import __builtin__
 import math
 from outils_math.point import Point
-
+import lib.log
+log =lib.log.Log(__name__)
 
 if hasattr(__builtin__.instance, 'asserInstance'):
     asserInstance = __builtin__.instance.asserInstance
+else:
+    log.logger.error("console $0p@l1z7 : ne peut importer instance.asserInstance")
 if hasattr(__builtin__.instance, 'actionInstance'):
     actionInstance = __builtin__.instance.actionInstance
+else:
+    log.logger.error("console $0p@l1z7 : ne peut importer instance.actionInstance")
+
+def scriptTotem():
+    asserInstance.goTo(Point(0.,660.))
+    #début notre totem sud
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(110)
+    time.sleep(0.5)
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     
-
-a = Point(200.0,200.0)
-b = Point(300.0,500.0) 
-
-"""
-while True:
-    a.x = float(raw_input("x ?"))
-    a.y = float(raw_input("y ?"))
-    asserInstance.goToSegment(a)
-"""
+    #mettre dans la cale
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(130)
+    time.sleep(0.2)
+    actionInstance.deplacer(110)
+    time.sleep(0.2)
+    actionInstance.deplacer(130)
+    asserInstance.changerVitesse("translation", 3)
+    asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    asserInstance.changerVitesse("translation", 2)
+    asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(0)
+    asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
     
-
-"""
-raw_input("?")
-asserInstance.avancer(100)
-raw_input("?")
-asserInstance.goToSegment(a)
-raw_input("?")
-asserInstance.goToSegment(b)
-raw_input("?")
-"""
-
+    """
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(400,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(80)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(0)
+    asserInstance.gestionTourner(math.pi/2)
+    actionInstance.deplacer(100)
+    time.sleep(0.5)
+    
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0)
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-100,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(500,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-300)
+    actionInstance.deplacer(0)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(math.pi/2)
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0)
+    asserInstance.gestionAvancer(150,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-150,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(0)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(math.pi/2)
+    asserInstance.goTo(Point(850.,1600.))
+    asserInstance.changerVitesse("translation", 3)
+    asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
+    asserInstance.changerVitesse("translation", 2)
+    asserInstance.gestionAvancer(500,instruction = "auStopNeRienFaire")
+    
+    
+    #asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    #actionInstance.deplacer(80)
+    #time.sleep(0.5)
+    
+    #asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
+    #actionInstance.deplacer(0)
+    #time.sleep(0.5)
+    """
+    
+    
+    
 def console():
-    print "### bienvenue dans la console $0p@l1z7 ###"
-    print "exit ou ? pour sortir |     goto avec g     |   orienter avec z,q,s,d "
-    print "avancer avec u -> p   | reculer avec j -> m | déplacer bras avec w -> n"
+    print "            ~~###~~ bienvenue dans la console $0p@1!z7 ~~###~~"
+    print "exit ou ? pour sortir |  a : lancer script   | e : enregistrer derniere action  "
+    print "avancer avec u -> p   | reculer avec j -> m  | ; : ! vitesses translation"
+    print "             orienter avec z,q,s,d | r,t,y : vitesses rotation  "
+    print "                 g : goto position | déplacer bras avec w -> n "             
     
     #position initiale du robot
-    asserInstance.setPosition(Point(0,400))
+    asserInstance.setPosition(Point(70,400))
+    asserInstance.setOrientation(0)
+    
+    #enregistrement du script
+    macro = ""
     
     while True:
         try:
             ordre = raw_input(">>")
             if ordre == "?" or ordre == "exit" :
+                print "script enregistré : \n\n"+macro+"\n"
                 break
             elif ordre == "g":
                 x = raw_input("x ?")
                 y = raw_input("y ?")
                 dest = Point(float(x),float(y)) 
                 asserInstance.goTo(dest)
+                current = "asserInstance.goTo(Point("+str(float(dest.x))+", "+str(float(dest.y))+"))\n"
             elif ordre == "q":
-                asserInstance.gestionTourner(3.14)
+                asserInstance.gestionTourner(3.14,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionTourner(3.14,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "s":
-                asserInstance.gestionTourner(-1.57)
+                asserInstance.gestionTourner(-1.57,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionTourner(-1.57,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "d":
-                asserInstance.gestionTourner(0)
+                asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionTourner(0,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "z":
-                asserInstance.gestionTourner(1.57)
+                asserInstance.gestionTourner(1.57,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionTourner(1.57,instruction = \"auStopNeRienFaire\")\n"
                 
             elif ordre == "u":
-                asserInstance.gestionAvancer(100)
+                asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(100,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "j":
-                asserInstance.gestionAvancer(-100)
-                
+                asserInstance.gestionAvancer(-100,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(-100,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "i":
-                asserInstance.gestionAvancer(200)
+                asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(200,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "k":
-                asserInstance.gestionAvancer(-200)
-                
+                asserInstance.gestionAvancer(-200,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(-200,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "o":
-                asserInstance.gestionAvancer(300)
+                asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(300,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "l":
-                asserInstance.gestionAvancer(-300)
-                
+                asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(-300,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "p":
-                asserInstance.gestionAvancer(400)
+                asserInstance.gestionAvancer(400,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(400,instruction = \"auStopNeRienFaire\")\n"
             elif ordre == "m":
-                asserInstance.gestionAvancer(-400)
+                asserInstance.gestionAvancer(-400,instruction = "auStopNeRienFaire")
+                current = "asserInstance.gestionAvancer(-400,instruction = \"auStopNeRienFaire\")\n"
                 
             elif ordre == "n":
                 actionInstance.deplacer(180)
+                current = "actionInstance.deplacer(180)\n"
             elif ordre == "b":
                 actionInstance.deplacer(130)
+                current = "actionInstance.deplacer(130)\n"
             elif ordre == "v":
                 actionInstance.deplacer(120)
+                current = "actionInstance.deplacer(120)\n"
             elif ordre == "c":
                 actionInstance.deplacer(110)
+                current = "actionInstance.deplacer(110)\n"
             elif ordre == "x":
                 actionInstance.deplacer(100)
+                current = "actionInstance.deplacer(100)\n"
             elif ordre == "w":
                 actionInstance.deplacer(0)
+                current = "actionInstance.deplacer(0)\n"
+                
+            #vitesses rotation
+            elif ordre == "r":
+                asserInstance.changerVitesse("rotation", 1)
+                current = "asserInstance.changerVitesse(\"rotation\", 1)\n"
+            elif ordre == "t":
+                asserInstance.changerVitesse("rotation", 2)
+                current = "asserInstance.changerVitesse(\"rotation\", 2)\n"
+            elif ordre == "y":
+                asserInstance.changerVitesse("rotation", 3)
+                current = "asserInstance.changerVitesse(\"rotation\", 3)\n"
+                
+            #vitesses translation
+            elif ordre == ";":
+                asserInstance.changerVitesse("translation", 1)
+                current = "asserInstance.changerVitesse(\"translation\", 1)\n"
+            elif ordre == ":":
+                asserInstance.changerVitesse("translation", 2)
+                current = "asserInstance.changerVitesse(\"translation\", 2)\n"
+            elif ordre == "!":
+                asserInstance.changerVitesse("translation", 3)
+                current = "asserInstance.changerVitesse(\"translation\", 3)\n"
+                
+            elif ordre == "a":
+                scriptTotem()
+            
+            elif ordre == "e":
+                macro += current
+                current = ""
+                
             else:
                 try:
                     actionInstance.deplacer(int(ordre))
+                    current = "actionInstance.deplacer("+str(int(ordre))+")\n"
                 except:
                     pass
+                
         except:
             print "--- exception levée ---"
 
 console()
-        
-"""
-asserInstance.gestionAvancer(100)
-asserInstance.gestionAvancer(300)
-raw_input("?")
-asserInstance.gestionTourner(1.57)
-raw_input("?")
-asserInstance.gestionAvancer(400)
-asserInstance.gestionTourner(0.0)
-raw_input("?")
-asserInstance.gestionTourner(math.pi)
-raw_input("?")
-asserInstance.gestionTourner(-1.57)
-asserInstance.gestionAvancer(400)
-raw_input("?")
-asserInstance.gestionAvancer(200)
-asserInstance.gestionAvancer(-200)
-asserInstance.gestionAvancer(-200)
-asserInstance.gestionAvancer(200)
-raw_input("?")
-asserInstance.gestionTourner(math.pi)
-asserInstance.gestionTourner(0)
-asserInstance.gestionTourner(1.57)
-asserInstance.gestionTourner(0)
-raw_input("?")
-"""

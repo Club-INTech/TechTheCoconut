@@ -4,13 +4,13 @@
 * CRC-8-WCDMA
 */
 
-Crc crc8_table[256];
+uint8_t crc8_table[256];
 
 //Fonction d'initialisation nécessaire au calcul rapide de crc
 void init_crc8()
 {
 	int i,j;
-	Crc crc;
+	uint8_t crc;
 
 	for (i=0; i<256; i++) 
 	{
@@ -22,17 +22,17 @@ void init_crc8()
 }
 
 //Fast CRC calculation
-void crc8_byte(Crc *crc, uint8_t byte)
+void crc8_byte(uint8_t *crc, uint8_t byte)
 {
 	*crc = crc8_table[(*crc) ^ byte];
 	*crc &= 0xFF;
 }
 
 
-Crc crc8(Data data)
+uint8_t crc8(int32_t data)
 {
 	unsigned int i,s=sizeof(data);
-	Crc crc=0;
+	uint8_t crc=0;
 	uint8_t byte=0;
 	
 	for(i=s;i>0;i--)

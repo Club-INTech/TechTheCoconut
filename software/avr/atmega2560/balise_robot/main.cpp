@@ -94,7 +94,7 @@ int main() {
 			}
 			else if(distance==0){
 				//Distance écrasée par le timeout côté balise (distance périmée).
-				Balise::serial_pc::print("NON_VISIBLE"); 
+				Balise::serial_pc::print("NON"); 
 			}
 			else{
 				char str[80] = {0};

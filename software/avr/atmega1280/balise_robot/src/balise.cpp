@@ -13,16 +13,19 @@ uint16_t Balise::max_counter(){
 	return max_counter_;
 }
 
-uint32_t Balise::getAngle(uint16_t offset) {
-// 	return max_counter_;
+int16_t Balise::getAngle(uint16_t offset) {
+	if(max_counter_==0)
+	  return -1;
+	
+	//temps à soustraire de l'angle pour avoir la valeur au moment du passage du laser
 	int32_t diff = ((int32_t)Balise::T_TopTour::value() - (int32_t)offset*4/5);
+		
 	while(diff<0){ //Assez mystère...
 	  diff+=(int32_t)max_counter_;
 	}
-// 	return  (int32_t)offset*4/5;
+
 	return diff *(float)360/(float)max_counter_ ;
-// 	return max_counter_;
-// 	return (((int32_t)Balise::T_TopTour::value() - (int32_t)offset*16/20)%max_counter_)*360/max_counter_;
+
 }
 
 Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
@@ -44,17 +47,3 @@ void Balise::asservir(int32_t vitesse_courante)
 	moteur_.envoyerPwm(pwm);
 }
 
-// void Balise::incremente_toptour()
-// {
-// 	toptour_++;
-// }
-// 
-// void Balise::reset_toptour()
-// {
-// 	toptour_=1;
-// }
-// 
-// uint16_t Balise::toptour()
-// {
-// 	return toptour_;
-// }

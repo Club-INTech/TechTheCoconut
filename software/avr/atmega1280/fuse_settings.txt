@@ -1,3 +1,0 @@
-Remettre le fusible de l'arduino mega pour configuration sans bootloader
-
-avrdude -patmega2560 -cusbasp -e -Ulfuse:w:0xff:m -Uhfuse:w:0xd9:m -Uefuse:w:0xfd:m 

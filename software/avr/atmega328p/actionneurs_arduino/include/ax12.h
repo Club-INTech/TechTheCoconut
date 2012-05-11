@@ -7,7 +7,15 @@
 #ifndef ax12_h
 #define ax12_h
 
+/** @file avr/atmega324p/actionneurs/include/ax12.hpp
+ *  @brief Ce fichier crée les constantes bas niveau pour les actionneurs.
+ *  @author Thibaut ~MissFrance~
+ *  @date 05 mai 2012
+ */ 
+
+// Librairie standard.
 #include <stdint.h>
+#include <avr/io.h>
 
 #define AX12_MAX_SERVOS             18
 #define AX12_BUFFER_SIZE            32
@@ -93,31 +101,14 @@
 
 typedef unsigned char byte;
 
-void ax12Init(long baud);
+void AX12_Serial_Init(long baud);
 
-byte ping (byte id);
-byte reset (byte id);
-byte readData (byte id, byte regstart, byte reglength);
-byte writeData (byte id, byte regstart, byte reglength, int value);
+void ping (byte id);
+void reset (byte id);
+void writeData (byte id, byte regstart, byte reglength, int value);
 
 extern int status_id;
 extern int status_error;
 extern int status_data;
-
-
-// extern volatile uint16_t ax_cons1;
-// extern volatile uint16_t ax_cons2;
-
-/*
- *  Fonctions pour les AX12
- *    ID : ID du servo
- *    angleCW : angle max antitrigo
- *    angleCCW : angle max trigo
- *    angle : consigne en angle
- *    vitesse : vitesse de rotation
- */
-void AX12Init (uint8_t ID, uint16_t angleCW, uint16_t angleCCW, uint16_t vitesse);
-void AX12GoTo (uint8_t ID, uint16_t angle);
-
 
 #endif

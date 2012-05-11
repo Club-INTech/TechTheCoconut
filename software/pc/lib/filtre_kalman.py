@@ -4,12 +4,13 @@ import numpy
 
 class FiltreKalman:
   
-  def __init__(self,x,P,F,H,R):
+  def __init__(self,x,P,F,H,R,Q):
     self.x = x
     self.P = P
     self.F = F
     self.H = H
     self.R = R
+    self.Q = Q
     
   def filtrer(self, Z, u = None):
     # Anthony : On ne peut pas utiliser self dans les arguments par défaut
@@ -18,7 +19,7 @@ class FiltreKalman:
         u = numpy.zeros(self.x.shape[0])[:, numpy.newaxis]
     # prediction
     self.x = (self.F * self.x) + u
-    self.P = self.F * self.P * self.F.transpose()
+    self.P = self.F * self.P * self.F.transpose() + self.Q
     
     # measurement update
     y = Z - (self.H * self.x)
