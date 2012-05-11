@@ -28,7 +28,7 @@ class Jumper :
         Retourne l'état du Jumper (1 si enfoncé, 0 sinon)
         """
         while 1:
-            self.serieCaptInstance.ecrire("jumper")
+            self.serieCaptInstance.ecrire(";j")
             try :
                 return int(self.serieCaptInstance.lire())
             except :
