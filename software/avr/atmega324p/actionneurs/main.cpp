@@ -23,10 +23,6 @@
 #include <libintech/jumper.hpp>
 #include <libintech/ax12.hpp>
 
-// LIBRAIRIES LOCALES
-// #include "actionneurs.h"
-
-
 
 /********************************
  *           CONSTANTES         *
