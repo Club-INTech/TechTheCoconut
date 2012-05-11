@@ -114,7 +114,7 @@ class Script:
         asserv.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
         asserv.changerVitesse("translation",2)
         asserv.changerVitesse("rotation",2)
-        asserv.gestionAvancer(200)     # On avance vers lui
+        asserv.gestionAvancer(500)     # On avance vers lui
         asserv.gestionTourner(-1.57)    # On lui montre nos fesses
         asserv.gestionAvancer(-480,"auStopNeRienFaire")    # On recule pour lui mettre sa dose
         asserv.changerVitesse("translation",3)
