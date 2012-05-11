@@ -172,9 +172,25 @@ class Strategie():
         k2 = 1
         
         poids = []
+        
+        nomScripts = []
+        
         # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
         for i in range(len(self.actions)) :
-            poids.append(k1*self.actions[i][-1] + k2*distance)
+           # Ajout des nom de scripts.
+            if self.actions[i][0] == "FARMERTOTEM" :
+                nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
+            elif self.actions[i][0] == "ENFONCERPOUSSOIR":
+                nomScripts.append("self.scriptInstance.enfoncerPoussoir"+str(self.actions[i][1]))
+            elif self.actions[i][0] == "FAIRECHIERENNEMI" :
+                nomScripts.append("self.scriptInstance.fairechierEnnemi")
+            elif self.actions[i][0] == "TOURDETABLE" :
+                nomScripts.append("self.scriptInstance.tourDeTable")
+            elif self.actions[i][0] == "DEFENDRE":
+                nomScripts.append("self.scriptInstance.defendreBase")
+                
+            exec("temps_script = self.scriptInstance.gestionScript("+str(nomScripts[i])+", 1)")
+            poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
@@ -196,25 +212,7 @@ class Strategie():
         
         # Sinon, on prend l'action
         try :
-            if self.actions[maxID][0] == "FARMERTOTEM" :
-                exec ("self.scriptInstance.gestionScript(self.scriptInstance.rafflerTotem"+str(self.actions[maxID][1])+str(self.actions[maxID][2])+")")
-                self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
-                
-            elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
-                exec ("self.scriptInstance.gestionScript(enfoncerPoussoir"+str(self.actions[maxID][1])+")")
-                self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
-                
-            elif self.actions[maxID][0] == "FAIRECHIERENNEMI" :
-                self.scriptInstance.faireChierEnnemi()
-                self.changerPriorite("FAIRECHIERENNEMI", [], self.actions[maxID][-1]-0.01)
-                
-            elif self.actions[maxID][0] == "TOURDETABLE":
-                self.scriptInstance.tourDeTable()
-                self.changerPriorite("TOURDETABLE", [], self.actions[maxID][-1]-0.01)
-                
-            elif self.actions[maxID][0] == "DEFENDRE":
-                self.scriptInstance.defendreBase()
-                self.changerPriorite("DEFENDRE", [], self.actions[maxID][-1]-0.01)
+            exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
         except :
             log.logger.error("La stratégie ne peut pas lancer d'actions")
         
