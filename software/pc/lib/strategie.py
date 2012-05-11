@@ -145,9 +145,9 @@ class Strategie():
         """
         log.logger.info("Initialisation des actions à faire")
         self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
-        self.actions.append(["FARMERTOTEM", 0, 1,   9.9 ])
-        self.actions.append(["FARMERTOTEM", 1, 0,   9   ])
-        self.actions.append(["FARMERTOTEM", 1, 1,   9   ])
+        self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
+        self.actions.append(["FARMERTOTEM", 1, 0,   10  ])
+        self.actions.append(["FARMERTOTEM", 1, 1,   10  ])
         
         self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
         self.actions.append(["ENFONCERPOUSSOIR", 2, 5])
@@ -165,11 +165,8 @@ class Strategie():
         """
         CETTE FONCTION PERMET A LA STRATEGIE DE CHOISIR QUELLE ACTION CHOISIR
         """
-
         
-        # TODO
         # TODO associer la distance courante à celle de la balise.
-        # TODO
         distance = 1
         
         # Poids du coefficient Nombre de Points / Durée
@@ -184,7 +181,7 @@ class Strategie():
             poids.append(k1*self.actions[i][-1] + k2*distance)
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
-        # déjà fait. Ex : On a déjà farmé le totem.
+        # déjà fait. Ex : On a déjà farmé le totem.)
         max = 0
         maxID = -1
         
@@ -204,11 +201,11 @@ class Strategie():
         # Sinon, on prend l'action
         try :
             if self.actions[maxID][0] == "FARMERTOTEM" :
-                self.scriptInstance.rafflerTotem(self.actions[maxID][1], self.actions[maxID][2])
+                exec ("self.scriptInstance.rafflerTotem"+str(self.actions[maxID][1])+str(self.actions[maxID][2])+"()")
                 self.changerPriorite("FARMERTOTEM", [self.actions[maxID][1], self.actions[maxID][2]], -1)
                 
             elif self.actions[maxID][0] == "ENFONCERPOUSSOIR" :
-                self.scriptInstance.enfoncerPoussoir(self.actions[maxID][1])
+                exec ("self.scriptInstance.enfoncerPoussoir"+str(self.actions[maxID][1])+"()")
                 self.changerPriorite("ENFONCERPOUSSOIR", [self.actions[maxID][1]], -1)
                 
             elif self.actions[maxID][0] == "FAIRECHIERENNEMI" :

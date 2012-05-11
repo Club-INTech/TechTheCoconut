@@ -12,9 +12,7 @@ class Jumper :
     classe gérant le Jumper
     """
     
-    def __init__(self) :
-        self.endmsg = "\n\r"
-        
+    def __init__(self) :        
         if hasattr(__builtin__.instance, 'serieCaptInstance'):  
             self.demarrer()
         else:

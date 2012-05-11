@@ -228,59 +228,41 @@ class Script:
 ####################################      Scripts de décision (marquent des points)       ##########################
 ####################################################################################################################
 
-    def rafflerTotem(self, ennemi = False, nord = False, versLaCalle = True) :
-        """
-        (Thibaut)
-        
-        Le robot se déplace de façon à raffler un totem
-        
-        :param ennemi: A mettre à True si on veut raffler le totem ennemi
-        :type ennemi: Bool
-        
-        :param nord: Partie Nord ou Sud du Totem qu'on veut raffler
-        :type nord: Bool
-        
-        :param versLaCalle: A changer si on veut Parcourir le totem de D à G ou l'inverse
-        :type versLaCalle: Bool        
-        
-        """
+    #----------------------#
+    #        TOTEMS        #
+    #----------------------#
+    
+    # Rafflage de notre totem côté sud (y petits)
+    def rafflerTotem00(self) :
         log.logger.info("Rafflage de totem en cours")
+        pass
+    
+    # Rafflage de notre totem côté nord (y grands)
+    def rafflerTotem01(self) :
+        log.logger.info("Rafflage de totem en cours")
+        pass
         
-        if not ennemi and not nord :
-            self.actionInstance.deplacer(10)
-            #self.asserInstance.goTo(Point(-50, 255))
-            #self.asserInstance.gestionTourner(0)
-            
-            self.actionInstance.deplacer(150)
-            #self.asserInstance.gestionAvancer(510)
-            time.sleep(1)
-            self.actionInstance.deplacer(75)
-            #self.asserInstance.gestionTourner(0.535)
-            #self.asserInstance.gestionAvancer(665)
-            #self.asserInstance.gestionTourner(0)
-            #self.asserInstance.gestionAvancer(-450)
-            self.actionInstance.deplacer(10)
-            
-        #if not ennemi and nord :
-            #self.actionInstance(
+    # Rafflage du totem ennemi côté sud (y petits)
+    def rafflerTotem10(self) :
+        log.logger.info("Rafflage de totem en cours")
+        pass
+    
+    # Rafflage du totem ennemi, côté Nord.
+    def rafflerTotem11(self) :
+        log.logger.info("Rafflage de totem en cours")
+        pass
     
     
-    def enfoncerPoussoir(self, idPoussoir) :
-        """
-        (Thibaut)
-        Made by Anthony
+    #----------------------#
+    #   BOUTONS POUSSOIR   #
+    #----------------------#
+    
+    # Poussoir côté chez nous.
+    def enfoncerPoussoir0(self, idPoussoir) :
         
-        Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
-        
-        :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
-        :type idPoussoir: int
-        """
-        log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" en cours")
+        log.logger.info("Enfonçage du poussoir à nous en cours")
         self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la position
-        if idPoussoir == 0:
-            self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
-        elif idPoussoir == 1:
-            self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
         self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         self.asserInstance.gestionAvancer(290) # on avance au point de rotation
         self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
@@ -288,14 +270,35 @@ class Script:
         self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
         self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
         self.asserInstance.gestionAvancer(450)    # On se barre.
-        log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" fini")
+        log.logger.info("Enfonçage du poussoir à nous fini")
         
+    # Poussoir côté ennemi.
+    def enfoncerPoussoir1(self, idPoussoir) :
+        
+        log.logger.info("Enfonçage du poussoir ennemi en cours")
+        self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
+        self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
+        self.asserInstance.gestionAvancer(290) # on avance au point de rotation
+        self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
+        self.asserInstance.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
+        self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
+        self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
+        self.asserInstance.gestionAvancer(450)    # On se barre.
+        log.logger.info("Enfonçage du poussoir ennemi fini")
+        
+        
+    #----------------------#
+    #       ANNEXES        #
+    #----------------------#
+    
         
     def faireChierEnnemi(self) :
         """
         Comment va-t-on bien faire chier l'ennemi ?
         """
         log.logger.info("C'est parti, on farme l'ennemi !")
+        pass
         
     def tourDeTable(self) :
         """
