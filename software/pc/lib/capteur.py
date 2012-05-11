@@ -56,7 +56,7 @@ class Capteur():
             self.serieCaptActionneurInstance.ecrire(";s")
             mesure = int(self.serieCaptActionneurInstance.lire())
             try:
-                if(string(mesure) == "norespone"):
+                if(string(mesure) == "norespone") or mesure < 0:
                     mesure = 0
             except:
                 pass
@@ -70,7 +70,7 @@ class Capteur():
         try:
             self.serieCaptActionneurInstance.ecrire(";i")
             mesure = int(self.serieCaptActionneurInstance.lire())
-            if mesure > 1000:
+            if mesure > 1000 or mesure < 0:
                 mesure = 0
             print "infrarouge : >"+str(mesure)+"<"
             self.listInfrarouge.append(mesure)
