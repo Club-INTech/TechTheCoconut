@@ -9,10 +9,10 @@ template<uint16_t bit>
 struct AVR_PORTD
 {
     static void set_input(){
-        DDRD |= (1 << bit);
+        DDRD &= ~(1 << bit);
     }
     static void set_output(){
-        DDRD &= ~(1 << bit);
+        DDRD |= (1 << bit);
     }
     static void set(){
         PORTD |= (1 << bit);
@@ -30,11 +30,11 @@ template<uint16_t bit>
 struct AVR_PORTC
 {
     static void set_input(){
-        DDRC  |= (1 << bit);
+        DDRC  &= ~(1 << bit);
     }
     
     static void set_output(){
-        DDRC &= ~(1 << bit);
+        DDRC |= (1 << bit);
     }
     
     static void set(){
@@ -57,11 +57,11 @@ template<uint16_t bit>
 struct AVR_PORTB
 {
     static void set_input(){
-        DDRB  |= (1 << bit);
+        DDRB  &= ~(1 << bit);
     }
     
     static void set_output(){
-        DDRB &= ~(1 << bit);
+        DDRB |= (1 << bit);
     }
     
     static void set(){

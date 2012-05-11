@@ -43,7 +43,7 @@ class Asservissement:
             log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
             
         #distance seuil de detection pour les ultrasons
-        self.maxCapt = -50000#400
+        self.maxCapt = 400
         
         #couleur du robot
         if __builtin__.constantes['couleur'] == "r":
@@ -172,13 +172,15 @@ class Asservissement:
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
-                capteur = self.capteurInstance.mesurer()
-                if capteur < self.maxCapt:
-                    print 'avancer : capteur !'
-                    return "obstacle"
-                elif int(self.timerAsserv.getTime()) - debut_timer > 8:
+                if int(self.timerAsserv.getTime()) - debut_timer > 8:
                     print "avancer : timeout !"
                     return "timeout"
+                elif distance > 0 :
+                    capteur = self.capteurInstance.mesurer()
+                    if capteur < self.maxCapt:
+                        print 'avancer : capteur !'
+                        return "obstacle"
+                
             time.sleep(0.05)
                 
         return "acquittement"
@@ -346,8 +348,8 @@ class Asservissement:
                 self.immobiliser()
                 #attente que la voie se libère
                 ennemi_en_vue = True
-                debut_timer = int(timerStrat.getTime())
-                while ennemi_en_vue and (int(timerStrat.getTime()) - debut_timer) < 4 :
+                debut_timer = int(self.timerAsserv.getTime())
+                while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
                     capteur = self.capteurInstance.mesurer()
                     if capteur < self.maxCapt:
                         print 'gestionAvancer : capteur !'

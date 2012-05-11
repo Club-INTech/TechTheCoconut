@@ -1,0 +1,23 @@
+
+        Message envoyé      |    Arguments          |      Action effectuée
+    ------------------------|-----------------------|----------------------------------------
+             ?              |           /           |       Ping  (répond "3")
+             !              |           /           |       Message perso
+    ------------------------|-----------------------|----------------------------------------
+              i             |                       |   Initialise les AX12
+            GOTO            |    +id    +angle      |   Modifie l'angle d'un AX12
+              g             |           +angle      |   Modifie l'angle de tous les AX12
+           CH_VIT           |    +id    +vitesse    |   Change la vitesse d'un AX12
+              c             |           +vitesse    |   Change la vitesse de tous les AX12
+              u             |    +id                |   Désasservissement d'un AX12
+    ------------------------|-----------------------|----------------------------------------
+            ;i              |                       |   Renvoie la valeur du capteur infrarouge (mm)
+            ;i_             |                       |   Renvoie la valeur brut du capteur infra (bof)
+            ;s              |                       |   Renvoie la valeur du capteur SRF, ou "noresponse"
+                            |                       |      si il y a un problème.
+            ;j              |                       |   Renvoie la valeur du jumper ( 0 / 1 )
+            ;u              |                       |   Renvoie la valeur du capteur ultrason (MAXtronic,
+                            |                       |       normalement pas utilisés à la coupe 
+                            |                       |       de France).
+    ------------------------|-----------------------|------------------------------------------
+

@@ -506,8 +506,11 @@ void Robot::gestion_blocage()
 	{
 
 		if(compteurBlocage==20){
-			stopper();
-			est_bloque_ = true;
+			if (not est_stoppe())
+			{
+				stopper();
+				est_bloque_ = true;
+			}
 			compteurBlocage=0;
 		}
 		else{

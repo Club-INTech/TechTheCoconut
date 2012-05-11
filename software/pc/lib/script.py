@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 
 import log
 import sys
@@ -25,6 +25,7 @@ class Script:
             self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
         else:
             log.logger.error("script : ne peut importer instance.asserInstanceDuree")
+            
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
@@ -33,7 +34,10 @@ class Script:
             self.actionInstance = __builtin__.instance.actionInstance
         else:
             log.logger.error("script : ne peut importer instance.actionInstance")
-    
+        if hasattr(__builtin__.instance, 'actionInstanceSimu'):
+            self.actionInstanceSimu = __builtin__.instance.actionInstanceSimu
+        else:
+            log.logger.error("script : ne peut importer instance.actionInstanceSimu")
         self.couleur = __builtin__.constantes["couleur"]
         
         
@@ -53,45 +57,51 @@ class Script:
         if chrono:
             #instance pour le calcul de durée
             asserv = self.asserInstanceDuree
+            action = self.actionInstanceSimu
             #initialisations
             if hasattr(__builtin__.instance, 'serieAsserInstance'):
                 asserv.setPosition(self.asserInstance.getPosition())
                 asserv.setOrientation(self.asserInstance.getOrientation())
-            
+            else :
+                #NOTE : pour tests (sans série)
+                asserv.setPosition(Point(70,400))
+                asserv.setOrientation(0)
+                
             #début du calcul de durée du script
             asserv.lancerChrono()
         else:
             #instance pour les déplacements réels
             asserv = self.asserInstance
+            action = self.actionInstance
             
         #vitesses normales
         asserv.changerVitesse("rotation",2)
         asserv.changerVitesse("translation",2)
-        try :
-            #execution du script
-            script(asserv)
-            if chrono:
-                #retour de la durée totale d'execution du script
-                return asserv.mesurerChrono()
-            else:
-                #bon déroulement du script (pour des déplacements réels)
-                return True
-        except :
+        #try :
+        #execution du script
+        script(asserv,action)
+        if chrono:
+            #retour de la durée totale d'execution du script
+            return asserv.mesurerChrono()
+        else:
+            #bon déroulement du script (pour des déplacements réels)
+            return True
+        #except :
             #spécifie un déroulement problématique
-            return False
+        return False
             
 ####################################################################################################################
 ###########################################     SCRIPTS SPECIAUX      ##############################################
 ####################################################################################################################
 
 
-    def recalage(self, asserv):
+    def recalage(self, asserv,action):
         """
         Fonction permettant de recaller le robot dans un coin de la table
         """
         asserv.recalage()
         
-    def homologation(self, asserv):
+    def homologation(self, asserv,action):
         #stocke le lingot et enfonce un poussoir
         asserv.changerVitesse("translation",1)
         asserv.changerVitesse("rotation",1)
@@ -114,7 +124,7 @@ class Script:
         asserv.gestionTourner(-1.57)    # réorientation du robot
         asserv.gestionAvancer(500)    # On se barre.
         
-    def etalonnageAsserv(self, asserv):
+    def etalonnageAsserv(self, asserv,action):
         pas = 0
         while True :
             print "modifier ?"
@@ -181,38 +191,84 @@ class Script:
 ###########################################      SCRIPTS DE TESTS     ##############################################
 ####################################################################################################################
 
-
-    def test1(self,asserv):
-        asserv.gestionAvancer(300,"forcer")
-        
-    def test2(self,asserv):
-        asserv.changerVitesse("translation",1)
-        asserv.gestionAvancer(300,"forcer")
+    def scriptTotem(self,asser,action):
+        asser.setPosition(Point(70,400))
+        asser.setOrientation(math.pi/2)
+        asser.goTo(Point(0.,660.))
+        #début notre totem sud
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        time.sleep(0.5)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        time.sleep(0.5)
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        #mettre dans la cale
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.2)
+        action.deplacer(110)
+        time.sleep(0.2)
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+        asser.goTo(Point(850.,1600.))
     
-    def test3(self,asserv):
+
+    def test1(self,asserv, action):
+        xd = raw_input("x départ? ")
+        yd = raw_input("y départ? ")
+        asserv.setPosition(Point(xd,yd))
+        asserv.setOrientation(math.pi/2)
+        xa = raw_input("x arrivée? ")
+        ya = raw_input("y arrivée? ")
+        asserv.goTo(Point(float(xa),float(ya)))
+        
+    def test2(self,asserv,action):
+        asserv.setPosition(Point(812,872))
+        asserv.setOrientation(math.pi/2)
+        asserv.goTo(Point(float(850),float(1600)))
+    
+    def test3(self,asserv,action):
         asserv.gestionTourner(math.pi/2)
         
-    def test4(self,asserv):
+    def test4(self,asserv,action):
         asserv.changerVitesse("rotation",3)
         asserv.gestionTourner(-math.pi/2)
         
-    def test5(self,asserv):
+    def test5(self,asserv,action):
         asserv.gestionAvancer(300)
         asserv.gestionAvancer(300)
         asserv.changerVitesse("rotation",3)
         asserv.gestionTourner(0)
         
-    def test6(self,asserv):
+    def test6(self,asserv,action):
         asserv.goTo(Point(800, 250))
         
-    def allerRetour(self, asserv):
+    def allerRetour(self, asserv,action):
         while 42:
             asserv.gestionAvancer(400)
             asserv.gestionTourner(0)
             asserv.gestionAvancer(400)
             asserv.gestionTourner(math.pi)
             
-    def testTourdeTable(self, asserv):
+    def testTourdeTable(self, asserv,action):
         #position initiale du robot
         asserv.setPosition(Point(0,400))
         while True:
@@ -228,59 +284,41 @@ class Script:
 ####################################      Scripts de décision (marquent des points)       ##########################
 ####################################################################################################################
 
-    def rafflerTotem(self, ennemi = False, nord = False, versLaCalle = True) :
-        """
-        (Thibaut)
-        
-        Le robot se déplace de façon à raffler un totem
-        
-        :param ennemi: A mettre à True si on veut raffler le totem ennemi
-        :type ennemi: Bool
-        
-        :param nord: Partie Nord ou Sud du Totem qu'on veut raffler
-        :type nord: Bool
-        
-        :param versLaCalle: A changer si on veut Parcourir le totem de D à G ou l'inverse
-        :type versLaCalle: Bool        
-        
-        """
+    #----------------------#
+    #        TOTEMS        #
+    #----------------------#
+    
+    # Rafflage de notre totem côté sud (y petits)
+    def rafflerTotem00(self) :
         log.logger.info("Rafflage de totem en cours")
+        pass
+    
+    # Rafflage de notre totem côté nord (y grands)
+    def rafflerTotem01(self) :
+        log.logger.info("Rafflage de totem en cours")
+        pass
         
-        if not ennemi and not nord :
-            self.actionInstance.deplacer(10)
-            #self.asserInstance.goTo(Point(-50, 255))
-            #self.asserInstance.gestionTourner(0)
-            
-            self.actionInstance.deplacer(150)
-            #self.asserInstance.gestionAvancer(510)
-            time.sleep(1)
-            self.actionInstance.deplacer(75)
-            #self.asserInstance.gestionTourner(0.535)
-            #self.asserInstance.gestionAvancer(665)
-            #self.asserInstance.gestionTourner(0)
-            #self.asserInstance.gestionAvancer(-450)
-            self.actionInstance.deplacer(10)
-            
-        #if not ennemi and nord :
-            #self.actionInstance(
+    # Rafflage du totem ennemi côté sud (y petits)
+    def rafflerTotem10(self) :
+        log.logger.info("Rafflage de totem en cours")
+        pass
+    
+    # Rafflage du totem ennemi, côté Nord.
+    def rafflerTotem11(self) :
+        log.logger.info("Rafflage de totem en cours")
+        pass
     
     
-    def enfoncerPoussoir(self, idPoussoir) :
-        """
-        (Thibaut)
-        Made by Anthony
+    #----------------------#
+    #   BOUTONS POUSSOIR   #
+    #----------------------#
+    
+    # Poussoir côté chez nous.
+    def enfoncerPoussoir0(self, idPoussoir) :
         
-        Le robot se déplace pour enfoncer le poussoir d'indice idPoussoir
-        
-        :param idPoussoir: Indice du poussoir, 0 = près de chez nous, 1 = loin de chez nous
-        :type idPoussoir: int
-        """
-        log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" en cours")
+        log.logger.info("Enfonçage du poussoir à nous en cours")
         self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la position
-        if idPoussoir == 0:
-            self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
-        elif idPoussoir == 1:
-            self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
         self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         self.asserInstance.gestionAvancer(290) # on avance au point de rotation
         self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
@@ -288,14 +326,35 @@ class Script:
         self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
         self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
         self.asserInstance.gestionAvancer(450)    # On se barre.
-        log.logger.info("Enfonçage du poussoir "+str(idPoussoir)+" fini")
+        log.logger.info("Enfonçage du poussoir à nous fini")
         
+    # Poussoir côté ennemi.
+    def enfoncerPoussoir1(self, idPoussoir) :
+        
+        log.logger.info("Enfonçage du poussoir ennemi en cours")
+        self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
+        self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
+        self.asserInstance.gestionAvancer(290) # on avance au point de rotation
+        self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
+        self.asserInstance.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
+        self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
+        self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
+        self.asserInstance.gestionAvancer(450)    # On se barre.
+        log.logger.info("Enfonçage du poussoir ennemi fini")
+        
+        
+    #----------------------#
+    #       ANNEXES        #
+    #----------------------#
+    
         
     def faireChierEnnemi(self) :
         """
         Comment va-t-on bien faire chier l'ennemi ?
         """
         log.logger.info("C'est parti, on farme l'ennemi !")
+        pass
         
     def tourDeTable(self) :
         """
@@ -338,7 +397,7 @@ sc = __builtin__.instance.scriptInstance
 sc.gestionScripts(sc.test1)
 sc.gestionScripts(sc.test1,True)
 
-def scriptPipeauNewStrategie(self, asserv):
+def scriptPipeauNewStrategie(self, asserv,action):
         #déplacements
         asserv.gestionAvancer(300)
         asserv.gestionAvancer(300,"forcer")
