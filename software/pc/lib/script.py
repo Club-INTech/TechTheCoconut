@@ -230,7 +230,8 @@ class Script:
         asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
         asser.goTo(Point(850.,1600.))
     
-    def test1(self,asserv,action):
+
+    def test1(self,asserv, action):
         xd = raw_input("x départ? ")
         yd = raw_input("y départ? ")
         asserv.setPosition(Point(xd,yd))
