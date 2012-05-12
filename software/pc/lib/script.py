@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 
 import log
 import sys
@@ -95,13 +95,13 @@ class Script:
 ####################################################################################################################
 
 
-    def recalage(self, asserv):
+    def recalage(self, asserv,action):
         """
         Fonction permettant de recaller le robot dans un coin de la table
         """
         asserv.recalage()
         
-    def homologation(self, asserv):
+    def homologation(self, asserv,action):
         #stocke le lingot et enfonce un poussoir
         asserv.changerVitesse("translation",1)
         asserv.changerVitesse("rotation",1)
@@ -114,7 +114,7 @@ class Script:
         asserv.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
         asserv.changerVitesse("translation",2)
         asserv.changerVitesse("rotation",2)
-        asserv.gestionAvancer(200)     # On avance vers lui
+        asserv.gestionAvancer(500)     # On avance vers lui
         asserv.gestionTourner(-1.57)    # On lui montre nos fesses
         asserv.gestionAvancer(-480,"auStopNeRienFaire")    # On recule pour lui mettre sa dose
         asserv.changerVitesse("translation",3)
@@ -124,7 +124,7 @@ class Script:
         asserv.gestionTourner(-1.57)    # réorientation du robot
         asserv.gestionAvancer(500)    # On se barre.
         
-    def etalonnageAsserv(self, asserv):
+    def etalonnageAsserv(self, asserv,action):
         pas = 0
         while True :
             print "modifier ?"
@@ -230,6 +230,7 @@ class Script:
         asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
         asser.goTo(Point(850.,1600.))
     
+
     def test1(self,asserv, action):
         xd = raw_input("x départ? ")
         yd = raw_input("y départ? ")
@@ -239,34 +240,35 @@ class Script:
         ya = raw_input("y arrivée? ")
         asserv.goTo(Point(float(xa),float(ya)))
         
-    def test2(self,asserv):
-        asserv.changerVitesse("translation",1)
-        asserv.gestionAvancer(300,"forcer")
+    def test2(self,asserv,action):
+        asserv.setPosition(Point(812,872))
+        asserv.setOrientation(math.pi/2)
+        asserv.goTo(Point(float(850),float(1600)))
     
-    def test3(self,asserv):
+    def test3(self,asserv,action):
         asserv.gestionTourner(math.pi/2)
         
-    def test4(self,asserv):
+    def test4(self,asserv,action):
         asserv.changerVitesse("rotation",3)
         asserv.gestionTourner(-math.pi/2)
         
-    def test5(self,asserv):
+    def test5(self,asserv,action):
         asserv.gestionAvancer(300)
         asserv.gestionAvancer(300)
         asserv.changerVitesse("rotation",3)
         asserv.gestionTourner(0)
         
-    def test6(self,asserv):
+    def test6(self,asserv,action):
         asserv.goTo(Point(800, 250))
         
-    def allerRetour(self, asserv):
+    def allerRetour(self, asserv,action):
         while 42:
             asserv.gestionAvancer(400)
             asserv.gestionTourner(0)
             asserv.gestionAvancer(400)
             asserv.gestionTourner(math.pi)
             
-    def testTourdeTable(self, asserv):
+    def testTourdeTable(self, asserv,action):
         #position initiale du robot
         asserv.setPosition(Point(0,400))
         while True:
@@ -395,7 +397,7 @@ sc = __builtin__.instance.scriptInstance
 sc.gestionScripts(sc.test1)
 sc.gestionScripts(sc.test1,True)
 
-def scriptPipeauNewStrategie(self, asserv):
+def scriptPipeauNewStrategie(self, asserv,action):
         #déplacements
         asserv.gestionAvancer(300)
         asserv.gestionAvancer(300,"forcer")
