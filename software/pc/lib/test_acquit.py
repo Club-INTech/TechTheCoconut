@@ -60,6 +60,8 @@ def scriptTotem():
     actionInstance.deplacer(0)
     asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
     
+    
+    
     """
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
