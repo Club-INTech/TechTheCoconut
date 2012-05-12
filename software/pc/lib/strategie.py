@@ -227,7 +227,8 @@ class Strategie():
             log.logger.info("ZUT ALORS ! Plus d'actions à faire")
             return
         
-        
+            print "#######################" + str(nomScripts[maxID])
+
         # Sinon, on prend l'action
         try :
             #exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
