@@ -17,12 +17,12 @@ class Script:
     
     def __init__(self):
         if hasattr(__builtin__.instance, 'asserInstance'):
-            self.asserInstance = __builtin__.instance.asserInstance
+            self.asserv = __builtin__.instance.asserInstance
         else:
             log.logger.error("script : ne peut importer instance.asserInstance")
             
         if hasattr(__builtin__.instance, 'asserInstanceDuree'):
-            self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
+            self.asservDuree = __builtin__.instance.asserInstanceDuree
         else:
             log.logger.error("script : ne peut importer instance.asserInstanceDuree")
             
@@ -31,13 +31,13 @@ class Script:
         else:
             log.logger.error("script : ne peut importer instance.robotInstance")
         if hasattr(__builtin__.instance, 'actionInstance') :
-            self.actionInstance = __builtin__.instance.actionInstance
+            self.action = __builtin__.instance.actionInstance
         else:
             log.logger.error("script : ne peut importer instance.actionInstance")
-        if hasattr(__builtin__.instance, 'actionInstanceSimu'):
-            self.actionInstanceSimu = __builtin__.instance.actionInstanceSimu
+        if hasattr(__builtin__.instance, 'actionSimu'):
+            self.actionSimu = __builtin__.instance.actionSimu
         else:
-            log.logger.error("script : ne peut importer instance.actionInstanceSimu")
+            log.logger.error("script : ne peut importer instance.actionSimu")
         self.couleur = __builtin__.constantes["couleur"]
         
         
@@ -56,12 +56,12 @@ class Script:
         
         if chrono:
             #instance pour le calcul de durée
-            asserv = self.asserInstanceDuree
-            action = self.actionInstanceSimu
+            asserv = self.asservDuree
+            action = self.actionSimu
             #initialisations
             if hasattr(__builtin__.instance, 'serieAsserInstance'):
-                asserv.setPosition(self.asserInstance.getPosition())
-                asserv.setOrientation(self.asserInstance.getOrientation())
+                asserv.setPosition(self.asserv.getPosition())
+                asserv.setOrientation(self.asserv.getOrientation())
             else :
                 #NOTE : pour tests (sans série)
                 asserv.setPosition(Point(70,400))
@@ -71,8 +71,8 @@ class Script:
             asserv.lancerChrono()
         else:
             #instance pour les déplacements réels
-            asserv = self.asserInstance
-            action = self.actionInstance
+            asserv = self.asserv
+            action = self.action
             
         #vitesses normales
         asserv.changerVitesse("rotation",2)
@@ -114,7 +114,7 @@ class Script:
         asserv.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
         asserv.changerVitesse("translation",2)
         asserv.changerVitesse("rotation",2)
-        asserv.gestionAvancer(200)     # On avance vers lui
+        asserv.gestionAvancer(500)     # On avance vers lui
         asserv.gestionTourner(-1.57)    # On lui montre nos fesses
         asserv.gestionAvancer(-480,"auStopNeRienFaire")    # On recule pour lui mettre sa dose
         asserv.changerVitesse("translation",3)
@@ -192,8 +192,8 @@ class Script:
 ####################################################################################################################
 
     def scriptTotem(self,asser,action):
-        asser.setPosition(Point(70,400))
-        asser.setOrientation(math.pi/2)
+        #asser.setPosition(Point(70,400))
+        #asser.setOrientation(math.pi/2)
         asser.goTo(Point(0.,660.))
         #début notre totem sud
         asser.gestionTourner(0)
@@ -291,7 +291,41 @@ class Script:
     # Rafflage de notre totem côté sud (y petits)
     def rafflerTotem00(self) :
         log.logger.info("Rafflage de totem en cours")
-        pass
+        asser.goTo(Point(0.,660.))
+        #début notre totem sud
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        time.sleep(0.5)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        time.sleep(0.5)
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        
+        #mettre dans la cale
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.2)
+        action.deplacer(110)
+        time.sleep(0.2)
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
     
     # Rafflage de notre totem côté nord (y grands)
     def rafflerTotem01(self) :
@@ -317,30 +351,30 @@ class Script:
     def enfoncerPoussoir0(self, idPoussoir) :
         
         log.logger.info("Enfonçage du poussoir à nous en cours")
-        self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la position
-        self.asserInstance.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
-        self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
-        self.asserInstance.gestionAvancer(290) # on avance au point de rotation
-        self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
-        self.asserInstance.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        self.asserInstance.gestionAvancer(450)    # On se barre.
+        self.action.deplacer(110) # On met les bras à 110 pour arriver à la position
+        self.asserv.goTo(Point(1500 - 640, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserv.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
+        self.asserv.gestionAvancer(290) # on avance au point de rotation
+        self.asserv.gestionTourner(-1.5)    # On lui montre nos fesses
+        self.asserv.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
+        self.asserv.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
+        self.asserv.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
+        self.asserv.gestionAvancer(450)    # On se barre.
         log.logger.info("Enfonçage du poussoir à nous fini")
         
     # Poussoir côté ennemi.
     def enfoncerPoussoir1(self, idPoussoir) :
         
         log.logger.info("Enfonçage du poussoir ennemi en cours")
-        self.actionInstance.deplacer(110) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
-        self.asserInstance.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
-        self.asserInstance.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
-        self.asserInstance.gestionAvancer(290) # on avance au point de rotation
-        self.asserInstance.gestionTourner(-1.5)    # On lui montre nos fesses
-        self.asserInstance.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        self.asserInstance.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        self.asserInstance.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        self.asserInstance.gestionAvancer(450)    # On se barre.
+        self.action.deplacer(110) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
+        self.asserv.goTo(Point(-1500 + 640 + 477, 2000 - 740)) # On va se placer le long de la ligne
+        self.asserv.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
+        self.asserv.gestionAvancer(290) # on avance au point de rotation
+        self.asserv.gestionTourner(-1.5)    # On lui montre nos fesses
+        self.asserv.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
+        self.asserv.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
+        self.asserv.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
+        self.asserv.gestionAvancer(450)    # On se barre.
         log.logger.info("Enfonçage du poussoir ennemi fini")
         
         
@@ -361,23 +395,23 @@ class Script:
         Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
         """
         log.logger.info("Tour de table")
-        self.actionInstance.deplacer(120) # On ouvre les bras
-        self.asserInstance.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
-        self.asserInstance.goTo(Point(395, 505))
-        self.asserInstance.goTo(Point(10, 580))
-        self.asserInstance.goTo(Point(-425, 480))
-        self.asserInstance.goTo(Point(-900, 970))
-        self.asserInstance.goTo(Point(410, 1480))
-        self.asserInstance.goTo(Point(0, 1400))
-        self.asserInstance.goTo(Point(405, 1480))
-        self.asserInstance.goTo(Point(900, 1000))
-        self.asserInstance.goTo(Point(890, 755))
-        self.actionInstance.deplacer(80) # On ferme les bras avant de gestionTourner
-        self.asserInstance.gestionTourner(0.755)
-        self.actionInstance.deplacer(120) # On ouvre les bras pour déposer
-        self.asserInstance.gestionAvancer(340) # On va dans la calle
-        self.asserInstance.gestionAvancer(-450) # On fait marche arrière pour se dégager
-        self.actionInstance.deplacer(100)
+        self.action.deplacer(120) # On ouvre les bras
+        self.asserv.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
+        self.asserv.goTo(Point(395, 505))
+        self.asserv.goTo(Point(10, 580))
+        self.asserv.goTo(Point(-425, 480))
+        self.asserv.goTo(Point(-900, 970))
+        self.asserv.goTo(Point(410, 1480))
+        self.asserv.goTo(Point(0, 1400))
+        self.asserv.goTo(Point(405, 1480))
+        self.asserv.goTo(Point(900, 1000))
+        self.asserv.goTo(Point(890, 755))
+        self.action.deplacer(80) # On ferme les bras avant de gestionTourner
+        self.asserv.gestionTourner(0.755)
+        self.action.deplacer(120) # On ouvre les bras pour déposer
+        self.asserv.gestionAvancer(340) # On va dans la calle
+        self.asserv.gestionAvancer(-450) # On fait marche arrière pour se dégager
+        self.action.deplacer(100)
         log.logger.info("Fin tour de table")
         
     def defendreBase(self):
@@ -409,8 +443,8 @@ def scriptPipeauNewStrategie(self, asserv,action):
         asserv.goTo(Point(800, 250))
         
         #exemples bras
-        self.actionInstance.deplacer(90)                 # tous les bras
-        self.actionInstance.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
-        self.actionInstance.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
-        self.actionInstance.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
+        self.action.deplacer(90)                 # tous les bras
+        self.action.deplacer(70, "hd")           # Bras Haud Droit (vu depuis le derrière du robot)
+        self.action.deplacer(50, ["hg", "bg"])   # Tourner les bras gauches
+        self.action.changer_vitesse(100)         # Entre 100 et 500 en gros mais on peut monter à 1000
 """

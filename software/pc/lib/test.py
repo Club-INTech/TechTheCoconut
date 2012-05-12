@@ -34,7 +34,7 @@ asser = __builtin__.instance.asserInstance
 sc = __builtin__.instance.scriptInstance
 #depart = outils_math.point.Point(0.0,400)
 sc.gestionScripts(sc.recalage)
-sc.gestionScripts(sc.homologation)
+sc.gestionScripts(sc.scriptTotem)
 
 #def test():
     #while 42 :

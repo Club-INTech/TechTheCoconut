@@ -446,7 +446,7 @@ class Asservissement:
         if not avecGotoSegment:
             #l'angle spécifié dans les scripts est valable pour un robot violet.
             if __builtin__.constantes['couleur'] == "r":
-                angle = math.pi - angle 
+                angle = math.pi - angle
 
         #angle dans ]-pi,pi]
         while angle > math.pi:
@@ -475,6 +475,10 @@ class Asservissement:
                 #tourner inversement à ce qui a été tourné
                 self.gestionTourner(orientAvant,"sansRecursion")
                 #recommencer le déplacement
+                if not avecGotoSegment:
+                    #l'angle spécifié dans les scripts est valable pour un robot violet.
+                    if __builtin__.constantes['couleur'] == "r":
+                        angle = math.pi - angle
                 self.gestionTourner(angle,"sansRecursion")
         
         if retour == "stoppe" and instruction == "sansRecursion":
