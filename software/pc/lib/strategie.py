@@ -187,8 +187,24 @@ class Strategie():
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
                 
-            exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
-            poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
+            # On récupère le temps qu'un script fait pour s'accomplir.
+            # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
+            try :
+                exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
+            except :
+                log.logger.error("Problème de script")
+                # WARNING A ENLEVER POUR UN MATCH
+                temps_script = 0
+                
+            # Ce try... except.. est utile si un script n'est pas fait en dur (pas scripté)
+            # C'est souvent une ZeroDivisionError qui est lancée (script de temps nul)
+            try :
+                poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
+            except :
+                poids.append(k1*self.actions[i][-1]/0.1         + k2*distance)
+            
+            
+            log.logger.error(str(temps_script))
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
@@ -210,8 +226,8 @@ class Strategie():
         
         # Sinon, on prend l'action
         try :
-            exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
-            log.logger.info("Lancement de " + nomScripts[maxID])
+            #exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            log.logger.info("Lancement de " + str(nomScripts[maxID]))
             
             # Puis on lui change sa priorité. 
             self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], 0)
