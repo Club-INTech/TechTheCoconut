@@ -14,6 +14,7 @@ typedef Timer<1,ModeCounter,64> timeout_timer;
 
 int main() 
 {
+    
  	setup();
 	
 	while(1){
@@ -41,6 +42,9 @@ int main()
 
 void setup()
 {
+    sbi(DDRD,DDD2);
+    sbi(PORTD,PORTD2);
+    
 	//Pins en input pour les PCINT
 	cbi(DDRC,DDC0);
 	cbi(DDRC,DDC1);
