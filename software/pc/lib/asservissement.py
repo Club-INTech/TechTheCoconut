@@ -80,9 +80,9 @@ class Asservissement:
         """
         oriente le robot pour le segment à parcourir
         sans instruction particulière
-        avec un booléen spécifiant que la rotation est demandée par un segment
+        avec un booléen spécifiant que la rotation ne doit pas effectuer de symétrie
         """
-        self.gestionTourner(angle,"",True)
+        self.gestionTourner(angle,"",avecSymetrie = False)
         
         """
         appel d'une translation de la distance euclidienne depart->arrivée
@@ -400,9 +400,9 @@ class Asservissement:
                 #reculer et tourner un peu
                 self.gestionAvancer(-50,instruction = "auStopNeRienFaire")
                 orientation = self.getOrientation()
-                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire")
-                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire")
-                self.gestionTourner(orientation)
+                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
+                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
+                self.gestionTourner(orientation, avecSymetrie = False)
                 
                 #finir le déplacement
                 posApres = self.getPosition()
@@ -434,16 +434,16 @@ class Asservissement:
                 #soucis
                 raise Exception
             
-    def gestionTourner(self, angle, instruction = "", avecGotoSegment = False):
+    def gestionTourner(self, angle, instruction = "", avecSymetrie = True):
         
         """
         méthode de haut niveau pour tourner le robot
         prend en paramètre l'angle à parcourir en radians
         et en facultatif une instruction "auStopNeRienFaire" ou "finir"
-        ainsi qu'un booléen indiquant que la rotation est induite par un segment (ie : pas de symétrie selon la couleur)
+        ainsi qu'un booléen indiquant si la rotation doit effectuer une symétrie selon la couleur
         """
         
-        if not avecGotoSegment:
+        if avecSymetrie:
             #l'angle spécifié dans les scripts est valable pour un robot violet.
             if __builtin__.constantes['couleur'] == "r":
                 angle = math.pi - angle
@@ -473,13 +473,9 @@ class Asservissement:
             else:
                 ##1
                 #tourner inversement à ce qui a été tourné
-                self.gestionTourner(orientAvant,"sansRecursion")
+                self.gestionTourner(orientAvant,"sansRecursion",avecSymetrie = False)
                 #recommencer le déplacement
-                if not avecGotoSegment:
-                    #l'angle spécifié dans les scripts est valable pour un robot violet.
-                    if __builtin__.constantes['couleur'] == "r":
-                        angle = math.pi - angle
-                self.gestionTourner(angle,"sansRecursion")
+                self.gestionTourner(angle,"sansRecursion",avecSymetrie = False)
         
         if retour == "stoppe" and instruction == "sansRecursion":
             ##4
@@ -493,7 +489,7 @@ class Asservissement:
             #augmenter vitesse
             self.changerVitesse("rotation", 3)
             #finir le déplacement
-            self.gestionTourner(angle)
+            self.gestionTourner(angle,avecSymetrie = False)
             #remettre vitesse
             self.changerVitesse("rotation", 2)
         
