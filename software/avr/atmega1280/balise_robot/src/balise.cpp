@@ -37,6 +37,7 @@ Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
 	serial_radio::change_baudrate(9600);
 	T_Asservissement::init();
 	T_TopTour::init();
+    pin_activation_moteur::set_output();
 	sei();
 }
 

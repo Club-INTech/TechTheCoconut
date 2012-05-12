@@ -1,5 +1,5 @@
-#define p1 10
-#define p2 11
+#define pa 10
+#define pb 11
 #define top 6
 
 #define PERIOD 60 //1000/17Hz
@@ -7,32 +7,33 @@
 int cmd = 10;//commande de départ
 
 void setup(){
-  pinMode(p1, OUTPUT);
-  pinMode(p2, OUTPUT);
+  pinMode(pa, OUTPUT);
+  pinMode(pb, OUTPUT);
   pinMode(top, INPUT);
   Serial.begin(9600);
 
-  digitalWrite(p1,LOW);
-  analogWrite(p2,cmd);
+  digitalWrite(pa,LOW);
+  analogWrite(pb,cmd);
 }
 
 
 void loop(){
-
-  long total=0;
-  long period=0;
-  
-  total+=pulseIn(top,LOW);
-  total+=pulseIn(top,HIGH);
-  period = total/1000.;
-  
-  if((period>PERIOD && cmd<250) || period==0) //0=timeout
-    cmd++;
-  if(period<PERIOD && cmd>0)
-    cmd-=1;  
-  
-  analogWrite(p2,cmd);
-  Serial.println(cmd);
-  Serial.println(period);
-  delay(300);
+  if(digitalRead(2)==HIGH){
+    long total=0;
+    long period=0;
+    
+    total+=pulseIn(top,LOW);
+    total+=pulseIn(top,HIGH);
+    period = total/1000.;
+    
+    if((period>PERIOD && cmd<250) || period==0) //0=timeout
+      cmd++;
+    if(period<PERIOD && cmd>0)
+      cmd-=1;  
+    
+    analogWrite(pb,cmd);
+    Serial.println(cmd);
+    Serial.println(period);
+    delay(300);
+  }
 }
