@@ -375,17 +375,17 @@ class Script:
     
     # Rafflage de notre totem côté nord (y grands)
     def rafflerTotem01(self,asser,action) :
-        log.logger.info("Rafflage de totem 0 1 en cours")
+        log.logger.debug("Rafflage de totem 0 1 en cours")
         pass
         
     # Rafflage du totem ennemi côté sud (y petits)
     def rafflerTotem10(self,asser,action) :
-        log.logger.info("Rafflage de totem 1 0 en cours")
+        log.logger.debug("Rafflage de totem 1 0 en cours")
         pass
     
     # Rafflage du totem ennemi, côté Nord.
     def rafflerTotem11(self,asser,action) :
-        log.logger.info("Rafflage de totem 1 1 en cours")
+        log.logger.debug("Rafflage de totem 1 1 en cours")
         pass
     
     
@@ -396,7 +396,7 @@ class Script:
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
         
-        log.logger.info("Enfonçage du poussoir côté nous en cours")
+        log.logger.debug("Enfonçage du poussoir côté nous en cours")
         action.deplacer(0) # On met les bras à 110 pour arriver à la position
         asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
@@ -406,12 +406,12 @@ class Script:
         asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
         asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
         asser.gestionAvancer(450)    # On se barre.
-        log.logger.info("Enfonçage du poussoir à nous fini")
+        log.logger.debug("Enfonçage du poussoir à nous fini")
         
     # Poussoir côté ennemi.
     def enfoncerPoussoir1(self,asser,action) :
         
-        log.logger.info("Enfonçage du poussoir côté ennemi en cours")
+        log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
         action.deplacer(0) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
         asser.goTo(Point(-1500 + 640 + 477, 2000 - 500)) # On va se placer le long de la ligne
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
@@ -421,7 +421,7 @@ class Script:
         asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
         asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
         asser.gestionAvancer(450)    # On se barre.
-        log.logger.info("Enfonçage du poussoir ennemi fini")
+        log.logger.debug("Enfonçage du poussoir ennemi fini")
         
         
     #----------------------#
@@ -433,14 +433,14 @@ class Script:
         """
         On fait un tour de table bras fermés
         """
-        log.logger.info("C'est parti, on farme l'ennemi !")
+        log.logger.debug("C'est parti, on farme l'ennemi !")
         self.tourDeTable(asser, action, False)
         
     def tourDeTable(self,asser,action, brasOuverts = True) :
         """
         Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
         """
-        log.logger.info("Tour de table")
+        log.logger.debug("Tour de table")
         if brasOuverts:
             action.deplacer(120) # On ouvre les bras
         else:
@@ -467,18 +467,18 @@ class Script:
             action.deplacer(100)
         else:
             pass
-        log.logger.info("Fin tour de table")
+        log.logger.debug("Fin tour de table")
         
     def defendreBase(self,asser,action):
         """
         Si l'ennemi est très bon, il faudra penser à défendre la base
         """
-        log.logger.info("Défense de la base")
+        log.logger.debug("Défense de la base")
         asser.goTo(Point(960, 1260))
         asser.gestionTourner(math.pi/2)
         asser.gestionAvancer(1300)
         asser.gestionAvancer(-1300)
-        log.logger.info("Fin défense de la base")
+        log.logger.debug("Fin défense de la base")
         
         
         
