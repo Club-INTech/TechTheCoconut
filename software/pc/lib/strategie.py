@@ -209,6 +209,7 @@ class Strategie():
             
             
             log.logger.error(str(temps_script))
+            time.sleep(5)
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
@@ -224,7 +225,7 @@ class Strategie():
         # Si maxID == -1 c'est que il ne reste rien à faire.
         # TODO Qu'est-ce qu'on fait dans ce cas là ?!
         if maxID < -1 :
-            log.logger.info("ZUT ALORS ! Plus d'actions à faire")
+            log.logger.critical("ZUT ALORS ! Plus d'actions à faire")
             return
         
             print "#######################" + str(nomScripts[maxID])
@@ -242,7 +243,7 @@ class Strategie():
         
         
         
-        
+    # Changement de priorité d'une entrée du tableau self.actions
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
         """
         
@@ -275,3 +276,6 @@ class Strategie():
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
         
+def t() :
+    s = Strategie()
+    s.lancer()
