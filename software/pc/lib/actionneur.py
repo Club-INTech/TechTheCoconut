@@ -205,7 +205,7 @@ class Actionneur(serie.Serie):
         """
         
         #récupération des constantes nécessaires:
-        log.logger.info('Calcul du rayon et du centre du robot')
+        #log.logger.info('Calcul du rayon et du centre du robot')
         
         #[]la longueur est sur x, largeur sur y
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]

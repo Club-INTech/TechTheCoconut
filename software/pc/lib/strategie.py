@@ -128,8 +128,6 @@ class Strategie():
         
     def initialiserActionsAFaire(self) :
         """
-        Thibaut.
-        
         TYPE D'ACTIONS : [NOM_DE_L_ACTION, +paramètresOptionnels, PRIORITÉ DE L'ACTION]
             NOM_DE_L_ACTION :   "FARMERTOTEM"   +param1 : ennemi, +param2: Nord
                                 "ENFONCERPOUSSOIR"                +param : id poussoir
@@ -189,7 +187,7 @@ class Strategie():
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
                 
-            exec("temps_script = self.scriptInstance.gestionScript("+str(nomScripts[i])+", 1)")
+            exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
             poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
@@ -213,8 +211,15 @@ class Strategie():
         # Sinon, on prend l'action
         try :
             exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            log.logger.info("Lancement de " + nomScripts[maxID])
+            
+            # Puis on lui change sa priorité. 
+            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], 0)
+            
         except :
             log.logger.error("La stratégie ne peut pas lancer d'actions")
+        
+        
         
         
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
