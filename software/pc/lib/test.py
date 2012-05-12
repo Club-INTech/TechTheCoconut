@@ -34,7 +34,16 @@ asser = __builtin__.instance.asserInstance
 sc = __builtin__.instance.scriptInstance
 #depart = outils_math.point.Point(0.0,400)
 sc.gestionScripts(sc.recalage)
-sc.gestionScripts(sc.scriptTotem)
+##############################UTILISATION DE LA STRATEGIE####################################
+import strategie
+strategie = strategie.Strategie()
+strategie.lancer()
+#############################################################################################
+
+##############################UTILISATION D'UN SCRIPT######################################## 
+
+#sc.gestionScripts(sc.scriptTotem)
+#############################################################################################
 
 #def test():
     #while 42 :
