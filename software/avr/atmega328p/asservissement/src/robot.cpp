@@ -489,8 +489,8 @@ void Robot::gestion_blocage()
 {
 
 	static float compteurBlocage=0;
-	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
-	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647};//,2147483647,2147483647};
+	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647};//,2147483647,2147483647};
 
 	/*
 	static int32_t last_distance;
@@ -499,18 +499,15 @@ void Robot::gestion_blocage()
 
 	//detection d'un blocage - translation
 	if (	   (abs(rotation.pwmCourant())>0
-		&& abs(T_last_angle[4]-T_last_angle[0])<5)
+		&& abs(T_last_angle[2]-T_last_angle[0])<5)
 		|| (abs(translation.pwmCourant())>0
-		&& abs(T_last_distance[4]-T_last_distance[0])<5)
+		&& abs(T_last_distance[2]-T_last_distance[0])<5)
 	   )
 	{
 
 		if(compteurBlocage==20){
-			if (not est_stoppe())
-			{
-				stopper();
-				est_bloque_ = true;
-			}
+			stopper();
+			est_bloque_ = true;
 			compteurBlocage=0;
 		}
 		else{
@@ -523,7 +520,7 @@ void Robot::gestion_blocage()
 		compteurBlocage=0;
 	}
 
-	for (int16_t i=4;i>0;i--)
+	for (int16_t i=2;i>0;i--)
 		T_last_distance[i] = T_last_distance[i-1];
 	T_last_distance[0] = mesure_distance_;
 

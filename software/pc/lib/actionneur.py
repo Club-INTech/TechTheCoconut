@@ -234,11 +234,13 @@ class Actionneur(serie.Serie):
     #------------------------------------------------#
     #       DANSE =D                                 #
     #------------------------------------------------#  
-        
+    
     def danse(self) :
         
         time.sleep(1)
+        self.danse_mvt1()
         
+    def danse_mvt1(self) :
         self.deplacer(90)
         time.sleep(1)
         self.deplacer(160)
@@ -286,7 +288,7 @@ class Actionneur(serie.Serie):
         self.deplacer(45, "hg")
         time.sleep(0.5)
 
-        
+    def danse_mvt2(self) :
         self.deplacer(40, "bg")
         self.deplacer(40, "hg")
         self.deplacer(160, "hd")
@@ -322,6 +324,8 @@ class Actionneur(serie.Serie):
         self.deplacer(90)
         time.sleep(1)
         self.changerVitesse(500)
+    
+    
         
         self.deplacer(80, "bg")
         self.deplacer(80, "bd")

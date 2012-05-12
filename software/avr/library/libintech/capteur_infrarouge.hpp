@@ -12,7 +12,7 @@
 
 class capteur_infrarouge{
 private:
-  static const uint16_t NB_ECHANTILLON =  6;
+  static const uint16_t NB_ECHANTILLON =  8;
   static const uint16_t    val_ADCH[NB_ECHANTILLON];
   static const uint16_t    val_mm[NB_ECHANTILLON] ;
   
@@ -60,7 +60,7 @@ public:
   
 };
 
-const uint16_t    capteur_infrarouge::val_ADCH[NB_ECHANTILLON]   = {64, 36, 22, 17, 13, 9};
-const uint16_t    capteur_infrarouge::val_mm[NB_ECHANTILLON]     = {100, 200, 300, 400, 500, 600};
+const uint16_t    capteur_infrarouge::val_ADCH[NB_ECHANTILLON]   = {200, 64, 36, 22, 17, 13, 9, 5};
+const uint16_t    capteur_infrarouge::val_mm[NB_ECHANTILLON]     = {70, 100, 200, 300, 400, 500, 600, 900};
 
 #endif
