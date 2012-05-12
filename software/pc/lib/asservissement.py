@@ -64,13 +64,13 @@ class Asservissement:
         self.vitesseRotation = 2
             
     
-    def goToSegment(self, arrivee, avecRechercheChemin = False):
+    def goToSegment(self, arrivee, avecRechercheChemin = []):
         """
         Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
         :param script: point d'arrivé
         :type script: point
-        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin
-        :type avecRechercheChemin: booléen
+        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin : contient de quoi créer une recursion.
+        :type avecRechercheChemin: list
         """
         depart = self.getPosition()
         delta_x = (arrivee.x-depart.x)
@@ -89,9 +89,9 @@ class Asservissement:
         sans instruction particulière
         avec un booléen codant l'utilisation de la recherche de chemin
         """
-        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
+        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),instruction = "",avecRechercheChemin = avecRechercheChemin)
     
-    def goTo(self, arrivee):
+    def goTo(self, arrivee, numTentatives = 1):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -101,6 +101,10 @@ class Asservissement:
         :param chemin: chemin renvoyé par la recherche de chemin
         :type chemin: liste de points
         """
+        
+        if numTentatives > 4:
+            #plusieurs recherches de chemin ne suffisent pas à contourner le robot ennemi (il tente sans doute également de nous contourner)
+            raise Exception
         
         log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
         theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
@@ -123,7 +127,7 @@ class Asservissement:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
             
             #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
-            self.goToSegment(i,True)
+            self.goToSegment(i,avecRechercheChemin = [arrivee, numTentatives])
         return "chemin_termine"
 
     def tourner(self, angle):
@@ -288,7 +292,7 @@ class Asservissement:
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
         
-    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False, numTentatives = 1):
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = [], numTentatives = 1):
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
@@ -325,27 +329,28 @@ class Asservissement:
         
         if retour == "obstacle" :
             ##2 
+            #stopper le robot
+            self.immobiliser()
+            
             #ajoute un robot adverse sur la table, pour la recherche de chemin
             orientation = self.getOrientation()
             position = self.getPosition()
-            
             adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
             __builtin__.instance.ajouterRobotAdverse(adverse)
             
-            
-            if instruction == "sansRecursion" or avecRechercheChemin:
+            if avecRechercheChemin :
+                #relancer une recherche de chemin
+                new_numTentatives = avecRechercheChemin[1] + 1
+                goTo(avecRechercheChemin[0], new_numTentatives)
+                
+            elif instruction == "sansRecursion":
                 ##4
-                #stopper le robot
-                self.immobiliser()
                 #mettre à jour l'attribut position du robot
                 
                 #stopper l'execution du script parent
                 raise Exception
             else:
-                
                 ##3
-                #stopper le robot
-                self.immobiliser()
                 #attente que la voie se libère
                 ennemi_en_vue = True
                 debut_timer = int(self.timerAsserv.getTime())
