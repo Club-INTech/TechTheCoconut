@@ -65,7 +65,7 @@ constantes = \
             "actionneur": "^4$",
         },
     },
-    "DureeJeu": 5,
+    "DureeJeu": 87,
     
     "Actionneurs":
     {
