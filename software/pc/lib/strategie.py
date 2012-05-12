@@ -178,15 +178,19 @@ class Strategie():
            # Ajout des nom de scripts.
             if self.actions[i][0] == "FARMERTOTEM" :
                 nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
+                nouvellePriorite = 0
             elif self.actions[i][0] == "ENFONCERPOUSSOIR":
                 nomScripts.append("self.scriptInstance.enfoncerPoussoir"+str(self.actions[i][1]))
+                nouvellePriorite = -1
             elif self.actions[i][0] == "FAIRECHIERENNEMI" :
                 nomScripts.append("self.scriptInstance.fairechierEnnemi")
+                nouvellePriorite = self.actions[i][-1] - 0.01     # Petite réduction
             elif self.actions[i][0] == "TOURDETABLE" :
                 nomScripts.append("self.scriptInstance.tourDeTable")
+                nouvellePriorite = self.actions[i][-1] - 0.01
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
-                
+                nouvellePriorite = self.actions[i][-1] - 0.01
             # On récupère le temps qu'un script fait pour s'accomplir.
             # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
             try :
@@ -230,7 +234,7 @@ class Strategie():
             log.logger.info("Lancement de " + str(nomScripts[maxID]))
             
             # Puis on lui change sa priorité. 
-            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], 0)
+            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], nouvellePriorite)
             
         except :
             log.logger.error("La stratégie ne peut pas lancer d'actions")
