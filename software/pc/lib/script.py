@@ -34,8 +34,8 @@ class Script:
             self.action = __builtin__.instance.actionInstance
         else:
             log.logger.error("script : ne peut importer instance.actionInstance")
-        if hasattr(__builtin__.instance, 'actionSimu'):
-            self.actionSimu = __builtin__.instance.actionSimu
+        if hasattr(__builtin__.instance, 'actionInstanceSimu'):
+            self.actionSimu = __builtin__.instance.actionInstanceSimu
         else:
             log.logger.error("script : ne peut importer instance.actionSimu")
         self.couleur = __builtin__.constantes["couleur"]
