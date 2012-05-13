@@ -16,8 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 class Script:
     
     def __init__(self):
-        # Timeout, mis à jour par la stratégie
-        self.timeout = -1
+        
         if hasattr(__builtin__.instance, 'asserInstance'):
             self.asserInstance = __builtin__.instance.asserInstance
         else:
@@ -85,18 +84,18 @@ class Script:
         #vitesses normales
         asser.changerVitesse("rotation",2)
         asser.changerVitesse("translation",2)
-        try :
-            #execution du script
-            script(asser,action)
-            if chrono:
-                #retour de la durée totale d'execution du script
-                return asser.mesurerChrono()
-            else:
-                #bon déroulement du script (pour des déplacements réels)
-                return True
-        except :
-            #spécifie un déroulement problématique
-            return False
+        #try :
+        #execution du script
+        script(asser,action)
+        if chrono:
+            #retour de la durée totale d'execution du script
+            return asser.mesurerChrono()
+        else:
+            #bon déroulement du script (pour des déplacements réels)
+            return True
+        #except :
+            ##spécifie un déroulement problématique
+            #return False
             
 ####################################################################################################################
 ###########################################     SCRIPTS SPECIAUX      ##############################################
@@ -303,13 +302,10 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         
     def test5(self,asser,action):
-        asser.gestionAvancer(300)
-        asser.gestionAvancer(300)
-        asser.changerVitesse("rotation",3)
-        asser.gestionTourner(0)
+        action.deplacer(150)
         
     def test6(self,asser,action):
-        asser.goTo(Point(800, 250))
+        action.deplacer(0)
         
     def allerRetour(self, asser,action):
         while 42:
