@@ -209,13 +209,14 @@ class Strategie():
             
             
             log.logger.error(str(temps_script))
-            time.sleep(5)
+            time.sleep(0)
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
         max = 0
         maxID = -1
         
+        log.logger.debug("FIN DE CES CALCUULS POUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURIS")
         # On cherche l'action qui fait le meilleur score 
         for i in range(len(self.actions)) :
             if poids[i] > max :
