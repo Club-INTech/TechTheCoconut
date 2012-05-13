@@ -126,7 +126,58 @@ void K2000()
   }
 }
 
+void balayageH()
+{
+  // Aller
+  for(int addr=0;addr<=3;addr++)
+    {
+      for (int row=0;row<7;row++)
+      {
+        lc.setRow(addr,row,B11111111);
+        delay(delaytime);
+        //lc.setRow(addr,row,(byte)0);
+      }
+  }
+  
+  // Retour
+  for(int addr=3;addr>=0;addr--)
+  {
+    for (int row=6;row>=0;row--)
+    {
+      //lc.setRow(addr,row,B11111111);
+      delay(delaytime);
+      lc.setRow(addr,row,(byte)0);
+    }
+  }
+}
+
+void balayageV()
+{
+  // Aller
+  for(int addr=0;addr<=3;addr++)
+    {
+      for (int row=0;row<7;row++)
+      {
+        lc.setColumn(addr,row,B11111111);
+        delay(delaytime);
+        //lc.setRow(addr,row,(byte)0);
+      }
+  }
+  
+  // Retour
+  for(int addr=3;addr>=0;addr--)
+  {
+    for (int row=6;row>=0;row--)
+    {
+      //lc.setRow(addr,row,B11111111);
+      delay(delaytime);
+      lc.setColumn(addr,row,(byte)0);
+    }
+  }
+}
+
 void loop() 
 { 
-  K2000();   
+  //balayageV();
+  K2000();  
 }
