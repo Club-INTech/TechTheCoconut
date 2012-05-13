@@ -323,73 +323,88 @@ class Asservissement:
         
         if retour == "obstacle" :
             ##2 
-            #stopper le robot
-            self.immobiliser()
-            
             #ajoute un robot adverse sur la table, pour la recherche de chemin
             orientation = self.getOrientation()
             position = self.getPosition()
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
+            tableLargeur = constantes["Coconut"]["longueur"]
+            tableLongueur = constantes["Coconut"]["largeur"]
             adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
-            print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-            print "ennemi en vue à "+str(adverse)
-            print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
             
-            if avecRechercheChemin :
-                #robot adverse
-                __builtin__.instance.viderListeRobotsAdv(recalculer = False)
-                __builtin__.instance.ajouterRobotAdverse(adverse)
+            if (adverse.x > -tableLongueur/2+self.rayonRobotsAdverses and adverse.x < tableLongueur/2-self.rayonRobotsAdverses and adverse.y < tableLargeur-self.rayonRobotsAdverses and adverse.y > self.rayonRobotsAdverses):
+                #le point détecté est bien dans l'aire de jeu, c'est sans doute un robot adverse
+                print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                print "ennemi en vue à "+str(adverse)
+                print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+            
+        
+                #stopper le robot
+                self.immobiliser()
                 
-                #relancer une recherche de chemin
-                #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
-                destination = avecRechercheChemin[0]
-                new_numTentatives = avecRechercheChemin[1] + 1
-                self.goTo(destination, new_numTentatives)
-                
-            elif instruction == "sansRecursion":
-                ##4
-                #robot adverse
-                __builtin__.instance.ajouterRobotAdverse(adverse)
-                #stopper l'execution du script parent
-                raise Exception
-            else:
-                ##3
-                #robot adverse
-                __builtin__.instance.ajouterRobotAdverse(adverse)
-                #attente que la voie se libère
-                ennemi_en_vue = True
-                debut_timer = int(self.timerAsserv.getTime())
-                while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
-                    capteur = self.capteurInstance.mesurer()
-                    if capteur < self.maxCapt:
-                        print 'gestionAvancer : capteur !'
-                    else :
-                        print 'gestionAvancer : la voie est libre !'
-                        ennemi_en_vue = False
+                if avecRechercheChemin :
+                    #robot adverse
+                    __builtin__.instance.viderListeRobotsAdv(recalculer = False)
+                    __builtin__.instance.ajouterRobotAdverse(adverse)
                     
-                if not ennemi_en_vue:
-                    #vider la liste des robots adverses repérés
-                    __builtin__.instance.viderListeRobotsAdv()
+                    #relancer une recherche de chemin
+                    #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
+                    destination = avecRechercheChemin[0]
+                    new_numTentatives = avecRechercheChemin[1] + 1
+                    self.goTo(destination, new_numTentatives)
                     
-                    #baisser vitesse
-                    self.changerVitesse("translation", 1)
-                    
-                    #finir le déplacement
-                    posApres = self.getPosition()
-                    dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-                    if distance != 0:
-                        signe = distance/abs(distance)
-                    else:
-                        signe = 1
-                    self.gestionAvancer(distance-signe*dist)
-                    
-                    #remettre vitesse
-                    self.changerVitesse("translation", 2)
-                    
-                else:
+                elif instruction == "sansRecursion":
+                    ##4
+                    #robot adverse
+                    __builtin__.instance.ajouterRobotAdverse(adverse)
                     #stopper l'execution du script parent
                     raise Exception
-                
+                else:
+                    ##3
+                    #robot adverse
+                    __builtin__.instance.ajouterRobotAdverse(adverse)
+                    #attente que la voie se libère
+                    ennemi_en_vue = True
+                    debut_timer = int(self.timerAsserv.getTime())
+                    while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
+                        capteur = self.capteurInstance.mesurer()
+                        if capteur < self.maxCapt:
+                            print 'gestionAvancer : capteur !'
+                        else :
+                            print 'gestionAvancer : la voie est libre !'
+                            ennemi_en_vue = False
+                        
+                    if not ennemi_en_vue:
+                        #vider la liste des robots adverses repérés
+                        __builtin__.instance.viderListeRobotsAdv()
+                        
+                        #baisser vitesse
+                        self.changerVitesse("translation", 1)
+                        
+                        #finir le déplacement
+                        posApres = self.getPosition()
+                        dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                        if distance != 0:
+                            signe = distance/abs(distance)
+                        else:
+                            signe = 1
+                        self.gestionAvancer(distance-signe*dist)
+                        
+                        #remettre vitesse
+                        self.changerVitesse("translation", 2)
+                        
+                    else:
+                        #stopper l'execution du script parent
+                        raise Exception
+                        
+            else:
+                #fausse alerte : on termine tranquil'
+                dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist)
+                    
         if retour == "stoppe" and instruction == "sansRecursion":
             #stopper l'execution du script parent
             raise Exception
