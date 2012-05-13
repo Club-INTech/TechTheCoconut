@@ -13,8 +13,8 @@ volatile int16_t window4 = -1;
 
 volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
-volatile uint16_t distance = 12;
-volatile int16_t timer=0;
+volatile uint16_t distance = 0;
+volatile int16_t timer=13;
 
 typedef Timer<0,ModeCounter,1024> window_timer;
 typedef Timer<1,ModeCounter,64> timeout_timer;
@@ -93,102 +93,15 @@ ISR(PCINT1_vect)
     {
 	switch(changedbits)
 	{
-	  case 1:
-	    //Si fenêtre fermée
-	    if(window1==-1){//Ouverture de la fenêtre
-	      window1=window_timer::value();
-	      overflow1=0;
-	    }
-	    else{
-	      //Si la fenêtre est encore valide (ie moins d'un tour de timer)
-	      if(overflow1==0 || (overflow1==1 && window_timer::value()<=window1))
-	      {
-		uint8_t time=window_timer::value()-window1+255*overflow1;
-		if(time>=TIME_THRESHOLD_MIN)
-		{
-		  distance=getDistance(time);
-		  timer=time;
-		  //On ferme les fenêtres
-		  window2=-1;
-		  window3=-1;
-		  window4=-1;
-		  timeout_timer::value(0);//Démarre le timer de validité
-		  
-		}
-	      }
-	      //Fermeture de cette fenêtre
-	      window1=-1;
-	    }
-	    break;
-	  case 2:
-	    //Si fenêtre fermée
-	    if(window2==-1)
-	    {//Ouverture de la fenêtre
-	      window2=window_timer::value();
-	      overflow2=0;
-	    }
-	    else{
-	      //Si la fenêtre est encore valide (ie moins d'un tour de timer)
-	      if(overflow2==0 || (overflow2==1 && window_timer::value()<=window2))
-	      {
-		uint8_t time=window_timer::value()-window2+255*overflow2;
-		if(time>=TIME_THRESHOLD_MIN)
-		{
-		  distance=getDistance(time);
-		  timer=time;
-		  //On ferme les fenêtres
-		  window1=-1;
-		  window3=-1;
-		  window4=-1;
-		  timeout_timer::value(0);//Démarre le timer de validité
-		  
-		}
-	      }
-	      //Fermeture de cette fenêtre
-	      window2=-1;
-	    }
-	    break;
-	  case 4:
-	    //Si fenêtre fermée
-	    if(window3==-1)
-	    {//Ouverture de la fenêtre
-	      window3=window_timer::value();
-	      overflow3=0;
-	    }
-	    else{
-	      //Si la fenêtre est encore valide (ie moins d'un tour de timer)
-	      if(overflow3==0 || (overflow3==3 && window_timer::value()<=window3))
-	      {
-		uint8_t time=window_timer::value()-window3+255*overflow3;
-		if(time>=TIME_THRESHOLD_MIN)
-		{
-		  distance=getDistance(time);
-		  timer=time;
-		  //On ferme les fenêtres
-		  window1=-1;
-		  window2=-1;
-		  window4=-1;
-		  timeout_timer::value(0);//Démarre le timer de validité
-		  
-		}
-	      }
-	      //Fermeture de cette fenêtre
-	      window3=-1;
-	    }
-	    break;
 	  case 8:
 	    //Si fenêtre fermée
 	    if(window4==-1)
 	    {//Ouverture de la fenêtre
 	      window4=window_timer::value();
 	      overflow4=0;
-	      distance=window_timer::value();
 	    }
-	    else{
-	      distance=44;
-	      //Si la fenêtre est encore valide (ie moins d'un tour de timer)
-	      if(overflow4==0 || (overflow4==1 && window_timer::value()<=window4))
-	      {
+	    else
+	    {
 		uint8_t time=window_timer::value()-window4+255*overflow4;
 		if(time>=TIME_THRESHOLD_MIN)
 		{
@@ -201,7 +114,7 @@ ISR(PCINT1_vect)
 		  timeout_timer::value(0);//Démarre le timer de validité
 		  
 		}
-	      }
+	      
 	      //Fermeture de cette fenêtre
 	      window4=-1;
 	    }
@@ -213,30 +126,9 @@ ISR(PCINT1_vect)
 //Interruption du TIMER0 sur overflow
 ISR(TIMER0_OVF_vect)
 {
-      if(window1!=-1)
-      {
-	if(overflow1==0)
-	   overflow1++;
-	else
-	  window1=-1;
-      }
-      if(window2!=-1)
-      {
-	if(overflow2==0)
-	   overflow2++;
-	else
-	  window2=-1;
-      }
-      if(window3!=-1)
-      {
-	if(overflow3==0)
-	   overflow3++;
-	else
-	  window3=-1;
-      }
       if(window4!=-1)
       {
-	if(overflow4==0)
+	if(overflow4<50)
 	   overflow4++;
 	else
 	  window4=-1;
@@ -245,5 +137,5 @@ ISR(TIMER0_OVF_vect)
 
 ISR(TIMER1_OVF_vect)
 {
- 	//distance = 0; //La distance est périmée.
+ 	distance = 0; //La distance est périmée.
 }
