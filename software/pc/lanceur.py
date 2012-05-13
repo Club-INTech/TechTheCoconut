@@ -2,6 +2,18 @@
 
 import lib.conf
 import __builtin__
+import os
+
+"""
+#création d'un cache en mémoire vive
+if (not os.popen('cd /media/cacheSopalint/ 2>&1 /dev/null').readlines() == []):
+    print "le répertoire /media/cacheSopalint doit etre créé dans la mémoire vive"
+    os.popen('sudo mkdir /media/cacheSopalint')
+    os.popen('sudo chmod 777 /media/cacheSopalint/')
+    os.popen('sudo mount -t tmpfs -o size=2M tmpfs /media/cacheSopalint')
+else:
+    print "répertoire"
+"""
 
 # Chargement de la couleur du robot
 first = True
