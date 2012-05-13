@@ -139,7 +139,7 @@ void cylon()
        //2eme colonne
        lc.setRow(0,i+1,B11111111);
        lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/2);
+       delay(delaytime*i/3);
        
        //Switch OFF
        lc.setRow(0,i,(byte)0);
@@ -156,7 +156,7 @@ void cylon()
         //2eme colonne
         lc.setRow(1,i-7+1,B11111111);
         lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/2);
+        delay(delaytime*(i-7)/3);
         
         //Switch OFF
         lc.setRow(1,i-7,(byte)0);
@@ -168,7 +168,7 @@ void cylon()
   }
   
   //Oeil gauche (de droite à gauche)
-  for(int i=14;i>=0;i--)
+  for(int i=13;i>=0;i--)
   {
      if(i<7) //MAX 01 & 04
      {
@@ -178,7 +178,7 @@ void cylon()
        //2eme colonne
        lc.setRow(0,i+1,B11111111);
        lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/2);
+       delay(delaytime*i/3);
        
        //Switch OFF
        lc.setRow(0,i,(byte)0);
@@ -195,7 +195,7 @@ void cylon()
         //2eme colonne
         lc.setRow(1,i-7+1,B11111111);
         lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/2);
+        delay(delaytime*(i-7)/3);
         
         //Switch OFF
         lc.setRow(1,i-7,(byte)0);
