@@ -220,7 +220,8 @@ class Actionneur(serie.Serie):
         sommet_bras = point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
         rayon_avec_bras = math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
         
-        self.robotInstance.rayon = max(rayon_avec_bras,rayon_original)
+        #mettre à jour l'attribut du robot
+        self.robotInstance.changeRayon(max(rayon_avec_bras,rayon_original))
         
     def test(self, temps = 0.3) :
         i = 0

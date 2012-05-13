@@ -11,7 +11,6 @@ import log
 import outils_math.point as point
 import actionneur
 import robot
-import recherche_chemin.thetastar
 import lib.log
 import outils_math
 import capteur
@@ -26,8 +25,7 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        theta = recherche_chemin.thetastar.Thetastar([])
-        theta.enregistreGraphe()
+        self.theta = __builtin__.instance.theta
         
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
@@ -106,9 +104,6 @@ class Asservissement:
             #plusieurs recherches de chemin ne suffisent pas à contourner le robot ennemi (il tente sans doute également de nous contourner)
             raise Exception
         
-        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
-        
         #récupération de la position de départ
         depart = self.getPosition()
         
@@ -117,7 +112,7 @@ class Asservissement:
             arrivee.x *= -1
             
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(depart,arrivee)
+        chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
         #supprime le point de départ du chemin.
         #une exception est levée ici en cas de chemin non trouvé

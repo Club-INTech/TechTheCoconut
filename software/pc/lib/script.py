@@ -83,18 +83,18 @@ class Script:
         #vitesses normales
         asser.changerVitesse("rotation",2)
         asser.changerVitesse("translation",2)
-        #try :
-        #execution du script
-        script(asser,action)
-        if chrono:
-            #retour de la durée totale d'execution du script
-            return asser.mesurerChrono()
-        else:
-            #bon déroulement du script (pour des déplacements réels)
-            return True
-        #except :
+        try :
+            #execution du script
+            script(asser,action)
+            if chrono:
+                #retour de la durée totale d'execution du script
+                return asser.mesurerChrono()
+            else:
+                #bon déroulement du script (pour des déplacements réels)
+                return True
+        except :
             #spécifie un déroulement problématique
-        return False
+            return False
             
 ####################################################################################################################
 ###########################################     SCRIPTS SPECIAUX      ##############################################
@@ -276,10 +276,10 @@ class Script:
         asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
 
     def test1(self,asser, action):
-        xd = raw_input("x départ? ")
-        yd = raw_input("y départ? ")
-        asser.setPosition(Point(float(xd),float(yd)))
-        asser.setOrientation(math.pi/2)
+        #xd = raw_input("x départ? ")
+        #yd = raw_input("y départ? ")
+        #asser.setPosition(Point(float(xd),float(yd)))
+        #asser.setOrientation(0)
         xa = raw_input("x arrivée? ")
         ya = raw_input("y arrivée? ")
         asser.goTo(Point(float(xa),float(ya)))
