@@ -28,23 +28,67 @@ int16_t Balise::getAngle(uint16_t offset) {
 
 }
 
-Balise::Balise() : asservissement_moteur_(0.5,0.5,0)
+Balise::Balise()
 {
-	asservissement_moteur_.consigne(0);
+// 	asservissement_moteur_.consigne(0);
 	serial_pc::init();
 	serial_pc::change_baudrate(9600);
 	serial_radio::init();
 	serial_radio::change_baudrate(9600);
-	T_Asservissement::init();
+// 	T_Asservissement::init();
 	T_TopTour::init();
     pin_activation_moteur::set_output();
+    pin_activation_moteur2::set_output();
+    moteur_on();
+    
+    //5V sur la pin 12 (B6) pour la direction laser
+    sbi(DDRB,PORTB6);
+    //On met la pin 13 (OC0A, B7) en OUT
+    sbi(DDRB,PORTB7);
+    cbi(TCCR0B,CS02);
+    cbi(TCCR0B,CS01);
+    sbi(TCCR0B,CS00);
+    //Seuil (cf formule datasheet)
+    //f_wanted=16000000/(2*prescaler*(1+OCR0A))
+    // Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
+    OCR0A= 170;
+    laser_off();
+    
 	sei();
 }
 
-void Balise::asservir(int32_t vitesse_courante)
-{
-	int16_t pwm = asservissement_moteur_.pwm(vitesse_courante);
-// 	Serial<0>::print(pwm);
-	moteur_.envoyerPwm(pwm);
+void Balise::laser_on(){
+    cbi(TCCR0A,WGM00);
+    sbi(TCCR0A,WGM01);
+    cbi(TCCR0B,WGM02);
+    sbi(TCCR0A,COM0A0);
+    cbi(TCCR0A,COM0A1);
+    sbi(PORTB,PORTB6);
 }
+
+void Balise::laser_off(){
+    cbi(TCCR0A,WGM00);
+    cbi(TCCR0A,WGM01);
+    cbi(TCCR0B,WGM02);
+    cbi(TCCR0A,COM0A0);
+    cbi(TCCR0A,COM0A1);
+    cbi(PORTB,PORTB6);
+}
+
+void Balise::moteur_on(){
+    pin_activation_moteur::set();
+    pin_activation_moteur2::set();
+}
+
+void Balise::moteur_off(){
+    pin_activation_moteur::clear();
+    pin_activation_moteur2::clear();
+}
+
+// void Balise::asservir(int32_t vitesse_courante)
+// {
+// 	int16_t pwm = asservissement_moteur_.pwm(vitesse_courante);
+// 	Serial<0>::print(pwm);
+// 	moteur_.envoyerPwm(pwm);
+// }
 

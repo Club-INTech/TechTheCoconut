@@ -29,9 +29,9 @@
 #ifndef rbi
 #define rbi(port,bit) ((port & (1 << bit)) >> bit)
 #endif
-
+/*
 #define READ_CANAL_A() rbi(PINB,PORTB4)
-#define READ_CANAL_B() rbi(PINB,PORTB5)
+#define READ_CANAL_B() rbi(PINB,PORTB5)*/
 
 void init();
 
@@ -74,23 +74,13 @@ int main() {
 		
 		//Laser off
 		if(COMPARE_BUFFER("loff",4)){
-		    cbi(TCCR0A,WGM00);
-		    cbi(TCCR0A,WGM01);
-		    cbi(TCCR0B,WGM02);
-		    cbi(TCCR0A,COM0A0);
-		    cbi(TCCR0A,COM0A1);
-            cbi(PORTB,PORTB6);
+		    balise.laser_off();
 		    Balise::serial_pc::print("laser off");
 		}
 		
 		//Laser on
 		if(COMPARE_BUFFER("lon",3)){
-		    cbi(TCCR0A,WGM00);
-		    sbi(TCCR0A,WGM01);
-		    cbi(TCCR0B,WGM02);
-		    sbi(TCCR0A,COM0A0);
-		    cbi(TCCR0A,COM0A1);
-		    sbi(PORTB,PORTB6);
+		    balise.laser_on();
             Balise::serial_pc::print("laser on");
 		}		    
 
@@ -186,12 +176,12 @@ int main() {
 		}
 		
 		if(COMPARE_BUFFER("mon",3)){
-		    Balise::pin_activation_moteur::set();
+		    balise.moteur_on();
 		    Balise::serial_pc::print("moteur on");
 		}
         
 		if(COMPARE_BUFFER("moff",4)){
-		    Balise::pin_activation_moteur::clear();
+		    balise.moteur_off();
 		    Balise::serial_pc::print("moteur off");
 		}
 		//Easter egg
@@ -206,31 +196,7 @@ int main() {
 }
 
 void init()
-{
-	//5V sur la pin 12 (B6) pour la direction laser
-	sbi(DDRB,PORTB6);
-	sbi(PORTB,PORTB6);
-	//On met la pin 13 (OC0A, B7) en OUT
-	sbi(DDRB,PORTB7);
-
-	//Config PWM de la pin 13 (créneau de 40Hz)
-	//Active mode CTC (cf datasheet p 96)
-	cbi(TCCR0A,WGM00);
-	sbi(TCCR0A,WGM01);
-	cbi(TCCR0B,WGM02);
-	//Défini le mode de comparaison
-	sbi(TCCR0A,COM0A0);
-	cbi(TCCR0A,COM0A1);
-	// Prescaler (=1)
-	cbi(TCCR0B,CS02);
-	cbi(TCCR0B,CS01);
-	sbi(TCCR0B,CS00);
-	
-	//Seuil (cf formule datasheet)
-	//f_wanted=16000000/(2*prescaler*(1+OCR0A))
-	// Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
-	OCR0A= 170;
-	
+{	
 	//Initialisation table pour crc8
 	init_crc8();
  	
@@ -261,8 +227,8 @@ void init()
 ISR(TIMER1_OVF_vect)
 {
 	//Serial<0>::print(codeur - last_codeur);
-	Balise::Instance().asservir(codeur - last_codeur);
-	last_codeur = codeur;
+// 	Balise::Instance().asservir(codeur - last_codeur);
+// 	last_codeur = codeur;
 }
 
 ISR(TIMER3_OVF_vect)
@@ -282,30 +248,30 @@ ISR(INT0_vect)
 
 ISR(PCINT0_vect)
 {
-	 if(dernier_etat_a == 0 && READ_CANAL_A() == 1){
-	   if(READ_CANAL_B() == 0)
-	     codeur--;
-	   else
-	     codeur++;
-	 }
-	 else if(dernier_etat_a == 1 && READ_CANAL_A() == 0){
-	   if(READ_CANAL_B() == 0)
-	     codeur++;
-	   else
-	     codeur--;
-	 }
-	 else if(dernier_etat_b == 0 && READ_CANAL_B() == 1){
-	   if(READ_CANAL_A() == 0)
-	     codeur--;
-	   else
-	     codeur++;
-	 }
-	 else if(dernier_etat_b == 1 && READ_CANAL_B() == 0){
-	   if(READ_CANAL_A() == 0)
-	     codeur++;
-	   else
-	     codeur--;
-	 }
-	dernier_etat_a = READ_CANAL_A();
-	dernier_etat_b = READ_CANAL_B(); 
+// 	 if(dernier_etat_a == 0 && READ_CANAL_A() == 1){
+// 	   if(READ_CANAL_B() == 0)
+// 	     codeur--;
+// 	   else
+// 	     codeur++;
+// 	 }
+// 	 else if(dernier_etat_a == 1 && READ_CANAL_A() == 0){
+// 	   if(READ_CANAL_B() == 0)
+// 	     codeur++;
+// 	   else
+// 	     codeur--;
+// 	 }
+// 	 else if(dernier_etat_b == 0 && READ_CANAL_B() == 1){
+// 	   if(READ_CANAL_A() == 0)
+// 	     codeur--;
+// 	   else
+// 	     codeur++;
+// 	 }
+// 	 else if(dernier_etat_b == 1 && READ_CANAL_B() == 0){
+// 	   if(READ_CANAL_A() == 0)
+// 	     codeur++;
+// 	   else
+// 	     codeur--;
+// 	 }
+// 	dernier_etat_a = READ_CANAL_A();
+// 	dernier_etat_b = READ_CANAL_B(); 
 }
