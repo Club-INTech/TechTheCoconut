@@ -172,25 +172,27 @@ class Strategie():
         poids = []
         
         nomScripts = []
+        nouvellesPriorites = []
         
         # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
         for i in range(len(self.actions)) :
            # Ajout des nom de scripts.
             if self.actions[i][0] == "FARMERTOTEM" :
                 nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
-                nouvellePriorite = 0
+                nouvellesPriorites.append(0)
             elif self.actions[i][0] == "ENFONCERPOUSSOIR":
                 nomScripts.append("self.scriptInstance.enfoncerPoussoir"+str(self.actions[i][1]))
-                nouvellePriorite = -1
+                nouvellesPriorites.append(-1)
             elif self.actions[i][0] == "FAIRECHIERENNEMI" :
                 nomScripts.append("self.scriptInstance.fairechierEnnemi")
-                nouvellePriorite = self.actions[i][-1] - 0.01     # Petite réduction
+                nouvellesPriorites.append(self.actions[i][-1] - 0.01)     # Petite réduction
             elif self.actions[i][0] == "TOURDETABLE" :
                 nomScripts.append("self.scriptInstance.tourDeTable")
-                nouvellePriorite = self.actions[i][-1] - 0.01
+                nouvellesPriorites.append(self.actions[i][-1] - 0.01)
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
-                nouvellePriorite = self.actions[i][-1] - 0.01
+                nouvellesPriorites.append(self.actions[i][-1] - 0.01)
+                
             # On récupère le temps qu'un script fait pour s'accomplir.
             # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
             try :
@@ -216,13 +218,14 @@ class Strategie():
         max = 0
         maxID = -1
         
-        log.logger.debug("FIN DE CES CALCUULS POUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURIS")
+        log.logger.debug("Fin d'initialisation des actions à faire")
         # On cherche l'action qui fait le meilleur score 
         for i in range(len(self.actions)) :
             if poids[i] > max :
                 max = poids[i]
                 maxID = i
-                
+        
+        
         # Si maxID == -1 c'est que il ne reste rien à faire.
         # TODO Qu'est-ce qu'on fait dans ce cas là ?!
         if maxID < -1 :
@@ -231,17 +234,35 @@ class Strategie():
         
             print "#######################" + str(nomScripts[maxID])
 
+        log.logger.debug("La meilleure action a été choisie")
+        time.sleep(1)
         # Sinon, on prend l'action
         try :
             #exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
-            log.logger.info("Lancement de " + str(nomScripts[maxID]))
-            
-            # Puis on lui change sa priorité. 
-            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], nouvellePriorite)
-            
+            log.logger.debug("Lancement de " + str(nomScripts[maxID]))
+            time.sleep(1)
+            log.logger.debug("Nouvelle priorité pour cette action : " + str(nouvellesPriorites[maxID]))
+            time.sleep(0.7)
+        # Problème de script
         except :
             log.logger.error("La stratégie ne peut pas lancer d'actions")
         
+        # Puis on lui change sa priorité.
+        try :
+            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], nouvellesPriorites[maxID])
+            log.logger.debug("2 arguments")
+
+        except :
+            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1]], nouvellesPriorites[maxID])
+            log.logger.debug("1 arguments")
+
+        else :
+            self.changerPriorite(self.actions[maxID][0], [], nouvellesPriorites[maxID])
+            log.logger.debug("0 argument")
+        time.sleep(1)
+       
+        log.logger.debug("NOUVELLES ACTIONS : " + str(self.actions))
+        time.sleep(5)
         
         
     # Changement de priorité d'une entrée du tableau self.actions
@@ -269,7 +290,7 @@ class Strategie():
                         found = 0
                         break
                 if found :
-                    self.actions[i][1+len(params)] = nouvellePriorite
+                    self.actions[i][-1] = nouvellePriorite
                     return 1
                     
     #TEST
