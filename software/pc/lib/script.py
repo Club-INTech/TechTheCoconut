@@ -376,7 +376,42 @@ class Script:
     # Rafflage de notre totem côté nord (y grands)
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
-        pass
+        
+        asser.goTo(Point(0.,1300.))
+        #début notre totem sud
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        time.sleep(0.5)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        time.sleep(0.5)
+        action.deplacer(120)
+        time.sleep(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        
+        #mettre dans la cale
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.2)
+        action.deplacer(110)
+        time.sleep(0.2)
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
         
     # Rafflage du totem ennemi côté sud (y petits)
     def rafflerTotem10(self,asser,action) :
