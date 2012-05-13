@@ -357,15 +357,13 @@ class Thetastar:
         #tracé du chemin
         v = Narrive
         chemin=[]
-        
-        if v == pred[v]:
-            #pas de chemin trouvé, script sur le point de bugger... COUPEZ !!
-            log.logger.critical("[thetastar] : pas de chemin trouvé, raison inconnue")
-            raise Exception
             
         while v != Ndepart:
             chemin.insert(0, Point(Thetastar.posX[v],Thetastar.posY[v]))
             p = Thetastar.g.vertex(pred[v])
+            if v == p:
+                log.logger.critical("[thetastar] : aucun chemin possible, graphe non connexe")
+                raise Exception
             v = p
         chemin.insert(0, Point(Thetastar.posX[v],Thetastar.posY[v]))
         return chemin

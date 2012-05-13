@@ -39,6 +39,10 @@ class Asservissement:
             self.serieAsserInstance = __builtin__.instance.serieAsserInstance
         else:
             log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
+        if hasattr(__builtin__.instance, 'asserInstanceDuree'):
+            self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
+        else:
+            log.logger.error("asservissement : ne peut importer instance.asserInstanceDuree")
             
         #distance seuil de detection pour les ultrasons
         self.maxCapt = 400
@@ -345,11 +349,20 @@ class Asservissement:
                     __builtin__.instance.viderListeRobotsAdv(recalculer = False)
                     __builtin__.instance.ajouterRobotAdverse(adverse)
                     
-                    #relancer une recherche de chemin
-                    #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
-                    destination = avecRechercheChemin[0]
-                    new_numTentatives = avecRechercheChemin[1] + 1
-                    self.goTo(destination, new_numTentatives)
+                    #est-il rentable de relancer une recherche de chemin ?
+                    self.asserInstanceDuree.setPosition(position)
+                    self.asserInstanceDuree.lancerChrono()
+                    self.asserInstanceDuree.goTo(destination)
+                    if self.asserInstanceDuree.mesurerChrono() < __builtin__.instance.timeout:
+                        #le contretemps est quand meme plus profitable que de changer de script
+                        
+                        #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
+                        destination = avecRechercheChemin[0]
+                        new_numTentatives = avecRechercheChemin[1] + 1
+                        self.goTo(destination, new_numTentatives)
+                    else:
+                        #la stratégie connait un script plus avantageux que de retenter un goTo pour le script courant
+                        raise Exception
                     
                 elif instruction == "sansRecursion":
                     ##4
