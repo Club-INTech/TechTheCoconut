@@ -43,13 +43,8 @@ private:
 	
 	bool etat_rot_;
 	bool etat_tra_;
-// 	bool est_bloque_;
-// 	bool envoi_stop_;
+	volatile bool est_bloque_;
 	
-    enum etat_robot { en_mvt, bloque, arrive };
-    
-    volatile etat_robot etat_mvt_;
-    
 	int32_t mesure_distance_;
 	int32_t mesure_angle_;
 	
@@ -84,8 +79,6 @@ public:
 	void changerVitesseRot1();
 	void changerVitesseRot2();
 	void changerVitesseRot3();
-	
-// 	void acquittement();
 	
 	void asservir();
 	void update_position();
