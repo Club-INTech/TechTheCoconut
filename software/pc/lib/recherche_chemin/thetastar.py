@@ -24,6 +24,7 @@ import profils.develop.constantes
 from lib.carte import Carte
 import __builtin__
 import lib.instance
+from lib.exceptions import departInaccessible
 
 #import lib.visualisation.visu_threads as visu_threads
 
@@ -214,7 +215,7 @@ class Thetastar:
             if not deviationDepart_reussie:
                 #impossible de trouver une position de départ
                 log.logger.critical("la position de départ ("+str(depart.x)+","+str(depart.y)+") est inaccessible !")
-                raise Exception
+                raise departInaccessible(depart)
             
         else :
             touche_ta = False
