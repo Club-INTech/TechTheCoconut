@@ -34,6 +34,12 @@ class Actionneur(serie.Serie):
         
     # Démarrage.
     def demarrer(self):
+        
+        if hasattr(__builtin__.instance, 'robotInstance'):
+            self.robotInstance = __builtin__.instance.robotInstance
+        else:
+            log.logger.error("actionneur : ne peut importer instance.robotInstance")
+        
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
             if hasattr(__builtin__.instance, 'serieCaptActionneurInstance'):
@@ -44,10 +50,7 @@ class Actionneur(serie.Serie):
                 self.calculRayon(0)
                 
             
-        if hasattr(__builtin__.instance, 'robotInstance'):
-            self.robotInstance = __builtin__.instance.robotInstance
-        else:
-            log.logger.error("actionneur : ne peut importer instance.robotInstance")
+        
         
     def deplacer(self, angle, position = ["hg", "hd", "bg", "bd"]):
         """
