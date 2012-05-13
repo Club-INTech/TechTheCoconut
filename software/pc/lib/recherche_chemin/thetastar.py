@@ -56,6 +56,8 @@ class Thetastar:
     
     carte = Carte()
     
+    repertoire = "/media/cacheSopalint/"
+    
     # Reglettes
     r1 = carte.reglettesEnBois[0].rectangle
     r2 = carte.reglettesEnBois[1].rectangle
@@ -110,6 +112,7 @@ class Thetastar:
         
         #actualisation du rayon du robot
         self.rayonRobot = __builtin__.instance.robotInstance.donneRayon()
+        print "rayon connu : "+str(self.rayonRobot)
         if not self.lastRayon == self.rayonRobot:
             #retracage du graphe en cas de changement
             self.enregistreGraphe()
@@ -372,10 +375,10 @@ class Thetastar:
             
         """
         
-        Thetastar.g=load_graph("sauv_g.xml")
-        TposX=marshal.load(open("sauv_posX","rb"))
-        TposY=marshal.load(open("sauv_posY","rb"))
-        Tpoids=marshal.load(open("sauv_poids","rb"))
+        Thetastar.g=load_graph(Thetastar.repertoire+"sauv_g.xml")
+        TposX=marshal.load(open(Thetastar.repertoire+"sauv_posX","rb"))
+        TposY=marshal.load(open(Thetastar.repertoire+"sauv_posY","rb"))
+        Tpoids=marshal.load(open(Thetastar.repertoire+"sauv_poids","rb"))
         for k in range(len(TposX)):
             Thetastar.posX[Thetastar.g.vertex(k)]=TposX[k]
             Thetastar.posY[Thetastar.g.vertex(k)]=TposY[k]
@@ -449,10 +452,10 @@ class Thetastar:
             TposY.append(Thetastar.posY[v])
         for e in Thetastar.g.edges():
             Tpoids.append(Thetastar.poids[e])
-        marshal.dump(TposX, open("sauv_posX", 'wb'))
-        marshal.dump(TposY, open("sauv_posY", 'wb'))
-        marshal.dump(Tpoids, open("sauv_poids", 'wb'))
-        Thetastar.g.save("sauv_g.xml")
+        marshal.dump(TposX, open(Thetastar.repertoire+"sauv_posX", 'wb'))
+        marshal.dump(TposY, open(Thetastar.repertoire+"sauv_posY", 'wb'))
+        marshal.dump(Tpoids, open(Thetastar.repertoire+"sauv_poids", 'wb'))
+        Thetastar.g.save(Thetastar.repertoire+"sauv_g.xml")
 
         
 class VisitorExample(AStarVisitor):
