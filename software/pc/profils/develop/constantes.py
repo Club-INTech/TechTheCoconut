@@ -66,7 +66,7 @@ constantes = \
         },
     },
     "DureeJeu": 87,
-    
+    "Strategie": 1, # profil de stratégie    
     "Actionneurs":
     {
         "angleMax": 160,
