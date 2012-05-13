@@ -106,13 +106,17 @@ class Instance:
             log.logger.error("instance : serieActionneurInstance n'est pas chargé. pas de chemin trouvé.")
         """
         
-    def ajouterRobotAdverse(self, position):
+    def ajouterRobotAdverse(self, position, recalculer = True):
         self.liste_robots_adv.append(position)
-        #retracer le graphe
-        self.theta.enregistreGraphe()
+        if recalculer:
+            #retracer le graphe
+            self.theta.enregistreGraphe()
     
-    def viderListeRobotsAdv(self):
+    def viderListeRobotsAdv(self,recalculer = True):
             self.liste_robots_adv = []
+            if recalculer:
+                #retracer le graphe
+                self.theta.enregistreGraphe()
             
     def instanciationScript(self):
         self.scriptInstance = script.Script()
