@@ -37,7 +37,11 @@ class Instance:
         #liste (globale) des centres de robots adverses détectés
         self.liste_robots_adv = []
         
+        #recherche des périphériques
         self.chemins = attributions.attribuer()
+        
+        # Timeout du script courant, mis à jour par la stratégie
+        self.timeout = 1000
         
 
     def instanciation(self):

@@ -39,6 +39,10 @@ class Asservissement:
             self.serieAsserInstance = __builtin__.instance.serieAsserInstance
         else:
             log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
+        if hasattr(__builtin__.instance, 'asserInstanceDuree'):
+            self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
+        else:
+            log.logger.error("asservissement : ne peut importer instance.asserInstanceDuree")
             
         #distance seuil de detection pour les ultrasons
         self.maxCapt = 400
@@ -117,6 +121,9 @@ class Asservissement:
         #supprime le point de départ du chemin.
         #une exception est levée ici en cas de chemin non trouvé
         chemin_python.remove(chemin_python[0])
+        
+        #on oublie les robots adverses, puisqu'on est censé les éviter
+        __builtin__.instance.viderListeRobotsAdv()
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
@@ -345,11 +352,20 @@ class Asservissement:
                     __builtin__.instance.viderListeRobotsAdv(recalculer = False)
                     __builtin__.instance.ajouterRobotAdverse(adverse)
                     
-                    #relancer une recherche de chemin
-                    #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
-                    destination = avecRechercheChemin[0]
-                    new_numTentatives = avecRechercheChemin[1] + 1
-                    self.goTo(destination, new_numTentatives)
+                    #est-il rentable de relancer une recherche de chemin ?
+                    self.asserInstanceDuree.setPosition(position)
+                    self.asserInstanceDuree.lancerChrono()
+                    self.asserInstanceDuree.goTo(destination)
+                    if self.asserInstanceDuree.mesurerChrono() < __builtin__.instance.timeout:
+                        #le contretemps est quand meme plus profitable que de changer de script
+                        
+                        #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
+                        destination = avecRechercheChemin[0]
+                        new_numTentatives = avecRechercheChemin[1] + 1
+                        self.goTo(destination, new_numTentatives)
+                    else:
+                        #la stratégie connait un script plus avantageux que de retenter un goTo pour le script courant
+                        raise Exception
                     
                 elif instruction == "sansRecursion":
                     ##4
@@ -358,9 +374,6 @@ class Asservissement:
                     #stopper l'execution du script parent
                     raise Exception
                 else:
-                    ##3
-                    #robot adverse
-                    __builtin__.instance.ajouterRobotAdverse(adverse)
                     #attente que la voie se libère
                     ennemi_en_vue = True
                     debut_timer = int(self.timerAsserv.getTime())
@@ -374,7 +387,8 @@ class Asservissement:
                         
                     if not ennemi_en_vue:
                         #vider la liste des robots adverses repérés
-                        __builtin__.instance.viderListeRobotsAdv()
+                        if not __builtin__.instance.liste_robots_adv == []:
+                            __builtin__.instance.viderListeRobotsAdv()
                         
                         #baisser vitesse
                         self.changerVitesse("translation", 1)
@@ -392,6 +406,8 @@ class Asservissement:
                         self.changerVitesse("translation", 2)
                         
                     else:
+                        #robot adverse
+                        __builtin__.instance.ajouterRobotAdverse(adverse)
                         #stopper l'execution du script parent
                         raise Exception
                         

@@ -60,20 +60,20 @@ int main() {
 		char buffer[10];
 		uint8_t n_lu = Balise::Balise::serial_pc::read(buffer,10);
 		if(n_lu == 0) n_lu = n_lu_prec;
-		#define COMPARE_BUFFER(string) (strncmp(buffer, string, n_lu) == 0 && n_lu>0) 
+		#define COMPARE_BUFFER(string,len) (len==n_lu && strncmp(buffer, string, n_lu) == 0 && n_lu>0) 
 
 		//Ping
-		if(COMPARE_BUFFER("?")){
+		if(COMPARE_BUFFER("?",1)){
 			Balise::serial_pc::print(2);
 		}
 		
 		//Speed
-		if(COMPARE_BUFFER("s")){
+		if(COMPARE_BUFFER("s",1)){
 			Balise::serial_pc::print(balise.max_counter());
 		}
 		
 		//Laser off
-		if(COMPARE_BUFFER("loff")){
+		if(COMPARE_BUFFER("loff",4)){
 		    cbi(TCCR0A,WGM00);
 		    cbi(TCCR0A,WGM01);
 		    cbi(TCCR0B,WGM02);
@@ -84,7 +84,7 @@ int main() {
 		}
 		
 		//Laser on
-		if(COMPARE_BUFFER("lon")){
+		if(COMPARE_BUFFER("lon",3)){
 		    cbi(TCCR0A,WGM00);
 		    sbi(TCCR0A,WGM01);
 		    cbi(TCCR0B,WGM02);
@@ -95,7 +95,7 @@ int main() {
 		}		    
 
 		//Ping balise adverse
-		if(COMPARE_BUFFER("!")){
+		if(COMPARE_BUFFER("!",1)){
 			// Timeout pour la requête de 0,25s
 			WDT_set_prescaler();
 			
@@ -111,7 +111,7 @@ int main() {
 		}
 		
 		//Table
-		if(COMPARE_BUFFER("t")){
+		if(COMPARE_BUFFER("t",1)){
 			// Timeout pour la requête de 0,25s
 			WDT_set_prescaler();
 			
@@ -127,7 +127,7 @@ int main() {
 		}
 		
 		//Valeurs
-		if(COMPARE_BUFFER("v")){
+		if(COMPARE_BUFFER("v",1)){
 			bool is_valid = false;
 			int16_t n_demandes = 0;
 			int32_t distance;
@@ -185,17 +185,17 @@ int main() {
 			}
 		}
 		
-		if(COMPARE_BUFFER("mon")){
+		if(COMPARE_BUFFER("mon",3)){
 		    Balise::pin_activation_moteur::set();
 		    Balise::serial_pc::print("moteur on");
 		}
         
-		if(COMPARE_BUFFER("moff")){
+		if(COMPARE_BUFFER("moff",4)){
 		    Balise::pin_activation_moteur::clear();
 		    Balise::serial_pc::print("moteur off");
 		}
 		//Easter egg
-		if(COMPARE_BUFFER("troll")){
+		if(COMPARE_BUFFER("troll",5)){
 			Balise::serial_pc::print("MER IL ET FOU ! ENKULE DE RIRE");
 		}
 		
