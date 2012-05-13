@@ -70,6 +70,12 @@ class Robot:
         # self.actionneur["hg"].angle
 
         log.logger.info('Création du robot')
+    
+    def changeRayon(self, rayon):
+        self.rayon = rayon
+        
+    def donneRayon(self):
+        return self.rayon
         
     def getPosition(self):
         """

@@ -25,4 +25,5 @@ class Rectangle:
         self.wx = wx
         self.wy = wy
         
-        
+    def __repr__(self):
+        return '[centre:(' + str(self.x) + ',' + str(self.y) + ');orient:' + str(self.t) + ';larg:(' + str(self.wx) + ',' + str(self.wy) + ')]'

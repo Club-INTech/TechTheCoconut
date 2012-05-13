@@ -3,7 +3,7 @@
 import __builtin__
 import instance
 asser = __builtin__.instance.asserInstance
-
+"""
 while True :
     a = raw_input(":")
     if (a=="q"):
@@ -16,3 +16,12 @@ while True :
         asser.serialInstance.write("\0")
     else:
         asser.serialInstance.write(a)
+"""
+
+def ping():
+    asser.serieAsserInstance.ecrire("d")
+    asser.serieAsserInstance.ecrire("200")
+    while True:
+        asser.serieAsserInstance.ecrire("acq")
+        print ">"+str(asser.serieAsserInstance.lire())+"<"
+    

@@ -10,7 +10,6 @@ import re
 import log
 import outils_math.point as point
 import robot
-import recherche_chemin.thetastar
 import lib.log
 import outils_math
 log =lib.log.Log(__name__)
@@ -24,8 +23,7 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        theta = recherche_chemin.thetastar.Thetastar([])
-        theta.enregistreGraphe()
+        self.theta = __builtin__.instance.theta
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
@@ -86,10 +84,8 @@ class Asservissement:
         :type chemin: liste de points
         """
         depart = self.getPosition()
-        log.logger.info("[asservissement] Calcul du centre du robot en fonction de l'angle des bras")
-        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
         log.logger.info("[asservissement] Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(depart,arrivee)
+        chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
         try :
             chemin_python.remove(chemin_python[0])

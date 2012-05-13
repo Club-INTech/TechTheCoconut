@@ -48,8 +48,6 @@ class Thetastar:
     :type liste_robots_adv: list de Point
     """
     
-    lastRayon = 0
-    
     # Constantes du robot Coconut
     tableLargeur = constantes["Coconut"]["longueur"]
     tableLongueur = constantes["Coconut"]["largeur"]
@@ -57,6 +55,9 @@ class Thetastar:
     nCotesRobotsA = constantes["Recherche_Chemin"]["nCotesRobotsA"]
     
     carte = Carte()
+    
+    repertoire = ""
+    #repertoire = "/media/cacheSopalint/"
     
     # Reglettes
     r1 = carte.reglettesEnBois[0].rectangle
@@ -89,29 +90,16 @@ class Thetastar:
 
     listeObjets = []
 
-    def __init__(self, liste_robots_adv):
-        Thetastar.liste_robots_adv = liste_robots_adv
+    def __init__(self):
+        self.liste_robots_adv = __builtin__.instance.liste_robots_adv
         
         if hasattr(__builtin__.instance, 'robotInstance'):
-            self.rayonRobot = __builtin__.instance.robotInstance.rayon
+            self.rayonRobot = __builtin__.instance.robotInstance.donneRayon()
         else:
             log.logger.error("thetastar : ne peut importer instance.robotInstance")
-        
-        if not Thetastar.lastRayon == self.rayonRobot:
-            #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
-            for rect in Thetastar.listeRectangles:
-                rect.wx += self.rayonRobot
-                rect.wy += self.rayonRobot
-                
-            #conversion des rectangles en polygones de 4 sommets
-            for rect in Thetastar.listeRectangles:
-                #création d'une liste de polygones pour les zones inaccessibles    
-                #les éléments de jeu ne doivent pas dépasser de l'aire de jeu
-                listePoints = []
-                for angle in RectangleToPoly(rect):
-                    listePoints.append(Point(angle.x,angle.y))
-                Thetastar.listeObjets.append(listePoints)
-            Thetastar.lastRayon = self.rayonRobot
+            
+        self.lastRayon =0
+        self.listeObjets = []
 
     def rechercheChemin(self, depart, arrive):
         """
@@ -122,7 +110,16 @@ class Thetastar:
         :param arrive: Point d'arrivée
         :type arrive: Point
         """
+        
+        #actualisation du rayon du robot
+        self.rayonRobot = __builtin__.instance.robotInstance.donneRayon()
+        print "rayon connu : "+str(self.rayonRobot)
+        if not self.lastRayon == self.rayonRobot:
+            #retracage du graphe en cas de changement
+            self.enregistreGraphe()
+        
         self.chargeGraphe()
+        
         log.logger.info("Recherche de chemin entre ("+str(depart.x)+", "+str(depart.y)+") et ("+str(arrive.x)+", "+str(arrive.y)+")")
         if not (depart.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and depart.y < Thetastar.tableLargeur-self.rayonRobot/2 and depart.y > 0.+self.rayonRobot/2):
             log.logger.critical("Le point de départ n'est pas dans l'aire de jeu")
@@ -134,7 +131,7 @@ class Thetastar:
         
         #création des robots adverses
         robotsA=[]
-        for centre in Thetastar.liste_robots_adv:
+        for centre in self.liste_robots_adv:
             robotsA.append(polygone(centre,self.rayonRobotsA,Thetastar.nCotesRobotsA))
             
         
@@ -148,12 +145,12 @@ class Thetastar:
                 for l in range(4,k):
                     #teste les arêtes accessibles
                     touche = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                             touche = True
                             break
                     if not touche:
-                        for robotA in Thetastar.liste_robots_adv:
+                        for robotA in self.liste_robots_adv:
                             if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),polygone(robotA,self.rayonRobotsA,Thetastar.nCotesRobotsA)):
                                 touche = True
                                 break
@@ -168,7 +165,7 @@ class Thetastar:
             p1=Point(Thetastar.posX[e.source()],Thetastar.posY[e.source()])
             p2=Point(Thetastar.posX[e.target()],Thetastar.posY[e.target()])
             touche = False
-            for poly in Thetastar.listeObjets:
+            for poly in self.listeObjets:
                 if collisionSegmentPoly(p1,p2,poly):
                     touche = True
                     break
@@ -184,7 +181,7 @@ class Thetastar:
         
         #test de l'accessibilité des positions de départ et d'arrivée
         touche_td = False
-        for poly in Thetastar.listeObjets:
+        for poly in self.listeObjets:
             if collisionPolyPoint(poly,depart):
                 touche_td = True
                 break
@@ -200,7 +197,7 @@ class Thetastar:
                 #on retente depuis un point de départ voisin, sur un cercle (hexagone) de faible rayon
                 for redir in polygone(depart,25.,6):
                     touche_tr = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionPolyPoint(poly,redir):
                             touche_tr = True
                             break
@@ -221,7 +218,7 @@ class Thetastar:
             
         else :
             touche_ta = False
-            for poly in Thetastar.listeObjets:
+            for poly in self.listeObjets:
                 if collisionPolyPoint(poly,arrive):
                     touche_ta = True
                     break
@@ -239,7 +236,7 @@ class Thetastar:
                     touche_cercle_A=True
                     for redir in polygone(arrive,25.,6):
                         touche_tr = False
-                        for poly in Thetastar.listeObjets:
+                        for poly in self.listeObjets:
                             if collisionPolyPoint(poly,redir):
                                 touche_tr = True
                                 break
@@ -264,7 +261,7 @@ class Thetastar:
                                 if pCollision:
                                     break
                             if not pCollision:
-                                for poly in Thetastar.listeObjets:
+                                for poly in self.listeObjets:
                                     pCollision=collisionSegmentPoly(depart,arrive,poly)
                                     if pCollision:
                                         break
@@ -289,7 +286,7 @@ class Thetastar:
                 for l in range(4,Thetastar.g.num_vertices()-2):
                     #teste les arêtes accessibles
                     touche_d = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionSegmentPoly(depart,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                             touche_d = True
                             break
@@ -305,7 +302,7 @@ class Thetastar:
                 for l in range(4,Thetastar.g.num_vertices()-1):
                     #teste les arêtes accessibles
                     touche_a = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionSegmentPoly(arrive,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                             touche_a = True
                             break
@@ -373,19 +370,16 @@ class Thetastar:
         return chemin
 
 
-
-
-
     def chargeGraphe(self):
         """
         Méthode qui charge le graphe initial depuis les fichiers sauv_*
             
         """
         
-        Thetastar.g=load_graph("sauv_g.xml")
-        TposX=marshal.load(open("sauv_posX","rb"))
-        TposY=marshal.load(open("sauv_posY","rb"))
-        Tpoids=marshal.load(open("sauv_poids","rb"))
+        Thetastar.g=load_graph(Thetastar.repertoire+"sauv_g.xml")
+        TposX=marshal.load(open(Thetastar.repertoire+"sauv_posX","rb"))
+        TposY=marshal.load(open(Thetastar.repertoire+"sauv_posY","rb"))
+        Tpoids=marshal.load(open(Thetastar.repertoire+"sauv_poids","rb"))
         for k in range(len(TposX)):
             Thetastar.posX[Thetastar.g.vertex(k)]=TposX[k]
             Thetastar.posY[Thetastar.g.vertex(k)]=TposY[k]
@@ -401,12 +395,34 @@ class Thetastar:
         Méthode qui enregistre le graphe contenant les éléments de jeu dans les fichiers sauv_*
             
         """
-    
+        
+        log.logger.info("calcul du graphe (initialisation, nouveau rayon ou nouveaux robots adverses")
+        
+        #copie des rectangles initiaux
+        Thetastar.rectangles = []
+        for rect in Thetastar.listeRectangles:
+            Thetastar.rectangles.append(Rectangle(rect.x,rect.y,rect.t,rect.wx,rect.wy))
+            
+        #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
+        for rect in Thetastar.rectangles:
+            rect.wx += 2*self.rayonRobot
+            rect.wy += 2*self.rayonRobot
+            
+        #conversion des rectangles en polygones de 4 sommets
+        self.listeObjets = []
+        for rect in Thetastar.rectangles:
+            #création d'une liste de polygones pour les zones inaccessibles    
+            #les éléments de jeu ne doivent pas dépasser de l'aire de jeu
+            listePoints = []
+            for angle in RectangleToPoly(rect):
+                listePoints.append(Point(angle.x,angle.y))
+            self.listeObjets.append(listePoints)
+        self.lastRayon = self.rayonRobot
+        
+            
         k=0
-        
-        
         #éléments de jeu
-        for objet in Thetastar.listeObjets:
+        for objet in self.listeObjets:
             #ajoute 4 noeuds : les angles de l'objet rectangulaire
             for angle in objet:
                 if (angle.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and angle.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and angle.y < Thetastar.tableLargeur-self.rayonRobot/2 and angle.y > 0.+self.rayonRobot/2):
@@ -416,7 +432,7 @@ class Thetastar:
                     for l in range(4,k):
                         #teste les arêtes accessibles
                         touche = False
-                        for poly in Thetastar.listeObjets:
+                        for poly in self.listeObjets:
                             if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                                 touche = True
                                 break
@@ -428,7 +444,7 @@ class Thetastar:
                     k+=1
         
         
-        log.logger.info("création du graphe initial et enregistrement dans les fichiers sauv_*")
+        log.logger.info("mise en cache du graphe dans les fichiers sauv_*")
         TposX=[]
         TposY=[]
         Tpoids=[]
@@ -437,10 +453,10 @@ class Thetastar:
             TposY.append(Thetastar.posY[v])
         for e in Thetastar.g.edges():
             Tpoids.append(Thetastar.poids[e])
-        marshal.dump(TposX, open("sauv_posX", 'wb'))
-        marshal.dump(TposY, open("sauv_posY", 'wb'))
-        marshal.dump(Tpoids, open("sauv_poids", 'wb'))
-        Thetastar.g.save("sauv_g.xml")
+        marshal.dump(TposX, open(Thetastar.repertoire+"sauv_posX", 'wb'))
+        marshal.dump(TposY, open(Thetastar.repertoire+"sauv_posY", 'wb'))
+        marshal.dump(Tpoids, open(Thetastar.repertoire+"sauv_poids", 'wb'))
+        Thetastar.g.save(Thetastar.repertoire+"sauv_g.xml")
 
         
 class VisitorExample(AStarVisitor):

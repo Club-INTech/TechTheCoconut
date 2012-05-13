@@ -11,7 +11,6 @@ import log
 import outils_math.point as point
 import actionneur
 import robot
-import recherche_chemin.thetastar
 import lib.log
 import outils_math
 import capteur
@@ -26,8 +25,7 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        theta = recherche_chemin.thetastar.Thetastar([])
-        theta.enregistreGraphe()
+        self.theta = __builtin__.instance.theta
         
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
@@ -106,9 +104,6 @@ class Asservissement:
             #plusieurs recherches de chemin ne suffisent pas à contourner le robot ennemi (il tente sans doute également de nous contourner)
             raise Exception
         
-        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
-        
         #récupération de la position de départ
         depart = self.getPosition()
         
@@ -117,7 +112,7 @@ class Asservissement:
             arrivee.x *= -1
             
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(depart,arrivee)
+        chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
         #supprime le point de départ du chemin.
         #une exception est levée ici en cas de chemin non trouvé
@@ -198,7 +193,6 @@ class Asservissement:
                     self.serieAsserInstance.ecrire("pos")
                     reponseX = self.serieAsserInstance.lire()
                     reponseY = self.serieAsserInstance.lire()
-                    print ">"+str(reponseX)+", "+str(reponseY)+"<\n"
                 pos = point.Point(float(reponseX),float(reponseY))
                 return pos
             except:
@@ -335,22 +329,33 @@ class Asservissement:
             #ajoute un robot adverse sur la table, pour la recherche de chemin
             orientation = self.getOrientation()
             position = self.getPosition()
-            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
-            __builtin__.instance.ajouterRobotAdverse(adverse)
+            largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
+            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
+            print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+            print "ennemi en vue à "+str(adverse)
+            print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
             
             if avecRechercheChemin :
+                #robot adverse
+                __builtin__.instance.viderListeRobotsAdv(recalculer = False)
+                __builtin__.instance.ajouterRobotAdverse(adverse)
+                
                 #relancer une recherche de chemin
+                #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
+                destination = avecRechercheChemin[0]
                 new_numTentatives = avecRechercheChemin[1] + 1
-                goTo(avecRechercheChemin[0], new_numTentatives)
+                self.goTo(destination, new_numTentatives)
                 
             elif instruction == "sansRecursion":
                 ##4
-                #mettre à jour l'attribut position du robot
-                
+                #robot adverse
+                __builtin__.instance.ajouterRobotAdverse(adverse)
                 #stopper l'execution du script parent
                 raise Exception
             else:
                 ##3
+                #robot adverse
+                __builtin__.instance.ajouterRobotAdverse(adverse)
                 #attente que la voie se libère
                 ennemi_en_vue = True
                 debut_timer = int(self.timerAsserv.getTime())
