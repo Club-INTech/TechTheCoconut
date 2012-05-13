@@ -431,10 +431,9 @@ class Script:
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
         
-        log.logger.debug("Enfonçage du poussoir côté nous en couuuuuuuurs")
+        log.logger.debug("Enfonçage du poussoir côté nous en cours")
         action.deplacer(0) # On met les bras à 110 pour arriver à la position
         asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
-        log.logger.debug("hohohohoho")
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         asser.gestionAvancer(290) # on avance au point de rotation
         asser.gestionTourner(-1.5)    # On lui montre nos fesses
@@ -473,15 +472,14 @@ class Script:
         log.logger.debug("C'est parti, on farme l'ennemi !")
         self.tourDeTable(asser, action, False)
         
-    def tourDeTable(self,asser,action, brasOuverts = True) :
+    # Tour de table avec les bras fermés.
+    def tourDeTable0(self,asser,action) :
         """
         Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
+        ET faire chier n'ennemi
         """
         log.logger.debug("Tour de table")
-        if brasOuverts:
-            action.deplacer(120) # On ouvre les bras
-        else:
-            action.deplacer(0) #On garde les bras fermés
+        action.deplacer(0) #On garde les bras fermés
         asser.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
         asser.goTo(Point(395, 505))
         asser.goTo(Point(10, 580))
@@ -492,19 +490,35 @@ class Script:
         asser.goTo(Point(405, 1480))
         asser.goTo(Point(900, 1000))
         asser.goTo(Point(890, 755))
-        if brasOuverts:
-            action.deplacer(80) # On ferme les bras avant de gestionTourner
-        else:
-            pass
+
         asser.gestionTourner(0.755)
         action.deplacer(120) # On ouvre les bras pour déposer
         asser.gestionAvancer(340) # On va dans la calle
         asser.gestionAvancer(-450) # On fait marche arrière pour se dégager
-        if brasOuverts:
-            action.deplacer(100)
-        else:
-            pass
-        log.logger.debug("Fin tour de table")
+
+    # Tour de table avec les bras ouverts
+    def tourDeTable1(self,asser,action) :
+        """
+        Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
+        """
+        log.logger.debug("Tour de table")
+        action.deplacer(120) # On ouvre les bras
+        asser.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
+        asser.goTo(Point(395, 505))
+        asser.goTo(Point(10, 580))
+        asser.goTo(Point(-425, 480))
+        asser.goTo(Point(-900, 970))
+        asser.goTo(Point(410, 1480))
+        asser.goTo(Point(0, 1400))
+        asser.goTo(Point(405, 1480))
+        asser.goTo(Point(900, 1000))
+        asser.goTo(Point(890, 755))
+        action.deplacer(80) # On ferme les bras avant de gestionTourner
+        asser.gestionTourner(0.755)
+        action.deplacer(120) # On ouvre les bras pour déposer
+        asser.gestionAvancer(340) # On va dans la calle
+        asser.gestionAvancer(-450) # On fait marche arrière pour se dégager
+        action.deplacer(100)
         
     def defendreBase(self,asser,action):
         """

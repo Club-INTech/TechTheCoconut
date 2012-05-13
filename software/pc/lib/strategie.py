@@ -131,13 +131,18 @@ class Strategie():
         TYPE D'ACTIONS : [NOM_DE_L_ACTION, +paramètresOptionnels, PRIORITÉ DE L'ACTION]
             NOM_DE_L_ACTION :   "FARMERTOTEM"   +param1 : ennemi, +param2: Nord
                                 "ENFONCERPOUSSOIR"                +param : id poussoir
-                                "CHOPEROBJET"  (lingot ou disque) +param : Point
-                                "FAIRECHIERENNEMI"                +param : AUCUN
+                                "FAIRECHIERENNEMI"
+                                "TOURDETABLE"                     +param1 : brasOuverts
+                                "DEFENDRE"
                                 
                                 
-            PRIORITÉ DE L'ACTION : A coter de 1 à 5. La stratégie l'utilisera en cas de conflits.
+            PRIORITÉ DE L'ACTION : Nombre de points rapportés si l'action réussi.
         """
-        log.logger.info("Initialisation des actions à faire")
+        
+        # Nombre de paramètres par actions
+        self.actions_nbrParametres = {"FARMERTOTEM":2, "ENFONCERPOUSSOIR":1, "FAIRECHIERENNEMI":0, "TOURDETABLE":1, "DEFENDRE":0}
+
+        
         self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
         self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
         self.actions.append(["FARMERTOTEM", 1, 0,   10  ])
@@ -146,16 +151,12 @@ class Strategie():
         self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
         self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
         
-        #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
-        #self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
-        #self.actions.append(["CHOPEROBJET", carte.disques[21].position, 3])  # disques du bas
-        #self.actions.append(["CHOPEROBJET", carte.lingots[1].position, 1])
+        #self.actions.append(["FAIRECHIERENNEMI", 1])    #
         
-        self.actions.append(["FAIRECHIERENNEMI", 1])    #
-        self.actions.append(["TOURDETABLE", 1])         #
-        self.actions.append(["DEFENDRE", 1])            #
+        self.actions.append(["TOURDETABLE", 0, 1  ])
+        self.actions.append(["TOURDETABLE", 1, 0.1])
+        self.actions.append(["DEFENDRE", 1])
         
-        self.actions_nbrParametres = {"FARMERTOTEM":2, "ENFONCERPOUSSOIR":1, "FAIRECHIERENNEMI":0, "TOURDETABLE":0, "DEFENDRE":0}
     
     def choisirAction(self) :
         """
@@ -189,7 +190,7 @@ class Strategie():
                 nomScripts.append("self.scriptInstance.fairechierEnnemi")
                 nouvellesPriorites.append(self.actions[i][-1] - 0.01)     # Petite réduction
             elif self.actions[i][0] == "TOURDETABLE" :
-                nomScripts.append("self.scriptInstance.tourDeTable")
+                nomScripts.append("self.scriptInstance.tourDeTable"+ str(self.actions[i][1]))
                 nouvellesPriorites.append(self.actions[i][-1] - 0.01)
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
@@ -198,6 +199,7 @@ class Strategie():
             # On récupère le temps qu'un script fait pour s'accomplir.
             # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
             try :
+                log.logger.debug("NOM DU SCRIPT : " + str(nomScripts[i]))
                 exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
             except :
                 log.logger.error("Problème de script")
@@ -209,12 +211,8 @@ class Strategie():
             try :
                 poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
             except :
-                poids.append(k1*self.actions[i][-1]/0.1         + k2*distance)
-            
-            
-            log.logger.error(str(temps_script))
-            time.sleep(0)
-            
+                poids.append(k1*self.actions[i][-1]         + k2*distance)
+                        
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
         max = 0
@@ -228,6 +226,7 @@ class Strategie():
                 maxID = i
         
         
+        log.logger.debug("Tableau de poids " + str(poids))
         # Si maxID == -1 c'est que il ne reste rien à faire.
         # TODO Qu'est-ce qu'on fait dans ce cas là ?!
         if maxID < -1 :
@@ -236,8 +235,6 @@ class Strategie():
         
             print "#######################" + str(nomScripts[maxID])
 
-        log.logger.debug("La meilleure action a été choisie")
-        time.sleep(1)
         # Sinon, on prend l'action
         try :
             #exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
@@ -247,7 +244,7 @@ class Strategie():
             time.sleep(0.7)
         # Problème de script
         except :
-            log.logger.error("La stratégie ne peut pas lancer d'actions")
+            log.logger.critical("La stratégie ne peut pas lancer d'actions")
         
         # Puis on lui change sa priorité.
         if self.actions_nbrParametres[self.actions[maxID][0]] == 2 :
