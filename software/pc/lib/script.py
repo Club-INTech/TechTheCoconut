@@ -431,10 +431,9 @@ class Script:
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
         
-        log.logger.debug("Enfonçage du poussoir côté nous en couuuuuuuurs")
+        log.logger.debug("Enfonçage du poussoir côté nous en cours")
         action.deplacer(0) # On met les bras à 110 pour arriver à la position
         asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
-        log.logger.debug("hohohohoho")
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         asser.gestionAvancer(290) # on avance au point de rotation
         asser.gestionTourner(-1.5)    # On lui montre nos fesses
