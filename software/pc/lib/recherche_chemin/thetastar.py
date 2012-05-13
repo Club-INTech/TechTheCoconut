@@ -315,8 +315,6 @@ class Thetastar:
                         Thetastar.g.add_edge(Narrive,Thetastar.g.vertex(l))
                         Thetastar.poids[Thetastar.g.edge(Narrive,Thetastar.g.vertex(l))] = sqrt((arrive.x - Thetastar.posX[Thetastar.g.vertex(l)]) ** 2 + (arrive.y - Thetastar.posY[Thetastar.g.vertex(l)]) ** 2)
                         
-                        
-                
                 chemin=[]
                 
                 log.logger.info("Chemin trouvé :")
@@ -330,9 +328,6 @@ class Thetastar:
                     #visu_table.creerChemin(chemin)
 
                 return chemin
-
-
-
 
 
 
@@ -362,6 +357,12 @@ class Thetastar:
         #tracé du chemin
         v = Narrive
         chemin=[]
+        
+        if v == pred[v]:
+            #pas de chemin trouvé, script sur le point de bugger... COUPEZ !!
+            log.logger.critical("[thetastar] : pas de chemin trouvé, raison inconnue")
+            raise Exception
+            
         while v != Ndepart:
             chemin.insert(0, Point(Thetastar.posX[v],Thetastar.posY[v]))
             p = Thetastar.g.vertex(pred[v])
