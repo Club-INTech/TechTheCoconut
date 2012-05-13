@@ -711,3 +711,6 @@ class Asservissement:
     def moteurDroit(self, vitesse):
         self.serieAsserInstance.ecrire("pwmD")
         self.serieAsserInstance.ecrire(str(vitesse))                
+
+    def attendre(self, temps):
+        time.sleep(temps)
