@@ -169,4 +169,5 @@ class Asservissement_duree:
         pass
         
     def attendre(self, temps):
+        print "temps d'attente    \t          \t         \t"+str(temps)
         self.duree += temps

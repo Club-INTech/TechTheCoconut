@@ -198,7 +198,9 @@ class Script:
 ####################################################################################################################
 
     def scriptTotem01(self,asser,action):
-        asser.goTo(Point(0.,1300.))
+        asser.goTo(Point(0.,1500.))
+        asser.gestionTourner(-math.pi/2)
+        action.deplacer(200)
         #début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
