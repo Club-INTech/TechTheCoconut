@@ -41,7 +41,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	
 	if (i>6)
 	{
-		robot.acquittement();
+// 		robot.acquittement();
 		i = 0;
 	}
 	else

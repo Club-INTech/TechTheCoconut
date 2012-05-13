@@ -84,7 +84,7 @@ class Thetastar:
     axeY=0
 
     #pour activer les déviations automatiques en cas de départ/arrivée inaccessible
-    effectuer_deviation_negligeable = True
+    effectuer_deviation_negligeable = False
     effectuer_deviation_segment = False
 
     listeObjets = []
@@ -124,9 +124,8 @@ class Thetastar:
         """
         self.chargeGraphe()
         log.logger.info("Recherche de chemin entre ("+str(depart.x)+", "+str(depart.y)+") et ("+str(arrive.x)+", "+str(arrive.y)+")")
-
         if not (depart.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and depart.y < Thetastar.tableLargeur-self.rayonRobot/2 and depart.y > 0.+self.rayonRobot/2):
-            log.logger.error("Le point de départ n'est pas dans l'aire de jeu")
+            log.logger.critical("Le point de départ n'est pas dans l'aire de jeu")
             raise Exception
         if not (arrive.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and arrive.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and arrive.y < Thetastar.tableLargeur-self.rayonRobot/2 and arrive.y > 0.+self.rayonRobot/2):
             log.logger.critical("le point d'arrivée n'est pas dans l'aire de jeu !")
@@ -195,11 +194,10 @@ class Thetastar:
                         touche_td = True
                         break
         if touche_td :
-            log.logger.critical("la position de départ est inaccessible !")
-            
+            deviationDepart_reussie = False
             if Thetastar.effectuer_deviation_negligeable :
+                log.logger.info("la position exacte de départ ("+str(depart.x)+","+str(depart.y)+") est inaccessible !")
                 #on retente depuis un point de départ voisin, sur un cercle (hexagone) de faible rayon
-                deviationDepart_reussie = False
                 for redir in polygone(depart,25.,6):
                     touche_tr = False
                     for poly in Thetastar.listeObjets:
@@ -216,9 +214,10 @@ class Thetastar:
                         deviationDepart_reussie = True
                         return self.rechercheChemin(redir,arrive)
                         break
-                if not deviationDepart_reussie:
-                    #impossible de trouver une position de départ
-                    raise Exception
+            if not deviationDepart_reussie:
+                #impossible de trouver une position de départ
+                log.logger.critical("la position de départ ("+str(depart.x)+","+str(depart.y)+") est inaccessible !")
+                raise Exception
             
         else :
             touche_ta = False
@@ -232,13 +231,10 @@ class Thetastar:
                             touche_ta = True
                             break
             if touche_ta :
-                log.logger.critical("la position d'arrivée ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !")
-                
-                
+                deviationArrive_reussie = False
                 if Thetastar.effectuer_deviation_negligeable :
-                    
+                    log.logger.info("la position exacte d'arrivée ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !")
                     #on retente une destination voisine de celle recherchée
-                    deviationArrive_reussie = False
                     #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
                     touche_cercle_A=True
                     for redir in polygone(arrive,25.,6):
@@ -277,11 +273,10 @@ class Thetastar:
                             deviationArrive_reussie = True
                             return self.rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y))
                             
-                    if not deviationArrive_reussie:
-                        #impossible de trouver une position d'arrivée
-                        raise Exception
-                
-                
+                if not deviationArrive_reussie:
+                    #impossible de trouver une position d'arrivée
+                    log.logger.critical("la position d'arrivée ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !")
+                    raise Exception
                 
             else :
                 #créations des noeuds arguments et de leurs arêtes

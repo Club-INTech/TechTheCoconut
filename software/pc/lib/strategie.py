@@ -128,8 +128,6 @@ class Strategie():
         
     def initialiserActionsAFaire(self) :
         """
-        Thibaut.
-        
         TYPE D'ACTIONS : [NOM_DE_L_ACTION, +paramètresOptionnels, PRIORITÉ DE L'ACTION]
             NOM_DE_L_ACTION :   "FARMERTOTEM"   +param1 : ennemi, +param2: Nord
                                 "ENFONCERPOUSSOIR"                +param : id poussoir
@@ -180,23 +178,45 @@ class Strategie():
            # Ajout des nom de scripts.
             if self.actions[i][0] == "FARMERTOTEM" :
                 nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
+                nouvellePriorite = 0
             elif self.actions[i][0] == "ENFONCERPOUSSOIR":
                 nomScripts.append("self.scriptInstance.enfoncerPoussoir"+str(self.actions[i][1]))
+                nouvellePriorite = -1
             elif self.actions[i][0] == "FAIRECHIERENNEMI" :
                 nomScripts.append("self.scriptInstance.fairechierEnnemi")
+                nouvellePriorite = self.actions[i][-1] - 0.01     # Petite réduction
             elif self.actions[i][0] == "TOURDETABLE" :
                 nomScripts.append("self.scriptInstance.tourDeTable")
+                nouvellePriorite = self.actions[i][-1] - 0.01
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
+                nouvellePriorite = self.actions[i][-1] - 0.01
+            # On récupère le temps qu'un script fait pour s'accomplir.
+            # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
+            try :
+                exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
+            except :
+                log.logger.error("Problème de script")
+                # WARNING A ENLEVER POUR UN MATCH
+                temps_script = 0
                 
-            exec("temps_script = self.scriptInstance.gestionScript("+str(nomScripts[i])+", 1)")
-            poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
+            # Ce try... except.. est utile si un script n'est pas fait en dur (pas scripté)
+            # C'est souvent une ZeroDivisionError qui est lancée (script de temps nul)
+            try :
+                poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
+            except :
+                poids.append(k1*self.actions[i][-1]/0.1         + k2*distance)
+            
+            
+            log.logger.error(str(temps_script))
+            time.sleep(0)
             
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
         max = 0
         maxID = -1
         
+        log.logger.debug("FIN DE CES CALCUULS POUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURIS")
         # On cherche l'action qui fait le meilleur score 
         for i in range(len(self.actions)) :
             if poids[i] > max :
@@ -206,17 +226,25 @@ class Strategie():
         # Si maxID == -1 c'est que il ne reste rien à faire.
         # TODO Qu'est-ce qu'on fait dans ce cas là ?!
         if maxID < -1 :
-            log.logger.info("ZUT ALORS ! Plus d'actions à faire")
+            log.logger.critical("ZUT ALORS ! Plus d'actions à faire")
             return
         
-        
+            print "#######################" + str(nomScripts[maxID])
+
         # Sinon, on prend l'action
         try :
-            exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            #exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            log.logger.info("Lancement de " + str(nomScripts[maxID]))
+            
+            # Puis on lui change sa priorité. 
+            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], nouvellePriorite)
+            
         except :
             log.logger.error("La stratégie ne peut pas lancer d'actions")
         
         
+        
+    # Changement de priorité d'une entrée du tableau self.actions
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
         """
         
@@ -249,3 +277,6 @@ class Strategie():
         if self.scriptInstance.scriptTestStruct0():
             self.scriptInstance.scriptTestStruct1()
         
+def t() :
+    s = Strategie()
+    s.lancer()

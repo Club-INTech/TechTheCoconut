@@ -55,45 +55,47 @@ int main() {
 	}
 	
 	init(); 
-    
+    uint8_t n_lu_prec = 0;
 	while (1) {
 		char buffer[10];
-		Balise::Balise::serial_pc::read(buffer,10);
-		
-		#define COMPARE_BUFFER(string,len) strncmp(buffer, string, len) == 0 && len>0
+		uint8_t n_lu = Balise::Balise::serial_pc::read(buffer,10);
+		if(n_lu == 0) n_lu = n_lu_prec;
+		#define COMPARE_BUFFER(string) (strncmp(buffer, string, n_lu) == 0 && n_lu>0) 
 
 		//Ping
-		if(COMPARE_BUFFER("?",1)){
+		if(COMPARE_BUFFER("?")){
 			Balise::serial_pc::print(2);
 		}
 		
 		//Speed
-		if(COMPARE_BUFFER("s",1)){
+		if(COMPARE_BUFFER("s")){
 			Balise::serial_pc::print(balise.max_counter());
 		}
 		
 		//Laser off
-		if(COMPARE_BUFFER("loff",4)){
+		if(COMPARE_BUFFER("loff")){
 		    cbi(TCCR0A,WGM00);
 		    cbi(TCCR0A,WGM01);
 		    cbi(TCCR0B,WGM02);
 		    cbi(TCCR0A,COM0A0);
 		    cbi(TCCR0A,COM0A1);
+            cbi(PORTB,PORTB6);
 		    Balise::serial_pc::print("laser off");
 		}
 		
 		//Laser on
-		if(COMPARE_BUFFER("lon",3)){
+		if(COMPARE_BUFFER("lon")){
 		    cbi(TCCR0A,WGM00);
 		    sbi(TCCR0A,WGM01);
 		    cbi(TCCR0B,WGM02);
 		    sbi(TCCR0A,COM0A0);
 		    cbi(TCCR0A,COM0A1);
-		    Balise::serial_pc::print("laser on");
+		    sbi(PORTB,PORTB6);
+            Balise::serial_pc::print("laser on");
 		}		    
 
 		//Ping balise adverse
-		if(COMPARE_BUFFER("!",1)){
+		if(COMPARE_BUFFER("!")){
 			// Timeout pour la requête de 0,25s
 			WDT_set_prescaler();
 			
@@ -109,7 +111,7 @@ int main() {
 		}
 		
 		//Table
-		if(COMPARE_BUFFER("t",1)){
+		if(COMPARE_BUFFER("t")){
 			// Timeout pour la requête de 0,25s
 			WDT_set_prescaler();
 			
@@ -125,7 +127,7 @@ int main() {
 		}
 		
 		//Valeurs
-		if(COMPARE_BUFFER("v",1)){
+		if(COMPARE_BUFFER("v")){
 			bool is_valid = false;
 			int16_t n_demandes = 0;
 			int32_t distance;
@@ -183,19 +185,28 @@ int main() {
 			}
 		}
 		
+		if(COMPARE_BUFFER("mon")){
+            Balise::pin_activation_moteur::set();
+            Balise::serial_pc::print("moteur on");
+        }
+        
+        if(COMPARE_BUFFER("moff")){
+            Balise::pin_activation_moteur::clear();
+            Balise::serial_pc::print("moteur off");
+        }
 		//Easter egg
-		if(COMPARE_BUFFER("troll",5)){
+		if(COMPARE_BUFFER("troll")){
 			Balise::serial_pc::print("MER IL ET FOU ! ENKULE DE RIRE");
 		}
 		
 		#undef COMPARE_BUFFER
+		n_lu_prec = n_lu;
 	}
 	
 }
 
 void init()
 {
-	
 	//5V sur la pin 12 (B6) pour la direction laser
 	sbi(DDRB,PORTB6);
 	sbi(PORTB,PORTB6);

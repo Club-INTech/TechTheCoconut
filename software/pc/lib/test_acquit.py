@@ -61,6 +61,43 @@ def scriptTotem():
     asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
     
     
+def scriptTotemNord():
+    asserInstance.goTo(Point(0.,1300.))
+    #début notre totem sud
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(110)
+    time.sleep(0.5)
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    
+    #mettre dans la cale
+    asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(130)
+    time.sleep(0.2)
+    actionInstance.deplacer(110)
+    time.sleep(0.2)
+    actionInstance.deplacer(130)
+    asserInstance.changerVitesse("translation", 3)
+    asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    asserInstance.changerVitesse("translation", 2)
+    asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(0)
+    asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+    
     
     """
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
@@ -223,6 +260,8 @@ def console():
                 
             elif ordre == "a":
                 scriptTotem()
+            elif ordre == "h":
+                scriptTotemNord()
             
             elif ordre == "e":
                 macro += current

@@ -11,6 +11,7 @@
 #include <libintech/singleton.hpp>
 #include <libintech/moteur.hpp>
 #include <libintech/asservissement.hpp>
+#include <libintech/register.hpp>
 #include "utils.h"
 
 class Balise : public Singleton<Balise>{
@@ -19,6 +20,7 @@ class Balise : public Singleton<Balise>{
 		typedef Serial<1> serial_radio;
 		typedef Timer<3,ModeCounter,64> T_TopTour;
 		typedef Timer<1,ModeCounter,64> T_Asservissement;
+        typedef AVR_PORTB<PORTB4> pin_activation_moteur;
 	private:
 		volatile uint32_t max_counter_;
 		typedef Timer<2,ModeFastPwm,1> T_2;
