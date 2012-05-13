@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 class Script:
     
     def __init__(self):
+        
         if hasattr(__builtin__.instance, 'asserInstance'):
             self.asserInstance = __builtin__.instance.asserInstance
         else:
@@ -83,18 +84,18 @@ class Script:
         #vitesses normales
         asser.changerVitesse("rotation",2)
         asser.changerVitesse("translation",2)
-        try :
-            #execution du script
-            script(asser,action)
-            if chrono:
-                #retour de la durée totale d'execution du script
-                return asser.mesurerChrono()
-            else:
-                #bon déroulement du script (pour des déplacements réels)
-                return True
-        except :
-            #spécifie un déroulement problématique
-            return False
+        #try :
+        #execution du script
+        script(asser,action)
+        if chrono:
+            #retour de la durée totale d'execution du script
+            return asser.mesurerChrono()
+        else:
+            #bon déroulement du script (pour des déplacements réels)
+            return True
+        #except :
+            ##spécifie un déroulement problématique
+            #return False
             
 ####################################################################################################################
 ###########################################     SCRIPTS SPECIAUX      ##############################################
@@ -198,82 +199,84 @@ class Script:
 ####################################################################################################################
 
     def scriptTotem01(self,asser,action):
-        asserInstance.goTo(Point(0.,1300.))
+        asser.goTo(Point(0.,1500.))
+        asser.gestionTourner(-math.pi/2)
+        action.deplacer(200)
         #début notre totem nord
-        asserInstance.gestionTourner(0)
-        actionInstance.deplacer(130)
-        time.sleep(0.5)
-        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(120)
-        time.sleep(0.5)
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(110)
-        time.sleep(0.5)
-        actionInstance.deplacer(120)
-        time.sleep(0.5)
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        asser.attendre(0.5)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        asser.attendre(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        asser.attendre(0.5)
+        action.deplacer(120)
+        asser.attendre(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         
         #mettre dans la cale
-        asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
-        asserInstance.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(130)
-        time.sleep(0.2)
-        actionInstance.deplacer(110)
-        time.sleep(0.2)
-        actionInstance.deplacer(130)
-        asserInstance.changerVitesse("translation", 3)
-        asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        asserInstance.changerVitesse("translation", 2)
-        asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(0)
-        asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        asser.attendre(0.2)
+        action.deplacer(110)
+        asser.attendre(0.2)
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
 
     def scriptTotem10(self,asser,action):
-        asserInstance.goTo(Point(-820.,660.))
+        asser.goTo(Point(-820.,660.))
         #début leur totem sud
-        asserInstance.gestionTourner(0)
-        actionInstance.deplacer(130)
-        time.sleep(0.5)
-        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(120)
-        time.sleep(0.5)
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(110)
-        time.sleep(0.5)
-        actionInstance.deplacer(120)
-        time.sleep(0.5)
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        asser.attendre(0.5)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        asser.attendre(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        asser.attendre(0.5)
+        action.deplacer(120)
+        asser.attendre(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         
         #mettre dans la cale
-        asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
-        asserInstance.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(700,instruction = "auStopNeRienFaire")
-        asserInstance.gestionTourner(math.pi/4, instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(400,instruction = "auStopNeRienFaire")
-        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(130)
-        time.sleep(0.2)
-        actionInstance.deplacer(110)
-        time.sleep(0.2)
-        actionInstance.deplacer(130)
-        asserInstance.changerVitesse("translation", 3)
-        asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        asserInstance.changerVitesse("translation", 2)
-        asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
-        actionInstance.deplacer(0)
-        asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(700,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(math.pi/4, instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(400,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        asser.attendre(0.2)
+        action.deplacer(110)
+        asser.attendre(0.2)
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
 
     def test1(self,asser, action):
         xd = raw_input("x départ? ")
@@ -299,13 +302,10 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         
     def test5(self,asser,action):
-        asser.gestionAvancer(300)
-        asser.gestionAvancer(300)
-        asser.changerVitesse("rotation",3)
-        asser.gestionTourner(0)
+        action.deplacer(150)
         
     def test6(self,asser,action):
-        asser.goTo(Point(800, 250))
+        action.deplacer(0)
         
     def allerRetour(self, asser,action):
         while 42:
@@ -341,16 +341,16 @@ class Script:
         #début notre totem sud
         asser.gestionTourner(0)
         action.deplacer(130)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(120)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(110)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         action.deplacer(120)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         #mettre dans la cale
@@ -361,9 +361,9 @@ class Script:
         asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
         action.deplacer(130)
-        time.sleep(0.2)
+        asser.attendre(0.2)
         action.deplacer(110)
-        time.sleep(0.2)
+        asser.attendre(0.2)
         action.deplacer(130)
         asser.changerVitesse("translation", 3)
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
@@ -381,16 +381,16 @@ class Script:
         #début notre totem sud
         asser.gestionTourner(0)
         action.deplacer(130)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(120)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(110)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         action.deplacer(120)
-        time.sleep(0.5)
+        asser.attendre(0.5)
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         
@@ -402,9 +402,9 @@ class Script:
         asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
         action.deplacer(130)
-        time.sleep(0.2)
+        asser.attendre(0.2)
         action.deplacer(110)
-        time.sleep(0.2)
+        asser.attendre(0.2)
         action.deplacer(130)
         asser.changerVitesse("translation", 3)
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
@@ -431,10 +431,9 @@ class Script:
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
         
-        log.logger.debug("Enfonçage du poussoir côté nous en couuuuuuuurs")
+        log.logger.debug("Enfonçage du poussoir côté nous en cours")
         action.deplacer(0) # On met les bras à 110 pour arriver à la position
         asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
-        log.logger.debug("hohohohoho")
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         asser.gestionAvancer(290) # on avance au point de rotation
         asser.gestionTourner(-1.5)    # On lui montre nos fesses
@@ -473,15 +472,14 @@ class Script:
         log.logger.debug("C'est parti, on farme l'ennemi !")
         self.tourDeTable(asser, action, False)
         
-    def tourDeTable(self,asser,action, brasOuverts = True) :
+    # Tour de table avec les bras fermés.
+    def tourDeTable0(self,asser,action) :
         """
         Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
+        ET faire chier n'ennemi
         """
         log.logger.debug("Tour de table")
-        if brasOuverts:
-            action.deplacer(120) # On ouvre les bras
-        else:
-            action.deplacer(0) #On garde les bras fermés
+        action.deplacer(0) #On garde les bras fermés
         asser.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
         asser.goTo(Point(395, 505))
         asser.goTo(Point(10, 580))
@@ -492,19 +490,35 @@ class Script:
         asser.goTo(Point(405, 1480))
         asser.goTo(Point(900, 1000))
         asser.goTo(Point(890, 755))
-        if brasOuverts:
-            action.deplacer(80) # On ferme les bras avant de gestionTourner
-        else:
-            pass
+
         asser.gestionTourner(0.755)
         action.deplacer(120) # On ouvre les bras pour déposer
         asser.gestionAvancer(340) # On va dans la calle
         asser.gestionAvancer(-450) # On fait marche arrière pour se dégager
-        if brasOuverts:
-            action.deplacer(100)
-        else:
-            pass
-        log.logger.debug("Fin tour de table")
+
+    # Tour de table avec les bras ouverts
+    def tourDeTable1(self,asser,action) :
+        """
+        Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
+        """
+        log.logger.debug("Tour de table")
+        action.deplacer(120) # On ouvre les bras
+        asser.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
+        asser.goTo(Point(395, 505))
+        asser.goTo(Point(10, 580))
+        asser.goTo(Point(-425, 480))
+        asser.goTo(Point(-900, 970))
+        asser.goTo(Point(410, 1480))
+        asser.goTo(Point(0, 1400))
+        asser.goTo(Point(405, 1480))
+        asser.goTo(Point(900, 1000))
+        asser.goTo(Point(890, 755))
+        action.deplacer(80) # On ferme les bras avant de gestionTourner
+        asser.gestionTourner(0.755)
+        action.deplacer(120) # On ouvre les bras pour déposer
+        asser.gestionAvancer(340) # On va dans la calle
+        asser.gestionAvancer(-450) # On fait marche arrière pour se dégager
+        action.deplacer(100)
         
     def defendreBase(self,asser,action):
         """
