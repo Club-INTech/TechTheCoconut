@@ -222,6 +222,8 @@ void Robot::communiquer_pc(){
 		}
 		else
 			serial_t_::print("EN_MVT");
+// 		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+// 		serial_t_::print(abs(translation.consigne() - mesure_distance_));
 	}
 
 	//demande de la position courante
@@ -420,8 +422,9 @@ bool Robot::est_stoppe()
 	else
 	{
 		mesure_ok = true;
-		bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 45;//33 observé;
-		bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 50;//40;
+
+		bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//52 observé;  (45 avant)
+		bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//58;  (40)
 		return rotation_stoppe && translation_stoppe;
 	}
 }
