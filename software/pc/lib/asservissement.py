@@ -324,6 +324,9 @@ class Asservissement:
         if retour == "obstacle" :
             ##2 
             #ajoute un robot adverse sur la table, pour la recherche de chemin
+            #stopper le robot
+            self.immobiliser()
+                
             orientation = self.getOrientation()
             position = self.getPosition()
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
@@ -337,10 +340,6 @@ class Asservissement:
                 print "ennemi en vue à "+str(adverse)
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
             
-        
-                #stopper le robot
-                self.immobiliser()
-                
                 if avecRechercheChemin :
                     #robot adverse
                     __builtin__.instance.viderListeRobotsAdv(recalculer = False)
