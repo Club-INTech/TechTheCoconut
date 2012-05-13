@@ -143,8 +143,8 @@ class Strategie():
         self.actions.append(["FARMERTOTEM", 1, 0,   10  ])
         self.actions.append(["FARMERTOTEM", 1, 1,   10  ])
         
+        self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
         self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
-        self.actions.append(["ENFONCERPOUSSOIR", 2, 5])
         
         #self.actions.append(["CHOPEROBJET", carte.disques[0].position, 2])   # disque 1
         #self.actions.append(["CHOPEROBJET", carte.disques[1].position, 2])   # disque 2
@@ -154,6 +154,8 @@ class Strategie():
         self.actions.append(["FAIRECHIERENNEMI", 1])    #
         self.actions.append(["TOURDETABLE", 1])         #
         self.actions.append(["DEFENDRE", 1])            #
+        
+        self.actions_nbrParametres = {"FARMERTOTEM":2, "ENFONCERPOUSSOIR":1, "FAIRECHIERENNEMI":0, "TOURDETABLE":0, "DEFENDRE":0}
     
     def choisirAction(self) :
         """
@@ -248,15 +250,15 @@ class Strategie():
             log.logger.error("La stratégie ne peut pas lancer d'actions")
         
         # Puis on lui change sa priorité.
-        try :
+        if self.actions_nbrParametres[self.actions[maxID][0]] == 2 :
             self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], nouvellesPriorites[maxID])
             log.logger.debug("2 arguments")
 
-        except :
+        elif self.actions_nbrParametres[self.actions[maxID][0]] == 1 :
             self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1]], nouvellesPriorites[maxID])
             log.logger.debug("1 arguments")
 
-        else :
+        elif self.actions_nbrParametres[self.actions[maxID][0]] == 0 : 
             self.changerPriorite(self.actions[maxID][0], [], nouvellesPriorites[maxID])
             log.logger.debug("0 argument")
         time.sleep(1)
