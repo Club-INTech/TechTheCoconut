@@ -168,3 +168,6 @@ class Asservissement_duree:
     def setUnsetAsser(self, asservissement, mode):
         pass
         
+    def attendre(self, temps):
+        print "temps d'attente    \t          \t         \t"+str(temps)
+        self.duree += temps

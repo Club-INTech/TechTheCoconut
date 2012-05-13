@@ -27,10 +27,10 @@ class Strategie():
     :type strategie:  int
 
     """
-    def __init__(self, strategie=1):
+    def __init__(self):
 
         
-        self.strategie = strategie
+        self.strategie = constantes['Strategie']
         self.timerStrat = timer.Timer()
         self.actions = []
         
@@ -39,7 +39,7 @@ class Strategie():
         
         # Résolution d'un bug de timer infini.
         if not hasattr(Strategie, "prendreDecisions") :
-            log.logger.info("Lancement de la stratégie numéro " + str(strategie))
+            log.logger.info("Lancement de la stratégie numéro " + str(self.strategie))
             
         #------------------------------#
         #-- Définition des instances --#
@@ -55,12 +55,10 @@ class Strategie():
         except :
             log.logger.error("stratégie : ne peut importer instance.scriptInstance")
             
-        """
         try :
             self.baliseInstance = __builtin__.instance.baliseInstance  # NOTE Convention ? (Thibaut)            
         except :
             log.logger.error("stratégie : ne peut importer instance.baliseInstance")
-        """
             
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
@@ -118,7 +116,8 @@ class Strategie():
         #--------------------------------------#
         
         elif self.strategie == 2:
-            pass
+            while 42 :
+                self.choisirAction()
         
         elif self.strategie == 3 :
             pass
@@ -141,21 +140,38 @@ class Strategie():
         
         # Nombre de paramètres par actions
         self.actions_nbrParametres = {"FARMERTOTEM":2, "ENFONCERPOUSSOIR":1, "FAIRECHIERENNEMI":0, "TOURDETABLE":1, "DEFENDRE":0}
-
         
-        self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
-        self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
-        self.actions.append(["FARMERTOTEM", 1, 0,   10  ])
-        self.actions.append(["FARMERTOTEM", 1, 1,   10  ])
-        
-        self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-        self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
-        
-        #self.actions.append(["FAIRECHIERENNEMI", 1])    #
-        
-        self.actions.append(["TOURDETABLE", 0, 1  ])
-        self.actions.append(["TOURDETABLE", 1, 0.1])
-        self.actions.append(["DEFENDRE", 1])
+        log.logger.debug("Initialisation des actions à faire")
+        # Selon le profil de statégie choisi, on peut mettre des priorités différentes pour chaques actions.
+        if self.strategie == 1 :
+            self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
+            self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
+            self.actions.append(["FARMERTOTEM", 1, 0,   10  ])
+            self.actions.append(["FARMERTOTEM", 1, 1,   10  ])
+            
+            self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
+            self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+            
+            #self.actions.append(["FAIRECHIERENNEMI", 1])    #
+            
+            self.actions.append(["TOURDETABLE", 0, 1  ])
+            self.actions.append(["TOURDETABLE", 1, 0.1])
+            self.actions.append(["DEFENDRE", 1])
+            
+        elif self.strategie == 2 :
+            self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
+            self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
+            self.actions.append(["FARMERTOTEM", 1, 0,   20  ])
+            self.actions.append(["FARMERTOTEM", 1, 1,   20  ])
+            
+            self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
+            self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+            
+            #self.actions.append(["FAIRECHIERENNEMI", 1])    #
+            
+            self.actions.append(["TOURDETABLE", 0, 1  ])
+            self.actions.append(["TOURDETABLE", 1, 0.1])
+            self.actions.append(["DEFENDRE", 1])
         
     
     def choisirAction(self) :
