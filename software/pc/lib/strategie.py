@@ -269,8 +269,6 @@ class Strategie():
             log.logger.critical("ZUT ALORS ! Plus d'actions à faire")
             return
         
-            print "#######################" + str(nomScripts[maxID])
-
         # Sinon, on prend l'action
         try :
             # Ecris un timeout dans __builtin__.instance
@@ -279,7 +277,7 @@ class Strategie():
             if deuxiemeMaxID >= 0 :
                 __builtin__.instance.timeout = tempsScripts[deuxiemeMaxID]
             else :
-                __builtin__.instance.timeout = -1
+                __builtin__.instance.timeout = 1000
             
             exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
             
