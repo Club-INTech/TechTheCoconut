@@ -186,14 +186,14 @@ int main() {
 		}
 		
 		if(COMPARE_BUFFER("mon")){
-            Balise::pin_activation_moteur::set();
-            Balise::serial_pc::print("moteur on");
-        }
+		    Balise::pin_activation_moteur::set();
+		    Balise::serial_pc::print("moteur on");
+		}
         
-        if(COMPARE_BUFFER("moff")){
-            Balise::pin_activation_moteur::clear();
-            Balise::serial_pc::print("moteur off");
-        }
+		if(COMPARE_BUFFER("moff")){
+		    Balise::pin_activation_moteur::clear();
+		    Balise::serial_pc::print("moteur off");
+		}
 		//Easter egg
 		if(COMPARE_BUFFER("troll")){
 			Balise::serial_pc::print("MER IL ET FOU ! ENKULE DE RIRE");
