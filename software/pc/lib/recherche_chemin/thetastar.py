@@ -56,7 +56,8 @@ class Thetastar:
     
     carte = Carte()
     
-    repertoire = "/media/cacheSopalint/"
+    repertoire = ""
+    #repertoire = "/media/cacheSopalint/"
     
     # Reglettes
     r1 = carte.reglettesEnBois[0].rectangle
