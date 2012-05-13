@@ -5,7 +5,7 @@
 
 #define PERIOD 60 //1000/17Hz
 
-int cmd = 65;//commande de départ
+int cmd = 75;//commande de départ
 
 void setup(){
   pinMode(p1, OUTPUT);
