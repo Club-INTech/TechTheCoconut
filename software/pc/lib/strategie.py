@@ -277,9 +277,9 @@ class Strategie():
             # CONVENTION : Si il n'y a pas de deuxième meilleure action à faire, on met
             # le timeout à -1
             if deuxiemeMaxID >= 0 :
-                __builtin__.instance.scriptInstance.timeout = tempsScripts[deuxiemeMaxID]
+                __builtin__.instance.timeout = tempsScripts[deuxiemeMaxID]
             else :
-                __builtin__.instance.scriptInstance.timeout = -1
+                __builtin__.instance.timeout = -1
             
             exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
             
