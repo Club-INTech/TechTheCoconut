@@ -36,7 +36,13 @@ class Actionneur(serie.Serie):
     def demarrer(self):
         if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
             Actionneur.initialise = True
-            self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
+            if hasattr(__builtin__.instance, 'serieCaptActionneurInstance'):
+                self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
+                self.deplacer(0)
+            else:
+                log.logger.error("actionneur : ne peut importer instance.serieCaptActionneurInstance")
+                self.calculRayon(0)
+                
             
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
