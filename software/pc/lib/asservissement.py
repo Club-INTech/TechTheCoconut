@@ -121,6 +121,9 @@ class Asservissement:
         #supprime le point de départ du chemin.
         #une exception est levée ici en cas de chemin non trouvé
         chemin_python.remove(chemin_python[0])
+        
+        #on oublie les robots adverses, puisqu'on est censé les éviter
+        __builtin__.instance.viderListeRobotsAdv()
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
@@ -371,9 +374,6 @@ class Asservissement:
                     #stopper l'execution du script parent
                     raise Exception
                 else:
-                    ##3
-                    #robot adverse
-                    __builtin__.instance.ajouterRobotAdverse(adverse)
                     #attente que la voie se libère
                     ennemi_en_vue = True
                     debut_timer = int(self.timerAsserv.getTime())
@@ -387,7 +387,8 @@ class Asservissement:
                         
                     if not ennemi_en_vue:
                         #vider la liste des robots adverses repérés
-                        __builtin__.instance.viderListeRobotsAdv()
+                        if not __builtin__.instance.liste_robots_adv == []:
+                            __builtin__.instance.viderListeRobotsAdv()
                         
                         #baisser vitesse
                         self.changerVitesse("translation", 1)
@@ -405,6 +406,8 @@ class Asservissement:
                         self.changerVitesse("translation", 2)
                         
                     else:
+                        #robot adverse
+                        __builtin__.instance.ajouterRobotAdverse(adverse)
                         #stopper l'execution du script parent
                         raise Exception
                         
