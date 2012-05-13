@@ -56,8 +56,7 @@ class Asservissement:
         self.liste_robots_adv = __builtin__.instance.liste_robots_adv
         
         #rayon moyen des robots adverses
-        #TODO : à mettre dans constantes
-        self.rayonRobotsAdverses = 200.0
+        self.rayonRobotsAdverses = constantes["Recherche_Chemin"]["rayonRobotsA"]
         
         #timer pour les timeout
         self.timerAsserv = timer.Timer()

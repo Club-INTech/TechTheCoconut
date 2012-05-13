@@ -8,6 +8,7 @@ from outils_math.point import Point
 import lib.log
 import os
 import math
+from lib.exceptions import departInaccessible
 
 log = lib.log.Log(__name__)
 
@@ -84,18 +85,41 @@ class Script:
         #vitesses normales
         asser.changerVitesse("rotation",2)
         asser.changerVitesse("translation",2)
-        #try :
-        #execution du script
-        script(asser,action)
-        if chrono:
-            #retour de la durée totale d'execution du script
-            return asser.mesurerChrono()
-        else:
-            #bon déroulement du script (pour des déplacements réels)
-            return True
-        #except :
-            ##spécifie un déroulement problématique
-            #return False
+        try :
+            #execution du script
+            script(asser,action)
+            if chrono:
+                #retour de la durée totale d'execution du script
+                return asser.mesurerChrono()
+            else:
+                #bon déroulement du script (pour des déplacements réels)
+                return True
+                
+        except departInaccessible as p:
+            print 'le point de départ est inaccessible : ', p.point
+            position = p.point# = self.asserInstance.getPosition()
+            #qu'est ce qui bloque ?
+            obstacle = False
+            for adverse in __builtin__.instance.liste_robots_adv:
+                dist = math.sqrt((adverse.x - position.x) ** 2 + (adverse.y - position.y) ** 2)
+                if dist < constantes["Recherche_Chemin"]["rayonRobotsA"] + self.robotInstance.donneRayon():
+                    obstacle = adverse
+                    break
+            if obstacle:
+                #esquiver le robot adverse
+                #TODO
+                pass
+            else:
+                #on est coincé dans un angle, ou un totem
+                #TODO
+                pass
+            
+            #on donne ensuite la main à la stratégie
+            return False
+            
+        except :
+            #spécifie un déroulement problématique
+            return False
             
 ####################################################################################################################
 ###########################################     SCRIPTS SPECIAUX      ##############################################

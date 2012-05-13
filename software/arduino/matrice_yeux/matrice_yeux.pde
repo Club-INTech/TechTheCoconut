@@ -126,6 +126,86 @@ void K2000()
   }
 }
 
+void cylon()
+{
+  //Oeil gauche (de gauche à droite)
+  for(int i=0;i<14;i++)
+  {
+     if(i<7) //MAX 01 & 04
+     {
+       //Switch ON
+       lc.setRow(0,i,B11111111);
+       lc.setRow(3,6-i,B11111111);
+       //2eme colonne
+       lc.setRow(0,i+1,B11111111);
+       lc.setRow(3,6-i+1,B11111111);
+       delay(delaytime*i/3);
+       
+       //Switch OFF
+       lc.setRow(0,i,(byte)0);
+       lc.setRow(3,6-i,(byte)0);
+       //2eme colonne
+       lc.setRow(0,i+1,(byte)0);
+       lc.setRow(3,6-i+1,(byte)0);
+     }
+     else //MAX 02 & 03
+     {
+       //Switch ON
+        lc.setRow(1,i-7,B11111111);
+        lc.setRow(2,13-i,B11111111);
+        //2eme colonne
+        lc.setRow(1,i-7+1,B11111111);
+        lc.setRow(2,13-i+1,B11111111);
+        delay(delaytime*(i-7)/3);
+        
+        //Switch OFF
+        lc.setRow(1,i-7,(byte)0);
+        lc.setRow(2,13-i,(byte)0);
+        //2eme colonne
+        lc.setRow(1,i-7+1,(byte)0);
+        lc.setRow(2,13-i+1,(byte)0);
+     }
+  }
+  
+  //Oeil gauche (de droite à gauche)
+  for(int i=13;i>=0;i--)
+  {
+     if(i<7) //MAX 01 & 04
+     {
+       //Switch ON
+       lc.setRow(0,i,B11111111);
+       lc.setRow(3,6-i,B11111111);
+       //2eme colonne
+       lc.setRow(0,i+1,B11111111);
+       lc.setRow(3,6-i+1,B11111111);
+       delay(delaytime*i/3);
+       
+       //Switch OFF
+       lc.setRow(0,i,(byte)0);
+       lc.setRow(3,6-i,(byte)0);
+       //2eme colonne
+       lc.setRow(0,i+1,(byte)0);
+       lc.setRow(3,6-i+1,(byte)0);
+     }
+     else //MAX 02 & 03
+     {
+       //Switch ON
+        lc.setRow(1,i-7,B11111111);
+        lc.setRow(2,13-i,B11111111);
+        //2eme colonne
+        lc.setRow(1,i-7+1,B11111111);
+        lc.setRow(2,13-i+1,B11111111);
+        delay(delaytime*(i-7)/3);
+        
+        //Switch OFF
+        lc.setRow(1,i-7,(byte)0);
+        lc.setRow(2,13-i,(byte)0);
+        //2eme colonne
+        lc.setRow(1,i-7+1,(byte)0);
+        lc.setRow(2,13-i+1,(byte)0);
+     }
+  }
+}
 void balayageH()
 {
   // Aller
@@ -179,5 +259,6 @@ void balayageV()
 void loop() 
 { 
   //balayageV();
-  K2000();  
+  //K2000(); 
+ cylon(); 
 }
