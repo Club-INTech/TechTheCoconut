@@ -144,10 +144,10 @@ class Strategie():
         log.logger.debug("Initialisation des actions à faire")
         # Selon le profil de statégie choisi, on peut mettre des priorités différentes pour chaques actions.
         if self.strategie == 1 :
-            self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
-            self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
-            self.actions.append(["FARMERTOTEM", 1, 0,   10  ])
-            self.actions.append(["FARMERTOTEM", 1, 1,   10  ])
+            self.actions.append(["FARMERTOTEM", 0, 0, 10])
+            self.actions.append(["FARMERTOTEM", 0, 1, 10])
+            self.actions.append(["FARMERTOTEM", 1, 0, 10])
+            self.actions.append(["FARMERTOTEM", 1, 1, 10])
             
             self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
             self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
@@ -157,6 +157,14 @@ class Strategie():
             self.actions.append(["TOURDETABLE", 0, 1  ])
             self.actions.append(["TOURDETABLE", 1, 0.1])
             self.actions.append(["DEFENDRE", 1])
+            
+            # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
+            # le deuxième argument est la nouvelle priorité si échec.
+            self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
+                                        "ENFONCERPOUSSOIR"  : [0, 5],
+                                        "TOURDETABLE"       : [0.4, 0.4],
+                                        "DEFENDRE"          : [0.1, 0.1]
+                                      }
             
         elif self.strategie == 2 :
             self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
@@ -172,6 +180,14 @@ class Strategie():
             self.actions.append(["TOURDETABLE", 0, 1  ])
             self.actions.append(["TOURDETABLE", 1, 0.1])
             self.actions.append(["DEFENDRE", 1])
+            
+            # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
+            # le deuxième argument est la nouvelle priorité si échec.
+            self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
+                                        "ENFONCERPOUSSOIR"  : [0, 5],
+                                        "TOURDETABLE"       : [0.4, 0.4],
+                                        "DEFENDRE"          : [0.1, 0.1]
+                                      }
         
     
     def choisirAction(self) :
@@ -189,7 +205,7 @@ class Strategie():
         k2 = 1
         
         poids = []
-        
+        tempsScripts = []
         nomScripts = []
         nouvellesPriorites = []
         
@@ -198,19 +214,18 @@ class Strategie():
            # Ajout des nom de scripts.
             if self.actions[i][0] == "FARMERTOTEM" :
                 nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
-                nouvellesPriorites.append(0)
+
             elif self.actions[i][0] == "ENFONCERPOUSSOIR":
                 nomScripts.append("self.scriptInstance.enfoncerPoussoir"+str(self.actions[i][1]))
-                nouvellesPriorites.append(-1)
+
             elif self.actions[i][0] == "FAIRECHIERENNEMI" :
                 nomScripts.append("self.scriptInstance.fairechierEnnemi")
-                nouvellesPriorites.append(self.actions[i][-1] - 0.01)     # Petite réduction
+
             elif self.actions[i][0] == "TOURDETABLE" :
                 nomScripts.append("self.scriptInstance.tourDeTable"+ str(self.actions[i][1]))
-                nouvellesPriorites.append(self.actions[i][-1] - 0.01)
+
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
-                nouvellesPriorites.append(self.actions[i][-1] - 0.01)
                 
             # On récupère le temps qu'un script fait pour s'accomplir.
             # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
@@ -221,6 +236,9 @@ class Strategie():
                 log.logger.error("Problème de script")
                 # WARNING A ENLEVER POUR UN MATCH
                 temps_script = 0
+                
+            # Temps de chaque scripts.
+            tempsScripts.append(temps_script)
                 
             # Ce try... except.. est utile si un script n'est pas fait en dur (pas scripté)
             # C'est souvent une ZeroDivisionError qui est lancée (script de temps nul)
@@ -233,19 +251,21 @@ class Strategie():
         # déjà fait. Ex : On a déjà farmé le totem.)
         max = 0
         maxID = -1
+        deuxiemeMaxID = -1
         
-        log.logger.debug("Fin d'initialisation des actions à faire")
-        # On cherche l'action qui fait le meilleur score 
+        # On cherche l'action qui fait le meilleur score
+        # Le deuxième max est utile pour arrêter le premier si celui ci met
+        # trop de temps.
         for i in range(len(self.actions)) :
             if poids[i] > max :
+                deuxiemeMaxID = maxID
                 max = poids[i]
                 maxID = i
         
         
-        log.logger.debug("Tableau de poids " + str(poids))
         # Si maxID == -1 c'est que il ne reste rien à faire.
         # TODO Qu'est-ce qu'on fait dans ce cas là ?!
-        if maxID < -1 :
+        if maxID < 0 :
             log.logger.critical("ZUT ALORS ! Plus d'actions à faire")
             return
         
@@ -253,29 +273,30 @@ class Strategie():
 
         # Sinon, on prend l'action
         try :
-            #exec("self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
-            log.logger.debug("Lancement de " + str(nomScripts[maxID]))
-            time.sleep(1)
-            log.logger.debug("Nouvelle priorité pour cette action : " + str(nouvellesPriorites[maxID]))
-            time.sleep(0.7)
+            # Ecris un timeout dans __builtin__.instance
+            # CONVENTION : Si il n'y a pas de deuxième meilleure action à faire, on met
+            # le timeout à -1
+            if deuxiemeMaxID >= 0 :
+                __builtin__.instance.scriptInstance.timeout = tempsScripts[deuxiemeMaxID]
+            else :
+                __builtin__.instance.scriptInstance.timeout = -1
+            
+            exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            
         # Problème de script
         except :
             log.logger.critical("La stratégie ne peut pas lancer d'actions")
-        
-        # Puis on lui change sa priorité.
-        if self.actions_nbrParametres[self.actions[maxID][0]] == 2 :
-            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1], self.actions[maxID][2]], nouvellesPriorites[maxID])
-            log.logger.debug("2 arguments")
-
-        elif self.actions_nbrParametres[self.actions[maxID][0]] == 1 :
-            self.changerPriorite(self.actions[maxID][0], [self.actions[maxID][1]], nouvellesPriorites[maxID])
-            log.logger.debug("1 arguments")
-
-        elif self.actions_nbrParametres[self.actions[maxID][0]] == 0 : 
-            self.changerPriorite(self.actions[maxID][0], [], nouvellesPriorites[maxID])
-            log.logger.debug("0 argument")
-        time.sleep(1)
-       
+            success = True
+            
+        # Si l'action s'est  bien déroulée
+        if success :
+            # Puis on lui change sa priorité.
+            self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][0])
+        # Si l'action a chié comme Deboc
+        else :
+            self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][1])
+    
+            
         log.logger.debug("NOUVELLES ACTIONS : " + str(self.actions))
         time.sleep(5)
         
@@ -307,6 +328,14 @@ class Strategie():
                 if found :
                     self.actions[i][-1] = nouvellePriorite
                     return 1
+                    
+    def changerPriorite_byID(self, id, nouvellePriorite) :
+        """
+        Change la priorité d'une action dans le tableau self.actions, en fonction
+        de l'ID de celui ci dans ce tableau
+        """
+        
+        self.actions[id][-1] = nouvellePriorite
                     
     #TEST
     def strateg_scripts(self):

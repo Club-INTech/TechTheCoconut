@@ -16,6 +16,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 class Script:
     
     def __init__(self):
+        # Timeout, mis à jour par la stratégie
+        self.timeout = -1
         if hasattr(__builtin__.instance, 'asserInstance'):
             self.asserInstance = __builtin__.instance.asserInstance
         else:
