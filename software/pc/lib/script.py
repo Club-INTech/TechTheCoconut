@@ -396,15 +396,16 @@ class Script:
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
         
-        log.logger.debug("Enfonçage du poussoir côté nous en cours")
+        log.logger.debug("Enfonçage du poussoir côté nous en couuuuuuuurs")
         action.deplacer(0) # On met les bras à 110 pour arriver à la position
-        asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
+        #asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
+        log.logger.debug("hohohohoho")
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         asser.gestionAvancer(290) # on avance au point de rotation
         asser.gestionTourner(-1.5)    # On lui montre nos fesses
-        asser.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
+        #asser.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
         asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
+        #asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
         asser.gestionAvancer(450)    # On se barre.
         log.logger.debug("Enfonçage du poussoir à nous fini")
         
@@ -413,7 +414,7 @@ class Script:
         
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
         action.deplacer(0) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
-        asser.goTo(Point(-1500 + 640 + 477, 2000 - 500)) # On va se placer le long de la ligne
+        #asser.goTo(Point(-1500 + 640 + 477, 2000 - 500)) # On va se placer le long de la ligne
         asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
         asser.gestionAvancer(290) # on avance au point de rotation
         asser.gestionTourner(-1.5)    # On lui montre nos fesses
