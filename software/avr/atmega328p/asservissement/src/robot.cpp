@@ -9,6 +9,7 @@
 #include "robot.h"
 #include <libintech/asservissement.hpp>
 
+#include <util/delay.h>
 
 // Constructeur avec assignation des attributs
 Robot::Robot() : 		couleur_('v')
@@ -55,9 +56,13 @@ void Robot::asservir()
 		pwmTranslation = translation.pwm(mesure_distance_,20);
 	else
 		pwmTranslation = 0;
-
-	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
-	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	
+	if(etat_tra_ || etat_rot_)
+	{
+		moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+		moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	}
+	
 }
 
 
@@ -92,6 +97,55 @@ void Robot::communiquer_pc(){
 	if(COMPARE_BUFFER("?",1)){
 		serial_t_::print(0);
 	}
+	
+	
+	else if(COMPARE_BUFFER("eer",3)){
+		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+	}
+	else if(COMPARE_BUFFER("eet",3)){
+		serial_t_::print(abs(translation.consigne() - mesure_distance_));
+	}
+	
+	else if(COMPARE_BUFFER("epr",3)){
+		serial_t_::print(rotation.pwmCourant());
+	}
+	else if(COMPARE_BUFFER("ept",3)){
+		serial_t_::print(translation.pwmCourant());
+	}
+	
+	else if(COMPARE_BUFFER("epg",3)){
+		serial_t_::print(moteurGauche.pwm());
+	}
+	else if(COMPARE_BUFFER("epd",3)){
+		serial_t_::print(moteurDroit.pwm());
+	}
+	
+	else if(COMPARE_BUFFER("cpg",3)){
+		moteurGauche.envoyerPwm(serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("cpd",3)){
+		moteurDroit.envoyerPwm(serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("cpr",3)){
+		int16_t rotation = serial_t_::read_float();
+		moteurGauche.envoyerPwm(- rotation);
+		moteurDroit.envoyerPwm(rotation);
+		
+	}
+	else if(COMPARE_BUFFER("cpt",3)){
+		int16_t translation = serial_t_::read_float();
+		moteurGauche.envoyerPwm(translation);
+		moteurDroit.envoyerPwm(translation);
+		
+	}
+	
+	
+	
+	
+	
+	
+		
+		
 	else if(COMPARE_BUFFER("ccr",3)){
 		couleur_ = 'r';
 	}
@@ -264,7 +318,7 @@ void Robot::communiquer_pc(){
 
 void Robot::changerVitesseTra1(void)
 {
-	translation.valeur_bridage(50.0);
+	translation.valeur_bridage(60.0);//50 avant balise, yeux, etc
 	translation.kp(0.75);
 	translation.kd(2.0);
 }
@@ -284,7 +338,7 @@ void Robot::changerVitesseTra3(void)
 }
 void Robot::changerVitesseRot1(void)
 {
-	rotation.valeur_bridage(70.0);
+	rotation.valeur_bridage(80.0);//70
 	rotation.kp(1.5);
 	rotation.kd(2.0);
 }
@@ -412,6 +466,7 @@ void Robot::envoyer_position_tic()
 
 bool Robot::est_stoppe()
 {
+	/*
 	static bool mesure_ok = true;
 
 	if ((abs(translation.consigne() - mesure_distance_) > 500 ||abs(compare_angle_tic(mesure_angle_,rotation.consigne())) > 1000) && mesure_ok)
@@ -421,13 +476,19 @@ bool Robot::est_stoppe()
 	}
 	else
 	{
+		
 		mesure_ok = true;
+		*/
+	
+	//rotation : 17 en v1, 
 
-		bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//52 observé;  (45 avant)
-		bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//58;  (40)
-		return rotation_stoppe && translation_stoppe;
-	}
+	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
+	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
+	return rotation_stoppe && translation_stoppe;
+	
+// 	}
 }
+
 
 ////////////////////////////// DEPLACEMENTS ET BLOCAGE ///////////////////////////////////
 
@@ -452,8 +513,11 @@ void Robot::stopper()
 {
 // 	serial_t_::print((int32_t)abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
 // 	serial_t_::print((int32_t)abs(translation.consigne() - mesure_distance_));
+	if (not est_stoppe())
+	{
 	rotation.consigne(mesure_angle_);
 	translation.consigne(mesure_distance_);
+	}
 }
 
 void Robot::gestion_blocage()
@@ -468,18 +532,20 @@ void Robot::gestion_blocage()
 	static int32_t last_angle;
 	*/
 	
-	if (  ( (abs(rotation.pwmCourant())>40
-		&& abs(T_last_angle[4]-T_last_angle[0])<5)
-		|| (abs(translation.pwmCourant())>50
-		&& abs(T_last_distance[4]-T_last_distance[0])<5) )
-		&& not est_stoppe() && (
-				       (not est_bloque_)
-				    || (abs(mesure_distance_ - translation.consigne())>300)
-				    || (abs(mesure_angle_ - rotation.consigne())>300)
-				       )
-	   )
-	{
 	
+	bool force_en_translation = (abs(rotation.pwmCourant())>40 && abs(T_last_angle[4]-T_last_angle[0])<5);
+	bool force_en_rotation = (abs(translation.pwmCourant())>50 && abs(T_last_distance[4]-T_last_distance[0])<5);
+	bool moteurs_forcent = force_en_translation || force_en_rotation;
+	
+	bool erreur_en_translation = abs(translation.consigne() - mesure_distance_) > 70;
+	bool erreur_en_rotation = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) > 65;
+	
+	bool important_ecart_en_translation = abs(mesure_distance_ - translation.consigne()) > 500;
+	bool important_ecart_en_rotation = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) > 500;
+	bool on_peut_stopper_le_robot = (not est_bloque_) || ( est_bloque_ && (important_ecart_en_translation || important_ecart_en_rotation));
+	
+	if (moteurs_forcent && on_peut_stopper_le_robot && (erreur_en_translation || erreur_en_rotation) )
+	{
 		if(compteurBlocage==20){
 			stopper();
 			est_bloque_ = true;
@@ -520,8 +586,9 @@ void Robot::recalage()
 	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
 	if (couleur_ == 'r') changer_orientation(0.0); else changer_orientation(PI);
 	etat_rot_ = true;
+	_delay_ms(500);
 	changerVitesseTra1();
-	translater_bloc(300.0);
+	translater_bloc(220.0);
 	tourner_bloc(PI/2);
 	translater_bloc(-300.0);
 	etat_rot_ = false;
@@ -530,13 +597,15 @@ void Robot::recalage()
 	y(LARGEUR_ROBOT/2);
 	changer_orientation(PI/2);
 	etat_rot_ = true;
+	_delay_ms(500);
 	changerVitesseTra1();
 	translater_bloc(150.0);
 	if (couleur_ == 'r') tourner_bloc(0.0); else tourner_bloc(PI);
 // 	etat_rot_ = false;
 // 	etat_tra_ = false;
 	changerVitesseTra2();
-	changerVitesseRot2();
+	changerVitesseRot1();
+	_delay_ms(200);
 	serial_t_::print("FIN_REC");
 }
 

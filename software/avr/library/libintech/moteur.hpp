@@ -39,6 +39,7 @@ public:
   }
   
   void envoyerPwm(int16_t pwm){	  
+	pwm_ = pwm;
     if (pwm>0) {
       direction(Direction::AVANCER);
       Timer::MODE::seuil(min(pwm, maxPWM_)); //Bridage
@@ -47,6 +48,11 @@ public:
       direction(Direction::RECULER);
 	  Timer::MODE::seuil(min(-pwm,maxPWM_)); //Bridage
     }
+  }
+  
+  int16_t pwm()
+  {
+	return pwm_;
   }
   
   void maxPWM(int16_t maxPWM){
@@ -59,6 +65,7 @@ public:
   
 private:
   int16_t maxPWM_;
+  int16_t pwm_;
 };
 
 
