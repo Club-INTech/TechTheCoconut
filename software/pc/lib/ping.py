@@ -19,9 +19,14 @@ while True :
 """
 
 def ping():
+    """
     asser.serieAsserInstance.ecrire("d")
     asser.serieAsserInstance.ecrire("200")
     while True:
         asser.serieAsserInstance.ecrire("acq")
         print ">"+str(asser.serieAsserInstance.lire())+"<"
-    
+    """
+    while True:
+        asser.serieAsserInstance.ecrire("pos")
+        print "x : >"+str(asser.serieAsserInstance.lire())+"<"
+        print "y : >"+str(asser.serieAsserInstance.lire())+"<"
