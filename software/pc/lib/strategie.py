@@ -163,17 +163,17 @@ class Strategie():
         if self.strategie == 1 :
             self.actions.append(["FARMERTOTEM", 0, 0, 10])
             self.actions.append(["FARMERTOTEM", 0, 1, 10])
-            self.actions.append(["FARMERTOTEM", 1, 0, 10])
-            self.actions.append(["FARMERTOTEM", 1, 1, 10])
+            #self.actions.append(["FARMERTOTEM", 1, 0, 10])
+            #self.actions.append(["FARMERTOTEM", 1, 1, 10])
             
             self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-            self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+            #self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
             
             #self.actions.append(["FAIRECHIERENNEMI", 1])    #
             
-            self.actions.append(["TOURDETABLE", 0, 1  ])
-            self.actions.append(["TOURDETABLE", 1, 0.1])
-            self.actions.append(["DEFENDRE", 1])
+            #self.actions.append(["TOURDETABLE", 0, 1  ])
+            #self.actions.append(["TOURDETABLE", 1, 0.1])
+            #self.actions.append(["DEFENDRE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
