@@ -62,7 +62,14 @@ def scriptTotem():
     
     
 def scriptTotemNord():
-    asserInstance.goTo(Point(0.,1300.))
+    asserInstance.goTo(Point(820,1350.))
+    asserInstance.gestionTourner(math.pi)
+    actionInstance.deplacer(110)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(700)
+    actionInstance.deplacer(60)
+    time.sleep(0.5)
+    
     #début notre totem sud
     asserInstance.gestionTourner(0)
     actionInstance.deplacer(130)
@@ -97,7 +104,26 @@ def scriptTotemNord():
     asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(0)
     asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
-    
+   
+def scriptTotemEnnemiSud() :
+    asserInstance.goTo(Point(-730, 660))
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(110)
+    time.sleep(0.5)
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.goTo(Point(0, 500))
+    asserInstance.gestionTourner(0.102)
+    asserInstance.gestionAvancer(683.0)
+    asserInstance.gestionTourner(0.845)
+    asserInstance.gestionAvancer(447.0)
     
     """
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
