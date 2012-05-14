@@ -87,13 +87,15 @@ import lib.chargement_lib
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
+    mode = raw_input('Indiquer le mode de lancement (a[utonome], [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
     first = False
     # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
     import time
     __builtin__.constantes["t0"] = time.time()
     if mode == '':
         mode = "console"
+    elif mode == 'a' :
+        mode = "autonome"
     elif mode == 'h':
         mode = "homologation"
     elif mode == 'j':
