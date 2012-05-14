@@ -330,6 +330,18 @@ class Thetastar:
 
                 return chemin
 
+    """
+    Dit si un point est accessible sur la table (ne prend pas en compte la position acutelle)
+    
+    :param x:  abscisse de l'arrivée
+    :type x: float
+    :param y: ordonnée de l'arrivée
+    :type y: float
+    :param rayon: Rayon du robot (facultatif)
+    :type rayon: float
+    :return: Point accessible|False si pas de point accessible
+    :rtype: Point|False
+    """
     def estAccessible(self, x, y, rayon = 0):
         arrive = Point(x,y)
         if rayon == 0:
@@ -346,6 +358,7 @@ class Thetastar:
         
         if not (arrive.x > -Thetastar.tableLongueur/2+rayonRobot and arrive.x < Thetastar.tableLongueur/2-rayonRobot and arrive.y < Thetastar.tableLargeur-rayonRobot and arrive.y > 0.+rayonRobot):
             print "\n("+str(x)+", "+str(y)+") n'est pas dans l'aire de jeu.\n"
+            return False
         else :
             
             #création des robots adverses
@@ -386,7 +399,7 @@ class Thetastar:
                             print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible."
                             print "par contre, "+str(redir)+" l'est.\n"
                             deviationArrive_reussie = True
-                            break
+                            return Point(x, y)
                     
                     if True :
                         #puis sur le segment départ-arrivée initial, on choisit le point accessible le plus proche de l'arrivée
@@ -407,14 +420,15 @@ class Thetastar:
                                         break
                             print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible."
                             print "par contre, "+str(pCollision[1])+" l'est.\n"
-                            deviationArrive_reussie = True
+                            return pCollision[1]
                             
                 if not deviationArrive_reussie:
                     #impossible de trouver une position d'arrivée
                     print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible.\n"
+                    return False
             else:
                 print "\n("+str(x)+", "+str(y)+") ok."
-                    
+                return Point(x,y)
 
     def AStar(self, Ndepart,Narrive):
         
