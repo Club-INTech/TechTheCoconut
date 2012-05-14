@@ -569,26 +569,28 @@ class Script:
       
     '''
     
-    def scriptGenerique(self, asser, suiteActions) :
+    def scriptGenerique(self, asser, action,  suiteActions) :
+        log.logger.debug("Script générique : " + str(suiteActions))
         for i in range(len(suiteActions)) :
+            print "hi"
             currentAction = suiteActions[i]
             
             if currentAction[0] == "avancer" :
                 if len(currentAction) == 3 :
-                    asser.gestionAvancer(currentAction[1], currentAction[2])
+                    return asser.gestionAvancer(currentAction[1], currentAction[2])
                 else :
-                    asser.gestionAvancer(currentAction[1])
+                    return asser.gestionAvancer(currentAction[1])
                     
             elif currentAction[0] == "tourner" :
                 if len(currentAction) == 3 :
-                    asser.gestionTourner(currentAction[1], currentAction[2])
+                    return asser.gestionTourner(currentAction[1], currentAction[2])
                 else : 
-                    asser.gestionTourner(currentAction[1])
+                    return asser.gestionTourner(currentAction[1])
             elif currentAction[0] == "actionneur" :
-                action.deplacer(currentAction[1])
+                return action.deplacer(currentAction[1])
                 
             elif currentAction[0] == "goTo" :
-                asser.goTo(currentAction[1])
+                return asser.goTo(Point(currentAction[1][0], currentAction[1][1]))
                     
         
         

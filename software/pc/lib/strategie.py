@@ -12,6 +12,8 @@ log = log.Log(__name__)
 
 import __builtin__
 import script
+import instance
+
 
 
 carte = carte.Carte()
@@ -62,6 +64,18 @@ class Strategie():
             self.baliseInstance = __builtin__.instance.baliseInstance  # NOTE Convention ? (Thibaut)            
         except :
             log.logger.error("stratégie : ne peut importer instance.baliseInstance")
+        
+        try :
+            self.asserInstance = __builtin__.instance.asserInstance
+        except :
+            log.logger.error("Impossible d'importer l'asservissement")
+        
+        try :
+            self.actionInstance = __builtin__.instance.actionInstance
+        except :
+            log.logger.error("Impossible d'importer les actionneurs")
+            
+        
             
     def lancer(self) :
             # Gestion de l'arrêt au bout de 90 secondes :
@@ -171,35 +185,43 @@ class Strategie():
             
             # Tableau de preActions : Liste d'actions à faire avant de lancer la vraie action.
             # Syntaxe :
-            #   [   id_action_dans_self.actions  ,  [ ["avancer/tourner/actionneur/goTo", param], [etc...] ] , [ conditions_d'execution  ]  ]
+            #   [   id_action_dans_self.actions  ,  [ ["avancer/tourner/actionneur/goTo", param], [etc...] ] , conditions_d'execution  ]
             #
             
-            self.preActions.append([1, [["goTo" , Point(800, 670)], ["actionneur" , 110], ["avancer", 680]], ["self.robotInstance.position().y < 670"]])
             
             
             
         elif self.strategie == 2 :
-            self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
+            #self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
             self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
-            self.actions.append(["FARMERTOTEM", 1, 0,   20  ])
-            self.actions.append(["FARMERTOTEM", 1, 1,   20  ])
+            #self.actions.append(["FARMERTOTEM", 1, 0,   20  ])
+            #self.actions.append(["FARMERTOTEM", 1, 1,   20  ])
             
-            self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-            self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+            #self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
+            #self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
             
             #self.actions.append(["FAIRECHIERENNEMI", 1])    #
             
-            self.actions.append(["TOURDETABLE", 0, 1  ])
-            self.actions.append(["TOURDETABLE", 1, 0.1])
-            self.actions.append(["DEFENDRE", 1])
+            #self.actions.append(["TOURDETABLE", 0, 1  ])
+            #self.actions.append(["TOURDETABLE", 1, 0.1])
+            #self.actions.append(["DEFENDRE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
+            #self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
+                                        #"ENFONCERPOUSSOIR"  : [0, 5],
+                                        #"TOURDETABLE"       : [0.4, 0.4],
+                                        #"DEFENDRE"          : [0.1, 0.1]
+                                      #}
+                                      
             self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
                                         "ENFONCERPOUSSOIR"  : [0, 5],
                                         "TOURDETABLE"       : [0.4, 0.4],
                                         "DEFENDRE"          : [0.1, 0.1]
                                       }
+                                      
+            self.preActions.append([0, [["actionneur" , 110], ["avancer", 680]], "self.robotInstance.position.y < 670"])
+            
                                       
         elif self.strategie == 3 :
             pass
@@ -284,6 +306,9 @@ class Strategie():
             log.logger.critical("ZUT ALORS ! Plus d'actions à faire")
             return
         
+        # On lance les PréActions :
+        self.choisirPreActions(maxID)
+        
         # Sinon, on prend l'action
         try :
             # Ecris un timeout dans __builtin__.instance
@@ -294,8 +319,8 @@ class Strategie():
             else :
                 __builtin__.instance.timeout = 1000
             
-            exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
-            
+            #exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            success = True
         # Problème de script
         except :
             log.logger.critical("La stratégie ne peut pas lancer d'actions")
@@ -319,9 +344,8 @@ class Strategie():
         
         ok = False
         # On check si il y a des préActions à faire pour l'action :
-        for i in range(minId, self.preActions) :
+        for i in range(minId, len(self.preActions)) :
             currentPreAction = self.preActions[i]
-            
             # Si on a trouvé, on arrête
             if currentPreAction[0] == id_action :
                 ok = True
@@ -331,8 +355,16 @@ class Strategie():
         if not ok :
             return True
             
-        
+        log.logger.info("Lancement d'un préScript : " + str(currentPreAction))
         # On exécute les conditions d'exécution :
+        exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
+        success = True
+        # Si tout s'est bien passé, on regarde si il y a une autre préAction
+        if success :
+            return self.choisirPreActions(id_action, i+1)
+        else :
+            return False
+        
             
         
     # Changement de priorité d'une entrée du tableau self.actions
