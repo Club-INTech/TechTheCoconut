@@ -40,6 +40,10 @@ class Script:
             self.actionInstanceSimu = __builtin__.instance.actionInstanceSimu
         else:
             log.logger.error("script : ne peut importer instance.actionInstanceSimu")
+        if hasattr(__builtin__.instance, 'theta'):
+            self.theta = __builtin__.instance.theta
+        else:
+            log.logger.error("script : ne peut importer instance.theta")
         self.couleur = __builtin__.constantes["couleur"]
         
 #Scripts à tester :
@@ -107,11 +111,39 @@ class Script:
                     break
             if obstacle:
                 #esquiver le robot adverse
-                #TODO
-                pass
+                # TODO prendre en compte la position de l'adversaire
+                # On recule un peu
+                self.gestionAvancer(-50-self.robotInstance.donneRayon())
+                # On tourne
+                for angle in [0, math.pi/2, math.pi, 3*math.pi/2]:
+                    try:
+                        self.gestionTourner(angle)
+                    except:
+                        pass
+                # On cherche un point accessible pas loin et on y va
+                #TODO A améliorer
+                nouvelle_position = self.theta.estAccessible(self, position.x, position.y)
+                if nouvelle_position:
+                    asser.goToSegment(nouvelle_position)
+                else:
+                    log.logger.error("Pas de point de départ accessible à proximité de ("+p.point.x+","+p.point.y+")")
             else:
                 #on est coincé dans un angle, ou un totem
-                #TODO
+                # On recule un peu
+                self.gestionAvancer(-50-self.robotInstance.donneRayon())
+                # On tourne
+                for angle in [0, math.pi/2, math.pi, 3*math.pi/2]:
+                    try:
+                        self.gestionTourner(angle)
+                    except:
+                        pass
+                # On cherche un point accessible pas loin et on y va
+                #TODO A améliorer
+                nouvelle_position = self.theta.estAccessible(self, position.x, position.y)
+                if nouvelle_position:
+                    asser.goToSegment(nouvelle_position)
+                else:
+                    log.logger.error("Pas de point de départ accessible à proximité de ("+p.point.x+","+p.point.y+")")
                 pass
             
             #on donne ensuite la main à la stratégie
