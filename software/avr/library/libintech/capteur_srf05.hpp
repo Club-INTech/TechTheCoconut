@@ -99,6 +99,7 @@ class capteur_srf05
             sbi(PCICR,PCIE2);//active PCINT
             sei();
             
+            Timer::value(0);
             // On est busy en attendant l'interruption.
             busy = true;
         }
@@ -125,7 +126,7 @@ class capteur_srf05
             // Si le timerOverflow n'a pas été lancé. sdfmodsfkgmodsj
             if (busy)
                 /// Envoi de la valeur mesurée sur la série. 
-                Serial::print(Timer::value()*600/1020);
+                Serial::print(Timer::value()*1050/1800.);
             
             // On n'est plus busy et on peut recevoir un nouvel ordre.
             busy = false;
@@ -145,13 +146,12 @@ class capteur_srf05
             Serial::print("noresponse");
         }
         
-        else
-        {
-            // Désactivation des interruptions
-            cbi(PCICR,PCIE2);
-            cbi(PCMSK2,PCINT18);
+
+        // Désactivation des interruptions
+        else{
+        cbi(PCICR,PCIE2);
+        cbi(PCMSK2,PCINT18);
         }
-        
         busy = false;
         
 

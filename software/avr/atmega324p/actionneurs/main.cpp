@@ -368,12 +368,12 @@ int main()
             else if (COMPARE_BUFFER(";i", 2))
                 serial_t_::print(capteur_infrarouge::value());
             
-            else if (COMPARE_BUFFER(".", 1))
+            else if (COMPARE_BUFFER(";u", 2))
                 serial_t_::print(capteur_infrarouge::value_brut());
             
             // Ultrasons SRF05
             else if (COMPARE_BUFFER(";s", 2))
-                capteur_srf05_t_::value();          // /!\ Pas de serial_t_::print()
+                capteur_srf05_t_::value();
                                                     // C'est une interruption qui s'occupe d'afficher
                                                     // la valeur.
         }
