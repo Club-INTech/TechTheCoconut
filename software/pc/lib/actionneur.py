@@ -73,21 +73,28 @@ class Actionneur(serie.Serie):
         
         #calcul du nouveau rayon du robot
         self.calculRayon(math.pi*angle/180)
-                
-        if position == "G":
-            position = ["hg", "bg"]
-        elif position == "D":
-            position = ["hd", "bd"]
-        
-        # Envoi des infos
-        if "hg" in position:
-            self.goto(self.ids["hg"], 180+3-angle)
-        if "hd" in position:
-            self.goto(self.ids["hd"], angle)
-        if "bg" in position:
-            self.goto(self.ids["bg"], angle+5)
-        if "bd" in position:
-            self.goto(self.ids["bd"], 180+9-angle)
+               
+        # Gestion de la symétrie
+        if _builtin__.constantes['couleur'] == "v" :
+            # Envoi des infos
+            if "hg" in position:
+                self.goto(self.ids["hg"], 180+3-angle)
+            if "hd" in position:
+                self.goto(self.ids["hd"], angle)
+            if "bg" in position:
+                self.goto(self.ids["bg"], angle+5)
+            if "bd" in position:
+                self.goto(self.ids["bd"], 180+9-angle)
+        else :
+            # Envoi des infos
+            if "hg" in position:
+                self.goto(self.ids["hd"], 180+3-angle)
+            if "hd" in position:
+                self.goto(self.ids["hg"], angle)
+            if "bg" in position:
+                self.goto(self.ids["bd"], angle+5)
+            if "bd" in position:
+                self.goto(self.ids["bg"], 180+9-angle)
         
 
         
