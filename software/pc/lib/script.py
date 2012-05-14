@@ -556,7 +556,19 @@ class Script:
         log.logger.debug("Fin défense de la base")
         
     def bourrerCale(self, asser, action) :
-        pass
+        asser.goTo(Point(900, 1000))
+        asser.gestionTourner(0)
+        actionInstance.deplacer(0, "bd")
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionTourner(-math.pi)
+        action.deplacer(150)
+        time.sleep(0.5)
+        asser.gestionAvancer(100)
+        action.deplacer(40)
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        asser.gestionAvancer(300)
+        asser.gestionAvancer(-200)
 
 ####################################################################################################################
 ####################################                       SCRIPT GÉNÉRIQUES              ##########################
