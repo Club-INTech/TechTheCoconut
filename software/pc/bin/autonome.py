@@ -18,6 +18,7 @@ timer       = lib.timer.Timer()
 jumper      = __builtin__.instance.jumperInstance
 strategie   = __builtin__.instance.strategieInstance
 asserInstance      = __builtin__.instance.asserInstance
+actionInstance     = __builtin__.instance.actionInstance
 script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
@@ -38,6 +39,10 @@ log.logger.warning("Le recalage a été effectué")
 jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
+actionInstance.deplacer(0)
+asserInstance.gestionAvancer(300)
+asserInstance.gestionTourner(2)
+asserInstance.gestionAvancer(200)
 strategie.lancer()
 
 # ET BIM !
