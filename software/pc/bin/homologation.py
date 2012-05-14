@@ -15,10 +15,9 @@ log = lib.log.Log(__name__)
 
 # Import d'un timer et du jumper
 timer       = lib.timer.Timer()
-jumper      = lib.jumper.Jumper()
-strategie   = lib.strategie.Strategie()
+jumper      = __builtin__.instance.jumperInstance
+strategie   = __builtin__.instance.strategieInstance
 asserInstance      = __builtin__.instance.asserInstance
-robot       = lib.robot.Robot()
 script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
@@ -40,9 +39,7 @@ jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
 # On lance le script d'homologation
-asserInstance.setUnsetAsser("translation",1)
-asserInstance.setUnsetAsser("rotation",1)
-script.homologation()
+script.gestionScripts(script.homologation)
 
 # ET BIM !
 
