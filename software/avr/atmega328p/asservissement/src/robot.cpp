@@ -532,7 +532,7 @@ void Robot::gestion_blocage()
 	static int32_t last_angle;
 	*/
 	
-	
+	/*
 	bool force_en_translation = (abs(rotation.pwmCourant())>40 && abs(T_last_angle[4]-T_last_angle[0])<5);
 	bool force_en_rotation = (abs(translation.pwmCourant())>50 && abs(T_last_distance[4]-T_last_distance[0])<5);
 	bool moteurs_forcent = force_en_translation || force_en_rotation;
@@ -543,8 +543,18 @@ void Robot::gestion_blocage()
 	bool important_ecart_en_translation = abs(mesure_distance_ - translation.consigne()) > 500;
 	bool important_ecart_en_rotation = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) > 500;
 	bool on_peut_stopper_le_robot = (not est_bloque_) || ( est_bloque_ && (important_ecart_en_translation || important_ecart_en_rotation));
+	*/
 	
-	if (moteurs_forcent && on_peut_stopper_le_robot && (erreur_en_translation || erreur_en_rotation) )
+	bool moteur_force = abs(moteurGauche.pwm()) > 45 || abs(moteurGauche.pwm()) > 45;
+	bool bouge_pas = abs(T_last_angle[4]-T_last_angle[0])<10 && abs(T_last_distance[4]-T_last_distance[0])<10;
+	
+	serial_t_::print("###");
+	serial_t_::print(abs(T_last_distance[4]-T_last_distance[0]));
+	serial_t_::print(abs(T_last_angle[4]-T_last_angle[0]));
+// 	serial_t_::print(moteurGauche.pwm());
+// 	serial_t_::print(moteurDroit.pwm());
+	
+	if (bouge_pas && moteur_force)
 	{
 		if(compteurBlocage==20){
 			stopper();
@@ -612,7 +622,7 @@ void Robot::recalage()
 void Robot::translater_bloc(float distance)
 {
 	translater(distance);
-	while(abs(translation.pwmCourant())> 50){
+	while(not est_stoppe() || not est_bloque_){
 		asm("nop");
 	}
 }
@@ -620,7 +630,7 @@ void Robot::translater_bloc(float distance)
 void Robot::tourner_bloc(float angle)
 {
 	tourner(angle);
-	while(abs(rotation.pwmCourant())> 40){
+	while(not est_stoppe() || not est_bloque_){
 		asm("nop");
 	}
 }
