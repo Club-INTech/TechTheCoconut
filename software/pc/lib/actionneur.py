@@ -29,8 +29,9 @@ class Actionneur(serie.Serie):
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
     def __init__(self):
         self.ids        = {"hg":1, "hd":2, "bg":0, "bd":3}
-        self.demarrer()
         self.serie_sleep_time = 0.008
+        self.demarrer()
+        
         
     # Démarrage.
     def demarrer(self):
