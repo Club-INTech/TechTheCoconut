@@ -38,6 +38,7 @@ class Strategie():
         
         self.preActions     = []
         self.postActions    = []
+
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
@@ -156,7 +157,8 @@ class Strategie():
         """
         
         # Nombre de paramètres par actions
-        self.actions_nbrParametres = {"FARMERTOTEM":2, "ENFONCERPOUSSOIR":1, "FAIRECHIERENNEMI":0, "TOURDETABLE":1, "DEFENDRE":0}
+        self.actions_nbrParametres = {"FARMERTOTEM":2, "ENFONCERPOUSSOIR":1, "FAIRECHIERENNEMI":0, "TOURDETABLE":1, "DEFENDRE":0,
+                                      "BOURRERCALLE":0}
         
         log.logger.debug("Initialisation des actions à faire")
         # Selon le profil de statégie choisi, on peut mettre des priorités différentes pour chaques actions.
@@ -175,12 +177,15 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
             
+            self.actions.append(["BOURRERCALLE", 1])
+            
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
             self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
                                         "ENFONCERPOUSSOIR"  : [0, 5],
                                         "TOURDETABLE"       : [0.4, 0.4],
-                                        "DEFENDRE"          : [0.1, 0.1]
+                                        "DEFENDRE"          : [0.1, 0.1],
+                                        "BOURRERCALLE"      : [2, 5]
                                       }
             
             # Tableau de preActions : Liste d'actions à faire avant de lancer la vraie action.
@@ -205,6 +210,7 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 0, 1  ])
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
+            self.actions.append(["BOURRERCALLE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
@@ -217,7 +223,8 @@ class Strategie():
             self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
                                         "ENFONCERPOUSSOIR"  : [0, 5],
                                         "TOURDETABLE"       : [0.4, 0.4],
-                                        "DEFENDRE"          : [0.1, 0.1]
+                                        "DEFENDRE"          : [0.1, 0.1],
+                                        "BOURRERCALLE"      : [2, 5]
                                       }
                                       
             self.preActions.append([0, [["actionneur" , 110], ["avancer", 680]], "self.robotInstance.position.y < 670"])
@@ -263,6 +270,9 @@ class Strategie():
 
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
+                
+            elif self.actions[i][0] == "BOURRERCALLE" :
+                nomScripts.append("self.scriptInstance.bourrerCale")
                 
             # On récupère le temps qu'un script fait pour s'accomplir.
             # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
@@ -330,6 +340,13 @@ class Strategie():
         if success :
             # Puis on lui change sa priorité.
             self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][0])
+            
+            # On incrémente la variable 
+            id_bourrage = self.findActions("BOURRERCALLE")
+            if id_bourrage >= 0 :
+                self.actions[id_bourrage][-1] += 1
+                
+                
         # Si l'action a chié comme Deboc
         else :
             self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][1])
@@ -402,6 +419,14 @@ class Strategie():
         """
         
         self.actions[id][-1] = nouvellePriorite
+        
+    def findActions(self, nomAction) :
+        
+        for i in range(len(self.actions)) :
+            if self.actions[i][0] == nomAction :
+                return i
+        return -1
+                    
                     
     #TEST
     def strateg_scripts(self):

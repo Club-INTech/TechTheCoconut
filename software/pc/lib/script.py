@@ -554,6 +554,9 @@ class Script:
         asser.gestionAvancer(1300)
         asser.gestionAvancer(-1300)
         log.logger.debug("Fin défense de la base")
+        
+    def bourrerCale(self, asser, action) :
+        pass
 
 ####################################################################################################################
 ####################################                       SCRIPT GÉNÉRIQUES              ##########################
