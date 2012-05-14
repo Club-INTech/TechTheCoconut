@@ -44,9 +44,9 @@ def scriptTotem():
     #mettre dans la cale
     asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
-    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(320,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(280,instruction = "auStopNeRienFaire")
     asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(130)
     time.sleep(0.2)
@@ -58,30 +58,30 @@ def scriptTotem():
     asserInstance.changerVitesse("translation", 2)
     asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(0)
-    asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
     
     
-def scriptTotemNord():
-    asserInstance.goTo(Point(820,1350.))
-    asserInstance.gestionTourner(math.pi)
-    actionInstance.deplacer(110)
-    time.sleep(0.5)
-    asserInstance.gestionAvancer(700)
-    actionInstance.deplacer(60)
-    time.sleep(0.5)
+def scriptTotemNordV0():
+    #asserInstance.goTo(Point(820,1350.))
+    #asserInstance.gestionTourner(math.pi)
+    #actionInstance.deplacer(110)
+    #time.sleep(0.5)
+    #asserInstance.gestionAvancer(700)
+    #actionInstance.deplacer(60)
+    #time.sleep(0.5)
     
     #début notre totem sud
     asserInstance.gestionTourner(0)
     actionInstance.deplacer(130)
     time.sleep(0.5)
-    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(250,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(120)
     time.sleep(0.5)
     asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(110)
     time.sleep(0.5)
-    actionInstance.deplacer(120)
+    actionInstance.deplacer(150)
     time.sleep(0.5)
     asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
@@ -89,11 +89,11 @@ def scriptTotemNord():
     #mettre dans la cale
     asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
-    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(330,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
-    asserInstance.gestionAvancer(300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(320,instruction = "auStopNeRienFaire")
     asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-    actionInstance.deplacer(130)
+    actionInstance.deplacer(140)
     time.sleep(0.2)
     actionInstance.deplacer(110)
     time.sleep(0.2)
@@ -101,9 +101,88 @@ def scriptTotemNord():
     asserInstance.changerVitesse("translation", 3)
     asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
     asserInstance.changerVitesse("translation", 2)
-    asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-230,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(0)
-    asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+    
+def scriptTotemNord():
+    #début notre totem nord
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionAvancer(250,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(120)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    actionInstance.deplacer(110)
+    time.sleep(0.5)
+    actionInstance.deplacer(150)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(350,instruction = "auStopNeRienFaire")
+    
+    # Rotation : vers le bas :
+    actionInstance.deplacer(130)
+    time.sleep(0.5)
+    asserInstance.gestionTourner(-math.pi/3, instruction="auStopNeRienFaire")
+    asserInstance.gestionAvancer(340, instruction="auStopNeRienFaire")
+    asserInstance.gestionTourner(0, instruction="auStopNeRienFaire")
+    asserInstance.gestionAvancer(250)
+    actionInstance.deplacer(160)
+    asserInstance.gestionAvancer(-50)
+    actionInstance.deplacer(130)
+    asserInstance.gestionAvancer(-50)
+    actionInstance.deplacer(150)
+    asserInstance.gestionAvancer(-50)
+    actionInstance.deplacer(110)
+    asserInstance.gestionAvancer(-150)
+    
+    # On récupère
+    #actionInstance.deplacer(0, "bd")
+    #asserInstance.gestionTourner(-math.pi/2)
+    #asserInstance.gestionTourner(-math.pi)
+    #actionInstance.deplacer(150)
+    #time.sleep(0.5)
+    #asserInstance.gestionAvancer(100)
+    #actionInstance.deplacer(40)
+    #asserInstance.gestionTourner(0)
+    #actionInstance.deplacer(130)
+    #asserInstance.gestionAvancer(300)
+    #asserInstance.gestionAvancer(-200)
+    
+    # VERSION 2
+    actionInstance.deplacer(0, ["bd", "hd"])
+    time.sleep(0.2)
+    asserInstance.gestionTourner(-math.pi/2)
+    asserInstance.gestionTourner(-math.pi)
+    asserInstance.gestionAvancer(70)
+    actionInstance.deplacer(70, ["hg", "bg"])
+    asserInstance.gestionTourner(math.pi/2)
+    actionInstance.deplacer(50, ["hg", "bg"])
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(130)
+    time.sleep(0.2)
+    asserInstance.gestionAvancer(300)
+    asserInstance.gestionAvancer(-200)
+    
+    
+    #mettre dans la cale
+    #asserInstance.gestionAvancer(100,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionAvancer(330,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionAvancer(320,instruction = "auStopNeRienFaire")
+    #asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    #actionInstance.deplacer(140)
+    #time.sleep(0.2)
+    #actionInstance.deplacer(110)
+    #time.sleep(0.2)
+    #actionInstance.deplacer(130)
+    #asserInstance.changerVitesse("translation", 3)
+    #asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+    #asserInstance.changerVitesse("translation", 2)
+    #asserInstance.gestionAvancer(-230,instruction = "auStopNeRienFaire")
+    #actionInstance.deplacer(0)
    
 def scriptTotemEnnemiSud() :
     asserInstance.goTo(Point(-730, 660))
@@ -124,7 +203,57 @@ def scriptTotemEnnemiSud() :
     asserInstance.gestionAvancer(683.0)
     asserInstance.gestionTourner(0.845)
     asserInstance.gestionAvancer(447.0)
+
+def scriptPoussoir0() :
+    asserInstance.gestionTourner(math.pi/2)
+    actionInstance.deplacer(150, "bd")
+    asserInstance.attendre(0.5)
+    asserInstance.gestionAvancer(220)
+    asserInstance.gestionTourner(-math.pi)
+    asserInstance.gestionTourner(-math.pi/2)
     
+    asserInstance.gestionAvancer(-3000, "auStopNeRienFaire")
+    asserInstance.gestionTourner(-math.pi/2)
+    asserInstance.gestionAvancer(400)
+    asserInstance.gestionAvancer(-100)
+    actionInstance.deplacer(0)
+
+    
+def faireChier():
+    asserInstance.gestionTourner(-math.pi)
+    actionInstance.deplacer(150, "bd")
+    asserInstance.attendre(0.5)
+    asserInstance.gestionAvancer(220)
+    asserInstance.gestionTourner(-math.pi/2)
+    asserInstance.gestionTourner(0)
+    actionInstance.deplacer(0)
+    asserInstance.gestionAvancer(-3000, "auStopNeRienFaire")
+    asserInstance.gestionAvancer(130)
+    asserInstance.gestionTourner(-math.pi/2-0.02)
+    asserInstance.attendre(.5)
+    asserInstance.gestionAvancer(500)
+    
+    """
+    asserInstance.gestionTourner(-3*math.pi/4)
+    asserInstance.gestionAvancer(250)
+    actionInstance.deplacer(150, "bg")
+    asserInstance.attendre(0.5)
+    asserInstance.gestionTourner(-math.pi/4)
+    asserInstance.gestionAvancer(350)
+    """
+    
+    asserInstance.gestionAvancer(150)
+    asserInstance.gestionTourner(-math.pi)
+    asserInstance.gestionAvancer(250)
+    actionInstance.deplacer(160)
+    asserInstance.attendre(0.2)
+    asserInstance.changerVitesse("rotation", 3)
+    asserInstance.gestionTourner(-math.pi/2)
+    asserInstance.gestionTourner(math.pi)
+    asserInstance.gestionTourner(math.pi/2)
+    asserInstance.gestionTourner(math.pi)
+    asserInstance.changerVitesse("rotation", 2)
+    asserInstance.gestionAvancer(-300)
     """
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
@@ -292,6 +421,11 @@ def console():
             elif ordre == "e":
                 macro += current
                 current = ""
+                
+            elif ordre == "sop" :
+                scriptPoussoir0()
+            elif ordre == "sop1": 
+                faireChier()
                 
             else:
                 try:
