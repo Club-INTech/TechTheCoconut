@@ -7,6 +7,7 @@ import asservissementDuree
 import recherche_chemin.thetastar
 import balise
 import capteur
+import jumper
 import serial
 import serie_acquisition
 import serie
@@ -49,6 +50,7 @@ class Instance:
         self.instanciationRobot()
         self.instanciationSerie()
         self.instanciationCapteur()
+        self.instanciationJumper()
         self.instanciationThetha()
         self.instanciationAsservissement()
         self.instanciationActionneur()
@@ -141,7 +143,10 @@ class Instance:
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
-        
+
+    def instanciationJumper(self) :
+        self.jumperInstance = jumper.Jumper()
+
     def instanciationAsservissement(self):
         try : 
             self.asserInstance = asservissement.Asservissement()
