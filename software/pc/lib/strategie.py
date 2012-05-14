@@ -34,6 +34,9 @@ class Strategie():
         self.timerStrat = timer.Timer()
         self.actions = []
         
+        self.preActions     = []
+        self.postActions    = []
+        
         # Remplir le tableau actions d'actions à faire (Thibaut)
         self.initialiserActionsAFaire()
         
@@ -166,6 +169,15 @@ class Strategie():
                                         "DEFENDRE"          : [0.1, 0.1]
                                       }
             
+            # Tableau de preActions : Liste d'actions à faire avant de lancer la vraie action.
+            # Syntaxe :
+            #   [   id_action_dans_self.actions  ,  [ ["avancer/tourner/actionneur/goTo", param], [etc...] ] , [ conditions_d'execution  ]  ]
+            #
+            
+            self.preActions.append([1, [["goTo" , Point(800, 670)], ["actionneur" , 110], ["avancer", 680]], ["self.robotInstance.position().y < 670"]])
+            
+            
+            
         elif self.strategie == 2 :
             self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
             self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
@@ -188,6 +200,9 @@ class Strategie():
                                         "TOURDETABLE"       : [0.4, 0.4],
                                         "DEFENDRE"          : [0.1, 0.1]
                                       }
+                                      
+        elif self.strategie == 3 :
+            pass
         
     
     def choisirAction(self) :
@@ -298,6 +313,27 @@ class Strategie():
         log.logger.debug("NOUVELLES ACTIONS : " + str(self.actions))
         time.sleep(5)
         
+    # Cette fonction s'occupe d'exécuter les preActions de l'action d'id id_action dans self.actions
+    # minId permet un appel récursif de la fonction
+    def choisirPreActions(self, id_action, minId = 0) :
+        
+        ok = False
+        # On check si il y a des préActions à faire pour l'action :
+        for i in range(minId, self.preActions) :
+            currentPreAction = self.preActions[i]
+            
+            # Si on a trouvé, on arrête
+            if currentPreAction[0] == id_action :
+                ok = True
+                break
+                
+        # Si il n'y a pas de preActions, on retourne True pour dire que tout d'est bien passé.
+        if not ok :
+            return True
+            
+        
+        # On exécute les conditions d'exécution :
+            
         
     # Changement de priorité d'une entrée du tableau self.actions
     def changerPriorite(self, nomAction, params, nouvellePriorite) :
