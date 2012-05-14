@@ -91,8 +91,8 @@ class Asservissement {
 		int32_t pwmCourant()
 		{
 			return pwmCourant_;
-        
 		}
+		
 		int32_t erreur_d()
 		{
 			return (en_ - enm1_);

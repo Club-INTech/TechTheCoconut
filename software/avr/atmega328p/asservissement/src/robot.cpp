@@ -481,9 +481,10 @@ bool Robot::est_stoppe()
 		*/
 	
 	//rotation : 17 en v1, 
-
-	bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
-	bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
+//     serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+//     serial_t_::print(abs(translation.consigne() - mesure_distance_));
+	volatile bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
+	volatile bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
 	return rotation_stoppe && translation_stoppe;
 	
 // 	}
@@ -545,12 +546,13 @@ void Robot::gestion_blocage()
 	bool on_peut_stopper_le_robot = (not est_bloque_) || ( est_bloque_ && (important_ecart_en_translation || important_ecart_en_rotation));
 	*/
 	
-	bool moteur_force = abs(moteurGauche.pwm()) > 45 || abs(moteurGauche.pwm()) > 45;
+	bool moteur_force = abs(moteurGauche.pwm()) > 45 || abs(moteurDroit.pwm()) > 45;
 	bool bouge_pas = abs(T_last_angle[4]-T_last_angle[0])<10 && abs(T_last_distance[4]-T_last_distance[0])<10;
 	
-	serial_t_::print("###");
-	serial_t_::print(abs(T_last_distance[4]-T_last_distance[0]));
-	serial_t_::print(abs(T_last_angle[4]-T_last_angle[0]));
+// 	serial_t_::print("###");
+//     serial_t_::print(abs(moteurGauche.pwm()));
+// 	serial_t_::print(abs(T_last_distance[4]-T_last_distance[0]));
+// 	serial_t_::print(abs(T_last_angle[4]-T_last_angle[0]));
 // 	serial_t_::print(moteurGauche.pwm());
 // 	serial_t_::print(moteurDroit.pwm());
 	
@@ -589,7 +591,7 @@ void Robot::recalage()
 {
 	changerVitesseTra1();
 	changerVitesseRot1();
-	translater_bloc(-300.0);
+	translater_bloc(-1000.0);
 	etat_rot_ = false;
 	changerVitesseTra2();
 	translater_bloc(-300.0);
@@ -600,7 +602,7 @@ void Robot::recalage()
 	changerVitesseTra1();
 	translater_bloc(220.0);
 	tourner_bloc(PI/2);
-	translater_bloc(-300.0);
+	translater_bloc(-1000.0);
 	etat_rot_ = false;
 	changerVitesseTra2();
 	translater_bloc(-300.0);
@@ -622,15 +624,17 @@ void Robot::recalage()
 void Robot::translater_bloc(float distance)
 {
 	translater(distance);
-	while(not est_stoppe() || not est_bloque_){
+	while(not est_stoppe() && not est_bloque_){
 		asm("nop");
 	}
+	serial_t_::print(3);
 }
 
 void Robot::tourner_bloc(float angle)
 {
 	tourner(angle);
-	while(not est_stoppe() || not est_bloque_){
+	while(not est_stoppe() && not est_bloque_){
 		asm("nop");
 	}
+	serial_t_::print(4);
 }

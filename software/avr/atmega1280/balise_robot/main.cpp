@@ -75,13 +75,16 @@ int main() {
 		//Laser off
 		if(COMPARE_BUFFER("loff",4)){
 		    balise.laser_off();
-		    Balise::serial_pc::print("laser off");
 		}
 		
 		//Laser on
 		if(COMPARE_BUFFER("lon",3)){
-		    balise.laser_on();
-            Balise::serial_pc::print("laser on");
+            if(balise.max_counter()>0){
+                balise.laser_on();
+            }
+            else{
+                Balise::serial_pc::print("Le moteur n'est pas allumé");
+            }
 		}		    
 
 		//Ping balise adverse
@@ -177,12 +180,11 @@ int main() {
 		
 		if(COMPARE_BUFFER("mon",3)){
 		    balise.moteur_on();
-		    Balise::serial_pc::print("moteur on");
 		}
         
 		if(COMPARE_BUFFER("moff",4)){
 		    balise.moteur_off();
-		    Balise::serial_pc::print("moteur off");
+            balise.laser_off();
 		}
 		//Easter egg
 		if(COMPARE_BUFFER("troll",5)){

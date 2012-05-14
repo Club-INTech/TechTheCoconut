@@ -39,7 +39,6 @@ Balise::Balise()
 	T_TopTour::init();
     pin_activation_moteur::set_output();
     pin_activation_moteur2::set_output();
-    moteur_on();
     
     //5V sur la pin 12 (B6) pour la direction laser
     sbi(DDRB,PORTB6);
@@ -53,6 +52,7 @@ Balise::Balise()
     // Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
     OCR0A= 170;
     laser_off();
+    moteur_off();
     
 	sei();
 }
@@ -64,6 +64,7 @@ void Balise::laser_on(){
     sbi(TCCR0A,COM0A0);
     cbi(TCCR0A,COM0A1);
     sbi(PORTB,PORTB6);
+    Balise::serial_pc::print("laser on");
 }
 
 void Balise::laser_off(){
@@ -73,16 +74,20 @@ void Balise::laser_off(){
     cbi(TCCR0A,COM0A0);
     cbi(TCCR0A,COM0A1);
     cbi(PORTB,PORTB6);
+    Balise::serial_pc::print("laser off");
 }
 
 void Balise::moteur_on(){
     pin_activation_moteur::set();
     pin_activation_moteur2::set();
+    Balise::serial_pc::print("moteur on");
+
 }
 
 void Balise::moteur_off(){
     pin_activation_moteur::clear();
     pin_activation_moteur2::clear();
+    Balise::serial_pc::print("moteur off");
 }
 
 // void Balise::asservir(int32_t vitesse_courante)
