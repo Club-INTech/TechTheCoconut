@@ -134,8 +134,8 @@ class Script:
         
     def homologation(self, asser,action):
         #stocke le lingot et enfonce un poussoir
-        asser.changerVitesse("translation",1)
-        asser.changerVitesse("rotation",1)
+        asser.changerVitesse("translation",2)
+        asser.changerVitesse("rotation",2)
         asser.gestionAvancer(260)     # On sort de la zone départ
         asser.gestionTourner(1.57)     # On se dirige vers le Nord
         asser.gestionAvancer(600)     # On avance jusqu'au lingots
@@ -554,7 +554,42 @@ class Script:
         asser.gestionAvancer(1300)
         asser.gestionAvancer(-1300)
         log.logger.debug("Fin défense de la base")
-        
+
+####################################################################################################################
+####################################                       SCRIPT GÉNÉRIQUES              ##########################
+####################################################################################################################
+
+    # Lance un script en fonction d'un tableau d'actions
+    '''
+      Syntaxe des actions : 
+      ["avancer", mm, option]
+      ["tourner", rad, option]
+      ["actionneur", angle]
+      ["goTo",    point]
+      
+    '''
+    
+    def scriptGenerique(self, asser, suiteActions) :
+        for i in range(len(suiteActions)) :
+            currentAction = suiteActions[i]
+            
+            if currentAction[0] == "avancer" :
+                if len(currentAction) == 3 :
+                    asser.gestionAvancer(currentAction[1], currentAction[2])
+                else :
+                    asser.gestionAvancer(currentAction[1])
+                    
+            elif currentAction[0] == "tourner" :
+                if len(currentAction) == 3 :
+                    asser.gestionTourner(currentAction[1], currentAction[2])
+                else : 
+                    asser.gestionTourner(currentAction[1])
+            elif currentAction[0] == "actionneur" :
+                action.deplacer(currentAction[1])
+                
+            elif currentAction[0] == "goTo" :
+                asser.goTo(currentAction[1])
+                    
         
         
         
