@@ -344,7 +344,7 @@ void Robot::changerVitesseRot1(void)
 }
 void Robot::changerVitesseRot2(void)
 {
-	rotation.valeur_bridage(100.0);
+	rotation.valeur_bridage(110.0);//100
 	rotation.kp(1.2);
 	rotation.kd(3.5);
 }
