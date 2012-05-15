@@ -164,12 +164,12 @@ class Strategie():
         # Selon le profil de statégie choisi, on peut mettre des priorités différentes pour chaques actions.
         if self.strategie == 1 :
             self.actions.append(["FARMERTOTEM", 0, 0, 10])
-            self.actions.append(["FARMERTOTEM", 0, 1, 10])
+            #self.actions.append(["FARMERTOTEM", 0, 1, 10])
             #self.actions.append(["FARMERTOTEM", 1, 0, 10])
             #self.actions.append(["FARMERTOTEM", 1, 1, 10])
             
             self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-            #self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+            self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
             
             #self.actions.append(["FAIRECHIERENNEMI", 1])    #
             
@@ -177,7 +177,7 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
             
-            self.actions.append(["BOURRERCALLE", 1])
+            #self.actions.append(["BOURRERCALLE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
@@ -227,7 +227,7 @@ class Strategie():
                                         "BOURRERCALLE"      : [2, 5]
                                       }
                                       
-            self.preActions.append([0, [["actionneur" , 110], ["avancer", 680]], "self.robotInstance.position.y < 670"])
+            self.preActions.append([0, [["goTo", [800,750]], ["actionneur" , 110], ["avancer", 680]], "self.robotInstance.position.y < 670"])
             
                                       
         elif self.strategie == 3 :
@@ -319,7 +319,7 @@ class Strategie():
         # On lance les PréActions :
         self.choisirPreActions(maxID)
         
-        # Sinon, on prend l'action
+        # Puis on lance l'action
         try :
             # Ecris un timeout dans __builtin__.instance
             # CONVENTION : Si il n'y a pas de deuxième meilleure action à faire, on met
@@ -329,7 +329,8 @@ class Strategie():
             else :
                 __builtin__.instance.timeout = 1000
             
-            #exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            log.logger.debug("LANCEMENT DU SCRIPT : " + nomScripts[maxID])
+            exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
             success = True
         # Problème de script
         except :
@@ -352,13 +353,11 @@ class Strategie():
             self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][1])
     
             
-        log.logger.debug("NOUVELLES ACTIONS : " + str(self.actions))
-        time.sleep(5)
         
     # Cette fonction s'occupe d'exécuter les preActions de l'action d'id id_action dans self.actions
     # minId permet un appel récursif de la fonction
     def choisirPreActions(self, id_action, minId = 0) :
-        
+        log.logger.info("Vérification de la présence d'un préscript")
         ok = False
         # On check si il y a des préActions à faire pour l'action :
         for i in range(minId, len(self.preActions)) :
@@ -371,7 +370,7 @@ class Strategie():
         # Si il n'y a pas de preActions, on retourne True pour dire que tout d'est bien passé.
         if not ok :
             return True
-            
+        
         log.logger.info("Lancement d'un préScript : " + str(currentPreAction))
         # On exécute les conditions d'exécution :
         exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")

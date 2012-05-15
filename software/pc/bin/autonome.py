@@ -36,14 +36,21 @@ except :
     
 # On attends le réenlèvement du jumper
 log.logger.warning("Le recalage a été effectué")
-jumper.scruterDepart()
+#jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
 actionInstance.deplacer(0)
 asserInstance.gestionAvancer(300)
 asserInstance.gestionTourner(2)
 asserInstance.gestionAvancer(200)
+
+#script.gestionScripts(script.rafflerTotem00)
+#script.gestionScripts(script.rafflerTotem01)
+#script.gestionScripts(script.enfoncerPoussoir0)
+#script.gestionScripts(script.enfoncerPoussoir1)
+#script.gestionScripts(script.homologation)
 strategie.lancer()
+
 
 # ET BIM !
 
