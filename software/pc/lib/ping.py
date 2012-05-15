@@ -2,6 +2,7 @@
 
 import __builtin__
 import instance
+import time
 asser = __builtin__.instance.asserInstance
 """
 while True :
@@ -26,7 +27,20 @@ def ping():
         asser.serieAsserInstance.ecrire("acq")
         print ">"+str(asser.serieAsserInstance.lire())+"<"
     """
+    
+    """
     while True:
         asser.serieAsserInstance.ecrire("pos")
         print "x : >"+str(asser.serieAsserInstance.lire())+"<"
         print "y : >"+str(asser.serieAsserInstance.lire())+"<"
+        #time.sleep(0.03)
+    """
+    while True:
+        com = raw_input("?")
+        if com == "p":
+            print asser.getPosition()
+        if com == "o":
+            print asser.getOrientation()
+        if com == "q":
+            break
+        
