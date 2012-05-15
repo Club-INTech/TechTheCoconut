@@ -36,7 +36,7 @@ class Capteur():
 
     def mesurer(self):
         #retournes l'entier capté
-        while len(self.listUltrason) < 3:
+        while len(self.listUltrason) < 5:
             try:
                 self.serieCaptActionneurInstance.ecrire(";s")
                 mesure = int(self.serieCaptActionneurInstance.lire())
@@ -44,7 +44,7 @@ class Capteur():
             except:
                 pass
             
-        while len(self.listInfrarouge) < 3:
+        while len(self.listInfrarouge) < 5:
             try:
                 self.serieCaptActionneurInstance.ecrire(";i")
                 mesure = int(self.serieCaptActionneurInstance.lire())
@@ -84,8 +84,8 @@ class Capteur():
         listCopyInfr.sort()
         listCopyUltra.sort()
         
-        print "résultat : "+str(max(listCopyInfr[1],listCopyUltra[1]))+"\n"
-        return max(listCopyInfr[1],listCopyUltra[1])
+        print "résultat : "+str(max(listCopyInfr[3],listCopyUltra[3]))+"\n"
+        return max(listCopyInfr[3],listCopyUltra[3])
         
         
     def arreter(self):
