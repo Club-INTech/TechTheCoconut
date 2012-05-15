@@ -23,7 +23,7 @@ script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
 log.logger.warning("Robot en attente du jumper pour recalage")
-jumper.demarrerRecalage()
+#jumper.demarrerRecalage()
 log.logger.info("Lancement du recalage...")
 
 #Lancement du recalage
@@ -39,11 +39,24 @@ log.logger.warning("Le recalage a été effectué")
 #jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
-actionInstance.deplacer(0)
-asserInstance.gestionAvancer(300)
-asserInstance.gestionTourner(2)
-asserInstance.gestionAvancer(200)
+farmage_ennemi = True
 
+if farmage_ennemi :
+    actionInstance.deplacer(0)
+    asserInstance.gestionAvancer(300)
+    asserInstance.gestionTourner(2)
+    asserInstance.gestionAvancer(200)
+else :
+    asserInstance.changerVitesse("translation", 3)
+    success = asserInstance.gestionAvancer("1900", "auStopNeRienFaire")
+    if success :
+        script.gestionScripts(script.rafflerTotem10)
+
+
+# Lancement de la stratégie.
+strategie.lancer()
+    
+    
 #script.gestionScripts(script.rafflerTotem00)
 #script.gestionScripts(script.rafflerTotem01)
 #script.gestionScripts(script.enfoncerPoussoir0)
