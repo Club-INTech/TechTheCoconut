@@ -128,7 +128,7 @@ void K2000()
 
 void cylon()
 {
-  //Oeil gauche (de gauche à droite)
+  //Aller (de gauche à droite)
   for(int i=0;i<14;i++)
   {
      if(i<7) //MAX 01 & 04
@@ -167,8 +167,8 @@ void cylon()
      }
   }
   
-  //Oeil gauche (de droite à gauche)
-  for(int i=13;i>=0;i--)
+  //Retour (de droite à gauche)
+  for(int i=14;i>=0;i--)
   {
      if(i<7) //MAX 01 & 04
      {
