@@ -65,7 +65,6 @@ class Script:
         - du retour en cas de succes ou d'échec
         - permet de lancer les scripts en mode "chronomètre", pour évaluer leur durée
         """
-        
         if chrono:
             #instance pour le calcul de durée
             asser = self.asserInstanceDuree
@@ -78,20 +77,20 @@ class Script:
                 #NOTE : pour tests (sans série)
                 asser.setPosition(Point(70,400))
                 asser.setOrientation(0)
-                
             #début du calcul de durée du script
             asser.lancerChrono()
         else:
+
             #instance pour les déplacements réels
             asser = self.asserInstance
             action = self.actionInstance
-            
         #vitesses normales
         asser.changerVitesse("rotation",2)
         asser.changerVitesse("translation",2)
         try :
-            #execution du script
+            #execution du script    
             script(asser,action)
+            log.logger.critical(str(script))
             if chrono:
                 #retour de la durée totale d'execution du script
                 return asser.mesurerChrono()
@@ -415,7 +414,8 @@ class Script:
     
     # Rafflage de notre totem côté sud (y petits)
     def rafflerTotem00(self,asser,action) :
-        log.logger.debug("Rafflage de totem 0 0")
+        log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
+        action.deplacer(0)
         asser.goTo(Point(0.,660.))
         #début notre totem sud
         asser.gestionTourner(0)
@@ -455,9 +455,9 @@ class Script:
     # Rafflage de notre totem côté nord (y grands)
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
-        
+        action.deplacer(0)
         asser.goTo(Point(-150, 1340))
-        #début notre totem nord
+        ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
         asser.attendre(0.5)
@@ -473,8 +473,8 @@ class Script:
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(350,instruction = "auStopNeRienFaire")
         
-        # Rotation : vers le bas :
-        actionInstance.deplacer(130)
+        ## Rotation : vers le bas :
+        action.deplacer(130)
         asser.attendre(0.5)
         asser.gestionTourner(-math.pi/3, instruction="auStopNeRienFaire")
         asser.gestionAvancer(340, instruction="auStopNeRienFaire")
@@ -489,20 +489,20 @@ class Script:
         action.deplacer(110)
         asser.gestionAvancer(-150)
         
-        # On récupère
-        #actionInstance.deplacer(0, "bd")
-        #asserInstance.gestionTourner(-math.pi/2)
-        #asserInstance.gestionTourner(-math.pi)
-        #actionInstance.deplacer(150)
-        #asser.attendre(0.5)
-        #asserInstance.gestionAvancer(100)
-        #actionInstance.deplacer(40)
-        #asserInstance.gestionTourner(0)
-        #actionInstance.deplacer(130)
-        #asserInstance.gestionAvancer(300)
-        #asserInstance.gestionAvancer(-200)
+        ## On récupère
+        ##actionInstance.deplacer(0, "bd")
+        ##asserInstance.gestionTourner(-math.pi/2)
+        ##asserInstance.gestionTourner(-math.pi)
+        ##actionInstance.deplacer(150)
+        ##asser.attendre(0.5)
+        ##asserInstance.gestionAvancer(100)
+        ##actionInstance.deplacer(40)
+        ##asserInstance.gestionTourner(0)
+        ##actionInstance.deplacer(130)
+        ##asserInstance.gestionAvancer(300)
+        ##asserInstance.gestionAvancer(-200)
         
-        # VERSION 2
+        ## VERSION 2
         action.deplacer(0, ["bd", "hd"])
         asser.attendre(0.2)
         asser.gestionTourner(-math.pi/2)
@@ -520,12 +520,67 @@ class Script:
     # Rafflage du totem ennemi côté sud (y petits)
     def rafflerTotem10(self,asser,action) :
         log.logger.debug("Rafflage de totem 1 0 en cours")
-        pass
+        action.deplacer(0)
+        asser.goTo(Point(-920, 470))
+        asser.gestionTourner(0)
+        action.deplacer(150)
+        asser.attendre(0.5)
+        asser.gestionAvancer(100)
+        action.deplacer(30, "bg")
+        asser.attendre(0.3)
+        action.deplacer(150, "bg")
+        asser.attendre(0.2)
+        asser.gestionAvancer(100)
+        action.deplacer(130)
+        asser.gestionAvancer(100, "auStopNeRienFaire")
+        asser.gestionTourner(0, "auStopNeRienFaire")
+        action.deplacer(110)
+        asser.attendre(0.2)
+        action.deplacer(120)
+        asser.attendre(0.2)
+        asser.gestionTourner(0, "auStopNeRienFaire")
+        asser.gestionAvancer(200, "auStopNeRienFaire")
+        asser.gestionTourner(0, "auStopNeRienFaire")
+        action.deplacer(90)
+        asser.attendre(0.3)
+        asser.gestionAvancer(200)
+        action.deplacer(40, "bg")
+        
+        #asser.gestionAvancer(120)
+        #action.deplacer(140, "hg")
+        #action.deplacer(140 ,"bg")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionAvancer(50, "auStopNeRienFaire")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #action.deplacer(0, "hd")
+        #action.deplacer(120, "bd")
+        #action.deplacer(120, ["hg", "bg"])
+        #asser.attendre(0.3)
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionAvancer(200, "auStopNeRienFaire")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #action.deplacer(110, ["hg", "bg"])
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionAvancer(200, "auStopNeRienFaire")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionTourner(0.5)
+        #asser.gestionAvancer(300)
+        
+        action.deplacer(0, ["hd", "hg"])
+        asser.gestionTourner(-1)
+        asser.gestionAvancer(300)
+        asser.gestionTourner(0)
+        asser.gestionAvancer(600)
+        asser.gestionTourner(1)
+        asser.gestionAvancer(500)
+        asser.gestionTourner(0)
+        asser.gestionAvancer(400, "auStopNeRienFaire")
+        asser.gestionAvancer(-400)
     
     # Rafflage du totem ennemi, côté Nord.
     def rafflerTotem11(self,asser,action) :
-        log.logger.debug("Rafflage de totem 1 1 en cours")
-        pass
+        action.deplacer(0)
+        log.logger.debug("Rafflage de totem 1 1 en cours")  
     
     
     #----------------------#
@@ -534,8 +589,9 @@ class Script:
     
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goTo(1500-720+7, 2000 - 510 - 180)  
+        asser.goTo(Point(1500-720+7, 2000 - 510 - 180))
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -553,9 +609,9 @@ class Script:
         
     # Poussoir côté ennemi.
     def enfoncerPoussoir1(self,asser,action) :
-        
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goTo(1500-720+7-470, 2000 - 510 - 180)  
+        asser.goTo(Point(1500-720+7-470, 2000 - 510 - 180))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -581,8 +637,8 @@ class Script:
         On fait un tour de table bras fermés
         """
         log.logger.debug("C'est parti, on farme l'ennemi !")
-        
-        asserInstance.goTo(-1500+960-70, 2000-260+160)
+        action.deplacer(0)
+        asserInstance.goTo(Point(-1500+960-70, 2000-260+160))
         asserInstance.gestionTourner(-math.pi)
         actionInstance.deplacer(150, "bd")
         asserInstance.attendre(0.5)
@@ -670,6 +726,7 @@ class Script:
         """
         Si l'ennemi est très bon, il faudra penser à défendre la base
         """
+        action.deplacer(0)
         log.logger.debug("Défense de la base")
         asser.goTo(Point(960, 1260))
         asser.gestionTourner(math.pi/2)
@@ -678,6 +735,7 @@ class Script:
         log.logger.debug("Fin défense de la base")
         
     def bourrerCale(self, asser, action) :
+        action.deplacer(0)
         asser.goTo(Point(900, 1000))
         asser.gestionTourner(0)
         actionInstance.deplacer(0, "bd")
@@ -707,6 +765,7 @@ class Script:
         asser.deplacer(700)
         
     def preAction_totem01_2(self, asser, action) :
+        action.deplacer(90)
         asser.goTo(660, 1700)
         asser.goTo(-20, 1700)
         
