@@ -256,9 +256,51 @@ void balayageV()
   }
 }
 
+void animationyeux()
+{
+   int i,j;
+   byte sprite[4]={B00111100,B00111100,B00111100,B00111100};
+   int pos[4]={1,2,3,4};
+   
+   for (i=0 ; i < 10 ; i++)
+     {
+         for (j=0 ; j<4 ; j++)
+         {
+           lc.setEyeColumn(1,pos[j],sprite[j],0);
+         } 
+      delay(30);
+        lc.setEyeColumn(1,pos[1]-1,(byte)0,0);
+        for (j=0 ; j < 4 ; j++)
+        {
+          pos[j]+=i;
+          
+        }
+        
+   }
+   
+   for (i=0 ; i < 10 ; i++)
+   {
+     for (j=0 ; j<4 ; j++)
+         {
+           lc.setEyeColumn(1,pos[j],sprite[j], 0);
+         } 
+      delay(30);
+        lc.setEyeColumn(1,pos[4]+1,(byte)0,0);
+        for (j=0 ; j < 4 ; j++)
+        {
+          pos[j]-=i;
+          
+        }
+        
+   }
+}
+
 void loop() 
 { 
   //balayageV();
   //K2000(); 
- cylon(); 
+// cylon();
+  //lc.setEyeColumn(1,2,B11111111,1);
+  //lc.setEyeColumn(1,12,B11111111,1);
+  animationyeux();
 }
