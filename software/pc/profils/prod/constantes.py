@@ -6,24 +6,21 @@
 """
 constantes = \
 {
-    "Coconut":
-    {
-        #: Largeur en mm
-        "largeur": 3000,
-        #: Longueur en mm
-        "longueur": 2000,
-
-        #longueur d'un bras
-        "longueurBras" : 180.,
-        
-        #sans compter les bras
-        "largeurRobot" : 200.,
-        "longueurRobot" : 360.,
-        
-        #longueur du coté du robot, en mm
-        "coteRobot" : 350.,        
-    },
-    "Anna": {},
+	"Coconut":
+	{
+		#: Largeur de la table en mm
+		"largeur": 3000,
+		#: Longueur de la table en mm
+		"longueur": 2000,
+		
+		#longueur d'un bras
+		"longueurBras" : 180.,
+		
+		#sans compter les bras
+		"largeurRobot" : 200.,
+		"longueurRobot" : 360.,
+	},
+	"Anna": {},
     "Objets_Table": {
         "rayon_disque":             60,
         "longueur_totem":           250,
@@ -34,23 +31,23 @@ constantes = \
         "largeur_regletteEnBois":   18,
         "rayon_palmier":            20
     },
-    "Logs":
-    {
-        "logs": True,
-        "logs_level": "DEBUG",
-        #   %(processName)s pour ajouter nom du processus
-        # le :: est volontaire, le nom du module sera inséré par la suite du programme
-        "logs_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
-        "stderr": True,
-        "stderr_level": "WARNING",
-        # le :: est volontaire, le nom du module sera inséré par la suite du programme
-        "stderr_format": "%(asctime)s::%(levelname)s:%(message)s",
-        "dossier": "logs"
-    },
-    "Recherche_Chemin":
+	"Logs":
+	{
+		"logs": True,
+		"logs_level": "DEBUG",
+		# 	%(processName)s pour ajouter nom du processus
+		# le :: est volontaire, le nom du module sera inséré par la suite du programme
+		"logs_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
+		"stderr": True,
+		"stderr_level": "DEBUG",
+                # le :: est volontaire, le nom du module sera inséré par la suite du programme
+		"stderr_format": "%(asctime)s::%(levelname)s:l%(lineno)d:%(threadName)s:%(message)s",
+		"dossier": "logs"
+	},
+	"Recherche_Chemin":
     {
         #rayon maximal du cercle circonscrit aux robots adverses, en mm
-        "rayonRobotsA" : 350.,
+        "rayonRobotsA" : 255.,
         #approximation hexagonale des robots adverses
         "nCotesRobotsA" : 6
     },
@@ -69,6 +66,7 @@ constantes = \
         },
     },
     "DureeJeu": 88,
+    "Strategie": 1, # profil de stratégie    
     "Actionneurs":
     {
         "angleMax": 160,
@@ -90,6 +88,7 @@ constantes = \
     },
     "Lolilol":
     {
-        "musique_active": False
+        "musique_active": False,
+        "musique_dossier": "/home/netantho/intech/multimedia_lolilol/",
     },
 }
