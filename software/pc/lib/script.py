@@ -99,8 +99,15 @@ class Script:
                 return True
                 
         except departInaccessible as p:
+            """
+            le cas du point de départ inaccessible est traité ici : 
+            si on ne le résout pas, aucun script ne pourra etre lancé par la stratégie
+            et ce bloc sera executé en boucle jusqu'à la fin des 90sec.
+            donc on prend un dernier snikers et on se concentre....
+            """
+            
             print 'le point de départ est inaccessible : ', p.point
-            position = p.point# = self.asserInstance.getPosition()
+            position = p.point
             #qu'est ce qui bloque ?
             obstacle = False
             for adverse in __builtin__.instance.liste_robots_adv:
@@ -108,43 +115,69 @@ class Script:
                 if dist < constantes["Recherche_Chemin"]["rayonRobotsA"] + self.robotInstance.donneRayon():
                     obstacle = adverse
                     break
+            """
             if obstacle:
                 #esquiver le robot adverse
-                # TODO prendre en compte la position de l'adversaire
-                # On recule un peu
-                self.gestionAvancer(-50-self.robotInstance.donneRayon())
-                # On tourne
-                for angle in [0, math.pi/2, math.pi, 3*math.pi/2]:
-                    try:
-                        self.gestionTourner(angle)
-                    except:
-                        pass
-                # On cherche un point accessible pas loin et on y va
-                #TODO A améliorer
-                nouvelle_position = self.theta.estAccessible(self, position.x, position.y)
-                if nouvelle_position:
-                    asser.goToSegment(nouvelle_position)
-                else:
-                    log.logger.error("Pas de point de départ accessible à proximité de ("+p.point.x+","+p.point.y+")")
-            else:
+            else :
                 #on est coincé dans un angle, ou un totem
-                # On recule un peu
-                self.gestionAvancer(-50-self.robotInstance.donneRayon())
-                # On tourne
-                for angle in [0, math.pi/2, math.pi, 3*math.pi/2]:
-                    try:
-                        self.gestionTourner(angle)
-                    except:
-                        pass
-                # On cherche un point accessible pas loin et on y va
-                #TODO A améliorer
-                nouvelle_position = self.theta.estAccessible(self, position.x, position.y)
-                if nouvelle_position:
-                    asser.goToSegment(nouvelle_position)
-                else:
-                    log.logger.error("Pas de point de départ accessible à proximité de ("+p.point.x+","+p.point.y+")")
-                pass
+            """
             
+            # On tourne et tente d'avancer dans plusieurs directions
+            orientation = self.asserInstance.getOrientation()
+            #on augmente la portée
+            for distanceTranslation in range(100,1000,150):
+                #pour les vitesses 2 et 3
+                for vitesse in range(2,4):
+                    self.asserInstance.changerVitesse("rotation", vitesse)
+                    #sur 3 directions
+                    for angle in [0, math.pi/2, -math.pi/2]:
+                        try:
+                            self.asserInstance.gestionTourner(orientation+angle, "auStopNeRienFaire")
+                            
+                            #une première translation à vitesse 2
+                            self.asserInstance.changerVitesse("translation", vitesse)
+                            self.asserInstance.gestionAvancer(-distanceTranslation, "auStopNeRienFaire")
+                            position = self.asserInstance.getPosition()
+                            nouvelle_position = self.theta.estAccessible(position)
+                            if nouvelle_position:
+                                #yes ! on a trouvé la sortie
+                                self.asserInstance.goToSegment(nouvelle_position)
+                                #on donne ensuite la main à la stratégie
+                                return False
+                                
+                        except:
+                            pass
+                        try:
+                            self.asserInstance.gestionTourner(orientation+angle, "auStopNeRienFaire")
+                            
+                            #une première translation à vitesse 2
+                            self.asserInstance.changerVitesse("translation", vitesse)
+                            self.asserInstance.gestionAvancer(2*distanceTranslation, "auStopNeRienFaire")
+                            position = self.asserInstance.getPosition()
+                            nouvelle_position = self.theta.estAccessible(position)
+                            if nouvelle_position:
+                                #yes ! on a trouvé la sortie
+                                self.asserInstance.goToSegment(nouvelle_position)
+                                #on donne ensuite la main à la stratégie
+                                return False
+                        except:
+                            pass
+                        try:
+                            self.asserInstance.gestionTourner(orientation+angle, "auStopNeRienFaire")
+                            
+                            #une première translation à vitesse 2
+                            self.asserInstance.changerVitesse("translation", vitesse)
+                            self.asserInstance.gestionAvancer(-distanceTranslation, "auStopNeRienFaire")
+                            position = self.asserInstance.getPosition()
+                            nouvelle_position = self.theta.estAccessible(position)
+                            if nouvelle_position:
+                                #yes ! on a trouvé la sortie
+                                self.asserInstance.goToSegment(nouvelle_position)
+                                #on donne ensuite la main à la stratégie
+                                return False
+                        except:
+                            pass
+                                
             #on donne ensuite la main à la stratégie
             return False
             

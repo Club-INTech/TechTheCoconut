@@ -139,7 +139,7 @@ class Asservissement:
         """
         self.serieAsserInstance.ecrire("t")
         self.serieAsserInstance.ecrire(str(float(angle)))
-        log.logger.info("Ordre de tourner à " + str(float(angle)))
+        #log.logger.info("Ordre de tourner à " + str(float(angle)))
         acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
         while not acquittement:
@@ -153,7 +153,7 @@ class Asservissement:
             elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                 print "tourner : timeout !"
                 return "timeout"
-            time.sleep(0.05)
+            #time.sleep(0.05)
             
         return "acquittement"
     
@@ -165,13 +165,15 @@ class Asservissement:
         """
         self.serieAsserInstance.ecrire("d")
         self.serieAsserInstance.ecrire(str(float(distance)))
-        log.logger.info("Ordre d'avancer de " + str(float(distance)))
+        #log.logger.info("Ordre d'avancer de " + str(float(distance)))
         acquittement = False
         debut_timer = int(self.timerAsserv.getTime())
         while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
+            print "             >"+reponse+"<"
             if reponse == "FIN_MVT":
+                print "avancer : FIN_MVT"
                 acquittement = True
             elif reponse == "STOPPE":
                 print "avancer : stoppé !"
@@ -186,7 +188,7 @@ class Asservissement:
                         print 'avancer : capteur !'
                         return "obstacle"
                 
-            time.sleep(0.05)
+            #time.sleep(0.05)
                 
         return "acquittement"
             
@@ -237,7 +239,7 @@ class Asservissement:
             if reponse == "FIN_REC":
                 log.logger.info("fin du recalage")
                 acquitement = True
-            time.sleep(0.05)
+            #time.sleep(0.05)
         
     def setUnsetAsser(self, asservissement, mode):
         pass
@@ -331,7 +333,6 @@ class Asservissement:
             ##2 
             #ajoute un robot adverse sur la table, pour la recherche de chemin
             #stopper le robot
-            self.immobiliser()
                 
             orientation = self.getOrientation()
             position = self.getPosition()
@@ -342,9 +343,11 @@ class Asservissement:
             
             if (adverse.x > -tableLongueur/2+self.rayonRobotsAdverses and adverse.x < tableLongueur/2-self.rayonRobotsAdverses and adverse.y < tableLargeur-self.rayonRobotsAdverses and adverse.y > self.rayonRobotsAdverses):
                 #le point détecté est bien dans l'aire de jeu, c'est sans doute un robot adverse
+                
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
                 print "ennemi en vue à "+str(adverse)
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                self.immobiliser()
             
                 if avecRechercheChemin :
                     #robot adverse
@@ -412,6 +415,7 @@ class Asservissement:
                         
             else:
                 #fausse alerte : on termine tranquil'
+                print "fausse alerte."
                 dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
                 if distance != 0:
                     signe = distance/abs(distance)

@@ -60,7 +60,7 @@ class Capteur():
                     mesure = 0
             except:
                 pass
-            print "ultrason : >"+str(mesure)+"<"
+            #print "ultrason : >"+str(mesure)+"<"
             self.listUltrason.append(int(mesure))
             self.listUltrason.pop(0)
                 
@@ -72,7 +72,7 @@ class Capteur():
             mesure = int(self.serieCaptActionneurInstance.lire())
             if mesure > 1500 or mesure < 0:
                 mesure = 0
-            print "infrarouge : >"+str(mesure)+"<"
+            #print "infrarouge : >"+str(mesure)+"<"
             self.listInfrarouge.append(mesure)
             self.listInfrarouge.pop(0)
         except:
@@ -84,7 +84,7 @@ class Capteur():
         listCopyInfr.sort()
         listCopyUltra.sort()
         
-        print "résultat : "+str(max(listCopyInfr[3],listCopyUltra[3]))+"\n"
+        #print "résultat : "+str(max(listCopyInfr[3],listCopyUltra[3]))+"\n"
         return max(listCopyInfr[3],listCopyUltra[3])
         
         

@@ -342,22 +342,12 @@ class Thetastar:
     :return: Point accessible|False si pas de point accessible
     :rtype: Point|False
     """
-    def estAccessible(self, x, y, rayon = 0):
-        arrive = Point(x,y)
-        if rayon == 0:
-            #actualisation du rayon du robot
-            rayonRobot = __builtin__.instance.robotInstance.donneRayon()
-            print "rayon actuel : "+str(rayonRobot)
-        else :
-            rayonRobot = rayon
-        if not self.lastRayon == rayonRobot:
-            #retracage du graphe en cas de changement
-            self.enregistreGraphe()
-            
+    def estAccessible(self, arrive):
+        rayonRobot = __builtin__.instance.robotInstance.donneRayon()
         self.chargeGraphe()
         
         if not (arrive.x > -Thetastar.tableLongueur/2+rayonRobot and arrive.x < Thetastar.tableLongueur/2-rayonRobot and arrive.y < Thetastar.tableLargeur-rayonRobot and arrive.y > 0.+rayonRobot):
-            print "\n("+str(x)+", "+str(y)+") n'est pas dans l'aire de jeu.\n"
+            print str(arrive)+" n'est pas dans l'aire de jeu.\n"
             return False
         else :
             
@@ -378,57 +368,64 @@ class Thetastar:
                             break
             if touche_ta :
                 deviationArrive_reussie = False
-                if True :
-                    print "\nla position exacte  ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !"
-                    #on retente une destination voisine de celle recherchée
-                    #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
-                    touche_cercle_A=True
-                    for redir in polygone(arrive,25.,6):
-                        touche_tr = False
-                        for poly in self.listeObjets:
-                            if collisionPolyPoint(poly,redir):
-                                touche_tr = True
-                                break
-                            if not touche_tr:
-                                for robotA in robotsA:
-                                    if collisionPolyPoint(robotA,redir):
-                                        touche_tr = True
-                                        break
-                        if not touche_tr :
-                            touche_cercle_A=False
-                            print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible."
-                            print "par contre, "+str(redir)+" l'est.\n"
-                            deviationArrive_reussie = True
-                            return Point(x, y)
-                    
-                    if True :
-                        #puis sur le segment départ-arrivée initial, on choisit le point accessible le plus proche de l'arrivée
-                        if touche_cercle_A:
-                            pCollision=False
-                            if x > 0:
-                                depart = Point(850,Thetastar.tableLargeur/2)
-                            else:
-                                depart = Point(-850,Thetastar.tableLargeur/2)
+                print "\nla position exacte  ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !"
+                #on retente une destination voisine de celle recherchée
+                #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
+                touche_cercle_A=True
+                for redir in polygone(arrive,50.,6):
+                    touche_tr = False
+                    for poly in self.listeObjets:
+                        if collisionPolyPoint(poly,redir):
+                            touche_tr = True
+                            break
+                        if not touche_tr:
                             for robotA in robotsA:
-                                pCollision=collisionSegmentPoly(depart,arrive,robotA)
-                                if pCollision:
+                                if collisionPolyPoint(robotA,redir):
+                                    touche_tr = True
                                     break
-                            if not pCollision:
-                                for poly in self.listeObjets:
-                                    pCollision=collisionSegmentPoly(depart,arrive,poly)
-                                    if pCollision:
-                                        break
-                            print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible."
-                            print "par contre, "+str(pCollision[1])+" l'est.\n"
-                            return pCollision[1]
+                    if not touche_tr :
+                        touche_cercle_A=False
+                        print "\nle point "+str(arrive)+" n'est pas accessible."
+                        print "par contre, "+str(redir)+" l'est.\n"
+                        deviationArrive_reussie = True
+                        return redir
+                    
+                #puis sur le segment départ-arrivée initial, on choisit le point accessible le plus proche de l'arrivée
+                if touche_cercle_A:
+                    pCollision=False
+                    
+                    #un de ces quatres points sera toujours "visible"
+                    if arrive.x <= 0 and arrive.y > Thetastar.tableLargeur/2:
+                        depart = Point(-700,1553)
+                    elif arrive.x > 0 and arrive.y > Thetastar.tableLargeur/2:
+                        depart = Point(700,1553)
+                    elif arrive.x <= 0 and arrive.y <= Thetastar.tableLargeur/2:
+                        depart = Point(-525,427)
+                    else:
+                        depart = Point(525,427)
+                        
+                    
+                    for robotA in robotsA:
+                        pCollision=collisionSegmentPoly(depart,arrive,robotA)
+                        if pCollision:
+                            break
+                    if not pCollision:
+                        for poly in self.listeObjets:
+                            pCollision=collisionSegmentPoly(depart,arrive,poly)
+                            if pCollision:
+                                break
+                    print "\nle point ("+str(arrive)+") n'est pas accessible."
+                    print "par contre, "+str(pCollision[1])+" l'est.\n"
+                    deviationArrive_reussie = True
+                    return pCollision[1]
                             
                 if not deviationArrive_reussie:
                     #impossible de trouver une position d'arrivée
-                    print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible.\n"
+                    print "\nle point ("+str(arrive)+") n'est pas accessible.\n"
                     return False
             else:
-                print "\n("+str(x)+", "+str(y)+") ok."
-                return Point(x,y)
+                print "\n("+str(arrive)+") ok."
+                return arrive
 
     def AStar(self, Ndepart,Narrive):
         
