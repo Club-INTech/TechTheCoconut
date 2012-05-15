@@ -238,7 +238,8 @@ class Actionneur(serie.Serie):
         rayon_avec_bras = math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
         
         #mettre à jour l'attribut du robot
-        self.robotInstance.changeRayon(max(rayon_avec_bras,rayon_original))
+        #NOTE : on n'utilisera la recherche de chemin qu'avec des bras fermés. donc pas de recalculs intempestifs.
+        #self.robotInstance.changeRayon(max(rayon_avec_bras,rayon_original))
         
     def test(self, temps = 0.3) :
         i = 0
