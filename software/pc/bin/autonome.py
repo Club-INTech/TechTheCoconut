@@ -41,7 +41,7 @@ log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
 farmage_ennemi = True
 
-if farmage_ennemi :
+if not farmage_ennemi :
     actionInstance.deplacer(0)
     asserInstance.gestionAvancer(300)
     asserInstance.gestionTourner(2)
@@ -62,7 +62,6 @@ strategie.lancer()
 #script.gestionScripts(script.enfoncerPoussoir0)
 #script.gestionScripts(script.enfoncerPoussoir1)
 #script.gestionScripts(script.homologation)
-strategie.lancer()
 
 
 # ET BIM !

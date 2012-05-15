@@ -177,7 +177,7 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
             
-            #self.actions.append(["BOURRERCALLE", 1])
+            self.actions.append(["BOURRERCALLE", 0])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
@@ -185,7 +185,7 @@ class Strategie():
                                         "ENFONCERPOUSSOIR"  : [0, 5],
                                         "TOURDETABLE"       : [0.4, 0.4],
                                         "DEFENDRE"          : [0.1, 0.1],
-                                        "BOURRERCALLE"      : [2, 5]
+                                        "BOURRERCALLE"      : [0, 5]
                                       }
             
             # Tableau de preActions : Liste d'actions à faire avant de lancer la vraie action.
@@ -346,7 +346,7 @@ class Strategie():
             log.logger.critical("La stratégie ne peut pas lancer d'actions")
             success = True
             
-        #time.sleep(5)
+        time.sleep(5)
         
         # Si l'action s'est  bien déroulée
         if success :
@@ -355,8 +355,8 @@ class Strategie():
             
             # On incrémente la variable 
             id_bourrage = self.findActions("BOURRERCALLE")
-            if id_bourrage >= 0 :
-                self.actions[id_bourrage][-1] += 1
+            if id_bourrage >= 0 and self.actions[maxID][0] == "FARMERTOTEM":
+                self.actions[id_bourrage][-1] += 0.5
         
         
         
