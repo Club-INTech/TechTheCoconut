@@ -98,7 +98,7 @@ void Robot::communiquer_pc(){
 		serial_t_::print(0);
 	}
 	
-	
+	///////////////LULZ///////////////////
 	else if(COMPARE_BUFFER("eer",3)){
 		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
 	}
@@ -139,13 +139,9 @@ void Robot::communiquer_pc(){
 		
 	}
 	
+	////////////////////////////////////////////:
 	
 	
-	
-	
-	
-		
-		
 	else if(COMPARE_BUFFER("ccr",3)){
 		couleur_ = 'r';
 	}
@@ -276,8 +272,6 @@ void Robot::communiquer_pc(){
 		}
 		else
 			serial_t_::print("EN_MVT");
-// 		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
-// 		serial_t_::print(abs(translation.consigne() - mesure_distance_));
 	}
 
 	//demande de la position courante
@@ -344,7 +338,7 @@ void Robot::changerVitesseRot1(void)
 }
 void Robot::changerVitesseRot2(void)
 {
-	rotation.valeur_bridage(100.0);
+	rotation.valeur_bridage(110.0);//100
 	rotation.kp(1.2);
 	rotation.kd(3.5);
 }
@@ -466,28 +460,9 @@ void Robot::envoyer_position_tic()
 
 bool Robot::est_stoppe()
 {
-	/*
-	static bool mesure_ok = true;
-
-	if ((abs(translation.consigne() - mesure_distance_) > 500 ||abs(compare_angle_tic(mesure_angle_,rotation.consigne())) > 1000) && mesure_ok)
-	{
-		mesure_ok = false;
-		return false;
-	}
-	else
-	{
-		
-		mesure_ok = true;
-		*/
-	
-	//rotation : 17 en v1, 
-//     serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
-//     serial_t_::print(abs(translation.consigne() - mesure_distance_));
 	volatile bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
 	volatile bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
 	return rotation_stoppe && translation_stoppe;
-	
-// 	}
 }
 
 

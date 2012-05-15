@@ -65,7 +65,6 @@ class Script:
         - du retour en cas de succes ou d'échec
         - permet de lancer les scripts en mode "chronomètre", pour évaluer leur durée
         """
-        
         if chrono:
             #instance pour le calcul de durée
             asser = self.asserInstanceDuree
@@ -78,19 +77,18 @@ class Script:
                 #NOTE : pour tests (sans série)
                 asser.setPosition(Point(70,400))
                 asser.setOrientation(0)
-                
             #début du calcul de durée du script
             asser.lancerChrono()
         else:
+
             #instance pour les déplacements réels
             asser = self.asserInstance
             action = self.actionInstance
-            
         #vitesses normales
         asser.changerVitesse("rotation",2)
         asser.changerVitesse("translation",2)
         try :
-            #execution du script
+            #execution du script    
             script(asser,action)
             if chrono:
                 #retour de la durée totale d'execution du script
@@ -100,8 +98,15 @@ class Script:
                 return True
                 
         except departInaccessible as p:
+            """
+            le cas du point de départ inaccessible est traité ici : 
+            si on ne le résout pas, aucun script ne pourra etre lancé par la stratégie
+            et ce bloc sera executé en boucle jusqu'à la fin des 90sec.
+            donc on prend un dernier snikers et on se concentre....
+            """
+            
             print 'le point de départ est inaccessible : ', p.point
-            position = p.point# = self.asserInstance.getPosition()
+            position = p.point
             #qu'est ce qui bloque ?
             obstacle = False
             for adverse in __builtin__.instance.liste_robots_adv:
@@ -109,43 +114,69 @@ class Script:
                 if dist < constantes["Recherche_Chemin"]["rayonRobotsA"] + self.robotInstance.donneRayon():
                     obstacle = adverse
                     break
+            """
             if obstacle:
                 #esquiver le robot adverse
-                # TODO prendre en compte la position de l'adversaire
-                # On recule un peu
-                self.gestionAvancer(-50-self.robotInstance.donneRayon())
-                # On tourne
-                for angle in [0, math.pi/2, math.pi, 3*math.pi/2]:
-                    try:
-                        self.gestionTourner(angle)
-                    except:
-                        pass
-                # On cherche un point accessible pas loin et on y va
-                #TODO A améliorer
-                nouvelle_position = self.theta.estAccessible(self, position.x, position.y)
-                if nouvelle_position:
-                    asser.goToSegment(nouvelle_position)
-                else:
-                    log.logger.error("Pas de point de départ accessible à proximité de ("+p.point.x+","+p.point.y+")")
-            else:
+            else :
                 #on est coincé dans un angle, ou un totem
-                # On recule un peu
-                self.gestionAvancer(-50-self.robotInstance.donneRayon())
-                # On tourne
-                for angle in [0, math.pi/2, math.pi, 3*math.pi/2]:
-                    try:
-                        self.gestionTourner(angle)
-                    except:
-                        pass
-                # On cherche un point accessible pas loin et on y va
-                #TODO A améliorer
-                nouvelle_position = self.theta.estAccessible(self, position.x, position.y)
-                if nouvelle_position:
-                    asser.goToSegment(nouvelle_position)
-                else:
-                    log.logger.error("Pas de point de départ accessible à proximité de ("+p.point.x+","+p.point.y+")")
-                pass
+            """
             
+            # On tourne et tente d'avancer dans plusieurs directions
+            orientation = self.asserInstance.getOrientation()
+            #on augmente la portée
+            for distanceTranslation in range(100,1000,150):
+                #pour les vitesses 2 et 3
+                for vitesse in range(2,4):
+                    self.asserInstance.changerVitesse("rotation", vitesse)
+                    #sur 3 directions
+                    for angle in [0, math.pi/2, -math.pi/2]:
+                        try:
+                            self.asserInstance.gestionTourner(orientation+angle, "auStopNeRienFaire")
+                            
+                            #une première translation à vitesse 2
+                            self.asserInstance.changerVitesse("translation", vitesse)
+                            self.asserInstance.gestionAvancer(-distanceTranslation, "auStopNeRienFaire")
+                            position = self.asserInstance.getPosition()
+                            nouvelle_position = self.theta.estAccessible(position)
+                            if nouvelle_position:
+                                #yes ! on a trouvé la sortie
+                                self.asserInstance.goToSegment(nouvelle_position)
+                                #on donne ensuite la main à la stratégie
+                                return False
+                                
+                        except:
+                            pass
+                        try:
+                            self.asserInstance.gestionTourner(orientation+angle, "auStopNeRienFaire")
+                            
+                            #une première translation à vitesse 2
+                            self.asserInstance.changerVitesse("translation", vitesse)
+                            self.asserInstance.gestionAvancer(2*distanceTranslation, "auStopNeRienFaire")
+                            position = self.asserInstance.getPosition()
+                            nouvelle_position = self.theta.estAccessible(position)
+                            if nouvelle_position:
+                                #yes ! on a trouvé la sortie
+                                self.asserInstance.goToSegment(nouvelle_position)
+                                #on donne ensuite la main à la stratégie
+                                return False
+                        except:
+                            pass
+                        try:
+                            self.asserInstance.gestionTourner(orientation+angle, "auStopNeRienFaire")
+                            
+                            #une première translation à vitesse 2
+                            self.asserInstance.changerVitesse("translation", vitesse)
+                            self.asserInstance.gestionAvancer(-distanceTranslation, "auStopNeRienFaire")
+                            position = self.asserInstance.getPosition()
+                            nouvelle_position = self.theta.estAccessible(position)
+                            if nouvelle_position:
+                                #yes ! on a trouvé la sortie
+                                self.asserInstance.goToSegment(nouvelle_position)
+                                #on donne ensuite la main à la stratégie
+                                return False
+                        except:
+                            pass
+                                
             #on donne ensuite la main à la stratégie
             return False
             
@@ -168,12 +199,12 @@ class Script:
         #stocke le lingot et enfonce un poussoir
         asser.changerVitesse("translation",2)
         asser.changerVitesse("rotation",2)
-        asser.gestionAvancer(260)     # On sort de la zone départ
+        asser.gestionAvancer(340)     # On sort de la zone départ
         asser.gestionTourner(1.57)     # On se dirige vers le Nord
         asser.gestionAvancer(600)     # On avance jusqu'au lingots
         asser.gestionTourner(0.0)  
-        asser.gestionAvancer(300)     # On le rentre dans la calle
-        asser.gestionAvancer(-300)    # On ressort de la calle
+        asser.gestionAvancer(390)     # On le rentre dans la calle
+        asser.gestionAvancer(-390)    # On ressort de la calle
         asser.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
         asser.changerVitesse("translation",2)
         asser.changerVitesse("rotation",2)
@@ -255,43 +286,66 @@ class Script:
 ####################################################################################################################
 
     def scriptTotem01(self,asser,action):
-        asser.goTo(Point(0.,1500.))
-        asser.gestionTourner(-math.pi/2)
-        action.deplacer(200)
+        asser.goTo(Point(-24, 1450))
         #début notre totem nord
-        asser.gestionTourner(0)
-        action.deplacer(130)
-        asser.attendre(0.5)
-        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
-        action.deplacer(120)
-        asser.attendre(0.5)
-        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
-        action.deplacer(110)
-        asser.attendre(0.5)
-        action.deplacer(120)
-        asser.attendre(0.5)
-        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        asserInstance.gestionTourner(0)
+        actionInstance.deplacer(130)
+        time.sleep(0.5)
+        asserInstance.gestionAvancer(250,instruction = "auStopNeRienFaire")
+        actionInstance.deplacer(120)
+        time.sleep(0.5)
+        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        actionInstance.deplacer(110)
+        time.sleep(0.5)
+        actionInstance.deplacer(150)
+        time.sleep(0.5)
+        asserInstance.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asserInstance.gestionAvancer(350,instruction = "auStopNeRienFaire")
         
-        #mettre dans la cale
-        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
-        asser.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        action.deplacer(130)
-        asser.attendre(0.2)
-        action.deplacer(110)
-        asser.attendre(0.2)
-        action.deplacer(130)
-        asser.changerVitesse("translation", 3)
-        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        asser.changerVitesse("translation", 2)
-        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
-        action.deplacer(0)
-        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+        # Rotation : vers le bas :
+        actionInstance.deplacer(130)
+        time.sleep(0.5)
+        asserInstance.gestionTourner(-math.pi/3, instruction="auStopNeRienFaire")
+        asserInstance.gestionAvancer(340, instruction="auStopNeRienFaire")
+        asserInstance.gestionTourner(0, instruction="auStopNeRienFaire")
+        asserInstance.gestionAvancer(250)
+        actionInstance.deplacer(160)
+        asserInstance.gestionAvancer(-50)
+        actionInstance.deplacer(130)
+        asserInstance.gestionAvancer(-50)
+        actionInstance.deplacer(150)
+        asserInstance.gestionAvancer(-50)
+        actionInstance.deplacer(110)
+        asserInstance.gestionAvancer(-150)
+        
+        # On récupère
+        #actionInstance.deplacer(0, "bd")
+        #asserInstance.gestionTourner(-math.pi/2)
+        #asserInstance.gestionTourner(-math.pi)
+        #actionInstance.deplacer(150)
+        #time.sleep(0.5)
+        #asserInstance.gestionAvancer(100)
+        #actionInstance.deplacer(40)
+        #asserInstance.gestionTourner(0)
+        #actionInstance.deplacer(130)
+        #asserInstance.gestionAvancer(300)
+        #asserInstance.gestionAvancer(-200)
+        
+        # VERSION 2
+        actionInstance.deplacer(0, ["bd", "hd"])
+        time.sleep(0.2)
+        asserInstance.gestionTourner(-math.pi/2)
+        asserInstance.gestionTourner(-math.pi)
+        asserInstance.gestionAvancer(70)
+        actionInstance.deplacer(70, ["hg", "bg"])
+        asserInstance.gestionTourner(math.pi/2)
+        actionInstance.deplacer(50, ["hg", "bg"])
+        asserInstance.gestionTourner(0)
+        actionInstance.deplacer(130)
+        time.sleep(0.2)
+        asserInstance.gestionAvancer(300)
+        asserInstance.gestionAvancer(-200)
 
     def scriptTotem10(self,asser,action):
         asser.goTo(Point(-820.,660.))
@@ -392,7 +446,8 @@ class Script:
     
     # Rafflage de notre totem côté sud (y petits)
     def rafflerTotem00(self,asser,action) :
-        log.logger.debug("Rafflage de totem 0 0")
+        log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
+        action.deplacer(0)
         asser.goTo(Point(0.,660.))
         #début notre totem sud
         asser.gestionTourner(0)
@@ -432,52 +487,132 @@ class Script:
     # Rafflage de notre totem côté nord (y grands)
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
-        
-        asser.goTo(Point(0.,1300.))
-        #début notre totem sud
+        action.deplacer(0)
+        asser.goTo(Point(-150, 1340))
+        ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
         asser.attendre(0.5)
-        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(250,instruction = "auStopNeRienFaire")
         action.deplacer(120)
         asser.attendre(0.5)
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(110)
         asser.attendre(0.5)
-        action.deplacer(120)
+        action.deplacer(150)
         asser.attendre(0.5)
         asser.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(350,instruction = "auStopNeRienFaire")
         
-        #mettre dans la cale
-        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
-        asser.gestionTourner(-math.pi/4,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        ## Rotation : vers le bas :
         action.deplacer(130)
-        asser.attendre(0.2)
+        asser.attendre(0.5)
+        asser.gestionTourner(-math.pi/3, instruction="auStopNeRienFaire")
+        asser.gestionAvancer(340, instruction="auStopNeRienFaire")
+        asser.gestionTourner(0, instruction="auStopNeRienFaire")
+        asser.gestionAvancer(250)
+        action.deplacer(160)
+        asser.gestionAvancer(-50)
+        action.deplacer(130)
+        asser.gestionAvancer(-50)
+        action.deplacer(150)
+        asser.gestionAvancer(-50)
         action.deplacer(110)
+        asser.gestionAvancer(-150)
+        
+        ## On récupère
+        ##actionInstance.deplacer(0, "bd")
+        ##asserInstance.gestionTourner(-math.pi/2)
+        ##asserInstance.gestionTourner(-math.pi)
+        ##actionInstance.deplacer(150)
+        ##asser.attendre(0.5)
+        ##asserInstance.gestionAvancer(100)
+        ##actionInstance.deplacer(40)
+        ##asserInstance.gestionTourner(0)
+        ##actionInstance.deplacer(130)
+        ##asserInstance.gestionAvancer(300)
+        ##asserInstance.gestionAvancer(-200)
+        
+        ## VERSION 2
+        action.deplacer(0, ["bd", "hd"])
         asser.attendre(0.2)
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionTourner(-math.pi)
+        asser.gestionAvancer(70)
+        action.deplacer(70, ["hg", "bg"])
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(50, ["hg", "bg"])
+        asser.gestionTourner(0)
         action.deplacer(130)
-        asser.changerVitesse("translation", 3)
-        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
-        asser.changerVitesse("translation", 2)
-        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
-        action.deplacer(0)
-        asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+        asser.attendre(0.2)
+        asser.gestionAvancer(300)
+        asser.gestionAvancer(-200)
         
     # Rafflage du totem ennemi côté sud (y petits)
     def rafflerTotem10(self,asser,action) :
         log.logger.debug("Rafflage de totem 1 0 en cours")
-        pass
+        action.deplacer(0)
+        asser.goTo(Point(-920+ 70, 470+180))
+        asser.gestionTourner(0)
+        action.deplacer(150)
+        asser.attendre(0.5)
+        asser.gestionAvancer(100)
+        action.deplacer(30, "bg")
+        asser.attendre(0.3)
+        action.deplacer(150, "bg")
+        asser.attendre(0.2)
+        asser.gestionAvancer(100)
+        action.deplacer(130)
+        asser.gestionAvancer(100, "auStopNeRienFaire")
+        asser.gestionTourner(0, "auStopNeRienFaire")
+        action.deplacer(110)
+        asser.attendre(0.2)
+        action.deplacer(120)
+        asser.attendre(0.2)
+        asser.gestionTourner(0, "auStopNeRienFaire")
+        asser.gestionAvancer(200, "auStopNeRienFaire")
+        asser.gestionTourner(0, "auStopNeRienFaire")
+        action.deplacer(90)
+        asser.attendre(0.3)
+        asser.gestionAvancer(200)
+        action.deplacer(40, "bg")
+        
+        #asser.gestionAvancer(120)
+        #action.deplacer(140, "hg")
+        #action.deplacer(140 ,"bg")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionAvancer(50, "auStopNeRienFaire")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #action.deplacer(0, "hd")
+        #action.deplacer(120, "bd")
+        #action.deplacer(120, ["hg", "bg"])
+        #asser.attendre(0.3)
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionAvancer(200, "auStopNeRienFaire")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #action.deplacer(110, ["hg", "bg"])
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionAvancer(200, "auStopNeRienFaire")
+        #asser.gestionTourner(0, "auStopNeRienFaire")
+        #asser.gestionTourner(0.5)
+        #asser.gestionAvancer(300)
+        
+        action.deplacer(0, ["hd", "hg"])
+        asser.gestionTourner(-1)
+        asser.gestionAvancer(300)
+        asser.gestionTourner(0)
+        asser.gestionAvancer(600)
+        asser.gestionTourner(1)
+        asser.gestionAvancer(500)
+        asser.gestionTourner(0)
+        asser.gestionAvancer(400, "auStopNeRienFaire")
+        asser.gestionAvancer(-400)
     
     # Rafflage du totem ennemi, côté Nord.
     def rafflerTotem11(self,asser,action) :
-        log.logger.debug("Rafflage de totem 1 1 en cours")
-        pass
+        action.deplacer(0)
+        log.logger.debug("Rafflage de totem 1 1 en cours")  
     
     
     #----------------------#
@@ -486,47 +621,89 @@ class Script:
     
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
-        
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        action.deplacer(0) # On met les bras à 110 pour arriver à la position
-        asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
-        asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
-        asser.gestionAvancer(290) # on avance au point de rotation
-        asser.gestionTourner(-1.5)    # On lui montre nos fesses
-        #asser.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        #asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        asser.gestionAvancer(450)    # On se barre.
+        asser.goTo(Point(1500-720+7, 2000 - 510 - 180))
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(150, "bd")
+        asser.attendre(0.5)
+        asser.gestionAvancer(220)
+        asser.gestionTourner(-math.pi)
+        asser.gestionTourner(-math.pi/2)
+        
+        asser.gestionAvancer(-3000, "auStopNeRienFaire")
+        asser.gestionAvancer(400)
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionAvancer(-100)
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir à nous fini")
 
         
     # Poussoir côté ennemi.
     def enfoncerPoussoir1(self,asser,action) :
-        
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        action.deplacer(0) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
-        asser.goTo(Point(-1500 + 640 + 477, 2000 - 500)) # On va se placer le long de la ligne
-        asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
-        asser.gestionAvancer(290) # on avance au point de rotation
-        asser.gestionTourner(-1.5)    # On lui montre nos fesses
-        asser.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        asser.gestionAvancer(450)    # On se barre.
+        asser.goTo(Point(780+70, 2000 - 510 - 180))  
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(150, "bd")
+        asser.attendre(0.5)
+        asser.gestionAvancer(220)
+        asser.gestionTourner(-math.pi)
+        asser.gestionTourner(-math.pi/2)
+        
+        asser.gestionAvancer(-3000, "auStopNeRienFaire")
+        asser.gestionAvancer(400)
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionAvancer(-100)
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir ennemi fini")
         
         
     #----------------------#
     #       ANNEXES        #
     #----------------------#
-    
-        
+
     def faireChierEnnemi(self,asser,action) :
         """
         On fait un tour de table bras fermés
         """
         log.logger.debug("C'est parti, on farme l'ennemi !")
-        self.tourDeTable(asser, action, False)
+        action.deplacer(0)
+        asserInstance.goTo(Point(-1500+960-70, 2000-260+160))
+        asserInstance.gestionTourner(-math.pi)
+        actionInstance.deplacer(150, "bd")
+        asserInstance.attendre(0.5)
+        asserInstance.gestionAvancer(220)
+        asserInstance.gestionTourner(-math.pi/2)
+        asserInstance.gestionTourner(0)
+        actionInstance.deplacer(0)
+        asserInstance.gestionAvancer(-3000, "auStopNeRienFaire")
+        asserInstance.gestionAvancer(130)
+        asserInstance.gestionTourner(-math.pi/2-0.02)
+        asserInstance.attendre(.5)
+        asserInstance.gestionAvancer(500)
+        
+        """
+        asserInstance.gestionTourner(-3*math.pi/4)
+        asserInstance.gestionAvancer(250)
+        actionInstance.deplacer(150, "bg")
+        asserInstance.attendre(0.5)
+        asserInstance.gestionTourner(-math.pi/4)
+        asserInstance.gestionAvancer(350)
+        """
+        
+        asserInstance.gestionAvancer(150)
+        asserInstance.gestionTourner(-math.pi)
+        asserInstance.gestionAvancer(250)
+        actionInstance.deplacer(160)
+        asserInstance.attendre(0.2)
+        asserInstance.changerVitesse("rotation", 3)
+        asserInstance.gestionTourner(-math.pi/2)
+        asserInstance.gestionTourner(math.pi)
+        asserInstance.gestionTourner(math.pi/2)
+        asserInstance.gestionTourner(math.pi)
+        asserInstance.changerVitesse("rotation", 2)
+        asserInstance.gestionAvancer(-300)
         
     # Tour de table avec les bras fermés.
     def tourDeTable0(self,asser,action) :
@@ -580,6 +757,7 @@ class Script:
         """
         Si l'ennemi est très bon, il faudra penser à défendre la base
         """
+        action.deplacer(0)
         log.logger.debug("Défense de la base")
         asser.goTo(Point(960, 1260))
         asser.gestionTourner(math.pi/2)
@@ -588,6 +766,7 @@ class Script:
         log.logger.debug("Fin défense de la base")
         
     def bourrerCale(self, asser, action) :
+        action.deplacer(0)
         asser.goTo(Point(900, 1000))
         asser.gestionTourner(0)
         actionInstance.deplacer(0, "bd")
@@ -601,9 +780,29 @@ class Script:
         action.deplacer(130)
         asser.gestionAvancer(300)
         asser.gestionAvancer(-200)
+        
+        
+####################################################################################################################
+###########################                P R É   ---   A C T I O N S                    ##########################
+####################################################################################################################
+
+    def preAction_totem01_1(self, asser, action) :
+        action.deplacer(0)
+        asser.goTo(Point(800, 700))
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(110)
+        asser.attendre(0.2)
+        asser.gestionTourner(math.pi/2)
+        asser.deplacer(700)
+        
+    def preAction_totem01_2(self, asser, action) :
+        action.deplacer(90)
+        asser.goTo(660, 1700)
+        asser.goTo(-20, 1700)
+        
 
 ####################################################################################################################
-####################################                       SCRIPT GÉNÉRIQUES              ##########################
+###########################                       SCRIPT GÉNÉRIQUES                       ##########################
 ####################################################################################################################
 
     # Lance un script en fonction d'un tableau d'actions
@@ -614,12 +813,12 @@ class Script:
       ["actionneur", angle]
       ["goTo",    point]
       
+      NOTE Normalement, cette fonction n'est pas utilisée.
     '''
     
     def scriptGenerique(self, asser, action,  suiteActions) :
         log.logger.debug("Script générique : " + str(suiteActions))
         for i in range(len(suiteActions)) :
-            print "hi"
             currentAction = suiteActions[i]
             
             if currentAction[0] == "avancer" :

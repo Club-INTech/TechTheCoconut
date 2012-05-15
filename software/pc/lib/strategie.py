@@ -121,13 +121,13 @@ class Strategie():
                 while self.actions != [] :
                     self.choisirAction()
                 
-                if self.timerStrat.time() <= 70 :
-                    # Prise de décision selon ce qui n'a pas été prise
-                    pass
+                #if self.timerStrat.time() <= 70 :
+                    ## Prise de décision selon ce qui n'a pas été prise
+                    #pass
                 
-                else :
-                    # Faire un "tour de piste"
-                    pass
+                #else :
+                    ## Faire un "tour de piste"
+                    #pass
 
         #--------------------------------------#
         #-- STRATEGIE NUMERO 2: Un peu mieux --#
@@ -165,11 +165,11 @@ class Strategie():
         if self.strategie == 1 :
             self.actions.append(["FARMERTOTEM", 0, 0, 10])
             self.actions.append(["FARMERTOTEM", 0, 1, 10])
-            #self.actions.append(["FARMERTOTEM", 1, 0, 10])
+            self.actions.append(["FARMERTOTEM", 1, 0, 10])
             #self.actions.append(["FARMERTOTEM", 1, 1, 10])
             
             self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-            #self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
+            self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
             
             #self.actions.append(["FAIRECHIERENNEMI", 1])    #
             
@@ -177,7 +177,7 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
             
-            self.actions.append(["BOURRERCALLE", 1])
+            #self.actions.append(["BOURRERCALLE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
@@ -210,7 +210,7 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 0, 1  ])
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
-            self.actions.append(["BOURRERCALLE", 1])
+            #self.actions.append(["BOURRERCALLE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
@@ -227,7 +227,8 @@ class Strategie():
                                         "BOURRERCALLE"      : [2, 5]
                                       }
                                       
-            self.preActions.append([0, [["actionneur" , 110], ["avancer", 680]], "self.robotInstance.position.y < 670"])
+            self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
+            self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
             
                                       
         elif self.strategie == 3 :
@@ -267,7 +268,7 @@ class Strategie():
 
             elif self.actions[i][0] == "TOURDETABLE" :
                 nomScripts.append("self.scriptInstance.tourDeTable"+ str(self.actions[i][1]))
-
+    
             elif self.actions[i][0] == "DEFENDRE":
                 nomScripts.append("self.scriptInstance.defendreBase")
                 
@@ -279,6 +280,7 @@ class Strategie():
             try :
                 log.logger.debug("NOM DU SCRIPT : " + str(nomScripts[i]))
                 exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
+                #log.logger.warning(temps_script)
             except :
                 log.logger.error("Problème de script")
                 # WARNING A ENLEVER POUR UN MATCH
@@ -290,15 +292,22 @@ class Strategie():
             # Ce try... except.. est utile si un script n'est pas fait en dur (pas scripté)
             # C'est souvent une ZeroDivisionError qui est lancée (script de temps nul)
             try :
-                poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
+                poid = k1*self.actions[i][-1]/temps_script + k2*distance
             except :
-                poids.append(k1*self.actions[i][-1]         + k2*distance)
+                poid = k1*self.actions[i][-1] + k2*distance
+            poids.append(poid)
                         
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
         max = 0
         maxID = -1
         deuxiemeMaxID = -1
+        
+        #log.logger.debug("Temps des scripts : "+ str(tempsScripts))
+        #log.logger.debug("Poids des scripts : "+ str(poids))
+        
+        for i in range(len(self.actions)) :
+            log.logger.debug("Action : " + str(self.actions[i]) + " | Temps : " + str(tempsScripts[i]) + " | Poids : " + str(poids[i]))
         
         # On cherche l'action qui fait le meilleur score
         # Le deuxième max est utile pour arrêter le premier si celui ci met
@@ -319,7 +328,7 @@ class Strategie():
         # On lance les PréActions :
         self.choisirPreActions(maxID)
         
-        # Sinon, on prend l'action
+        # Puis on lance l'action
         try :
             # Ecris un timeout dans __builtin__.instance
             # CONVENTION : Si il n'y a pas de deuxième meilleure action à faire, on met
@@ -329,13 +338,16 @@ class Strategie():
             else :
                 __builtin__.instance.timeout = 1000
             
-            #exec("success = self.scriptInstance.gestionScript("+nomScripts[maxID]+")")
+            log.logger.debug("LANCEMENT DU SCRIPT : " + nomScripts[maxID])
+            exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
             success = True
         # Problème de script
         except :
             log.logger.critical("La stratégie ne peut pas lancer d'actions")
             success = True
             
+        #time.sleep(5)
+        
         # Si l'action s'est  bien déroulée
         if success :
             # Puis on lui change sa priorité.
@@ -345,20 +357,19 @@ class Strategie():
             id_bourrage = self.findActions("BOURRERCALLE")
             if id_bourrage >= 0 :
                 self.actions[id_bourrage][-1] += 1
-                
-                
-        # Si l'action a chié comme Deboc
+        
+        
+        
+        # Si l'action a chié
         else :
             self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][1])
     
             
-        log.logger.debug("NOUVELLES ACTIONS : " + str(self.actions))
-        time.sleep(5)
         
     # Cette fonction s'occupe d'exécuter les preActions de l'action d'id id_action dans self.actions
     # minId permet un appel récursif de la fonction
     def choisirPreActions(self, id_action, minId = 0) :
-        
+        log.logger.info("Vérification de la présence d'un préscript")
         ok = False
         # On check si il y a des préActions à faire pour l'action :
         for i in range(minId, len(self.preActions)) :
@@ -371,16 +382,22 @@ class Strategie():
         # Si il n'y a pas de preActions, on retourne True pour dire que tout d'est bien passé.
         if not ok :
             return True
-            
-        log.logger.info("Lancement d'un préScript : " + str(currentPreAction))
+        
+        log.logger.info("Lancement d'un préScript : " + str(currentPreAction[1]))
         # On exécute les conditions d'exécution :
-        exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
-        success = True
+        try :
+            exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." +currentPreAction[1]+")")
+        # Sinon, il y a une erreur de script
+        except :
+            log.logger.critical("Impossible de lancer self.scriptInstance.gestionScripts(self.scriptInstance."+currentPreAction[1]+")")
+        
+        #exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
+        #success = True
+        
         # Si tout s'est bien passé, on regarde si il y a une autre préAction
-        if success :
-            return self.choisirPreActions(id_action, i+1)
-        else :
-            return False
+        return self.choisirPreActions(id_action, i+1)
+            
+        
         
             
         

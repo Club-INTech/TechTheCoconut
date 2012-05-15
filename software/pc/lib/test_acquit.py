@@ -16,10 +16,13 @@ log =lib.log.Log(__name__)
 
 if hasattr(__builtin__.instance, 'asserInstance'):
     asserInstance = __builtin__.instance.asserInstance
+    asser = asserInstance
 else:
     log.logger.error("console $0p@l1z7 : ne peut importer instance.asserInstance")
 if hasattr(__builtin__.instance, 'actionInstance'):
     actionInstance = __builtin__.instance.actionInstance
+    action = actionInstance
+    
 else:
     log.logger.error("console $0p@l1z7 : ne peut importer instance.actionInstance")
 
@@ -254,6 +257,62 @@ def faireChier():
     asserInstance.gestionTourner(math.pi)
     asserInstance.changerVitesse("rotation", 2)
     asserInstance.gestionAvancer(-300)
+    
+def farmerTotemEnnemiSud():
+    asser.gestionTourner(0)
+    action.deplacer(150)
+    asser.attendre(0.5)
+    asser.gestionAvancer(100)
+    action.deplacer(30, "bg")
+    asser.attendre(0.3)
+    action.deplacer(150, "bg")
+    asser.attendre(0.2)
+    asser.gestionAvancer(100)
+    action.deplacer(130)
+    asser.gestionAvancer(100, "auStopNeRienFaire")
+    asser.gestionTourner(0, "auStopNeRienFaire")
+    action.deplacer(110)
+    asser.attendre(0.2)
+    action.deplacer(120)
+    asser.attendre(0.2)
+    asser.gestionTourner(0, "auStopNeRienFaire")
+    asser.gestionAvancer(200, "auStopNeRienFaire")
+    asser.gestionTourner(0, "auStopNeRienFaire")
+    action.deplacer(90)
+    asser.attendre(0.3)
+    asser.gestionAvancer(200)
+    action.deplacer(40, "bg")
+    
+    #asser.gestionAvancer(120)
+    #action.deplacer(140, "hg")
+    #action.deplacer(140 ,"bg")
+    #asser.gestionTourner(0, "auStopNeRienFaire")
+    #asser.gestionAvancer(50, "auStopNeRienFaire")
+    #asser.gestionTourner(0, "auStopNeRienFaire")
+    #action.deplacer(0, "hd")
+    #action.deplacer(120, "bd")
+    #action.deplacer(120, ["hg", "bg"])
+    #asser.attendre(0.3)
+    #asser.gestionTourner(0, "auStopNeRienFaire")
+    #asser.gestionAvancer(200, "auStopNeRienFaire")
+    #asser.gestionTourner(0, "auStopNeRienFaire")
+    #action.deplacer(110, ["hg", "bg"])
+    #asser.gestionTourner(0, "auStopNeRienFaire")
+    #asser.gestionAvancer(200, "auStopNeRienFaire")
+    #asser.gestionTourner(0, "auStopNeRienFaire")
+    #asser.gestionTourner(0.5)
+    #asser.gestionAvancer(300)
+    
+    action.deplacer(0, ["hd", "hg"])
+    asser.gestionTourner(-1)
+    asser.gestionAvancer(300)
+    asser.gestionTourner(0)
+    asser.gestionAvancer(600)
+    asser.gestionTourner(1)
+    asser.gestionAvancer(500)
+    asser.gestionTourner(0)
+    asser.gestionAvancer(400, "auStopNeRienFaire")
+    asser.gestionAvancer(-400)
     """
     asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
     asserInstance.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
@@ -426,6 +485,8 @@ def console():
                 scriptPoussoir0()
             elif ordre == "sop1": 
                 faireChier()
+            elif ordre == "sop2":
+                farmerTotemEnnemiSud()
                 
             else:
                 try:
