@@ -210,7 +210,7 @@ class Strategie():
             #self.actions.append(["TOURDETABLE", 0, 1  ])
             #self.actions.append(["TOURDETABLE", 1, 0.1])
             #self.actions.append(["DEFENDRE", 1])
-            self.actions.append(["BOURRERCALLE", 1])
+            #self.actions.append(["BOURRERCALLE", 1])
             
             # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
             # le deuxième argument est la nouvelle priorité si échec.
@@ -227,7 +227,8 @@ class Strategie():
                                         "BOURRERCALLE"      : [2, 5]
                                       }
                                       
-            self.preActions.append([0, [["goTo", [800,750]], ["actionneur" , 110], ["avancer", 680]], "self.robotInstance.position.y < 670"])
+            self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
+            self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
             
                                       
         elif self.strategie == 3 :
@@ -371,15 +372,21 @@ class Strategie():
         if not ok :
             return True
         
-        log.logger.info("Lancement d'un préScript : " + str(currentPreAction))
+        log.logger.info("Lancement d'un préScript : " + str(currentPreAction[1]))
         # On exécute les conditions d'exécution :
-        exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
-        success = True
+        
+        exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." +currentPreAction[1]+")")
+        
+        #exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
+        #success = True
+        
         # Si tout s'est bien passé, on regarde si il y a une autre préAction
         if success :
             return self.choisirPreActions(id_action, i+1)
         else :
             return False
+            
+        
         
             
         

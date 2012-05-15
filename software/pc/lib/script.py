@@ -649,9 +649,28 @@ class Script:
         action.deplacer(130)
         asser.gestionAvancer(300)
         asser.gestionAvancer(-200)
+        
+        
+####################################################################################################################
+###########################                P R É   ---   A C T I O N S                    ##########################
+####################################################################################################################
+
+    def preAction_totem01_1(self, asser, action) :
+        action.deplacer(0)
+        asser.goTo(Point(800, 700))
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(110)
+        asser.attendre(0.2)
+        asser.gestionTourner(math.pi/2)
+        asser.deplacer(700)
+        
+    def preAction_totem01_2(self, asser, action) :
+        asser.goTo(660, 1700)
+        asser.goTo(-20, 1700)
+        
 
 ####################################################################################################################
-####################################                       SCRIPT GÉNÉRIQUES              ##########################
+###########################                       SCRIPT GÉNÉRIQUES                       ##########################
 ####################################################################################################################
 
     # Lance un script en fonction d'un tableau d'actions
@@ -662,12 +681,12 @@ class Script:
       ["actionneur", angle]
       ["goTo",    point]
       
+      NOTE Normalement, cette fonction n'est pas utilisée.
     '''
     
     def scriptGenerique(self, asser, action,  suiteActions) :
         log.logger.debug("Script générique : " + str(suiteActions))
         for i in range(len(suiteActions)) :
-            print "hi"
             currentAction = suiteActions[i]
             
             if currentAction[0] == "avancer" :
