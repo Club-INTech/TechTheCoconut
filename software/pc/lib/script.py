@@ -90,7 +90,6 @@ class Script:
         try :
             #execution du script    
             script(asser,action)
-            log.logger.critical(str(script))
             if chrono:
                 #retour de la durée totale d'execution du script
                 return asser.mesurerChrono()
