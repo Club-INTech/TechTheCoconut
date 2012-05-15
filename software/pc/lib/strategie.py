@@ -339,14 +339,14 @@ class Strategie():
                 __builtin__.instance.timeout = 1000
             
             log.logger.debug("LANCEMENT DU SCRIPT : " + nomScripts[maxID])
-            #exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
+            exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
             success = True
         # Problème de script
         except :
             log.logger.critical("La stratégie ne peut pas lancer d'actions")
             success = True
             
-        time.sleep(5)
+        #time.sleep(5)
         
         # Si l'action s'est  bien déroulée
         if success :
