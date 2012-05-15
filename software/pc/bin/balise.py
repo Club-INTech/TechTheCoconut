@@ -10,5 +10,6 @@ import __builtin__
 
 vTable = lib.visualisation.Visu_table(__builtin__.instance)
 balise = __builtin__.instance.baliseInstance
-t = Thread(target=balise.tracker_robot_adverse)
-t.start();
+balise.allumer()
+#t = Thread(target=balise.tracker_robot_adverse)
+#t.start();

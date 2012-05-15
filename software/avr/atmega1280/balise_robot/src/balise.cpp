@@ -4,6 +4,9 @@
 #include "balise.h"
 #include <libintech/serial/serial_0.hpp>
 #include <libintech/serial/serial_1.hpp>
+#include "watchdog.h"
+bool is_laser_on __attribute__((section (".noinit")));
+bool is_moteur_on __attribute__((section (".noinit")));
 
 void Balise::max_counter(uint16_t valeur){
 	max_counter_ = valeur;
@@ -51,8 +54,12 @@ Balise::Balise()
     //f_wanted=16000000/(2*prescaler*(1+OCR0A))
     // Valeur fixée = 48KHz (ne pas aller au dessus, le pont redresseur chauffe sinon)
     OCR0A= 170;
-    laser_off();
-    moteur_off();
+    if (not WDT_is_reset())
+    {
+        is_moteur_on = false;
+        is_laser_on = false;
+    }
+    retablir_etat();
     
 	sei();
 }
@@ -64,7 +71,7 @@ void Balise::laser_on(){
     sbi(TCCR0A,COM0A0);
     cbi(TCCR0A,COM0A1);
     sbi(PORTB,PORTB6);
-    Balise::serial_pc::print("laser on");
+    is_laser_on=true;
 }
 
 void Balise::laser_off(){
@@ -74,22 +81,29 @@ void Balise::laser_off(){
     cbi(TCCR0A,COM0A0);
     cbi(TCCR0A,COM0A1);
     cbi(PORTB,PORTB6);
-    Balise::serial_pc::print("laser off");
+    is_laser_on=false;
 }
 
 void Balise::moteur_on(){
     pin_activation_moteur::set();
     pin_activation_moteur2::set();
-    Balise::serial_pc::print("moteur on");
-
+    is_moteur_on = true;
 }
 
 void Balise::moteur_off(){
     pin_activation_moteur::clear();
     pin_activation_moteur2::clear();
-    Balise::serial_pc::print("moteur off");
+    is_moteur_on = false;
 }
 
+void Balise::retablir_etat(){
+    if(is_moteur_on){
+        moteur_on();
+    }
+    if(is_laser_on){
+        laser_on();
+    }
+}
 // void Balise::asservir(int32_t vitesse_courante)
 // {
 // 	int16_t pwm = asservissement_moteur_.pwm(vitesse_courante);

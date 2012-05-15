@@ -43,18 +43,16 @@ volatile int32_t last_codeur = 0;
 int main() {
 	
 	Balise & balise = Balise::Instance();
-	
+	init(); 
 	// En cas de reset par le watchdog
 	if (WDT_is_reset())
 	{
 		// Envoi du timeout au PC
 		Balise::serial_pc::print("timeout");
-	
+        
 		// Désactivation du watchdog
 		WDT_off();
 	}
-	
-	init(); 
     uint8_t n_lu_prec = 0;
 	while (1) {
 		char buffer[10];
@@ -67,6 +65,15 @@ int main() {
 			Balise::serial_pc::print(2);
 		}
 		
+		if(COMPARE_BUFFER("allumer",7)){
+            balise.moteur_on();
+            balise.laser_on();
+        }
+        
+        if(COMPARE_BUFFER("eteindre",8)){
+            balise.moteur_off();
+            balise.laser_off();
+        }
 		//Speed
 		if(COMPARE_BUFFER("s",1)){
 			Balise::serial_pc::print(balise.max_counter());
@@ -208,11 +215,11 @@ void init()
 	sbi(EICRA,ISC00);
 	sbi(EIMSK,INT0);//Activation proprement dite
 
-	// Initialisation interruptions codeurs
-	// Interruptions de codeuse(PCINT4 => Pin 10 sur l'Arduino)
-	sbi(PCMSK0,PCINT4);
-	// Activer les interruptions
-	sbi(PCICR,PCIE0);
+// 	// Initialisation interruptions codeurs
+// 	// Interruptions de codeuse(PCINT4 => Pin 10 sur l'Arduino)
+// 	sbi(PCMSK0,PCINT4);
+// 	// Activer les interruptions
+// 	sbi(PCICR,PCIE0);
 
 	// Initialisation interruptions codeurs
 	// Masques
