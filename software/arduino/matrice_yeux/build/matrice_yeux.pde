@@ -234,25 +234,25 @@ void balayageH()
 void balayageV()
 {
   // Aller
-  for(int addr=0;addr<=3;addr++)
+  for(int eye=1 ; eye<=2 ; eye++)
     {
-      for (int row=0;row<7;row++)
+      for (int col=0;col<=13;col++)
       {
-        lc.setColumn(addr,row,B11111111);
+        lc.setEyeColumn(eye,col,B11111111,0);
         delay(delaytime);
-        //lc.setRow(addr,row,(byte)0);
+        //lc.setEyeColumn(eye,col,(byte)0,0);
       }
   }
   
-  // Retour
-  for(int addr=3;addr>=0;addr--)
-  {
-    for (int row=6;row>=0;row--)
+   // Retour
+  for(int eye=2 ; eye>0 ; eye--)
     {
-      //lc.setRow(addr,row,B11111111);
-      delay(delaytime);
-      lc.setColumn(addr,row,(byte)0);
-    }
+      for (int col=13;col>=0;col--)
+      {
+        lc.setEyeColumn(eye,col,B11111111,0);
+        delay(delaytime);
+        //lc.setEyeColumn(eye,col,(byte)0,0);
+      }
   }
 }
 
@@ -282,7 +282,7 @@ void animationyeux()
    {
      for (j=0 ; j<4 ; j++)
          {
-           lc.setEyeColumn(1,pos[j],sprite[j],0);
+           lc.setEyeColumn(1,pos[j],sprite[j], 0);
          } 
       delay(30);
         lc.setEyeColumn(1,pos[4]+1,(byte)0,0);
@@ -299,8 +299,9 @@ void loop()
 { 
   //balayageV();
   //K2000(); 
-// cylon();
+ cylon();
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
-  animationyeux();
+  //animationyeux();
+  //balayageV();
 }

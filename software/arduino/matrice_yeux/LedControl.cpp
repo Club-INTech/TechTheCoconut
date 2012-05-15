@@ -232,8 +232,8 @@ void LedControl::setEyeRow(int eye, int row, byte value){
 	eye = 3;
 	
 	//Matrix 1 & 2
-	setrowumn(eye-1,row,value); //1 -> 0 | 2 -> 2
-	setrowumn(eye,row,value); //1 -> 1 | 2 -> 3
+	setColumn(eye-1,row,value); //1 -> 0 | 2 -> 2
+	setColumn(eye,row,value); //1 -> 1 | 2 -> 3
 }
 
 
