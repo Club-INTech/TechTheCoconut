@@ -292,9 +292,10 @@ class Strategie():
             # Ce try... except.. est utile si un script n'est pas fait en dur (pas scripté)
             # C'est souvent une ZeroDivisionError qui est lancée (script de temps nul)
             try :
-                poids.append(k1*self.actions[i][-1]/temps_script + k2*distance)
+                poid = k1*self.actions[i][-1]/temps_script + k2*distance
             except :
-                poids.append(k1*self.actions[i][-1]         + k2*distance)
+                poid = k1*self.actions[i][-1] + k2*distance
+            poids.append(poid)
                         
         # On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
         # déjà fait. Ex : On a déjà farmé le totem.)
@@ -302,8 +303,11 @@ class Strategie():
         maxID = -1
         deuxiemeMaxID = -1
         
-        log.logger.debug("Temps des scripts : "+ str(tempsScripts))
-        log.logger.debug("Poids des scripts : "+ str(poids))
+        #log.logger.debug("Temps des scripts : "+ str(tempsScripts))
+        #log.logger.debug("Poids des scripts : "+ str(poids))
+        
+        for i in range(len(self.actions)) :
+            log.logger.debug("Action : " + str(self.actions[i]) + " | Temps : " + str(tempsScripts[i]) + " | Poids : " + str(poids[i]))
         
         # On cherche l'action qui fait le meilleur score
         # Le deuxième max est utile pour arrêter le premier si celui ci met
@@ -342,7 +346,7 @@ class Strategie():
             log.logger.critical("La stratégie ne peut pas lancer d'actions")
             success = True
             
-        time.sleep(20)
+        time.sleep(5)
         
         # Si l'action s'est  bien déroulée
         if success :
