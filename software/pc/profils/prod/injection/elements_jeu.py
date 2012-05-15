@@ -117,7 +117,7 @@ oriLingot2 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penchÃ
 oriLingot3 = 3.1415/2    #WARNING Normalement, ce lingot est un petit peu penchÃ©...
 
 
-carte.ajouter_lingot(elements_jeu.Lingot(pointLingot1, oriLingot1, hauteur, False))
+carte.ajouter_lingot(elements_jeu.Lingot(pointLingot1, oriLingot1, hauteur, True))
 carte.ajouter_lingot(elements_jeu.Lingot(pointLingot2, oriLingot2, hauteur, couleur_robot == 'V'))
 carte.ajouter_lingot(elements_jeu.Lingot(pointLingot3, oriLingot3, hauteur, couleur_robot == 'R'))
 
@@ -179,7 +179,7 @@ ptDisque18 = point.Point(0, 2000-(240 - 30))
 
 # On rentre les variables disques dans la Carte.
 for i in range(1, 19) :
-    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
+    exec("if (ptDisque" + str(i) + " == 0) :\n enemy = True\nelif (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
 
 
 
@@ -192,8 +192,7 @@ ptDisque22 = point.Point(-90, 2000 - 300)
 
 # On rentre les disques noirs dans la Carte
 for i in range (19, 23):
-    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")
-    
+    exec("if (ptDisque" + str(i) +".x > 0) == (couleur_robot == 'R'):\n enemy = True\nelse:\n enemy = False\ncarte.ajouter_disque(elements_jeu.Disque(ptDisque"+str(i)+", 0, couleur, hauteur, enemy))")  
 
 # Niveau 1 des totems
 hauteur = 18

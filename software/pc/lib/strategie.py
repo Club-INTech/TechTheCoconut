@@ -356,7 +356,7 @@ class Strategie():
             # On incrémente la variable 
             id_bourrage = self.findActions("BOURRERCALLE")
             if id_bourrage >= 0 and self.actions[maxID][0] == "FARMERTOTEM":
-                self.actions[id_bourrage][-1] += 0.5
+                self.actions[id_bourrage][-1] += 4
         
         
         

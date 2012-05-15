@@ -769,7 +769,7 @@ class Script:
         action.deplacer(0)
         asser.goTo(Point(900, 1000))
         asser.gestionTourner(0)
-        actionInstance.deplacer(0, "bd")
+        action.deplacer(0, "bd")
         asser.gestionTourner(-math.pi/2)
         asser.gestionTourner(-math.pi)
         action.deplacer(150)
