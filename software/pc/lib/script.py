@@ -534,17 +534,20 @@ class Script:
     
     # Poussoir côté chez nous.
     def enfoncerPoussoir0(self,asser,action) :
-        
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        action.deplacer(0) # On met les bras à 110 pour arriver à la position
-        asser.goTo(Point(1500 - 640, 2000 - 500)) # On va se placer le long de la ligne
-        asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
-        asser.gestionAvancer(290) # on avance au point de rotation
-        asser.gestionTourner(-1.5)    # On lui montre nos fesses
-        #asser.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        #asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        asser.gestionAvancer(450)    # On se barre.
+        asser.goTo(1500-720+7, 2000 - 510 - 180)  
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(150, "bd")
+        asser.attendre(0.5)
+        asser.gestionAvancer(220)
+        asser.gestionTourner(-math.pi)
+        asser.gestionTourner(-math.pi/2)
+        
+        asser.gestionAvancer(-3000, "auStopNeRienFaire")
+        asser.gestionAvancer(400)
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionAvancer(-100)
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir à nous fini")
 
         
@@ -552,15 +555,19 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        action.deplacer(0) # On met les bras à 110 pour arriver à la positionif idPoussoir == 0:
-        asser.goTo(Point(-1500 + 640 + 477, 2000 - 500)) # On va se placer le long de la ligne
-        asser.gestionTourner(-math.pi/2) # on s'oriente vers les poussoir
-        asser.gestionAvancer(290) # on avance au point de rotation
-        asser.gestionTourner(-1.5)    # On lui montre nos fesses
-        asser.changerVitesse('translation', 3)   # .. Puis on l'enfonce en fonçant
-        asser.gestionAvancer(-470.0)  # Pour l'enfoncer à fond
-        asser.changerVitesse('translation', 2)   # On remet le couple maxi à sa valeur d'origine.
-        asser.gestionAvancer(450)    # On se barre.
+        asser.goTo(1500-720+7-470, 2000 - 510 - 180)  
+        asser.gestionTourner(math.pi/2)
+        action.deplacer(150, "bd")
+        asser.attendre(0.5)
+        asser.gestionAvancer(220)
+        asser.gestionTourner(-math.pi)
+        asser.gestionTourner(-math.pi/2)
+        
+        asser.gestionAvancer(-3000, "auStopNeRienFaire")
+        asser.gestionAvancer(400)
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionAvancer(-100)
+        action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir ennemi fini")
         
         
@@ -574,7 +581,42 @@ class Script:
         On fait un tour de table bras fermés
         """
         log.logger.debug("C'est parti, on farme l'ennemi !")
-        self.tourDeTable(asser, action, False)
+        
+        asserInstance.goTo(-1500+960-70, 2000-260+160)
+        asserInstance.gestionTourner(-math.pi)
+        actionInstance.deplacer(150, "bd")
+        asserInstance.attendre(0.5)
+        asserInstance.gestionAvancer(220)
+        asserInstance.gestionTourner(-math.pi/2)
+        asserInstance.gestionTourner(0)
+        actionInstance.deplacer(0)
+        asserInstance.gestionAvancer(-3000, "auStopNeRienFaire")
+        asserInstance.gestionAvancer(130)
+        asserInstance.gestionTourner(-math.pi/2-0.02)
+        asserInstance.attendre(.5)
+        asserInstance.gestionAvancer(500)
+        
+        """
+        asserInstance.gestionTourner(-3*math.pi/4)
+        asserInstance.gestionAvancer(250)
+        actionInstance.deplacer(150, "bg")
+        asserInstance.attendre(0.5)
+        asserInstance.gestionTourner(-math.pi/4)
+        asserInstance.gestionAvancer(350)
+        """
+        
+        asserInstance.gestionAvancer(150)
+        asserInstance.gestionTourner(-math.pi)
+        asserInstance.gestionAvancer(250)
+        actionInstance.deplacer(160)
+        asserInstance.attendre(0.2)
+        asserInstance.changerVitesse("rotation", 3)
+        asserInstance.gestionTourner(-math.pi/2)
+        asserInstance.gestionTourner(math.pi)
+        asserInstance.gestionTourner(math.pi/2)
+        asserInstance.gestionTourner(math.pi)
+        asserInstance.changerVitesse("rotation", 2)
+        asserInstance.gestionAvancer(-300)
         
     # Tour de table avec les bras fermés.
     def tourDeTable0(self,asser,action) :
@@ -668,6 +710,7 @@ class Script:
         asser.goTo(660, 1700)
         asser.goTo(-20, 1700)
         
+        1500-72+7
 
 ####################################################################################################################
 ###########################                       SCRIPT GÉNÉRIQUES                       ##########################
