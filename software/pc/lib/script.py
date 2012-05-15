@@ -521,7 +521,7 @@ class Script:
     def rafflerTotem10(self,asser,action) :
         log.logger.debug("Rafflage de totem 1 0 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-920, 470))
+        asser.goTo(Point(-920+ 70, 470+180))
         asser.gestionTourner(0)
         action.deplacer(150)
         asser.attendre(0.5)
@@ -611,7 +611,7 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goTo(Point(1500-720+7-470, 2000 - 510 - 180))  
+        asser.goTo(Point(780+70, 2000 - 510 - 180))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -630,8 +630,7 @@ class Script:
     #----------------------#
     #       ANNEXES        #
     #----------------------#
-    
-        
+
     def faireChierEnnemi(self,asser,action) :
         """
         On fait un tour de table bras fermés
