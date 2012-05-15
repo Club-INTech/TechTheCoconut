@@ -20,13 +20,23 @@ while True :
 """
 
 def ping():
-    """
-    asser.serieAsserInstance.ecrire("d")
-    asser.serieAsserInstance.ecrire("200")
+    
     while True:
-        asser.serieAsserInstance.ecrire("acq")
-        print ">"+str(asser.serieAsserInstance.lire())+"<"
-    """
+        
+        com = raw_input("?")
+        if com == "q":
+            break
+        if com == "d":
+            asser.serieAsserInstance.ecrire("d")
+            asser.serieAsserInstance.ecrire("200")
+            for i in range(50):
+                asser.serieAsserInstance.ecrire("acq")
+                print str(i)+">"+str(asser.serieAsserInstance.lire())+"<"
+        if com == "":
+            for i in range(50):
+                asser.serieAsserInstance.ecrire("acq")
+                print str(i)+">"+str(asser.serieAsserInstance.lire())+"<"
+                    
     
     """
     while True:
@@ -34,6 +44,7 @@ def ping():
         print "x : >"+str(asser.serieAsserInstance.lire())+"<"
         print "y : >"+str(asser.serieAsserInstance.lire())+"<"
         #time.sleep(0.03)
+    """
     """
     while True:
         com = raw_input("?")
@@ -45,4 +56,4 @@ def ping():
                 print asser.getOrientation()
         if com == "q":
             break
-        
+    """

@@ -10,7 +10,7 @@ def attribuer():
     chemins = ["","","","","",""]
     
     #liste des périphériques recherchés
-    peripheriques = [[0,"asservissement",9600],[3,"capteurs_actionneurs",9600],[2,"balise",9600]]#[1,"capteurs",57600],[4,"actionneurs",9600]]
+    peripheriques = [[0,"asservissement",9600],[3,"capteurs_actionneurs",9600]]#[2,"balise",9600],#[1,"capteurs",57600],[4,"actionneurs",9600]]
     
     
     #listage des périphériques trouvés
