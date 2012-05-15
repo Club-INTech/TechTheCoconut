@@ -75,7 +75,7 @@ class Actionneur(serie.Serie):
         self.calculRayon(math.pi*angle/180)
                
         # Gestion de la symétrie
-        if _builtin__.constantes['couleur'] == "v" :
+        if __builtin__.constantes['couleur'] == "v" :
             # Envoi des infos
             if "hg" in position:
                 self.goto(self.ids["hg"], 180+3-angle)
