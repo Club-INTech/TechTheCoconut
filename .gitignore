@@ -129,3 +129,7 @@
 /software/arm/lpcxpresso/CMSISv2_LPC17xx/Release/*
 /software/arm/lpcxpresso/INTech-USB-Serie/Debug/src/*
 /software/arm/lpcxpresso/INTech-USB-Serie/Debug/*
+/software/sauv_g.xml
+/software/sauv_poids
+/software/sauv_posX
+/software/sauv_posY

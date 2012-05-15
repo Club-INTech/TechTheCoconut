@@ -12,8 +12,8 @@ class Jumper :
     classe gérant le Jumper
     """
     
-    def __init__(self) :        
-        if hasattr(__builtin__.instance, 'serieCaptInstance'):  
+    def __init__(self) :
+        if hasattr(__builtin__.instance, 'serieCaptActionneurInstance'):  
             self.demarrer()
         else:
             log.logger.error("l'instance de lib.capteur.Capteur n'est pas chargée")
@@ -21,16 +21,16 @@ class Jumper :
     def demarrer(self):
         if not hasattr(self, 'initialise') or not self.initialise:
             self.initialise = True
-            self.serieCaptInstance = __builtin__.instance.serieCaptInstance
+            self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
             
     def getEtat(self) :
         """
         Retourne l'état du Jumper (1 si enfoncé, 0 sinon)
         """
         while 1:
-            self.serieCaptInstance.ecrire(";j")
+            self.serieCaptActionneurInstance.ecrire(";j")
             try :
-                return int(self.serieCaptInstance.lire())
+                return int(self.serieCaptActionneurInstance.lire())
             except :
                 time.sleep(0.01)
         

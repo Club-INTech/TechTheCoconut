@@ -43,6 +43,15 @@ class Balise:
         self.filtre_kalman = FiltreKalman(x,P,F,H,R,Q)
         self.mutex = Lock()
     
+    def allumer(self):
+        log.logger.info("balise : allumage")
+        self.serieBaliseInstance.ecrire("allumer")
+        
+    def eteindre(self):
+        log.logger.info("balise : eteindre")
+        self.serieBaliseInstance.ecrire("eteindre")
+        
+        
     def getPosition(self):
         self.mutex.acquire()
         state = self.filtre_kalman.x;

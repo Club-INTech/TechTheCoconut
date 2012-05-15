@@ -1,0 +1,3 @@
+#define TABLE_LENGTH 9
+#define DISTANCE 1340, 1250, 1100, 950, 800, 670, 540, 440
+#define DELTA_T 38, 40, 46, 52, 59, 70, 85, 105

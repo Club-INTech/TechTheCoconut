@@ -65,8 +65,8 @@ constantes = \
             "actionneur": "^4$",
         },
     },
-    "DureeJeu": 5,
-    
+    "DureeJeu": 30,
+    "Strategie": 2, # profil de stratégie    
     "Actionneurs":
     {
         "angleMax": 160,

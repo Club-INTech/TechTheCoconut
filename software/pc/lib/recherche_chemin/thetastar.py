@@ -24,6 +24,7 @@ import profils.develop.constantes
 from lib.carte import Carte
 import __builtin__
 import lib.instance
+from lib.exceptions import departInaccessible
 
 #import lib.visualisation.visu_threads as visu_threads
 
@@ -48,8 +49,6 @@ class Thetastar:
     :type liste_robots_adv: list de Point
     """
     
-    lastRayon = 0
-    
     # Constantes du robot Coconut
     tableLargeur = constantes["Coconut"]["longueur"]
     tableLongueur = constantes["Coconut"]["largeur"]
@@ -57,6 +56,9 @@ class Thetastar:
     nCotesRobotsA = constantes["Recherche_Chemin"]["nCotesRobotsA"]
     
     carte = Carte()
+    
+    repertoire = ""
+    #repertoire = "/media/cacheSopalint/"
     
     # Reglettes
     r1 = carte.reglettesEnBois[0].rectangle
@@ -84,34 +86,21 @@ class Thetastar:
     axeY=0
 
     #pour activer les déviations automatiques en cas de départ/arrivée inaccessible
-    effectuer_deviation_negligeable = True
+    effectuer_deviation_negligeable = False
     effectuer_deviation_segment = False
 
     listeObjets = []
 
-    def __init__(self, liste_robots_adv):
-        Thetastar.liste_robots_adv = liste_robots_adv
+    def __init__(self):
+        self.liste_robots_adv = __builtin__.instance.liste_robots_adv
         
         if hasattr(__builtin__.instance, 'robotInstance'):
-            self.rayonRobot = __builtin__.instance.robotInstance.rayon
+            self.rayonRobot = __builtin__.instance.robotInstance.donneRayon()
         else:
             log.logger.error("thetastar : ne peut importer instance.robotInstance")
-        
-        if not Thetastar.lastRayon == self.rayonRobot:
-            #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
-            for rect in Thetastar.listeRectangles:
-                rect.wx += self.rayonRobot
-                rect.wy += self.rayonRobot
-                
-            #conversion des rectangles en polygones de 4 sommets
-            for rect in Thetastar.listeRectangles:
-                #création d'une liste de polygones pour les zones inaccessibles    
-                #les éléments de jeu ne doivent pas dépasser de l'aire de jeu
-                listePoints = []
-                for angle in RectangleToPoly(rect):
-                    listePoints.append(Point(angle.x,angle.y))
-                Thetastar.listeObjets.append(listePoints)
-            Thetastar.lastRayon = self.rayonRobot
+            
+        self.lastRayon =0
+        self.listeObjets = []
 
     def rechercheChemin(self, depart, arrive):
         """
@@ -122,20 +111,28 @@ class Thetastar:
         :param arrive: Point d'arrivée
         :type arrive: Point
         """
+        
+        #actualisation du rayon du robot
+        self.rayonRobot = __builtin__.instance.robotInstance.donneRayon()
+        print "rayon connu : "+str(self.rayonRobot)
+        if not self.lastRayon == self.rayonRobot:
+            #retracage du graphe en cas de changement
+            self.enregistreGraphe()
+        
         self.chargeGraphe()
+        
         log.logger.info("Recherche de chemin entre ("+str(depart.x)+", "+str(depart.y)+") et ("+str(arrive.x)+", "+str(arrive.y)+")")
-
-        if not (depart.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and depart.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and depart.y < Thetastar.tableLargeur-self.rayonRobot/2 and depart.y > 0.+self.rayonRobot/2):
-            log.logger.error("Le point de départ n'est pas dans l'aire de jeu")
+        if not (depart.x > -Thetastar.tableLongueur/2+self.rayonRobot and depart.x < Thetastar.tableLongueur/2-self.rayonRobot and depart.y < Thetastar.tableLargeur-self.rayonRobot and depart.y > 0.+self.rayonRobot):
+            log.logger.critical("Le point de départ n'est pas dans l'aire de jeu")
             raise Exception
-        if not (arrive.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and arrive.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and arrive.y < Thetastar.tableLargeur-self.rayonRobot/2 and arrive.y > 0.+self.rayonRobot/2):
+        if not (arrive.x > -Thetastar.tableLongueur/2+self.rayonRobot and arrive.x < Thetastar.tableLongueur/2-self.rayonRobot and arrive.y < Thetastar.tableLargeur-self.rayonRobot and arrive.y > 0.+self.rayonRobot):
             log.logger.critical("le point d'arrivée n'est pas dans l'aire de jeu !")
             raise Exception
 
         
         #création des robots adverses
         robotsA=[]
-        for centre in Thetastar.liste_robots_adv:
+        for centre in self.liste_robots_adv:
             robotsA.append(polygone(centre,self.rayonRobotsA,Thetastar.nCotesRobotsA))
             
         
@@ -149,12 +146,12 @@ class Thetastar:
                 for l in range(4,k):
                     #teste les arêtes accessibles
                     touche = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                             touche = True
                             break
                     if not touche:
-                        for robotA in Thetastar.liste_robots_adv:
+                        for robotA in self.liste_robots_adv:
                             if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),polygone(robotA,self.rayonRobotsA,Thetastar.nCotesRobotsA)):
                                 touche = True
                                 break
@@ -169,7 +166,7 @@ class Thetastar:
             p1=Point(Thetastar.posX[e.source()],Thetastar.posY[e.source()])
             p2=Point(Thetastar.posX[e.target()],Thetastar.posY[e.target()])
             touche = False
-            for poly in Thetastar.listeObjets:
+            for poly in self.listeObjets:
                 if collisionSegmentPoly(p1,p2,poly):
                     touche = True
                     break
@@ -185,7 +182,7 @@ class Thetastar:
         
         #test de l'accessibilité des positions de départ et d'arrivée
         touche_td = False
-        for poly in Thetastar.listeObjets:
+        for poly in self.listeObjets:
             if collisionPolyPoint(poly,depart):
                 touche_td = True
                 break
@@ -195,14 +192,13 @@ class Thetastar:
                         touche_td = True
                         break
         if touche_td :
-            log.logger.critical("la position de départ est inaccessible !")
-            
+            deviationDepart_reussie = False
             if Thetastar.effectuer_deviation_negligeable :
+                log.logger.info("la position exacte de départ ("+str(depart.x)+","+str(depart.y)+") est inaccessible !")
                 #on retente depuis un point de départ voisin, sur un cercle (hexagone) de faible rayon
-                deviationDepart_reussie = False
                 for redir in polygone(depart,25.,6):
                     touche_tr = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionPolyPoint(poly,redir):
                             touche_tr = True
                             break
@@ -216,13 +212,14 @@ class Thetastar:
                         deviationDepart_reussie = True
                         return self.rechercheChemin(redir,arrive)
                         break
-                if not deviationDepart_reussie:
-                    #impossible de trouver une position de départ
-                    raise Exception
+            if not deviationDepart_reussie:
+                #impossible de trouver une position de départ
+                log.logger.critical("la position de départ ("+str(depart.x)+","+str(depart.y)+") est inaccessible !")
+                raise departInaccessible(depart)
             
         else :
             touche_ta = False
-            for poly in Thetastar.listeObjets:
+            for poly in self.listeObjets:
                 if collisionPolyPoint(poly,arrive):
                     touche_ta = True
                     break
@@ -232,18 +229,15 @@ class Thetastar:
                             touche_ta = True
                             break
             if touche_ta :
-                log.logger.critical("la position d'arrivée ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !")
-                
-                
+                deviationArrive_reussie = False
                 if Thetastar.effectuer_deviation_negligeable :
-                    
+                    log.logger.info("la position exacte d'arrivée ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !")
                     #on retente une destination voisine de celle recherchée
-                    deviationArrive_reussie = False
                     #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
                     touche_cercle_A=True
                     for redir in polygone(arrive,25.,6):
                         touche_tr = False
-                        for poly in Thetastar.listeObjets:
+                        for poly in self.listeObjets:
                             if collisionPolyPoint(poly,redir):
                                 touche_tr = True
                                 break
@@ -268,7 +262,7 @@ class Thetastar:
                                 if pCollision:
                                     break
                             if not pCollision:
-                                for poly in Thetastar.listeObjets:
+                                for poly in self.listeObjets:
                                     pCollision=collisionSegmentPoly(depart,arrive,poly)
                                     if pCollision:
                                         break
@@ -277,11 +271,10 @@ class Thetastar:
                             deviationArrive_reussie = True
                             return self.rechercheChemin(depart,Point(0.99999999*pCollision[1].x+0.00000001*depart.x,0.99999999*pCollision[1].y+0.00000001*depart.y))
                             
-                    if not deviationArrive_reussie:
-                        #impossible de trouver une position d'arrivée
-                        raise Exception
-                
-                
+                if not deviationArrive_reussie:
+                    #impossible de trouver une position d'arrivée
+                    log.logger.critical("la position d'arrivée ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !")
+                    raise Exception
                 
             else :
                 #créations des noeuds arguments et de leurs arêtes
@@ -294,7 +287,7 @@ class Thetastar:
                 for l in range(4,Thetastar.g.num_vertices()-2):
                     #teste les arêtes accessibles
                     touche_d = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionSegmentPoly(depart,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                             touche_d = True
                             break
@@ -310,7 +303,7 @@ class Thetastar:
                 for l in range(4,Thetastar.g.num_vertices()-1):
                     #teste les arêtes accessibles
                     touche_a = False
-                    for poly in Thetastar.listeObjets:
+                    for poly in self.listeObjets:
                         if collisionSegmentPoly(arrive,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                             touche_a = True
                             break
@@ -323,8 +316,6 @@ class Thetastar:
                         Thetastar.g.add_edge(Narrive,Thetastar.g.vertex(l))
                         Thetastar.poids[Thetastar.g.edge(Narrive,Thetastar.g.vertex(l))] = sqrt((arrive.x - Thetastar.posX[Thetastar.g.vertex(l)]) ** 2 + (arrive.y - Thetastar.posY[Thetastar.g.vertex(l)]) ** 2)
                         
-                        
-                
                 chemin=[]
                 
                 log.logger.info("Chemin trouvé :")
@@ -339,10 +330,105 @@ class Thetastar:
 
                 return chemin
 
-
-
-
-
+    """
+    Dit si un point est accessible sur la table (ne prend pas en compte la position acutelle)
+    
+    :param x:  abscisse de l'arrivée
+    :type x: float
+    :param y: ordonnée de l'arrivée
+    :type y: float
+    :param rayon: Rayon du robot (facultatif)
+    :type rayon: float
+    :return: Point accessible|False si pas de point accessible
+    :rtype: Point|False
+    """
+    def estAccessible(self, x, y, rayon = 0):
+        arrive = Point(x,y)
+        if rayon == 0:
+            #actualisation du rayon du robot
+            rayonRobot = __builtin__.instance.robotInstance.donneRayon()
+            print "rayon actuel : "+str(rayonRobot)
+        else :
+            rayonRobot = rayon
+        if not self.lastRayon == rayonRobot:
+            #retracage du graphe en cas de changement
+            self.enregistreGraphe()
+            
+        self.chargeGraphe()
+        
+        if not (arrive.x > -Thetastar.tableLongueur/2+rayonRobot and arrive.x < Thetastar.tableLongueur/2-rayonRobot and arrive.y < Thetastar.tableLargeur-rayonRobot and arrive.y > 0.+rayonRobot):
+            print "\n("+str(x)+", "+str(y)+") n'est pas dans l'aire de jeu.\n"
+            return False
+        else :
+            
+            #création des robots adverses
+            robotsA=[]
+            for centre in self.liste_robots_adv:
+                robotsA.append(polygone(centre,self.rayonRobotsA,Thetastar.nCotesRobotsA))
+            
+            touche_ta = False
+            for poly in self.listeObjets:
+                if collisionPolyPoint(poly,arrive):
+                    touche_ta = True
+                    break
+                if not touche_ta:
+                    for robotA in robotsA:
+                        if collisionPolyPoint(robotA,arrive):
+                            touche_ta = True
+                            break
+            if touche_ta :
+                deviationArrive_reussie = False
+                if True :
+                    print "\nla position exacte  ("+str(arrive.x)+","+str(arrive.y)+") est inaccessible !"
+                    #on retente une destination voisine de celle recherchée
+                    #d'abord sur un cercle (hexagone) de faible rayon autour du point d'arrivé initial
+                    touche_cercle_A=True
+                    for redir in polygone(arrive,25.,6):
+                        touche_tr = False
+                        for poly in self.listeObjets:
+                            if collisionPolyPoint(poly,redir):
+                                touche_tr = True
+                                break
+                            if not touche_tr:
+                                for robotA in robotsA:
+                                    if collisionPolyPoint(robotA,redir):
+                                        touche_tr = True
+                                        break
+                        if not touche_tr :
+                            touche_cercle_A=False
+                            print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible."
+                            print "par contre, "+str(redir)+" l'est.\n"
+                            deviationArrive_reussie = True
+                            return Point(x, y)
+                    
+                    if True :
+                        #puis sur le segment départ-arrivée initial, on choisit le point accessible le plus proche de l'arrivée
+                        if touche_cercle_A:
+                            pCollision=False
+                            if x > 0:
+                                depart = Point(850,Thetastar.tableLargeur/2)
+                            else:
+                                depart = Point(-850,Thetastar.tableLargeur/2)
+                            for robotA in robotsA:
+                                pCollision=collisionSegmentPoly(depart,arrive,robotA)
+                                if pCollision:
+                                    break
+                            if not pCollision:
+                                for poly in self.listeObjets:
+                                    pCollision=collisionSegmentPoly(depart,arrive,poly)
+                                    if pCollision:
+                                        break
+                            print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible."
+                            print "par contre, "+str(pCollision[1])+" l'est.\n"
+                            return pCollision[1]
+                            
+                if not deviationArrive_reussie:
+                    #impossible de trouver une position d'arrivée
+                    print "\nle point ("+str(x)+", "+str(y)+") n'est pas accessible.\n"
+                    return False
+            else:
+                print "\n("+str(x)+", "+str(y)+") ok."
+                return Point(x,y)
 
     def AStar(self, Ndepart,Narrive):
         
@@ -370,15 +456,16 @@ class Thetastar:
         #tracé du chemin
         v = Narrive
         chemin=[]
+            
         while v != Ndepart:
             chemin.insert(0, Point(Thetastar.posX[v],Thetastar.posY[v]))
             p = Thetastar.g.vertex(pred[v])
+            if v == p:
+                log.logger.critical("[thetastar] : aucun chemin possible, graphe non connexe")
+                raise Exception
             v = p
         chemin.insert(0, Point(Thetastar.posX[v],Thetastar.posY[v]))
         return chemin
-
-
-
 
 
     def chargeGraphe(self):
@@ -387,10 +474,10 @@ class Thetastar:
             
         """
         
-        Thetastar.g=load_graph("sauv_g.xml")
-        TposX=marshal.load(open("sauv_posX","rb"))
-        TposY=marshal.load(open("sauv_posY","rb"))
-        Tpoids=marshal.load(open("sauv_poids","rb"))
+        Thetastar.g=load_graph(Thetastar.repertoire+"sauv_g.xml")
+        TposX=marshal.load(open(Thetastar.repertoire+"sauv_posX","rb"))
+        TposY=marshal.load(open(Thetastar.repertoire+"sauv_posY","rb"))
+        Tpoids=marshal.load(open(Thetastar.repertoire+"sauv_poids","rb"))
         for k in range(len(TposX)):
             Thetastar.posX[Thetastar.g.vertex(k)]=TposX[k]
             Thetastar.posY[Thetastar.g.vertex(k)]=TposY[k]
@@ -406,22 +493,44 @@ class Thetastar:
         Méthode qui enregistre le graphe contenant les éléments de jeu dans les fichiers sauv_*
             
         """
-    
+        
+        log.logger.info("calcul du graphe (initialisation, nouveau rayon ou nouveaux robots adverses")
+        
+        #copie des rectangles initiaux
+        Thetastar.rectangles = []
+        for rect in Thetastar.listeRectangles:
+            Thetastar.rectangles.append(Rectangle(rect.x,rect.y,rect.t,rect.wx,rect.wy))
+            
+        #élargissement des objets : les noeuds concernent les zones accessibles par le centre du robot
+        for rect in Thetastar.rectangles:
+            rect.wx += 2*self.rayonRobot
+            rect.wy += 2*self.rayonRobot
+            
+        #conversion des rectangles en polygones de 4 sommets
+        self.listeObjets = []
+        for rect in Thetastar.rectangles:
+            #création d'une liste de polygones pour les zones inaccessibles    
+            #les éléments de jeu ne doivent pas dépasser de l'aire de jeu
+            listePoints = []
+            for angle in RectangleToPoly(rect):
+                listePoints.append(Point(angle.x,angle.y))
+            self.listeObjets.append(listePoints)
+        self.lastRayon = self.rayonRobot
+        
+            
         k=0
-        
-        
         #éléments de jeu
-        for objet in Thetastar.listeObjets:
+        for objet in self.listeObjets:
             #ajoute 4 noeuds : les angles de l'objet rectangulaire
             for angle in objet:
-                if (angle.x > -Thetastar.tableLongueur/2+self.rayonRobot/2 and angle.x < Thetastar.tableLongueur/2-self.rayonRobot/2 and angle.y < Thetastar.tableLargeur-self.rayonRobot/2 and angle.y > 0.+self.rayonRobot/2):
+                if (angle.x > -Thetastar.tableLongueur/2+self.rayonRobot and angle.x < Thetastar.tableLongueur/2-self.rayonRobot and angle.y < Thetastar.tableLargeur-self.rayonRobot and angle.y > 0.+self.rayonRobot):
                     Thetastar.g.add_vertex()
                     Thetastar.posX[Thetastar.g.vertex(k)] = angle.x
                     Thetastar.posY[Thetastar.g.vertex(k)] = angle.y
                     for l in range(4,k):
                         #teste les arêtes accessibles
                         touche = False
-                        for poly in Thetastar.listeObjets:
+                        for poly in self.listeObjets:
                             if collisionSegmentPoly(angle,Point(Thetastar.posX[Thetastar.g.vertex(l)],Thetastar.posY[Thetastar.g.vertex(l)]),poly):
                                 touche = True
                                 break
@@ -433,7 +542,7 @@ class Thetastar:
                     k+=1
         
         
-        log.logger.info("création du graphe initial et enregistrement dans les fichiers sauv_*")
+        log.logger.info("mise en cache du graphe dans les fichiers sauv_*")
         TposX=[]
         TposY=[]
         Tpoids=[]
@@ -442,10 +551,10 @@ class Thetastar:
             TposY.append(Thetastar.posY[v])
         for e in Thetastar.g.edges():
             Tpoids.append(Thetastar.poids[e])
-        marshal.dump(TposX, open("sauv_posX", 'wb'))
-        marshal.dump(TposY, open("sauv_posY", 'wb'))
-        marshal.dump(Tpoids, open("sauv_poids", 'wb'))
-        Thetastar.g.save("sauv_g.xml")
+        marshal.dump(TposX, open(Thetastar.repertoire+"sauv_posX", 'wb'))
+        marshal.dump(TposY, open(Thetastar.repertoire+"sauv_posY", 'wb'))
+        marshal.dump(Tpoids, open(Thetastar.repertoire+"sauv_poids", 'wb'))
+        Thetastar.g.save(Thetastar.repertoire+"sauv_g.xml")
 
         
 class VisitorExample(AStarVisitor):

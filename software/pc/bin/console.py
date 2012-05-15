@@ -15,5 +15,10 @@ try:
     ipshell = IPShellEmbed()
     ipshell()
 except:
-    log.logger.error("La dépendance Ipython n'est pas installée. Taper sudo apt-get install ipython")
+    try:
+        from IPython.frontend.terminal.embed import InteractiveShellEmbed
+        ipshell = InteractiveShellEmbed()
+        ipshell()
+    except:
+        log.logger.error("La dépendance Ipython n'est pas installée. Taper sudo apt-get install ipython")
 

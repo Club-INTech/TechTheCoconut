@@ -4,8 +4,10 @@ import lib.log
 import robot
 import asservissement
 import asservissementDuree
+import recherche_chemin.thetastar
 import balise
 import capteur
+import jumper
 import serial
 import serie_acquisition
 import serie
@@ -35,20 +37,27 @@ class Instance:
         
         #liste (globale) des centres de robots adverses détectés
         self.liste_robots_adv = []
+        
+        #recherche des périphériques
         self.chemins = attributions.attribuer()
+        
+        # Timeout du script courant, mis à jour par la stratégie
+        self.timeout = 1000
+        
 
     def instanciation(self):
         self.instanciationMutex()
         self.instanciationRobot()
         self.instanciationSerie()
         self.instanciationCapteur()
+        self.instanciationJumper()
+        self.instanciationThetha()
         self.instanciationAsservissement()
         self.instanciationActionneur()
         self.instanciationScript()
         self.instanciationStrategie()
         self.baliseInstance = balise.Balise()
         
-    
     def instanciationSerie(self):
         
         #Instance serie asservissement
@@ -103,14 +112,24 @@ class Instance:
             log.logger.error("instance : serieActionneurInstance n'est pas chargé. pas de chemin trouvé.")
         """
         
-    def ajouterRobotAdverse(self, position):
+    def ajouterRobotAdverse(self, position, recalculer = True):
         self.liste_robots_adv.append(position)
+        if recalculer:
+            #retracer le graphe
+            self.theta.enregistreGraphe()
     
-    def viderListeRobotsAdv(self):
+    def viderListeRobotsAdv(self,recalculer = True):
             self.liste_robots_adv = []
+            if recalculer:
+                #retracer le graphe
+                self.theta.enregistreGraphe()
             
     def instanciationScript(self):
         self.scriptInstance = script.Script()
+        
+    def instanciationThetha(self):
+        log.logger.info("établissement du graphe en fonction des robots adverses rencontrés")
+        self.theta = recherche_chemin.thetastar.Thetastar()
         
     def instanciationStrategie(self):
         try:
@@ -124,16 +143,19 @@ class Instance:
 
     def instanciationRobot(self):
         self.robotInstance = robot.Robot()
-        
+
+    def instanciationJumper(self) :
+        self.jumperInstance = jumper.Jumper()
+
     def instanciationAsservissement(self):
         try : 
             self.asserInstance = asservissement.Asservissement()
         except :
             log.logger.error("instance : asserInstance n'est pas chargé")
-        try : 
-            self.asserInstanceDuree = asservissementDuree.Asservissement_duree()
-        except :
-            log.logger.critical("instance : asserInstanceDuree n'est pas chargé")
+        #try : 
+        self.asserInstanceDuree = asservissementDuree.Asservissement_duree()
+        #except :
+            #log.logger.critical("instance : asserInstanceDuree n'est pas chargé")
 
     def instanciationActionneur(self):
         try:

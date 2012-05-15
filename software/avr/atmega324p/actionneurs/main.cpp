@@ -94,11 +94,11 @@ typedef Serial<1> serial_ax_;
 extern AX12<serial_ax_, BAUD_RATE_SERIE> AX;
 
 // Ultrasons MAX
-extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
-extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
+// extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD2> > ultrason_g;
+// extern ultrason< Timer<1,ModeCounter,8>, AVR_PORTD<PORTD3> > ultrason_d;
 
 // Ultrasons SRF05
-typedef Timer<1,ModeCounter, 256> timerCapteurSRF;
+typedef Timer<1,ModeCounter, 64> timerCapteurSRF;
 typedef capteur_srf05< timerCapteurSRF, serial_t_ > capteur_srf05_t_;
 
 // Jumper
@@ -117,8 +117,8 @@ int main()
     capteur_srf05_t_    ::init();
     serial_t_           ::init();
     serial_ax_          ::init();
-    ultrason_d           .init();
-    ultrason_g           .init();
+//     ultrason_d           .init();
+//     ultrason_g           .init();
     
     AX.init(AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
     
@@ -360,20 +360,20 @@ int main()
             else if (COMPARE_BUFFER(";j", 2))
                 serial_t_::print(jumper_t_::value());
             
-            // ultrasons
-            else if (COMPARE_BUFFER(";u", 2))
-                serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
+//             // ultrasons
+//             else if (COMPARE_BUFFER(";u", 2))
+//                 serial_t_::print(max(ultrason_g.value(),ultrason_d.value()));
             
             // infrarouge
             else if (COMPARE_BUFFER(";i", 2))
                 serial_t_::print(capteur_infrarouge::value());
             
-            else if (COMPARE_BUFFER(".", 1))
+            else if (COMPARE_BUFFER(";u", 2))
                 serial_t_::print(capteur_infrarouge::value_brut());
             
             // Ultrasons SRF05
             else if (COMPARE_BUFFER(";s", 2))
-                capteur_srf05_t_::value();          // /!\ Pas de serial_t_::print()
+                capteur_srf05_t_::value();
                                                     // C'est une interruption qui s'occupe d'afficher
                                                     // la valeur.
         }

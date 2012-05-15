@@ -11,7 +11,6 @@ import log
 import outils_math.point as point
 import actionneur
 import robot
-import recherche_chemin.thetastar
 import lib.log
 import outils_math
 import capteur
@@ -26,8 +25,7 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        theta = recherche_chemin.thetastar.Thetastar([])
-        theta.enregistreGraphe()
+        self.theta = __builtin__.instance.theta
         
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
@@ -41,6 +39,10 @@ class Asservissement:
             self.serieAsserInstance = __builtin__.instance.serieAsserInstance
         else:
             log.logger.error("asservissement : ne peut importer instance.serieAsserInstance")
+        if hasattr(__builtin__.instance, 'asserInstanceDuree'):
+            self.asserInstanceDuree = __builtin__.instance.asserInstanceDuree
+        else:
+            log.logger.error("asservissement : ne peut importer instance.asserInstanceDuree")
             
         #distance seuil de detection pour les ultrasons
         self.maxCapt = 400
@@ -54,8 +56,7 @@ class Asservissement:
         self.liste_robots_adv = __builtin__.instance.liste_robots_adv
         
         #rayon moyen des robots adverses
-        #TODO : à mettre dans constantes
-        self.rayonRobotsAdverses = 200.0
+        self.rayonRobotsAdverses = constantes["Recherche_Chemin"]["rayonRobotsA"]
         
         #timer pour les timeout
         self.timerAsserv = timer.Timer()
@@ -64,13 +65,13 @@ class Asservissement:
         self.vitesseRotation = 2
             
     
-    def goToSegment(self, arrivee, avecRechercheChemin = False):
+    def goToSegment(self, arrivee, avecRechercheChemin = []):
         """
         Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
         :param script: point d'arrivé
         :type script: point
-        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin
-        :type avecRechercheChemin: booléen
+        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin : contient de quoi créer une recursion.
+        :type avecRechercheChemin: list
         """
         depart = self.getPosition()
         delta_x = (arrivee.x-depart.x)
@@ -80,18 +81,18 @@ class Asservissement:
         """
         oriente le robot pour le segment à parcourir
         sans instruction particulière
-        avec un booléen spécifiant que la rotation est demandée par un segment
+        avec un booléen spécifiant que la rotation ne doit pas effectuer de symétrie
         """
-        self.gestionTourner(angle,"",True)
+        self.gestionTourner(angle,"",avecSymetrie = False)
         
         """
         appel d'une translation de la distance euclidienne depart->arrivée
         sans instruction particulière
         avec un booléen codant l'utilisation de la recherche de chemin
         """
-        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
+        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),instruction = "",avecRechercheChemin = avecRechercheChemin)
     
-    def goTo(self, arrivee):
+    def goTo(self, arrivee, numTentatives = 1):
         """
         Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
         :param depart: point de départ
@@ -102,8 +103,9 @@ class Asservissement:
         :type chemin: liste de points
         """
         
-        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
+        if numTentatives > 4:
+            #plusieurs recherches de chemin ne suffisent pas à contourner le robot ennemi (il tente sans doute également de nous contourner)
+            raise Exception
         
         #récupération de la position de départ
         depart = self.getPosition()
@@ -113,17 +115,20 @@ class Asservissement:
             arrivee.x *= -1
             
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(depart,arrivee)
+        chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
         #supprime le point de départ du chemin.
         #une exception est levée ici en cas de chemin non trouvé
         chemin_python.remove(chemin_python[0])
+        
+        #on oublie les robots adverses, puisqu'on est censé les éviter
+        __builtin__.instance.viderListeRobotsAdv()
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
             
             #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
-            self.goToSegment(i,True)
+            self.goToSegment(i,avecRechercheChemin = [arrivee, numTentatives])
         return "chemin_termine"
 
     def tourner(self, angle):
@@ -194,7 +199,6 @@ class Asservissement:
                     self.serieAsserInstance.ecrire("pos")
                     reponseX = self.serieAsserInstance.lire()
                     reponseY = self.serieAsserInstance.lire()
-                    print ">"+str(reponseX)+", "+str(reponseY)+"<\n"
                 pos = point.Point(float(reponseX),float(reponseY))
                 return pos
             except:
@@ -288,7 +292,7 @@ class Asservissement:
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
         
-    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False, numTentatives = 1):
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = [], numTentatives = 1):
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
@@ -326,60 +330,95 @@ class Asservissement:
         if retour == "obstacle" :
             ##2 
             #ajoute un robot adverse sur la table, pour la recherche de chemin
+            #stopper le robot
+            self.immobiliser()
+                
             orientation = self.getOrientation()
             position = self.getPosition()
+            largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
+            tableLargeur = constantes["Coconut"]["longueur"]
+            tableLongueur = constantes["Coconut"]["largeur"]
+            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
             
-            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses)*math.sin(orientation))
-            __builtin__.instance.ajouterRobotAdverse(adverse)
+            if (adverse.x > -tableLongueur/2+self.rayonRobotsAdverses and adverse.x < tableLongueur/2-self.rayonRobotsAdverses and adverse.y < tableLargeur-self.rayonRobotsAdverses and adverse.y > self.rayonRobotsAdverses):
+                #le point détecté est bien dans l'aire de jeu, c'est sans doute un robot adverse
+                print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                print "ennemi en vue à "+str(adverse)
+                print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
             
-            
-            if instruction == "sansRecursion" or avecRechercheChemin:
-                ##4
-                #stopper le robot
-                self.immobiliser()
-                #mettre à jour l'attribut position du robot
-                
-                #stopper l'execution du script parent
-                raise Exception
-            else:
-                
-                ##3
-                #stopper le robot
-                self.immobiliser()
-                #attente que la voie se libère
-                ennemi_en_vue = True
-                debut_timer = int(self.timerAsserv.getTime())
-                while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
-                    capteur = self.capteurInstance.mesurer()
-                    if capteur < self.maxCapt:
-                        print 'gestionAvancer : capteur !'
-                    else :
-                        print 'gestionAvancer : la voie est libre !'
-                        ennemi_en_vue = False
+                if avecRechercheChemin :
+                    #robot adverse
+                    __builtin__.instance.viderListeRobotsAdv(recalculer = False)
+                    __builtin__.instance.ajouterRobotAdverse(adverse)
                     
-                if not ennemi_en_vue:
-                    #vider la liste des robots adverses repérés
-                    __builtin__.instance.viderListeRobotsAdv()
-                    
-                    #baisser vitesse
-                    self.changerVitesse("translation", 1)
-                    
-                    #finir le déplacement
-                    posApres = self.getPosition()
-                    dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-                    if distance != 0:
-                        signe = distance/abs(distance)
+                    #est-il rentable de relancer une recherche de chemin ?
+                    self.asserInstanceDuree.setPosition(position)
+                    self.asserInstanceDuree.lancerChrono()
+                    self.asserInstanceDuree.goTo(destination)
+                    if self.asserInstanceDuree.mesurerChrono() < __builtin__.instance.timeout:
+                        #le contretemps est quand meme plus profitable que de changer de script
+                        
+                        #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
+                        destination = avecRechercheChemin[0]
+                        new_numTentatives = avecRechercheChemin[1] + 1
+                        self.goTo(destination, new_numTentatives)
                     else:
-                        signe = 1
-                    self.gestionAvancer(distance-signe*dist)
+                        #la stratégie connait un script plus avantageux que de retenter un goTo pour le script courant
+                        raise Exception
                     
-                    #remettre vitesse
-                    self.changerVitesse("translation", 2)
-                    
-                else:
+                elif instruction == "sansRecursion":
+                    ##4
+                    #robot adverse
+                    __builtin__.instance.ajouterRobotAdverse(adverse)
                     #stopper l'execution du script parent
                     raise Exception
-                
+                else:
+                    #attente que la voie se libère
+                    ennemi_en_vue = True
+                    debut_timer = int(self.timerAsserv.getTime())
+                    while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
+                        capteur = self.capteurInstance.mesurer()
+                        if capteur < self.maxCapt:
+                            print 'gestionAvancer : capteur !'
+                        else :
+                            print 'gestionAvancer : la voie est libre !'
+                            ennemi_en_vue = False
+                        
+                    if not ennemi_en_vue:
+                        #vider la liste des robots adverses repérés
+                        if not __builtin__.instance.liste_robots_adv == []:
+                            __builtin__.instance.viderListeRobotsAdv()
+                        
+                        #baisser vitesse
+                        self.changerVitesse("translation", 1)
+                        
+                        #finir le déplacement
+                        posApres = self.getPosition()
+                        dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                        if distance != 0:
+                            signe = distance/abs(distance)
+                        else:
+                            signe = 1
+                        self.gestionAvancer(distance-signe*dist)
+                        
+                        #remettre vitesse
+                        self.changerVitesse("translation", 2)
+                        
+                    else:
+                        #robot adverse
+                        __builtin__.instance.ajouterRobotAdverse(adverse)
+                        #stopper l'execution du script parent
+                        raise Exception
+                        
+            else:
+                #fausse alerte : on termine tranquil'
+                dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist)
+                    
         if retour == "stoppe" and instruction == "sansRecursion":
             #stopper l'execution du script parent
             raise Exception
@@ -400,9 +439,9 @@ class Asservissement:
                 #reculer et tourner un peu
                 self.gestionAvancer(-50,instruction = "auStopNeRienFaire")
                 orientation = self.getOrientation()
-                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire")
-                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire")
-                self.gestionTourner(orientation)
+                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
+                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
+                self.gestionTourner(orientation, avecSymetrie = False)
                 
                 #finir le déplacement
                 posApres = self.getPosition()
@@ -434,19 +473,19 @@ class Asservissement:
                 #soucis
                 raise Exception
             
-    def gestionTourner(self, angle, instruction = "", avecGotoSegment = False):
+    def gestionTourner(self, angle, instruction = "", avecSymetrie = True):
         
         """
         méthode de haut niveau pour tourner le robot
         prend en paramètre l'angle à parcourir en radians
         et en facultatif une instruction "auStopNeRienFaire" ou "finir"
-        ainsi qu'un booléen indiquant que la rotation est induite par un segment (ie : pas de symétrie selon la couleur)
+        ainsi qu'un booléen indiquant si la rotation doit effectuer une symétrie selon la couleur
         """
         
-        if not avecGotoSegment:
+        if avecSymetrie:
             #l'angle spécifié dans les scripts est valable pour un robot violet.
             if __builtin__.constantes['couleur'] == "r":
-                angle = math.pi - angle 
+                angle = math.pi - angle
 
         #angle dans ]-pi,pi]
         while angle > math.pi:
@@ -473,9 +512,9 @@ class Asservissement:
             else:
                 ##1
                 #tourner inversement à ce qui a été tourné
-                self.gestionTourner(orientAvant,"sansRecursion")
+                self.gestionTourner(orientAvant,"sansRecursion",avecSymetrie = False)
                 #recommencer le déplacement
-                self.gestionTourner(angle,"sansRecursion")
+                self.gestionTourner(angle,"sansRecursion",avecSymetrie = False)
         
         if retour == "stoppe" and instruction == "sansRecursion":
             ##4
@@ -489,7 +528,7 @@ class Asservissement:
             #augmenter vitesse
             self.changerVitesse("rotation", 3)
             #finir le déplacement
-            self.gestionTourner(angle)
+            self.gestionTourner(angle,avecSymetrie = False)
             #remettre vitesse
             self.changerVitesse("rotation", 2)
         
@@ -687,3 +726,6 @@ class Asservissement:
     def moteurDroit(self, vitesse):
         self.serieAsserInstance.ecrire("pwmD")
         self.serieAsserInstance.ecrire(str(vitesse))                
+
+    def attendre(self, temps):
+        time.sleep(temps)

@@ -11,7 +11,6 @@ import log
 import outils_math.point as point
 import actionneur
 import robot
-import recherche_chemin.thetastar
 import lib.log
 import outils_math
 import capteur
@@ -26,8 +25,7 @@ class Asservissement_duree:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        theta = recherche_chemin.thetastar.Thetastar([])
-        theta.enregistreGraphe()
+        self.theta = __builtin__.instance.theta
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
@@ -94,10 +92,8 @@ class Asservissement_duree:
         :type chemin: liste de points
         """
         depart = self.getPosition()
-        log.logger.info("Calcul du centre du robot en fonction de l'angle des bras")
-        theta = recherche_chemin.thetastar.Thetastar(self.liste_robots_adv)
         log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = theta.rechercheChemin(depart,arrivee)
+        chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
         try :
             chemin_python.remove(chemin_python[0])
@@ -172,3 +168,6 @@ class Asservissement_duree:
     def setUnsetAsser(self, asservissement, mode):
         pass
         
+    def attendre(self, temps):
+        print "temps d'attente    \t          \t         \t"+str(temps)
+        self.duree += temps

@@ -14,15 +14,15 @@
 #include "robot.h"
 
 
-int8_t i = 0;
+// int8_t i = 0;
 
 int main()
 {
     Robot & robot = Robot::Instance();
 	while(1)
 	{
-//         Serial<0>::print(10);
  		robot.communiquer_pc();
+		
 	}
 	return 0;
 }
@@ -38,13 +38,12 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	robot.gestion_blocage();
 	robot.update_position();
 	
-	
+	/*
 	if (i>6)
 	{
-		robot.acquittement();
 		i = 0;
 	}
 	else
 		i++;
-	
+	*/
 }

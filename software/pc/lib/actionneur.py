@@ -29,19 +29,29 @@ class Actionneur(serie.Serie):
     # Le périphérique, le débit, le timeout et le nom sont les mêmes pour tous les actionneurs
     def __init__(self):
         self.ids        = {"hg":1, "hd":2, "bg":0, "bd":3}
-        self.demarrer()
         self.serie_sleep_time = 0.008
+        self.demarrer()
+        
         
     # Démarrage.
     def demarrer(self):
-        if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
-            Actionneur.initialise = True
-            self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
-            
+        
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
             log.logger.error("actionneur : ne peut importer instance.robotInstance")
+        
+        if not hasattr(Actionneur, 'initialise') or not Actionneur.initialise:
+            Actionneur.initialise = True
+            if hasattr(__builtin__.instance, 'serieCaptActionneurInstance'):
+                self.serieCaptActionneurInstance = __builtin__.instance.serieCaptActionneurInstance
+                self.deplacer(0)
+            else:
+                log.logger.error("actionneur : ne peut importer instance.serieCaptActionneurInstance")
+                self.calculRayon(0)
+                
+            
+        
         
     def deplacer(self, angle, position = ["hg", "hd", "bg", "bd"]):
         """
@@ -63,21 +73,28 @@ class Actionneur(serie.Serie):
         
         #calcul du nouveau rayon du robot
         self.calculRayon(math.pi*angle/180)
-                
-        if position == "G":
-            position = ["hg", "bg"]
-        elif position == "D":
-            position = ["hd", "bd"]
-        
-        # Envoi des infos
-        if "hg" in position:
-            self.goto(self.ids["hg"], 180+3-angle)
-        if "hd" in position:
-            self.goto(self.ids["hd"], angle)
-        if "bg" in position:
-            self.goto(self.ids["bg"], angle+5)
-        if "bd" in position:
-            self.goto(self.ids["bd"], 180+9-angle)
+               
+        # Gestion de la symétrie
+        if __builtin__.constantes['couleur'] == "v" :
+            # Envoi des infos
+            if "hg" in position:
+                self.goto(self.ids["hg"], 180+3-angle)
+            if "hd" in position:
+                self.goto(self.ids["hd"], angle)
+            if "bg" in position:
+                self.goto(self.ids["bg"], angle+5)
+            if "bd" in position:
+                self.goto(self.ids["bd"], 180+9-angle)
+        else :
+            # Envoi des infos
+            if "hg" in position:
+                self.goto(self.ids["hd"], 180+3-angle)
+            if "hd" in position:
+                self.goto(self.ids["hg"], angle)
+            if "bg" in position:
+                self.goto(self.ids["bd"], angle+5)
+            if "bd" in position:
+                self.goto(self.ids["bg"], 180+9-angle)
         
 
         
@@ -205,7 +222,7 @@ class Actionneur(serie.Serie):
         """
         
         #récupération des constantes nécessaires:
-        log.logger.info('Calcul du rayon et du centre du robot')
+        #log.logger.info('Calcul du rayon et du centre du robot')
         
         #[]la longueur est sur x, largeur sur y
         longueur_bras = profils.develop.constantes.constantes["Coconut"]["longueurBras"]
@@ -220,7 +237,8 @@ class Actionneur(serie.Serie):
         sommet_bras = point.Point(longueur_robot/2 + proj_x, largeur_robot/2 + proj_y)
         rayon_avec_bras = math.sqrt((sommet_bras.x) ** 2 + (sommet_bras.y) ** 2)
         
-        self.robotInstance.rayon = max(rayon_avec_bras,rayon_original)
+        #mettre à jour l'attribut du robot
+        self.robotInstance.changeRayon(max(rayon_avec_bras,rayon_original))
         
     def test(self, temps = 0.3) :
         i = 0
@@ -231,221 +249,4 @@ class Actionneur(serie.Serie):
                 time.sleep(1)
             i += 1
         
-    #------------------------------------------------#
-    #       DANSE =D                                 #
-    #------------------------------------------------#  
-        
-    def danse(self) :
-        
-        time.sleep(1)
-        
-        self.deplacer(90)
-        time.sleep(1)
-        self.deplacer(160)
-        time.sleep(1)
-        self.deplacer(0)
-        time.sleep(1)
-        self.deplacer(45)
-        time.sleep(1)
-        self.deplacer(120)
-        time.sleep(1)
-        self.deplacer(45, "bg")
-        time.sleep(0.3)
-        self.deplacer(45, "bd")
-        time.sleep(0.3)
-        self.deplacer(45, "hg")
-        self.deplacer(45, "hd")
-        time.sleep(0.3)
-        self.deplacer(100)
-        time.sleep(0.2)
-        self.deplacer(120)
-        time.sleep(0.3)
-        self.deplacer(140, "bg")
-        self.deplacer(140, "bd")
-
-        self.deplacer(160, "hg")
-        self.deplacer(160, "hd")
-        time.sleep(0.5)
-        self.deplacer(45, "hd")
-        self.deplacer(45, "hg")
-        self.changerVitesse(100)
-        self.deplacer(20, "bd")
-        self.deplacer(20, "bg")
-        self.changerVitesse(500)
-        time.sleep(0.5)
-        self.deplacer(160, "hg")
-        self.deplacer(160, "hd")
-        time.sleep(0.5)
-        self.deplacer(45, "hd")
-        self.deplacer(45, "hg")
-        time.sleep(0.5)
-        self.deplacer(160, "hg")
-        self.deplacer(160, "hd")
-        time.sleep(0.5)
-        self.deplacer(45, "hd")
-        self.deplacer(45, "hg")
-        time.sleep(0.5)
-
-        
-        self.deplacer(40, "bg")
-        self.deplacer(40, "hg")
-        self.deplacer(160, "hd")
-        self.deplacer(160, "bd")
-        time.sleep(0.5)
-        self.changerVitesse(150)
-        self.deplacer(40, "bd")
-        self.deplacer(40, "hd")
-        self.deplacer(160, "hg")
-        self.deplacer(160, "bg")
-        time.sleep(1.5)
-        self.changerVitesse(500)
-        self.deplacer(40, "bg")
-        self.deplacer(40, "hg")
-        self.deplacer(160, "hd")
-        self.deplacer(160, "bd")
-        time.sleep(0.5)
-        self.changerVitesse(150)
-        self.deplacer(40, "bd")
-        self.deplacer(40, "hd")
-        self.deplacer(160, "hg")
-        self.deplacer(160, "bg")
-        time.sleep(1.5)
-        self.changerVitesse(400)
-        self.deplacer(40, "bg")
-        self.deplacer(160, "bd")
-        time.sleep(1)
-        self.deplacer(160, "hd")
-        self.deplacer(40, "hg")
-        self.deplacer(160, "bg")
-        self.deplacer(40, "bd")
-        time.sleep(0.7)
-        self.deplacer(90)
-        time.sleep(1)
-        self.changerVitesse(500)
-        
-        self.deplacer(80, "bg")
-        self.deplacer(80, "bd")
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        time.sleep(0.5)
-        self.deplacer(70, "hg")
-        self.deplacer(70, "hd")
-        self.deplacer(110, "bg")
-        self.deplacer(110, "bd")
-        time.sleep(0.5)
-        self.deplacer(60, "bg")
-        self.deplacer(60, "bd")
-        self.deplacer(120, "hg")
-        self.deplacer(120, "hd")
-        time.sleep(1)
-        self.deplacer(70, "hg")
-        self.deplacer(70, "hd")
-        self.deplacer(110, "bg")
-        self.deplacer(110, "bd")
-        time.sleep(0.5)
-        self.deplacer(80, "bg")
-        self.deplacer(80, "bd")
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        time.sleep(0.5)
-        self.deplacer(90)
-        time.sleep(1)
-        
-        #####################################
-        
-        self.deplacer(80, "hg")
-        time.sleep(0.3)
-        self.deplacer(100, "hg")
-        time.sleep(0.3)
-        self.deplacer(80, "hg")
-        time.sleep(0.3)
-        self.deplacer(100, "hg")
-        time.sleep(0.3)
-        
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        time.sleep(0.25)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        time.sleep(0.25)
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        time.sleep(0.25)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        time.sleep(0.25)
-        
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        time.sleep(0.2)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        time.sleep(0.2)
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        time.sleep(0.2)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        time.sleep(0.2)
-        
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        self.deplacer(80, "bg")
-        time.sleep(0.15)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        self.deplacer(100, "bg")
-        time.sleep(0.15)
-        
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        self.deplacer(80, "bg")
-        time.sleep(0.08)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        self.deplacer(100, "bg")
-        time.sleep(0.08)
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        self.deplacer(80, "bg")
-        time.sleep(0.08)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        self.deplacer(100, "bg")
-        time.sleep(0.08)
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        self.deplacer(80, "bg")
-        time.sleep(0.08)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        self.deplacer(100, "bg")
-        time.sleep(0.08)
-        self.deplacer(80, "hg")
-        self.deplacer(80, "hd")
-        self.deplacer(80, "bd")
-        self.deplacer(80, "bg")
-        time.sleep(0.08)
-        self.deplacer(100, "hg")
-        self.deplacer(100, "hd")
-        self.deplacer(100, "bd")
-        self.deplacer(100, "bg")
-        time.sleep(0.08)
-        
-        self.deplacer(160)
-
-        
-        
-
+    

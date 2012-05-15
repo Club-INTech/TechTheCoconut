@@ -2,6 +2,18 @@
 
 import lib.conf
 import __builtin__
+import os
+
+"""
+#création d'un cache en mémoire vive
+if (not os.popen('cd /media/cacheSopalint/ 2>&1 /dev/null').readlines() == []):
+    print "le répertoire /media/cacheSopalint doit etre créé dans la mémoire vive"
+    os.popen('sudo mkdir /media/cacheSopalint')
+    os.popen('sudo chmod 777 /media/cacheSopalint/')
+    os.popen('sudo mount -t tmpfs -o size=2M tmpfs /media/cacheSopalint')
+else:
+    print "répertoire"
+"""
 
 # Chargement de la couleur du robot
 first = True
@@ -75,13 +87,15 @@ import lib.chargement_lib
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (autonome, [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
+    mode = raw_input('Indiquer le mode de lancement (a[utonome], [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
     first = False
     # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
     import time
     __builtin__.constantes["t0"] = time.time()
     if mode == '':
         mode = "console"
+    elif mode == 'a' :
+        mode = "autonome"
     elif mode == 'h':
         mode = "homologation"
     elif mode == 'j':

@@ -1,13 +1,20 @@
 #include "main.h"
 #include <libintech/timer.hpp>
 
-volatile uint8_t WINDOW_OPENER = 0;
-volatile uint8_t WINDOW_FLAG = 0;
+volatile int8_t overflow1= 0;
+volatile int8_t overflow2 = 0;
+volatile int8_t overflow3 = 0;
+volatile int8_t overflow4 = 0;
+
+volatile int16_t window1 = -1;
+volatile int16_t window2 = -1;
+volatile int16_t window3 = -1;
+volatile int16_t window4 = -1;
+
 volatile uint8_t portchistory = 0xFF;
 volatile uint8_t changedbits=0;
 volatile uint16_t distance = 0;
-volatile int32_t message = 0;
-volatile int16_t timer=0;
+volatile int16_t timer=13;
 
 typedef Timer<0,ModeCounter,1024> window_timer;
 typedef Timer<1,ModeCounter,64> timeout_timer;
@@ -18,7 +25,6 @@ int main()
  	setup();
 	
 	while(1){
-		char buffer[10];
 		unsigned char order= Serial<0>::read_char();
 		if(order=='v'){
 
@@ -85,35 +91,48 @@ ISR(PCINT1_vect)
     //Si front montant
     if((PINC & changedbits)!=0)
     {
-		//Si on est dans une fenêtre encore active
-		if(WINDOW_FLAG)
-		{			
-			if(TCNT0*16>=TIME_THRESHOLD_MIN)
-			{		
-				if(changedbits == WINDOW_OPENER)
-				{
-					WINDOW_FLAG = 0;
-					distance=getDistance(window_timer::value());
-					timer=window_timer::value();
-					timeout_timer::value(0);
-				}
-			}
-		}
-		else
+	switch(changedbits)
+	{
+	  case 8:
+	    //Si fenêtre fermée
+	    if(window4==-1)
+	    {//Ouverture de la fenêtre
+	      window4=window_timer::value();
+	      overflow4=0;
+	    }
+	    else
+	    {
+		uint8_t time=window_timer::value()-window4+255*overflow4;
+		if(time>=TIME_THRESHOLD_MIN)
 		{
-			//On ouvre une fenêtre et initialise le TIMER0
-			WINDOW_FLAG = 1;
-			window_timer::value(0);
-			WINDOW_OPENER=changedbits;
+		  distance=getDistance(time);
+		  timer=time;
+		  //On ferme les fenêtres
+		  window1=-1;
+		  window2=-1;
+		  window3=-1;
+		  timeout_timer::value(0);//Démarre le timer de validité
+		  
 		}
+	      
+	      //Fermeture de cette fenêtre
+	      window4=-1;
+	    }
+	    break;
 	}
+    }
 }
 
 //Interruption du TIMER0 sur overflow
 ISR(TIMER0_OVF_vect)
 {
-	//On ferme la fenêtre
-	WINDOW_FLAG = 0;
+      if(window4!=-1)
+      {
+	if(overflow4<50)
+	   overflow4++;
+	else
+	  window4=-1;
+      }
 }
 
 ISR(TIMER1_OVF_vect)

@@ -40,14 +40,12 @@ class Robot:
     """
     
     def __init__(self):
-        #TODO
-        # Convertir en attributs de classe et les initialiser que si non reconnus (hasattr)
         if not hasattr(self, 'position'):
             self.position = point.Point(0, 400)
         if not hasattr(self, 'orientation'):
             self.orientation = 0
         if not hasattr(self, 'rayon'):
-            self.rayon = 279
+            self.rayon = 200
         if not hasattr(self, 'acquittement'):
             self.acquitemment = False
         if not hasattr(self, 'fin_translation'):
@@ -70,6 +68,12 @@ class Robot:
         # self.actionneur["hg"].angle
 
         log.logger.info('Création du robot')
+    
+    def changeRayon(self, rayon):
+        self.rayon = rayon
+        
+    def donneRayon(self):
+        return self.rayon
         
     def getPosition(self):
         """
