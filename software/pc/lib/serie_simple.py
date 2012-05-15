@@ -90,7 +90,7 @@ class SerieSimple(serial.Serial):
         lu = self.readline()
         lu = lu.split("\r\n")[0].replace('\0', '')
         log.logger.debug("Lecture sur la liaison série "+self.peripherique+" : "+lu)
-        return lu;
+        return lu
 
     def stop(self):
         """

@@ -38,9 +38,11 @@ def ping():
     while True:
         com = raw_input("?")
         if com == "p":
-            print asser.getPosition()
+            while True:
+                print asser.getPosition()
         if com == "o":
-            print asser.getOrientation()
+            while True:
+                print asser.getOrientation()
         if com == "q":
             break
         
