@@ -12,6 +12,7 @@ class Danse :
     def __init__(self) :
         if hasattr(__builtin__.instance, 'actionInstance') :
             self.actionneur =  __builtin__.instance.actionInstance
+            a = self.actionneur
         else :
             log.logger.error("Impossible d'importer les actionneurs")
     
@@ -19,6 +20,57 @@ class Danse :
         
         time.sleep(1)
         self.actionneur.danse_mvt1()
+    
+    def danse_epicSax(self):
+        a.deplacer(110)
+        time.sleep(1)
+        
+        a.deplacer(70, ["hg", "bg"])
+        a.deplacer(140, ["hd", "bd"])
+        time.sleep(0.5)
+        a.deplacer(70, ["hd", "bd"])
+        a.deplacer(140, ["hg", "bg"])
+        time.sleep(0.5)
+        a.deplacer(70, ["hg", "bg"])
+        a.deplacer(140, ["hd", "bd"])
+        time.sleep(0.5)
+        a.deplacer(70, ["hd", "bd"])
+        a.deplacer(140, ["hg", "bg"])
+        time.sleep(0.5)
+        
+        time.sleep(0.5)
+        a.deplacer(70, "bg")
+        a.deplacer(140, "bd")
+        time.sleep(0.5)
+        a.deplacer(70, ["bd", "hg"])
+        a.deplacer(140,["bg", "hd"])
+        time.sleep(0.5)
+        a.deplacer(70, ["bg", "hd"])
+        a.deplacer(140,["bd", "hg"])
+        time.sleep(0.5)
+        a.deplacer(70, ["bd", "hg"])
+        a.deplacer(140,["bg", "hd"])
+        time.sleep(0.5)
+        
+        time.sleep(0.5)
+        a.deplacer(140, ["bg", "hg"])
+        a.deplacer(40,  ["bd", "hd"])
+        time.sleep(0.5)
+        a.deplacer(110, ["bg", "hg"])
+        a.deplacer(70,  ["bd", "hd"])
+        time.sleep(0.5)
+        a.deplacer(90, ["bg", "hg"])
+        a.deplacer(90,  ["bd", "hd"])
+        time.sleep(0.5)
+        a.deplacer(70, ["bg", "hg"])
+        a.deplacer(110, ["bd", "hd"])
+        time.sleep(0.5)
+        a.deplacer(40, ["bg", "hg"])
+        a.deplacer(140, ["bd", "hd"])
+        time.sleep(0.5)
+        
+        
+        
         
     def danse_mvt1(self) :
         self.actionneur.deplacer(90)

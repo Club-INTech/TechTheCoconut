@@ -193,6 +193,9 @@ class Strategie():
             #   [   id_action_dans_self.actions  ,  [ ["avancer/tourner/actionneur/goTo", param], [etc...] ] , conditions_d'execution  ]
             #
             
+            self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
+            self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
+            
             
             
             
@@ -343,7 +346,7 @@ class Strategie():
             success = True
         # Problème de script
         except :
-            log.logger.critical("La stratégie ne peut pas lancer d'actions")
+            log.logger.critical("La stratégie ne peut pas lancer l'action "+nomScripts[maxID])
             success = True
             
         time.sleep(5)
@@ -389,7 +392,7 @@ class Strategie():
             exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." +currentPreAction[1]+")")
         # Sinon, il y a une erreur de script
         except :
-            log.logger.critical("Impossible de lancer self.scriptInstance.gestionScripts(self.scriptInstance."+currentPreAction[1]+")")
+            log.logger.critical("Impossible de lancer "+currentPreAction[1])
         
         #exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
         #success = True
