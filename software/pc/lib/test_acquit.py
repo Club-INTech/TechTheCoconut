@@ -372,7 +372,7 @@ def console():
     print "exit ou ? pour sortir |  a : lancer script   | e : enregistrer derniere action  "
     print "avancer avec u -> p   | reculer avec j -> m  | ; : ! vitesses translation"
     print "             orienter avec z,q,s,d | r,t,y : vitesses rotation  "
-    print "                 g : goto position | déplacer bras avec w -> n "             
+    print "  g : goto position | déplacer bras avec w -> n | ² : position courante "             
     
     #position initiale du robot
     asserInstance.setPosition(Point(70,400))
@@ -487,6 +487,8 @@ def console():
                 faireChier()
             elif ordre == "sop2":
                 farmerTotemEnnemiSud()
+            elif ordre == "²":
+                print "pos : "+str(asserInstance.getPosition())+", orient : "+str(asserInstance.getOrientation())
                 
             else:
                 try:
