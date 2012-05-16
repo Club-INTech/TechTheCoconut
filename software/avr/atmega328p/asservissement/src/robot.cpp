@@ -556,34 +556,34 @@ void Robot::gestion_blocage()
 
 void Robot::recalage()
 {
-	changerVitesseTra2();
-	changerVitesseRot2();
+	changerVitesseTra1();
+	changerVitesseRot1();
 	translater_bloc(-1000.0);
 	etat_rot_ = false;
-// 	changerVitesseTra2();
+	changerVitesseTra2();
 	translater_bloc(-300.0);
 	if (couleur_ == 'r') x(-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x(LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
 	if (couleur_ == 'r') changer_orientation(0.0); else changer_orientation(PI);
 	etat_rot_ = true;
 	_delay_ms(500);
-// 	changerVitesseTra1();
+	changerVitesseTra1();
 	translater_bloc(220.0);
 	tourner_bloc(PI/2);
 	translater_bloc(-1000.0);
 	etat_rot_ = false;
-// 	changerVitesseTra2();
+	changerVitesseTra2();
 	translater_bloc(-300.0);
 	y(LARGEUR_ROBOT/2);
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	_delay_ms(500);
-// 	changerVitesseTra1();
+	changerVitesseTra1();
 	translater_bloc(150.0);
 	if (couleur_ == 'r') tourner_bloc(0.0); else tourner_bloc(PI);
 // 	etat_rot_ = false;
 // 	etat_tra_ = false;
-// 	changerVitesseTra2();
-// 	changerVitesseRot1();
+	changerVitesseTra2();
+	changerVitesseRot2();
 	_delay_ms(200);
 	serial_t_::print("FIN_REC");
 }
@@ -594,7 +594,7 @@ void Robot::translater_bloc(float distance)
 	while(not est_stoppe() && not est_bloque_){
 		asm("nop");
 	}
-	serial_t_::print(3);
+// 	serial_t_::print(3);
 }
 
 void Robot::tourner_bloc(float angle)
@@ -603,5 +603,5 @@ void Robot::tourner_bloc(float angle)
 	while(not est_stoppe() && not est_bloque_){
 		asm("nop");
 	}
-	serial_t_::print(4);
+// 	serial_t_::print(4);
 }
