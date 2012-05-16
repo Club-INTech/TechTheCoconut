@@ -18,7 +18,8 @@ void cylon();
 void balayageH();
 void balayageV();
 void animationyeux();
-void spritetest();
+void smiley();
+void gauchedroite();
 void loop();
 LedControl lc=LedControl(12,11,10,4);
 
@@ -249,11 +250,9 @@ void animationyeux()
         
    }
 }
-void spritetest()
+void smiley()
 {
-  //byte sprite[14]={B0000000,B0000000,B0000000,B0000000,B0000000,B0001111,B0011111,B0011111,B0001111,B0000000,B0000000,B0000000,B0000000,B0000000};
-  //byte sprite[14]={B00000001,B00000001,B00000001,B00000001,B01101101,B01100111,B00000111,B00000111,B01100111,B01101101,B00000001,B00000001,B00000001,B00000001};
-  byte sprite[14]={B00000111,B00001111,B00011001,B00110001,B01100001,B11000001,B11000001,B11000001,B11000001,B11000001,B01100001,B00110001,B00011111,B00001111};
+  byte sprite[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
 
   for (int col=0; col<14; col++)
   {
@@ -261,12 +260,51 @@ void spritetest()
   }
 }
 
+void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
+{
+   byte sprite[6]={B00111001,B01111101,B11000111,B11000111,B01111101,B00111001}; 
+   //Aller
+   for (int i=0; i<8 ; i ++)
+   {
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, sprite[col], false); 
+         lc.setEyeColumn(2, col+i, sprite[col], false); 
+      }
+      delay(delaytime);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, (byte)0, false); 
+         lc.setEyeColumn(2, col+i, (byte)0, false); 
+      } 
+   }
+   
+   //Retour
+   for (int i=8; i>=0 ; i--)
+    {
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, sprite[col], false); 
+         lc.setEyeColumn(2, col+i, sprite[col], false); 
+      }
+      delay(delaytime);
+      if(i==0 || i==8) delay(delaytime*10);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, (byte)0, false); 
+         lc.setEyeColumn(2, col+i, (byte)0, false); 
+      } 
+   }
+}
 void loop() 
 { 
   //balayageV();
   //K2000(); 
   //cylon();
-  spritetest();
+  //smiley();
+  //delay(1000);
+  gauchedroite();
+  //delay(1000);
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
   //animationyeux();

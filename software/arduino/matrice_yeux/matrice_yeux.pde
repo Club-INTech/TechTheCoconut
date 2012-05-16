@@ -249,12 +249,51 @@ void smiley()
   }
 }
 
+void gauchedroite() // Oeil qui regarde de gauche à droite
+{
+   byte sprite[6]={B00111001,B01111101,B11000111,B11000111,B01111101,B00111001}; 
+   //Aller
+   for (int i=0; i<8 ; i ++)
+   {
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, sprite[col], false); 
+         lc.setEyeColumn(2, col+i, sprite[col], false); 
+      }
+      delay(delaytime);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, (byte)0, false); 
+         lc.setEyeColumn(2, col+i, (byte)0, false); 
+      } 
+   }
+   
+   //Retour
+   for (int i=8; i>=0 ; i--)
+    {
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, sprite[col], false); 
+         lc.setEyeColumn(2, col+i, sprite[col], false); 
+      }
+      delay(delaytime);
+      if(i==0 || i==8) delay(delaytime*10);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, (byte)0, false); 
+         lc.setEyeColumn(2, col+i, (byte)0, false); 
+      } 
+   }
+}
 void loop() 
 { 
   //balayageV();
   //K2000(); 
   //cylon();
-  smiley();
+  //smiley();
+  //delay(1000);
+  gauchedroite();
+  //delay(1000);
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
   //animationyeux();
