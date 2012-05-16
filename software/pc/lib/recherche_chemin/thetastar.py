@@ -71,7 +71,13 @@ class Thetastar:
     
     # Totems
     t1 = carte.totems[0].rectangle
-    t2 = carte.totems[1].rectangle    
+    t2 = carte.totems[1].rectangle  
+    
+    #on pense aux cds
+    t1.wx += 2*140
+    t1.wy += 2*140
+    t2.wx += 2*140
+    t2.wy += 2*140
     
     listeRectangles = [r1,r2,r3,r4,p,t1,t2]
 
@@ -114,10 +120,11 @@ class Thetastar:
         
         #actualisation du rayon du robot
         self.rayonRobot = __builtin__.instance.robotInstance.donneRayon()
-        print "rayon connu : "+str(self.rayonRobot)
+        #print "rayon connu : "+str(self.rayonRobot)
         if not self.lastRayon == self.rayonRobot:
             #retracage du graphe en cas de changement
-            self.enregistreGraphe()
+            log.logger.critical("WTF le rayon du robot a changé ?")
+            #self.enregistreGraphe()
         
         self.chargeGraphe()
         

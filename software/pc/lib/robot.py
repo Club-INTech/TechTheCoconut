@@ -45,7 +45,7 @@ class Robot:
         if not hasattr(self, 'orientation'):
             self.orientation = 0
         if not hasattr(self, 'rayon'):
-            self.rayon = 200
+            self.rayon = 180
         if not hasattr(self, 'acquittement'):
             self.acquitemment = False
         if not hasattr(self, 'fin_translation'):
