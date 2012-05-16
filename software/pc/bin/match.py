@@ -42,11 +42,16 @@ log.logger.info("Le Jumper a été retiré. Lancement de la stratégie")
 
 
 timer.lancer()
+
+script.gestionScripts(script.totem00)
+script.gestionScripts(script.bourrerCale)
+script.gestionScripts(script.poussoir1)
+
+"""
 actionInstance.deplacer(0)
 asserInstance.gestionAvancer(600)
 asserInstance.gestionTourner(2)
 asserInstance.gestionAvancer(250)
-
 
 
 log.logger.debug("RAFFLER TOTEM 00")
@@ -59,6 +64,7 @@ log.logger.debug("RAFFLER TOTEM 01")
 script.gestionScripts(script.rafflerTotem01)
 log.logger.debug("BOURRAGE CALE")
 script.gestionScripts(script.bourrerCale)
+"""
 
 
 

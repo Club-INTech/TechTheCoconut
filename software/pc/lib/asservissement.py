@@ -447,12 +447,62 @@ class Asservissement:
                 self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
                 
             elif numTentatives == 3:
+                
+                #replier un peu les bras
+                if hasattr(__builtin__.instance, 'actionInstance'):
+                    actionInstance = __builtin__.instance.actionInstance
+                    actionInstance.deplacer(100)
+                    time.sleep(0.3)
+                    actionInstance.deplacer(130)
+                    time.sleep(0.3)
+                    actionInstance.deplacer(120)
+                    time.sleep(0.3)
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+                
+                
+            elif numTentatives == 4:
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                #forcer
+                self.changerVitesse("translation", 3)
+                self.gestionAvancer(signe*20,"auStopNeRienFaire")
+                self.changerVitesse("translation", 2)
+                
+                #replier un peu les bras
+                if hasattr(__builtin__.instance, 'actionInstance'):
+                    actionInstance = __builtin__.instance.actionInstance
+                    actionInstance.deplacer(70)
+                    time.sleep(0.3)
+                    actionInstance.deplacer(135)
+                    time.sleep(0.3)
+                    actionInstance.deplacer(120)
+                    time.sleep(0.3)
+                #finir le déplacement
+                posApres = self.getPosition()
+                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
+                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
+            
+            elif numTentatives == 5:
                 #reculer et tourner un peu
-                self.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+                self.changerVitesse("translation", 3)
+                self.gestionAvancer(-signe*50,"auStopNeRienFaire")
+                self.changerVitesse("translation", 2)
+                
+                self.changerVitesse("rotation", 3)
                 orientation = self.getOrientation()
                 self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
                 self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
                 self.gestionTourner(orientation, avecSymetrie = False)
+                self.changerVitesse("rotation", 2)
                 
                 #finir le déplacement
                 posApres = self.getPosition()
@@ -462,25 +512,8 @@ class Asservissement:
                 else:
                     signe = 1
                 self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
-                
-            elif numTentatives == 4:
-                #replier un peu les bras
-                if hasattr(__builtin__.instance, 'actionInstance'):
-                    actionInstance = __builtin__.instance.actionInstance
-                    actionInstance.deplacer(110)
-                    time.sleep(0.5)
-                    actionInstance.deplacer(130)
-                    time.sleep(0.5)
-                #finir le déplacement
-                posApres = self.getPosition()
-                dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
-                if distance != 0:
-                    signe = distance/abs(distance)
-                else:
-                    signe = 1
-                self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
-                
-            elif numTentatives >= 5:
+            
+            elif numTentatives >= 6:
                 #soucis
                 raise Exception
             
