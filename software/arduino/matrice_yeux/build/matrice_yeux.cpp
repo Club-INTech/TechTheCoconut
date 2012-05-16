@@ -14,7 +14,6 @@
 void setup();
 void writeArduinoOnMatrix();
 void K2000();
-void cylonV2();
 void cylon();
 void balayageH();
 void balayageV();
@@ -133,108 +132,32 @@ void K2000()
     }
   }
 }
-void cylonV2()
+void cylon()
 {
   //Aller
-  for(int col=0; col>=13 ; col++)
+  for(int col=0; col<=13 ; col++)
   {
     lc.setEyeColumn(1,col,B11111111,true); //Switch ON
+    lc.setEyeColumn(1,col+1,B11111111,true);
     if(col<7)
     delay(delaytime*col/3);
     else
     delay(delaytime*(13-col)/3);
     lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
+    lc.setEyeColumn(1,col+1,(byte)0,true);
   }
   
   //Retour
-  for(int col=13; col<=0 ; col--)
+  for(int col=13; col>=0 ; col--)
   {
     lc.setEyeColumn(1,col,B11111111,true); //Switch ON
+    lc.setEyeColumn(1,col-1,B11111111,true);
     if(col<7)
     delay(delaytime*col/3);
     else
     delay(delaytime*(13-col)/3);
     lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
-  }
-}
-void cylon()
-{
-  //Aller (de gauche \u00e0 droite)
-  for(int i=0;i<14;i++)
-  {
-     if(i<7) //MAX 01 & 04
-     {
-       //Switch ON
-       lc.setRow(0,i,B11111111);
-       lc.setRow(3,6-i,B11111111);
-       //2eme colonne
-       lc.setRow(0,i+1,B11111111);
-       lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/3);
-       
-       //Switch OFF
-       lc.setRow(0,i,(byte)0);
-       lc.setRow(3,6-i,(byte)0);
-       //2eme colonne
-       lc.setRow(0,i+1,(byte)0);
-       lc.setRow(3,6-i+1,(byte)0);
-     }
-     else //MAX 02 & 03
-     {
-       //Switch ON
-        lc.setRow(1,i-7,B11111111);
-        lc.setRow(2,13-i,B11111111);
-        //2eme colonne
-        lc.setRow(1,i-7+1,B11111111);
-        lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/3);
-        
-        //Switch OFF
-        lc.setRow(1,i-7,(byte)0);
-        lc.setRow(2,13-i,(byte)0);
-        //2eme colonne
-        lc.setRow(1,i-7+1,(byte)0);
-        lc.setRow(2,13-i+1,(byte)0);
-     }
-  }
-  
-  //Retour (de droite \u00e0 gauche)
-  for(int i=14;i>=0;i--)
-  {
-     if(i<7) //MAX 01 & 04
-     {
-       //Switch ON
-       lc.setRow(0,i,B11111111);
-       lc.setRow(3,6-i,B11111111);
-       //2eme colonne
-       lc.setRow(0,i+1,B11111111);
-       lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/3);
-       
-       //Switch OFF
-       lc.setRow(0,i,(byte)0);
-       lc.setRow(3,6-i,(byte)0);
-       //2eme colonne
-       lc.setRow(0,i+1,(byte)0);
-       lc.setRow(3,6-i+1,(byte)0);
-     }
-     else //MAX 02 & 03
-     {
-       //Switch ON
-        lc.setRow(1,i-7,B11111111);
-        lc.setRow(2,13-i,B11111111);
-        //2eme colonne
-        lc.setRow(1,i-7+1,B11111111);
-        lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/3);
-        
-        //Switch OFF
-        lc.setRow(1,i-7,(byte)0);
-        lc.setRow(2,13-i,(byte)0);
-        //2eme colonne
-        lc.setRow(1,i-7+1,(byte)0);
-        lc.setRow(2,13-i+1,(byte)0);
-     }
+    lc.setEyeColumn(1,col-1,(byte)0,true);
   }
 }
 void balayageH()
@@ -330,8 +253,7 @@ void loop()
 { 
   //balayageV();
   //K2000(); 
-  //cylon();
-  cylonV2();
+  cylon();
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
   //animationyeux();
