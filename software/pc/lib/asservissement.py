@@ -73,10 +73,13 @@ class Asservissement:
         :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin : contient de quoi créer une recursion.
         :type avecRechercheChemin: list
         """
+        
         depart = self.getPosition()
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
+        
+        log.logger.info("effectue un segment de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         
         """
         oriente le robot pour le segment à parcourir
