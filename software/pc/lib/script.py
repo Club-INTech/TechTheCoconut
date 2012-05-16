@@ -448,10 +448,11 @@ class Script:
     def rafflerTotem00(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
-        asser.goTo(Point(0.,630.))
+        asser.goTo(Point(200, 450))
+        asser.goToSegment(Point(0.,630.))
         #début notre totem sud
         asser.gestionTourner(0)
-        action.deplacer(130)
+        action.deplacer(120)
         asser.attendre(0.5)
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(120)
@@ -623,11 +624,11 @@ class Script:
     def enfoncerPoussoir0(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goTo(Point(1500-720+7, 2000 - 510 - 180))
+        asser.goTo(Point(1500-720+7, 2000 - 450 - 180))
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
-        asser.gestionAvancer(220)
+        asser.gestionAvancer(20)
         asser.gestionTourner(-math.pi)
         asser.gestionTourner(-math.pi/2)
         
@@ -643,11 +644,11 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goTo(Point(780+70, 2000 - 510 - 180))  
+        asser.goTo(Point(780+70, 2000 - 310 - 180))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
-        asser.gestionAvancer(220)
+        #asser.gestionAvancer(220)
         asser.gestionTourner(-math.pi)
         asser.gestionTourner(-math.pi/2)
         
