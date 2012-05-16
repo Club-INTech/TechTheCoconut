@@ -449,7 +449,9 @@ class Script:
         log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
         asser.goTo(Point(200, 450))
-        asser.goToSegment(Point(-45.,612.6))
+        log.logger.debug("COUCOUCOUCOU")
+        asser.goToSegment(Point(-45.,660.6))
+        
         #début notre totem sud
         asser.gestionTourner(0)
         action.deplacer(120)
@@ -480,10 +482,10 @@ class Script:
         asser.changerVitesse("translation", 3)
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
         asser.changerVitesse("translation", 2)
-        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-500,instruction = "auStopNeRienFaire")
         action.deplacer(0)
         asser.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
-        asser.goTo(Point(850.,1600.))
+        #asser.goTo(Point(850.,1600.))
     
     # Rafflage de notre totem côté nord (y grands)
     def rafflerTotem01(self,asser,action) :
