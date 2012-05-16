@@ -168,14 +168,14 @@ class Strategie():
         #
         #
         if self.strategie == 1 :
-            self.actions =  {"rafflerTotem00" : [10, 25, 1, [3, 7]],
-                             "rafflerTotem01" : [10, 27, 2, [3, 7]],
-                             "rafflerTotem10" : [7, 30 , 4, [1, 4]],
+            self.actions =  {"rafflerTotem00" : [9, 25, 1, [3, 7]],
+                             "rafflerTotem01" : [9, 27, 2, [3, 7]],
+                             "rafflerTotem10" : [6, 30 , 4, [1, 4]],
                              
-                             "enfoncerPoussoir0" : [5, 10,2, [0, 4]],
-                             "enfoncerPoussoir1" : [5, 11,3, [0, 3]],
+                             "enfoncerPoussoir0" : [5, 7,2, [0, 3]],
+                             "enfoncerPoussoir1" : [5, 7,3, [0, 3]],
                              
-                             "bourrerCale"       : [4, 10, 1, [2, 3]]
+                             "bourrerCale"       : [4, 10, 1, [1, 3]]
                             }
 
             
@@ -186,183 +186,15 @@ class Strategie():
             
             
         elif self.strategie == 2 :
-            pass
-            ##self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
-            #self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
-            ##self.actions.append(["FARMERTOTEM", 1, 0,   20  ])
-            ##self.actions.append(["FARMERTOTEM", 1, 1,   20  ])
-            
-            ##self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-            ##self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
-            
-            ##self.actions.append(["FAIRECHIERENNEMI", 1])    #
-            
-            ##self.actions.append(["TOURDETABLE", 0, 1  ])
-            ##self.actions.append(["TOURDETABLE", 1, 0.1])
-            ##self.actions.append(["DEFENDRE", 1])
-            ##self.actions.append(["BOURRERCALLE", 1])
-            
-            ## Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
-            ## le deuxième argument est la nouvelle priorité si échec.
-            ##self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
-                                        ##"ENFONCERPOUSSOIR"  : [0, 5],
-                                        ##"TOURDETABLE"       : [0.4, 0.4],
-                                        ##"DEFENDRE"          : [0.1, 0.1]
-                                      ##}
-                                      
-            #self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
-                                        #"ENFONCERPOUSSOIR"  : [0, 5],
-                                        #"TOURDETABLE"       : [0.4, 0.4],
-                                        #"DEFENDRE"          : [0.1, 0.1],
-                                        #"BOURRERCALLE"      : [2, 5]
-                                      #}
-                                      
-            #self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
-            #self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
-            
+            pass           
                                       
         elif self.strategie == 3 :
             pass
         
     
+    # Cette fonction est appellée dans une boucle infinie et permet de choisir 
+    # l'action la meilleure à réaliser.
     def choisirAction(self) :
-        #"""
-        #CETTE FONCTION PERMET A LA STRATEGIE DE CHOISIR QUELLE ACTION CHOISIR
-        #"""
-        
-        ## TODO associer la distance courante à celle de la balise.
-        #distance = 1
-        
-        ## Poids du coefficient Nombre de Points / Durée
-        #k1 = 1
-        
-        ## Poids du coefficient "Adversaire proche de l'objectif" :
-        #k2 = 1
-        
-        #poids = []
-        #tempsScripts = []
-        #nomScripts = []
-        #nouvellesPriorites = []
-        
-        ## Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
-        #for i in range(len(self.actions)) :
-        ## Ajout des nom de scripts.
-            #if self.actions[i][0] == "FARMERTOTEM" :
-                #nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
-
-            #elif self.actions[i][0] == "ENFONCERPOUSSOIR":
-                #nomScripts.append("self.scriptInstance.enfoncerPoussoir"+str(self.actions[i][1]))
-
-            #elif self.actions[i][0] == "FAIRECHIERENNEMI" :
-                #nomScripts.append("self.scriptInstance.fairechierEnnemi")
-
-            #elif self.actions[i][0] == "TOURDETABLE" :
-                #nomScripts.append("self.scriptInstance.tourDeTable"+ str(self.actions[i][1]))
-    
-            #elif self.actions[i][0] == "DEFENDRE":
-                #nomScripts.append("self.scriptInstance.defendreBase")
-                
-            #elif self.actions[i][0] == "BOURRERCALLE" :
-                #nomScripts.append("self.scriptInstance.bourrerCale")
-                
-            ## On récupère le temps qu'un script fait pour s'accomplir.
-            ## Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
-            #try :
-                #log.logger.debug("NOM DU SCRIPT : " + str(nomScripts[i]))
-                ## WARNING LA LIGNE SUIVANTE FAIT LAGGUER À MORT LA BEAGLEBOARD
-                #beagleboard = True
-                
-                #if not beagleboard :
-                    #exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
-                #else :
-                    #temps_script = 1
-            #except :
-                #log.logger.error("Problème de script")
-                ## WARNING A ENLEVER POUR UN MATCH
-                #temps_script = 0
-                
-            ## Temps de chaque scripts.
-            #tempsScripts.append(temps_script)
-                
-            ## Ce try... except.. est utile si un script n'est pas fait en dur (pas scripté)
-            ## C'est souvent une ZeroDivisionError qui est lancée (script de temps nul)
-            #try :
-                #poid = k1*self.actions[i][-1]/temps_script + k2*distance
-            #except :
-                #poid = k1*self.actions[i][-1] + k2*distance
-            #poids.append(poid)
-                        
-        ## On cherche ceux qui font des points positifs (sinon, c'est qu'on est dans un cas
-        ## déjà fait. Ex : On a déjà farmé le totem.)
-        #max = 0
-        #maxID = -1
-        #deuxiemeMaxID = -1
-        
-        ##log.logger.debug("Temps des scripts : "+ str(tempsScripts))
-        ##log.logger.debug("Poids des scripts : "+ str(poids))
-        
-        #for i in range(len(self.actions)) :
-            #log.logger.debug("Action : " + str(self.actions[i]) + " | Temps : " + str(tempsScripts[i]) + " | Poids : " + str(poids[i]))
-        
-        ## On cherche l'action qui fait le meilleur score
-        ## Le deuxième max est utile pour arrêter le premier si celui ci met
-        ## trop de temps.
-        #for i in range(len(self.actions)) :
-            #if poids[i] > max :
-                #deuxiemeMaxID = maxID
-                #max = poids[i]
-                #maxID = i
-        
-        
-        ## Si maxID == -1 c'est que il ne reste rien à faire.
-        ## TODO Qu'est-ce qu'on fait dans ce cas là ?!
-        #if maxID < 0 :
-            #log.logger.critical("ZUT ALORS ! Plus d'actions à faire")
-            #return
-        
-        ## On lance les PréActions :
-        #self.choisirPreActions(maxID)
-        
-        ## Puis on lance l'action
-        #try :
-            ## Ecris un timeout dans __builtin__.instance
-            ## CONVENTION : Si il n'y a pas de deuxième meilleure action à faire, on met
-            ## le timeout à -1
-            #if deuxiemeMaxID >= 0 :
-                #__builtin__.instance.timeout = tempsScripts[deuxiemeMaxID]
-            #else :
-                #__builtin__.instance.timeout = 1000
-            
-            #log.logger.debug("LANCEMENT DU SCRIPT : " + nomScripts[maxID])
-            #if not beagleboard :
-                #exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
-            #else :
-                #time.sleep(5)
-            #success = True
-        ## Problème de script
-        #except :
-            #log.logger.critical("La stratégie ne peut pas lancer l'action "+nomScripts[maxID])
-            #success = True
-        
-        ## Si l'action s'est  bien déroulée
-        #if success :
-            ## Puis on lui change sa priorité.
-            #self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][0])
-            
-            ## On incrémente la variable 
-            #id_bourrage = self.findActions("BOURRERCALLE")
-            #if id_bourrage >= 0 and self.actions[maxID][0] == "FARMERTOTEM":
-                #self.actions[id_bourrage][-1] += 4
-        
-        
-        
-        ## Si l'action a chié
-        #else :
-            #self.changerPriorite_byID(maxID, self.nouvellesPriorites[self.actions[maxID][0]][1])
-    
-            
-        """_______________________________________________________________________________________________"""
-        
         poids = []
         temps = []
         try :
@@ -376,7 +208,7 @@ class Strategie():
             actionAtester = self.actions[action]
             zoneObjectif  = actionAtester[2]
             difference = self.getDifferenceZone(self.zoneRobot, zoneObjectif)
-            temps_action = float(actionAtester[2]+(1+difference)*8)
+            temps_action = float(actionAtester[1]+(1+difference)*5)
             print "Temps d'action : " + str (temps_action)
             poids_action = actionAtester[0]/temps_action
             temps.append([action,temps_action])
@@ -402,7 +234,7 @@ class Strategie():
             log.logger.critical("Impossible de lancer " + str(meilleureAction) + " !")
             success = True
             self.zoneRobot = self.actions[meilleureAction][2]
-            time.sleep(5)
+            time.sleep(0.1)
         self.changerScore(meilleureAction, success)
         # Changement des scores des actions
         

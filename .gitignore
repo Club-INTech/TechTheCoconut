@@ -140,6 +140,7 @@
 /logs/2012-05-16/4.log
 /logs/2012-05-16/5.log
 /logs/2012-05-16/6.log
+/logs/*
 /sauv_g.xml
 /sauv_poids
 /sauv_posX
@@ -160,3 +161,17 @@
 /logs/2012-05-16/7.log
 /logs/2012-05-16/8.log
 /logs/2012-05-16/9.log
+/logs/2012-05-16/23.log
+/logs/2012-05-16/24.log
+/logs/2012-05-16/25.log
+/logs/2012-05-16/26.log
+/logs/2012-05-17/0.log
+/logs/2012-05-17/1.log
+/logs/2012-05-17/2.log
+/logs/2012-05-17/3.log
+/logs/2012-05-17/4.log
+/logs/2012-05-17/5.log
+/logs/2012-05-17/6.log
+/logs/2012-05-17/7.log
+/logs/2012-05-17/8.log
+/logs/2012-05-17/9.log
