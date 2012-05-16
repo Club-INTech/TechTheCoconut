@@ -24,7 +24,7 @@ script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
 log.logger.warning("Robot en attente du jumper pour recalage")
-#jumper.demarrerRecalage()
+jumper.demarrerRecalage()
 log.logger.info("Lancement du recalage...")
 
 #Lancement du recalage
@@ -37,7 +37,7 @@ except :
     
 # On attends le réenlèvement du jumper
 log.logger.info("Le recalage a été effectué")
-#jumper.scruterDepart()
+jumper.scruterDepart()
 log.logger.info("Le Jumper a été retiré. Lancement de la stratégie")
 
 
