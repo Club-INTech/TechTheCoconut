@@ -17,6 +17,7 @@ import strategie
 import threading
 import actionneur
 import actionneurSimu
+import timer
 from threading import Lock
 
 log =lib.log.Log(__name__)
@@ -56,6 +57,7 @@ class Instance:
         self.instanciationActionneur()
         self.instanciationScript()
         self.instanciationStrategie()
+        self.instanciationTimer()
         self.baliseInstance = balise.Balise()
         
     def instanciationSerie(self):
@@ -167,6 +169,9 @@ class Instance:
         self.actionInstanceSimu = actionneurSimu.Actionneur_simu()
         #except:
             #log.logger.error("instance : actionInstanceSimu n'est pas chargé")
+        
+    def instanciationTimer(self) :
+        self.timerInstance = timer.Timer()
         
     def instanciationAcquisition(self):
         try :
