@@ -14,6 +14,7 @@
 void setup();
 void writeArduinoOnMatrix();
 void K2000();
+void cylonV2();
 void cylon();
 void balayageH();
 void balayageV();
@@ -46,9 +47,7 @@ void setup() {
 }
 
 /*
- This method will display the characters for the
- word "Arduino" one after the other on the matrix. 
- (you need at least 5x7 leds to see the whole chars)
+Exemple
  */
 void writeArduinoOnMatrix() {
   /* here is the data for the characters */
@@ -134,7 +133,30 @@ void K2000()
     }
   }
 }
-
+void cylonV2()
+{
+  //Aller
+  for(int col=0; col>=13 ; col++)
+  {
+    lc.setEyeColumn(1,col,B11111111,true); //Switch ON
+    if(col<7)
+    delay(delaytime*col/3);
+    else
+    delay(delaytime*(13-col)/3);
+    lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
+  }
+  
+  //Retour
+  for(int col=13; col<=0 ; col--)
+  {
+    lc.setEyeColumn(1,col,B11111111,true); //Switch ON
+    if(col<7)
+    delay(delaytime*col/3);
+    else
+    delay(delaytime*(13-col)/3);
+    lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
+  }
+}
 void cylon()
 {
   //Aller (de gauche \u00e0 droite)
@@ -308,7 +330,8 @@ void loop()
 { 
   //balayageV();
   //K2000(); 
- cylon();
+  //cylon();
+  cylonV2();
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
   //animationyeux();
