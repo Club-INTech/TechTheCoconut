@@ -193,8 +193,8 @@ class Strategie():
             #   [   id_action_dans_self.actions  ,  [ ["avancer/tourner/actionneur/goTo", param], [etc...] ] , conditions_d'execution  ]
             #
             
-            self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
-            self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
+            #self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
+            #self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
             
             
             
