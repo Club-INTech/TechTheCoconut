@@ -449,7 +449,7 @@ class Script:
         log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
         asser.goTo(Point(200, 450))
-        asser.goToSegment(Point(0.,630.))
+        asser.goToSegment(Point(-45.,612.6))
         #début notre totem sud
         asser.gestionTourner(0)
         action.deplacer(120)
@@ -489,7 +489,7 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-150, 1360))
+        asser.goTo(Point(-392.227979275,1445.0))
         ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -624,7 +624,7 @@ class Script:
     def enfoncerPoussoir0(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goTo(Point(1500-720+7, 2000 - 450 - 180))
+        asser.goTo(Point(751.344262295,1445.0))
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -644,7 +644,7 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goTo(Point(780+70, 2000 - 310 - 180))  
+        asser.goTo(Point(850., 1510.))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
