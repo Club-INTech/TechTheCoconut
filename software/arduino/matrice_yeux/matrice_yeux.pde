@@ -123,7 +123,7 @@ void K2000()
     }
   }
 }
-void cylonne()
+void cylon()
 {
   //Aller
   for(int col=0; col<=13 ; col++)
@@ -149,86 +149,6 @@ void cylonne()
     delay(delaytime*(13-col)/3);
     lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
     lc.setEyeColumn(1,col-1,(byte)0,true);
-  }
-}
-void cylon()
-{
-  //Aller (de gauche à droite)
-  for(int i=0;i<14;i++)
-  {
-     if(i<7) //MAX 01 & 04
-     {
-       //Switch ON
-       lc.setRow(0,i,B11111111);
-       lc.setRow(3,6-i,B11111111);
-       //2eme colonne
-       lc.setRow(0,i+1,B11111111);
-       lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/3);
-       
-       //Switch OFF
-       lc.setRow(0,i,(byte)0);
-       lc.setRow(3,6-i,(byte)0);
-       //2eme colonne
-       lc.setRow(0,i+1,(byte)0);
-       lc.setRow(3,6-i+1,(byte)0);
-     }
-     else //MAX 02 & 03
-     {
-       //Switch ON
-        lc.setRow(1,i-7,B11111111);
-        lc.setRow(2,13-i,B11111111);
-        //2eme colonne
-        lc.setRow(1,i-7+1,B11111111);
-        lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/3);
-        
-        //Switch OFF
-        lc.setRow(1,i-7,(byte)0);
-        lc.setRow(2,13-i,(byte)0);
-        //2eme colonne
-        lc.setRow(1,i-7+1,(byte)0);
-        lc.setRow(2,13-i+1,(byte)0);
-     }
-  }
-  
-  //Retour (de droite à gauche)
-  for(int i=14;i>=0;i--)
-  {
-     if(i<7) //MAX 01 & 04
-     {
-       //Switch ON
-       lc.setRow(0,i,B11111111);
-       lc.setRow(3,6-i,B11111111);
-       //2eme colonne
-       lc.setRow(0,i+1,B11111111);
-       lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/3);
-       
-       //Switch OFF
-       lc.setRow(0,i,(byte)0);
-       lc.setRow(3,6-i,(byte)0);
-       //2eme colonne
-       lc.setRow(0,i+1,(byte)0);
-       lc.setRow(3,6-i+1,(byte)0);
-     }
-     else //MAX 02 & 03
-     {
-       //Switch ON
-        lc.setRow(1,i-7,B11111111);
-        lc.setRow(2,13-i,B11111111);
-        //2eme colonne
-        lc.setRow(1,i-7+1,B11111111);
-        lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/3);
-        
-        //Switch OFF
-        lc.setRow(1,i-7,(byte)0);
-        lc.setRow(2,13-i,(byte)0);
-        //2eme colonne
-        lc.setRow(1,i-7+1,(byte)0);
-        lc.setRow(2,13-i+1,(byte)0);
-     }
   }
 }
 void balayageH()
@@ -319,13 +239,22 @@ void animationyeux()
         
    }
 }
+void smiley()
+{
+  byte sprite[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
+
+  for (int col=0; col<14; col++)
+  {
+     lc.setEyeColumn(1, col, sprite[col], true); 
+  }
+}
 
 void loop() 
 { 
   //balayageV();
   //K2000(); 
   //cylon();
-  cylonne();
+  smiley();
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
   //animationyeux();

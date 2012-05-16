@@ -239,12 +239,24 @@ void animationyeux()
         
    }
 }
+void spritetest()
+{
+  //byte sprite[14]={B0000000,B0000000,B0000000,B0000000,B0000000,B0001111,B0011111,B0011111,B0001111,B0000000,B0000000,B0000000,B0000000,B0000000};
+  //byte sprite[14]={B00000001,B00000001,B00000001,B00000001,B01101101,B01100111,B00000111,B00000111,B01100111,B01101101,B00000001,B00000001,B00000001,B00000001};
+  byte sprite[14]={B00000111,B00001111,B00011001,B00110001,B01100001,B11000001,B11000001,B11000001,B11000001,B11000001,B01100001,B00110001,B00011111,B00001111};
+
+  for (int col=0; col<14; col++)
+  {
+     lc.setEyeColumn(1, col, sprite[col], true); 
+  }
+}
 
 void loop() 
 { 
   //balayageV();
   //K2000(); 
-  cylon();
+  //cylon();
+  spritetest();
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
   //animationyeux();
