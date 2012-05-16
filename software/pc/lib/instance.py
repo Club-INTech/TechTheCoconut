@@ -130,6 +130,7 @@ class Instance:
     def instanciationThetha(self):
         log.logger.info("établissement du graphe en fonction des robots adverses rencontrés")
         self.theta = recherche_chemin.thetastar.Thetastar()
+        self.theta.enregistreGraphe()
         
     def instanciationStrategie(self):
         try:
