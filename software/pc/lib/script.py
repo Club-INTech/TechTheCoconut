@@ -496,10 +496,11 @@ class Script:
     def poussoir1(self,asser,action):
         asser.gestionTourner(math.pi/2,instruction = "finir")
         asser.gestionAvancer(400,instruction = "auStopNeRienFaire")
-        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+
         asser.gestionTourner(math.pi/2)
         action.deplacer(180, "bd")
         asser.attendre(0.3)
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         asser.gestionTourner(-math.pi)
         asser.gestionTourner(-math.pi/2)
         #asser.changerVitesse("translation", 3)
@@ -508,8 +509,12 @@ class Script:
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         asser.gestionTourner(-math.pi/2)
         action.deplacer(0)
-        asser.gestionAvancer(400)
+        asser.gestionAvancer(200)
+        asser.gestionTourner(-math.pi)
+        asser.gestionAvancer(300)
         log.logger.debug("Enfonçage du poussoir à nous fini")
+        
+
         
         
     # Rafflage de notre totem côté sud (y petits)
@@ -714,7 +719,7 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goTo(Point(850., 1510.))  
+        asser.goTo(Point(-360, 1510.))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
