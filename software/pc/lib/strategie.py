@@ -184,6 +184,7 @@ class Strategie():
             
             
         elif self.strategie == 2 :
+            pass
             ##self.actions.append(["FARMERTOTEM", 0, 0,   10  ])
             #self.actions.append(["FARMERTOTEM", 0, 1,   10  ])
             ##self.actions.append(["FARMERTOTEM", 1, 0,   20  ])
@@ -362,7 +363,11 @@ class Strategie():
         
         poids = []
         temps = []
-        zoneRobot     = asserInstance.getZone()
+        try :
+            zoneRobot = asserInstance.getZone()
+        except :
+            log.logger.error("Impossible de lancer asser.getZone()")
+            zoneRobot = 1
         
         debug = True
 
@@ -377,7 +382,7 @@ class Strategie():
         
         if debug :
             log.logger.debug(str(temps))
-            log.logger.poids(str(poids))
+            log.logger.debug(str(poids))
             
         # On cherche le max des actions
         maxID = -1
@@ -386,7 +391,15 @@ class Strategie():
             if poids[i][1] > max :
                 max = poids[i][1]
                 maxID = i
-            
+                
+        meilleureAction = poids[maxID][0]
+        # Lancement de la meilleure action :
+        try :
+            exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." + meilleureAction + ")")
+        except :
+            log.logger.critical("Impossible de lancer " + str(meilleureAction) + " !")
+            success = True
+        self.changerScore(meilleureAction, success)
         # Changement des scores des actions
         
         
