@@ -27,6 +27,7 @@ else:
     log.logger.error("console $0p@l1z7 : ne peut importer instance.actionInstance")
 
 def scriptTotem():
+    
     asserInstance.goTo(Point(0.,660.))
     #début notre totem sud
     asserInstance.gestionTourner(0)
@@ -59,10 +60,25 @@ def scriptTotem():
     asserInstance.changerVitesse("translation", 3)
     asserInstance.gestionAvancer(-50,instruction = "auStopNeRienFaire")
     asserInstance.changerVitesse("translation", 2)
-    asserInstance.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(-200,instruction = "auStopNeRienFaire")
     actionInstance.deplacer(0)
-    #asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
     
+def poussoir1():
+    asserInstance.gestionTourner(math.pi/2,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(400,instruction = "auStopNeRienFaire")
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    asser.gestionTourner(math.pi/2)
+    action.deplacer(150, "bd")
+    asser.attendre(0.3)
+    asser.gestionTourner(-math.pi)
+    asser.gestionTourner(-math.pi/2)
+    asserInstance.changerVitesse("translation", 3)
+    asser.gestionAvancer(-1000, "auStopNeRienFaire")
+    asserInstance.changerVitesse("translation", 2)
+    asserInstance.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    asser.gestionTourner(-math.pi/2)
+    asser.gestionAvancer(400)
+    log.logger.debug("Enfonçage du poussoir à nous fini")
     
 def scriptTotemNordV0():
     #asserInstance.goTo(Point(820,1350.))
@@ -474,6 +490,7 @@ def console():
                 
             elif ordre == "a":
                 scriptTotem()
+                poussoir1()
             elif ordre == "h":
                 scriptTotemNord()
             

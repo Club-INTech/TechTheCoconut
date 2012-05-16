@@ -74,10 +74,10 @@ class Thetastar:
     t2 = carte.totems[1].rectangle  
     
     #on pense aux cds
-    t1.wx += 2*140
-    t1.wy += 2*140
-    t2.wx += 2*140
-    t2.wy += 2*140
+    #t1.wx += 2*140
+    #t1.wy += 2*140
+    #t2.wx += 2*140
+    #t2.wy += 2*140
     
     listeRectangles = [r1,r2,r3,r4,p,t1,t2]
 
