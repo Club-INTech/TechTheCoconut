@@ -53,7 +53,13 @@ class Asservissement_duree:
         self.orientation = 0
         self.position = point.Point(0,400)
         self.duree = 0
-    
+    #############
+    def test(self):
+        raw_input("?")
+        debut_timer = int(self.timerAsserv.getTime())
+        raw_input("?")
+        print int(self.timerAsserv.getTime()) - debut_timer
+    #############
     def lancerChrono(self):
         self.duree = 0
         

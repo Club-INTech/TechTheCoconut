@@ -179,7 +179,7 @@ class Asservissement:
                 print "avancer : stoppé !"
                 return "stoppe"
             else:
-                if int(self.timerAsserv.getTime()) - debut_timer > 8:
+                if (int(self.timerAsserv.getTime()) - debut_timer) > 8:
                     print "avancer : timeout !"
                     return "timeout"
                 elif distance > 0 :
@@ -197,7 +197,7 @@ class Asservissement:
             try:
                 reponseX = ""
                 reponseY = ""
-                while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^([0-9]+)$", reponseY)):
+                while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^(-[0-9]+|[0-9]+)$", reponseY)):
                     self.serieAsserInstance.ecrire("pos")
                     reponseX = self.serieAsserInstance.lire()
                     reponseY = self.serieAsserInstance.lire()
@@ -341,7 +341,7 @@ class Asservissement:
             tableLongueur = constantes["Coconut"]["largeur"]
             adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
             
-            if (adverse.x > -tableLongueur/2+self.rayonRobotsAdverses and adverse.x < tableLongueur/2-self.rayonRobotsAdverses and adverse.y < tableLargeur-self.rayonRobotsAdverses and adverse.y > self.rayonRobotsAdverses):
+            if (adverse.x > -tableLongueur/2+100 and adverse.x < tableLongueur/2-100 and adverse.y < tableLargeur-100 and adverse.y > 100):
                 #le point détecté est bien dans l'aire de jeu, c'est sans doute un robot adverse
                 
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
@@ -393,7 +393,7 @@ class Asservissement:
                             __builtin__.instance.viderListeRobotsAdv()
                         
                         #baisser vitesse
-                        self.changerVitesse("translation", 1)
+                        #self.changerVitesse("translation", 1)
                         
                         #finir le déplacement
                         posApres = self.getPosition()
@@ -402,10 +402,10 @@ class Asservissement:
                             signe = distance/abs(distance)
                         else:
                             signe = 1
-                        self.gestionAvancer(distance-signe*dist)
+                        self.gestionAvancer(distance-signe*dist, "sansRecursion")
                         
                         #remettre vitesse
-                        self.changerVitesse("translation", 2)
+                        #self.changerVitesse("translation", 2)
                         
                     else:
                         #robot adverse
@@ -415,13 +415,17 @@ class Asservissement:
                         
             else:
                 #fausse alerte : on termine tranquil'
-                print "fausse alerte."
-                dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
-                if distance != 0:
-                    signe = distance/abs(distance)
+                print "fausse alerte. pos à "+str(position)+", adverse à "+str(adverse)+"."
+                if instruction == "sansRecursion":
+                    #stopper l'execution du script parent
+                    raise Exception
                 else:
-                    signe = 1
-                self.gestionAvancer(distance-signe*dist)
+                    dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
+                    if distance != 0:
+                        signe = distance/abs(distance)
+                    else:
+                        signe = 1
+                    self.gestionAvancer(distance-signe*dist,"sansRecursion")
                     
         if retour == "stoppe" and instruction == "sansRecursion":
             #stopper l'execution du script parent
