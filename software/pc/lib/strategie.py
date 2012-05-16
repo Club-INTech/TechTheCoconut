@@ -282,8 +282,12 @@ class Strategie():
             # Ce try...except... est utile si on n'a pas branché l'USB sur les ports.
             try :
                 log.logger.debug("NOM DU SCRIPT : " + str(nomScripts[i]))
-                exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
-                #log.logger.warning(temps_script)
+                # WARNING LA LIGNE SUIVANTE FAIT LAGGUER À MORT LA BEAGLEBOARD
+                beagleboard = True
+                if not beagleboard :
+                    exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
+                else :
+                    temps_script = 1
             except :
                 log.logger.error("Problème de script")
                 # WARNING A ENLEVER POUR UN MATCH

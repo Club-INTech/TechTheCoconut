@@ -448,7 +448,7 @@ class Script:
     def rafflerTotem00(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
-        asser.goTo(Point(0.,660.))
+        asser.goTo(Point(0.,630.))
         #début notre totem sud
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -488,7 +488,7 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-150, 1340))
+        asser.goTo(Point(-150, 1360))
         ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -553,7 +553,7 @@ class Script:
     def rafflerTotem10(self,asser,action) :
         log.logger.debug("Rafflage de totem 1 0 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-920+ 70, 470+180))
+        asser.goTo(Point(-920+ 70, 450+180))
         asser.gestionTourner(0)
         action.deplacer(150)
         asser.attendre(0.5)

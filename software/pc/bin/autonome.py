@@ -5,6 +5,7 @@ from sys import argv
 import os
 import __builtin__
 import lib.instance
+import time
 
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -44,9 +45,9 @@ farmage_ennemi = False
 
 if not farmage_ennemi :
     actionInstance.deplacer(0)
-    asserInstance.gestionAvancer(300)
+    asserInstance.gestionAvancer(600)
     asserInstance.gestionTourner(2)
-    asserInstance.gestionAvancer(200)
+    asserInstance.gestionAvancer(100)
 else :
     asserInstance.changerVitesse("translation", 3)
     success = asserInstance.gestionAvancer("1900", "auStopNeRienFaire")
