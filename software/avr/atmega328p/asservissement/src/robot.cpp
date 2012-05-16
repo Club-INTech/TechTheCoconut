@@ -33,20 +33,15 @@ Robot::Robot() : 		couleur_('v')
 
 	changer_orientation(3.1415);
 
-	translation.valeur_bridage(100.0);
-	translation.kp(0.75);
-	translation.kd(2.5);
-
-	rotation.valeur_bridage(100.0);
-	rotation.kp(1.2);
-	rotation.kd(3.5);
+	changerVitesseRot2();
+	changerVitesseTra2();
 }
 
 void Robot::asservir()
 {
 	int32_t pwmTranslation;
 	int32_t pwmRotation;
-
+	
 	if (etat_rot_)
 		pwmRotation = rotation.pwm(mesure_angle_,10);
 	else
@@ -57,12 +52,9 @@ void Robot::asservir()
 	else
 		pwmTranslation = 0;
 	
-	if(etat_tra_ || etat_rot_)
-	{
-		moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
-		moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
-	}
-	
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+
 }
 
 
@@ -332,13 +324,13 @@ void Robot::changerVitesseTra3(void)
 }
 void Robot::changerVitesseRot1(void)
 {
-	rotation.valeur_bridage(80.0);//70
+	rotation.valeur_bridage(90.0);//70
 	rotation.kp(1.5);
 	rotation.kd(2.0);
 }
 void Robot::changerVitesseRot2(void)
 {
-	rotation.valeur_bridage(110.0);//100
+	rotation.valeur_bridage(140.0);//100
 	rotation.kp(1.2);
 	rotation.kd(3.5);
 }
