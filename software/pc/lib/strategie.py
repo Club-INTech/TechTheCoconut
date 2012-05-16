@@ -35,6 +35,8 @@ class Strategie():
         self.strategie = constantes['Strategie']
         self.timerStrat = timer.Timer()
         self.actions = {}
+        self.zoneRobot = 1
+
         
         self.preActions     = []
         self.postActions    = []
@@ -168,10 +170,10 @@ class Strategie():
         if self.strategie == 1 :
             self.actions =  {"rafflerTotem00" : [10, 25, 1, [3, 7]],
                              "rafflerTotem01" : [10, 27, 2, [3, 7]],
-                             "rafflerTotem10" : [7, 30 , 3, [1, 4]],
+                             "rafflerTotem10" : [7, 30 , 4, [1, 4]],
                              
                              "enfoncerPoussoir0" : [5, 10,2, [0, 4]],
-                             "enfoncerPoussoir1" : [5, 11,4, [0, 3]],
+                             "enfoncerPoussoir1" : [5, 11,3, [0, 3]],
                              
                              "bourrerCale"       : [4, 10, 1, [2, 3]]
                             }
@@ -364,25 +366,25 @@ class Strategie():
         poids = []
         temps = []
         try :
-            zoneRobot = asserInstance.getZone()
+            self.zoneRobot = asserInstance.getZone()
         except :
             log.logger.error("Impossible de lancer asser.getZone()")
-            zoneRobot = 1
         
         debug = True
 
         for action in self.actions.keys() :
             actionAtester = self.actions[action]
-            zoneObjectif  = actionAtester[1]
-            difference = self.getDifferenceZone(zoneRobot, zoneObjectif)
-            temps_action = actionAtester[2]+(1+difference)*8
+            zoneObjectif  = actionAtester[2]
+            difference = self.getDifferenceZone(self.zoneRobot, zoneObjectif)
+            temps_action = float(actionAtester[2]+(1+difference)*8)
+            print "Temps d'action : " + str (temps_action)
             poids_action = actionAtester[0]/temps_action
             temps.append([action,temps_action])
             poids.append([action,poids_action])
         
         if debug :
-            log.logger.debug(str(temps))
-            log.logger.debug(str(poids))
+            log.logger.debug("TEMPS :: " + str(temps))
+            log.logger.debug("POIDS :: " + str(poids))
             
         # On cherche le max des actions
         maxID = -1
@@ -399,6 +401,8 @@ class Strategie():
         except :
             log.logger.critical("Impossible de lancer " + str(meilleureAction) + " !")
             success = True
+            self.zoneRobot = self.actions[meilleureAction][2]
+            time.sleep(5)
         self.changerScore(meilleureAction, success)
         # Changement des scores des actions
         
