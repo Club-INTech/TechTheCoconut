@@ -141,8 +141,8 @@ class Script:
                             if nouvelle_position:
                                 #yes ! on a trouvé la sortie
                                 self.asserInstance.goToSegment(nouvelle_position)
-                                #on donne ensuite la main à la stratégie
-                                return False
+                                #on relance le script
+                                return gestionScripts(script,chrono)
                                 
                         except:
                             pass
@@ -157,8 +157,8 @@ class Script:
                             if nouvelle_position:
                                 #yes ! on a trouvé la sortie
                                 self.asserInstance.goToSegment(nouvelle_position)
-                                #on donne ensuite la main à la stratégie
-                                return False
+                                #on relance le script
+                                return gestionScripts(script,chrono)
                         except:
                             pass
                         try:
@@ -172,8 +172,8 @@ class Script:
                             if nouvelle_position:
                                 #yes ! on a trouvé la sortie
                                 self.asserInstance.goToSegment(nouvelle_position)
-                                #on donne ensuite la main à la stratégie
-                                return False
+                                #on relance le script
+                                return gestionScripts(script,chrono)
                         except:
                             pass
                                 
