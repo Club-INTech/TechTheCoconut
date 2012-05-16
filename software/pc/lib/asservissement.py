@@ -773,3 +773,27 @@ class Asservissement:
 
     def attendre(self, temps):
         time.sleep(temps)
+        
+    def getZone(self) :
+        
+        couleur = __builtin__.constantes["couleur"]
+        
+        if couleur == "v" :
+            if self.getPosition().x >= 0 and self.getPosition().y <= 1500:
+                return 1
+            elif self.getPosition().x >= 0 and self.getPosition().y > 1500 :
+                return 2
+            elif self.getPosition().x < 0 and self.getPosition().y <= 1500 :
+                return 4
+            elif self.getPosition().x < 0 and self.getPosition().y > 1500 :
+                return 3
+                
+        else :
+            if self.getPosition().x < 0 and self.getPosition().y <= 1500:
+                return 1
+            elif self.getPosition().x < 0 and self.getPosition().y > 1500 :
+                return 2
+            elif self.getPosition().x >= 0 and self.getPosition().y <= 1500 :
+                return 4
+            elif self.getPosition().x >= 0 and self.getPosition().y > 1500 :
+                return 3
