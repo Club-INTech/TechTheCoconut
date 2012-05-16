@@ -53,7 +53,7 @@ class Actionneur(serie.Serie):
             
         
         
-    def deplacer(self, angle, position = ["hg", "hd", "bg", "bd"]):
+    def deplacer(self, angle, position = ["hg", "hd", "bg", "bd"], couleur = __builtin__.constantes['couleur']):
         """
         Envoyer un ordre à l'actionneur
         
@@ -75,7 +75,7 @@ class Actionneur(serie.Serie):
         self.calculRayon(math.pi*angle/180)
                
         # Gestion de la symétrie
-        if __builtin__.constantes['couleur'] == "v" :
+        if couleur == "v" :
             # Envoi des infos
             if "hg" in position:
                 self.goto(self.ids["hg"], 180+3-angle)
@@ -88,13 +88,13 @@ class Actionneur(serie.Serie):
         else :
             # Envoi des infos
             if "hg" in position:
-                self.goto(self.ids["hd"], 180+3-angle)
+                self.deplacer(angle, "hd", "v") 
             if "hd" in position:
-                self.goto(self.ids["hg"], angle)
+                self.deplacer(angle, "hg", "v")
             if "bg" in position:
-                self.goto(self.ids["bd"], angle+5)
+                self.deplacer(angle, "bd", "v")
             if "bd" in position:
-                self.goto(self.ids["bg"], 180+9-angle)
+                self.deplacer(angle, "bg", "v")
         
 
         
