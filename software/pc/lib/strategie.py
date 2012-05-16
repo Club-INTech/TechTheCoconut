@@ -175,34 +175,7 @@ class Strategie():
                              
                              "bourrerCale"       : [4, 10, 1, [2, 3]]
                             }
-            #self.actions.append(["FARMERTOTEM", 0, 1, 10])
-            #self.actions.append(["FARMERTOTEM", 1, 0, 10])
-            ##self.actions.append(["FARMERTOTEM", 1, 1, 10])
-            
-            #self.actions.append(["ENFONCERPOUSSOIR", 0, 5])
-            #self.actions.append(["ENFONCERPOUSSOIR", 1, 5])
-            
-            ##self.actions.append(["FAIRECHIERENNEMI", 1])    #
-            
-            ##self.actions.append(["TOURDETABLE", 0, 1  ])
-            ##self.actions.append(["TOURDETABLE", 1, 0.1])
-            ##self.actions.append(["DEFENDRE", 1])
-            
-            #self.actions.append(["BOURRERCALLE", 0])
-            
-            # Tableau de nouvelles priorités : Pour chaque actions, le premier argument est la nouvelle priorité si succès,
-            # le deuxième argument est la nouvelle priorité si échec.
-            #self.nouvellesPriorites = { "FARMERTOTEM"       : [1, 5],
-                                        #"ENFONCERPOUSSOIR"  : [0, 5],
-                                        #"TOURDETABLE"       : [0.4, 0.4],
-                                        #"DEFENDRE"          : [0.1, 0.1],
-                                        #"BOURRERCALLE"      : [0, 5]
-                                      #}
-            
-            # Tableau de preActions : Liste d'actions à faire avant de lancer la vraie action.
-            # Syntaxe :
-            #   [   id_action_dans_self.actions  ,  [ ["avancer/tourner/actionneur/goTo", param], [etc...] ] , conditions_d'execution  ]
-            #
+
             
             #self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
             #self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
@@ -393,17 +366,28 @@ class Strategie():
         
         debug = True
 
-        for actionAtester in self.actions.values() :
+        for action in self.actions.keys() :
+            actionAtester = self.actions[action]
             zoneObjectif  = actionAtester[1]
             difference = self.getDifferenceZone(zoneRobot, zoneObjectif)
-            temps_action = actionAtester[2]+(1+difference*8)
+            temps_action = actionAtester[2]+(1+difference)*8
             poids_action = actionAtester[0]/temps_action
-            temps.append(temps_action)
-            poids.append(poids_action)
+            temps.append([action,temps_action])
+            poids.append([action,poids_action])
         
         if debug :
             log.logger.debug(str(temps))
             log.logger.poids(str(poids))
+            
+        # On cherche le max des actions
+        maxID = -1
+        max = 0
+        for i in range(len(temps)) :
+            if poids[i][1] > max :
+                max = poids[i][1]
+                maxID = i
+            
+        # Changement des scores des actions
         
         
             
@@ -451,32 +435,11 @@ class Strategie():
             
         
     # Changement de priorité d'une entrée du tableau self.actions
-    def changerPriorite(self, nomAction, params, nouvellePriorite) :
-        """
-        
-        Change la priorité d'une action dans le tableau self.actions
-        
-        
-        :param nomAction: NOM_DE_L_ACTION
-        :type nomAction: string
-        
-        :param params: Tableau contenant les paramètres optionels
-        :type params: tableau de trucs
-        
-        :param nouvellePriorite: Nouvelle priorité pour l'action
-        :type nouvellePriorite: int (entre 0 et 5)
-        """
-        for i in range(len(self.actions)) :
-            if self.actions[i][0] == nomAction :
-                found = 1
-                for j in range(len(params)) :
-                    if self.actions[i][j+1] != params[j] :
-                        
-                        found = 0
-                        break
-                if found :
-                    self.actions[i][-1] = nouvellePriorite
-                    return 1
+    def changerScore(self, nomAction, success) :
+        if success : 
+            self.actions[nomAction][0] = self.actions[nomAction][3][0]
+        else :
+            self.actions[nomAction][0] = self.actions[nomAction][3][1]
                     
     def changerPriorite_byID(self, id, nouvellePriorite) :
         """
