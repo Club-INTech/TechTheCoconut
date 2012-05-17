@@ -509,12 +509,21 @@ class Script:
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         asser.gestionTourner(-math.pi/2)
         action.deplacer(0)
-        asser.gestionAvancer(200)
-        asser.gestionTourner(-math.pi)
         asser.gestionAvancer(300)
         log.logger.debug("Enfonçage du poussoir à nous fini")
         
-
+    def poussoir2(self,asser,action):
+        asser.gestionTourner(math.pi,instruction = "finir")
+        action.deplacer(130,["bd","hd"])
+        asser.gestionAvancer(1248,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionAvancer(-200.0)
+        #asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-1000, "auStopNeRienFaire")
+        #asser.changerVitesse("translation", 2)
+        asser.gestionTourner(-math.pi/2)
+        asser.gestionAvancer(300)
+        log.logger.debug("Enfonçage du poussoir éloigné fini")
         
         
     # Rafflage de notre totem côté sud (y petits)
