@@ -46,7 +46,8 @@ timer.lancer()
 script.gestionScripts(script.totem00)
 script.gestionScripts(script.bourrerCale)
 script.gestionScripts(script.poussoir1)
-script.gestionScripts(script.enfoncerPoussoir1)
+script.gestionScripts(script.poussoir2)
+
 """
 actionInstance.deplacer(0)
 asserInstance.gestionAvancer(600)
