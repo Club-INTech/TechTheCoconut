@@ -629,7 +629,7 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(-200.0)
         #asser.changerVitesse("translation", 3)
-        asser.gestionAvancer(-1000, "auStopNeRienFaire")
+        asser.gestionAvancer(-10000, "auStopNeRienFaire")
         #asser.changerVitesse("translation", 2)
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(300)
