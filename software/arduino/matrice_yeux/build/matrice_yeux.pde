@@ -358,18 +358,6 @@ void writeChar(int eye,char value)
          break;
      }
   }
-  
-  /* 
-  //Pause d'une seconde
-  delay(1000);
-  
-  //ClearDisplay
-  for (int col=0; col<13; col++)
-  {
-     lc.setEyeColumn(1, col, (byte)0, true);
-  }  
-  
-  */
 }
 
 void compteARebours(int time)
@@ -395,6 +383,29 @@ void compteARebours(int time)
   }
 }
 
+void pacman()
+{
+  byte pacman1[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11101110,B01000100,B00000000};
+  byte pacman2[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11111110,B01111100,B00111000};
+  
+  for(int i=0;i<28;i++)
+  {
+    for(int col=0;col<8;col++)
+    {
+       if(i%2==0)
+       lc.setMatrixColumn(col+i,pacman1[col]);
+       else
+       lc.setMatrixColumn(col+i,pacman2[col]);
+    }
+    delay(300);
+    //ClearDisplay
+    for (int col=0; col<15; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true);
+    }
+  }  
+}
+
 void loop() 
 { 
   //balayageV(); //K2000
@@ -405,8 +416,8 @@ void loop()
   //emoticon(i);
   
   //compteARebours(90);
-  
-  gauchedroite();
+  pacman();
+  //gauchedroite();
   //emoticon(2); //exptdr
   
   //cercle(); //by cassou

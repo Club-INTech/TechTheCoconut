@@ -388,7 +388,7 @@ void pacman()
   byte pacman1[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11101110,B01000100,B00000000};
   byte pacman2[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11111110,B01111100,B00111000};
   
-  for(int i=0;i>28;i++)
+  for(int i=0;i<28;i++)
   {
     for(int col=0;col<8;col++)
     {
@@ -397,8 +397,15 @@ void pacman()
        else
        lc.setMatrixColumn(col+i,pacman2[col]);
     }
+    delay(300);
+    //ClearDisplay
+    for (int col=0; col<15; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true);
+    }
   }  
 }
+
 void loop() 
 { 
   //balayageV(); //K2000
@@ -408,8 +415,8 @@ void loop()
   //for(int i=1;i<9;i++)
   //emoticon(i);
   
-  compteARebours(90);
-  
+  //compteARebours(90);
+  pacman();
   //gauchedroite();
   //emoticon(2); //exptdr
   
