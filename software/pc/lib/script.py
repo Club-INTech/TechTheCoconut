@@ -551,6 +551,7 @@ class Script:
         asser.gestionAvancer(-220,instruction = "auStopNeRienFaire")
         action.deplacer(0)
         
+    def totem00_v3(self,asser,action):
         
         asser.gestionTourner(3.1)
         asser.gestionAvancer(1020)
