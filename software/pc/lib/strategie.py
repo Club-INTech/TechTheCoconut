@@ -196,23 +196,11 @@ class Strategie():
     # l'action la meilleure à réaliser.
     def choisirAction(self) :
         poids = []
-<<<<<<< HEAD
         temps = []
         try :
             self.zoneRobot = asserInstance.getZone()
         except :
             log.logger.error("Impossible de lancer asser.getZone()")
-=======
-        tempsScripts = []
-        nomScripts = []
-        nouvellesPriorites = []
-        
-        # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
-        for i in xrange(len(self.actions)) :
-           # Ajout des nom de scripts.
-            if self.actions[i][0] == "FARMERTOTEM" :
-                nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
->>>>>>> 7127ce002d34a2b3d466e49c8b8222db177ab7dd
 
         debug = True
 
@@ -233,28 +221,10 @@ class Strategie():
             
         # On cherche le max des actions
         maxID = -1
-<<<<<<< HEAD
         max = 0
         for i in range(len(temps)) :
             if poids[i][1] > max :
                 max = poids[i][1]
-=======
-        deuxiemeMaxID = -1
-        
-        #log.logger.debug("Temps des scripts : "+ str(tempsScripts))
-        #log.logger.debug("Poids des scripts : "+ str(poids))
-        
-        for i in xrange(len(self.actions)) :
-            log.logger.debug("Action : " + str(self.actions[i]) + " | Temps : " + str(tempsScripts[i]) + " | Poids : " + str(poids[i]))
-        
-        # On cherche l'action qui fait le meilleur score
-        # Le deuxième max est utile pour arrêter le premier si celui ci met
-        # trop de temps.
-        for i in xrange(len(self.actions)) :
-            if poids[i] > max :
-                deuxiemeMaxID = maxID
-                max = poids[i]
->>>>>>> 7127ce002d34a2b3d466e49c8b8222db177ab7dd
                 maxID = i
                 
         meilleureAction = poids[maxID][0]
@@ -311,41 +281,12 @@ class Strategie():
         return self.choisirPreActions(id_action, i+1)
 
     # Changement de priorité d'une entrée du tableau self.actions
-<<<<<<< HEAD
     def changerScore(self, nomAction, success) :
         if success : 
             self.actions[nomAction][0] = self.actions[nomAction][3][0]
         else :
             self.actions[nomAction][0] = self.actions[nomAction][3][1]
 
-=======
-    def changerPriorite(self, nomAction, params, nouvellePriorite) :
-        """
-        
-        Change la priorité d'une action dans le tableau self.actions
-        
-        
-        :param nomAction: NOM_DE_L_ACTION
-        :type nomAction: string
-        
-        :param params: Tableau contenant les paramètres optionels
-        :type params: tableau de trucs
-        
-        :param nouvellePriorite: Nouvelle priorité pour l'action
-        :type nouvellePriorite: int (entre 0 et 5)
-        """
-        for i in xrange(len(self.actions)) :
-            if self.actions[i][0] == nomAction :
-                found = 1
-                for j in xrange(len(params)) :
-                    if self.actions[i][j+1] != params[j] :
-                        
-                        found = 0
-                        break
-                if found :
-                    self.actions[i][-1] = nouvellePriorite
-                    return 1
->>>>>>> 7127ce002d34a2b3d466e49c8b8222db177ab7dd
                     
     def changerPriorite_byID(self, id, nouvellePriorite) :
         """
