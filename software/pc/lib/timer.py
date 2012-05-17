@@ -57,6 +57,9 @@ class Timer(threading.Thread):
             return time.time() - Timer.origineStrategie
         else :
             return time.time() - Timer.origine
+            
+    def getTimeRemaining(self) :
+        return __builtin__.constantes["DureeJeu"] - self.getTime()
         
     def interrupt(self) :
         
