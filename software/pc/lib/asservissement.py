@@ -460,7 +460,7 @@ class Asservissement:
                     #attente que la voie se libère
                     ennemi_en_vue = True
                     debut_timer = int(self.timerAsserv.getTime())
-                    while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
+                    while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 10 :
                         capteur = self.capteurInstance.mesurer()
                         if capteur < self.maxCapt:
                             print 'gestionAvancer : capteur !'
@@ -491,6 +491,24 @@ class Asservissement:
                     else:
                         #robot adverse
                         __builtin__.instance.ajouterRobotAdverse(adverse)
+                        if hasattr(__builtin__.instance, 'actionInstance'):
+                            actionInstance = __builtin__.instance.actionInstance
+                            self.goToScript(Point(-820,905))
+                            self.gestionTourner(3.14)
+                            actionInstance.deplacer(120,["bd"])
+                            time.sleep(0.3)
+                            self.gestionAvancer(260)
+                            self.gestionTourner(-1.57)
+                            self.gestionTourner(0)
+                            actionInstance.deplacer(120,["bg"])
+                            time.sleep(0.3)
+                            self.goToScript(Point(820,905))
+                            self.gestionTourner(0)
+                            self.gestionAvancer(260,"auStopNeRienFaire")
+                            actionInstance.deplacer(140)
+                            time.sleep(0.3)
+                            self.gestionAvancer(-260)
+                        
                         #stopper l'execution du script parent
                         raise Exception
                         
