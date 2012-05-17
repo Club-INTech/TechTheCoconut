@@ -52,7 +52,7 @@ elif v == 2 :
     script.gestionScripts(script.totem00_v2)
 elif v == 3 :
     script.gestionScripts(script.totem00_v3)
-script.gestionScripts(script.bourrerCale)
+#script.gestionScripts(script.bourrerCale)
 script.gestionScripts(script.poussoir1)
 script.gestionScripts(script.poussoir2)
-script.gestionScripts(script.totem01)
+#script.gestionScripts(script.totem01)
