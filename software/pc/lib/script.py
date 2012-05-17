@@ -456,10 +456,10 @@ class Script:
     
     def totem00(self,asser,action):
         
-        asser.gestionTourner(3.14)
-        asser.gestionAvancer(1020)
+        asser.gestionTourner(3)
+        asser.gestionAvancer(1220)
         asser.gestionTourner(2.0)
-        asser.gestionAvancer(468)
+        asser.gestionAvancer(358)
         #asser.goTo(Point(0.,660.))
         
         #début notre totem sud
@@ -864,7 +864,7 @@ class Script:
         
     def bourrerCale(self, asser, action) :
         #action.deplacer(0)
-        #asser.goTo(Point(900, 1000))
+        asser.goToSegment(Point(900, 1000))
         asser.gestionTourner(0)
         action.deplacer(0, "bd")
         asser.gestionTourner(-math.pi/2)
