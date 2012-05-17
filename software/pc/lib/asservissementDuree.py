@@ -8,7 +8,7 @@ import __builtin__
 import timer
 import re
 import log
-import outils_math.point as point
+from outils_math.point import Point
 import actionneur
 import robot
 import lib.log
@@ -51,9 +51,9 @@ class Asservissement_duree:
         self.modeRotation = 2
         self.modeTranslation = 2
         self.orientation = 0
-        self.position = point.Point(0,400)
+        self.position = Point(0,400)
         self.duree = 0
-        self.hotSpots = [point.Point(-900,1000),point.Point(-800,1420),point.Point(-360,1660),point.Point(360,1660),point.Point(800,1420),point.Point(900,1000),point.Point(540,290),point.Point(-540,290)]
+        self.hotSpots = [Point(-900,1000),Point(-800,1420),Point(-360,1660),Point(360,1660),Point(800,1420),Point(900,1000),Point(540,290),Point(-540,290)]
         
         
     #############
@@ -93,10 +93,15 @@ class Asservissement_duree:
         """
         self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
     
+    
+    
+    ############################## <HACK>
+    
+    
+    
     def goToScript(self, arrivee):
         depart = self.getPosition()
         log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        
         
         HSdepart = self.hotSpot(depart)
         HSarrivee = self.hotSpot(arrivee)
@@ -116,6 +121,7 @@ class Asservissement_duree:
         else:
         
             for k in range(len(self.hotSpots)):
+                
                 if self.hotSpots[k] == HSdepart:
                     dep = k
                 if self.hotSpots[k] == HSarrivee:
@@ -130,11 +136,40 @@ class Asservissement_duree:
     def hotSpot(self, point):
         #détermine le hotspot le plus proche à partir d'un point de la carte
         
-        dest = self.hotSpots[0]
-        for hs in self.hotSpots:
-            if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
-                dest = hs
-        return dest
+        #zone sur le coté du totem
+        if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
+            return self.hotSpots[0]
+        elif self.estDansZone(point,Point(401,1180),Point(592,810)):
+            return self.hotSpots[5]
+            
+        #zone sur le dessus du totem
+        elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)):
+            return self.hotSpots[2]
+        elif self.estDansZone(point,Point(167,1213),Point(448,1000)):
+            return self.hotSpots[3]
+            
+        #zone sur le dessous du totem
+        elif self.estDansZone(point,Point(-448,1000),Point(-167,810)):
+            return self.hotSpots[7]
+        elif self.estDansZone(point,Point(167,1000),Point(448,810)):
+            return self.hotSpots[6]
+            
+        else:
+        
+            dest = self.hotSpots[0]
+            for hs in self.hotSpots:
+                if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
+                    dest = hs
+            return dest
+        
+    def estDansZone(self,point,hg,bd):
+        if (point.x > hg.x and point.x < bd.x and point.y < hg.y and point.y > bd.y):
+            return True
+        else:
+            return False
+    
+    
+    ############################## </HACK>
     
     
     
@@ -184,7 +219,7 @@ class Asservissement_duree:
         print "temps de rotation\tà "+str(int(angle*1000)/1000.)+",   \tvitesse "+str(self.modeRotation)+":\t"+str(deltaAngle/self.vitesseRotation)
         
     def getPosition(self):
-        return point.Point(self.position.x,self.position.y)
+        return Point(self.position.x,self.position.y)
     
     def setPosition(self,position):
         self.position.x = position.x
