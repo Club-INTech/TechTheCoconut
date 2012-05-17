@@ -3,6 +3,8 @@
 #define PI 3.14159265
 #define LARGEUR_ROBOT 200.0
 #define LONGUEUR_TABLE 3000.0
+#define PI_TIC 4414
+#define PI_fois2_TIC 8828
 
 #include "twi_master.h"
 #include <libintech/serial/serial_0.hpp>
@@ -10,6 +12,7 @@
 #include <libintech/asservissement.hpp>
 
 #include <util/delay.h>
+
 
 // Constructeur avec assignation des attributs
 Robot::Robot() : 		couleur_('v')
@@ -23,7 +26,7 @@ Robot::Robot() : 		couleur_('v')
 				,translation(0.75,3.5,0.0)//(0.6,2.5,0.0)//(1.4,6.0,0.0)
 				,rotation(0.9,3.5,0.0)//(1.3,6.0,0.0)//(1.5,6.5,0.0)
 				,CONVERSION_TIC_MM_(0.10360)//0.1061)
-				,CONVERSION_TIC_RADIAN_(0.000703762)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
+				,CONVERSION_TIC_RADIAN_(0.0007117)//0.000705976)//0.00070226)//0.000703)//0.000737463064)
 
 {
 	TWI_init();
@@ -100,7 +103,7 @@ void Robot::communiquer_pc(){
 	
 	
 	else if(COMPARE_BUFFER("eer",3)){
-		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+		serial_t_::print(abs(rotation.erreur()));
 	}
 	else if(COMPARE_BUFFER("eet",3)){
 		serial_t_::print(abs(translation.consigne() - mesure_distance_));
@@ -276,7 +279,7 @@ void Robot::communiquer_pc(){
 		}
 		else
 			serial_t_::print("EN_MVT");
-// 		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+// 		serial_t_::print(abs(rotation.erreur()));
 // 		serial_t_::print(abs(translation.consigne() - mesure_distance_));
 	}
 
@@ -412,19 +415,18 @@ int32_t Robot::angle_initial()
 	if (couleur_ == 'r')
 		return 0;
 	else
-		return 4260;
+		return PI_TIC;
 }
 
 int32_t Robot::angle_optimal(int32_t angle, int32_t angleBkp)
 {
-	// 8928 tics : 2*pi
-	while (angle > angleBkp+4464)
-		angle -= 8928;
-	while (angle <= angleBkp-4464)
-		angle += 8928;
+	while (angle > angleBkp+PI_TIC)
+		angle -= PI_fois2_TIC;
+	while (angle <= angleBkp-PI_TIC)
+		angle += PI_fois2_TIC;
 	return angle;
 }
-
+/*
 int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 {
 	//renvoit l'angle en tic minimisant le passage de angle1 à angle2
@@ -440,7 +442,7 @@ int32_t Robot::compare_angle_tic(int32_t angle1,int32_t angle2)
 		diff = 8928-diff;
 	return diff;
 }
-
+*/
 void Robot::changer_orientation(float new_angle)
 {
 	int32_t new_angle_tic = angle_optimal( new_angle/CONVERSION_TIC_RADIAN_, mesure_angle_ );
@@ -483,9 +485,10 @@ bool Robot::est_stoppe()
 	//rotation : 17 en v1, 
 //     serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
 //     serial_t_::print(abs(translation.consigne() - mesure_distance_));
-	volatile bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
-	volatile bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
-	return rotation_stoppe && translation_stoppe;
+	volatile bool rotation_stoppe = abs(rotation.erreur()) < 105;//37
+	volatile bool translation_stoppe = abs(translation.erreur()) < 100;//42
+	bool bouge_pas = rotation.erreur_d()==0 && translation.erreur_d()==0;
+	return rotation_stoppe && translation_stoppe && bouge_pas;
 	
 // 	}
 }
@@ -525,8 +528,8 @@ void Robot::gestion_blocage()
 {
 
 	static float compteurBlocage=0;
-	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
-	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+// 	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+// 	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
 
 	/*
 	static int32_t last_distance;
@@ -547,7 +550,7 @@ void Robot::gestion_blocage()
 	*/
 	
 	bool moteur_force = abs(moteurGauche.pwm()) > 45 || abs(moteurDroit.pwm()) > 45;
-	bool bouge_pas = abs(T_last_angle[4]-T_last_angle[0])<10 && abs(T_last_distance[4]-T_last_distance[0])<10;
+	bool bouge_pas = rotation.erreur_d()==0 && translation.erreur_d()==0;
 	
 // 	serial_t_::print("###");
 //     serial_t_::print(abs(moteurGauche.pwm()));
@@ -571,13 +574,13 @@ void Robot::gestion_blocage()
 		compteurBlocage=0;
 	}
 
-	for (int16_t i=4;i>0;i--)
-		T_last_distance[i] = T_last_distance[i-1];
-	T_last_distance[0] = mesure_distance_;
-	
-	for (int16_t i=4;i>0;i--)
-		T_last_angle[i] = T_last_angle[i-1];
-	T_last_angle[0] = mesure_angle_;
+// 	for (int16_t i=4;i>0;i--)
+// 		T_last_distance[i] = T_last_distance[i-1];
+// 	T_last_distance[0] = mesure_distance_;
+// 	
+// 	for (int16_t i=4;i>0;i--)
+// 		T_last_angle[i] = T_last_angle[i-1];
+// 	T_last_angle[0] = mesure_angle_;
 	
 	/*
 	last_distance = mesure_distance_;
