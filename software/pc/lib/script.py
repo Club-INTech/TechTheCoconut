@@ -408,8 +408,13 @@ class Script:
         __builtin__.instance.ajouterRobotAdverse(Point(float(xa),float(ya)))
         
     def test4(self,asser,action):
-        asser.changerVitesse("rotation",3)
-        asser.gestionTourner(-math.pi/2)
+        xd = raw_input("x départ? ")
+        yd = raw_input("y départ? ")
+        asser.setPosition(Point(float(xd),float(yd)))
+        asser.setOrientation(0)
+        xa = raw_input("x arrivée? ")
+        ya = raw_input("y arrivée? ")
+        asser.goToScript(Point(float(xa),float(ya)))
         
     def test5(self,asser,action):
         action.deplacer(150)
@@ -530,7 +535,7 @@ class Script:
     def rafflerTotem00(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
-        asser.goTo(Point(200, 450))
+        asser.goToScript(Point(200, 450))
         log.logger.debug("COUCOUCOUCOU")
         asser.goToSegment(Point(-45.,660.6))
         
@@ -573,7 +578,7 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-392.227979275,1445.0))
+        asser.goToScript(Point(-392.227979275,1445.0))
         ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -638,7 +643,7 @@ class Script:
     def rafflerTotem10(self,asser,action) :
         log.logger.debug("Rafflage de totem 1 0 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-920+ 70, 450+180))
+        asser.goToScript(Point(-920+ 70, 450+180))
         asser.gestionTourner(0)
         action.deplacer(150)
         asser.attendre(0.5)
@@ -708,7 +713,7 @@ class Script:
     def enfoncerPoussoir0(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goTo(Point(751.344262295,1445.0))
+        asser.goToScript(Point(751.344262295,1445.0))
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -728,7 +733,7 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goTo(Point(-360, 1510.))  
+        asser.goToScript(Point(-360, 1510.))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -754,7 +759,7 @@ class Script:
         """
         log.logger.debug("C'est parti, on farme l'ennemi !")
         action.deplacer(0)
-        asser.goTo(Point(-1500+960-70, 2000-260+160))
+        asser.goToScript(Point(-1500+960-70, 2000-260+160))
         asser.gestionTourner(-math.pi)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -879,7 +884,7 @@ class Script:
 
     def preAction_totem01_1(self, asser, action) :
         action.deplacer(0)
-        asser.goTo(Point(800, 700))
+        asser.goToScript(Point(800, 700))
         asser.gestionTourner(math.pi/2)
         action.deplacer(110)
         asser.attendre(0.2)
@@ -888,8 +893,8 @@ class Script:
         
     def preAction_totem01_2(self, asser, action) :
         action.deplacer(90)
-        asser.goTo(660, 1700)
-        asser.goTo(-20, 1700)
+        asser.goToScript(660, 1700)
+        asser.goToScript(-20, 1700)
         
 
 ####################################################################################################################

@@ -8,7 +8,7 @@ import __builtin__
 import timer
 import re
 import log
-import outils_math.point as point
+from outils_math.point import Point
 import actionneur
 import robot
 import lib.log
@@ -63,6 +63,8 @@ class Asservissement:
         
         self.vitesseTranslation = 2
         self.vitesseRotation = 2
+        
+        self.hotSpots = [Point(-900,1000),Point(-800,1420),Point(-360,1660),Point(360,1660),Point(800,1420),Point(900,1000),Point(540,290),Point(-540,290)]
             
     
     def goToSegment(self, arrivee, avecRechercheChemin = []):
@@ -73,8 +75,9 @@ class Asservissement:
         :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin : contient de quoi créer une recursion.
         :type avecRechercheChemin: list
         """
-        
         depart = self.getPosition()
+        log.logger.info("effectue le segment de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
@@ -94,6 +97,84 @@ class Asservissement:
         avec un booléen codant l'utilisation de la recherche de chemin
         """
         self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),instruction = "",avecRechercheChemin = avecRechercheChemin)
+    
+    
+    ############################## <HACK>
+    
+    
+    
+    def goToScript(self, arrivee):
+        depart = self.getPosition()
+        log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        
+        HSdepart = self.hotSpot(depart)
+        HSarrivee = self.hotSpot(arrivee)
+        
+        repere = HSdepart
+        while not repere == HSarrivee:
+            self.goToSegment(repere)
+            repere = self.HotSpotSuivant(repere,HSarrivee)
+        self.goToSegment(HSarrivee)
+        self.goToSegment(arrivee)
+        
+    def HotSpotSuivant(self,HSdepart,HSarrivee):
+         #retourne le hotspot suivant pour effectuer le trajet
+        
+        if HSdepart == HSarrivee :
+            return HSdepart
+        else:
+        
+            for k in range(len(self.hotSpots)):
+                
+                if self.hotSpots[k] == HSdepart:
+                    dep = k
+                if self.hotSpots[k] == HSarrivee:
+                    arr = k
+                    
+            if (dep - arr)%len(self.hotSpots) < len(self.hotSpots)/2.:
+                sens = -1
+            else:
+                sens = 1
+            return self.hotSpots[dep+sens]
+        
+    def hotSpot(self, point):
+        #détermine le hotspot le plus proche à partir d'un point de la carte
+        
+        #zone sur le coté du totem
+        if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
+            return self.hotSpots[0]
+        elif self.estDansZone(point,Point(401,1180),Point(592,810)):
+            return self.hotSpots[5]
+            
+        #zone sur le dessus du totem
+        elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)):
+            return self.hotSpots[2]
+        elif self.estDansZone(point,Point(167,1213),Point(448,1000)):
+            return self.hotSpots[3]
+            
+        #zone sur le dessous du totem
+        elif self.estDansZone(point,Point(-448,1000),Point(-167,810)):
+            return self.hotSpots[7]
+        elif self.estDansZone(point,Point(167,1000),Point(448,810)):
+            return self.hotSpots[6]
+            
+        else:
+        
+            dest = self.hotSpots[0]
+            for hs in self.hotSpots:
+                if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
+                    dest = hs
+            return dest
+        
+    def estDansZone(self,point,hg,bd):
+        if (point.x > hg.x and point.x < bd.x and point.y < hg.y and point.y > bd.y):
+            return True
+        else:
+            return False
+    
+    
+    ############################## </HACK>
+    
     
     def goTo(self, arrivee, numTentatives = 1):
         """
@@ -204,7 +285,7 @@ class Asservissement:
                     self.serieAsserInstance.ecrire("pos")
                     reponseX = self.serieAsserInstance.lire()
                     reponseY = self.serieAsserInstance.lire()
-                pos = point.Point(float(reponseX),float(reponseY))
+                pos = Point(float(reponseX),float(reponseY))
                 return pos
             except:
                 pass
@@ -342,7 +423,7 @@ class Asservissement:
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
             tableLargeur = constantes["Coconut"]["longueur"]
             tableLongueur = constantes["Coconut"]["largeur"]
-            adverse = point.Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
+            adverse = Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
             
             if (adverse.x > -tableLongueur/2+100 and adverse.x < tableLongueur/2-100 and adverse.y < tableLargeur-100 and adverse.y > 100):
                 #le point détecté est bien dans l'aire de jeu, c'est sans doute un robot adverse
