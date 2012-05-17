@@ -939,6 +939,24 @@ class Script:
         asser.gestionAvancer(-300)
         action.deplacer(0)
         
+    def viderCaleEnnemi(self, asser, action) :
+        log.logger.debug("Farmage d'ennemi")
+        asser.goTo(Point(-690, 600))
+        asser.gestionTourner(2.22)
+        asser.gestionAvancer(219.0)
+        action.deplacer(160, ["bg", "bd"])
+        asser.attendre(.2)
+        asser.gestionTourner(3.045)
+        asser.gestionAvancer(272.0)
+        action.deplacer(20, ["bg", "bd"])
+        asser.gestionAvancer(-270)
+        asser.goTo(Point(779, 974))
+        asser.gestionTourner(0)
+        action.deplacer(160, ["bd", "bg"])
+        asser.attendre(0.2)
+        asser.gestionAvancer(270, "auStopNeRienFaire")
+        asser.gestionAvancer(-270)
+        
     # Tour de table avec les bras fermés.
     def tourDeTable0(self,asser,action) :
         """
