@@ -355,6 +355,34 @@ void gauchedroite() // Oeil qui regarde de gauche à droite
       } 
    }
 }
+void cercle() // by cassou
+{
+   byte sprite1[14]={B11111110,B11111110,B00000000,B11111110,B11111110,B11000110,B11010110,B11010110,B11000110,B11111110,B11111110,B00000000,B11111110,B11111110};
+   byte sprite2[14]={B11111110,B00000000,B11111110,B11111110,B10000010,B10111010,B10111010,B10111010,B10111010,B10000010,B11111110,B11111110,B00000000,B11111110};
+   byte sprite3[14]={B00000000,B11111110,B11111110,B00000000,B01111100,B01111100,B01101100,B01101100,B01111100,B01111100,B00000000,B11111110,B11111110,B00000000}; 
+   
+   for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, sprite1[col], true); 
+    }
+    delay(delaytime*4);
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true); 
+       lc.setEyeColumn(1, col, sprite2[col], true); 
+    } 
+    delay(delaytime*4);
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true); 
+       lc.setEyeColumn(1, col, sprite3[col], true); 
+    } 
+    delay(delaytime*4);
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true); 
+    } 
+}
 
 void loop() 
 { 
@@ -363,11 +391,7 @@ void loop()
   //cylon();
   //for(int i=0; i<5 ; i++)
   gauchedroite();
-  //smiley();
-  //delay(1000);
-  //delay(1000);
-  //lc.setEyeColumn(1,2,B11111111,1);
-  //lc.setEyeColumn(1,12,B11111111,1);
+  //cercle(); //by cassou
   //animationyeux();
   //balayageV();
 }
