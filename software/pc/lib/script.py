@@ -556,7 +556,7 @@ class Script:
         asser.gestionTourner(3.1)
         asser.gestionAvancer(1020)
         asser.gestionTourner(2.0)
-        asser.gestionAvancer(455)
+        asser.gestionAvancer(430)
         #asser.goTo(Point(0.,660.))
         
         #début notre totem sud
@@ -606,7 +606,7 @@ class Script:
         asser.gestionAvancer(400,instruction = "auStopNeRienFaire")
 
         asser.gestionTourner(math.pi/2)
-        action.deplacer(180, "bd")
+        action.deplacer(120, "bd")
         asser.attendre(0.3)
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         asser.gestionTourner(-math.pi)
@@ -617,13 +617,15 @@ class Script:
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         asser.gestionTourner(-math.pi/2)
         action.deplacer(0)
-        asser.gestionAvancer(300)
+        asser.gestionAvancer(260)
         log.logger.debug("Enfonçage du poussoir à nous fini")
         
     def poussoir2(self,asser,action):
+        log.logger.debug("Début d'enfonçage du poussoir 2")
         asser.gestionTourner(math.pi,instruction = "finir")
-        action.deplacer(130,["bd","hd"])
+        action.deplacer(130,["bd","bg"])
         asser.gestionAvancer(1248,instruction = "auStopNeRienFaire")
+        action.deplacer(50, ["bg", "bd"])
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(-200.0)
         #asser.changerVitesse("translation", 3)

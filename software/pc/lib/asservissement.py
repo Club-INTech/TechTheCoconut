@@ -532,7 +532,7 @@ class Asservissement:
                     signe = 1
                 #reculer
                 self.changerVitesse("translation", 3)
-                self.gestionAvancer(-signe*15,"auStopNeRienFaire")
+                self.gestionAvancer(-signe*20,"auStopNeRienFaire")
                 self.changerVitesse("translation", 2)
                 
                 #se réasservir en rotation
@@ -578,7 +578,7 @@ class Asservissement:
                     actionInstance = __builtin__.instance.actionInstance
                     actionInstance.deplacer(70)
                     time.sleep(0.3)
-                    actionInstance.deplacer(135)
+                    actionInstance.deplacer(130)
                     time.sleep(0.3)
                     actionInstance.deplacer(120)
                     time.sleep(0.3)
