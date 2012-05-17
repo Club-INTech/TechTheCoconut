@@ -150,7 +150,7 @@ class Thetastar:
                 Thetastar.g.add_vertex()
                 Thetastar.posX[Thetastar.g.vertex(k)] = angle.x
                 Thetastar.posY[Thetastar.g.vertex(k)] = angle.y
-                for l in range(4,k):
+                for l in xrange(4,k):
                     #teste les arêtes accessibles
                     touche = False
                     for poly in self.listeObjets:
@@ -291,7 +291,7 @@ class Thetastar:
                 Narrive=Thetastar.g.add_vertex()
                 Thetastar.posX[Narrive] = arrive.x
                 Thetastar.posY[Narrive] = arrive.y
-                for l in range(4,Thetastar.g.num_vertices()-2):
+                for l in xrange(4,Thetastar.g.num_vertices()-2):
                     #teste les arêtes accessibles
                     touche_d = False
                     for poly in self.listeObjets:
@@ -307,7 +307,7 @@ class Thetastar:
                         Thetastar.g.add_edge(Ndepart,Thetastar.g.vertex(l))
                         Thetastar.poids[Thetastar.g.edge(Ndepart,Thetastar.g.vertex(l))] = sqrt((depart.x - Thetastar.posX[Thetastar.g.vertex(l)]) ** 2 + (depart.y - Thetastar.posY[Thetastar.g.vertex(l)]) ** 2)
                 
-                for l in range(4,Thetastar.g.num_vertices()-1):
+                for l in xrange(4,Thetastar.g.num_vertices()-1):
                     #teste les arêtes accessibles
                     touche_a = False
                     for poly in self.listeObjets:
@@ -482,7 +482,7 @@ class Thetastar:
         TposX=marshal.load(open(Thetastar.repertoire+"sauv_posX","rb"))
         TposY=marshal.load(open(Thetastar.repertoire+"sauv_posY","rb"))
         Tpoids=marshal.load(open(Thetastar.repertoire+"sauv_poids","rb"))
-        for k in range(len(TposX)):
+        for k in xrange(len(TposX)):
             Thetastar.posX[Thetastar.g.vertex(k)]=TposX[k]
             Thetastar.posY[Thetastar.g.vertex(k)]=TposY[k]
         k=0
@@ -531,7 +531,7 @@ class Thetastar:
                     Thetastar.g.add_vertex()
                     Thetastar.posX[Thetastar.g.vertex(k)] = angle.x
                     Thetastar.posY[Thetastar.g.vertex(k)] = angle.y
-                    for l in range(4,k):
+                    for l in xrange(4,k):
                         #teste les arêtes accessibles
                         touche = False
                         for poly in self.listeObjets:

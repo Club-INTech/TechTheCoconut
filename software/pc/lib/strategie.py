@@ -201,8 +201,9 @@ class Strategie():
             self.zoneRobot = asserInstance.getZone()
         except :
             log.logger.error("Impossible de lancer asser.getZone()")
-        
+
         debug = True
+
 
         for action in self.actions.keys() :
             actionAtester = self.actions[action]
@@ -254,7 +255,7 @@ class Strategie():
         log.logger.info("Vérification de la présence d'un préscript")
         ok = False
         # On check si il y a des préActions à faire pour l'action :
-        for i in range(minId, len(self.preActions)) :
+        for i in xrange(minId, len(self.preActions)) :
             currentPreAction = self.preActions[i]
             # Si on a trouvé, on arrête
             if currentPreAction[0] == id_action :
@@ -278,17 +279,14 @@ class Strategie():
         
         # Si tout s'est bien passé, on regarde si il y a une autre préAction
         return self.choisirPreActions(id_action, i+1)
-            
-        
-        
-            
-        
+
     # Changement de priorité d'une entrée du tableau self.actions
     def changerScore(self, nomAction, success) :
         if success : 
             self.actions[nomAction][0] = self.actions[nomAction][3][0]
         else :
             self.actions[nomAction][0] = self.actions[nomAction][3][1]
+
                     
     def changerPriorite_byID(self, id, nouvellePriorite) :
         """
@@ -300,7 +298,7 @@ class Strategie():
         
     def findActions(self, nomAction) :
         
-        for i in range(len(self.actions)) :
+        for i in xrange(len(self.actions)) :
             if self.actions[i][0] == nomAction :
                 return i
         return -1
