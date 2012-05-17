@@ -29,6 +29,9 @@ ZONES = (
     (CASE_COTE*(CASES_LARGEUR+1), 0, CASE_COTE*CASES_LARGEUR, CASE_COTE*CASES_HAUTEUR)
 )
 
+BUFFER1 = ''
+BUFFER2 = ''
+
 MATRICE = [{},{}]
 
 def dessiner_zone(numero):
@@ -61,13 +64,6 @@ def dessiner_quadrillage(x_ini, y_ini, x_fin, y_fin):
             (x, y_fin),
             1
         )
-
-#def case_coords(x_index, y_index, zone):
-    #"""
-    #Donne les coordonnées d'une case en fonction de son index dans la zone voulue
-    #"""
-    
-    
     
 def dessiner_remplir_case(x_click, y_click, couleur = COULEUR_CASE):
     """
@@ -94,41 +90,40 @@ def dessiner_remplir_case(x_click, y_click, couleur = COULEUR_CASE):
                 (x, y, CASE_COTE, CASE_COTE)
             )
         zone += 1
+    matrice_to_buffer()
     
 def dessiner_vider_case(x_click, y_click):
     """
     Efface la bonne case selon la position en (x,y) de la souris
     """
     dessiner_remplir_case(x_click, y_click, COULEUR_ZONES)
+
+def initialiser_matrice():
+    for i in range(len(MATRICE)):
+        for x in range(1,CASES_LARGEUR+1):
+            for y in range(1,CASES_HAUTEUR+1):
+                MATRICE[i][(x,y)] = 0
+    
+def copier():
+    pygame.scrap.put(SCRAP_TEXT, BUFFER)
+    
+def matrice_to_buffer():
+    for (x,y) in MATRICE[0]:
+        print x, y
+    for (x,y) in MATRICE[0]:
+        print x, y
     
 pygame.init()
 DISPLAYSURF = pygame.display.set_mode((CASE_COTE*(2*CASES_LARGEUR+1), ((CASE_COTE*CASES_HAUTEUR)+100)))
-    
+
 dessiner_zone(0)
 dessiner_zone(1)
 dessiner_quadrillage(0, 0, CASE_COTE*CASES_LARGEUR, CASE_COTE*CASES_HAUTEUR)
 dessiner_quadrillage(CASE_COTE*(CASES_LARGEUR+1), 0, CASE_COTE*(2*CASES_LARGEUR+1), CASE_COTE*CASES_HAUTEUR)
 
-# Create a font
-font = pygame.font.Font(None, 17)
-
-# Render the text
-text = font.render('Powered by Python and PyGame', True, (255,
-255, 255), (159, 182, 205))
-
-# Create a rectangle
-textRect = text.get_rect()
-
-# Center the rectangle
-textRect.centerx = DISPLAYSURF.get_rect().centerx
-textRect.centery = DISPLAYSURF.get_rect().centery
-
-# Blit the text
-DISPLAYSURF.blit(text, textRect)
-
-
-
 pygame.display.set_caption('Editeur yeux')
+pygame.scrap.init()
+initialiser_matrice()
 ETAT_SOURIS = 'lache'
 SIDE = 1 # NOTE 1 pour gauche, 3 pour droite
 while True: # main game loop
