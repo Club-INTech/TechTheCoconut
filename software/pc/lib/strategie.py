@@ -250,7 +250,7 @@ class Strategie():
         nouvellesPriorites = []
         
         # Attribution des scores via les coefficients.   (k1*NbrPoints + k2*Prochitude de l'adv)
-        for i in range(len(self.actions)) :
+        for i in xrange(len(self.actions)) :
            # Ajout des nom de scripts.
             if self.actions[i][0] == "FARMERTOTEM" :
                 nomScripts.append("self.scriptInstance.rafflerTotem"+str(self.actions[i][1])+str(self.actions[i][2]))
@@ -306,13 +306,13 @@ class Strategie():
         #log.logger.debug("Temps des scripts : "+ str(tempsScripts))
         #log.logger.debug("Poids des scripts : "+ str(poids))
         
-        for i in range(len(self.actions)) :
+        for i in xrange(len(self.actions)) :
             log.logger.debug("Action : " + str(self.actions[i]) + " | Temps : " + str(tempsScripts[i]) + " | Poids : " + str(poids[i]))
         
         # On cherche l'action qui fait le meilleur score
         # Le deuxième max est utile pour arrêter le premier si celui ci met
         # trop de temps.
-        for i in range(len(self.actions)) :
+        for i in xrange(len(self.actions)) :
             if poids[i] > max :
                 deuxiemeMaxID = maxID
                 max = poids[i]
@@ -373,7 +373,7 @@ class Strategie():
         log.logger.info("Vérification de la présence d'un préscript")
         ok = False
         # On check si il y a des préActions à faire pour l'action :
-        for i in range(minId, len(self.preActions)) :
+        for i in xrange(minId, len(self.preActions)) :
             currentPreAction = self.preActions[i]
             # Si on a trouvé, on arrête
             if currentPreAction[0] == id_action :
@@ -418,10 +418,10 @@ class Strategie():
         :param nouvellePriorite: Nouvelle priorité pour l'action
         :type nouvellePriorite: int (entre 0 et 5)
         """
-        for i in range(len(self.actions)) :
+        for i in xrange(len(self.actions)) :
             if self.actions[i][0] == nomAction :
                 found = 1
-                for j in range(len(params)) :
+                for j in xrange(len(params)) :
                     if self.actions[i][j+1] != params[j] :
                         
                         found = 0
@@ -440,7 +440,7 @@ class Strategie():
         
     def findActions(self, nomAction) :
         
-        for i in range(len(self.actions)) :
+        for i in xrange(len(self.actions)) :
             if self.actions[i][0] == nomAction :
                 return i
         return -1
