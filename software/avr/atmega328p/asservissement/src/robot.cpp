@@ -33,15 +33,20 @@ Robot::Robot() : 		couleur_('v')
 
 	changer_orientation(3.1415);
 
-	changerVitesseRot2();
-	changerVitesseTra2();
+	translation.valeur_bridage(100.0);
+	translation.kp(0.75);
+	translation.kd(2.5);
+
+	rotation.valeur_bridage(100.0);
+	rotation.kp(1.2);
+	rotation.kd(3.5);
 }
 
 void Robot::asservir()
 {
 	int32_t pwmTranslation;
 	int32_t pwmRotation;
-	
+
 	if (etat_rot_)
 		pwmRotation = rotation.pwm(mesure_angle_,10);
 	else
@@ -52,9 +57,12 @@ void Robot::asservir()
 	else
 		pwmTranslation = 0;
 	
-	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
-	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
-
+	if(etat_tra_ || etat_rot_)
+	{
+		moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+		moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
+	}
+	
 }
 
 
@@ -90,7 +98,7 @@ void Robot::communiquer_pc(){
 		serial_t_::print(0);
 	}
 	
-	///////////////LULZ///////////////////
+	
 	else if(COMPARE_BUFFER("eer",3)){
 		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
 	}
@@ -131,9 +139,13 @@ void Robot::communiquer_pc(){
 		
 	}
 	
-	////////////////////////////////////////////:
 	
 	
+	
+	
+	
+		
+		
 	else if(COMPARE_BUFFER("ccr",3)){
 		couleur_ = 'r';
 	}
@@ -264,6 +276,8 @@ void Robot::communiquer_pc(){
 		}
 		else
 			serial_t_::print("EN_MVT");
+// 		serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+// 		serial_t_::print(abs(translation.consigne() - mesure_distance_));
 	}
 
 	//demande de la position courante
@@ -324,13 +338,13 @@ void Robot::changerVitesseTra3(void)
 }
 void Robot::changerVitesseRot1(void)
 {
-	rotation.valeur_bridage(90.0);//70
+	rotation.valeur_bridage(80.0);//70
 	rotation.kp(1.5);
 	rotation.kd(2.0);
 }
 void Robot::changerVitesseRot2(void)
 {
-	rotation.valeur_bridage(140.0);//100
+	rotation.valeur_bridage(100.0);
 	rotation.kp(1.2);
 	rotation.kd(3.5);
 }
@@ -452,9 +466,28 @@ void Robot::envoyer_position_tic()
 
 bool Robot::est_stoppe()
 {
+	/*
+	static bool mesure_ok = true;
+
+	if ((abs(translation.consigne() - mesure_distance_) > 500 ||abs(compare_angle_tic(mesure_angle_,rotation.consigne())) > 1000) && mesure_ok)
+	{
+		mesure_ok = false;
+		return false;
+	}
+	else
+	{
+		
+		mesure_ok = true;
+		*/
+	
+	//rotation : 17 en v1, 
+//     serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
+//     serial_t_::print(abs(translation.consigne() - mesure_distance_));
 	volatile bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
 	volatile bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
 	return rotation_stoppe && translation_stoppe;
+	
+// 	}
 }
 
 
@@ -583,7 +616,7 @@ void Robot::recalage()
 // 	etat_rot_ = false;
 // 	etat_tra_ = false;
 	changerVitesseTra2();
-	changerVitesseRot2();
+	changerVitesseRot1();
 	_delay_ms(200);
 	serial_t_::print("FIN_REC");
 }
@@ -594,7 +627,6 @@ void Robot::translater_bloc(float distance)
 	while(not est_stoppe() && not est_bloque_){
 		asm("nop");
 	}
-// 	serial_t_::print(3);
 }
 
 void Robot::tourner_bloc(float angle)
@@ -603,5 +635,4 @@ void Robot::tourner_bloc(float angle)
 	while(not est_stoppe() && not est_bloque_){
 		asm("nop");
 	}
-// 	serial_t_::print(4);
 }
