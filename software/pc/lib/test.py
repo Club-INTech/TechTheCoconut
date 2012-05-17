@@ -33,7 +33,7 @@ import instance
 asser = __builtin__.instance.asserInstance
 sc = __builtin__.instance.scriptInstance
 sc.gestionScripts(sc.recalage)
-sc.gestionScripts(sc.totem00)
+sc.gestionScripts(sc.secour)
 
 
 #depart = outils_math.point.Point(0.0,400)
@@ -51,8 +51,8 @@ sc.gestionScripts(sc.totem00)
 #a = Point(-800,1700)
 #t.rechercheChemin(d,a)
 ##############################UTILISATION D'UN SCRIPT########################################
-while True:
-    sc.gestionScripts(sc.test4,True)
+#while True:
+    #sc.gestionScripts(sc.test4,True)
 
 #############################################################################################
 
@@ -137,8 +137,8 @@ while True:
 #asser.avancer(-500)
 
 #while 42:
-    #asser.avancer(-200)
     #asser.avancer(200)
+    #asser.avancer(-200)
 
 #while 42:
     #asser.avancer(400)
