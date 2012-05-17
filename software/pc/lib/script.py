@@ -493,10 +493,15 @@ class Script:
         action.deplacer(110)
         time.sleep(0.3)
         action.deplacer(130)
+        time.sleep(0.3)
+        action.deplacer(110)
+        time.sleep(0.3)
+    
+        action.deplacer(130)
         asser.changerVitesse("translation", 3)
         asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
         asser.changerVitesse("translation", 2)
-        asser.gestionAvancer(-250,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-220,instruction = "auStopNeRienFaire")
         action.deplacer(0)
         
     def poussoir1(self,asser,action):
@@ -534,10 +539,11 @@ class Script:
         
     # Rafflage de notre totem côté sud (y petits)
     def rafflerTotem00(self,asser,action) :
-        log.logger.debug("Rafflage de totem 0 0")
+        log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
-        asser.goToScript(Point(200, 450))
-        asser.goToSegment(Point(-45.,660.6))
+        #asser.goToScript(Point(200, 450))
+        #log.logger.debug("COUCOUCOUCOU")
+        asser.goToScript(Point(-45.,660.6))
         
         #début notre totem sud
         asser.gestionTourner(0)
@@ -857,7 +863,7 @@ class Script:
         log.logger.debug("Fin défense de la base")
         
     def bourrerCale(self, asser, action) :
-        action.deplacer(0)
+        #action.deplacer(0)
         #asser.goTo(Point(900, 1000))
         asser.gestionTourner(0)
         action.deplacer(0, "bd")
@@ -872,7 +878,7 @@ class Script:
         action.deplacer(130)
         asser.attendre(0.3)
         asser.gestionAvancer(360)
-        asser.gestionAvancer(-200)
+        asser.gestionAvancer(-230)
         action.deplacer(0)
         asser.attendre(0.3)
         
