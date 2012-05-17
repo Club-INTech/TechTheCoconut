@@ -891,6 +891,15 @@ class Script:
         asser.gestionTourner(math.pi/2)
         asser.deplacer(700)
         
+    def preAction_2_3(self, asser, action) :
+        action.deplacer(0)
+        asser.goTo(Point(430, 1585))
+        action.deplacer(130)
+        asser.attendre(0.2)
+        asser.gestionTourner(path.pi)
+        asser.gestionAvancer(400)
+        
+        
 
 ####################################################################################################################
 ###########################                       SCRIPT GÉNÉRIQUES                       ##########################

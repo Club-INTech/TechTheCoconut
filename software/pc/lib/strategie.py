@@ -175,7 +175,8 @@ class Strategie():
                              "bourrerCale"       : [4, 10, 1, [1, 3]]
                             }
                             
-            self.preActions =   [[[1,2], 'preAction_1_2']]
+            self.preActions =   [[[1,2], 'preAction_1_2'],
+                                 [[2,3], 'preAction_2_3']]
 
             
             #self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
