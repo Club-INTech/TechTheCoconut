@@ -456,10 +456,107 @@ class Script:
     
     def totem00(self,asser,action):
         
-        asser.gestionTourner(3)
-        asser.gestionAvancer(1220)
+        asser.gestionTourner(3.1)
+        asser.gestionAvancer(1020)
         asser.gestionTourner(2.0)
-        asser.gestionAvancer(358)
+        asser.gestionAvancer(448)
+        #asser.goTo(Point(0.,660.))
+        
+        #début notre totem sud
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        time.sleep(0.5)
+        asser.gestionAvancer(200,instruction = "finir")
+        asser.gestionTourner(0,instruction = "finir")
+        action.deplacer(120)
+        time.sleep(0.3)
+        action.deplacer(130)
+        time.sleep(0.3)
+        asser.gestionTourner(0,instruction = "finir")
+        asser.gestionAvancer(200,instruction = "finir")
+        action.deplacer(100)
+        time.sleep(0.3)
+        action.deplacer(120)
+        time.sleep(0.3)
+        asser.gestionTourner(0,instruction = "finir")
+        asser.gestionAvancer(200,instruction = "finir")
+        
+        #mettre dans la cale
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(320,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(280,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.3)
+        action.deplacer(110)
+        time.sleep(0.3)
+        action.deplacer(130)
+        time.sleep(0.3)
+        action.deplacer(110)
+        time.sleep(0.3)
+    
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-220,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        
+    def totem00_v2(self,asser,action):
+        
+        asser.goTo(Point(0, 660.))
+        #asser.goTo(Point(0.,660.))
+        
+        #début notre totem sud
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        time.sleep(0.5)
+        asser.gestionAvancer(200,instruction = "finir")
+        asser.gestionTourner(0,instruction = "finir")
+        action.deplacer(120)
+        time.sleep(0.3)
+        action.deplacer(130)
+        time.sleep(0.3)
+        asser.gestionTourner(0,instruction = "finir")
+        asser.gestionAvancer(200,instruction = "finir")
+        action.deplacer(100)
+        time.sleep(0.3)
+        action.deplacer(120)
+        time.sleep(0.3)
+        asser.gestionTourner(0,instruction = "finir")
+        asser.gestionAvancer(200,instruction = "finir")
+        
+        #mettre dans la cale
+        asser.gestionAvancer(100,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(math.pi/4,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(320,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(280,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.3)
+        action.deplacer(110)
+        time.sleep(0.3)
+        action.deplacer(130)
+        time.sleep(0.3)
+        action.deplacer(110)
+        time.sleep(0.3)
+    
+        action.deplacer(130)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50,instruction = "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-220,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        
+    def totem00_v3(self,asser,action):
+        
+        asser.gestionTourner(3.1)
+        asser.gestionAvancer(1020)
+        asser.gestionTourner(2.0)
+        asser.gestionAvancer(455)
         #asser.goTo(Point(0.,660.))
         
         #début notre totem sud
@@ -536,6 +633,44 @@ class Script:
         asser.gestionAvancer(300)
         log.logger.debug("Enfonçage du poussoir éloigné fini")
         
+    def totem01(self, asser, action) :
+        action.deplacer(50)
+        asser.goTo(Point(0, 1500))
+        asser.gestionTourner(1.712)
+        asser.gestionAvancer(226.0)
+        ##début notre totem nord
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        asser.attendre(0.5)
+        asser.gestionAvancer(250,instruction = "auStopNeRienFaire")
+        action.deplacer(120)
+        asser.attendre(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(110)
+        asser.attendre(0.5)
+        action.deplacer(150)
+        asser.attendre(0.5)
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(350,instruction = "auStopNeRienFaire")
+        
+        ## Rotation : vers le bas :
+        action.deplacer(130)
+        asser.attendre(0.5)
+        asser.gestionTourner(-math.pi/3, instruction="auStopNeRienFaire")
+        asser.gestionAvancer(340, instruction="auStopNeRienFaire")
+        asser.gestionTourner(0, instruction="auStopNeRienFaire")
+        asser.gestionAvancer(250)
+        action.deplacer(160)
+        asser.gestionAvancer(-50)
+        action.deplacer(130)
+        asser.gestionAvancer(-50)
+        action.deplacer(150)
+        asser.gestionAvancer(-50)
+        action.deplacer(110)
+        asser.gestionAvancer(-150)
+    #_________________________________________________________________________________________________
+    #_________________________________________________________________________________________________
         
     # Rafflage de notre totem côté sud (y petits)
     def rafflerTotem00(self,asser,action) :

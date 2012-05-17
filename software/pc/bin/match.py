@@ -10,6 +10,9 @@ import time
 # Ajout de ../ au path python
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+v = input("Version ? ")
+
+
 
 import lib.chargement_lib
 log = lib.log.Log(__name__)
@@ -43,7 +46,13 @@ log.logger.info("Le Jumper a été retiré. Lancement de la stratégie")
 
 timer.lancer()
 
-script.gestionScripts(script.totem00)
+if v == 1: 
+    script.gestionScripts(script.totem00)
+elif v == 2 :
+    script.gestionScripts(script.totem00_v2)
+elif v == 3 :
+    script.gestionScripts(script.totem00_v3)
 script.gestionScripts(script.bourrerCale)
 script.gestionScripts(script.poussoir1)
 script.gestionScripts(script.poussoir2)
+script.gestionScripts(script.totem01)
