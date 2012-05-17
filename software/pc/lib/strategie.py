@@ -35,11 +35,8 @@ class Strategie():
         self.strategie = constantes['Strategie']
         self.timerStrat = timer.Timer()
         self.actions = {}
-        self.zoneRobot = 1
-
-        
         self.preActions     = []
-        self.postActions    = []
+        self.zoneRobot = 1
 
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
@@ -177,6 +174,8 @@ class Strategie():
                              
                              "bourrerCale"       : [4, 10, 1, [1, 3]]
                             }
+                            
+            self.preActions =   [[[1,2], 'preAction_1_2']]
 
             
             #self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
@@ -186,7 +185,17 @@ class Strategie():
             
             
         elif self.strategie == 2 :
-            pass           
+            self.actions =  {"rafflerTotem00" : [9, 25, 1, [3, 7]],
+                             "rafflerTotem01" : [9, 27, 2, [3, 7]],
+                             "rafflerTotem10" : [6, 30 , 4, [1, 4]],
+                             
+                             "enfoncerPoussoir0" : [5, 7,2, [0, 3]],
+                             "enfoncerPoussoir1" : [5, 7,3, [0, 3]],
+                             
+                             "bourrerCale"       : [4, 10, 1, [1, 3]]
+                            }
+            
+            self.preActions =   [[[1,2], 'preAction_1_2']]       
                                       
         elif self.strategie == 3 :
             pass
@@ -209,9 +218,10 @@ class Strategie():
             actionAtester = self.actions[action]
             zoneObjectif  = actionAtester[2]
             difference = self.getDifferenceZone(self.zoneRobot, zoneObjectif)
+            
             temps_action = float(actionAtester[1]+(1+difference)*5)
-            print "Temps d'action : " + str (temps_action)
             poids_action = actionAtester[0]/temps_action
+            
             temps.append([action,temps_action])
             poids.append([action,poids_action])
         
@@ -222,12 +232,16 @@ class Strategie():
         # On cherche le max des actions
         maxID = -1
         max = 0
-        for i in range(len(temps)) :
+        for i in xrange(len(temps)) :
             if poids[i][1] > max :
                 max = poids[i][1]
                 maxID = i
                 
         meilleureAction = poids[maxID][0]
+        
+        # Lancement d'une preAction sur le passage de la zone courante à la zone d'action :
+        self.choisirPreAction(self.zoneRobot, self.actions[meilleureAction][2])
+        
         # Lancement de la meilleure action :
         try :
             exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." + meilleureAction + ")")
@@ -235,12 +249,12 @@ class Strategie():
             log.logger.critical("Impossible de lancer " + str(meilleureAction) + " !")
             success = True
             self.zoneRobot = self.actions[meilleureAction][2]
-            time.sleep(0.1)
-        self.changerScore(meilleureAction, success)
-        # Changement des scores des actions
-        
-        
+            time.sleep(5)
             
+        # Changement des scores des actions
+        self.changerScore(meilleureAction, success)
+        
+        
     # Retourne le nombre de zones à franchir pour passer d'une à l'autre.
     def getDifferenceZone(self, zone1, zone2) :
         if zone1 == zone2 :
@@ -248,37 +262,18 @@ class Strategie():
         if abs(zone1-zone2) == 2 :
             return 2            
         return 1
-            
-    # Cette fonction s'occupe d'exécuter les preActions de l'action d'id id_action dans self.actions
-    # minId permet un appel récursif de la fonction
-    def choisirPreActions(self, id_action, minId = 0) :
-        log.logger.info("Vérification de la présence d'un préscript")
-        ok = False
-        # On check si il y a des préActions à faire pour l'action :
-        for i in xrange(minId, len(self.preActions)) :
-            currentPreAction = self.preActions[i]
-            # Si on a trouvé, on arrête
-            if currentPreAction[0] == id_action :
-                ok = True
-                break
-                
-        # Si il n'y a pas de preActions, on retourne True pour dire que tout d'est bien passé.
-        if not ok :
-            return True
         
-        log.logger.info("Lancement d'un préScript : " + str(currentPreAction[1]))
-        # On exécute les conditions d'exécution :
-        try :
-            exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." +currentPreAction[1]+")")
-        # Sinon, il y a une erreur de script
-        except :
-            log.logger.critical("Impossible de lancer "+currentPreAction[1])
-        
-        #exec("if " + currentPreAction[-1] + " :\n success = self.scriptInstance.scriptGenerique(self.asserInstance, self.actionInstance, "+str(currentPreAction[1])+")")
-        #success = True
-        
-        # Si tout s'est bien passé, on regarde si il y a une autre préAction
-        return self.choisirPreActions(id_action, i+1)
+    # Lance une preAction lors du passage de la zone 1 à la zone 2
+    def choisirPreAction(self, zone1, zone2) :
+        for i in xrange(len(self.preActions)) :
+            print zone1, zone2
+            if self.preActions[i][0] == [zone1, zone2] :
+                try :
+                    exec("self.scriptInstance.gestionScripts(self.scriptInstance." + self.preActions[i][1] + ")")
+                    return
+                except :
+                    log.logger.error("Impossible de lancer la préaction " + self.preActions[i][1] + " !")
+                    time.sleep(2)
 
     # Changement de priorité d'une entrée du tableau self.actions
     def changerScore(self, nomAction, success) :
@@ -287,23 +282,6 @@ class Strategie():
         else :
             self.actions[nomAction][0] = self.actions[nomAction][3][1]
 
-                    
-    def changerPriorite_byID(self, id, nouvellePriorite) :
-        """
-        Change la priorité d'une action dans le tableau self.actions, en fonction
-        de l'ID de celui ci dans ce tableau
-        """
-        
-        self.actions[id][-1] = nouvellePriorite
-        
-    def findActions(self, nomAction) :
-        
-        for i in xrange(len(self.actions)) :
-            if self.actions[i][0] == nomAction :
-                return i
-        return -1
-        
-                    
     #TEST
     def strateg_scripts(self):
         if self.scriptInstance.scriptTestStruct0():

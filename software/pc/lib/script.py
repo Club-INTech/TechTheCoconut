@@ -882,7 +882,7 @@ class Script:
 ###########################                P R É   ---   A C T I O N S                    ##########################
 ####################################################################################################################
 
-    def preAction_totem01_1(self, asser, action) :
+    def preAction_1_2(self, asser, action) :
         action.deplacer(0)
         asser.goToScript(Point(800, 700))
         asser.gestionTourner(math.pi/2)
@@ -890,11 +890,6 @@ class Script:
         asser.attendre(0.2)
         asser.gestionTourner(math.pi/2)
         asser.deplacer(700)
-        
-    def preAction_totem01_2(self, asser, action) :
-        action.deplacer(90)
-        asser.goToScript(660, 1700)
-        asser.goToScript(-20, 1700)
         
 
 ####################################################################################################################
