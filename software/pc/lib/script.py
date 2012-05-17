@@ -533,11 +533,10 @@ class Script:
         
     # Rafflage de notre totem côté sud (y petits)
     def rafflerTotem00(self,asser,action) :
-        log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
+        log.logger.debug("Rafflage de totem 0 0")
         action.deplacer(0)
-        #asser.goToScript(Point(200, 450))
-        #log.logger.debug("COUCOUCOUCOU")
-        asser.goToScript(Point(-45.,660.6))
+        asser.goToScript(Point(200, 450))
+        asser.goToSegment(Point(-45.,660.6))
         
         #début notre totem sud
         asser.gestionTourner(0)

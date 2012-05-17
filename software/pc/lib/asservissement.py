@@ -82,8 +82,6 @@ class Asservissement:
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
         
-        log.logger.info("effectue un segment de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        
         """
         oriente le robot pour le segment à parcourir
         sans instruction particulière
