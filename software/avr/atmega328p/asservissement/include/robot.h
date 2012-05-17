@@ -87,7 +87,7 @@ public:
 	int32_t angle_initial(void);
 // 	float angle_optimal(float angle, float angleBkp);
 	int32_t angle_optimal(int32_t angle, int32_t angleBkp);
-	int32_t compare_angle_tic(int32_t angle1,int32_t angle2);
+// 	int32_t compare_angle_tic(int32_t angle1,int32_t angle2);
 	
 	void envoyer_position(void);
 	
