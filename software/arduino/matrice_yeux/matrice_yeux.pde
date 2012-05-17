@@ -71,9 +71,9 @@ void balayageH()
     {
       for (int row=0;row<=6;row++)
       {
-        lc.setEyeRow(eye,row,B11111111,0);
+        lc.setEyeRow(eye,row,B11111111);
         delay(delaytime);
-        lc.setEyeRow(eye,row,(byte)0,0);
+        lc.setEyeRow(eye,row,(byte)0);
       }
   }
   
@@ -82,9 +82,9 @@ void balayageH()
     {
       for (int row=6;row>=0;row--)
       {
-        lc.setEyeRow(eye,row,B11111111,0);
+        lc.setEyeRow(eye,row,B11111111);
         delay(delaytime);
-        lc.setEyeRow(eye,row,(byte)0,0);
+        lc.setEyeRow(eye,row,(byte)0);
       }
   }
 }
@@ -193,12 +193,12 @@ void gauchedroite() // Oeil qui regarde de gauche à droite
    }
    
    //Clignement
-   for (int tour=0; tour<2; tour ++)
+   for (int tour=0; tour<1; tour ++)
    {
      for (int col=0; col<6; col++)
       {
-         lc.setEyeColumn(1, col+3, clignement[col], false); 
-         lc.setEyeColumn(2, col+3, clignement[col], false);
+         lc.setEyeColumn(1, col+3, clignement[col], false);  //clin d'oeil
+         lc.setEyeColumn(2, col+3, sprite[col], false);
       }
       delay(300);
       for (int col=0; col<6; col++)
@@ -358,18 +358,6 @@ void writeChar(int eye,char value)
          break;
      }
   }
-  
-  /* 
-  //Pause d'une seconde
-  delay(1000);
-  
-  //ClearDisplay
-  for (int col=0; col<13; col++)
-  {
-     lc.setEyeColumn(1, col, (byte)0, true);
-  }  
-  
-  */
 }
 
 void compteARebours(int time)
@@ -378,8 +366,8 @@ void compteARebours(int time)
   for(int i=time;i>=0;i--)
   {
     //Affichage
-    unite = time%10;
-    dizaine = (time/10)%10;
+    unite = i%10;
+    dizaine = (i/10)%10;
     
     writeChar(1,dizaine);
     writeChar(2,unite);
@@ -395,6 +383,22 @@ void compteARebours(int time)
   }
 }
 
+void pacman()
+{
+  byte pacman1[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11101110,B01000100,B00000000};
+  byte pacman2[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11111110,B01111100,B00111000};
+  
+  for(int i=0;i>28;i++)
+  {
+    for(int col=0;col<8;col++)
+    {
+       if(i%2==0)
+       lc.setMatrixColumn(col+i,pacman1[col]);
+       else
+       lc.setMatrixColumn(col+i,pacman2[col]);
+    }
+  }  
+}
 void loop() 
 { 
   //balayageV(); //K2000
@@ -404,10 +408,10 @@ void loop()
   //for(int i=1;i<9;i++)
   //emoticon(i);
   
-  //compteARebours(90);
+  compteARebours(90);
   
-  gauchedroite();
-  emoticon(2); //exptdr
+  //gauchedroite();
+  //emoticon(2); //exptdr
   
   //cercle(); //by cassou
   //animationyeux();
