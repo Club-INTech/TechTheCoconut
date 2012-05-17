@@ -4,6 +4,7 @@ import asservissement
 import outils_math
 import robot
 import recherche_chemin.thetastar
+from outils_math.point import Point
 import script
 import time
 import serial
@@ -30,7 +31,7 @@ while 42:
 import __builtin__
 import instance
 
-asser = __builtin__.instance.asserInstance
+asser = __builtin__.instance.asserInstanceDuree
 sc = __builtin__.instance.scriptInstance
 #sc.gestionScripts(sc.recalage)
 
@@ -50,8 +51,33 @@ sc = __builtin__.instance.scriptInstance
 #a = Point(-800,1700)
 #t.rechercheChemin(d,a)
 ##############################UTILISATION D'UN SCRIPT######################################## 
-while True:
-    sc.gestionScripts(sc.test4,True)
+
+def console():
+    asser.setOrientation(0)
+    asser.setPosition(Point(float(0),float(400)))
+    while True:
+        print "recherche de chemin"
+        print "quitter............q"
+        print "point de départ....d"
+        print "point d'arrivée....a"
+        print "placer adverse.....p"
+        com = raw_input("?")
+        if com == "q":
+            break
+        elif com == "d":
+            xd = raw_input("x départ? ")
+            yd = raw_input("y départ? ")
+            asser.setPosition(Point(float(xd),float(yd)))
+        elif com == "a":
+            xa = raw_input("x arrivée? ")
+            ya = raw_input("y arrivée? ")
+            asser.goToScript(Point(float(xa),float(ya)))
+        elif com == "p":
+            xp = raw_input("x robot adverse? ")
+            yp = raw_input("y robot adverse? ")
+            __builtin__.instance.ajouterRobotAdverse(Point(float(xp),float(yp)))
+        print ""
+console()
 
 #############################################################################################
 
