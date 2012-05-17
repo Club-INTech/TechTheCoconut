@@ -556,7 +556,7 @@ class Script:
         asser.gestionTourner(3.1)
         asser.gestionAvancer(1020)
         asser.gestionTourner(2.0)
-        asser.gestionAvancer(430)
+        asser.gestionAvancer(415)
         #asser.goTo(Point(0.,660.))
         
         #début notre totem sud
