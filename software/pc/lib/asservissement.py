@@ -255,7 +255,7 @@ class Asservissement:
         while not acquittement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
-            print "             >"+reponse+"<"
+            #print "             >"+reponse+"<"
             if reponse == "FIN_MVT":
                 print "avancer : FIN_MVT"
                 acquittement = True
