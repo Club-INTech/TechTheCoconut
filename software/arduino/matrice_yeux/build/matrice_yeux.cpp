@@ -258,13 +258,56 @@ void smiley()
   {
      lc.setEyeColumn(1, col, sprite[col], true); 
   }
+  delay(1000);
+  for (int col=0; col<14; col++)
+  {
+     lc.setEyeColumn(1, col, (byte)0, true); 
+  }
 }
 
 void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
 {
    byte sprite[6]={B00111001,B01111101,B11000111,B11000111,B01111101,B00111001}; 
-   //Aller
-   for (int i=0; i<8 ; i ++)
+   byte clignement[6]={B00110001,B00110001,B00110001,B00110001,B00110001,B00110001};
+   
+   for(int tour=0; tour<4 ; tour++)
+   {
+     //Aller
+     for (int i=0; i<8 ; i ++)
+     {
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, sprite[col], false); 
+           lc.setEyeColumn(2, col+i, sprite[col], false); 
+        }
+        delay(delaytime);
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, (byte)0, false); 
+           lc.setEyeColumn(2, col+i, (byte)0, false); 
+        } 
+     }
+     
+     //Retour
+     for (int i=8; i>=0 ; i--)
+      {
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, sprite[col], false); 
+           lc.setEyeColumn(2, col+i, sprite[col], false); 
+        }
+        delay(delaytime);
+        if(i==0 || i==8) delay(delaytime*10);
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, (byte)0, false); 
+           lc.setEyeColumn(2, col+i, (byte)0, false); 
+        } 
+     }
+   }
+   
+   //Arr\u00eat au mileu
+   for (int i=0; i<4 ; i ++)
    {
       for (int col=0; col<6; col++)
       {
@@ -272,6 +315,8 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
          lc.setEyeColumn(2, col+i, sprite[col], false); 
       }
       delay(delaytime);
+      if(i==3) delay(1000); //Pause
+      
       for (int col=0; col<6; col++)
       {
          lc.setEyeColumn(1, col+i, (byte)0, false); 
@@ -279,16 +324,41 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
       } 
    }
    
-   //Retour
-   for (int i=8; i>=0 ; i--)
-    {
+   //Clignement
+   for (int tour=0; tour<2; tour ++)
+   {
+     for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+3, clignement[col], false); 
+         lc.setEyeColumn(2, col+3, clignement[col], false);
+      }
+      delay(300);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+3, (byte)0, false); 
+         lc.setEyeColumn(2, col+3, (byte)0, false); 
+         lc.setEyeColumn(1, col+3, sprite[col], false); 
+         lc.setEyeColumn(2, col+3, sprite[col], false); 
+      }
+      delay(500);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+3, (byte)0, false); 
+         lc.setEyeColumn(2, col+3, (byte)0, false); 
+      }
+   } 
+  
+  //Continuation de l'animation pour reprendre la boucle
+  for (int i=2; i>=0 ; i --)
+   {
       for (int col=0; col<6; col++)
       {
          lc.setEyeColumn(1, col+i, sprite[col], false); 
          lc.setEyeColumn(2, col+i, sprite[col], false); 
       }
       delay(delaytime);
-      if(i==0 || i==8) delay(delaytime*10);
+      if(i==3) delay(1000); //Pause
+      
       for (int col=0; col<6; col++)
       {
          lc.setEyeColumn(1, col+i, (byte)0, false); 
@@ -296,14 +366,16 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
       } 
    }
 }
+
 void loop() 
 { 
   //balayageV();
   //K2000(); 
   //cylon();
+  //for(int i=0; i<5 ; i++)
+  gauchedroite();
   //smiley();
   //delay(1000);
-  gauchedroite();
   //delay(1000);
   //lc.setEyeColumn(1,2,B11111111,1);
   //lc.setEyeColumn(1,12,B11111111,1);
