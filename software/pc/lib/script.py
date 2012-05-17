@@ -204,15 +204,15 @@ class Script:
         asser.gestionTourner(1.57)     # On se dirige vers le Nord
         asser.gestionAvancer(600)     # On avance jusqu'au lingots
         asser.gestionTourner(0.0)  
-        asser.gestionAvancer(390)     # On le rentre dans la calle
-        asser.gestionAvancer(-390)    # On ressort de la calle
+        asser.gestionAvancer(300)     # On le rentre dans la calle
+        asser.gestionAvancer(-300)    # On ressort de la calle
         asser.gestionTourner(1.57)     # On se tourne vers le boutton poussoir
         #asser.changerVitesse("translation",2)
         #asser.changerVitesse("rotation",2)
         asser.gestionAvancer(500)     # On avance vers lui
-        actionInstance.deplacer(100, ["bd"])
+        #actionInstance.deplacer(100, ["bd"])
         asser.gestionTourner(-1.57)    # On lui montre nos fesses
-        actionInstance.deplacer(10, ["bd"])
+        #actionInstance.deplacer(10, ["bd"])
         asser.gestionAvancer(-480,"auStopNeRienFaire")    # On recule pour lui mettre sa dose
         asser.changerVitesse("translation",3)
         asser.gestionAvancer(-500.0,"auStopNeRienFaire")  # Pour l'enfoncer à fond
