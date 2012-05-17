@@ -235,7 +235,7 @@ class Asservissement:
             elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                 print "tourner : timeout !"
                 return "timeout"
-            #time.sleep(0.05)
+            time.sleep(0.05)
             
         return "acquittement"
     
@@ -254,6 +254,7 @@ class Asservissement:
             self.serieAsserInstance.ecrire('acq')
             reponse = str(self.serieAsserInstance.lire())
             #print "             >"+reponse+"<"
+            #print str(reponse)
             if reponse == "FIN_MVT":
                 print "avancer : FIN_MVT"
                 acquittement = True
@@ -270,7 +271,7 @@ class Asservissement:
                         print 'avancer : capteur !'
                         return "obstacle"
                 
-            #time.sleep(0.05)
+            time.sleep(0.1)
                 
         return "acquittement"
             
