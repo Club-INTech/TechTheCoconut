@@ -494,6 +494,21 @@ class Script:
             asser.gestionAvancer(400)
             asser.gestionTourner(math.pi)
             
+    def test_goto1(self, asser, action):
+        print "OBJECTIF TOTEM SUD : (0,660)"
+        asser.goTo(Point(0,660))
+        
+    def test_goto2(self, asser, action) :
+        print "OBJECTIF TOTEM NORD : (0,1330)"
+        asser.goTo(Point(0, 1330))
+    def test_goto3(self, asser, action) :
+        print "OBJECTIF _1 : (-800,1700)"
+        asser.goTo(Point(-800,1700))
+    def test_goto4(self, asser, action):
+        print "OBJECTIF _2 : (800,1700)"
+
+        asser.goTo(Point(800,1700))
+        
     def testTourdeTable(self, asser,action):
         #position initiale du robot
         asser.setPosition(Point(0,400))

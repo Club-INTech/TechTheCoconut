@@ -106,6 +106,8 @@ while first or erreur:
         mode = "match"
     elif mode == "t":
         mode = "tests_mecha"
+    elif mode == "tt" :
+        mode = "test_goto"
     elif mode == "b":
         mode = "balise"
     elif mode == "v":
