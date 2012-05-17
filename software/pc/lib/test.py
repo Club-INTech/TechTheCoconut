@@ -32,12 +32,12 @@ import instance
 
 asser = __builtin__.instance.asserInstance
 sc = __builtin__.instance.scriptInstance
-sc.gestionScripts(sc.recalage)
+#sc.gestionScripts(sc.recalage)
 
 
 #depart = outils_math.point.Point(0.0,400)
 ##############################UTILISATION DE LA STRATEGIE####################################
-import strategie
+#import strategie
 #strategie = strategie.Strategie()
 #strategie.lancer()
 #############################################################################################
@@ -50,8 +50,8 @@ import strategie
 #a = Point(-800,1700)
 #t.rechercheChemin(d,a)
 ##############################UTILISATION D'UN SCRIPT######################################## 
-
-sc.gestionScripts(sc.rafflerTotem00)
+while True:
+    sc.gestionScripts(sc.test4,True)
 
 #############################################################################################
 
