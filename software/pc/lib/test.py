@@ -38,7 +38,7 @@ sc.gestionScripts(sc.totem00)
 
 #depart = outils_math.point.Point(0.0,400)
 ##############################UTILISATION DE LA STRATEGIE####################################
-import strategie
+#import strategie
 #strategie = strategie.Strategie()
 #strategie.lancer()
 #############################################################################################
@@ -50,9 +50,9 @@ import strategie
 #d = Point(1300,250)
 #a = Point(-800,1700)
 #t.rechercheChemin(d,a)
-##############################UTILISATION D'UN SCRIPT######################################## 
-
-#sc.gestionScripts(sc.rafflerTotem00)
+##############################UTILISATION D'UN SCRIPT########################################
+while True:
+    sc.gestionScripts(sc.test4,True)
 
 #############################################################################################
 
