@@ -21,6 +21,7 @@ void animationyeux();
 void smiley();
 void gauchedroite();
 void cercle();
+void emoticon(int mode);
 void loop();
 LedControl lc=LedControl(12,11,10,4);
 
@@ -396,13 +397,42 @@ void cercle() // by cassou
     } 
 }
 
+void emoticon(int mode)
+{
+  byte love[14]={B00000000,B00000000,B00000000,B01100000,B11110000,B11111000,B01111100,B00111110,B01111100,B11111000,B11110000,B01100000,B00000000,B00000000}; 
+  byte exptdr[14]={B11000110,B11000110,B11000110,B11000110,B11000110,B11101110,B11101110,B11101100,B01101100,B01101100,B01101100,B00111000,B00111000,B00111000};
+  
+   for (int col=0; col<13; col++)
+   {
+     switch(mode)
+     {
+       case 1: //love
+         lc.setEyeColumn(1, col, love[col], true); 
+         break;
+         
+       case 2: //exptdr
+         lc.setEyeColumn(1, col, exptdr[col], true); 
+         break;
+     }
+   }
+ 
+  delay(1000); // pause
+  
+  for (int col=0; col<13; col++)
+  {
+     lc.setEyeColumn(1, col, (byte)0, true);
+  }
+  
+}
+
 void loop() 
 { 
   //balayageV();
   //K2000(); 
   //cylon();
-  //for(int i=0; i<5 ; i++)
-  gauchedroite();
+  emoticon(1);
+  emoticon(2);
+  //gauchedroite();
   //cercle(); //by cassou
   //animationyeux();
   //balayageV();

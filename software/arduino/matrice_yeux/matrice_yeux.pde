@@ -239,20 +239,6 @@ void animationyeux()
         
    }
 }
-void smiley()
-{
-  byte sprite[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
-
-  for (int col=0; col<14; col++)
-  {
-     lc.setEyeColumn(1, col, sprite[col], true); 
-  }
-  delay(1000);
-  for (int col=0; col<14; col++)
-  {
-     lc.setEyeColumn(1, col, (byte)0, true); 
-  }
-}
 
 void gauchedroite() // Oeil qui regarde de gauche à droite
 {
@@ -388,6 +374,7 @@ void emoticon(int mode)
 {
   byte love[14]={B00000000,B00000000,B00000000,B01100000,B11110000,B11111000,B01111100,B00111110,B01111100,B11111000,B11110000,B01100000,B00000000,B00000000}; 
   byte exptdr[14]={B11000110,B11000110,B11000110,B11000110,B11000110,B11101110,B11101110,B11101100,B01101100,B01101100,B01101100,B00111000,B00111000,B00111000};
+  byte smiley[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
   
    for (int col=0; col<13; col++)
    {
@@ -400,16 +387,20 @@ void emoticon(int mode)
        case 2: //exptdr
          lc.setEyeColumn(1, col, exptdr[col], true); 
          break;
+         
+       case 3: //smiley
+         lc.setEyeColumn(1, col, smiley[col], true); 
+         break;
      }
    }
  
   delay(1000); // pause
   
+  //ClearDisplay
   for (int col=0; col<13; col++)
   {
      lc.setEyeColumn(1, col, (byte)0, true);
-  }
-  
+  }  
 }
 
 void loop() 
@@ -418,7 +409,7 @@ void loop()
   //K2000(); 
   //cylon();
   emoticon(1);
-  emotcon(2);
+  emoticon(2);
   //gauchedroite();
   //cercle(); //by cassou
   //animationyeux();
