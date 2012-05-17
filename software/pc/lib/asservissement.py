@@ -105,8 +105,7 @@ class Asservissement:
         
     ############################## <HACK>
     
-    
-    def goToScript(self, arrivee):
+    def goTo(self, arrivee):
         depart = self.getPosition()
         
         #appel de la recherche de chemin : liste de points
@@ -252,44 +251,44 @@ class Asservissement:
     ############################## </HACK>
     
     
-    def goTo(self, arrivee, numTentatives = 1):
-        """
-        Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
-        :param depart: point de départ
-        :type depart: Point
-        :param arrivee: point d'arrivée
-        :type arrivee: Point
-        :param chemin: chemin renvoyé par la recherche de chemin
-        :type chemin: liste de points
-        """
+    #def goTo(self, arrivee, numTentatives = 1):
+        #"""
+        #Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
+        #:param depart: point de départ
+        #:type depart: Point
+        #:param arrivee: point d'arrivée
+        #:type arrivee: Point
+        #:param chemin: chemin renvoyé par la recherche de chemin
+        #:type chemin: liste de points
+        #"""
         
-        if numTentatives > 4:
-            #plusieurs recherches de chemin ne suffisent pas à contourner le robot ennemi (il tente sans doute également de nous contourner)
-            raise Exception
+        #if numTentatives > 4:
+            ##plusieurs recherches de chemin ne suffisent pas à contourner le robot ennemi (il tente sans doute également de nous contourner)
+            #raise Exception
         
-        #récupération de la position de départ
-        depart = self.getPosition()
+        ##récupération de la position de départ
+        #depart = self.getPosition()
         
-        #éventuelle symétrie sur la position d'arrivée
-        if __builtin__.constantes['couleur'] == "r":
-            arrivee.x *= -1
+        ##éventuelle symétrie sur la position d'arrivée
+        #if __builtin__.constantes['couleur'] == "r":
+            #arrivee.x *= -1
             
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = self.theta.rechercheChemin(depart,arrivee)
+        #log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        #chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
-        #supprime le point de départ du chemin.
-        #une exception est levée ici en cas de chemin non trouvé
-        chemin_python.remove(chemin_python[0])
+        ##supprime le point de départ du chemin.
+        ##une exception est levée ici en cas de chemin non trouvé
+        #chemin_python.remove(chemin_python[0])
         
-        #on oublie les robots adverses, puisqu'on est censé les éviter
-        self.oublierAdverses()
+        ##on oublie les robots adverses, puisqu'on est censé les éviter
+        #self.oublierAdverses()
             
-        for i in chemin_python:
-            log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
+        #for i in chemin_python:
+            #log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
             
-            #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
-            self.goToSegment(i,avecRechercheChemin = [arrivee, numTentatives])
-        return "chemin_termine"
+            ##effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
+            #self.goToSegment(i,avecRechercheChemin = [arrivee, numTentatives])
+        #return "chemin_termine"
 
     def tourner(self, angle):
         """
