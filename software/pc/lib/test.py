@@ -30,16 +30,25 @@ while 42:
 import __builtin__
 import instance
 
-asser = __builtin__.instance.asserInstance
-sc = __builtin__.instance.scriptInstance
+#asser = __builtin__.instance.asserInstance
+#sc = __builtin__.instance.scriptInstance
+#sc.gestionScripts(sc.recalage)
+
+
 #depart = outils_math.point.Point(0.0,400)
-sc.gestionScripts(sc.recalage)
 ##############################UTILISATION DE LA STRATEGIE####################################
 import strategie
-strategie = strategie.Strategie()
-strategie.lancer()
+#strategie = strategie.Strategie()
+#strategie.lancer()
 #############################################################################################
+#test recherche de chemin
 
+from outils_math.point import Point
+import recherche_chemin.thetastar
+t = recherche_chemin.thetastar.Thetastar()
+d = Point(1300,250)
+a = Point(-800,1700)
+t.rechercheChemin(d,a)
 ##############################UTILISATION D'UN SCRIPT######################################## 
 
 #sc.gestionScripts(sc.scriptTotem)

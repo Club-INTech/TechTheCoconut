@@ -118,17 +118,9 @@ class Strategie():
                 
                 # Si on arrive là, c'est que le script d'origine est terminé.
                 # On appelle choisirAction tant que self.actions n'est pas vide
-                while self.actions != [] :
+                while 42 :
                     self.choisirAction()
                 
-                #if self.timerStrat.time() <= 70 :
-                    ## Prise de décision selon ce qui n'a pas été prise
-                    #pass
-                
-                #else :
-                    ## Faire un "tour de piste"
-                    #pass
-
         #--------------------------------------#
         #-- STRATEGIE NUMERO 2: Un peu mieux --#
         #--------------------------------------#
@@ -284,6 +276,7 @@ class Strategie():
                 log.logger.debug("NOM DU SCRIPT : " + str(nomScripts[i]))
                 # WARNING LA LIGNE SUIVANTE FAIT LAGGUER À MORT LA BEAGLEBOARD
                 beagleboard = True
+                
                 if not beagleboard :
                     exec("temps_script = self.scriptInstance.gestionScripts("+str(nomScripts[i])+", 1)")
                 else :
@@ -346,14 +339,15 @@ class Strategie():
                 __builtin__.instance.timeout = 1000
             
             log.logger.debug("LANCEMENT DU SCRIPT : " + nomScripts[maxID])
-            exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
+            if not beagleboard :
+                exec("success = self.scriptInstance.gestionScripts("+nomScripts[maxID]+")")
+            else :
+                time.sleep(5)
             success = True
         # Problème de script
         except :
             log.logger.critical("La stratégie ne peut pas lancer l'action "+nomScripts[maxID])
             success = True
-            
-        time.sleep(5)
         
         # Si l'action s'est  bien déroulée
         if success :
@@ -450,6 +444,7 @@ class Strategie():
             if self.actions[i][0] == nomAction :
                 return i
         return -1
+        
                     
                     
     #TEST
