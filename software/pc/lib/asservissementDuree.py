@@ -53,6 +53,9 @@ class Asservissement_duree:
         self.orientation = 0
         self.position = point.Point(0,400)
         self.duree = 0
+        self.hotSpots = [point.Point(-900,1000),point.Point(-800,1420),point.Point(-360,1660),point.Point(360,1660),point.Point(800,1420),point.Point(900,1000),point.Point(540,290),point.Point(-540,290)]
+        
+        
     #############
     def test(self):
         raw_input("?")
@@ -75,6 +78,9 @@ class Asservissement_duree:
         :type avecRechercheChemin: booléen
         """
         depart = self.getPosition()
+        log.logger.info("effectue le segment de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        
+        
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
         angle = math.atan2(delta_y,delta_x)
@@ -86,6 +92,51 @@ class Asservissement_duree:
         avec un booléen codant l'utilisation de la recherche de chemin
         """
         self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),"",avecRechercheChemin)
+    
+    def goToScript(self, arrivee):
+        depart = self.getPosition()
+        log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        
+        
+        HSdepart = self.hotSpot(depart)
+        HSarrivee = self.hotSpot(arrivee)
+        
+        repere = HSdepart
+        while not repere == HSarrivee:
+            self.goToSegment(repere)
+            repere = self.HotSpotSuivant(repere,HSarrivee)
+        self.goToSegment(HSarrivee)
+        self.goToSegment(arrivee)
+        
+    def HotSpotSuivant(self,HSdepart,HSarrivee):
+         #retourne le hotspot suivant pour effectuer le trajet
+        
+        if HSdepart == HSarrivee :
+            return HSdepart
+        else:
+        
+            for k in range(len(self.hotSpots)):
+                if self.hotSpots[k] == HSdepart:
+                    dep = k
+                if self.hotSpots[k] == HSarrivee:
+                    arr = k
+                    
+            if (dep - arr)%len(self.hotSpots) < len(self.hotSpots)/2.:
+                sens = -1
+            else:
+                sens = 1
+            return self.hotSpots[dep+sens]
+        
+    def hotSpot(self, point):
+        #détermine le hotspot le plus proche à partir d'un point de la carte
+        
+        dest = self.hotSpots[0]
+        for hs in self.hotSpots:
+            if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
+                dest = hs
+        return dest
+    
+    
     
     def goTo(self, arrivee):
         """
