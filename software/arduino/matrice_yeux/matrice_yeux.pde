@@ -375,8 +375,14 @@ void emoticon(int mode)
   byte love[14]={B00000000,B00000000,B00000000,B01100000,B11110000,B11111000,B01111100,B00111110,B01111100,B11111000,B11110000,B01100000,B00000000,B00000000}; 
   byte exptdr[14]={B11000110,B11000110,B11000110,B11000110,B11000110,B11101110,B11101110,B11101100,B01101100,B01101100,B01101100,B00111000,B00111000,B00111000};
   byte smiley[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
+  byte disturbed[14]={B00011100,B00100010,B01001000,B10010100,B10100010,B10101010,B10101010,B10101010,B10101010,B10101010,B10101010,B10010010,B01000100,B00111000};
+  byte doublenote[14]={B00000000,B00000000,B00000100,B00001110,B00001110,B11111110,B11000000,B11000000,B11000100,B11001110,B11001110,B11111110,B00000000,B00000000};
+  byte KO[14]={B00000000,B00000000,B00000000,B10000010,B11000110,B01101100,B00111000,B01101100,B11000110,B10000010,B00000000,B00000000,B00000000,B00000000};
+  byte blazed1[14]={B11110000,B11110000,B00000000,B00000000,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000000};
+  byte blazed2[14]={B00000000,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000000,B00000000,B00000000,B00000000};
+  byte G[14]={B00000000,B00000000,B00000000,B01111100,B11111100,B11000110,B11000110,B11010110,B11011110,B11011110,B00010000,B00000000,B00000000,B00000000};
   
-   for (int col=0; col<13; col++)
+  for (int col=0; col<13; col++)
    {
      switch(mode)
      {
@@ -391,6 +397,30 @@ void emoticon(int mode)
        case 3: //smiley
          lc.setEyeColumn(1, col, smiley[col], true); 
          break;
+        
+        case 4: //disturbed
+          lc.setEyeColumn(1, col, disturbed[col], false); 
+          lc.setEyeColumn(2, col, disturbed[col], false); 
+          break;
+          
+         case 5: //doublenote
+          lc.setEyeColumn(1, col, doublenote[col], false); 
+          lc.setEyeColumn(2, col, doublenote[col], false); 
+          break;
+          
+         case 6: //KO
+           lc.setEyeColumn(1, col, KO[col], true); 
+           break;
+          
+         case 7: //Blazed
+           lc.setEyeColumn(1, col, blazed1[col], false); 
+           lc.setEyeColumn(2, col, blazed2[col], false); 
+           break;
+           
+         case 8: // GG
+           lc.setEyeColumn(1, col, G[col], false); 
+           lc.setEyeColumn(2, col, G[col], false); 
+           break;
      }
    }
  
@@ -403,13 +433,103 @@ void emoticon(int mode)
   }  
 }
 
+void writeChar(int eye,char value)
+{
+  //Sprites
+  byte write0[14]={B00000000,B00000000,B00000000,B11111110,B11111110,B11000110,B11000110,B11000110,B11000110,B11111110,B11111110,B00000000,B00000000,B00000000};
+  byte write1[14]={B00000000,B00000000,B00000000,B00000000,B00000000,B01000010,B11111110,B11111110,B00000010,B00000000,B00000000,B00000000,B00000000,B00000000};
+  byte write2[14]={B00000000,B00000000,B00000000,B00000000,B11011110,B11011110,B11010110,B11010110,B11110110,B11110110,B00000000,B00000000,B00000000,B00000000};
+  byte write3[14]={B00000000,B00000000,B00000000,B00000000,B11000110,B11000110,B11010110,B11010110,B11111110,B11111110,B00000000,B00000000,B00000000,B00000000};
+  byte write4[14]={B00000000,B00000000,B00000000,B00000000,B00001100,B00011100,B00111100,B01101100,B11001100,B11011110,B11011110,B00000000,B00000000,B00000000};
+  byte write5[14]={B00000000,B00000000,B00000000,B00000000,B11110110,B11110110,B11010110,B11010110,B11011110,B11011110,B00000000,B00000000,B00000000,B00000000};
+  byte write6[14]={B00000000,B00000000,B00000000,B00000000,B11111110,B11111110,B11011110,B11010010,B11011110,B11011110,B00000000,B00000000,B00000000,B00000000};
+  byte write7[14]={B00000000,B00000000,B00000000,B00000000,B11000000,B11001110,B11011110,B11110000,B11100000,B11000000,B00000000,B00000000,B00000000,B00000000};
+  byte write8[14]={B00000000,B00000000,B00000000,B00000000,B11111110,B11111110,B11010110,B11010110,B11111110,B11111110,B00000000,B00000000,B00000000,B00000000};
+  byte write9[14]={B00000000,B00000000,B00000000,B00000000,B11110110,B11110110,B11010110,B11010110,B11111110,B11111110,B00000000,B00000000,B00000000,B00000000};
+  
+  for (int col=0; col<13; col++)
+  {
+     switch(value)
+     {
+       case 0:
+         lc.setEyeColumn(eye, col, write0[col], false);
+         break;
+       case 1:
+         lc.setEyeColumn(eye, col, write1[col], false);
+         break;
+       case 2:
+         lc.setEyeColumn(eye, col, write2[col], false);
+         break;
+       case 3:
+         lc.setEyeColumn(eye, col, write3[col], false);
+         break;
+       case 4:
+         lc.setEyeColumn(eye, col, write4[col], false);
+         break;
+       case 5:
+         lc.setEyeColumn(eye, col, write5[col], false);
+         break;
+       case 6:
+         lc.setEyeColumn(eye, col, write6[col], false);
+         break;
+       case 7:
+         lc.setEyeColumn(eye, col, write7[col], false);
+         break;
+       case 8:
+         lc.setEyeColumn(eye, col, write8[col], false);
+         break;
+       case 9:
+         lc.setEyeColumn(eye, col, write9[col], false);
+         break;
+     }
+  }
+  
+  /* 
+  //Pause d'une seconde
+  delay(1000);
+  
+  //ClearDisplay
+  for (int col=0; col<13; col++)
+  {
+     lc.setEyeColumn(1, col, (byte)0, true);
+  }  
+  
+  */
+}
+
+void compteARebours(int time)
+{
+  int unite, dizaine;
+  for(int i=time;i>=0;i--)
+  {
+    //Affichage
+    unite = time%10;
+    dizaine = (time/10)%10;
+    
+    writeChar(1,dizaine);
+    writeChar(2,unite);
+    
+    //Pause d'une seconde
+    delay(1000);
+    
+    //ClearDisplay
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true);
+    }  
+  }
+}
+
 void loop() 
 { 
   //balayageV();
   //K2000(); 
   //cylon();
-  emoticon(1);
-  emoticon(2);
+  
+  //for(int i=1;i<9;i++)
+  //emoticon(i);
+  
+  compteARebours(90);
   //gauchedroite();
   //cercle(); //by cassou
   //animationyeux();

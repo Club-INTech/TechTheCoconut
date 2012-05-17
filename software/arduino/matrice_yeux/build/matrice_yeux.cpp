@@ -18,7 +18,6 @@ void cylon();
 void balayageH();
 void balayageV();
 void animationyeux();
-void smiley();
 void gauchedroite();
 void cercle();
 void emoticon(int mode);
@@ -252,20 +251,6 @@ void animationyeux()
         
    }
 }
-void smiley()
-{
-  byte sprite[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
-
-  for (int col=0; col<14; col++)
-  {
-     lc.setEyeColumn(1, col, sprite[col], true); 
-  }
-  delay(1000);
-  for (int col=0; col<14; col++)
-  {
-     lc.setEyeColumn(1, col, (byte)0, true); 
-  }
-}
 
 void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
 {
@@ -401,8 +386,12 @@ void emoticon(int mode)
 {
   byte love[14]={B00000000,B00000000,B00000000,B01100000,B11110000,B11111000,B01111100,B00111110,B01111100,B11111000,B11110000,B01100000,B00000000,B00000000}; 
   byte exptdr[14]={B11000110,B11000110,B11000110,B11000110,B11000110,B11101110,B11101110,B11101100,B01101100,B01101100,B01101100,B00111000,B00111000,B00111000};
+  byte smiley[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
+  byte disturbed[14]={B00011100,B00100010,B01001000,B10010100,B10100010,B10101010,B10101010,B10101010,B10101010,B10101010,B10101010,B10010010,B01000100,B00111000};
+  byte doublenote[14]={B00000000,B00000000,B00000100,B00001110,B00001110,B11111110,B11000000,B11000000,B11000100,B11001110,B11001110,B11111110,B00000000,B00000000};
+  byte KO[14]={B00000000,B00000000,B00000000,B10000010,B01000100,B00101000,B00010000,B00101000,B01000100,B10000010,B00000000,B00000000,B00000000,B00000000};
   
-   for (int col=0; col<13; col++)
+  for (int col=0; col<13; col++)
    {
      switch(mode)
      {
@@ -413,16 +402,36 @@ void emoticon(int mode)
        case 2: //exptdr
          lc.setEyeColumn(1, col, exptdr[col], true); 
          break;
+         
+       case 3: //smiley
+         lc.setEyeColumn(1, col, smiley[col], true); 
+         break;
+        
+        case 4: //disturbed
+          lc.setEyeColumn(1, col, disturbed[col], false); 
+          lc.setEyeColumn(2, col, disturbed[col], false); 
+          break;
+          
+         case 5: //doublenote
+          lc.setEyeColumn(1, col, doublenote[col], false); 
+          lc.setEyeColumn(2, col, doublenote[col], false); 
+          break;
+          
+         case 6: //KO
+           lc.setEyeColumn(1, col, KO[col], true); 
+           break;
+          
+          
      }
    }
  
   delay(1000); // pause
   
+  //ClearDisplay
   for (int col=0; col<13; col++)
   {
      lc.setEyeColumn(1, col, (byte)0, true);
-  }
-  
+  }  
 }
 
 void loop() 
@@ -430,8 +439,8 @@ void loop()
   //balayageV();
   //K2000(); 
   //cylon();
-  emoticon(1);
-  emoticon(2);
+  for(int i=1;i<7;i++)
+  emoticon(i);
   //gauchedroite();
   //cercle(); //by cassou
   //animationyeux();
