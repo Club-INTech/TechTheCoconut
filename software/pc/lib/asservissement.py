@@ -319,11 +319,10 @@ class Asservissement:
         log.logger.info("début du recalage")
         acquitement = False
         while not acquitement:
-            reponse = self.serieAsserInstance.lire()
+            reponse = self.serieAsserInstance.lire(timeout = False)
             if reponse == "FIN_REC":
                 log.logger.info("fin du recalage")
                 acquitement = True
-            #time.sleep(0.05)
         
     def setUnsetAsser(self, asservissement, mode):
         pass

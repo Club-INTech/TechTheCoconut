@@ -75,18 +75,25 @@ class Serie(threading.Thread, serial.Serial):
         reponse = str(reponse).replace("\n","").replace("\r","").replace("\0", "")
         return reponse
         
-    def lire(self):
+    def lire(self,timeout = True):
         """
         Lire une information venant d'un périphérique jusqu'au retour à la ligne
         """
-        try:
-            #print "lecture..."
-            return self.decoLire()
-        except:
-            #print "sleep..."
-            time.sleep(1)
-            #print "recursion..."
-            return self.lire()
+        if timeout :
+            try:
+                #print "lecture..."
+                return self.decoLire()
+            except:
+                #print "sleep..."
+                time.sleep(1)
+                #print "recursion..."
+                return self.lire()
+        else:
+            self.mutex.acquire()
+            reponse = self.serie.readline()
+            self.mutex.release()
+            reponse = str(reponse).replace("\n","").replace("\r","").replace("\0", "")
+            return reponse
     
     def ecrire(self, message):
         """
