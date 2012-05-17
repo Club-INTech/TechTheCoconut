@@ -24,7 +24,6 @@ script      = __builtin__.instance.scriptInstance
 
 # On attend la mise en position du Jumper pour lancer le recalage
 log.logger.warning("Robot en attente du jumper pour recalage")
-time.sleep(5)
 #jumper.demarrerRecalage()
 log.logger.info("Lancement du recalage...")
 
