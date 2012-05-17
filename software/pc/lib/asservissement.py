@@ -51,6 +51,8 @@ class Asservissement:
         if __builtin__.constantes['couleur'] == "r":
             self.serieAsserInstance.ecrire('ccr')
         
+        #vitesse moyenne (translation et rotations)
+        self.vitesse_moyenne_segment = 1
         
         #liste des centres de robots adverses repérés (liste de points)
         self.liste_robots_adv = __builtin__.instance.liste_robots_adv
@@ -65,7 +67,8 @@ class Asservissement:
         self.vitesseRotation = 2
         
         #self.hotSpots = [Point(-900,1000),Point(-800,1420),Point(-360,1660),Point(360,1660),Point(800,1420),Point(900,1000),Point(540,290),Point(-540,290)]
-        self.hotSpots = [Point(0, 1440), Point(860, 1440), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1440)]
+        self.hotSpotsOriginaux = [Point(0, 1440), Point(860, 1440), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1440)]
+        self.hotSpots = self.hotSpotsOriginaux[:]
     
     def goToSegment(self, arrivee, avecRechercheChemin = []):
         """
@@ -78,15 +81,17 @@ class Asservissement:
         depart = self.getPosition()
         log.logger.info("effectue le segment de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         
+        
         delta_x = (arrivee.x-depart.x)
         delta_y = (arrivee.y-depart.y)
-        angle = math.atan2(delta_y,delta_x)
         
         """
         oriente le robot pour le segment à parcourir
         sans instruction particulière
         avec un booléen spécifiant que la rotation ne doit pas effectuer de symétrie
         """
+        angle = math.atan2(delta_y,delta_x)
+        angle = int(angle*10000)/10000.
         self.gestionTourner(angle,"",avecSymetrie = False)
         
         """
@@ -94,74 +99,136 @@ class Asservissement:
         sans instruction particulière
         avec un booléen codant l'utilisation de la recherche de chemin
         """
-        self.gestionAvancer(math.sqrt(delta_x**2+delta_y**2),instruction = "",avecRechercheChemin = avecRechercheChemin)
-    
-    
+        distance = math.sqrt(delta_x**2+delta_y**2)
+        distance = int(distance*10)/10.
+        self.gestionAvancer(distance,instruction = "",avecRechercheChemin = avecRechercheChemin)
+        
     ############################## <HACK>
-    
     
     
     def goToScript(self, arrivee):
         depart = self.getPosition()
+        
+        #appel de la recherche de chemin : liste de points
+        chemin = self.rechercheChemin(depart, arrivee)[0]
+        for point in chemin:
+            self.goToSegment(point)
+        
+        #on réinitialise la mémoire des (du) robot ennemi
+        self.oublierAdverses()
+        
+    def getTimeTo(self,depart, arrivee):
+        #appel de la recherche de chemin : distance parcourue
+        return self.rechercheChemin(depart, arrivee)[1]*self.vitesse_moyenne_segment
+        
+    def rechercheChemin(self, depart, arrivee):
+        """
+        méthode de recherche de chemin basique
+        renvoi un tuple dont 
+        le premier element est la liste des points à parcourir, du deuxième point à l'arrivée
+        le second est la distance totale parcourue
+        """
+        
         log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         
         HSdepart = self.hotSpot(depart)
+        print "hotspot de départ : "+str(HSdepart)
         HSarrivee = self.hotSpot(arrivee)
+        print "hotspot de'arrivée : "+str(HSarrivee)
         
-        repere = HSdepart
-        while not repere == HSarrivee:
-            self.goToSegment(repere)
-            repere = self.HotSpotSuivant(repere,HSarrivee)
-        self.goToSegment(HSarrivee)
-        self.goToSegment(arrivee)
-        
-    def HotSpotSuivant(self,HSdepart,HSarrivee):
-         #retourne le hotspot suivant pour effectuer le trajet
+        #couper l'anneau si robot adverse
+        for adverse in self.liste_robots_adv:
+            self.supprimerHotspot(self.hotSpot(adverse))
+            print "le hotspot "+str(self.hotSpot(adverse))+" a été supprimé."
+            
         
         if HSdepart == HSarrivee :
-            return HSdepart
+            chemin = [HSdepart]
+            dist = 0.
         else:
-        
-            for k in range(len(self.hotSpots)):
-                
-                if self.hotSpots[k] == HSdepart:
-                    dep = k
-                if self.hotSpots[k] == HSarrivee:
-                    arr = k
+            #établissement de listes représentant le parcourt des hotspots dans les 2 sens
+            listeSens1 = self.hotSpots[self.hotSpots.index(HSdepart):]+self.hotSpots[:self.hotSpots.index(HSdepart)]
+            listeSens2 = listeSens1[:]
+            listeSens2.reverse()
+            listeSens2.insert(0,listeSens2.pop())
+            
+            print "listeSens1 : "+str(listeSens1)
+            print "listeSens2 : "+str(listeSens2)
+            
+            #calcul de la distance du trajet, dans les 2 sens
+            dist1 = 0.
+            cheminSens1 = []
+            for k in range(1,len(listeSens1)):
+                if not listeSens1[k]:
+                    dist1 = float('inf')
+                    break
+                else:
+                    dist1 += math.sqrt( (listeSens1[k].x - listeSens1[k-1].x)**2 + (listeSens1[k].y - listeSens1[k-1].y)**2 )
+                    cheminSens1.append(listeSens1[k])
+                if listeSens1[k] == HSarrivee:
+                    break
+            
+            dist2 = 0.  
+            cheminSens2 = []
+            for k in range(1,len(listeSens2)):
+                if not listeSens2[k]:
+                    dist2 = float('inf')
+                    break
+                else:
+                    dist2 += math.sqrt( (listeSens2[k].x - listeSens2[k-1].x)**2 + (listeSens2[k].y - listeSens2[k-1].y)**2 )
+                    cheminSens2.append(listeSens2[k])
+                if listeSens2[k] == HSarrivee:
+                    break
                     
-            if (dep - arr)%len(self.hotSpots) < len(self.hotSpots)/2.:
-                sens = -1
+            print "cheminSens1 : "+str(cheminSens1)
+            print "cheminSens2 : "+str(cheminSens2)
+                
+            if dist1 <= dist2:
+                chemin = cheminSens1
+                dist = dist1
             else:
-                sens = 1
-            return self.hotSpots[dep+sens]
+                chemin = cheminSens2
+                dist = dist2
+            chemin.insert(0,HSdepart)
         
+        chemin.append(arrivee)
+        
+        #ajoute les distances des points départ et arrivée à celles calculées entre les hotspots
+        dist += math.sqrt( (depart.x - HSdepart.x)**2 + (depart.y - HSdepart.y)**2 )
+        dist += math.sqrt( (arrivee.x - HSarrivee.x)**2 + (arrivee.y - HSarrivee.y)**2 )
+        
+        log.logger.info("chemin trouvé : ("+str(chemin))
+        return (chemin, dist)
+            
+            
     def hotSpot(self, point):
         #détermine le hotspot le plus proche à partir d'un point de la carte
         
         #zone sur le coté du totem
         if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
-            return self.hotSpots[0]
+            return self.hotSpots[6]
         elif self.estDansZone(point,Point(401,1180),Point(592,810)):
-            return self.hotSpots[5]
+            return self.hotSpots[2]
             
         #zone sur le dessus du totem
         elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)):
-            return self.hotSpots[2]
+            return self.hotSpots[0]
         elif self.estDansZone(point,Point(167,1213),Point(448,1000)):
-            return self.hotSpots[3]
+            return self.hotSpots[0]
             
         #zone sur le dessous du totem
         elif self.estDansZone(point,Point(-448,1000),Point(-167,810)):
-            return self.hotSpots[7]
+            return self.hotSpots[4]
         elif self.estDansZone(point,Point(167,1000),Point(448,810)):
-            return self.hotSpots[6]
+            return self.hotSpots[4]
             
         else:
         
             dest = self.hotSpots[0]
             for hs in self.hotSpots:
-                if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
-                    dest = hs
+                if hs :
+                    if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
+                        dest = hs
             return dest
         
     def estDansZone(self,point,hg,bd):
@@ -169,6 +236,17 @@ class Asservissement:
             return True
         else:
             return False
+            
+    def supprimerHotspot(self,hotspot):
+        try:
+            pos = self.hotSpots.index(hotspot)
+            self.hotSpots.pop(pos)
+            self.hotSpots.insert(pos,"")
+        except: pass
+        
+    def oublierAdverses(self):
+        __builtin__.instance.viderListeRobotsAdv()
+        self.hotSpots = self.hotSpotsOriginaux[:]
     
     
     ############################## </HACK>
@@ -204,7 +282,7 @@ class Asservissement:
         chemin_python.remove(chemin_python[0])
         
         #on oublie les robots adverses, puisqu'on est censé les éviter
-        __builtin__.instance.viderListeRobotsAdv()
+        self.oublierAdverses()
             
         for i in chemin_python:
             log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
@@ -433,7 +511,7 @@ class Asservissement:
             
                 if avecRechercheChemin :
                     #robot adverse
-                    __builtin__.instance.viderListeRobotsAdv(recalculer = False)
+                    self.oublierAdverses()
                     __builtin__.instance.ajouterRobotAdverse(adverse)
                     
                     #est-il rentable de relancer une recherche de chemin ?
@@ -472,7 +550,7 @@ class Asservissement:
                     if not ennemi_en_vue:
                         #vider la liste des robots adverses repérés
                         if not __builtin__.instance.liste_robots_adv == []:
-                            __builtin__.instance.viderListeRobotsAdv()
+                            self.oublierAdverses()
                         
                         #baisser vitesse
                         #self.changerVitesse("translation", 1)

@@ -14,6 +14,8 @@ import __builtin__
 import script
 import instance
 
+from random import randint
+
 
 
 carte = carte.Carte()
@@ -36,7 +38,7 @@ class Strategie():
         self.timerStrat = timer.Timer()
         self.actions = {}
         self.preActions     = []
-        self.zoneRobot = 1
+        self.couleur = __builtin__.constantes["couleur"]
 
         
         # Remplir le tableau actions d'actions à faire (Thibaut)
@@ -66,9 +68,13 @@ class Strategie():
             log.logger.error("stratégie : ne peut importer instance.baliseInstance")
         
         try :
+            self.serieAsserInstance = __builtin__.instance.serieAsserInstance
             self.asserInstance = __builtin__.instance.asserInstance
+            self.simu = False
         except :
+            self.asserInstance = __builtin__.instance.asserInstanceDuree
             log.logger.error("Impossible d'importer l'asservissement")
+            self.simu = True
         
         try :
             self.actionInstance = __builtin__.instance.actionInstance
@@ -78,8 +84,6 @@ class Strategie():
         
             
     def lancer(self) :
-            # Gestion de l'arrêt au bout de 90 secondes :
-            Strategie.prendreDecisions = True
             
             # Lancement du timer.
             self.timerStrat.lancer()
@@ -109,17 +113,11 @@ class Strategie():
         #------------------------------------#
         
         if self.strategie == 1 :
-            # Position de départ.
-            #self.depart = self.robotInstance.position()     
+            # Si on arrive là, c'est que le script d'origine est terminé.
+            # On appelle choisirAction tant que self.actions n'est pas vide
+            while 42 :
+                self.choisirAction()
             
-            # Tant qu'on peut prendre des décisions
-            while Strategie.prendreDecisions :
-                
-                # Si on arrive là, c'est que le script d'origine est terminé.
-                # On appelle choisirAction tant que self.actions n'est pas vide
-                while 42 :
-                    self.choisirAction()
-                
         #--------------------------------------#
         #-- STRATEGIE NUMERO 2: Un peu mieux --#
         #--------------------------------------#
@@ -153,7 +151,7 @@ class Strategie():
         
         log.logger.debug("Initialisation des actions à faire")
         # Selon le profil de statégie choisi, on peut mettre des priorités différentes pour chaques actions.
-        # Tableau : [score espéré, temps d'éxécution, [zone(s) dans lequel se trouve le départ de l'obj], [nvlle prio si succès, nvlle prio si échec]]
+        # Tableau : [score espéré, Point de départ , Temps du script,  [nvlle prio si succès, nvlle prio si échec], <METTREÀZERO> ]
         
         #           _________________________________
         #           |               |               |
@@ -165,70 +163,70 @@ class Strategie():
         #
         #
         if self.strategie == 1 :
-            self.actions =  {"rafflerTotem00" : [9, 25, 1, [3, 7]],
-                             "rafflerTotem01" : [9, 27, 2, [3, 7]],
-                             "rafflerTotem10" : [6, 30 , 4, [1, 4]],
+            self.actions =  {"rafflerTotem00" : [9,Point(0,660), 25, [-1, 5], 0],
+                             "rafflerTotem01" : [9,Point(0,1500), 27, [-1, 5], 0],
+                             "rafflerTotem10" : [6,Point(-920+ 70, 450+180), 40, [-1, 4], 0],
                              
-                             "enfoncerPoussoir0" : [5, 7,2, [0, 3]],
-                             "enfoncerPoussoir1" : [5, 7,3, [0, 3]],
+                             "enfoncerPoussoir0" : [5,Point(751.344262295,1445.0), 5,[-1, 3], 0],
+                             "enfoncerPoussoir1" : [5,Point(-360, 1510.), 5, [-1, 3], 0],
                              
-                             "bourrerCale"       : [4, 10, 1, [1, 3]]
+                             "bourrerCale"       : [0,Point(900, 1000), 8,  [0, 3], 0]
                             }
                             
-            self.preActions =   [[[1,2], 'preAction_1_2'],
-                                 [[2,3], 'preAction_2_3']]
-
-            
-            #self.preActions.append([0, "preAction_totem01_1", "self.asserInstance.getPosition().y < 670"])
-            #self.preActions.append([0, "preAction_totem01_2", "self.asserInstance.getPosition().x > 400"])
-            
-            
-            
-            
         elif self.strategie == 2 :
-            self.actions =  {"rafflerTotem00" : [9, 25, 1, [3, 7]],
-                             "rafflerTotem01" : [9, 27, 2, [3, 7]],
-                             "rafflerTotem10" : [6, 30 , 4, [1, 4]],
+            #self.actions =  {"rafflerTotem00" : [9, [3, 7]],
+                             #"rafflerTotem01" : [9, [3, 7]],
+                             #"rafflerTotem10" : [6, [1, 4]],
                              
-                             "enfoncerPoussoir0" : [5, 7,2, [0, 3]],
-                             "enfoncerPoussoir1" : [5, 7,3, [0, 3]],
+                             #"enfoncerPoussoir0" : [5, [0, 3]],
+                             #"enfoncerPoussoir1" : [5, [0, 3]],
                              
-                             "bourrerCale"       : [4, 10, 1, [1, 3]]
-                            }
+                             #"bourrerCale"       : [4, [1, 3]]
+                            #}
             
             self.preActions =   [[[1,2], 'preAction_1_2']]       
                                       
         elif self.strategie == 3 :
             pass
         
-    
+    # Retourne la position sur la table, qui dépend de la couleur
+    def getPositionSymetrisee(self) :
+        pos = self.asserInstance.getPosition()
+        if self.couleur == "v" :
+            return Point(pos.x, pos.y)
+        return Point(-pos.x, pos.y)
+        
     # Cette fonction est appellée dans une boucle infinie et permet de choisir 
     # l'action la meilleure à réaliser.
     def choisirAction(self) :
+        
         poids = []
         temps = []
-        try :
-            self.zoneRobot = asserInstance.getZone()
-        except :
-            log.logger.error("Impossible de lancer asser.getZone()")
-
-        debug = True
-
-
+        
         for action in self.actions.keys() :
             actionAtester = self.actions[action]
-            zoneObjectif  = actionAtester[2]
-            difference = self.getDifferenceZone(self.zoneRobot, zoneObjectif)
+            positionRobot = self.getPositionSymetrisee()
             
-            temps_action = float(actionAtester[1]+(1+difference)*5)
-            poids_action = actionAtester[0]/temps_action
+            positionObjectif = actionAtester[1]
             
+            try :
+                temps_action = actionAtester[2] + self.asserInstance.getTimeTo(positionRobot, positionObjectif)
+            except :
+                log.logger.debug("Impossible de lancer getTimeTo")
+                temps_action = actionAtester[2] + math.sqrt((positionRobot.x - positionObjectif.x)**2 + (positionRobot.y - positionObjectif.y)**2)/400
+            
+            # Éliminé si il ne reste pas assez de temps.
+            if temps_action >= self.timerStrat.getTimeRemaining() :
+                poids_action = -1
+                
+            else :
+                poids_action = float(actionAtester[0])/temps_action
+                
             temps.append([action,temps_action])
             poids.append([action,poids_action])
-        
-        if debug :
-            log.logger.debug("TEMPS :: " + str(temps))
-            log.logger.debug("POIDS :: " + str(poids))
+            
+        log.logger.info("TEMPS : " + str(temps))
+        log.logger.debug("POIDS : " + str(poids))
             
         # On cherche le max des actions
         maxID = -1
@@ -237,21 +235,41 @@ class Strategie():
             if poids[i][1] > max :
                 max = poids[i][1]
                 maxID = i
+        
+        # Si il ne reste plus rien à faire :
+        if maxID == -1 :
+            log.logger.debug("Plus aucun script à lancer.")
+            try :
+                self.scriptInstance.gestionScripts(self.scriptInstance.viderCaleEnnemi)
+                return
+            except :
+                log.logger.error("Impossible de vider la cale de l'ennemi")
+                time.sleep(2)
+                return
                 
         meilleureAction = poids[maxID][0]
         
+        print ("Position : " + str(positionRobot))
+        
         # Lancement d'une preAction sur le passage de la zone courante à la zone d'action :
-        self.choisirPreAction(self.zoneRobot, self.actions[meilleureAction][2])
+        #self.choisirPreAction(self.zoneRobot, self.actions[meilleureAction][2])
         
         # Lancement de la meilleure action :
         try :
             exec("success = self.scriptInstance.gestionScripts(self.scriptInstance." + meilleureAction + ")")
-        except :
+            log.logger.debug("Lancement du script " + meilleureAction + ".")
+        except :   
             log.logger.critical("Impossible de lancer " + str(meilleureAction) + " !")
-            success = True
-            self.zoneRobot = self.actions[meilleureAction][2]
-            time.sleep(5)
+            success = randint(0,3)
+            print success
+            time.sleep(temps[maxID][1])
             
+        if success and self.simu :
+            self.asserInstance.setPosition(self.actions[meilleureAction][1])
+            
+        # Augmentation du nombre d'essai de cette action
+        self.actions[meilleureAction][4] += 1
+        
         # Changement des scores des actions
         self.changerScore(meilleureAction, success)
         
@@ -267,7 +285,6 @@ class Strategie():
     # Lance une preAction lors du passage de la zone 1 à la zone 2
     def choisirPreAction(self, zone1, zone2) :
         for i in xrange(len(self.preActions)) :
-            print zone1, zone2
             if self.preActions[i][0] == [zone1, zone2] :
                 try :
                     exec("self.scriptInstance.gestionScripts(self.scriptInstance." + self.preActions[i][1] + ")")
@@ -280,9 +297,19 @@ class Strategie():
     def changerScore(self, nomAction, success) :
         if success : 
             self.actions[nomAction][0] = self.actions[nomAction][3][0]
+            
+            # Incrémentation du poids du farmage de cale
+            if "rafflerTotem" in nomAction :
+                try :
+                    self.actions["bourrerCale"][0] += 2
+                except :
+                    pass
         else :
+            # Changement du poids des actions
             self.actions[nomAction][0] = self.actions[nomAction][3][1]
-
+            if self.actions[nomAction][4] >= 2 :
+                self.actions[nomAction][0] = -1
+        
     #TEST
     def strateg_scripts(self):
         if self.scriptInstance.scriptTestStruct0():

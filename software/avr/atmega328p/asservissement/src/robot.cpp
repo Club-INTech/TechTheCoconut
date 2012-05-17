@@ -483,10 +483,9 @@ bool Robot::est_stoppe()
 	//rotation : 17 en v1, 
 //     serial_t_::print(abs(compare_angle_tic(mesure_angle_,rotation.consigne())));
 //     serial_t_::print(abs(translation.consigne() - mesure_distance_));
-	volatile bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 105;//37
-	volatile bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 100;//42
-	bool bouge_pas = rotation.erreur_d()==0 && translation.erreur_d()==0;
-	return rotation_stoppe && translation_stoppe && bouge_pas;
+	volatile bool rotation_stoppe = abs(compare_angle_tic(mesure_angle_,rotation.consigne())) < 65;//37
+	volatile bool translation_stoppe = abs(translation.consigne() - mesure_distance_) < 70;//42
+	return rotation_stoppe && translation_stoppe;
 	
 // 	}
 }
@@ -526,8 +525,8 @@ void Robot::gestion_blocage()
 {
 
 	static float compteurBlocage=0;
-// 	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
-// 	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+	static int32_t T_last_distance[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
+	static int32_t T_last_angle[] = {2147423647,2147483647,2147483647,2147483647,2147483647};
 
 	/*
 	static int32_t last_distance;
@@ -548,7 +547,7 @@ void Robot::gestion_blocage()
 	*/
 	
 	bool moteur_force = abs(moteurGauche.pwm()) > 45 || abs(moteurDroit.pwm()) > 45;
-	bool bouge_pas = rotation.erreur_d()==0 && translation.erreur_d()==0;
+	bool bouge_pas = abs(T_last_angle[4]-T_last_angle[0])<10 && abs(T_last_distance[4]-T_last_distance[0])<10;
 	
 // 	serial_t_::print("###");
 //     serial_t_::print(abs(moteurGauche.pwm()));
@@ -572,13 +571,13 @@ void Robot::gestion_blocage()
 		compteurBlocage=0;
 	}
 
-// 	for (int16_t i=4;i>0;i--)
-// 		T_last_distance[i] = T_last_distance[i-1];
-// 	T_last_distance[0] = mesure_distance_;
-// 	
-// 	for (int16_t i=4;i>0;i--)
-// 		T_last_angle[i] = T_last_angle[i-1];
-// 	T_last_angle[0] = mesure_angle_;
+	for (int16_t i=4;i>0;i--)
+		T_last_distance[i] = T_last_distance[i-1];
+	T_last_distance[0] = mesure_distance_;
+	
+	for (int16_t i=4;i>0;i--)
+		T_last_angle[i] = T_last_angle[i-1];
+	T_last_angle[0] = mesure_angle_;
 	
 	/*
 	last_distance = mesure_distance_;

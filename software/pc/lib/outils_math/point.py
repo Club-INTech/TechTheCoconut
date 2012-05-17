@@ -26,6 +26,9 @@ class Point:
     
     def __mul__(self,other):
         return Point(self.x*other, self.y*other)
+    
+    def __str__(self) :
+        return "("+str(self.x)+"," + str(self.y) + ")"
         
     def to_list(self):
         return [self.x, self.y]
