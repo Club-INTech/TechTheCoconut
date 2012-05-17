@@ -514,8 +514,9 @@ class Asservissement:
             
         if retour == "stoppe" and instruction == "finir":
             
-            if numTentatives <= 2:
+            if numTentatives == 1:
                 #finir le déplacement
+                self.sauvOrient = self.getOrientation()
                 posApres = self.getPosition()
                 dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
                 if distance != 0:
@@ -524,14 +525,25 @@ class Asservissement:
                     signe = 1
                 self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
                 
-            elif numTentatives == 3:
+            elif numTentatives == 2:
+                if distance != 0:
+                    signe = distance/abs(distance)
+                else:
+                    signe = 1
+                #reculer
+                self.changerVitesse("translation", 3)
+                self.gestionAvancer(-signe*15,"auStopNeRienFaire")
+                self.changerVitesse("translation", 2)
+                
+                #se réasservir en rotation
+                self.changerVitesse("rotation", 3)
+                self.gestionTourner(self.sauvOrient, avecSymetrie = False)
+                self.changerVitesse("rotation", 2)
                 
                 #replier un peu les bras
                 if hasattr(__builtin__.instance, 'actionInstance'):
                     actionInstance = __builtin__.instance.actionInstance
                     actionInstance.deplacer(100)
-                    time.sleep(0.3)
-                    actionInstance.deplacer(130)
                     time.sleep(0.3)
                     actionInstance.deplacer(120)
                     time.sleep(0.3)
@@ -545,7 +557,13 @@ class Asservissement:
                 self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
                 
                 
-            elif numTentatives == 4:
+            elif numTentatives == 3:
+                
+                #se réasservir en rotation
+                self.changerVitesse("rotation", 3)
+                self.gestionTourner(self.sauvOrient, avecSymetrie = False)
+                self.changerVitesse("rotation", 2)
+                
                 if distance != 0:
                     signe = distance/abs(distance)
                 else:
@@ -569,17 +587,16 @@ class Asservissement:
                 dist = math.sqrt((posApres.x - posAvant.x) ** 2 + (posApres.y - posAvant.y) ** 2)
                 self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
             
-            elif numTentatives == 5:
+            elif numTentatives == 4:
                 #reculer et tourner un peu
                 self.changerVitesse("translation", 3)
                 self.gestionAvancer(-signe*50,"auStopNeRienFaire")
                 self.changerVitesse("translation", 2)
                 
                 self.changerVitesse("rotation", 3)
-                orientation = self.getOrientation()
-                self.gestionTourner(orientation+0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
-                self.gestionTourner(orientation-0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
-                self.gestionTourner(orientation, avecSymetrie = False)
+                self.gestionTourner(self.sauvOrient+0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
+                self.gestionTourner(self.sauvOrient-0.08,instruction = "auStopNeRienFaire", avecSymetrie = False)
+                self.gestionTourner(self.sauvOrient, avecSymetrie = False)
                 self.changerVitesse("rotation", 2)
                 
                 #finir le déplacement
@@ -591,7 +608,7 @@ class Asservissement:
                     signe = 1
                 self.gestionAvancer(distance-signe*dist,instruction = "finir",numTentatives = numTentatives+1)
             
-            elif numTentatives >= 6:
+            elif numTentatives >= 5:
                 #soucis
                 raise Exception
             
