@@ -128,14 +128,16 @@ void balayageV()
 
 void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
 {
-   byte sprite[6]={B00111001,B01111101,B11000111,B11000111,B01111101,B00111001}; 
-   byte clignement[6]={B00110001,B00110001,B00110001,B00110001,B00110001,B00110001};
+   //byte sprite[6]={B00111001,B01111101,B11000111,B11000111,B01111101,B00111001}; 
+  // byte clignement[6]={B00110001,B00110001,B00110001,B00110001,B00110001,B00110001};
+   byte clignement[7]={B00110001,B00110001,B00110001,B00110001,B00110001,B00110001,B00110001};
+   byte sprite[7]={B00100100,B01010100,B11111110,B01010100,B11111110,B01010100,B01001000}; //Dollars
    
    
    //Centre vers le bord (pour respecter la boucle)
     for (int i=2; i>=0 ; i --)
      {
-        for (int col=0; col<6; col++)
+        for (int col=0; col<7; col++)
         {
            lc.setEyeColumn(1, col+i, sprite[col], false); 
            lc.setEyeColumn(2, col+i, sprite[col], false); 
@@ -143,7 +145,7 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
         delay(delaytime);
         if(i==3) delay(1000); //Pause
         
-        for (int col=0; col<6; col++)
+        for (int col=0; col<7; col++)
         {
            lc.setEyeColumn(1, col+i, (byte)0, false); 
            lc.setEyeColumn(2, col+i, (byte)0, false); 
@@ -155,13 +157,13 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
       //Aller
      for (int i=0; i<8 ; i ++)
      {
-        for (int col=0; col<6; col++)
+        for (int col=0; col<7; col++)
         {
            lc.setEyeColumn(1, col+i, sprite[col], false); 
            lc.setEyeColumn(2, col+i, sprite[col], false); 
         }
         delay(delaytime);
-        for (int col=0; col<6; col++)
+        for (int col=0; col<7; col++)
         {
            lc.setEyeColumn(1, col+i, (byte)0, false); 
            lc.setEyeColumn(2, col+i, (byte)0, false); 
@@ -171,14 +173,14 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
      //Retour
      for (int i=8; i>=0 ; i--)
       {
-        for (int col=0; col<6; col++)
+        for (int col=0; col<7; col++)
         {
            lc.setEyeColumn(1, col+i, sprite[col], false); 
            lc.setEyeColumn(2, col+i, sprite[col], false); 
         }
         delay(delaytime);
         if(i==0 || i==8) delay(delaytime*10);
-        for (int col=0; col<6; col++)
+        for (int col=0; col<7; col++)
         {
            lc.setEyeColumn(1, col+i, (byte)0, false); 
            lc.setEyeColumn(2, col+i, (byte)0, false); 
@@ -189,7 +191,7 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
    //Arr\u00eat au mileu
    for (int i=0; i<4 ; i ++)
    {
-      for (int col=0; col<6; col++)
+      for (int col=0; col<7; col++)
       {
          lc.setEyeColumn(1, col+i, sprite[col], false); 
          lc.setEyeColumn(2, col+i, sprite[col], false); 
@@ -197,7 +199,7 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
       delay(delaytime);
       if(i==3) delay(1000); //Pause
       
-      for (int col=0; col<6; col++)
+      for (int col=0; col<7; col++)
       {
          lc.setEyeColumn(1, col+i, (byte)0, false); 
          lc.setEyeColumn(2, col+i, (byte)0, false); 
@@ -207,13 +209,13 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
    //Clignement
    for (int tour=0; tour<1; tour ++)
    {
-     for (int col=0; col<6; col++)
+     for (int col=0; col<7; col++)
       {
          lc.setEyeColumn(1, col+3, clignement[col], false);  //clin d'oeil
          lc.setEyeColumn(2, col+3, sprite[col], false);
       }
       delay(300);
-      for (int col=0; col<6; col++)
+      for (int col=0; col<7; col++)
       {
          lc.setEyeColumn(1, col+3, (byte)0, false); 
          lc.setEyeColumn(2, col+3, (byte)0, false); 
@@ -221,7 +223,7 @@ void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
          lc.setEyeColumn(2, col+3, sprite[col], false); 
       }
       delay(500);
-      for (int col=0; col<6; col++)
+      for (int col=0; col<7; col++)
       {
          lc.setEyeColumn(1, col+3, (byte)0, false); 
          lc.setEyeColumn(2, col+3, (byte)0, false); 
@@ -402,6 +404,7 @@ void pacman()
   
   for(int i=0;i<28;i++)
   {
+    //Pacman
     for(int col=0;col<8;col++)
     {
        if(i%2==0)
@@ -409,13 +412,49 @@ void pacman()
        else
        lc.setMatrixColumn(col+i,pacman2[col]);
     }
-    delay(300);
+    
+    //Points
+    if(i+5<10)
+    lc.setLed(1,3,3,true);
+    if(i+5<15)
+    lc.setLed(2,2,3,true);
+    if(i+5<20)
+    lc.setLed(2,6,3,true);
+    if(i+5<25)
+    lc.setLed(3,4,3,true);
+    
+    delay(200);
     //ClearDisplay
     for (int col=0; col<15; col++)
     {
        lc.setEyeColumn(1, col, (byte)0, true);
     }
-  }  
+    
+    //Points
+    if(i+5<10)
+    lc.setLed(1,3,3,true);
+    if(i+5<15)
+    lc.setLed(2,2,3,true);
+    if(i+5<20)
+    lc.setLed(2,6,3,true);
+    if(i+5<25)
+    lc.setLed(3,4,3,true);
+  }
+  
+  /*
+  //Win !
+  
+  byte writeW[14]={B11000000,B11110000,B00111100,B00001110,B00001110,B00111100,B00110000,B00111100,B00001110,B00001110,B00111100,B11110000,B11000000,B00000000};
+  byte writeIN[14]={B00000000,B11111110,B11111110,B00000000,B11111110,B11111110,B01100000,B00110000,B11111110,B11111110,B00000000,B11110110,B11110110,B00000000};
+  
+  for (int col=0; col<13; col++)
+  {
+    lc.setEyeColumn(1,col, writeW[col],false);
+    lc.setEyeColumn(2,col, writeIN[col],false);
+  }
+  delay(1000);
+  
+  */
 }
 
 void loop() 
@@ -428,8 +467,9 @@ void loop()
   //emoticon(i);
   
   //compteARebours(90);
+  for(int i=0;i<2;i++)
+  gauchedroite();
   pacman();
-  //gauchedroite();
   //emoticon(2); //exptdr
   
   //cercle(); //by cassou
