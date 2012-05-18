@@ -25,7 +25,6 @@ class Asservissement:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        self.theta = __builtin__.instance.theta
         
         if hasattr(__builtin__.instance, 'capteurInstance'):
             self.capteurInstance = __builtin__.instance.capteurInstance
@@ -70,13 +69,12 @@ class Asservissement:
         self.hotSpotsOriginaux = [Point(0, 1440), Point(860, 1440), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1440)]
         self.hotSpots = self.hotSpotsOriginaux[:]
     
-    def goToSegment(self, arrivee, avecRechercheChemin = []):
+    def goToSegment(self, arrivee, avecRechercheChemin = False):
         """
         Fonction qui envoie un point d'arrivé au robot sans utiliser la recherche de chemin (segment direct départ-arrivée)
         :param script: point d'arrivé
         :type script: point
-        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin : contient de quoi créer une recursion.
-        :type avecRechercheChemin: list
+        :param avecRechercheChemin: si le segment a été trouvé par la recherche de chemin
         """
         depart = self.getPosition()
         log.logger.info("effectue le segment de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
@@ -111,7 +109,7 @@ class Asservissement:
         #appel de la recherche de chemin : liste de points
         chemin = self.rechercheChemin(depart, arrivee)[0]
         for point in chemin:
-            self.goToSegment(point)
+            self.goToSegment(point, avecRechercheChemin = True)
         
         #on réinitialise la mémoire des (du) robot ennemi
         self.oublierAdverses()
@@ -246,7 +244,6 @@ class Asservissement:
     def oublierAdverses(self):
         __builtin__.instance.viderListeRobotsAdv()
         self.hotSpots = self.hotSpotsOriginaux[:]
-    
     
     ############################## </HACK>
     
@@ -453,7 +450,7 @@ class Asservissement:
     def immobiliser(self):
         self.serieAsserInstance.ecrire('stop')
         
-    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = [], numTentatives = 1):
+    def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False, numTentatives = 1):
         """
         méthode de haut niveau pour translater le robot
         prend en paramètre la distance à parcourir en mm
@@ -488,11 +485,7 @@ class Asservissement:
                 #recommencer le déplacement
                 self.gestionAvancer(distance,"sansRecursion")
         
-        if retour == "obstacle" :
-            ##2 
-            #ajoute un robot adverse sur la table, pour la recherche de chemin
-            #stopper le robot
-                
+        if retour == "obstacle" and not instruction == "oublierCapteur":
             orientation = self.getOrientation()
             position = self.getPosition()
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
@@ -508,29 +501,9 @@ class Asservissement:
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
                 self.immobiliser()
             
-                if avecRechercheChemin :
+                if avecRechercheChemin or instruction == "sansRecursion":
                     #robot adverse
                     self.oublierAdverses()
-                    __builtin__.instance.ajouterRobotAdverse(adverse)
-                    
-                    #est-il rentable de relancer une recherche de chemin ?
-                    self.asserInstanceDuree.setPosition(position)
-                    self.asserInstanceDuree.lancerChrono()
-                    self.asserInstanceDuree.goTo(destination)
-                    if self.asserInstanceDuree.mesurerChrono() < __builtin__.instance.timeout:
-                        #le contretemps est quand meme plus profitable que de changer de script
-                        
-                        #avecRechercheChemin est une liste dont les éléments permettent de lancer un appel récursif
-                        destination = avecRechercheChemin[0]
-                        new_numTentatives = avecRechercheChemin[1] + 1
-                        self.goTo(destination, new_numTentatives)
-                    else:
-                        #la stratégie connait un script plus avantageux que de retenter un goTo pour le script courant
-                        raise Exception
-                    
-                elif instruction == "sansRecursion":
-                    ##4
-                    #robot adverse
                     __builtin__.instance.ajouterRobotAdverse(adverse)
                     #stopper l'execution du script parent
                     raise Exception
@@ -548,11 +521,7 @@ class Asservissement:
                         
                     if not ennemi_en_vue:
                         #vider la liste des robots adverses repérés
-                        if not __builtin__.instance.liste_robots_adv == []:
-                            self.oublierAdverses()
-                        
-                        #baisser vitesse
-                        #self.changerVitesse("translation", 1)
+                        self.oublierAdverses()
                         
                         #finir le déplacement
                         posApres = self.getPosition()
@@ -563,46 +532,23 @@ class Asservissement:
                             signe = 1
                         self.gestionAvancer(distance-signe*dist, "sansRecursion")
                         
-                        #remettre vitesse
-                        #self.changerVitesse("translation", 2)
-                        
                     else:
                         #robot adverse
+                        self.oublierAdverses()
                         __builtin__.instance.ajouterRobotAdverse(adverse)
-                        if hasattr(__builtin__.instance, 'actionInstance'):
-                            actionInstance = __builtin__.instance.actionInstance
-                            self.goToScript(Point(-820,905))
-                            self.gestionTourner(3.14)
-                            actionInstance.deplacer(120,["bd"])
-                            time.sleep(0.3)
-                            self.gestionAvancer(260)
-                            self.gestionTourner(-1.57)
-                            self.gestionTourner(0)
-                            actionInstance.deplacer(120,["bg"])
-                            time.sleep(0.3)
-                            self.goToScript(Point(820,905))
-                            self.gestionTourner(0)
-                            self.gestionAvancer(260,"auStopNeRienFaire")
-                            actionInstance.deplacer(140)
-                            time.sleep(0.3)
-                            self.gestionAvancer(-260)
-                        
                         #stopper l'execution du script parent
                         raise Exception
                         
             else:
                 #fausse alerte : on termine tranquil'
                 print "fausse alerte. pos à "+str(position)+", adverse à "+str(adverse)+"."
-                if instruction == "sansRecursion":
-                    #stopper l'execution du script parent
-                    raise Exception
+                
+                dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
+                if distance != 0:
+                    signe = distance/abs(distance)
                 else:
-                    dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
-                    if distance != 0:
-                        signe = distance/abs(distance)
-                    else:
-                        signe = 1
-                    self.gestionAvancer(distance-signe*dist,"sansRecursion")
+                    signe = 1
+                self.gestionAvancer(distance-signe*dist,"oublierCapteur")
                     
         if retour == "stoppe" and instruction == "sansRecursion":
             #stopper l'execution du script parent
@@ -767,189 +713,6 @@ class Asservissement:
             #remettre vitesse
             self.changerVitesse("rotation", 2)
         
-    def afficherMenu(self):
-        print """
-        Indiquer l'action à effectuer :
-        Quitter-------------------------------[0]
-        Zone de départ------------------------[1]
-        Constante de rotation-----------------[2]
-        Constante de translation--------------[3]
-        Changer la position courante-----------[4]
-        Activer/Désactiver l'asservissement---[5]
-        Afficher des valeurs------------------[6]
-        Ping de la liaison série--------------[7]
-        """
-
-    def afficherSousMenu(self):
-        print """
-        Revenir au menu-----------------------[0]
-        Changer la dérivée--------------------[1]
-        Changer l'intégration-----------------[2]
-        Changer le proportionnel--------------[3]
-        Mettre le max du PWM------------------[4]
-        """
-        
-    def modifierConstantes(self):
-        self.afficherMenu()
-        main_exit = False
-        while not main_exit:
-            
-            choix = raw_input()
-            #Quitter
-            if choix == '0':
-                main_exit = True
-                pass
-            #Définir la zone de départ
-            elif choix == '1':
-                couleur = raw_input("Indiquer la zone de départ (r/v)")
-                message = 'cc' + str(couleur)
-                self.serieAsserInstance.ecrire(message)
-                self.afficherMenu()
-            #Définir les constantes de rotation
-            elif choix == '2':
-                exit = False
-                valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
-                while not exit:
-                    self.afficherSousMenu()
-                    choix = raw_input()
-                    message = "cr"
-                    
-                    if choix != '0':
-                        constante = raw_input("Indiquer la valeur de la constante :")
-                        message += str(valeurs[choix]) + '' + str(constante)
-                        self.serieAsserInstance.ecrire(message)
-                    
-                    else:
-                        exit = True
-                        self.afficherMenu()
-            #Définir les constantes de translation
-            elif choix == '3':
-                exit = False
-                valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
-                while not exit:
-                    self.afficherSousMenu()
-                    choix = raw_input()
-                    message = "ct"
-                    
-                    if choix != '0':
-                        constante = raw_input("Indiquer la valeur de la constante :")
-                        message += valeurs[choix] + '' + str(constante)
-                        self.serieAsserInstance.ecrire(message)
-                    
-                    else:
-                        exit = True
-                        self.afficherMenu()
-            #Définir la position courante
-            elif choix == '4':
-                print "Ne pas rentrer de valeur pour une coordonée permet de laisser la valeur déjà enregistrée sur l'AVR"
-                coordonneX = raw_input("Rentrer a coordonée en x : ")
-                if coordonneX:
-                    message = 'cx' + str(coordonneX)
-                    self.serieAsserInstance.ecrire(message)
-                
-                coordonneY = raw_input("Rentrer a coordonée en y: ")
-                if coordonneY:
-                    message = 'cy' + str(coordonneY)
-                    self.serieAsserInstance.ecrire(message)
-                
-                self.afficherMenu()
-            #Activer ou désactiver l'asservissement
-            elif choix == '5':
-                exit = False
-                while not exit:
-                    print """
-                    Revenir au menu-----------------------[0]
-                    Activer la rotation-------------------[1]
-                    Désactiver la rotation----------------[2]
-                    Activer la translation----------------[3]
-                    Désactiver la translation-------------[4]
-                    """
-                    constante = raw_input()
-                    if constante == '1':
-                        message = 'sr'
-                        self.serieAsserInstance.ecrire(message)
-                    elif constante == '2':
-                        message = 'dr'
-                        self.serieAsserInstance.ecrire(message)
-                    elif constante == '3':
-                        message = 'st'
-                        self.serieAsserInstance.ecrire(message)
-                    elif constante == '4':
-                        message = 'dt'
-                        self.serieAsserInstance.ecrire(message)
-                    elif constante == '0':
-                        exit = True
-                        self.afficherMenu()
-            #Afficher les constantes enregistrées dans l'AVR
-            elif choix == '6':
-                exit = False
-                while not exit:
-                    print """
-                    Revenir au menu------------------------------------[0]
-                    Afficher la couleur--------------------------------[1]
-                    Afficher la rotation-------------------------------[2]
-                    Afficher la translation----------------------------[3]
-                    Afficher le type d'asservissement------------------[4]
-                    Afficher les coordonnées enregistrées--------------[5]
-                    """
-                    choix = raw_input()
-                    if choix == '0':
-                        exit = True
-                        self.afficherMenu()
-                        
-                    elif choix == '1':
-                        message = 'ec'
-                        
-                    elif choix == '2':
-                        exit = False
-                        valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
-                        while not exit:
-                            self.afficherSousMenu()
-                            choix = raw_input()
-                            if choix == '0':
-                                exit = True
-                                self.afficherMenu()
-                            else:
-                                message = 'er' + valeurs[choix]
-                                self.serieAsserInstance.ecrire(message)
-                    elif choix == '3':
-                        exit = False
-                        valeurs = {"1" : "d", "2" : "i", "3" : "p", "4" : "m"}
-                        while not exit:
-                            self.afficherSousMenu()
-                            choix = raw_input()
-                            if choix == '0':
-                                exit = True
-                                self.afficherMenu()
-                            else:
-                                message = 'et' + valeurs[choix]
-                                self.serieAsserInstance.ecrire(message)
-                    elif choix == '4':
-                        self.serieAsserInstance.ecrire('es')
-                    elif choix =='5':
-                        exit = False
-                        while not exit:
-                            self.serieAsserInstance.ecrire('ex')
-                            answer = False
-                            while not answer:
-                                while not self.serieAsserInstance.file_attente.empty():
-                                    print self.serieAsserInstance.file_attente.get()
-                                    answer = True
-                                    self.afficherSousMenu()
-                            self.serieAsserInstance.ecrire('ye')
-                            while not answer:
-                                while not self.serieAsserInstance.file_attente.empty():
-                                    print self.serieAsserInstance.file_attente.get()
-                                    answer = True
-                                    self.afficherSousMenu()
-            elif choix == '7':
-                exit = False
-                while not exit:
-                    self.serieAsserInstance.ecrire('?')
-                    
-            else:
-                print "Il faut choisir une valeur contenue dans le menu."
-                
     """
     accesseurs direct au PWM pour la borne d'arcade
     (nécessite un flash spécial)
@@ -964,27 +727,3 @@ class Asservissement:
 
     def attendre(self, temps):
         time.sleep(temps)
-        
-    def getZone(self) :
-        
-        couleur = __builtin__.constantes["couleur"]
-        
-        if couleur == "v" :
-            if self.getPosition().x >= 0 and self.getPosition().y <= 1500:
-                return 1
-            elif self.getPosition().x >= 0 and self.getPosition().y > 1500 :
-                return 2
-            elif self.getPosition().x < 0 and self.getPosition().y <= 1500 :
-                return 4
-            elif self.getPosition().x < 0 and self.getPosition().y > 1500 :
-                return 3
-                
-        else :
-            if self.getPosition().x < 0 and self.getPosition().y <= 1500:
-                return 1
-            elif self.getPosition().x < 0 and self.getPosition().y > 1500 :
-                return 2
-            elif self.getPosition().x >= 0 and self.getPosition().y <= 1500 :
-                return 4
-            elif self.getPosition().x >= 0 and self.getPosition().y > 1500 :
-                return 3

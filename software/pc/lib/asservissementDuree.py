@@ -25,7 +25,6 @@ class Asservissement_duree:
     Classe pour gérer l'asservissement
     """
     def __init__(self):
-        self.theta = __builtin__.instance.theta
         if hasattr(__builtin__.instance, 'robotInstance'):
             self.robotInstance = __builtin__.instance.robotInstance
         else:
@@ -105,7 +104,7 @@ class Asservissement_duree:
     ############################## <HACK>
     
     
-    def goToScript(self, arrivee):
+    def goTo(self, arrivee):
         depart = self.getPosition()
         
         #appel de la recherche de chemin : liste de points
@@ -252,31 +251,31 @@ class Asservissement_duree:
     
     
     
-    def goTo(self, arrivee):
-        """
-        Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
-        :param depart: point de départ
-        :type depart: Point
-        :param arrivee: point d'arrivée
-        :type arrivee: Point
-        :param chemin: chemin renvoyé par la recherche de chemin
-        :type chemin: liste de points
-        """
-        depart = self.getPosition()
-        log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
-        chemin_python = self.theta.rechercheChemin(depart,arrivee)
+    #def goTo(self, arrivee):
+        #"""
+        #Fonction qui appelle la recherche de chemin et envoie une liste de coordonnées à la carte asservissement
+        #:param depart: point de départ
+        #:type depart: Point
+        #:param arrivee: point d'arrivée
+        #:type arrivee: Point
+        #:param chemin: chemin renvoyé par la recherche de chemin
+        #:type chemin: liste de points
+        #"""
+        #depart = self.getPosition()
+        #log.logger.info("Appel de la recherche de chemin pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
+        #chemin_python = self.theta.rechercheChemin(depart,arrivee)
         
-        try :
-            chemin_python.remove(chemin_python[0])
-        except :
-            return (depart)
+        #try :
+            #chemin_python.remove(chemin_python[0])
+        #except :
+            #return (depart)
             
-        for i in chemin_python:
-            log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
+        #for i in chemin_python:
+            #log.logger.info("goto (" + str(float(i.x)) + ', ' + str(float(i.y)) + ')')
             
-            #effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
-            self.goToSegment(i,True)
-        return "chemin_termine"
+            ##effectue un segment du chemin trouvé, en indiquant que la recherche de chemin a été utilisée
+            #self.goToSegment(i,True)
+        #return "chemin_termine"
         
     def gestionAvancer(self, distance, instruction = "", avecRechercheChemin = False):
         self.position.x += distance*math.cos(self.orientation)
