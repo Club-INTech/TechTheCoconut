@@ -712,6 +712,57 @@ class Asservissement:
             #remettre vitesse
             self.changerVitesse("rotation", 2)
         
+    def degager(self,retry = False):
+        orientation = self.getOrientation()
+        if not retry :
+            if orientation > -3*math.pi/4 and orientation <= -math.pi/4:
+                consigne = -math.pi/2
+            elif orientation > -math.pi/4 and orientation <= math.pi/4:
+                consigne = 0.
+            elif orientation > math.pi/4 and orientation <= 3*math.pi/4:
+                consigne = math.pi/2
+            else:
+                consigne = math.pi
+        else :
+            if orientation <= -math.pi/2:
+                consigne = -3*math.pi/4
+            elif orientation > -math.pi/2 and orientation <= 0:
+                consigne = -math.pi/4
+            elif orientation > 0 and orientation <= math.pi/2:
+                consigne = math.pi/4
+            else:
+                consigne = 3*math.pi/4
+                
+        self.gestionTourner(consigne,instruction = "finir",avecSymetrie = False)
+
+        if hasattr(__builtin__.instance, 'actionInstance'):
+            actionInstance = __builtin__.instance.actionInstance
+            actionInstance.deplacer(40)
+            time.sleep(0.3)
+            actionInstance.deplacer(70)
+            time.sleep(0.3)
+            actionInstance.deplacer(0)
+            time.sleep(0.3)
+            
+        self.gestionAvancer(150,instruction = "auStopNeRienFaire")
+        self.gestionAvancer(150,instruction = "auStopNeRienFaire")
+
+        position = self.getPosition()
+        if self.estInaccessible(position):
+            self.gestionAvancer(-150,instruction = "auStopNeRienFaire")
+            self.gestionAvancer(-150,instruction = "auStopNeRienFaire")
+            
+            position = self.getPosition()
+            if self.estInaccessible(position) and not retry:
+                self.degager(retry = True)
+                    
+        
+    def estInaccessible(self,point):
+        #@@ TODO
+        return True
+        #self.estDansZone(point,Point(),bd):
+        
+        
     """
     accesseurs direct au PWM pour la borne d'arcade
     (nécessite un flash spécial)
