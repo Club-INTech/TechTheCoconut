@@ -167,10 +167,10 @@ class Strategie():
                              "rafflerTotem01" : [9,Point(0,1500), 27, [-1, 5], 0],
                              "rafflerTotem10" : [6,Point(-920+ 70, 450+180), 40, [-1, 4], 0],
                              
-                             "enfoncerPoussoir0" : [5,Point(751.344262295,1445.0), 5,[-1, 3], 0],
-                             "enfoncerPoussoir1" : [5,Point(-360, 1510.), 5, [-1, 3], 0],
+                             "enfoncerPoussoir0" : [5,Point(751.344262295,1445.0), 10,[-1, 3], 0],
+                             "enfoncerPoussoir1" : [5,Point(-360, 1510.), 10, [-1, 3], 0],
                              
-                             "bourrerCale"       : [0,Point(900, 1000), 8,  [0, 3], 0]
+                             "bourrerCale"       : [0,Point(900, 1000), 9,  [0, 3], 0]
                             }
                             
         elif self.strategie == 2 :

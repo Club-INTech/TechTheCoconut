@@ -53,6 +53,8 @@ while not stop :
         action = "rafflerTotem01"
     elif action == "10" :
         action = "rafflerTotem10"
+    elif action == "11" :
+        action = "rafflerTotem11"
     elif action == "p0" :
         action = "enfoncerPoussoir0"
     elif action == "p1" :
@@ -81,6 +83,7 @@ while not stop :
         continue
     elif action == "?" :
         afficheraide()
+        continue
     
     try :
         exec("script.gestionScripts(script." + action + ")" )

@@ -679,18 +679,18 @@ class Script:
         action.deplacer(0)
         #asser.goTo(Point(200, 450))
         #log.logger.debug("COUCOUCOUCOU")
-        asser.goTo(Point(-80,660))
+        asser.goTo(Point(-90,660))
         
         #début notre totem sud
         asser.gestionTourner(0)
-        action.deplacer(130)
+        action.deplacer(140)
         asser.attendre(0.2)
         
         asser.gestionAvancer(50)
         action.deplacer(90, "bg")
         asser.attendre(0.2)
-        action.deplacer(110)
-        asser.attendre(0.1)
+        action.deplacer(130)
+        #asser.attendre(0.1)
         
         asser.gestionAvancer(200,instruction = "finir")
         action.deplacer(120)
@@ -838,7 +838,28 @@ class Script:
     # Rafflage du totem ennemi, côté Nord.
     def rafflerTotem11(self,asser,action) :
         action.deplacer(0)
-        log.logger.debug("Rafflage de totem 1 1 en cours")  
+        log.logger.debug("Rafflage de totem 1 1 en cours")
+        asser.goTo(Point(-920+70, 1350))
+        
+        asser.gestionTourner(0)
+        action.deplacer(130)
+        asser.attendre(0.2)
+        
+        asser.gestionAvancer(20)
+        action.deplacer(70, "bd")
+        asser.attendre(0.2)
+        action.deplacer(130, "bd")
+        asser.gestionAvancer(230,"finir")
+        action.deplacer(120)
+        asser.attendre(0.2)
+        asser.gestionTourner(0,instruction = "finir")
+        asser.gestionAvancer(200,instruction = "finir")
+        action.deplacer(110)
+        asser.attendre(0.2)
+        action.deplacer(150)
+        asser.attendre(0.2)
+        asser.gestionTourner(0,instruction = "finir")
+        asser.gestionAvancer(350,instruction = "finir")
     
     
     #----------------------#
@@ -849,7 +870,7 @@ class Script:
     def enfoncerPoussoir0(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goTo(Point(850,1400))
+        asser.goTo(Point(860,1490))
         asser.gestionTourner(math.pi/2)
         action.deplacer(120, "bd")
         #asser.attendre(0.2)
@@ -933,10 +954,10 @@ class Script:
         action.deplacer(0)
         
     def debutRapide(self, asser, action) :
-        asserInstance.changerVitesse("translation", 3)
-        asserInstance.gestionTourner(3.12)
-        asserInstance.gestionAvancer(1000, "auStopNeRienFaire")
-        asserInstance.changerVitesse("translation", 2)
+        asser.changerVitesse("translation", 3)
+        asser.gestionTourner(3.12)
+        asser.gestionAvancer(1300, "auStopNeRienFaire")
+        asser.changerVitesse("translation", 2)
         
     def viderCaleEnnemi(self, asser, action) :
         log.logger.debug("Farmage d'ennemi")
@@ -1035,7 +1056,7 @@ class Script:
         action.deplacer(150)
         asser.attendre(0.2)
         asser.gestionAvancer(200, "auStopNeRienFaire")
-        action.deplacer(30, ["bg", "bd"])
+        action.deplacer(30)
         asser.attendre(0.2)
         asser.gestionTourner(0)
         action.deplacer(150)
