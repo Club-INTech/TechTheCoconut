@@ -313,7 +313,7 @@ class Asservissement:
             elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                 print "tourner : timeout !"
                 return "timeout"
-            time.sleep(0.05)
+            time.sleep(0.1)
             
         return "acquittement"
     
@@ -397,6 +397,7 @@ class Asservissement:
             if reponse == "FIN_REC":
                 log.logger.info("fin du recalage")
                 acquitement = True
+            time.sleep(0.1)
         
     def setUnsetAsser(self, asservissement, mode):
         pass
