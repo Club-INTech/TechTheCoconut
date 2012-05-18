@@ -52,7 +52,7 @@ class Asservissement:
             self.serieAsserInstance.ecrire('ccr')
         
         #vitesse moyenne (translation et rotations)
-        self.vitesse_moyenne_segment = 1
+        self.vitesse_moyenne_segment = 700
         
         #liste des centres de robots adverses repérés (liste de points)
         self.liste_robots_adv = __builtin__.instance.liste_robots_adv
@@ -118,7 +118,7 @@ class Asservissement:
         
     def getTimeTo(self,depart, arrivee):
         #appel de la recherche de chemin : distance parcourue
-        return self.rechercheChemin(depart, arrivee)[1]*self.vitesse_moyenne_segment
+        return self.rechercheChemin(depart, arrivee)[1]/self.vitesse_moyenne_segment
         
     def rechercheChemin(self, depart, arrivee):
         """

@@ -479,7 +479,7 @@ class Script:
         asser.setOrientation(0)
         xa = raw_input("x arrivée? ")
         ya = raw_input("y arrivée? ")
-        asser.goToScript(Point(float(xa),float(ya)))
+        asser.goTo(Point(float(xa),float(ya)))
         
     def test5(self,asser,action):
         action.deplacer(150)
@@ -525,8 +525,8 @@ class Script:
         asser.setPosition(Point(0,400))
         asser.setOrientation(1.57)
         
-        asser.goToScript(Point(1002,703))
-        asser.goToScript(Point(0,400))
+        asser.goTo(Point(1002,703))
+        asser.goTo(Point(0,400))
         
 
 ####################################################################################################################
@@ -766,13 +766,13 @@ class Script:
     def rafflerTotem00(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 0 sdvmoskdvvpsdok")
         action.deplacer(0)
-        #asser.goToScript(Point(200, 450))
+        #asser.goTo(Point(200, 450))
         #log.logger.debug("COUCOUCOUCOU")
-        asser.goToScript(Point(-45.,660.6))
+        asser.goTo(Point(-60,660))
         
         #début notre totem sud
         asser.gestionTourner(0)
-        action.deplacer(120)
+        action.deplacer(130)
         asser.attendre(0.5)
         asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
         action.deplacer(120)
@@ -809,7 +809,7 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goToScript(Point(-392.227979275,1445.0))
+        asser.goTo(Point(-392.227979275,1445.0))
         ##début notre totem nord
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -874,7 +874,7 @@ class Script:
     def rafflerTotem10(self,asser,action) :
         log.logger.debug("Rafflage de totem 1 0 en cours")
         action.deplacer(0)
-        asser.goToScript(Point(-920+ 70, 450+180))
+        asser.goTo(Point(-920+ 70, 450+180))
         asser.gestionTourner(0)
         action.deplacer(150)
         asser.attendre(0.5)
@@ -944,7 +944,7 @@ class Script:
     def enfoncerPoussoir0(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté nous en cours")
-        asser.goToScript(Point(751.344262295,1445.0))
+        asser.goTo(Point(751.344262295,1445.0))
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -964,7 +964,7 @@ class Script:
     def enfoncerPoussoir1(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Enfonçage du poussoir côté ennemi en cours")
-        asser.goToScript(Point(-360, 1510.))  
+        asser.goTo(Point(-360, 1510.))  
         asser.gestionTourner(math.pi/2)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -990,7 +990,7 @@ class Script:
         """
         log.logger.debug("C'est parti, on farme l'ennemi !")
         action.deplacer(0)
-        asser.goToScript(Point(-1500+960-70, 2000-260+160))
+        asser.goTo(Point(-1500+960-70, 2000-260+160))
         asser.gestionTourner(-math.pi)
         action.deplacer(150, "bd")
         asser.attendre(0.5)
@@ -1044,7 +1044,7 @@ class Script:
         asser.attendre(0.2)
         asser.gestionAvancer(270, "auStopNeRienFaire")
         asser.gestionAvancer(-270)
-        
+        action.deplacer(0)
     # Tour de table avec les bras fermés.
     def tourDeTable0(self,asser,action) :
         """
@@ -1133,7 +1133,7 @@ class Script:
 
     def preAction_1_2(self, asser, action) :
         action.deplacer(0)
-        asser.goToScript(Point(800, 700))
+        asser.goTo(Point(800, 700))
         asser.gestionTourner(math.pi/2)
         action.deplacer(110)
         asser.attendre(0.2)
