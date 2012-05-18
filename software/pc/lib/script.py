@@ -768,6 +768,7 @@ class Script:
         action.deplacer(110)
         asser.gestionAvancer(-150)
         action.deplacer(0)
+
         
     # Rafflage du totem ennemi côté sud (y petits)
     def rafflerTotem10(self,asser,action) :
@@ -982,6 +983,38 @@ class Script:
         asser.gestionAvancer(270, "auStopNeRienFaire")
         asser.gestionAvancer(-270)
         action.deplacer(0)
+        
+    def viderCaleEnnemi2(self, asser, action) :
+        log.logger.debug("On vide la cale de l'autre !")
+        action.deplacer(0)
+        asser.goTo(Point(-950, 1436)
+        asser.gestionTourner(-math.pi/2-0.1)
+        
+        action.deplacer(180, "bd")
+        asser.attendre(0.1)
+        asser.gestionAvancer(200, "auStopNeRienFaire")
+        action.deplacer(70, "bd")
+        asser.attendre(0.2)
+        action.deplacer(180, "bd")
+        asser.attendre(0.2)
+        asser.gestionAvancer(200)
+        action.deplacer(70, "bd")
+        asser.attendre(0.2)
+        action.deplacer(180, "bd")
+        asser.attendre(0.2)
+        asser.gestionAvancer(200)
+        action.gestionTourner(20)
+        asser.gestionTourner(0)
+        
+        asser.goTo(Point(779, 974))
+        asser.gestionTourner(0)
+        action.deplacer(160, ["bd", "bg"])
+        asser.attendre(0.2)
+        asser.gestionAvancer(270, "auStopNeRienFaire")
+        asser.gestionAvancer(-270)
+        action.deplacer(0)
+        
+        
     # Tour de table avec les bras fermés.
     def tourDeTable0(self,asser,action) :
         """
