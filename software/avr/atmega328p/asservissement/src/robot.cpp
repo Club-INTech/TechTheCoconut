@@ -36,13 +36,8 @@ Robot::Robot() : 		couleur_('v')
 
 	changer_orientation(3.1415);
 
-	translation.valeur_bridage(100.0);
-	translation.kp(0.75);
-	translation.kd(2.5);
-
-	rotation.valeur_bridage(100.0);
-	rotation.kp(1.2);
-	rotation.kd(3.5);
+	changerVitesseRot2();
+	changerVitesseTra2();
 }
 
 void Robot::asservir()
@@ -332,8 +327,8 @@ void Robot::changerVitesseTra2(void)
 void Robot::changerVitesseTra3(void)
 {
 	translation.valeur_bridage(200.0);
-	translation.kp(0.75);
-	translation.kd(3.5);
+	translation.kp(0.5);
+	translation.kd(4.0);
 
 }
 void Robot::changerVitesseRot1(void)
