@@ -149,20 +149,18 @@ class Log:
             return True
         return False
 
-    def revision_disponible(self, dossier, dossier_date):
+    def revision_disponible(self, dossier):
         """
         Donne la prochaine révision à créer dans les logs
         
         :param dossier: dossier principal des logs
         :type dossier: string
-        :param dossier_date: dossier de la date actuelle
-        :type dossier_date: string
         :return: révision à créer
         :rtype: int
         """
         i = 0
-        self.creer_dossier(dossier+"/"+dossier_date)
-        while os.path.exists(dossier+"/"+dossier_date+"/"+str(i)+".log"):
+        self.creer_dossier(dossier)
+        while os.path.exists(dossier+"/"+str(i)+".log"):
             i += 1
         return i
 
