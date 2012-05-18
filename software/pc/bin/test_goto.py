@@ -63,6 +63,8 @@ while not stop :
         action = "bourrerCale"
     elif action == "e" :
         action = "viderCaleEnnemi"
+    elif action == "e2" :
+        action = "viderCaleEnnemi2"
         
     elif action == "g1" :
         action = "test_goto1"

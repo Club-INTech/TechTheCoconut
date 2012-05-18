@@ -819,7 +819,7 @@ class Script:
     def rafflerTotem11(self,asser,action) :
         action.deplacer(0)
         log.logger.debug("Rafflage de totem 1 1 en cours")
-        asser.goTo(Point(-920+70, 1350))
+        asser.goTo(Point(-920+70, 1390))
         
         asser.gestionTourner(0)
         action.deplacer(130)
@@ -876,7 +876,7 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         
         asser.gestionAvancer(-500, "auStopNeRienFaire")
-        asser.gestionAvancer(300)
+        asser.gestionAvancer(300, 'finir')
         asser.gestionTourner(-math.pi/2)
         #asser.gestionAvancer(-100)
         action.deplacer(0)
@@ -894,6 +894,8 @@ class Script:
         #asser.gestionAvancer(220)
         asser.gestionTourner(-math.pi)
         asser.gestionTourner(-math.pi/2)
+        
+        action.deplacer(20, "bd")
         
         asser.gestionAvancer(-3000, "auStopNeRienFaire")
         asser.gestionAvancer(400)
@@ -987,7 +989,7 @@ class Script:
     def viderCaleEnnemi2(self, asser, action) :
         log.logger.debug("On vide la cale de l'autre !")
         action.deplacer(0)
-        asser.goTo(Point(-950, 1436)
+        asser.goTo(Point(-950, 1436))
         asser.gestionTourner(-math.pi/2-0.1)
         
         action.deplacer(180, "bd")
