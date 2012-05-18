@@ -841,7 +841,7 @@ class Script:
         asser.gestionTourner(0,instruction = "finir")
         asser.gestionAvancer(350,instruction = "finir")
         
-        asser.gestionTourner(math.pi/4)
+        asser.gestionTourner(-math.pi/4)
         asser.gestionAvancer(300)
         asser.gestionTourner(0)
         asser.gestionAvancer(300, "auStopNeRienFaire")
