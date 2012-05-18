@@ -60,11 +60,8 @@ void Robot::asservir()
 	else
 		pwmTranslation = 0;
 	
-	if(etat_tra_ || etat_rot_)
-	{
-		moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
-		moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
-	}
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
 	
 }
 
