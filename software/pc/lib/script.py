@@ -747,7 +747,7 @@ class Script:
         asser.gestionAvancer(200,instruction = "finir")
         action.deplacer(110)
         asser.attendre(0.2)
-        action.deplacer(150)
+        action.deplacer(130)
         asser.attendre(0.2)
         asser.gestionTourner(0,instruction = "finir")
         asser.gestionAvancer(350,instruction = "finir")
