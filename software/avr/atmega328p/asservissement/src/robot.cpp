@@ -60,11 +60,8 @@ void Robot::asservir()
 	else
 		pwmTranslation = 0;
 	
-	if(etat_tra_ || etat_rot_)
-	{
-		moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
-		moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
-	}
+	moteurGauche.envoyerPwm(pwmTranslation - pwmRotation);
+	moteurDroit.envoyerPwm(pwmTranslation + pwmRotation);
 	
 }
 
@@ -81,8 +78,8 @@ void Robot::update_position()
 	float last_angle_radian = last_angle* CONVERSION_TIC_RADIAN_;
 	float delta_distance_mm = delta_distance_tic * CONVERSION_TIC_MM_;
 
-	x_ += ( delta_distance_mm * cos( last_angle_radian - angle_origine_ ) );
-	y_ += ( delta_distance_mm * sin( last_angle_radian - angle_origine_) );
+	x_ += ( delta_distance_mm * cos(angle_serie_) );
+	y_ += ( delta_distance_mm * sin(angle_serie_) );
 
 	angle_serie_ += delta_angle_tic * CONVERSION_TIC_RADIAN_;
 

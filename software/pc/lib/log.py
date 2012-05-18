@@ -100,7 +100,6 @@ class Log:
         dossier_racine = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         dossier_abs = dossier_racine+"/"+dossier
         Log.dossier_logs = dossier
-        Log.dossier_date = str(datetime.date.today())
         Log.stderr = stderr
         Log.logs = logs
         Log.stderr_level = stderr_level
@@ -127,7 +126,7 @@ class Log:
         if logs:
             self.creer_dossier(dossier_abs)
             if not hasattr(Log, 'revision'):
-                Log.revision = self.revision_disponible(dossier, Log.dossier_date)
+                Log.revision = self.revision_disponible(dossier)
             # Ajout du handler pour logs
             self.configurer_logs()
         # Création de l'entête dans stderr et logs
@@ -149,20 +148,18 @@ class Log:
             return True
         return False
 
-    def revision_disponible(self, dossier, dossier_date):
+    def revision_disponible(self, dossier):
         """
         Donne la prochaine révision à créer dans les logs
         
         :param dossier: dossier principal des logs
         :type dossier: string
-        :param dossier_date: dossier de la date actuelle
-        :type dossier_date: string
         :return: révision à créer
         :rtype: int
         """
         i = 0
-        self.creer_dossier(dossier+"/"+dossier_date)
-        while os.path.exists(dossier+"/"+dossier_date+"/"+str(i)+".log"):
+        self.creer_dossier(dossier)
+        while os.path.exists(dossier+"/"+str(i)+".log"):
             i += 1
         return i
 
@@ -179,7 +176,7 @@ class Log:
         """
         if hasattr(Log, 'logs_handler'):
             self.logger.removeHandler(Log.logs_handler)
-        Log.logs_handler = logging.FileHandler(Log.dossier_logs+"/"+Log.dossier_date+"/"+str(Log.revision)+".log")
+        Log.logs_handler = logging.FileHandler(Log.dossier_logs+"/"+str(Log.revision)+".log")
         exec("Log.logs_handler.setLevel(logging."+Log.logs_level+")")
         formatter = logging.Formatter(Log.logs_format)
         Log.logs_handler.setFormatter(formatter)
