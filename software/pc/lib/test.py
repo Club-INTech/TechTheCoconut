@@ -3,7 +3,6 @@
 import asservissement
 import outils_math
 import robot
-import recherche_chemin.thetastar
 from outils_math.point import Point
 import script
 import time
@@ -43,14 +42,7 @@ sc.gestionScripts(sc.secour)
 #strategie = strategie.Strategie()
 #strategie.lancer()
 #############################################################################################
-#test recherche de chemin
 
-#from outils_math.point import Point
-#import recherche_chemin.thetastar
-#t = recherche_chemin.thetastar.Thetastar()
-#d = Point(1300,250)
-#a = Point(-800,1700)
-#t.rechercheChemin(d,a)
 
 ##############################UTILISATION D'UN SCRIPT########################################
 #while True:

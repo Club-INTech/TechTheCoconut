@@ -3,7 +3,6 @@
 import asservissement
 import outils_math
 import robot
-import recherche_chemin.thetastar
 import script
 import time
 import serial
