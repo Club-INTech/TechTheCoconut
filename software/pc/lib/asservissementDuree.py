@@ -103,21 +103,24 @@ class Asservissement_duree:
     
     ############################## <HACK>
     
-    
     def goTo(self, arrivee):
         depart = self.getPosition()
+        
+        ##éventuelle symétrie sur la position d'arrivée
+        if __builtin__.constantes['couleur'] == "r":
+            arrivee.x *= -1
         
         #appel de la recherche de chemin : liste de points
         chemin = self.rechercheChemin(depart, arrivee)[0]
         for point in chemin:
-            self.goToSegment(point)
+            self.goToSegment(point, avecRechercheChemin = True)
         
         #on réinitialise la mémoire des (du) robot ennemi
         self.oublierAdverses()
         
     def getTimeTo(self,depart, arrivee):
         #appel de la recherche de chemin : distance parcourue
-        return self.rechercheChemin(depart, arrivee)[1]*self.vitesse_moyenne_segment
+        return self.rechercheChemin(depart, arrivee)[1]/self.vitesse_moyenne_segment
         
     def rechercheChemin(self, depart, arrivee):
         """
@@ -130,15 +133,11 @@ class Asservissement_duree:
         log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         
         HSdepart = self.hotSpot(depart)
-        print "hotspot de départ : "+str(HSdepart)
         HSarrivee = self.hotSpot(arrivee)
-        print "hotspot de'arrivée : "+str(HSarrivee)
         
         #couper l'anneau si robot adverse
         for adverse in self.liste_robots_adv:
             self.supprimerHotspot(self.hotSpot(adverse))
-            print "le hotspot "+str(self.hotSpot(adverse))+" a été supprimé."
-            
         
         if HSdepart == HSarrivee :
             chemin = [HSdepart]
@@ -149,9 +148,6 @@ class Asservissement_duree:
             listeSens2 = listeSens1[:]
             listeSens2.reverse()
             listeSens2.insert(0,listeSens2.pop())
-            
-            print "listeSens1 : "+str(listeSens1)
-            print "listeSens2 : "+str(listeSens2)
             
             #calcul de la distance du trajet, dans les 2 sens
             dist1 = 0.
@@ -177,9 +173,6 @@ class Asservissement_duree:
                     cheminSens2.append(listeSens2[k])
                 if listeSens2[k] == HSarrivee:
                     break
-                    
-            print "cheminSens1 : "+str(cheminSens1)
-            print "cheminSens2 : "+str(cheminSens2)
                 
             if dist1 <= dist2:
                 chemin = cheminSens1
@@ -189,7 +182,14 @@ class Asservissement_duree:
                 dist = dist2
             chemin.insert(0,HSdepart)
         
-        chemin.append(arrivee)
+        #ajouter le point d'arrivée, si ce n'est pas un hotspot
+        if not (arrivee.x == chemin[-1].x and arrivee.y == chemin[-1].y):
+            chemin.append(arrivee)
+            
+        #ne pas créer de doublon si le point de départ était un hotspot
+        try : chemin.remove(depart)
+        except : pass
+        
         
         #ajoute les distances des points départ et arrivée à celles calculées entre les hotspots
         dist += math.sqrt( (depart.x - HSdepart.x)**2 + (depart.y - HSdepart.y)**2 )
@@ -204,7 +204,7 @@ class Asservissement_duree:
         
         #zone sur le coté du totem
         if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
-            return self.hotSpots[6]
+            return self.hotSpots[7]
         elif self.estDansZone(point,Point(401,1180),Point(592,810)):
             return self.hotSpots[2]
             
@@ -221,7 +221,6 @@ class Asservissement_duree:
             return self.hotSpots[4]
             
         else:
-        
             dest = self.hotSpots[0]
             for hs in self.hotSpots:
                 if hs :
@@ -241,11 +240,10 @@ class Asservissement_duree:
             self.hotSpots.pop(pos)
             self.hotSpots.insert(pos,"")
         except: pass
-        
+    
     def oublierAdverses(self):
         __builtin__.instance.viderListeRobotsAdv()
         self.hotSpots = self.hotSpotsOriginaux[:]
-    
     
     ############################## </HACK>
     
@@ -341,3 +339,60 @@ class Asservissement_duree:
     def attendre(self, temps):
         print "temps d'attente    \t          \t         \t"+str(temps)
         self.duree += temps
+        
+    def degager(self,retry = False):
+        orientation = self.getOrientation()
+        if not retry :
+            if orientation > -3*math.pi/4 and orientation <= -math.pi/4:
+                consigne = -math.pi/2
+            elif orientation > -math.pi/4 and orientation <= math.pi/4:
+                consigne = 0.
+            elif orientation > math.pi/4 and orientation <= 3*math.pi/4:
+                consigne = math.pi/2
+            else:
+                consigne = math.pi
+        else :
+            if orientation <= -math.pi/2:
+                consigne = -3*math.pi/4
+            elif orientation > -math.pi/2 and orientation <= 0:
+                consigne = -math.pi/4
+            elif orientation > 0 and orientation <= math.pi/2:
+                consigne = math.pi/4
+            else:
+                consigne = 3*math.pi/4
+                
+        self.gestionTourner(consigne,instruction = "finir",avecSymetrie = False)
+
+        if hasattr(__builtin__.instance, 'actionInstance'):
+            actionInstance = __builtin__.instance.actionInstance
+            actionInstance.deplacer(40)
+            time.sleep(0.3)
+            actionInstance.deplacer(70)
+            time.sleep(0.3)
+            actionInstance.deplacer(0)
+            time.sleep(0.3)
+            
+        self.gestionAvancer(150,instruction = "auStopNeRienFaire")
+        self.gestionAvancer(150,instruction = "auStopNeRienFaire")
+
+        position = self.getPosition()
+        if self.estInaccessible(position):
+            self.gestionAvancer(-150,instruction = "auStopNeRienFaire")
+            self.gestionAvancer(-150,instruction = "auStopNeRienFaire")
+            
+            position = self.getPosition()
+            if self.estInaccessible(position) and not retry:
+                self.degager(retry = True)
+                    
+        
+    def estInaccessible(self,point):
+        point.x = abs(point.x)
+        
+        dansTable = self.estDansZone(point,Point(-1300,1800),Point(1300,200))
+        
+        dansTotem = self.estDansZone(point,Point(72,1341),Point(750,660))
+        dansPalmier = self.estDansZone(point,Point(-240,1240),Point(250,750))
+        danscalle = self.estDansZone(point,Point(970,2000),Point(1700,1130))
+        dansbarette = self.estDansZone(point,Point(770,720),Point(1700,280))
+        
+        return not ( dansTable and not (dansTotem or dansPalmier or danscalle or dansbarette) )

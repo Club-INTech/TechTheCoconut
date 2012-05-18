@@ -32,8 +32,8 @@ import instance
 
 asser = __builtin__.instance.asserInstanceDuree
 sc = __builtin__.instance.scriptInstance
-sc.gestionScripts(sc.recalage)
-sc.gestionScripts(sc.secour)
+#sc.gestionScripts(sc.recalage)
+#sc.gestionScripts(sc.secour)
 
 
 #depart = outils_math.point.Point(0.0,400)
@@ -50,31 +50,44 @@ sc.gestionScripts(sc.secour)
     
 ##############################UTILISATION D'UN SCRIPT######################################## 
 
+
 def console():
     asser.setOrientation(0)
     asser.setPosition(Point(float(0),float(400)))
-    while True:
-        print "recherche de chemin"
-        print "quitter............q"
-        print "point de départ....d"
-        print "point d'arrivée....a"
-        print "placer adverse.....p"
-        com = raw_input("?")
-        if com == "q":
-            break
-        elif com == "d":
-            xd = raw_input("x départ? ")
-            yd = raw_input("y départ? ")
-            asser.setPosition(Point(float(xd),float(yd)))
-        elif com == "a":
-            xa = raw_input("x arrivée? ")
-            ya = raw_input("y arrivée? ")
-            asser.goToScript(Point(float(xa),float(ya)))
-        elif com == "p":
-            xp = raw_input("x robot adverse? ")
-            yp = raw_input("y robot adverse? ")
-            __builtin__.instance.ajouterRobotAdverse(Point(float(xp),float(yp)))
-        print ""
+    print ("tests de points inaccessibles....a")
+    print ("tests de goto....................g")
+    com = raw_input("?")
+    if com == "g":
+        while True:
+            print "recherche de chemin"
+            print "quitter............q"
+            print "point de départ....d"
+            print "point d'arrivée....a"
+            print "placer adverse.....p"
+            com = raw_input("?")
+            if com == "q":
+                break
+            elif com == "d":
+                xd = raw_input("x départ? ")
+                yd = raw_input("y départ? ")
+                asser.setPosition(Point(float(xd),float(yd)))
+            elif com == "a":
+                xa = raw_input("x arrivée? ")
+                ya = raw_input("y arrivée? ")
+                asser.goTo(Point(float(xa),float(ya)))
+            elif com == "p":
+                xp = raw_input("x robot adverse? ")
+                yp = raw_input("y robot adverse? ")
+                __builtin__.instance.ajouterRobotAdverse(Point(float(xp),float(yp)))
+            print ""
+    elif com == "a":
+        while True:
+            x = raw_input("x ? ")
+            y = raw_input("y ? ")
+            if( asser.estInaccessible(Point(float(x),float(y)))):
+                print "inaccessible"
+            else:
+                print "accessible"
 console()
 
 

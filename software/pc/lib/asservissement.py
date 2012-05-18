@@ -66,7 +66,7 @@ class Asservissement:
         self.vitesseRotation = 2
         
         #self.hotSpots = [Point(-900,1000),Point(-800,1420),Point(-360,1660),Point(360,1660),Point(800,1420),Point(900,1000),Point(540,290),Point(-540,290)]
-        self.hotSpotsOriginaux = [Point(0, 1440), Point(860, 1440), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1440)]
+        self.hotSpotsOriginaux = [Point(0, 1490), Point(860, 1490), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-990, 630), Point(-875, 970), Point(-860, 1490)]
         self.hotSpots = self.hotSpotsOriginaux[:]
     
     def goToSegment(self, arrivee, avecRechercheChemin = False):
@@ -131,15 +131,11 @@ class Asservissement:
         log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         
         HSdepart = self.hotSpot(depart)
-        print "hotspot de départ : "+str(HSdepart)
         HSarrivee = self.hotSpot(arrivee)
-        print "hotspot de'arrivée : "+str(HSarrivee)
         
         #couper l'anneau si robot adverse
         for adverse in self.liste_robots_adv:
             self.supprimerHotspot(self.hotSpot(adverse))
-            print "le hotspot "+str(self.hotSpot(adverse))+" a été supprimé."
-            
         
         if HSdepart == HSarrivee :
             chemin = [HSdepart]
@@ -150,9 +146,6 @@ class Asservissement:
             listeSens2 = listeSens1[:]
             listeSens2.reverse()
             listeSens2.insert(0,listeSens2.pop())
-            
-            print "listeSens1 : "+str(listeSens1)
-            print "listeSens2 : "+str(listeSens2)
             
             #calcul de la distance du trajet, dans les 2 sens
             dist1 = 0.
@@ -178,9 +171,6 @@ class Asservissement:
                     cheminSens2.append(listeSens2[k])
                 if listeSens2[k] == HSarrivee:
                     break
-                    
-            print "cheminSens1 : "+str(cheminSens1)
-            print "cheminSens2 : "+str(cheminSens2)
                 
             if dist1 <= dist2:
                 chemin = cheminSens1
@@ -190,7 +180,14 @@ class Asservissement:
                 dist = dist2
             chemin.insert(0,HSdepart)
         
-        chemin.append(arrivee)
+        #ajouter le point d'arrivée, si ce n'est pas un hotspot
+        if not (arrivee.x == chemin[-1].x and arrivee.y == chemin[-1].y):
+            chemin.append(arrivee)
+            
+        #ne pas créer de doublon si le point de départ était un hotspot
+        try : chemin.remove(depart)
+        except : pass
+        
         
         #ajoute les distances des points départ et arrivée à celles calculées entre les hotspots
         dist += math.sqrt( (depart.x - HSdepart.x)**2 + (depart.y - HSdepart.y)**2 )
@@ -205,7 +202,7 @@ class Asservissement:
         
         #zone sur le coté du totem
         if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
-            return self.hotSpots[6]
+            return self.hotSpots[7]
         elif self.estDansZone(point,Point(401,1180),Point(592,810)):
             return self.hotSpots[2]
             
@@ -222,7 +219,6 @@ class Asservissement:
             return self.hotSpots[4]
             
         else:
-        
             dest = self.hotSpots[0]
             for hs in self.hotSpots:
                 if hs :
@@ -469,8 +465,8 @@ class Asservissement:
             #stopper le robot
             self.immobiliser()
             if instruction == "sansRecursion":
-                #°°
-                
+                if self.estInaccessible(self.getPosition()):
+                    self.degager()
                 #stopper l'execution du script parent
                 raise Exception
                 
@@ -552,7 +548,8 @@ class Asservissement:
                 self.gestionAvancer(distance-signe*dist,"oublierCapteur")
                     
         if retour == "stoppe" and instruction == "sansRecursion":
-            #°°
+            if self.estInaccessible(self.getPosition()):
+                self.degager()
             #stopper l'execution du script parent
             raise Exception
             
@@ -654,7 +651,8 @@ class Asservissement:
             
             elif numTentatives >= 5:
                 #soucis
-                #°°
+                if self.estInaccessible(self.getPosition()):
+                    self.degager()
                 raise Exception
             
     def gestionTourner(self, angle, instruction = "", avecSymetrie = True):
@@ -687,7 +685,8 @@ class Asservissement:
             #stopper le robot
             self.immobiliser()
             if instruction == "sansRecursion":
-                #°°
+                if self.estInaccessible(self.getPosition()):
+                    self.degager()
                 #stopper l'execution du script parent
                 raise Exception
                 
@@ -699,7 +698,8 @@ class Asservissement:
                 self.gestionTourner(angle,"sansRecursion",avecSymetrie = False)
         
         if retour == "stoppe" and instruction == "sansRecursion":
-            #°°
+            if self.estInaccessible(self.getPosition()):
+                self.degager()
             #stopper l'execution du script parent
             raise Exception
             
@@ -758,9 +758,16 @@ class Asservissement:
                     
         
     def estInaccessible(self,point):
-        #@@ TODO
-        return True
-        #self.estDansZone(point,Point(),bd):
+        point.x = abs(point.x)
+        
+        dansTable = self.estDansZone(point,Point(-1300,1800),Point(1300,200))
+        
+        dansTotem = self.estDansZone(point,Point(72,1341),Point(750,660))
+        dansPalmier = self.estDansZone(point,Point(-240,1240),Point(250,750))
+        danscalle = self.estDansZone(point,Point(970,2000),Point(1700,1130))
+        dansbarette = self.estDansZone(point,Point(770,720),Point(1700,280))
+        
+        return not ( dansTable and not (dansTotem or dansPalmier or danscalle or dansbarette) )
         
         
     """
