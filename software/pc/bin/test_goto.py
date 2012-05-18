@@ -71,6 +71,9 @@ while not stop :
     elif action == "g4" :
         action = "test_goto4"
         
+    elif action == "d" :
+        action = "debutRapide"
+        
     elif action == "!" :
         stop = True
         continue
