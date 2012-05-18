@@ -40,19 +40,14 @@ log.logger.warning("Le recalage a été effectué")
 jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
-farmage_ennemi = True
+farmage_ennemi = False
 
-if not farmage_ennemi :
-    actionInstance.deplacer(0)
-    asserInstance.gestionAvancer(600)
-    asserInstance.gestionTourner(2)
-    asserInstance.gestionAvancer(100)
-else :
+if farmage_ennemi :
     asserInstance.changerVitesse("translation", 3)
     success = asserInstance.gestionAvancer("1900", "auStopNeRienFaire")
     if success :
+        asserInstance.changerVitesse("translation", 2)
         script.gestionScripts(script.rafflerTotem10)
-
 
 # Lancement de la stratégie.
 strategie.lancer()
