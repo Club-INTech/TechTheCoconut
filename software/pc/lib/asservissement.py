@@ -89,7 +89,6 @@ class Asservissement:
         avec un booléen spécifiant que la rotation ne doit pas effectuer de symétrie
         """
         angle = math.atan2(delta_y,delta_x)
-        angle = int(angle*10000)/10000.
         self.gestionTourner(angle,"",avecSymetrie = False)
         
         """
@@ -98,7 +97,6 @@ class Asservissement:
         avec un booléen codant l'utilisation de la recherche de chemin
         """
         distance = math.sqrt(delta_x**2+delta_y**2)
-        distance = int(distance*10)/10.
         self.gestionAvancer(distance,instruction = "",avecRechercheChemin = avecRechercheChemin)
         
     ############################## <HACK>
@@ -109,7 +107,7 @@ class Asservissement:
         ##éventuelle symétrie sur la position d'arrivée
         if __builtin__.constantes['couleur'] == "r":
             arrivee.x *= -1
-            
+        
         #appel de la recherche de chemin : liste de points
         chemin = self.rechercheChemin(depart, arrivee)[0]
         for point in chemin:
@@ -244,7 +242,7 @@ class Asservissement:
             self.hotSpots.pop(pos)
             self.hotSpots.insert(pos,"")
         except: pass
-        
+    
     def oublierAdverses(self):
         __builtin__.instance.viderListeRobotsAdv()
         self.hotSpots = self.hotSpotsOriginaux[:]
@@ -471,8 +469,7 @@ class Asservissement:
             #stopper le robot
             self.immobiliser()
             if instruction == "sansRecursion":
-                ##4
-                #mettre à jour l'attribut position du robot
+                #°°
                 
                 #stopper l'execution du script parent
                 raise Exception
@@ -555,6 +552,7 @@ class Asservissement:
                 self.gestionAvancer(distance-signe*dist,"oublierCapteur")
                     
         if retour == "stoppe" and instruction == "sansRecursion":
+            #°°
             #stopper l'execution du script parent
             raise Exception
             
@@ -656,6 +654,7 @@ class Asservissement:
             
             elif numTentatives >= 5:
                 #soucis
+                #°°
                 raise Exception
             
     def gestionTourner(self, angle, instruction = "", avecSymetrie = True):
@@ -688,9 +687,7 @@ class Asservissement:
             #stopper le robot
             self.immobiliser()
             if instruction == "sansRecursion":
-                ##4
-                #mettre à jour l'attribut position du robot
-                
+                #°°
                 #stopper l'execution du script parent
                 raise Exception
                 
@@ -702,9 +699,7 @@ class Asservissement:
                 self.gestionTourner(angle,"sansRecursion",avecSymetrie = False)
         
         if retour == "stoppe" and instruction == "sansRecursion":
-            ##4
-            #mettre à jour l'attribut orientation du robot
-            
+            #°°
             #stopper l'execution du script parent
             raise Exception
             
