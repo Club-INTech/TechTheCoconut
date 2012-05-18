@@ -728,8 +728,10 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-80,1350))
+        asser.goTo(Point(-80,1370))
         ##début notre totem nord
+        action.gestionTourner(90, ["bd", "hd"])
+        asser.attendre(0.1)
         asser.gestionTourner(0)
         action.deplacer(130)
         asser.attendre(0.2)
@@ -751,7 +753,7 @@ class Script:
         asser.gestionAvancer(350,instruction = "finir")
         
         ## Rotation : vers le bas :
-        action.deplacer(130)
+        action.deplacer(110)
         asser.attendre(0.2)
         asser.gestionTourner(-math.pi/3)
         asser.gestionAvancer(340)
@@ -766,34 +768,6 @@ class Script:
         action.deplacer(110)
         asser.gestionAvancer(-150)
         action.deplacer(0)
-        
-        ## On récupère
-        ##actionInstance.deplacer(0, "bd")
-        ##asserInstance.gestionTourner(-math.pi/2)
-        ##asserInstance.gestionTourner(-math.pi)
-        ##actionInstance.deplacer(150)
-        ##asser.attendre(0.5)
-        ##asserInstance.gestionAvancer(100)
-        ##actionInstance.deplacer(40)
-        ##asserInstance.gestionTourner(0)
-        ##actionInstance.deplacer(130)
-        ##asserInstance.gestionAvancer(300)
-        ##asserInstance.gestionAvancer(-200)
-        
-        ## VERSION 2
-        #action.deplacer(0, ["bd", "hd"])
-        #asser.attendre(0.2)
-        #asser.gestionTourner(-math.pi/2)
-        #asser.gestionTourner(-math.pi)
-        #asser.gestionAvancer(70)
-        #action.deplacer(70, ["hg", "bg"])
-        #asser.gestionTourner(math.pi/2)
-        #action.deplacer(50, ["hg", "bg"])
-        #asser.gestionTourner(0)
-        #action.deplacer(130)
-        #asser.attendre(0.2)
-        #asser.gestionAvancer(300)
-        #asser.gestionAvancer(-200)
         
     # Rafflage du totem ennemi côté sud (y petits)
     def rafflerTotem10(self,asser,action) :
@@ -821,20 +795,25 @@ class Script:
         asser.gestionTourner(0)
         action.deplacer(90)
         asser.attendre(0.3)
-        asser.gestionAvancer(200)
-        action.deplacer(40, "bg")
         
-        action.deplacer(0, ["hd", "hg"])
-        asser.gestionTourner(-1)
-        asser.gestionAvancer(300)
-        asser.gestionTourner(0)
-        asser.gestionAvancer(600)
-        asser.gestionTourner(1)
-        asser.gestionAvancer(500)
-        asser.gestionTourner(0)
-        asser.gestionAvancer(300, "auStopNeRienFaire")
-        asser.gestionAvancer(-300)
+        #asser.gestionAvancer(200)
+        #action.deplacer(40, "bg")
+        
+        #action.deplacer(0, ["hd", "hg"])
+        #asser.gestionTourner(-1)
+        #asser.gestionAvancer(300)
+        #asser.gestionTourner(0)
+        #asser.gestionAvancer(600)
+        #asser.gestionTourner(1)
+        #asser.gestionAvancer(500)
+        #asser.gestionTourner(0)
+        #asser.gestionAvancer(300, "auStopNeRienFaire")
+        #asser.gestionAvancer(-300)
     
+        asser.gestionAvancer(500, "finir")
+        asser.gestionTourner(0)
+        asser.gestionAvancer(400)
+        
     # Rafflage du totem ennemi, côté Nord.
     def rafflerTotem11(self,asser,action) :
         action.deplacer(0)
@@ -860,6 +839,23 @@ class Script:
         asser.attendre(0.2)
         asser.gestionTourner(0,instruction = "finir")
         asser.gestionAvancer(350,instruction = "finir")
+        
+        asser.gestionTourner(math.pi/4)
+        asser.gestionAvancer(300)
+        asser.gestionTourner(0)
+        asser.gestionAvancer(300, "auStopNeRienFaire")
+        asser.gestionAvancer(-50)
+        action.deplacer(130)
+        asser.attendre(0.1)
+        action.deplacer(110)
+        asser.attendre(0.1)
+        action.deplacer(150)
+        asser.changerVitesse("translation", 3)
+        asser.gestionAvancer(-50)
+        asser.changerVitesse("translation", 2)
+        asser.gestionAvancer(-250)
+        action.deplacer(0)
+        asser.gestionTourner(math.pi/2)
     
     
     #----------------------#

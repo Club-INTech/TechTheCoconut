@@ -301,7 +301,7 @@ class Strategie():
             # Incrémentation du poids du farmage de cale
             if "rafflerTotem" in nomAction :
                 try :
-                    self.actions["bourrerCale"][0] += 2
+                    self.actions["bourrerCale"][0] += 5
                 except :
                     pass
         else :
