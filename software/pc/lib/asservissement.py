@@ -481,7 +481,7 @@ class Asservissement:
         
         if retour == "obstacle" and not instruction == "oublierCapteur":
             orientation = self.getOrientation()
-            position = self.getPosition()f
+            position = self.getPosition()
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
             tableLargeur = constantes["Coconut"]["longueur"]
             tableLongueur = constantes["Coconut"]["largeur"]
