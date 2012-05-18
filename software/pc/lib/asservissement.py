@@ -106,6 +106,10 @@ class Asservissement:
     def goTo(self, arrivee):
         depart = self.getPosition()
         
+        ##éventuelle symétrie sur la position d'arrivée
+        if __builtin__.constantes['couleur'] == "r":
+            arrivee.x *= -1
+            
         #appel de la recherche de chemin : liste de points
         chemin = self.rechercheChemin(depart, arrivee)[0]
         for point in chemin:
