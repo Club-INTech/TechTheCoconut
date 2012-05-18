@@ -307,7 +307,7 @@ class Strategie():
         else :
             # Changement du poids des actions
             self.actions[nomAction][0] = self.actions[nomAction][3][1]
-            if self.actions[nomAction][4] >= 2 :
+            if self.actions[nomAction][4] >= 3 :
                 self.actions[nomAction][0] = -1
         
     #TEST
