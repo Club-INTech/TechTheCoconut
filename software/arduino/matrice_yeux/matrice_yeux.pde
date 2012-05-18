@@ -445,21 +445,65 @@ void pacman()
   */
 }
 
+void cardio()
+{
+  byte cardio[14]={B00010000,B00010000,B01100000,B10000000,B01111100,B00000010,B00011100,B00010000,B00010000,B00100000,B00010000,B00010000,B00010000,B00010000};
+  
+  //Affichage ligne
+  for (int col=0 ; col<28 ; col++)
+  {
+    lc.setMatrixColumn(col,B00010000); //Ligne 
+    lc.setMatrixColumn(col-10,B00000000); //Efface la ligne au fur et à mesure
+    delay(20);
+  }
+  //Supp fin de ligne
+   for (int col=28-10 ; col<28 ; col++)
+  {
+    lc.setMatrixColumn(col,B00000000); //Efface la ligne
+    delay(20);
+  }
+  //Affichage cardio
+  for(int eye=1;eye<=2;eye++)
+  {
+    
+     for (int col=0 ; col<14 ; col++)
+    {
+      lc.setEyeColumn(eye,col,cardio[col],false); //cardio
+      delay(30);
+      //lc.setEyeColumn(1,col,(byte)0,true); //cardio
+    }
+  }
+}
+
 void loop() 
 { 
   //balayageV(); //K2000
   //balayageH();
-  //cylon();
-  
+  int j = 0;
+  while(true)
+ { 
+    for(int i=0; i<5;i++)
+    cylon();
+    
+    if(j%2 == 0)
+    cardio();
+    else
+    emoticon(2);
+    
+    j++;
+ }
   //for(int i=1;i<9;i++)
   //emoticon(i);
   
   //compteARebours(90);
-  for(int i=0;i<2;i++)
+  
+  /*for(int i=0;i<2;i++)
   gauchedroite();
   pacman();
+  */
+  
+  
   //emoticon(2); //exptdr
   
   //cercle(); //by cassou
-  //animationyeux();
 }
