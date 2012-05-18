@@ -348,18 +348,17 @@ class Asservissement:
         return "acquittement"
             
     def getPosition(self):
-        while 42:
+        reponseX = ""
+        reponseY = ""
+        while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^(-[0-9]+|[0-9]+)$", reponseY)):
             try:
-                reponseX = ""
-                reponseY = ""
-                while not (re.match("^(-[0-9]+|[0-9]+)$", reponseX) and re.match("^(-[0-9]+|[0-9]+)$", reponseY)):
-                    self.serieAsserInstance.ecrire("pos")
-                    reponseX = self.serieAsserInstance.lire()
-                    reponseY = self.serieAsserInstance.lire()
-                pos = Point(float(reponseX),float(reponseY))
-                return pos
+                self.serieAsserInstance.ecrire("pos")
+                time.sleep(0.1)
+                reponseX = self.serieAsserInstance.lire()
+                reponseY = self.serieAsserInstance.lire()
             except:
                 pass
+        return Point(float(reponseX),float(reponseY))
             
     def setPosition(self,position):
         self.serieAsserInstance.ecrire("cx")
@@ -368,17 +367,15 @@ class Asservissement:
         self.serieAsserInstance.ecrire(str(float(position.y)))
     
     def getOrientation(self):
-        while 42:
+        reponse = ""
+        while not re.match("^(-[0-9]+|[0-9]+)$", reponse):
             try:
-                reponse = ""
-                while not re.match("^(-[0-9]+|[0-9]+)$", reponse):
-                    self.serieAsserInstance.ecrire("eo")
-                    reponse = self.serieAsserInstance.lire()
-                orientation = float(reponse)/1000.0
-                #self.robotInstance.setOrientation(orientation)
-                return orientation
+                self.serieAsserInstance.ecrire("eo")
+                time.sleep(0.1)
+                reponse = self.serieAsserInstance.lire()
             except:
                 pass
+        return float(reponse)/1000.0
             
     def setOrientation(self,orientation):
         self.serieAsserInstance.ecrire("co")
@@ -484,7 +481,7 @@ class Asservissement:
         
         if retour == "obstacle" and not instruction == "oublierCapteur":
             orientation = self.getOrientation()
-            position = self.getPosition()
+            position = self.getPosition()f
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
             tableLargeur = constantes["Coconut"]["longueur"]
             tableLongueur = constantes["Coconut"]["largeur"]
