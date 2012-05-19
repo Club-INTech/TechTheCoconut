@@ -54,7 +54,7 @@ class Asservissement:
         self.vitesse_moyenne_segment = 700
         
         #liste des centres de robots adverses repérés (liste de points)
-        self.liste_robots_adv = __builtin__.instance.liste_robots_adv
+        self.liste_robots_adv = []
         
         #rayon moyen des robots adverses
         self.rayonRobotsAdverses = constantes["Recherche_Chemin"]["rayonRobotsA"]
@@ -133,7 +133,10 @@ class Asservissement:
         HSarrivee = self.hotSpot(arrivee)
         
         #couper l'anneau si robot adverse
+        self.hotSpots = self.hotSpotsOriginaux[:]
+        print "liste robots adverses : "+str(self.liste_robots_adv)
         for adverse in self.liste_robots_adv:
+            print "le noeud "+str(self.hotSpot(adverse))+" a été retiré à cause de l'adverse "+str(adverse)
             self.supprimerHotspot(self.hotSpot(adverse))
         
         if HSdepart == HSarrivee :
@@ -232,14 +235,19 @@ class Asservissement:
             return False
             
     def supprimerHotspot(self,hotspot):
+        print "suppression du point : "+str(hotspot)
+        print "avant = "+str(self.hotSpots)
         try:
             pos = self.hotSpots.index(hotspot)
             self.hotSpots.pop(pos)
             self.hotSpots.insert(pos,"")
         except: pass
+        print "après = "+str(self.hotSpots)
+        
     
     def oublierAdverses(self):
-        __builtin__.instance.viderListeRobotsAdv()
+        print "on oublie les adverses"
+        self.liste_robots_adv = []
         self.hotSpots = self.hotSpotsOriginaux[:]
     
     ############################## </HACK>
@@ -498,14 +506,14 @@ class Asservissement:
                 if avecRechercheChemin or instruction == "sansRecursion":
                     #robot adverse
                     self.oublierAdverses()
-                    __builtin__.instance.ajouterRobotAdverse(adverse)
+                    self.liste_robots_adv.append(adverse)
                     #stopper l'execution du script parent
                     raise Exception
                 else:
                     #attente que la voie se libère
                     ennemi_en_vue = True
                     debut_timer = int(self.timerAsserv.getTime())
-                    while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 10 :
+                    while ennemi_en_vue and (int(self.timerAsserv.getTime()) - debut_timer) < 4 :
                         capteur = self.capteurInstance.mesurer()
                         if capteur < self.maxCapt:
                             print 'gestionAvancer : capteur !'
@@ -530,7 +538,7 @@ class Asservissement:
                     else:
                         #robot adverse
                         self.oublierAdverses()
-                        __builtin__.instance.ajouterRobotAdverse(adverse)
+                        self.liste_robots_adv.append(adverse)
                         #stopper l'execution du script parent
                         raise Exception
                         
