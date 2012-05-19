@@ -40,15 +40,6 @@ log.logger.warning("Le recalage a été effectué")
 jumper.scruterDepart()
 log.logger.warning("Le Jumper a été retiré. Lancement de la stratégie")
 
-farmage_ennemi = False
-
-if farmage_ennemi :
-    asserInstance.changerVitesse("translation", 3)
-    success = asserInstance.gestionAvancer("1900", "auStopNeRienFaire")
-    if success :
-        asserInstance.changerVitesse("translation", 2)
-        script.gestionScripts(script.rafflerTotem10)
-
 # Lancement du timer.
 timer.lancer()
 
@@ -56,7 +47,6 @@ try :
     script.gestionScripts(script.debutRapide)
 except :
     log.logger.critical("Impossible de lancer le démarrage du robot")
-    time.sleep(5)
     # Lancement de la stratégie.
 strategie.lancer()
     

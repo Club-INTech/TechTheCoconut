@@ -162,7 +162,7 @@ class Strategie():
         if self.strategie == 1 :
             self.actions =  {"rafflerTotem00" : [13,Point(0,660), 18, [-1, 5], 0],
                              "rafflerTotem01" : [9,Point(0,1500), 18, [-1, 5], 0],
-                             "rafflerTotem10" : [6,Point(-920+ 70, 450+180), 40, [-1, 4], 0],
+                             #"rafflerTotem10" : [6,Point(-920+ 70, 450+180), 40, [-1, 4], 0],
                              
                              "enfoncerPoussoir0" : [5,Point(860,1490), 11,[-1, 3], 0],
                              "enfoncerPoussoir1" : [5,Point(-390, 1510.), 10, [-1, 3], 0],
