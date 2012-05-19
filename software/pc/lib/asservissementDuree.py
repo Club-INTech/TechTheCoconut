@@ -35,7 +35,7 @@ class Asservissement_duree:
         self.maxCapt = 0
         
         #liste des centres de robots adverses repérés (liste de points)
-        self.liste_robots_adv = __builtin__.instance.liste_robots_adv
+        self.liste_robots_adv = []
         
         #vitesse moyenne (translation et rotations)
         self.vitesse_moyenne_segment = 1
@@ -119,6 +119,11 @@ class Asservissement_duree:
         self.oublierAdverses()
         
     def getTimeTo(self,depart, arrivee):
+        
+        ##éventuelle symétrie sur la position d'arrivée
+        if __builtin__.constantes['couleur'] == "r":
+            arrivee.x *= -1
+            
         #appel de la recherche de chemin : distance parcourue
         return self.rechercheChemin(depart, arrivee)[1]/self.vitesse_moyenne_segment
         
@@ -136,7 +141,10 @@ class Asservissement_duree:
         HSarrivee = self.hotSpot(arrivee)
         
         #couper l'anneau si robot adverse
+        self.hotSpots = self.hotSpotsOriginaux[:]
+        print "liste robots adverses : "+str(self.liste_robots_adv)
         for adverse in self.liste_robots_adv:
+            print "le noeud "+str(self.hotSpot(adverse))+" a été retiré à cause de l'adverse "+str(adverse)
             self.supprimerHotspot(self.hotSpot(adverse))
         
         if HSdepart == HSarrivee :
@@ -203,25 +211,24 @@ class Asservissement_duree:
         #détermine le hotspot le plus proche à partir d'un point de la carte
         
         #zone sur le coté du totem
-        if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
-            return self.hotSpots[7]
-        elif self.estDansZone(point,Point(401,1180),Point(592,810)):
+        if self.estDansZone(point,Point(-592,1180),Point(-401,810)) and self.hotSpots[6]:
+            return self.hotSpots[6]
+        elif self.estDansZone(point,Point(401,1180),Point(592,810)) and self.hotSpots[2]:
             return self.hotSpots[2]
             
         #zone sur le dessus du totem
-        elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)):
+        elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)) and self.hotSpots[0]:
             return self.hotSpots[0]
-        elif self.estDansZone(point,Point(167,1213),Point(448,1000)):
+        elif self.estDansZone(point,Point(167,1213),Point(448,1000)) and self.hotSpots[0]:
             return self.hotSpots[0]
             
         #zone sur le dessous du totem
-        elif self.estDansZone(point,Point(-448,1000),Point(-167,810)):
+        elif self.estDansZone(point,Point(-448,1000),Point(-167,810)) and self.hotSpots[4]:
             return self.hotSpots[4]
-        elif self.estDansZone(point,Point(167,1000),Point(448,810)):
+        elif self.estDansZone(point,Point(167,1000),Point(448,810)) and self.hotSpots[4]:
             return self.hotSpots[4]
             
         else:
-            dest = self.hotSpots[0]
             for hs in self.hotSpots:
                 if hs :
                     if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
@@ -235,14 +242,19 @@ class Asservissement_duree:
             return False
             
     def supprimerHotspot(self,hotspot):
+        print "suppression du point : "+str(hotspot)
+        print "avant = "+str(self.hotSpots)
         try:
             pos = self.hotSpots.index(hotspot)
             self.hotSpots.pop(pos)
             self.hotSpots.insert(pos,"")
         except: pass
+        print "après = "+str(self.hotSpots)
+        
     
     def oublierAdverses(self):
-        __builtin__.instance.viderListeRobotsAdv()
+        print "on oublie les adverses"
+        self.liste_robots_adv = []
         self.hotSpots = self.hotSpotsOriginaux[:]
     
     ############################## </HACK>

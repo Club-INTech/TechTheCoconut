@@ -116,6 +116,11 @@ class Asservissement:
         self.oublierAdverses()
         
     def getTimeTo(self,depart, arrivee):
+        
+        ##éventuelle symétrie sur la position d'arrivée
+        if __builtin__.constantes['couleur'] == "r":
+            arrivee.x *= -1
+            
         #appel de la recherche de chemin : distance parcourue
         return self.rechercheChemin(depart, arrivee)[1]/self.vitesse_moyenne_segment
         
@@ -204,25 +209,24 @@ class Asservissement:
         #détermine le hotspot le plus proche à partir d'un point de la carte
         
         #zone sur le coté du totem
-        if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
+        if self.estDansZone(point,Point(-592,1180),Point(-401,810)) and self.hotSpots[6]:
             return self.hotSpots[6]
-        elif self.estDansZone(point,Point(401,1180),Point(592,810)):
+        elif self.estDansZone(point,Point(401,1180),Point(592,810)) and self.hotSpots[2]:
             return self.hotSpots[2]
             
         #zone sur le dessus du totem
-        elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)):
+        elif self.estDansZone(point,Point(-448,1213),Point(-167,1000)) and self.hotSpots[0]:
             return self.hotSpots[0]
-        elif self.estDansZone(point,Point(167,1213),Point(448,1000)):
+        elif self.estDansZone(point,Point(167,1213),Point(448,1000)) and self.hotSpots[0]:
             return self.hotSpots[0]
             
         #zone sur le dessous du totem
-        elif self.estDansZone(point,Point(-448,1000),Point(-167,810)):
+        elif self.estDansZone(point,Point(-448,1000),Point(-167,810)) and self.hotSpots[4]:
             return self.hotSpots[4]
-        elif self.estDansZone(point,Point(167,1000),Point(448,810)):
+        elif self.estDansZone(point,Point(167,1000),Point(448,810)) and self.hotSpots[4]:
             return self.hotSpots[4]
             
         else:
-            dest = self.hotSpots[0]
             for hs in self.hotSpots:
                 if hs :
                     if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :

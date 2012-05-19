@@ -35,9 +35,6 @@ class Instance:
     def __init__(self):
         log.logger.info("Instanciation de la classe Instance")
         
-        #liste (globale) des centres de robots adverses détectés
-        self.liste_robots_adv = []
-        
         #recherche des périphériques
         self.chemins = attributions.attribuer()
         
@@ -112,12 +109,6 @@ class Instance:
             log.logger.error("instance : serieActionneurInstance n'est pas chargé. pas de chemin trouvé.")
         """
         
-    def ajouterRobotAdverse(self, position):
-        self.liste_robots_adv.append(position)
-    
-    def viderListeRobotsAdv(self):
-        self.liste_robots_adv = []
-            
     def instanciationScript(self):
         self.scriptInstance = script.Script()
         

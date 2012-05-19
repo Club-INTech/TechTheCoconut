@@ -78,7 +78,8 @@ def console():
             elif com == "p":
                 xp = raw_input("x robot adverse? ")
                 yp = raw_input("y robot adverse? ")
-                __builtin__.instance.ajouterRobotAdverse(Point(float(xp),float(yp)))
+                asser.liste_robots_adv.append(Point(float(xp),float(yp)))
+                #print "1"+str(__builtin__.instance.liste_robots_adv)
             print ""
     elif com == "a":
         while True:
