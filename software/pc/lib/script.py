@@ -728,18 +728,12 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(760, 1700))
-        asser.gestionTourner(-2.67)
-        action.deplacer(120, "bd")
-        asser.gestionAvancer(700)
-        #action.deplacer(30, "bd")
-        action.deplacer(120, ["bd", "hd"])
-        asser.gestionTourner(0)
-        action.deplacer(40, "bd")
-        asser.attendre(0.2)
-        asser.gestionTourner(-math.pi/2)
-        action.deplacer(120, "bd")
-        asser.attendre(0.2)
+        asser.goTo(Point(-80,1380))
+        ##début notre totem nord
+        action.deplacer(90, ["bd", "hd"])
+        asser.attendre(0.1)
+        action.deplacer(0, ["bd", "hd"])
+        asser.attendre(0.1)
         asser.gestionTourner(0)
         action.deplacer(120)
         ##début notre totem nord
@@ -772,7 +766,7 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(350)
         asser.gestionTourner(0)
-        asser.gestionAvancer(300, "auStopNeRienFaire")
+        asser.gestionAvancer(350, "auStopNeRienFaire")
         action.deplacer(160)
         asser.gestionAvancer(-50)
         action.deplacer(130)
@@ -1041,10 +1035,12 @@ class Script:
         ET faire chier n'ennemi
         """
         asser.goTo(Point(0,1490))
-        input()
+
+        raw_input()
         asser.goTo(Point(590,290))
         asser.goTo(Point(-990,630))
         asser.goTo(Point(0,1490))
+
     # Tour de table avec les bras ouverts
     def tourDeTable1(self,asser,action) :
         """
