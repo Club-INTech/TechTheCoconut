@@ -214,7 +214,7 @@ class Strategie():
             
             print self.timerStrat.getTimeRemaining()
             # Éliminé si il ne reste pas assez de temps.
-            if temps_action >= self.timerStrat.getTimeRemaining() + 10:
+            if temps_action >= self.timerStrat.getTimeRemaining():
                 poids_action = -2
                 
             else :

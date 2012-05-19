@@ -677,14 +677,12 @@ class Script:
     def rafflerTotem00(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 0")
         action.deplacer(0)
-        #asser.goTo(Point(200, 450))
-        #log.logger.debug("COUCOUCOUCOU")
         asser.goTo(Point(-90,660))
         
         #début notre totem sud
         asser.gestionTourner(0)
         action.deplacer(140)
-        asser.attendre(0.2)
+        asser.attendre(0.1)
         
         asser.gestionAvancer(50)
         action.deplacer(90, "bg")
@@ -692,20 +690,24 @@ class Script:
         action.deplacer(130)
         #asser.attendre(0.1)
         
-        asser.gestionAvancer(200,instruction = "finir")
-        action.deplacer(130)
-        #asser.attendre(0.2)
-        asser.gestionTourner(0,instruction = "finir")
-        asser.gestionAvancer(200,instruction = "finir")
-        action.deplacer(110)
-        asser.attendre(0.1)
-        action.deplacer(130)
-        asser.attendre(0.1)
-        asser.gestionTourner(0,instruction = "finir")
-        asser.gestionAvancer(200,instruction = "finir")
-        #mettre dans la cale
+        #asser.gestionAvancer(200,instruction = "finir")
+        #action.deplacer(130)
+        ##asser.attendre(0.2)
+        #asser.gestionTourner(0,instruction = "finir")
+        #asser.gestionAvancer(200,instruction = "finir")
+        #action.deplacer(110)
+        #asser.attendre(0.1)
+        #action.deplacer(130)
+        #asser.attendre(0.1)
+        #asser.gestionTourner(0,instruction = "finir")
+        #asser.gestionAvancer(200,instruction = "finir")
+        ##mettre dans la cale
         
-        asser.gestionAvancer(100,instruction = "finir")
+        asser.gestionAvancer(400, instruction="finir")
+        asser.gestionTourner(0)
+        asser.gestionAvancer(300)
+        
+        #asser.gestionAvancer(100,instruction = "finir")
         asser.gestionTourner(math.pi/4)
         asser.gestionAvancer(300)
         asser.gestionTourner(0)
@@ -721,7 +723,7 @@ class Script:
         asser.changerVitesse("translation", 2)
         asser.gestionAvancer(-250)
         action.deplacer(0)
-        asser.gestionTourner(math.pi/2)
+        #asser.gestionTourner(math.pi/2)
         #asser.goTo(Point(850.,1600.))
     
     # Rafflage de notre totem côté nord (y grands)
@@ -735,7 +737,7 @@ class Script:
         action.deplacer(0, ["bd", "hd"])
         asser.attendre(0.1)
         asser.gestionTourner(0)
-        action.deplacer(120)
+        #action.deplacer(120)
         ##début notre totem nord
         #action.deplacer(90, ["bd", "hd"])
         #asser.attendre(0.1)
@@ -743,26 +745,26 @@ class Script:
         action.deplacer(130)
         asser.attendre(0.2)
         
-        asser.gestionAvancer(20)
+        asser.gestionAvancer(50)
         asser.gestionTourner(0,instruction = "finir")
         action.deplacer(70, "bd")
         asser.attendre(0.2)
         action.deplacer(120, "bd")
         asser.gestionAvancer(230,"finir")
         action.deplacer(110)
-        asser.attendre(0.1)
+        #asser.attendre(0.1)
         asser.gestionTourner(0,instruction = "finir")
         asser.gestionAvancer(200,instruction = "finir")
-        action.deplacer(120)
-        asser.attendre(0.1)
-        action.deplacer(110)
-        asser.attendre(0.1)
+        #action.deplacer(120)
+        #asser.attendre(0.1)
+        #action.deplacer(110)
+        #asser.attendre(0.1)
         asser.gestionTourner(0,instruction = "finir")
         asser.gestionAvancer(200,instruction = "finir")
         
         ## Rotation : vers le bas :
         action.deplacer(110)
-        asser.attendre(0.2)
+        #asser.attendre(0.2)
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(350)
         asser.gestionTourner(0)
@@ -965,8 +967,8 @@ class Script:
         action.deplacer(0)
         
     def debutRapide(self, asser, action) :
-        asser.gestionTourner(3.1)
-        asser.gestionAvancer(900, "auStopNeRienFaire")
+        asser.gestionTourner(2.9)
+        asser.gestionAvancer(1000, "auStopNeRienFaire")
         asser.changerVitesse("translation", 2)
         
     def viderCaleEnnemi(self, asser, action) :
