@@ -733,13 +733,15 @@ class Script:
         action.deplacer(120, "bd")
         asser.gestionAvancer(700)
         #action.deplacer(30, "bd")
-        action.deplacer(120)
-        asser.gestionTourner(-math.pi/2)
+        action.deplacer(120, ["bd", "hd"])
+        asser.gestionTourner(0)
         action.deplacer(40, "bd")
         asser.attendre(0.2)
+        asser.gestionTourner(-math.pi/2)
         action.deplacer(120, "bd")
+        asser.attendre(0.2)
         asser.gestionTourner(0)
-        
+        action.deplacer(120)
         ##début notre totem nord
         #action.deplacer(90, ["bd", "hd"])
         #asser.attendre(0.1)
