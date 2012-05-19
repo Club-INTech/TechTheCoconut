@@ -65,8 +65,7 @@ class Asservissement:
         self.vitesseTranslation = 2
         self.vitesseRotation = 2
         
-        #self.hotSpots = [Point(-900,1000),Point(-800,1420),Point(-360,1660),Point(360,1660),Point(800,1420),Point(900,1000),Point(540,290),Point(-540,290)]
-        self.hotSpotsOriginaux = [Point(0, 1490), Point(860, 1490), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-990, 630), Point(-875, 970), Point(-860, 1490)]
+        self.hotSpotsOriginaux = [Point(0, 1490), Point(860, 1490), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1490)]
         self.hotSpots = self.hotSpotsOriginaux[:]
     
     def goToSegment(self, arrivee, avecRechercheChemin = False):
@@ -202,7 +201,7 @@ class Asservissement:
         
         #zone sur le coté du totem
         if self.estDansZone(point,Point(-592,1180),Point(-401,810)):
-            return self.hotSpots[7]
+            return self.hotSpots[6]
         elif self.estDansZone(point,Point(401,1180),Point(592,810)):
             return self.hotSpots[2]
             
