@@ -728,11 +728,22 @@ class Script:
     def rafflerTotem01(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 1 en cours")
         action.deplacer(0)
-        asser.goTo(Point(-80,1370))
-        ##début notre totem nord
-        action.deplacer(90, ["bd", "hd"])
-        asser.attendre(0.1)
+        asser.goTo(Point(760, 1700))
+        asser.gestionTourner(-2.67)
+        action.deplacer(120, "bd")
+        asser.gestionAvancer(700)
+        #action.deplacer(30, "bd")
+        action.deplacer(120)
+        asser.gestionTourner(-math.pi/2)
+        action.deplacer(40, "bd")
+        asser.attendre(0.2)
+        action.deplacer(120, "bd")
         asser.gestionTourner(0)
+        
+        ##début notre totem nord
+        #action.deplacer(90, ["bd", "hd"])
+        #asser.attendre(0.1)
+        #asser.gestionTourner(0)
         action.deplacer(130)
         asser.attendre(0.2)
         
@@ -751,7 +762,7 @@ class Script:
         action.deplacer(110)
         asser.attendre(0.1)
         asser.gestionTourner(0,instruction = "finir")
-        asser.gestionAvancer(380,instruction = "finir")
+        asser.gestionAvancer(200,instruction = "finir")
         
         ## Rotation : vers le bas :
         action.deplacer(110)
@@ -759,7 +770,7 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(350)
         asser.gestionTourner(0)
-        asser.gestionAvancer(250, "auStopNeRienFaire")
+        asser.gestionAvancer(300, "auStopNeRienFaire")
         action.deplacer(160)
         asser.gestionAvancer(-50)
         action.deplacer(130)
@@ -958,7 +969,6 @@ class Script:
         action.deplacer(0)
         
     def debutRapide(self, asser, action) :
-        asser.changerVitesse("translation", 3)
         asser.gestionTourner(3.1)
         asser.gestionAvancer(900, "auStopNeRienFaire")
         asser.changerVitesse("translation", 2)
@@ -1028,24 +1038,11 @@ class Script:
         Tenter de passer à des pts clés pour ramasser des éventuels CDs perdus
         ET faire chier n'ennemi
         """
-        log.logger.debug("Tour de table")
-        action.deplacer(0) #On garde les bras fermés
-        asser.goTo(Point(860, 650)) # On va se placer à un de départ près de notre base
-        asser.goTo(Point(395, 505))
-        asser.goTo(Point(10, 580))
-        asser.goTo(Point(-425, 480))
-        asser.goTo(Point(-900, 970))
-        asser.goTo(Point(410, 1480))
-        asser.goTo(Point(0, 1400))
-        asser.goTo(Point(405, 1480))
-        asser.goTo(Point(900, 1000))
-        asser.goTo(Point(890, 755))
-
-        asser.gestionTourner(0.755)
-        action.deplacer(120) # On ouvre les bras pour déposer
-        asser.gestionAvancer(340) # On va dans la calle
-        asser.gestionAvancer(-450) # On fait marche arrière pour se dégager
-
+        asser.goTo(Point(0,1490))
+        input()
+        asser.goTo(Point(590,290))
+        asser.goTo(Point(-990,630))
+        asser.goTo(Point(0,1490))
     # Tour de table avec les bras ouverts
     def tourDeTable1(self,asser,action) :
         """
