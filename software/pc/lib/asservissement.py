@@ -127,9 +127,6 @@ class Asservissement:
         le premier element est la liste des points à parcourir, du deuxième point à l'arrivée
         le second est la distance totale parcourue
         """
-        if __builtin__.constantes['couleur'] == "r":
-            depart.x *= -1
-            arrivee.x *= -1
         
         log.logger.info("Appel de la recherche de chemin basique pour le point de départ : ("+str(depart.x)+","+str(depart.y)+") et d'arrivée : ("+str(arrivee.x)+","+str(arrivee.y)+")")
         
@@ -196,13 +193,6 @@ class Asservissement:
         dist += math.sqrt( (depart.x - HSdepart.x)**2 + (depart.y - HSdepart.y)**2 )
         dist += math.sqrt( (arrivee.x - HSarrivee.x)**2 + (arrivee.y - HSarrivee.y)**2 )
         
-        
-        if __builtin__.constantes['couleur'] == "r":
-            sortie = chemin[:]
-            chemin = []
-            for point in sortie:
-                chemin.append(Point(-point.x,point.y))
-            
         log.logger.info("chemin trouvé : ("+str(chemin))
         return (chemin, dist)
             
