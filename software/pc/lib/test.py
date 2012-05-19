@@ -88,6 +88,13 @@ def console():
                 print "inaccessible"
             else:
                 print "accessible"
+    elif com == "t":
+        asser.goTo(Point(0, 1490))
+        raw_input("ok ?")
+        asser.goTo(Point(590, 290))
+        asser.goTo(Point(-990, 630))
+        asser.goTo(Point(0, 1490))
+        
 console()
 
 
