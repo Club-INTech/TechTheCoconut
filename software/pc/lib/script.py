@@ -677,7 +677,7 @@ class Script:
     def rafflerTotem00(self,asser,action) :
         log.logger.debug("Rafflage de totem 0 0")
         action.deplacer(0)
-        asser.goTo(Point(-90,660))
+        asser.goTo(Point(-90,655))
         
         #début notre totem sud
         asser.gestionTourner(0)
@@ -687,7 +687,7 @@ class Script:
         asser.gestionAvancer(50)
         action.deplacer(90, "bg")
         asser.attendre(0.2)
-        action.deplacer(130)
+        action.deplacer(130, "bg")
         #asser.attendre(0.1)
         
         #asser.gestionAvancer(200,instruction = "finir")
@@ -760,7 +760,7 @@ class Script:
         #action.deplacer(110)
         #asser.attendre(0.1)
         asser.gestionTourner(0,instruction = "finir")
-        asser.gestionAvancer(200,instruction = "finir")
+        asser.gestionAvancer(300,instruction = "finir")
         
         ## Rotation : vers le bas :
         action.deplacer(110)
@@ -768,7 +768,7 @@ class Script:
         asser.gestionTourner(-math.pi/2)
         asser.gestionAvancer(350)
         asser.gestionTourner(0)
-        asser.gestionAvancer(350, "auStopNeRienFaire")
+        asser.gestionAvancer(400, "auStopNeRienFaire")
         action.deplacer(160)
         asser.gestionAvancer(-50)
         action.deplacer(130)
@@ -881,7 +881,7 @@ class Script:
         asser.gestionTourner(math.pi/2)
         action.deplacer(120, "bd")
         #asser.attendre(0.2)
-        asser.gestionAvancer(120)
+        asser.gestionAvancer(20)
         asser.gestionTourner(math.pi)
         asser.gestionTourner(-math.pi/2)
         

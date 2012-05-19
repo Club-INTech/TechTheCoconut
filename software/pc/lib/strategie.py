@@ -161,13 +161,13 @@ class Strategie():
         #
         if self.strategie == 1 :
             self.actions =  {"rafflerTotem00" : [13,Point(0,660), 18, [-1, 5], 0],
-                             "rafflerTotem01" : [9,Point(0,1500), 18, [-1, 5], 0],
+                             "rafflerTotem01" : [9,Point(0,1500), 23, [-1, 5], 0],
                              #"rafflerTotem10" : [6,Point(-920+ 70, 450+180), 40, [-1, 4], 0],
                              
-                             "enfoncerPoussoir0" : [5,Point(860,1490), 11,[-1, 3], 0],
-                             "enfoncerPoussoir1" : [5,Point(-390, 1510.), 10, [-1, 3], 0],
+                             "enfoncerPoussoir0" : [6,Point(860,1490), 11,[-1, 3], 0],
+                             "enfoncerPoussoir1" : [6,Point(-390, 1510.), 10, [-1, 3], 0],
                              
-                             "bourrerCale"       : [3,Point(900, 1000), 10,  [0, 3], 0]
+                             "bourrerCale"       : [0,Point(900, 1000), 10,  [0, 3], 0]
                             }
                             
         elif self.strategie == 2 :
@@ -214,7 +214,7 @@ class Strategie():
             
             print self.timerStrat.getTimeRemaining()
             # Éliminé si il ne reste pas assez de temps.
-            if temps_action >= self.timerStrat.getTimeRemaining():
+            if temps_action >= self.timerStrat.getTimeRemaining() + 5:
                 poids_action = -2
                 
             else :
@@ -299,7 +299,7 @@ class Strategie():
             # Incrémentation du poids du farmage de cale
             if "rafflerTotem" in nomAction :
                 try :
-                    self.actions["bourrerCale"][0] += 5
+                    self.actions["bourrerCale"][0] += 2
                 except :
                     pass
         else :
