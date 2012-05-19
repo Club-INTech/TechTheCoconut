@@ -141,7 +141,6 @@ class Asservissement:
         self.hotSpots = self.hotSpotsOriginaux[:]
         print "liste robots adverses : "+str(self.liste_robots_adv)
         for adverse in self.liste_robots_adv:
-            log.logger.debug("le noeud "+str(self.hotSpot(adverse))+" a été retiré à cause de l'adverse "+str(adverse))
             print "le noeud "+str(self.hotSpot(adverse))+" a été retiré à cause de l'adverse "+str(adverse)
             self.supprimerHotspot(self.hotSpot(adverse))
         
@@ -246,7 +245,6 @@ class Asservissement:
             return False
             
     def supprimerHotspot(self,hotspot):
-        log.logger.debug("suppression du point : "+str(hotspot))
         print "suppression du point : "+str(hotspot)
         print "avant = "+str(self.hotSpots)
         try:
@@ -322,11 +320,9 @@ class Asservissement:
                 acquittement = True
             elif reponse == "STOPPE":
                 print "tourner : stoppé !"
-                log.logger.debug("tourner : stoppé !")
                 return "stoppe"
             elif int(self.timerAsserv.getTime()) - debut_timer > 8:
                 print "tourner : timeout !"
-                log.logger.debug("tourner : timeout !")
                 return "timeout"
             time.sleep(0.1)
             
@@ -350,22 +346,18 @@ class Asservissement:
             #print str(reponse)
             if reponse == "FIN_MVT":
                 print "avancer : FIN_MVT"
-                log.logger.debug("avancer : FIN_MVT")
                 acquittement = True
             elif reponse == "STOPPE":
                 print "avancer : stoppé !"
-                log.logger.debug("avancer : stoppé !")
                 return "stoppe"
             else:
                 if (int(self.timerAsserv.getTime()) - debut_timer) > 8:
                     print "avancer : timeout !"
-                    log.logger.debug("avancer : timeout !")
                     return "timeout"
                 elif distance > 0 :
                     capteur = self.capteurInstance.mesurer()
                     if capteur < self.maxCapt:
                         print 'avancer : capteur !'
-                        log.logger.debug('avancer : capteur !')
                         return "obstacle"
                 
             time.sleep(0.1)
@@ -479,7 +471,6 @@ class Asservissement:
         """
         
         print "#avancer à "+str(distance)+", "+instruction
-        log.logger.debug("#avancer à "+str(distance)+", "+instruction)
         
         posAvant = self.getPosition()
         retour = self.avancer(distance)
@@ -520,7 +511,6 @@ class Asservissement:
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
                 print "ennemi en vue à "+str(adverse)
                 print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-                log.logger.debug("ennemi en vue à "+str(adverse))
                 self.immobiliser()
             
                 if avecRechercheChemin or instruction == "sansRecursion":
@@ -537,10 +527,8 @@ class Asservissement:
                         capteur = self.capteurInstance.mesurer()
                         if capteur < self.maxCapt:
                             print 'gestionAvancer : capteur !'
-                            log.logger.debug('gestionAvancer : capteur !')
                         else :
                             print 'gestionAvancer : la voie est libre !'
-                            log.logger.debug('gestionAvancer : la voie est libre !')
                             ennemi_en_vue = False
                         time.sleep(0.05)
                         
@@ -567,7 +555,6 @@ class Asservissement:
             else:
                 #fausse alerte : on termine tranquil'
                 print "fausse alerte. pos à "+str(position)+", adverse à "+str(adverse)+"."
-                log.logger.debug("fausse alerte. pos à "+str(position)+", adverse à "+str(adverse)+".")
                 
                 dist = math.sqrt((position.x - posAvant.x) ** 2 + (position.y - posAvant.y) ** 2)
                 if distance != 0:
@@ -705,7 +692,6 @@ class Asservissement:
             angle += 2*math.pi
         
         print "#tourner à "+str(angle)+", "+instruction
-        log.logger.debug("#tourner à "+str(angle)+", "+instruction)
         
         orientAvant = self.getOrientation()
         retour = self.tourner(angle)
