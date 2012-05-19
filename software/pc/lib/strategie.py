@@ -84,9 +84,6 @@ class Strategie():
         
             
     def lancer(self) :
-            
-            # Lancement du timer.
-            self.timerStrat.lancer()
         
             # Lancer la de prise de décision
             self.prendreDecision()
@@ -167,8 +164,8 @@ class Strategie():
                              "rafflerTotem01" : [9,Point(0,1500), 18, [-1, 5], 0],
                              "rafflerTotem10" : [6,Point(-920+ 70, 450+180), 40, [-1, 4], 0],
                              
-                             "enfoncerPoussoir0" : [5,Point(751.344262295,1445.0), 11,[-1, 3], 0],
-                             "enfoncerPoussoir1" : [5,Point(-360, 1510.), 10, [-1, 3], 0],
+                             "enfoncerPoussoir0" : [5,Point(860,1490), 11,[-1, 3], 0],
+                             "enfoncerPoussoir1" : [5,Point(-390, 1510.), 10, [-1, 3], 0],
                              
                              "bourrerCale"       : [0,Point(900, 1000), 10,  [0, 3], 0]
                             }
@@ -215,9 +212,10 @@ class Strategie():
                 log.logger.debug("Impossible de lancer getTimeTo")
                 temps_action = actionAtester[2] + math.sqrt((positionRobot.x - positionObjectif.x)**2 + (positionRobot.y - positionObjectif.y)**2)/400
             
+            print self.timerStrat.getTimeRemaining()
             # Éliminé si il ne reste pas assez de temps.
-            if temps_action >= self.timerStrat.getTimeRemaining() :
-                poids_action = -1
+            if temps_action >= self.timerStrat.getTimeRemaining() + 10:
+                poids_action = -2
                 
             else :
                 poids_action = float(actionAtester[0])/temps_action

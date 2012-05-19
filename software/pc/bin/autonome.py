@@ -49,7 +49,15 @@ if farmage_ennemi :
         asserInstance.changerVitesse("translation", 2)
         script.gestionScripts(script.rafflerTotem10)
 
-# Lancement de la stratégie.
+# Lancement du timer.
+timer.lancer()
+
+try :
+    script.gestionScripts(script.debutRapide)
+except :
+    log.logger.critical("Impossible de lancer le démarrage du robot")
+    time.sleep(5)
+    # Lancement de la stratégie.
 strategie.lancer()
     
     
