@@ -1083,7 +1083,7 @@ class Script:
         
     def bourrerCale(self, asser, action) :
         #action.deplacer(0)
-        asser.goToSegment(Point(900, 1000))
+        asser.goTo(Point(900, 1000))
         asser.gestionTourner(0)
         action.deplacer(0, "bd")
         asser.gestionTourner(-math.pi/2)
