@@ -167,7 +167,7 @@ class Strategie():
                              "enfoncerPoussoir0" : [5,Point(860,1490), 11,[-1, 3], 0],
                              "enfoncerPoussoir1" : [5,Point(-390, 1510.), 10, [-1, 3], 0],
                              
-                             "bourrerCale"       : [0,Point(900, 1000), 10,  [0, 3], 0]
+                             "bourrerCale"       : [3,Point(900, 1000), 10,  [0, 3], 0]
                             }
                             
         elif self.strategie == 2 :
@@ -206,11 +206,11 @@ class Strategie():
             
             positionObjectif = actionAtester[1]
             
-            try :
-                temps_action = actionAtester[2] + self.asserInstance.getTimeTo(positionRobot, positionObjectif)
-            except :
-                log.logger.debug("Impossible de lancer getTimeTo")
-                temps_action = actionAtester[2] + math.sqrt((positionRobot.x - positionObjectif.x)**2 + (positionRobot.y - positionObjectif.y)**2)/400
+            #try :
+            temps_action = actionAtester[2] + self.asserInstance.getTimeTo(positionRobot, positionObjectif)
+            #except :
+                #log.logger.debug("Impossible de lancer getTimeTo")
+                #temps_action = actionAtester[2] + math.sqrt((positionRobot.x - positionObjectif.x)**2 + (positionRobot.y - positionObjectif.y)**2)/400
             
             print self.timerStrat.getTimeRemaining()
             # Éliminé si il ne reste pas assez de temps.
