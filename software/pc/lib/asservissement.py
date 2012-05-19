@@ -44,7 +44,7 @@ class Asservissement:
             log.logger.error("asservissement : ne peut importer instance.asserInstanceDuree")
             
         #distance seuil de detection pour les ultrasons
-        self.maxCapt = 400
+        self.maxCapt = 600
         
         #couleur du robot
         if __builtin__.constantes['couleur'] == "r":
@@ -485,7 +485,7 @@ class Asservissement:
             largeur_robot = profils.develop.constantes.constantes["Coconut"]["largeurRobot"]
             tableLargeur = constantes["Coconut"]["longueur"]
             tableLongueur = constantes["Coconut"]["largeur"]
-            adverse = Point(position.x + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
+            adverse = Point(position.x + (self.maxCapt/2+self.rayonRobotsAdverses+largeur_robot/2)*math.cos(orientation),position.y + (self.maxCapt/2+self.rayonRobotsAdverses+largeur_robot/2)*math.sin(orientation))
             
             if (adverse.x > -tableLongueur/2+100 and adverse.x < tableLongueur/2-100 and adverse.y < tableLargeur-100 and adverse.y > 100):
                 #le point détecté est bien dans l'aire de jeu, c'est sans doute un robot adverse
@@ -512,6 +512,7 @@ class Asservissement:
                         else :
                             print 'gestionAvancer : la voie est libre !'
                             ennemi_en_vue = False
+                        time.sleep(0.05)
                         
                     if not ennemi_en_vue:
                         #vider la liste des robots adverses repérés
@@ -524,7 +525,7 @@ class Asservissement:
                             signe = distance/abs(distance)
                         else:
                             signe = 1
-                        self.gestionAvancer(distance-signe*dist, "sansRecursion")
+                        self.gestionAvancer(distance-signe*dist)
                         
                     else:
                         #robot adverse
