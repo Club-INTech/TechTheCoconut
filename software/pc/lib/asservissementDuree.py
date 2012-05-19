@@ -38,7 +38,7 @@ class Asservissement_duree:
         self.liste_robots_adv = []
         
         #vitesse moyenne (translation et rotations)
-        self.vitesse_moyenne_segment = 1
+        self.vitesse_moyenne_segment = 134
         
         #rayon moyen des robots adverses
         #TODO : à mettre dans constantes
@@ -144,6 +144,7 @@ class Asservissement_duree:
         self.hotSpots = self.hotSpotsOriginaux[:]
         print "liste robots adverses : "+str(self.liste_robots_adv)
         for adverse in self.liste_robots_adv:
+            log.logger.debug("le noeud "+str(self.hotSpot(adverse))+" a été retiré à cause de l'adverse "+str(adverse))
             print "le noeud "+str(self.hotSpot(adverse))+" a été retiré à cause de l'adverse "+str(adverse)
             self.supprimerHotspot(self.hotSpot(adverse))
         
@@ -229,6 +230,12 @@ class Asservissement_duree:
             return self.hotSpots[4]
             
         else:
+            #initialiser
+            for hs in self.hotSpots:
+                if hs :
+                    dest = hs
+                    break
+                    
             for hs in self.hotSpots:
                 if hs :
                     if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
@@ -242,6 +249,7 @@ class Asservissement_duree:
             return False
             
     def supprimerHotspot(self,hotspot):
+        log.logger.debug("suppression du point : "+str(hotspot))
         print "suppression du point : "+str(hotspot)
         print "avant = "+str(self.hotSpots)
         try:

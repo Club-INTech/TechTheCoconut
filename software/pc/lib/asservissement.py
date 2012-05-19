@@ -51,7 +51,7 @@ class Asservissement:
             self.serieAsserInstance.ecrire('ccr')
         
         #vitesse moyenne (translation et rotations)
-        self.vitesse_moyenne_segment = 700
+        self.vitesse_moyenne_segment = 134
         
         #liste des centres de robots adverses repérés (liste de points)
         self.liste_robots_adv = []
@@ -227,6 +227,12 @@ class Asservissement:
             return self.hotSpots[4]
             
         else:
+            #initialiser
+            for hs in self.hotSpots:
+                if hs :
+                    dest = hs
+                    break
+                    
             for hs in self.hotSpots:
                 if hs :
                     if ((hs.x - point.x)**2 + (hs.y - point.y)**2) < ((dest.x - point.x)**2 + (dest.y - point.y)**2) :
