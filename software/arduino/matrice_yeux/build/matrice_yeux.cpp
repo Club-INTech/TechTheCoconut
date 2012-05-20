@@ -21,6 +21,7 @@ void emoticon(int mode);
 void writeChar(int eye,char value);
 void compteARebours(int time);
 void pacman();
+void sopalint();
 void cardio();
 void loop();
 LedControl lc=LedControl(12,11,10,4);
@@ -457,7 +458,23 @@ void pacman()
   
   */
 }
-
+void sopalint()
+{
+ byte writeSopalint[48]={B11110110,B11010110,B11010110,B11011110,B11011110,B00000000,B11111110,B11111110,B11000110,B11111110,B11111110,B00000000,B11111110,B11111110,B11011000,B11011000,B11111000,B00000000,B11111110,B11111110,B11011000,B11111110,B11111110,B00000000,B11111110,B11111110,B00000110,B00000110,B00000110,B11000000,B00000000,B11111110,B11111110,B00000000,B11111110,B11111110,B01110000,B00111000,B11111110,B11111110,B00000000,B11000000,B11000000,B11111110,B11111110,B11000000,B11000000};
+ int j;
+for(int i=47 ; i>-29 ; i--) //Pas de d\u00e9filement
+ {
+      for(int col=0 ; col=28; col++)
+     {
+       if(i+col > 47)
+       j = 5; // colonne vide
+       else
+       j = i+col;
+       
+       lc.setMatrixColumn(col,writeSopalint[j]);
+     }
+ }
+}
 void cardio()
 {
   byte cardio[14]={B00010000,B00010000,B01100000,B10000000,B01111100,B00000010,B00011100,B00010000,B00010000,B00100000,B00010000,B00010000,B00010000,B00010000};
@@ -490,8 +507,7 @@ void cardio()
 
 void loop() 
 { 
-  //balayageV(); //K2000
-  //balayageH();
+  /*
   int j = 0;
   while(true)
  { 
@@ -505,19 +521,39 @@ void loop()
     
     j++;
  }
-  //for(int i=1;i<9;i++)
-  //emoticon(i);
-  
-  //compteARebours(90);
-  
-  /*for(int i=0;i<2;i++)
-  gauchedroite();
-  pacman();
-  */
-  
-  
-  //emoticon(2); //exptdr
-  
-  //cercle(); //by cassou
+ */
+ 
+ //Bouquet final !
+  for(int j=1 ; j<13 ; j++)
+  {
+    //for(int i=0; i<2 ; i++)
+    gauchedroite();
+    switch(j)
+    {
+      case 8 : 
+      pacman();
+      break;
+      
+      case 9 : 
+      cercle();
+      break;
+      
+      case 10 : 
+      cardio();
+      break;
+      
+      case 11: 
+      balayageV();
+      break;
+      
+      case 12: 
+      cylon();
+      break;
+      
+      default:
+      emoticon(j);
+      
+    }
+  }
 }
 
