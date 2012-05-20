@@ -12,12 +12,17 @@
  */
 #include "WProgram.h"
 void setup();
-void writeArduinoOnMatrix();
-void K2000();
 void cylon();
 void balayageH();
 void balayageV();
-void animationyeux();
+void gauchedroite();
+void cercle();
+void emoticon(int mode);
+void writeChar(int eye,char value);
+void compteARebours(int time);
+void pacman();
+void sopalint();
+void cardio();
 void loop();
 LedControl lc=LedControl(12,11,10,4);
 
@@ -45,198 +50,56 @@ void setup() {
    }
 }
 
-/*
- This method will display the characters for the
- word "Arduino" one after the other on the matrix. 
- (you need at least 5x7 leds to see the whole chars)
- */
-void writeArduinoOnMatrix() {
-  /* here is the data for the characters */
-  byte a[5]={B01111110,B10001000,B10001000,B10001000,B01111110};
-  byte r[5]={B00111110,B00010000,B00100000,B00100000,B00010000};
-  byte d[5]={B00011100,B00100010,B00100010,B00010010,B11111110};
-  byte u[5]={B00111100,B00000010,B00000010,B00000100,B00111110};
-  byte i[5]={B00000000,B00100010,B10111110,B00000010,B00000000};
-  byte n[5]={B00111110,B00010000,B00100000,B00100000,B00011110};
-  byte o[5]={B00011100,B00100010,B00100010,B00100010,B00011100};
-
-  /* now display them one by one with a small delay */
-  lc.setRow(1,0,a[0]);
-  lc.setRow(1,1,a[1]);
-  lc.setRow(1,2,a[2]);
-  lc.setRow(1,3,a[3]);
-  lc.setRow(1,4,a[4]);
-  delay(delaytime);
-  lc.setRow(1,0,r[0]);
-  lc.setRow(1,1,r[1]);
-  lc.setRow(1,2,r[2]);
-  lc.setRow(1,3,r[3]);
-  lc.setRow(1,4,r[4]);
-  delay(delaytime);
-  lc.setRow(1,0,d[0]);
-  lc.setRow(1,1,d[1]);
-  lc.setRow(1,2,d[2]);
-  lc.setRow(1,3,d[3]);
-  lc.setRow(1,4,d[4]);
-  delay(delaytime);
-  lc.setRow(1,0,u[0]);
-  lc.setRow(1,1,u[1]);
-  lc.setRow(1,2,u[2]);
-  lc.setRow(1,3,u[3]);
-  lc.setRow(1,4,u[4]);
-  delay(delaytime);
-  lc.setRow(1,0,i[0]);
-  lc.setRow(1,1,i[1]);
-  lc.setRow(1,2,i[2]);
-  lc.setRow(1,3,i[3]);
-  lc.setRow(1,4,i[4]);
-  delay(delaytime);
-  lc.setRow(1,0,n[0]);
-  lc.setRow(1,1,n[1]);
-  lc.setRow(1,2,n[2]);
-  lc.setRow(1,3,n[3]);
-  lc.setRow(1,4,n[4]);
-  delay(delaytime);
-  lc.setRow(1,0,o[0]);
-  lc.setRow(1,1,o[1]);
-  lc.setRow(1,2,o[2]);
-  lc.setRow(1,3,o[3]);
-  lc.setRow(1,4,o[4]);
-  delay(delaytime);
-  lc.setRow(1,0,0);
-  lc.setRow(1,1,0);
-  lc.setRow(1,2,0);
-  lc.setRow(1,3,0);
-  lc.setRow(1,4,0);
-  delay(delaytime);
-}
-void K2000()
-{
-  // Aller
-  for(int addr=0;addr<=3;addr++)
-    {
-      for (int row=0;row<7;row++)
-      {
-        lc.setRow(addr,row,B11111111);
-        delay(delaytime);
-        lc.setRow(addr,row,(byte)0);
-      }
-  }
-  
-  // Retour
-  for(int addr=3;addr>=0;addr--)
-  {
-    for (int row=6;row>=0;row--)
-    {
-      lc.setRow(addr,row,B11111111);
-      delay(delaytime);
-      lc.setRow(addr,row,(byte)0);
-    }
-  }
-}
-
 void cylon()
 {
-  //Aller (de gauche \u00e0 droite)
-  for(int i=0;i<14;i++)
+  //Aller
+  for(int col=0; col<=13 ; col++)
   {
-     if(i<7) //MAX 01 & 04
-     {
-       //Switch ON
-       lc.setRow(0,i,B11111111);
-       lc.setRow(3,6-i,B11111111);
-       //2eme colonne
-       lc.setRow(0,i+1,B11111111);
-       lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/3);
-       
-       //Switch OFF
-       lc.setRow(0,i,(byte)0);
-       lc.setRow(3,6-i,(byte)0);
-       //2eme colonne
-       lc.setRow(0,i+1,(byte)0);
-       lc.setRow(3,6-i+1,(byte)0);
-     }
-     else //MAX 02 & 03
-     {
-       //Switch ON
-        lc.setRow(1,i-7,B11111111);
-        lc.setRow(2,13-i,B11111111);
-        //2eme colonne
-        lc.setRow(1,i-7+1,B11111111);
-        lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/3);
-        
-        //Switch OFF
-        lc.setRow(1,i-7,(byte)0);
-        lc.setRow(2,13-i,(byte)0);
-        //2eme colonne
-        lc.setRow(1,i-7+1,(byte)0);
-        lc.setRow(2,13-i+1,(byte)0);
-     }
+    lc.setEyeColumn(1,col,B11111111,true); //Switch ON
+    lc.setEyeColumn(1,col+1,B11111111,true);
+    if(col<6)
+    delay(delaytime*col/3);
+    else
+    delay(delaytime*(13-col)/3);
+    lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
+    lc.setEyeColumn(1,col+1,(byte)0,true);
   }
   
-  //Retour (de droite \u00e0 gauche)
-  for(int i=14;i>=0;i--)
+  //Retour
+  for(int col=13; col>=0 ; col--)
   {
-     if(i<7) //MAX 01 & 04
-     {
-       //Switch ON
-       lc.setRow(0,i,B11111111);
-       lc.setRow(3,6-i,B11111111);
-       //2eme colonne
-       lc.setRow(0,i+1,B11111111);
-       lc.setRow(3,6-i+1,B11111111);
-       delay(delaytime*i/3);
-       
-       //Switch OFF
-       lc.setRow(0,i,(byte)0);
-       lc.setRow(3,6-i,(byte)0);
-       //2eme colonne
-       lc.setRow(0,i+1,(byte)0);
-       lc.setRow(3,6-i+1,(byte)0);
-     }
-     else //MAX 02 & 03
-     {
-       //Switch ON
-        lc.setRow(1,i-7,B11111111);
-        lc.setRow(2,13-i,B11111111);
-        //2eme colonne
-        lc.setRow(1,i-7+1,B11111111);
-        lc.setRow(2,13-i+1,B11111111);
-        delay(delaytime*(i-7)/3);
-        
-        //Switch OFF
-        lc.setRow(1,i-7,(byte)0);
-        lc.setRow(2,13-i,(byte)0);
-        //2eme colonne
-        lc.setRow(1,i-7+1,(byte)0);
-        lc.setRow(2,13-i+1,(byte)0);
-     }
+    lc.setEyeColumn(1,col,B11111111,true); //Switch ON
+    lc.setEyeColumn(1,col-1,B11111111,true);
+    if(col<6)
+    delay(delaytime*col/3);
+    else
+    delay(delaytime*(13-col)/3);
+    lc.setEyeColumn(1,col,(byte)0,true); //Switch OFF
+    lc.setEyeColumn(1,col-1,(byte)0,true);
   }
 }
 void balayageH()
 {
-  // Aller
-  for(int addr=0;addr<=3;addr++)
+   // Aller
+  for(int eye=1 ; eye<=2 ; eye++)
     {
-      for (int row=0;row<7;row++)
+      for (int row=0;row<=6;row++)
       {
-        lc.setRow(addr,row,B11111111);
+        lc.setEyeRow(eye,row,B11111111);
         delay(delaytime);
-        //lc.setRow(addr,row,(byte)0);
+        lc.setEyeRow(eye,row,(byte)0);
       }
   }
   
-  // Retour
-  for(int addr=3;addr>=0;addr--)
-  {
-    for (int row=6;row>=0;row--)
+   // Retour
+  for(int eye=2 ; eye>0 ; eye--)
     {
-      //lc.setRow(addr,row,B11111111);
-      delay(delaytime);
-      lc.setRow(addr,row,(byte)0);
-    }
+      for (int row=6;row>=0;row--)
+      {
+        lc.setEyeRow(eye,row,B11111111);
+        delay(delaytime);
+        lc.setEyeRow(eye,row,(byte)0);
+      }
   }
 }
 
@@ -249,7 +112,7 @@ void balayageV()
       {
         lc.setEyeColumn(eye,col,B11111111,0);
         delay(delaytime);
-        //lc.setEyeColumn(eye,col,(byte)0,0);
+        lc.setEyeColumn(eye,col,(byte)0,0);
       }
   }
   
@@ -260,58 +123,437 @@ void balayageV()
       {
         lc.setEyeColumn(eye,col,B11111111,0);
         delay(delaytime);
-        //lc.setEyeColumn(eye,col,(byte)0,0);
+        lc.setEyeColumn(eye,col,(byte)0,0);
       }
   }
 }
 
-void animationyeux()
+void gauchedroite() // Oeil qui regarde de gauche \u00e0 droite
 {
-   int i,j;
-   byte sprite[4]={B00111100,B00111100,B00111100,B00111100};
-   int pos[4]={1,2,3,4};
+   byte sprite[6]={B00111001,B01111101,B11000111,B11000111,B01111101,B00111001}; 
+   byte clignement[6]={B00110001,B00110001,B00110001,B00110001,B00110001,B00110001};
+   //byte clignement[7]={B00110001,B00110001,B00110001,B00110001,B00110001,B00110001,B00110001};
+  // byte sprite[7]={B00100100,B01010100,B11111110,B01010100,B11111110,B01010100,B01001000}; //Dollars
    
-   for (i=0 ; i < 10 ; i++)
+   
+   //Centre vers le bord (pour respecter la boucle)
+    for (int i=2; i>=0 ; i --)
      {
-         for (j=0 ; j<4 ; j++)
-         {
-           lc.setEyeColumn(1,pos[j],sprite[j],0);
-         } 
-      delay(30);
-        lc.setEyeColumn(1,pos[1]-1,(byte)0,0);
-        for (j=0 ; j < 4 ; j++)
+        for (int col=0; col<6; col++)
         {
-          pos[j]+=i;
-          
+           lc.setEyeColumn(1, col+i, sprite[col], false); 
+           lc.setEyeColumn(2, col+i, sprite[col], false); 
         }
+        delay(delaytime);
+        if(i==3) delay(1000); //Pause
         
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, (byte)0, false); 
+           lc.setEyeColumn(2, col+i, (byte)0, false); 
+        } 
+     }
+     
+   for(int tour=0; tour<4 ; tour++)
+   {    
+      //Aller
+     for (int i=0; i<8 ; i ++)
+     {
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, sprite[col], false); 
+           lc.setEyeColumn(2, col+i, sprite[col], false); 
+        }
+        delay(delaytime);
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, (byte)0, false); 
+           lc.setEyeColumn(2, col+i, (byte)0, false); 
+        } 
+     }
+     
+     //Retour
+     for (int i=8; i>=0 ; i--)
+      {
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, sprite[col], false); 
+           lc.setEyeColumn(2, col+i, sprite[col], false); 
+        }
+        delay(delaytime);
+        if(i==0 || i==8) delay(delaytime*10);
+        for (int col=0; col<6; col++)
+        {
+           lc.setEyeColumn(1, col+i, (byte)0, false); 
+           lc.setEyeColumn(2, col+i, (byte)0, false); 
+        } 
+     }
    }
    
-   for (i=0 ; i < 10 ; i++)
+   //Arr\u00eat au mileu
+   for (int i=0; i<4 ; i ++)
    {
-     for (j=0 ; j<4 ; j++)
-         {
-           lc.setEyeColumn(1,pos[j],sprite[j], 0);
-         } 
-      delay(30);
-        lc.setEyeColumn(1,pos[4]+1,(byte)0,0);
-        for (j=0 ; j < 4 ; j++)
-        {
-          pos[j]-=i;
-          
-        }
-        
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, sprite[col], false); 
+         lc.setEyeColumn(2, col+i, sprite[col], false); 
+      }
+      delay(delaytime);
+      if(i==3) delay(1000); //Pause
+      
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+i, (byte)0, false); 
+         lc.setEyeColumn(2, col+i, (byte)0, false); 
+      } 
    }
+   
+   //Clignement
+   for (int tour=0; tour<1; tour ++)
+   {
+     for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+3, clignement[col], false);  //clin d'oeil
+         lc.setEyeColumn(2, col+3, sprite[col], false);
+      }
+      delay(300);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+3, (byte)0, false); 
+         lc.setEyeColumn(2, col+3, (byte)0, false); 
+         lc.setEyeColumn(1, col+3, sprite[col], false); 
+         lc.setEyeColumn(2, col+3, sprite[col], false); 
+      }
+      delay(500);
+      for (int col=0; col<6; col++)
+      {
+         lc.setEyeColumn(1, col+3, (byte)0, false); 
+         lc.setEyeColumn(2, col+3, (byte)0, false); 
+      }
+   } 
+}
+void cercle() // by cassou
+{
+   byte sprite1[14]={B11111110,B11111110,B00000000,B11111110,B11111110,B11000110,B11010110,B11010110,B11000110,B11111110,B11111110,B00000000,B11111110,B11111110};
+   byte sprite2[14]={B11111110,B00000000,B11111110,B11111110,B10000010,B10111010,B10111010,B10111010,B10111010,B10000010,B11111110,B11111110,B00000000,B11111110};
+   byte sprite3[14]={B00000000,B11111110,B11111110,B00000000,B01111100,B01111100,B01101100,B01101100,B01111100,B01111100,B00000000,B11111110,B11111110,B00000000}; 
+   
+   for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, sprite1[col], true); 
+    }
+    delay(delaytime*4);
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true); 
+       lc.setEyeColumn(1, col, sprite2[col], true); 
+    } 
+    delay(delaytime*4);
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true); 
+       lc.setEyeColumn(1, col, sprite3[col], true); 
+    } 
+    delay(delaytime*4);
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true); 
+    } 
+}
+
+void emoticon(int mode)
+{
+  byte love[14]={B00000000,B00000000,B00000000,B01100000,B11110000,B11111000,B01111100,B00111110,B01111100,B11111000,B11110000,B01100000,B00000000,B00000000}; 
+  byte exptdr[14]={B11000110,B11000110,B11000110,B11000110,B11000110,B11101110,B11101110,B11101100,B01101100,B01101100,B01101100,B00111000,B00111000,B00111000};
+  byte smiley[14]={B00000111,B00011111,B00111001,B01100001,B11100001,B11000001,B11000001,B11000001,B11000001,B01100001,B01100001,B00111001,B00011111,B00000111};
+  byte disturbed[14]={B00011100,B00100010,B01001000,B10010100,B10100010,B10101010,B10101010,B10101010,B10101010,B10101010,B10101010,B10010010,B01000100,B00111000};
+  byte doublenote[14]={B00000000,B00000000,B00000100,B00001110,B00001110,B11111110,B11000000,B11000000,B11000100,B11001110,B11001110,B11111110,B00000000,B00000000};
+  byte KO[14]={B00000000,B00000000,B00000000,B10000010,B11000110,B01101100,B00111000,B01101100,B11000110,B10000010,B00000000,B00000000,B00000000,B00000000};
+  byte blazed1[14]={B11110000,B11110000,B00000000,B00000000,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000000};
+  byte blazed2[14]={B00000000,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000110,B00000000,B00000000,B00000000,B00000000};
+  byte G[14]={B00000000,B00000000,B00000000,B01111100,B11111100,B11000110,B11000110,B11010110,B11011110,B11011110,B00010000,B00000000,B00000000,B00000000};
+  
+  for (int col=0; col<13; col++)
+   {
+     switch(mode)
+     {
+       case 1: //love
+         lc.setEyeColumn(1, col, love[col], true); 
+         break;
+         
+       case 2: //exptdr
+         lc.setEyeColumn(1, col, exptdr[col], true); 
+         break;
+         
+       case 3: //smiley
+         lc.setEyeColumn(1, col, smiley[col], true); 
+         break;
+        
+        case 4: //disturbed
+          lc.setEyeColumn(1, col, disturbed[col], false); 
+          lc.setEyeColumn(2, col, disturbed[col], false); 
+          break;
+          
+         case 5: //doublenote
+          lc.setEyeColumn(1, col, doublenote[col], false); 
+          lc.setEyeColumn(2, col, doublenote[col], false); 
+          break;
+          
+         case 6: //KO
+           lc.setEyeColumn(1, col, KO[col], true); 
+           break;
+          
+         case 7: //Blazed
+           lc.setEyeColumn(1, col, blazed1[col], false); 
+           lc.setEyeColumn(2, col, blazed2[col], false); 
+           break;
+           
+         case 8: // GG
+           lc.setEyeColumn(1, col, G[col], false); 
+           lc.setEyeColumn(2, col, G[col], false); 
+           break;
+     }
+   }
+ 
+  delay(1000); // pause
+  
+  //ClearDisplay
+  for (int col=0; col<13; col++)
+  {
+     lc.setEyeColumn(1, col, (byte)0, true);
+  }  
+}
+
+void writeChar(int eye,char value)
+{
+  //Sprites
+  byte write0[14]={B00000000,B00000000,B00000000,B11111110,B11111110,B11000110,B11000110,B11000110,B11000110,B11111110,B11111110,B00000000,B00000000,B00000000};
+  byte write1[14]={B00000000,B00000000,B00000000,B00000000,B00000000,B01000010,B11111110,B11111110,B00000010,B00000000,B00000000,B00000000,B00000000,B00000000};
+  byte write2[14]={B00000000,B00000000,B00000000,B00000000,B11011110,B11011110,B11010110,B11010110,B11110110,B11110110,B00000000,B00000000,B00000000,B00000000};
+  byte write3[14]={B00000000,B00000000,B00000000,B00000000,B11000110,B11000110,B11010110,B11010110,B11111110,B11111110,B00000000,B00000000,B00000000,B00000000};
+  byte write4[14]={B00000000,B00000000,B00000000,B00000000,B00001100,B00011100,B00111100,B01101100,B11001100,B11011110,B11011110,B00000000,B00000000,B00000000};
+  byte write5[14]={B00000000,B00000000,B00000000,B00000000,B11110110,B11110110,B11010110,B11010110,B11011110,B11011110,B00000000,B00000000,B00000000,B00000000};
+  byte write6[14]={B00000000,B00000000,B00000000,B00000000,B11111110,B11111110,B11011110,B11010010,B11011110,B11011110,B00000000,B00000000,B00000000,B00000000};
+  byte write7[14]={B00000000,B00000000,B00000000,B00000000,B11000000,B11001110,B11011110,B11110000,B11100000,B11000000,B00000000,B00000000,B00000000,B00000000};
+  byte write8[14]={B00000000,B00000000,B00000000,B00000000,B11111110,B11111110,B11010110,B11010110,B11111110,B11111110,B00000000,B00000000,B00000000,B00000000};
+  byte write9[14]={B00000000,B00000000,B00000000,B00000000,B11110110,B11110110,B11010110,B11010110,B11111110,B11111110,B00000000,B00000000,B00000000,B00000000};
+  
+  for (int col=0; col<13; col++)
+  {
+     switch(value)
+     {
+       case 0:
+         lc.setEyeColumn(eye, col, write0[col], false);
+         break;
+       case 1:
+         lc.setEyeColumn(eye, col, write1[col], false);
+         break;
+       case 2:
+         lc.setEyeColumn(eye, col, write2[col], false);
+         break;
+       case 3:
+         lc.setEyeColumn(eye, col, write3[col], false);
+         break;
+       case 4:
+         lc.setEyeColumn(eye, col, write4[col], false);
+         break;
+       case 5:
+         lc.setEyeColumn(eye, col, write5[col], false);
+         break;
+       case 6:
+         lc.setEyeColumn(eye, col, write6[col], false);
+         break;
+       case 7:
+         lc.setEyeColumn(eye, col, write7[col], false);
+         break;
+       case 8:
+         lc.setEyeColumn(eye, col, write8[col], false);
+         break;
+       case 9:
+         lc.setEyeColumn(eye, col, write9[col], false);
+         break;
+     }
+  }
+}
+
+void compteARebours(int time)
+{
+  int unite, dizaine;
+  for(int i=time;i>=0;i--)
+  {
+    //Affichage
+    unite = i%10;
+    dizaine = (i/10)%10;
+    
+    writeChar(1,dizaine);
+    writeChar(2,unite);
+    
+    //Pause d'une seconde
+    delay(1000);
+    
+    //ClearDisplay
+    for (int col=0; col<13; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true);
+    }  
+  }
+}
+
+void pacman()
+{
+  byte pacman1[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11101110,B01000100,B00000000};
+  byte pacman2[8]={B00111000,B01111100,B11111110,B11111110,B11111110,B11111110,B01111100,B00111000};
+  
+  for(int i=0;i<28;i++)
+  {
+    //Pacman
+    for(int col=0;col<8;col++)
+    {
+       if(i%2==0)
+       lc.setMatrixColumn(col+i,pacman1[col]);
+       else
+       lc.setMatrixColumn(col+i,pacman2[col]);
+    }
+    
+    //Points
+    if(i+5<10)
+    lc.setLed(1,3,3,true);
+    if(i+5<15)
+    lc.setLed(2,2,3,true);
+    if(i+5<20)
+    lc.setLed(2,6,3,true);
+    if(i+5<25)
+    lc.setLed(3,4,3,true);
+    
+    delay(200);
+    //ClearDisplay
+    for (int col=0; col<15; col++)
+    {
+       lc.setEyeColumn(1, col, (byte)0, true);
+    }
+    
+    //Points
+    if(i+5<10)
+    lc.setLed(1,3,3,true);
+    if(i+5<15)
+    lc.setLed(2,2,3,true);
+    if(i+5<20)
+    lc.setLed(2,6,3,true);
+    if(i+5<25)
+    lc.setLed(3,4,3,true);
+  }
+  
+  /*
+  //Win !
+  
+  byte writeW[14]={B11000000,B11110000,B00111100,B00001110,B00001110,B00111100,B00110000,B00111100,B00001110,B00001110,B00111100,B11110000,B11000000,B00000000};
+  byte writeIN[14]={B00000000,B11111110,B11111110,B00000000,B11111110,B11111110,B01100000,B00110000,B11111110,B11111110,B00000000,B11110110,B11110110,B00000000};
+  
+  for (int col=0; col<13; col++)
+  {
+    lc.setEyeColumn(1,col, writeW[col],false);
+    lc.setEyeColumn(2,col, writeIN[col],false);
+  }
+  delay(1000);
+  
+  */
+}
+void sopalint()
+{
+ byte writeSopalint[48]={B11110110,B11010110,B11010110,B11011110,B11011110,B00000000,B11111110,B11111110,B11000110,B11111110,B11111110,B00000000,B11111110,B11111110,B11011000,B11011000,B11111000,B00000000,B11111110,B11111110,B11011000,B11111110,B11111110,B00000000,B11111110,B11111110,B00000110,B00000110,B00000110,B11000000,B00000000,B11111110,B11111110,B00000000,B11111110,B11111110,B01110000,B00111000,B11111110,B11111110,B00000000,B11000000,B11000000,B11111110,B11111110,B11000000,B11000000};
+ int j;
+for(int i=47 ; i>-29 ; i--) //Pas de d\u00e9filement
+ {
+      for(int col=0 ; col=28; col++)
+     {
+       if(i+col > 47)
+       j = 5; // colonne vide
+       else
+       j = i+col;
+       
+       lc.setMatrixColumn(col,writeSopalint[j]);
+     }
+ }
+}
+void cardio()
+{
+  byte cardio[14]={B00010000,B00010000,B01100000,B10000000,B01111100,B00000010,B00011100,B00010000,B00010000,B00100000,B00010000,B00010000,B00010000,B00010000};
+  
+  //Affichage ligne
+  for (int col=0 ; col<28 ; col++)
+  {
+    lc.setMatrixColumn(col,B00010000); //Ligne 
+    lc.setMatrixColumn(col-10,B00000000); //Efface la ligne au fur et \u00e0 mesure
+    delay(20);
+  }
+  //Supp fin de ligne
+   for (int col=28-10 ; col<28 ; col++)
+  {
+    lc.setMatrixColumn(col,B00000000); //Efface la ligne
+    delay(20);
+  }
+  //Affichage cardio
+  for(int eye=1;eye<=2;eye++)
+  {
+    
+     for (int col=0 ; col<14 ; col++)
+    {
+      lc.setEyeColumn(eye,col,cardio[col],false); //cardio
+      delay(30);
+      //lc.setEyeColumn(1,col,(byte)0,true); //cardio
+    }
+  }
 }
 
 void loop() 
 { 
-  //balayageV();
-  //K2000(); 
- cylon();
-  //lc.setEyeColumn(1,2,B11111111,1);
-  //lc.setEyeColumn(1,12,B11111111,1);
-  //animationyeux();
-  //balayageV();
+  /*
+  int j = 0;
+  while(true)
+ { 
+    for(int i=0; i<5;i++)
+    cylon();
+    
+    if(j%2 == 0)
+    cardio();
+    else
+    emoticon(2);
+    
+    j++;
+ }
+ */
+ 
+ //Bouquet final !
+  for(int j=1 ; j<13 ; j++)
+  {
+    //for(int i=0; i<2 ; i++)
+    gauchedroite();
+    switch(j)
+    {
+      case 8 : 
+      pacman();
+      break;
+      
+      case 9 : 
+      cercle();
+      break;
+      
+      case 10 : 
+      cardio();
+      break;
+      
+      case 11: 
+      balayageV();
+      break;
+      
+      case 12: 
+      cylon();
+      break;
+      
+      default:
+      emoticon(j);
+      
+    }
+  }
 }
 
