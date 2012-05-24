@@ -491,8 +491,24 @@ void cardio()
   }
 }
 
+void choukette()
+{
+  byte writeCho[14]={B01111100,B01000100,B01000100,B01000100,B00000000,B01111100,B00010000,B00010000,B01111100,B00000000,B01111100,B01000100,B01000100,B01111100};
+  byte writeUk[14]={B01111100,B00000100,B00000100,B01111100,B00000000,B01111100,B00010000,B00101000,B01000100,B00010000,B00111000,B00011100,B00111000,B00010000};
+
+  for (int col=0; col<=13; col++)
+   {
+       lc.setEyeColumn(1, col,  writeCho[col], false); 
+       lc.setEyeColumn(2, col,  writeUk[col], false); 
+   }
+   delay(1000);
+
+}
 void loop() 
 { 
+  
+  gauchedroite();
+  choukette();
   /*
   int j = 0;
   while(true)
@@ -509,7 +525,7 @@ void loop()
  }
  */
  
- //Bouquet final !
+ /*/Bouquet final !
   for(int j=1 ; j<13 ; j++)
   {
     //for(int i=0; i<2 ; i++)
@@ -540,5 +556,5 @@ void loop()
       emoticon(j);
       
     }
-  }
+  }*/
 }
