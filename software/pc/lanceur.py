@@ -87,7 +87,7 @@ import lib.chargement_lib
 first = True
 erreur = False
 while first or erreur:
-    mode = raw_input('Indiquer le mode de lancement (a[utonome], [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
+    mode = raw_input('Indiquer le mode de lancement (c[assiope], a[utonome], [console], b[alise], v[isualisation_table], e[talonnage_constantes], h[omologation], j[oystick], m[atch], t[est]) :')
     first = False
     # Importation de l'instant où on lance le robot (avant l'arrivée du bouton poussoir) (par Thibaut)
     import time
@@ -112,6 +112,8 @@ while first or erreur:
         mode = "balise"
     elif mode == "v":
         mode = "visualisation_table"
+    elif mode == "c":
+	mode = "cassiope"
     else:
         first=True
     

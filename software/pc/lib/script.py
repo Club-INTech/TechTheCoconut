@@ -171,6 +171,16 @@ class Script:
         actionInstance.deplacer(110)
         asserInstance.gestionAvancer(-150)
     
+    def pipeau_cassiope(self,asser,action):
+        #stocke le lingot et enfonce un poussoir
+        asser.changerVitesse("translation",2)
+        asser.changerVitesse("rotation",2)
+        asser.gestionAvancer(800) 
+        asser.gestionTourner(-1.57)
+        asser.gestionAvancer(800) 
+        asser.gestionTourner(3.14) 
+        asser.gestionAvancer(800)
+
     def homologation(self, asser,action):
         #stocke le lingot et enfonce un poussoir
         asser.changerVitesse("translation",2)

@@ -43,7 +43,8 @@ int main() {
 	Balise & balise = Balise::Instance();
 	init();
 	uint32_t rawFrame=0;
-    Balise::serial_pc::print("init");
+	balise.moteur_on();
+	Balise::serial_pc::print("init");
 	while (1) {
 		char buffer[10];
 		Balise::Balise::serial_pc::read(buffer,10);
@@ -86,7 +87,7 @@ int main() {
 				angle = balise.getAngle(offset + (t2 - t1)*5/4);
 				
 // 				is_valid = (crc==crc8((distance << 16) + offset));
-                is_valid = true;
+				is_valid = true;
 				n_demandes++;
 			}while(is_valid==false && n_demandes<5);
 			if(n_demandes==5){

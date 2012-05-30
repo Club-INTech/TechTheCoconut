@@ -44,6 +44,8 @@ int main() {
 	
 	Balise & balise = Balise::Instance();
 	init(); 
+	balise.moteur_on();
+	balise.laser_on();
 	// En cas de reset par le watchdog
 	if (WDT_is_reset())
 	{
@@ -86,12 +88,7 @@ int main() {
 		
 		//Laser on
 		if(COMPARE_BUFFER("lon",3)){
-            if(balise.max_counter()>0){
-                balise.laser_on();
-            }
-            else{
-                Balise::serial_pc::print("Le moteur n'est pas allumé");
-            }
+		    balise.laser_on();
 		}		    
 
 		//Ping balise adverse
