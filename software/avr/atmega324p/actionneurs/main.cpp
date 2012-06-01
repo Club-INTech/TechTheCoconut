@@ -135,9 +135,6 @@ int main()
     if (FLASH_ID_MODE >= 0)
         AX.initID(0xFE, FLASH_ID_MODE);
         
-
-    // Variable utilisée uniquement pour le REANIMATION_MODE :
-    uint8_t debug_baudrate  = 0x00;
     // Variable utilisée uniquement pour le NOSERIE_MODE :
     uint8_t debug_noserie   = 0x00;
         
@@ -145,33 +142,12 @@ int main()
     // de la liaison série carte <-> carte).
     sei();
     
-        
     /// BOUCLE PRINCIPALE
     while (1)
     {
         /// Mode de réanimation, lorsque plus rien d'autre ne marche.
         if (REANIMATION_MODE)
-        {
-            // On brute-force le baud rate des AX12, et on leur envoie pour chaque baud rate
-            // d'écoute un signal de reset.
-            while (debug_baudrate < 0xFF)
-            {
-                serial_ax_::change_baudrate(2000000/(debug_baudrate + 1));
-                AX.reset(0xFE);
-                debug_baudrate++;
-            }
-            
-            // Une fois que le signal de reset a été reçu, l'AX12 écoute à 1.000.000 bps.
-            // Donc à ce baud rate, on reflash le baud rate d'écoute de l'AX12.
-            serial_ax_::change_baudrate(1000000);
-            AX.writeData(AX_BROADCAST, AX_BAUD_RATE, 1, BAUD_RATE_AX12);
-            
-            // Puis on revient à la valeur initiale, et on lui donne un angle consigne.
-            serial_ax_::change_baudrate(BAUD_RATE_SERIE);
-            AX.init (AX_ANGLECW, AX_ANGLECCW, AX_SPEED);
-            AX.GoTo (AX_BROADCAST, 512);
-            
-        }
+            AX.reanimationMode();        
         
         /// Test des AX12 sans communiquer avec eux via la liaison série.
         /// Ils sont censés tourner en boucle, donc désolidarisez-les du
@@ -347,10 +323,15 @@ int main()
                 // On lit la valeur à écrire
                 uint16_t val = serial_t_::read_int();
                 
-                AX.writeData(id, adresse, n, val);
-                
+                AX.writeData(id, adresse, n, val);   
             }
-
+            
+            else if (COMPARE_BUFFER("REANIM", 6))
+            {
+                serial_t_::print("id? (0xFE pour ne pas reflasher l'ID)");
+                uint8_t id = serial_t_::read_int();
+                AX.reanimationMode(id);
+            }
             
             /// *********************************************** ///
             ///                 CAPTEURS                        ///

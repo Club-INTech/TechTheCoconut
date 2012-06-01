@@ -140,6 +140,29 @@ public :
         sendPacket (id, reglength+1, AX_WRITE_DATA, data);
     }
     
+    /// Tente de réanimer un AX12 mort.
+    void reanimationMode(uint8_t id = 0xFE)
+    {
+        uint8_t debug_baudrate = 0;
+        // On brute-force le baud rate des AX12, et on leur envoie pour chaque baud rate
+        // d'écoute un signal de reset.
+        while (debug_baudrate < 0xFF)
+        {
+            Serial::change_baudrate(2000000/(debug_baudrate + 1));
+            reset(id);
+            debug_baudrate++;
+        }
+        
+        // Une fois que le signal de reset a été reçu, l'AX12 écoute à 1.000.000 bps.
+        // Donc à ce baud rate, on reflash le baud rate d'écoute de l'AX12.
+        Serial::change_baudrate(1000000);
+        writeData(0xFE, AX_BAUD_RATE, 1, uint8_t(2000000/baud_rate - 1));
+        
+        
+        // Si l'id est différente du broadcast, alors on la reflash.
+        if (id != 0xFE)
+            initID(0x01, id);
+    }
     
     /// Réinitialisation de l'ID de l'AX12
     void initID(uint8_t ancien_id, uint8_t nouvel_id)
