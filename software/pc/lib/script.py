@@ -1170,8 +1170,61 @@ class Script:
                 
             elif currentAction[0] == "goTo" :
                 return asser.goTo(Point(currentAction[1][0], currentAction[1][1]))
-                    
-        
+                 
+                 
+#############################################################################################
+#############################################################################################
+      
+    def torine00(self,asser,action):
+        #totem 00
+        asser.goTo(Point(-70.0, 470.0))
+        asser.gestionTourner(0,instruction = "finir")
+        action.deplacer(130)
+        time.sleep(0.3)
+        asser.gestionAvancer(400,instruction = "finir")
+        asser.gestionAvancer(300,instruction = "finir")
+        asser.gestionTourner(0.74,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(400,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+        action.deplacer(130)
+        time.sleep(0.3)
+        action.deplacer(180)
+        time.sleep(0.3)
+        asser.gestionAvancer(-350,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        time.sleep(0.3)
+        asser.gestionTourner(1.57,instruction = "auStopNeRienFaire")
+        #poussoir0
+        asser.gestionAvancer(500,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(-1.57,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-200,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(200,instruction = "auStopNeRienFaire")
+    
+    def torine01(self,asser,action):
+        #totem01
+        asser.goTo(Point(-50.0, 1200.0))
+        asser.gestionTourner(0,instruction = "finir")
+        action.deplacer(140)
+        time.sleep(0.3)
+        asser.gestionAvancer(300,instruction = "finir")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(400,instruction = "finir")
+        asser.gestionTourner(-0.74,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(0,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(300,instruction = "auStopNeRienFaire")
+        action.deplacer(180)
+        time.sleep(0.3)
+        asser.gestionAvancer(-300,instruction = "auStopNeRienFaire")
+        action.deplacer(0)
+        time.sleep(0.3)
+        #rentrer dans la cale
+        asser.gestionTourner(1.57,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-600,instruction = "auStopNeRienFaire")
+        asser.gestionTourner(3.14,instruction = "auStopNeRienFaire")
+        asser.gestionAvancer(-400,instruction = "auStopNeRienFaire")
         
         
 ####################################################################################################################

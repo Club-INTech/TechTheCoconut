@@ -65,7 +65,8 @@ class Asservissement:
         self.vitesseTranslation = 2
         self.vitesseRotation = 2
         
-        self.hotSpotsOriginaux = [Point(0, 1490), Point(860, 1490), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1490)]
+        #self.hotSpotsOriginaux = [Point(0, 1490), Point(860, 1490), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1490)]
+        self.hotSpotsOriginaux = [Point(0, 1200), Point(860, 1200), Point(875, 970), Point(590, 290), Point(0, 560), Point(-590, 290), Point(-875, 970), Point(-860, 1200)]
         self.hotSpots = self.hotSpotsOriginaux[:]
     
     def goToSegment(self, arrivee, avecRechercheChemin = False):
