@@ -158,7 +158,7 @@ public :
         Serial::change_baudrate(1000000);
         writeData(0xFE, AX_BAUD_RATE, 1, uint8_t(2000000/baud_rate - 1));
         
-        
+        Serial::change_baudrate(baud_rate);
         // Si l'id est différente du broadcast, alors on la reflash.
         if (id != 0xFE)
             initID(0x01, id);
