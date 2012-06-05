@@ -34,6 +34,10 @@ private:
 	
 	typedef Serial<0> serial_t_;
 	
+	int32_t pwmG_;
+	int32_t pwmD_;
+	bool BASCULE_;
+	
 	unsigned char couleur_;
 	float x_;
 	float y_;
@@ -57,6 +61,9 @@ private:
 public:
 	
 	Robot();
+	
+	void bandeArcade();
+	bool BASCULE();
 	
 	void couleur(unsigned char);
 	unsigned char couleur(void);
@@ -85,9 +92,7 @@ public:
 	void communiquer_pc();
 	
 	int32_t angle_initial(void);
-// 	float angle_optimal(float angle, float angleBkp);
 	int32_t angle_optimal(int32_t angle, int32_t angleBkp);
-// 	int32_t compare_angle_tic(int32_t angle1,int32_t angle2);
 	
 	void envoyer_position(void);
 	

@@ -16,6 +16,9 @@
 
 // Constructeur avec assignation des attributs
 Robot::Robot() : 		couleur_('v')
+				,pwmG_(0)
+				,pwmD_(0)
+				,BASCULE_(false)
 				,x_(0)
 				,y_(0)
 				,angle_serie_(0.0)
@@ -38,6 +41,12 @@ Robot::Robot() : 		couleur_('v')
 
 	changerVitesseRot2();
 	changerVitesseTra2();
+}
+
+void Robot::bandeArcade()
+{
+	moteurGauche.envoyerPwm(pwmG_);
+	moteurDroit.envoyerPwm(pwmD_);
 }
 
 void Robot::asservir()
@@ -93,6 +102,16 @@ void Robot::communiquer_pc(){
 		serial_t_::print(0);
 	}
 	
+	else if(COMPARE_BUFFER("arcade",6)){
+		BASCULE_ = not BASCULE_;
+	}
+	
+	else if(COMPARE_BUFFER("pwmG",4)){
+		pwmG_ = ((int32_t) serial_t_::read_float());
+	}
+	else if(COMPARE_BUFFER("pwmD",4)){
+		pwmD_ = ((int32_t) serial_t_::read_float());
+	}
 	
 	else if(COMPARE_BUFFER("eer",3)){
 		serial_t_::print(abs(rotation.erreur()));
@@ -351,6 +370,10 @@ void Robot::changerVitesseRot3(void)
 }
 ////////////////////////////// ACCESSEURS /////////////////////////////////
 
+bool Robot::BASCULE()
+{
+	return BASCULE_;
+}
 unsigned char Robot::couleur(void)
 {
 	return couleur_;

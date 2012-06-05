@@ -26,6 +26,7 @@ if hasattr(__builtin__.instance, 'capteurInstance'):
     capteurInstance = __builtin__.instance.capteurInstance
     
 def arcade():
+    asserInstance.serieAsserInstance.ecrire("arcade")
     maxCapt = 600
     consigneGauche = 0
     consigneDroite = 0
