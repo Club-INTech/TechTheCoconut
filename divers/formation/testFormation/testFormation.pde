@@ -35,16 +35,7 @@ Servo myservo1; //Direction
 Servo myservo2;
 Servo myservo3;
 
-int ledState = LOW;             // ledState used to set the LED
-long previousMillis = 0;        // will store last time LED was updated
-
-// the follow variables is a long because the time, measured in miliseconds,
-// will quickly become a bigger number than can be stored in an int.
-long interval = 2000;           // interval at which to blink (milliseconds)
-
-int volant = 90;
-
-
+int volant = 90; //Variable du volant en degrès (90 = tout droit)
 
 //Fonction d'initialisation exécuté une fois au début du programme
 void setup() {
@@ -65,7 +56,7 @@ void setup() {
   pinMode(CAPTEURD, INPUT);
  
   //Init direction
-  myservo1.write(90); // Tout droit chauffeur ;)
+  myservo1.write(volant); // Tout droit chauffeur ;)
   
   //Démarrage du moteur
   analogWrite(VITESSE,200); // VROUMMMMMMM !
@@ -75,10 +66,11 @@ void setup() {
 //Boucle infinie
 void loop()
 {
-  //Test des capteurs => 1 c'est noir
+  //Test des capteurs avec les LEDs de contrôle => Led allumée quand on est sur la ligne noire
   digitalWrite(LED1,digitalRead(CAPTEURG));
   digitalWrite(LED2,digitalRead(CAPTEURD));
   
+  //Correction de la trajectoire
   volant = volant - digitalRead(CAPTEURG)*5 + digitalRead(CAPTEURD)*5;
   myservo1.write(volant);
   
@@ -87,39 +79,4 @@ void loop()
   //Limite de débatement du volant
   if(volant<GAUCHE)volant = GAUCHE;
   if(volant>DROITE)volant = DROITE;
-  
-  
-  
-  /*
-  unsigned long currentMillis = millis();
- 
-  if(currentMillis - previousMillis > interval) {
-    // save the last time you blinked the LED 
-    previousMillis = currentMillis;   
-
-    // if the LED is off turn it on and vice-versa:
-    if (ledState == LOW)
-    {
-      ledState = HIGH;
-      analogWrite(VITESSE,64);
-      myservo1.write(0);
-      myservo2.write(180);
-      myservo3.write(180);
-    }
-    else
-    {
-      ledState = LOW;
-      analogWrite(VITESSE,200);
-      myservo1.write(180);
-      myservo2.write(0);
-      myservo3.write(0);
-    }
-
-    // set the LED with the ledState of the variable:
-    digitalWrite(SENS, ledState);
-  }
-  digitalWrite(LED1, digitalRead(CAPTEUR1));
-  digitalWrite(LED2, digitalRead(CAPTEUR2));
-  */
 }
-
