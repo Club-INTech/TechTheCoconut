@@ -19,16 +19,19 @@ Test de la direction : OK
 #define SERVO2 10
 #define SERVO3 11
 
-#define CAPTEUR1 6
-#define CAPTEUR2 8
+#define CAPTEURD 6 //Droite
+#define CAPTEURG 8 //Gauche
 
 #define VITESSE 5
 #define SENS 4
 #define COURANT 15
 
+#define GAUCHE 30
+#define DROITE 150
+
 
 //Variable Servo moteur
-Servo myservo1;
+Servo myservo1; //Direction
 Servo myservo2;
 Servo myservo3;
 
@@ -38,6 +41,8 @@ long previousMillis = 0;        // will store last time LED was updated
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
 long interval = 2000;           // interval at which to blink (milliseconds)
+
+int volant = 90;
 
 
 
@@ -56,13 +61,36 @@ void setup() {
   myservo3.attach(SERVO3);
   
   //Définition des sorties :
-  pinMode(CAPTEUR1, INPUT);
-  pinMode(CAPTEUR2, INPUT);
+  pinMode(CAPTEURG, INPUT);
+  pinMode(CAPTEURD, INPUT);
+ 
+  //Init direction
+  myservo1.write(90); // Tout droit chauffeur ;)
+  
+  //Démarrage du moteur
+  analogWrite(VITESSE,200); // VROUMMMMMMM !
+ 
 }
 
 //Boucle infinie
 void loop()
 {
+  //Test des capteurs => 1 c'est noir
+  digitalWrite(LED1,digitalRead(CAPTEURG));
+  digitalWrite(LED2,digitalRead(CAPTEURD));
+  
+  volant = volant - digitalRead(CAPTEURG)*5 + digitalRead(CAPTEURD)*5;
+  myservo1.write(volant);
+  
+  delay(20);
+  
+  //Limite de débatement du volant
+  if(volant<GAUCHE)volant = GAUCHE;
+  if(volant>DROITE)volant = DROITE;
+  
+  
+  
+  /*
   unsigned long currentMillis = millis();
  
   if(currentMillis - previousMillis > interval) {
@@ -92,6 +120,6 @@ void loop()
   }
   digitalWrite(LED1, digitalRead(CAPTEUR1));
   digitalWrite(LED2, digitalRead(CAPTEUR2));
-  
+  */
 }
 
