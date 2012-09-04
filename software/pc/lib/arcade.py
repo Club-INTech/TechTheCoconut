@@ -48,15 +48,15 @@ def arcade():
             #pour pc
             
             #avancer
-            if event.type == KEYDOWN and event.key == K_r:
+            if event.type == KEYDOWN and event.key == K_UP:
                 consigneGauche = vitesse + correction
-            if event.type == KEYDOWN and event.key == K_i:
+            if event.type == KEYDOWN and event.key == K_r:
                 consigneDroite = vitesse
                     
             #reculer
-            if event.type == KEYDOWN and event.key == K_f:
+            if event.type == KEYDOWN and event.key == K_DOWN:
                 consigneGauche = -vitesse - correction
-            if event.type == KEYDOWN and event.key == K_j:
+            if event.type == KEYDOWN and event.key == K_d:
                 consigneDroite = -vitesse
                 
             #stopper
@@ -66,18 +66,18 @@ def arcade():
                 consigneDroite = 0
                 
             #vitesses
-            if event.type == KEYDOWN and event.key == K_w:
-                vitesse = 50
-            if event.type == KEYDOWN and event.key == K_x:
-                vitesse = 80
-            if event.type == KEYDOWN and event.key == K_c:
-                vitesse = 100
-            if event.type == KEYDOWN and event.key == K_v:
-                vitesse = 120
-            if event.type == KEYDOWN and event.key == K_b:
-                vitesse = 150
-            if event.type == KEYDOWN and event.key == K_n:
-                vitesse = 200
+            #if event.type == KEYDOWN and event.key == K_w:
+                #vitesse = 50
+            #if event.type == KEYDOWN and event.key == K_x:
+                #vitesse = 80
+            #if event.type == KEYDOWN and event.key == K_c:
+                #vitesse = 100
+            #if event.type == KEYDOWN and event.key == K_v:
+                #vitesse = 120
+            #if event.type == KEYDOWN and event.key == K_b:
+                #vitesse = 150
+            #if event.type == KEYDOWN and event.key == K_n:
+                #vitesse = 200
                 
             #bras
             if event.type == KEYDOWN and event.key == K_m:
