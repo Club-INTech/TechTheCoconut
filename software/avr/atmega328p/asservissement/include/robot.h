@@ -34,16 +34,16 @@ private:
 	
 	typedef Serial<0> serial_t_;
 	
+	//kit pour borne d'arcade
+	bool BASCULE_;
 	int32_t pwmG_;
 	int32_t pwmD_;
-	bool BASCULE_;
 	
 	unsigned char couleur_;
 	float x_;
 	float y_;
 	float angle_serie_;
 	float angle_origine_;
-	void changer_orientation(float new_angle);
 	
 	bool etat_rot_;
 	bool etat_tra_;
@@ -62,23 +62,15 @@ public:
 	
 	Robot();
 	
+	//kit pour borne d'arcade
 	void bandeArcade();
 	bool BASCULE();
 	
-	void couleur(unsigned char);
-	unsigned char couleur(void);
-	void x(float);
-	float x(void);
-	void y(float);
-	float y(void);
-	
 	//gestion des mesures courantes
 	void mesure_angle(int32_t); 
-	int32_t mesure_angle(void);
 	void mesure_distance(int32_t); 
-	int32_t mesure_distance(void);
-	void envoyer_position_tic(void);
-	bool est_stoppe();
+	
+	void changer_orientation(float new_angle);
 	
 	void changerVitesseTra1();
 	void changerVitesseTra2();
@@ -91,19 +83,16 @@ public:
 	void update_position();
 	void communiquer_pc();
 	
-	int32_t angle_initial(void);
 	int32_t angle_optimal(int32_t angle, int32_t angleBkp);
-	
-	void envoyer_position(void);
 	
 	void tourner(float angle);
 	void translater(float distance);
 
 	void stopper();
+	bool est_stoppe();
 	void gestion_blocage();
 	
 	void recalage(void);
-	
 	void translater_bloc(float distance);
 	void tourner_bloc(float angle);
 };

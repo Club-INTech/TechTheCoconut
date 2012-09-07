@@ -37,6 +37,7 @@ ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 		int32_t infos[2];
 		//info[0]=>distance courante ; info[1] => angle courant.
 		get_all(infos);
+
 		robot.mesure_distance(infos[0]);
 		robot.mesure_angle(infos[1]);
 		robot.asservir();
