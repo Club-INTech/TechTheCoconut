@@ -13,7 +13,7 @@ int main()
     while(1)
     {
         if(emission_flag == 0)
-            Serial<0>::print_noln('v');
+            Serial<0>::print('v');
     }
     
     return 0;
