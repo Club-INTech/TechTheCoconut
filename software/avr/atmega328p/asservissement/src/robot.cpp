@@ -1,23 +1,11 @@
-#include <math.h>
-
-#define PI 3.14159265
-#define LARGEUR_ROBOT 200.0
-#define LONGUEUR_TABLE 3000.0
-#define PI_TIC 4414
-
-#include "twi_master.h"
-#include <libintech/serial/serial_0.hpp>
 #include "robot.h"
-#include <libintech/asservissement.hpp>
-
-#include <util/delay.h>
-
 
 // Constructeur avec assignation des attributs
-Robot::Robot() : 	couleur_('v')
+Robot::Robot() : 	
+			 BASCULE_(false)
 			,pwmG_(0)
 			,pwmD_(0)
-			,BASCULE_(false)
+			,couleur_('v')
 			,x_(0)
 			,y_(0)
 			,angle_serie_(0.0)
@@ -36,9 +24,9 @@ Robot::Robot() : 	couleur_('v')
 	TimerCounter_t::init();
 	serial_t_::change_baudrate(9600);
 
-	changer_orientation(3.1415);
-	changerVitesseRot2();
-	changerVitesseTra2();
+	changer_orientation(PI);
+	changerVitesseRot(2);
+	changerVitesseTra(2);
 }
 
 void Robot::bandeArcade()
@@ -79,8 +67,8 @@ void Robot::update_position()
 
 	float delta_distance_mm = delta_distance_tic * CONVERSION_TIC_MM_;
 
-	x_ += ( delta_distance_mm * cos(angle_serie_) );
-	y_ += ( delta_distance_mm * sin(angle_serie_) );
+	x_ += ( delta_distance_mm * cos_table(angle_serie_) );
+	y_ += ( delta_distance_mm * sin_table(angle_serie_) );
 
 	angle_serie_ += delta_angle_tic * CONVERSION_TIC_RADIAN_;
 
@@ -259,74 +247,38 @@ void Robot::communiquer_pc(){
 		serial_t_::print((int32_t)y_);
 	}
 
-	////////////////////////////////////////vitesses prédéfinies
-	else if (COMPARE_BUFFER("ctv1",4))
+	//vitesses prédéfinies
+	else if (COMPARE_BUFFER("ctv",3))
 	{
-		changerVitesseTra1();
+		changerVitesseTra((int16_t) serial_t_::read_float());
 	}
-	else if (COMPARE_BUFFER("ctv2",4))
+	else if (COMPARE_BUFFER("crv",3))
 	{
-		changerVitesseTra2();
+		changerVitesseRot((int16_t) serial_t_::read_float());
 	}
-	else if (COMPARE_BUFFER("ctv3",4))
-	{
-		changerVitesseTra3();
-	}
-	else if (COMPARE_BUFFER("crv1",4))
-	{
-		changerVitesseRot1();
-	}
-	else if (COMPARE_BUFFER("crv2",4))
-	{
-		changerVitesseRot2();
-	}
-	else if (COMPARE_BUFFER("crv3",4))
-	{
-		changerVitesseRot3();
-	}
-
 
 #undef COMPARE_BUFFER
 }
 ////////////////////////////// VITESSES /////////////////////////////
-
-void Robot::changerVitesseTra1(void)
+void Robot::changerVitesseTra(int16_t valeur)
 {
-	translation.valeur_bridage(60.0);//50 avant balise, yeux, etc
-	translation.kp(0.75);
-	translation.kd(2.0);
+	float vb_translation[] = {60.0,100.0,200.0};
+	float kp_translation[] = {0.75,0.75,0.5};
+	float kd_translation[] = {2.0,2.5,4.0};
+	
+	translation.valeur_bridage(vb_translation[valeur-1]);
+	translation.kp(kp_translation[valeur-1]);
+	translation.kd(kd_translation[valeur-1]);
 }
-void Robot::changerVitesseTra2(void)
+void Robot::changerVitesseRot(int16_t valeur)
 {
-	translation.valeur_bridage(100.0);
-	translation.kp(0.75);
-	translation.kd(2.5);
-
-}
-void Robot::changerVitesseTra3(void)
-{
-	translation.valeur_bridage(200.0);
-	translation.kp(0.5);
-	translation.kd(4.0);
-
-}
-void Robot::changerVitesseRot1(void)
-{
-	rotation.valeur_bridage(80.0);//70
-	rotation.kp(1.5);
-	rotation.kd(2.0);
-}
-void Robot::changerVitesseRot2(void)
-{
-	rotation.valeur_bridage(100.0);
-	rotation.kp(1.2);
-	rotation.kd(3.5);
-}
-void Robot::changerVitesseRot3(void)
-{
-	rotation.valeur_bridage(200.0);
-	rotation.kp(0.9);
-	rotation.kd(3.5);
+	float vb_rotation[] = {80.0,100.0,200.0};
+	float kp_rotation[] = {1.5,1.2,0.9};
+	float kd_rotation[] = {2.0,3.5,3.5};
+	
+	rotation.valeur_bridage(vb_rotation[valeur-1]);
+	rotation.kp(kp_rotation[valeur-1]);
+	rotation.kd(kd_rotation[valeur-1]);
 }
 ////////////////////////////// ACCESSEURS /////////////////////////////////
 
@@ -414,7 +366,7 @@ void Robot::gestion_blocage()
 	
 	if (bouge_pas && moteur_force)
 	{
-		if(compteurBlocage==20){
+		if(compteurBlocage==100){//20
 			stopper();
 			est_bloque_ = true;
 			compteurBlocage=0;
@@ -430,32 +382,32 @@ void Robot::gestion_blocage()
 
 void Robot::recalage()
 {
-	changerVitesseTra1();
-	changerVitesseRot1();
+	changerVitesseTra(1);
+	changerVitesseRot(1);
 	translater_bloc(-1000.0);
 	etat_rot_ = false;
-	changerVitesseTra2();
+	changerVitesseTra(2);
 	translater_bloc(-300.0);
 	if (couleur_ == 'r') x_ = (-LONGUEUR_TABLE/2+LARGEUR_ROBOT/2); else x_ = (LONGUEUR_TABLE/2-LARGEUR_ROBOT/2);
 	if (couleur_ == 'r') changer_orientation(0.0); else changer_orientation(PI);
 	etat_rot_ = true;
 	_delay_ms(500);
-	changerVitesseTra1();
+	changerVitesseTra(1);
 	translater_bloc(220.0);
 	tourner_bloc(PI/2);
 	translater_bloc(-1000.0);
 	etat_rot_ = false;
-	changerVitesseTra2();
+	changerVitesseTra(2);
 	translater_bloc(-300.0);
 	y_ = (LARGEUR_ROBOT/2);
 	changer_orientation(PI/2);
 	etat_rot_ = true;
 	_delay_ms(500);
-	changerVitesseTra1();
+	changerVitesseTra(1);
 	translater_bloc(150.0);
 	if (couleur_ == 'r') tourner_bloc(0.0); else tourner_bloc(PI);
-	changerVitesseTra2();
-	changerVitesseRot1();
+	changerVitesseTra(2);
+	changerVitesseRot(1);
 	_delay_ms(200);
 	serial_t_::print("FIN_REC");
 }

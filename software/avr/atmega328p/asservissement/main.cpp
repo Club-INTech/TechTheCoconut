@@ -14,21 +14,19 @@
 #include "robot.h"
 
 
-// int8_t i = 0;
-
 int main()
 {
     Robot & robot = Robot::Instance();
 	while(1)
 	{
  		robot.communiquer_pc();
-		
 	}
 	return 0;
 }
 
 ISR(TIMER1_OVF_vect, ISR_NOBLOCK){
 	Robot & robot = Robot::Instance();
+	
 	
 	if (robot.BASCULE())
 		robot.bandeArcade();

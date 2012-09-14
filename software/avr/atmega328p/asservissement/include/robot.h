@@ -1,18 +1,27 @@
 #ifndef robot_h
 #define robot_h
 
-#include <stdint.h>
+#include "Cos.h"
+#include "twi_master.h"
 
+#include <stdint.h>
 #include <avr/io.h>
+#include <util/delay.h>
 
 #include <libintech/asservissement.hpp>
 #include <libintech/serial/serial_impl.hpp>
+#include <libintech/serial/serial_0.hpp>
 #include <libintech/timer.hpp>
 #include <libintech/pwm.hpp>
 #include <libintech/moteur.hpp>
 #include <libintech/register.hpp>
 #include <libintech/singleton.hpp>
 
+#define PI 3.14159265
+#define PI_TIC 4414
+
+#define LARGEUR_ROBOT 200.0
+#define LONGUEUR_TABLE 3000.0
 
 class Robot : public Singleton<Robot>{
 // Par défaut les attributs sont publics dans une struct
@@ -28,8 +37,8 @@ private:
 	typedef Timer<0,ModeFastPwm,1> T_D;
 	Moteur<T_D, AVR_PORTB<PORTB0> > moteurDroit;
 	
-	//Timer 1 en mode compteur, Prescaler de 8
-	typedef Timer<1,ModeCounter,8> TimerCounter_t;
+	//Timer 1 en mode compteur, Prescaler de 1
+	typedef Timer<1,ModeCounter,1> TimerCounter_t;
 	TimerCounter_t compteur;
 	
 	typedef Serial<0> serial_t_;
@@ -72,12 +81,8 @@ public:
 	
 	void changer_orientation(float new_angle);
 	
-	void changerVitesseTra1();
-	void changerVitesseTra2();
-	void changerVitesseTra3();
-	void changerVitesseRot1();
-	void changerVitesseRot2();
-	void changerVitesseRot3();
+	void changerVitesseTra(int16_t valeur);
+	void changerVitesseRot(int16_t valeur);
 	
 	void asservir();
 	void update_position();

@@ -449,10 +449,12 @@ class Asservissement:
         3 : vitesse pour forcer
         """
         if typeAsservissement == "rotation":
-            self.serieAsserInstance.ecrire("crv"+str(int(valeur)))
+            self.serieAsserInstance.ecrire("crv")
+            self.serieAsserInstance.ecrire(str(int(valeur)))
             self.vitesseRotation = int(valeur)
         elif typeAsservissement == "translation":
-            self.serieAsserInstance.ecrire("ctv"+str(int(valeur)))
+            self.serieAsserInstance.ecrire("ctv")
+            self.serieAsserInstance.ecrire(str(int(valeur)))
             self.vitesseTranslation = int(valeur)
             
     def getVitesse(self, typeAsservissement):
