@@ -1,0 +1,25 @@
+2012-05-10 00:16:11,782:__main__:INFO:l57:MainThread:[32m[32mProfil de configuration chargé : prod[0m[0m
+2012-05-10 00:16:11,787:__main__:INFO:l59:MainThread:[32m[32mInjection des données de la carte[0m[0m
+2012-05-10 00:16:16,190:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2012-05-10 00:16:16,194:lib.instance:INFO:l37:MainThread:[32m[32mInstanciation de la classe Instance[0m[0m
+2012-05-10 00:16:18,715:lib.attributions:INFO:l42:MainThread:[32m[32m['/dev/ttyACM1', '', '', '/dev/ttyACM3', '', ''][0m[0m
+2012-05-10 00:16:18,722:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2012-05-10 00:16:18,725:lib.instance:ERROR:l83:MainThread:[33m[33minstance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2012-05-10 00:16:18,729:lib.instance:INFO:l133:MainThread:[32m[32métablissement du graphe en fonction des robots adverses rencontrés[0m[0m
+2012-05-10 00:16:18,730:lib.recherche_chemin.thetastar:INFO:l501:MainThread:[32m[32mcalcul du graphe (initialisation, nouveau rayon ou nouveaux robots adverses[0m[0m
+2012-05-10 00:16:20,942:lib.recherche_chemin.thetastar:INFO:l549:MainThread:[32m[32mmise en cache du graphe dans les fichiers sauv_*[0m[0m
+2012-05-10 00:16:20,959:lib.asservissement:ERROR:l45:MainThread:[33m[33masservissement : ne peut importer instance.asserInstanceDuree[0m[0m
+2012-05-10 00:16:21,067:lib.strategie:DEBUG:l154:MainThread:[36m[36mInitialisation des actions à faire[0m[0m
+2012-05-10 00:16:21,069:lib.strategie:INFO:l47:MainThread:[32m[32mLancement de la stratégie numéro 1[0m[0m
+2012-05-10 00:16:21,071:lib.strategie:ERROR:l66:MainThread:[33m[33mstratégie : ne peut importer instance.baliseInstance[0m[0m
+2012-05-10 00:16:21,073:lib.balise:ERROR:l32:MainThread:[33m[33mbalise : ne peut importer instance.serieBaliseInstance[0m[0m
+2012-05-10 00:16:25,996:__main__:INFO:l119:MainThread:[32m[32mChargement du fichier de lancement match[0m[0m
+2012-05-10 00:16:28,324:bin.match:WARNING:l29:MainThread:[35m[35mRobot en attente du jumper pour recalage[0m[0m
+2012-05-10 00:16:35,635:bin.match:INFO:l31:MainThread:[32m[32mLancement du recalage...[0m[0m
+2012-05-10 00:16:35,637:lib.asservissement:INFO:l317:MainThread:[32m[32mdébut du recalage[0m[0m
+2012-05-10 00:16:46,615:lib.asservissement:INFO:l322:MainThread:[32m[32mfin du recalage[0m[0m
+2012-05-10 00:16:46,617:bin.match:INFO:l42:MainThread:[32m[32mLe recalage a été effectué[0m[0m
+2012-05-10 00:16:53,567:bin.match:INFO:l44:MainThread:[32m[32mLe Jumper a été retiré. Lancement de la stratégie[0m[0m
+2012-05-10 00:16:53,569:lib.timer:INFO:l37:MainThread:[32m[32mLancement du timer...[0m[0m
+2012-05-10 00:17:20,236:lib.script:DEBUG:l621:MainThread:[36m[36mEnfonçage du poussoir à nous fini[0m[0m
+2012-05-10 00:17:20,238:lib.script:DEBUG:l624:MainThread:[36m[36mDébut d'enfonçage du poussoir 2[0m[0m

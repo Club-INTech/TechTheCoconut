@@ -1,0 +1,22 @@
+2000-01-01 01:56:53,846:__main__:INFO:l57:MainThread:[32m[32mProfil de configuration chargé : develop[0m[0m
+2000-01-01 01:56:53,849:__main__:INFO:l59:MainThread:[32m[32mInjection des données de la carte[0m[0m
+2000-01-01 01:56:55,440:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:56:55,457:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:56:55,463:lib.instance:INFO:l36:MainThread:[32m[32mInstanciation de la classe Instance[0m[0m
+2000-01-01 01:57:03,377:lib.attributions:INFO:l42:MainThread:[32m[32m['', '', '', '', '', ''][0m[0m
+2000-01-01 01:57:03,384:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:57:03,387:lib.instance:ERROR:l68:MainThread:[33m[33minstance : serieAsserInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:57:03,390:lib.instance:ERROR:l78:MainThread:[33m[33minstance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:57:03,392:lib.instance:ERROR:l88:MainThread:[33m[33minstance : serieCaptActionneurInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:57:03,394:lib.capteur:ERROR:l35:MainThread:[33m[33m[Capteurs] impossible d'acceder à serieCaptActionneurInstance[0m[0m
+2000-01-01 01:57:03,396:lib.jumper:ERROR:l19:MainThread:[33m[33ml'instance de lib.capteur.Capteur n'est pas chargée[0m[0m
+2000-01-01 01:57:03,398:lib.asservissement:ERROR:l40:MainThread:[33m[33masservissement : ne peut importer instance.serieAsserInstance[0m[0m
+2000-01-01 01:57:03,400:lib.asservissement:ERROR:l44:MainThread:[33m[33masservissement : ne peut importer instance.asserInstanceDuree[0m[0m
+2000-01-01 01:57:03,403:lib.actionneur:ERROR:l50:MainThread:[33m[33mactionneur : ne peut importer instance.serieCaptActionneurInstance[0m[0m
+2000-01-01 01:57:03,407:lib.strategie:DEBUG:l149:MainThread:[36m[36mInitialisation des actions à faire[0m[0m
+2000-01-01 01:57:03,409:lib.strategie:INFO:l49:MainThread:[32m[32mLancement de la stratégie numéro 1[0m[0m
+2000-01-01 01:57:03,411:lib.strategie:ERROR:l68:MainThread:[33m[33mstratégie : ne peut importer instance.baliseInstance[0m[0m
+2000-01-01 01:57:03,413:lib.strategie:ERROR:l76:MainThread:[33m[33mImpossible d'importer l'asservissement[0m[0m
+2000-01-01 01:57:03,415:lib.balise:ERROR:l32:MainThread:[33m[33mbalise : ne peut importer instance.serieBaliseInstance[0m[0m
+2000-01-01 01:57:29,554:__main__:INFO:l121:MainThread:[32m[32mChargement du fichier de lancement match[0m[0m
+2000-01-01 01:57:40,411:bin.match:WARNING:l29:MainThread:[35m[35mRobot en attente du jumper pour recalage[0m[0m

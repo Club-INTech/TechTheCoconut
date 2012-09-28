@@ -1,6 +1,6 @@
 *.pyc
 *.pdf
-*.log
+logs
 *.orig
 *~
 *.kate-swp

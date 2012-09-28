@@ -1,0 +1,23 @@
+2000-01-01 01:18:08,086:__main__:INFO:l57:MainThread:[32m[32mProfil de configuration chargé : prod[0m[0m
+2000-01-01 01:18:08,088:__main__:INFO:l59:MainThread:[32m[32mInjection des données de la carte[0m[0m
+2000-01-01 01:18:16,249:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:18:16,253:lib.instance:INFO:l37:MainThread:[32m[32mInstanciation de la classe Instance[0m[0m
+2000-01-01 01:18:18,769:lib.attributions:INFO:l42:MainThread:[32m[32m['/dev/ttyACM1', '', '', '/dev/ttyACM3', '', ''][0m[0m
+2000-01-01 01:18:18,775:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:18:18,779:lib.instance:ERROR:l83:MainThread:[33m[33minstance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:18:18,782:lib.instance:INFO:l133:MainThread:[32m[32métablissement du graphe en fonction des robots adverses rencontrés[0m[0m
+2000-01-01 01:18:18,784:lib.recherche_chemin.thetastar:INFO:l501:MainThread:[32m[32mcalcul du graphe (initialisation, nouveau rayon ou nouveaux robots adverses[0m[0m
+2000-01-01 01:18:21,008:lib.recherche_chemin.thetastar:INFO:l549:MainThread:[32m[32mmise en cache du graphe dans les fichiers sauv_*[0m[0m
+2000-01-01 01:18:21,459:lib.asservissement:ERROR:l45:MainThread:[33m[33masservissement : ne peut importer instance.asserInstanceDuree[0m[0m
+2000-01-01 01:18:21,564:lib.strategie:DEBUG:l154:MainThread:[36m[36mInitialisation des actions à faire[0m[0m
+2000-01-01 01:18:21,566:lib.strategie:INFO:l47:MainThread:[32m[32mLancement de la stratégie numéro 1[0m[0m
+2000-01-01 01:18:21,567:lib.strategie:ERROR:l66:MainThread:[33m[33mstratégie : ne peut importer instance.baliseInstance[0m[0m
+2000-01-01 01:18:21,569:lib.balise:ERROR:l32:MainThread:[33m[33mbalise : ne peut importer instance.serieBaliseInstance[0m[0m
+2000-01-01 01:18:23,497:__main__:INFO:l119:MainThread:[32m[32mChargement du fichier de lancement match[0m[0m
+2000-01-01 01:18:24,983:bin.match:WARNING:l29:MainThread:[35m[35mRobot en attente du jumper pour recalage[0m[0m
+2000-01-01 01:18:27,677:bin.match:INFO:l31:MainThread:[32m[32mLancement du recalage...[0m[0m
+2000-01-01 01:18:27,680:lib.asservissement:INFO:l317:MainThread:[32m[32mdébut du recalage[0m[0m
+2000-01-01 01:18:38,394:lib.asservissement:INFO:l322:MainThread:[32m[32mfin du recalage[0m[0m
+2000-01-01 01:18:38,396:bin.match:INFO:l42:MainThread:[32m[32mLe recalage a été effectué[0m[0m
+2000-01-01 01:18:57,806:bin.match:INFO:l44:MainThread:[32m[32mLe Jumper a été retiré. Lancement de la stratégie[0m[0m
+2000-01-01 01:18:57,807:lib.timer:INFO:l37:MainThread:[32m[32mLancement du timer...[0m[0m

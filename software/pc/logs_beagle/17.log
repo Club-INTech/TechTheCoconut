@@ -1,0 +1,23 @@
+2000-01-01 02:16:41,663:__main__:INFO:l57:MainThread:[32m[32mProfil de configuration chargé : develop[0m[0m
+2000-01-01 02:16:41,666:__main__:INFO:l59:MainThread:[32m[32mInjection des données de la carte[0m[0m
+2000-01-01 02:16:42,589:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 02:16:42,603:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 02:16:42,606:lib.instance:INFO:l36:MainThread:[32m[32mInstanciation de la classe Instance[0m[0m
+2000-01-01 02:16:45,123:lib.attributions:INFO:l42:MainThread:[32m[32m['/dev/ttyACM1', '', '', '/dev/ttyACM3', '', ''][0m[0m
+2000-01-01 02:16:45,131:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 02:16:45,135:lib.instance:ERROR:l78:MainThread:[33m[33minstance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 02:16:45,139:lib.asservissement:ERROR:l44:MainThread:[33m[33masservissement : ne peut importer instance.asserInstanceDuree[0m[0m
+2000-01-01 02:16:45,248:lib.strategie:DEBUG:l149:MainThread:[36m[36mInitialisation des actions à faire[0m[0m
+2000-01-01 02:16:45,252:lib.strategie:INFO:l49:MainThread:[32m[32mLancement de la stratégie numéro 1[0m[0m
+2000-01-01 02:16:45,254:lib.strategie:ERROR:l68:MainThread:[33m[33mstratégie : ne peut importer instance.baliseInstance[0m[0m
+2000-01-01 02:16:45,257:lib.balise:ERROR:l32:MainThread:[33m[33mbalise : ne peut importer instance.serieBaliseInstance[0m[0m
+2000-01-01 02:16:47,972:__main__:INFO:l125:MainThread:[32m[32mChargement du fichier de lancement stand[0m[0m
+2000-01-01 02:16:47,985:lib.asservissement:INFO:l405:MainThread:[32m[32mdébut du recalage[0m[0m
+2000-01-01 02:17:03,913:lib.asservissement:INFO:l410:MainThread:[32m[32mfin du recalage[0m[0m
+2000-01-01 02:17:04,320:lib.asservissement:INFO:l136:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (1184.0,252.0) et d'arrivée : (-70.0,470.0)[0m[0m
+2000-01-01 02:17:04,329:lib.asservissement:INFO:l204:MainThread:[32m[32mchemin trouvé : ([(590,290), (0,560), (-70.0,470.0)][0m[0m
+2000-01-01 02:17:04,441:lib.asservissement:INFO:l80:MainThread:[32m[32meffectue le segment de départ : (1184.0,252.0) et d'arrivée : (590,290)[0m[0m
+2000-01-01 02:17:07,529:lib.asservissement:INFO:l80:MainThread:[32m[32meffectue le segment de départ : (588.0,287.0) et d'arrivée : (0,560)[0m[0m
+2000-01-01 02:17:09,557:lib.asservissement:INFO:l136:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (470.0,341.0) et d'arrivée : (-50.0,1200.0)[0m[0m
+2000-01-01 02:17:09,571:lib.asservissement:INFO:l204:MainThread:[32m[32mchemin trouvé : ([(590,290), (875,970), (860,1200), (0,1200), (-50.0,1200.0)][0m[0m
+2000-01-01 02:17:09,684:lib.asservissement:INFO:l80:MainThread:[32m[32meffectue le segment de départ : (453.0,349.0) et d'arrivée : (590,290)[0m[0m

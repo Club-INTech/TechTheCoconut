@@ -1,0 +1,147 @@
+2000-01-01 01:19:44,401:__main__:INFO:l57:MainThread:[32m[32mProfil de configuration chargé : prod[0m[0m
+2000-01-01 01:19:44,404:__main__:INFO:l59:MainThread:[32m[32mInjection des données de la carte[0m[0m
+2000-01-01 01:19:45,976:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:19:45,983:lib.instance:INFO:l36:MainThread:[32m[32mInstanciation de la classe Instance[0m[0m
+2000-01-01 01:19:48,492:lib.attributions:INFO:l42:MainThread:[32m[32m['/dev/ttyACM1', '', '', '/dev/ttyACM3', '', ''][0m[0m
+2000-01-01 01:19:48,499:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:19:48,502:lib.instance:ERROR:l78:MainThread:[33m[33minstance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:19:48,507:lib.asservissement:ERROR:l44:MainThread:[33m[33masservissement : ne peut importer instance.asserInstanceDuree[0m[0m
+2000-01-01 01:19:48,613:lib.strategie:DEBUG:l149:MainThread:[36m[36mInitialisation des actions à faire[0m[0m
+2000-01-01 01:19:48,617:lib.strategie:INFO:l49:MainThread:[32m[32mLancement de la stratégie numéro 1[0m[0m
+2000-01-01 01:19:48,620:lib.strategie:ERROR:l68:MainThread:[33m[33mstratégie : ne peut importer instance.baliseInstance[0m[0m
+2000-01-01 01:19:48,624:lib.balise:ERROR:l32:MainThread:[33m[33mbalise : ne peut importer instance.serieBaliseInstance[0m[0m
+2000-01-01 01:19:54,462:__main__:INFO:l121:MainThread:[32m[32mChargement du fichier de lancement autonome[0m[0m
+2000-01-01 01:19:54,478:bin.autonome:WARNING:l26:MainThread:[35m[35mRobot en attente du jumper pour recalage[0m[0m
+2000-01-01 01:19:57,889:bin.autonome:INFO:l28:MainThread:[32m[32mLancement du recalage...[0m[0m
+2000-01-01 01:19:57,893:lib.asservissement:INFO:l404:MainThread:[32m[32mdébut du recalage[0m[0m
+2000-01-01 01:20:08,619:lib.asservissement:INFO:l409:MainThread:[32m[32mfin du recalage[0m[0m
+2000-01-01 01:20:08,722:bin.autonome:WARNING:l39:MainThread:[35m[35mLe recalage a été effectué[0m[0m
+2000-01-01 01:20:09,207:bin.autonome:WARNING:l41:MainThread:[35m[35mLe Jumper a été retiré. Lancement de la stratégie[0m[0m
+2000-01-01 01:20:09,211:lib.timer:INFO:l37:MainThread:[32m[32mLancement du timer...[0m[0m
+2000-01-01 01:20:12,907:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (204.0,489.0) et d'arrivée : (-900,1000)[0m[0m
+2000-01-01 01:20:12,913:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-900,1000)][0m[0m
+2000-01-01 01:20:13,022:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (204.0,489.0) et d'arrivée : (390,1510.0)[0m[0m
+2000-01-01 01:20:13,030:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490), (0,1490), (390,1510.0)][0m[0m
+2000-01-01 01:20:13,143:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (204.0,489.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:20:13,151:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:20:13,262:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (204.0,489.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:20:13,267:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (0,660)][0m[0m
+2000-01-01 01:20:13,376:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (204.0,489.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:20:13,384:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490)][0m[0m
+2000-01-01 01:20:13,389:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', 22.247820809404857], ['enfoncerPoussoir1', 35.17078750032217], ['rafflerTotem01', 45.33114209886446], ['rafflerTotem00', 20.35822622986874], ['enfoncerPoussoir0', 26.838604785431627]][0m[0m
+2000-01-01 01:20:13,392:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', 0.0], ['enfoncerPoussoir1', 0.1705961232726176], ['rafflerTotem01', 0.19853900835702634], ['rafflerTotem00', 0.6385625080109849], ['enfoncerPoussoir0', 0.22355856602713137]][0m[0m
+2000-01-01 01:20:13,397:lib.script:DEBUG:l678:MainThread:[36m[36mRafflage de totem 0 0[0m[0m
+2000-01-01 01:20:13,610:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-204.0,489.0) et d'arrivée : (90,655)[0m[0m
+2000-01-01 01:20:13,617:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (90,655)][0m[0m
+2000-01-01 01:20:13,732:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-204.0,489.0) et d'arrivée : (0,560)[0m[0m
+2000-01-01 01:20:15,765:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-2.0,559.0) et d'arrivée : (90,655)[0m[0m
+2000-01-01 01:20:32,238:lib.strategie:DEBUG:l258:MainThread:[36m[36mLancement du script rafflerTotem00.[0m[0m
+2000-01-01 01:20:32,348:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (283.0,768.0) et d'arrivée : (900,1000)[0m[0m
+2000-01-01 01:20:32,354:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (590,290), (875,970), (900,1000)][0m[0m
+2000-01-01 01:20:32,465:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (283.0,768.0) et d'arrivée : (-390,1510.0)[0m[0m
+2000-01-01 01:20:32,471:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490), (0,1490), (-390,1510.0)][0m[0m
+2000-01-01 01:20:32,582:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (283.0,768.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:20:32,588:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:20:32,700:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (283.0,768.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:20:32,705:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (0,660)][0m[0m
+2000-01-01 01:20:32,816:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (283.0,768.0) et d'arrivée : (860,1490)[0m[0m
+2000-01-01 01:20:32,822:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (590,290), (875,970), (860,1490)][0m[0m
+2000-01-01 01:20:32,825:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', 23.256881575604517], ['enfoncerPoussoir1', 36.17984826652183], ['rafflerTotem01', 46.340202865064114], ['rafflerTotem00', 21.3672869960684], ['enfoncerPoussoir0', 27.847665551631284]][0m[0m
+2000-01-01 01:20:32,828:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', 0.0], ['enfoncerPoussoir1', 0.1658381747706764], ['rafflerTotem01', 0.194215809244657], ['rafflerTotem00', 0.23400256667680855], ['enfoncerPoussoir0', 0.21545791653076382]][0m[0m
+2000-01-01 01:20:32,831:lib.script:DEBUG:l678:MainThread:[36m[36mRafflage de totem 0 0[0m[0m
+2000-01-01 01:20:33,044:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-283.0,768.0) et d'arrivée : (90,655)[0m[0m
+2000-01-01 01:20:33,052:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (90,655)][0m[0m
+2000-01-01 01:20:33,164:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-283.0,768.0) et d'arrivée : (0,560)[0m[0m
+2000-01-01 01:20:44,446:lib.strategie:DEBUG:l258:MainThread:[36m[36mLancement du script rafflerTotem00.[0m[0m
+2000-01-01 01:20:44,558:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (284.0,470.0) et d'arrivée : (-900,1000)[0m[0m
+2000-01-01 01:20:44,565:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-900,1000)][0m[0m
+2000-01-01 01:20:44,675:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (284.0,470.0) et d'arrivée : (390,1510.0)[0m[0m
+2000-01-01 01:20:44,682:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490), (0,1490), (390,1510.0)][0m[0m
+2000-01-01 01:20:44,794:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (284.0,470.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:20:44,801:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:20:44,911:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (284.0,470.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:20:44,916:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (0,660)][0m[0m
+2000-01-01 01:20:45,030:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (284.0,470.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:20:45,035:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (-590,290), (-875,970), (-860,1490)][0m[0m
+2000-01-01 01:20:45,038:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', 22.859142730293055], ['enfoncerPoussoir1', 35.782109421210365], ['rafflerTotem01', 45.94246401975266], ['rafflerTotem00', 20.96954815075694], ['enfoncerPoussoir0', 27.449926706319825]][0m[0m
+2000-01-01 01:20:45,041:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', 0.0], ['enfoncerPoussoir1', 0.16768156201667117], ['rafflerTotem01', 0.1958971986380728], ['rafflerTotem00', 0.23844099854004316], ['enfoncerPoussoir0', 0.21857981859815362]][0m[0m
+2000-01-01 01:20:45,044:lib.script:DEBUG:l678:MainThread:[36m[36mRafflage de totem 0 0[0m[0m
+2000-01-01 01:20:45,255:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-284.0,470.0) et d'arrivée : (90,655)[0m[0m
+2000-01-01 01:20:45,262:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,560), (90,655)][0m[0m
+2000-01-01 01:20:45,371:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-284.0,470.0) et d'arrivée : (0,560)[0m[0m
+2000-01-01 01:20:48,155:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (1.0,555.0) et d'arrivée : (90,655)[0m[0m
+2000-01-01 01:21:05,902:lib.strategie:DEBUG:l258:MainThread:[36m[36mLancement du script rafflerTotem00.[0m[0m
+2000-01-01 01:21:06,015:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (824.0,875.0) et d'arrivée : (900,1000)[0m[0m
+2000-01-01 01:21:06,020:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(875,970), (900,1000)][0m[0m
+2000-01-01 01:21:06,130:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (824.0,875.0) et d'arrivée : (-390,1510.0)[0m[0m
+2000-01-01 01:21:06,138:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(875,970), (860,1490), (0,1490), (-390,1510.0)][0m[0m
+2000-01-01 01:21:06,250:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (824.0,875.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:21:06,255:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(875,970), (860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:21:06,367:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (824.0,875.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:21:06,373:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(875,970), (590,290), (0,560), (0,660)][0m[0m
+2000-01-01 01:21:06,485:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (824.0,875.0) et d'arrivée : (860,1490)[0m[0m
+2000-01-01 01:21:06,491:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(875,970), (860,1490)][0m[0m
+2000-01-01 01:21:06,495:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', 11.096083424873175], ['enfoncerPoussoir1', 24.019050115790485], ['rafflerTotem01', 34.17940471433278], ['rafflerTotem00', 29.895360864416258], ['enfoncerPoussoir0', 15.686867400899944]][0m[0m
+2000-01-01 01:21:06,497:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', 0.18024377822509563], ['enfoncerPoussoir1', 0.24980171868060302], ['rafflerTotem01', 0.2633164642632276], ['rafflerTotem00', -0.03345000599040356], ['enfoncerPoussoir0', 0.38248554326759876]][0m[0m
+2000-01-01 01:21:06,603:lib.script:DEBUG:l879:MainThread:[36m[36mEnfonçage du poussoir côté nous en cours[0m[0m
+2000-01-01 01:21:06,715:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-824.0,875.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:06,720:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(-875,970), (-860,1490)][0m[0m
+2000-01-01 01:21:06,831:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-824.0,875.0) et d'arrivée : (-875,970)[0m[0m
+2000-01-01 01:21:09,001:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-871.0,970.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:18,125:lib.strategie:DEBUG:l258:MainThread:[36m[36mLancement du script enfoncerPoussoir0.[0m[0m
+2000-01-01 01:21:18,237:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (854.0,1619.0) et d'arrivée : (-900,1000)[0m[0m
+2000-01-01 01:21:18,242:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (-860,1490), (-875,970), (-900,1000)][0m[0m
+2000-01-01 01:21:18,352:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (854.0,1619.0) et d'arrivée : (390,1510.0)[0m[0m
+2000-01-01 01:21:18,359:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (390,1510.0)][0m[0m
+2000-01-01 01:21:18,470:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (854.0,1619.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:21:18,477:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:21:18,591:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (854.0,1619.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:21:18,596:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (875,970), (590,290), (0,560), (0,660)][0m[0m
+2000-01-01 01:21:18,708:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (854.0,1619.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:18,714:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (-860,1490)][0m[0m
+2000-01-01 01:21:18,718:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', 27.973186634677898], ['enfoncerPoussoir1', 20.295910024593418], ['rafflerTotem01', 30.45626462313571], ['rafflerTotem00', 33.936643178698596], ['enfoncerPoussoir0', 24.799548205225264]][0m[0m
+2000-01-01 01:21:18,720:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', -2], ['enfoncerPoussoir1', 0.29562606420355353], ['rafflerTotem01', -2], ['rafflerTotem00', -2], ['enfoncerPoussoir0', -2]][0m[0m
+2000-01-01 01:21:18,825:lib.script:DEBUG:l902:MainThread:[36m[36mEnfonçage du poussoir côté ennemi en cours[0m[0m
+2000-01-01 01:21:18,936:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-854.0,1619.0) et d'arrivée : (390,1510.0)[0m[0m
+2000-01-01 01:21:18,943:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(-860,1490), (0,1490), (390,1510.0)][0m[0m
+2000-01-01 01:21:19,052:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-854.0,1619.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:21,419:lib.strategie:DEBUG:l258:MainThread:[36m[36mLancement du script enfoncerPoussoir1.[0m[0m
+2000-01-01 01:21:21,533:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (852.0,1621.0) et d'arrivée : (900,1000)[0m[0m
+2000-01-01 01:21:21,538:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (875,970), (900,1000)][0m[0m
+2000-01-01 01:21:21,650:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (852.0,1621.0) et d'arrivée : (-390,1510.0)[0m[0m
+2000-01-01 01:21:21,655:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (-390,1510.0)][0m[0m
+2000-01-01 01:21:21,764:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (852.0,1621.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:21:21,770:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:21:21,880:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (852.0,1621.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:21:21,885:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (875,970), (590,290), (0,560), (0,660)][0m[0m
+2000-01-01 01:21:21,996:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (852.0,1621.0) et d'arrivée : (860,1490)[0m[0m
+2000-01-01 01:21:22,001:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490)][0m[0m
+2000-01-01 01:21:22,004:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', 15.153071619632243], ['enfoncerPoussoir1', 20.311615905070145], ['rafflerTotem01', 30.47197050361244], ['rafflerTotem00', 33.952349059175326], ['enfoncerPoussoir0', 11.979433190179604]][0m[0m
+2000-01-01 01:21:22,006:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', 0.13198644144259242], ['enfoncerPoussoir1', 0.14769873623157406], ['rafflerTotem01', -2], ['rafflerTotem00', -2], ['enfoncerPoussoir0', 0.2504292108293833]][0m[0m
+2000-01-01 01:21:22,111:lib.script:DEBUG:l879:MainThread:[36m[36mEnfonçage du poussoir côté nous en cours[0m[0m
+2000-01-01 01:21:22,223:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-852.0,1621.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:22,229:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(-860,1490)][0m[0m
+2000-01-01 01:21:22,340:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-852.0,1621.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:24,584:lib.strategie:DEBUG:l258:MainThread:[36m[36mLancement du script enfoncerPoussoir0.[0m[0m
+2000-01-01 01:21:24,694:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (858.0,1523.0) et d'arrivée : (-900,1000)[0m[0m
+2000-01-01 01:21:24,704:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (875,970), (590,290), (0,560), (-590,290), (-900,1000)][0m[0m
+2000-01-01 01:21:24,813:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (861.0,1488.0) et d'arrivée : (390,1510.0)[0m[0m
+2000-01-01 01:21:24,822:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (390,1510.0)][0m[0m
+2000-01-01 01:21:24,934:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (861.0,1486.0) et d'arrivée : (0,1500)[0m[0m
+2000-01-01 01:21:24,945:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (0,1500)][0m[0m
+2000-01-01 01:21:25,055:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (859.0,1504.0) et d'arrivée : (0,660)[0m[0m
+2000-01-01 01:21:25,063:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (875,970), (590,290), (0,560), (0,660)][0m[0m
+2000-01-01 01:21:25,175:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (858.0,1516.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:25,184:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(860,1490), (0,1490), (-860,1490)][0m[0m
+2000-01-01 01:21:25,187:lib.strategie:INFO:l226:MainThread:[32m[32mTEMPS : [['bourrerCale', inf], ['enfoncerPoussoir1', 19.348869789349497], ['rafflerTotem01', 29.523306758400132], ['rafflerTotem00', 33.077659666366], ['enfoncerPoussoir0', 24.03042395239411]][0m[0m
+2000-01-01 01:21:25,189:lib.strategie:DEBUG:l227:MainThread:[36m[36mPOIDS : [['bourrerCale', -2], ['enfoncerPoussoir1', -2], ['rafflerTotem01', -2], ['rafflerTotem00', -2], ['enfoncerPoussoir0', -2]][0m[0m
+2000-01-01 01:21:25,191:lib.strategie:DEBUG:l239:MainThread:[36m[36mPlus aucun script à lancer.[0m[0m
+2000-01-01 01:21:25,194:lib.script:DEBUG:l975:MainThread:[36m[36mFarmage d'ennemi[0m[0m
+2000-01-01 01:21:25,302:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (-858.0,1517.0) et d'arrivée : (690,600)[0m[0m
+2000-01-01 01:21:25,311:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(-860,1490), (0,1490), (860,1490), (875,970), (590,290), (690,600)][0m[0m
+2000-01-01 01:21:25,424:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-858.0,1517.0) et d'arrivée : (-860,1490)[0m[0m
+2000-01-01 01:21:26,578:lib.asservissement:INFO:l79:MainThread:[32m[32meffectue le segment de départ : (-860.0,1495.0) et d'arrivée : (0,1490)[0m[0m
+2000-01-01 01:21:30,969:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (6.0,1465.0) et d'arrivée : (900,1000)[0m[0m
+2000-01-01 01:21:31,722:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,1490), (-860,1490), (-875,970), (-590,290), (0,560), (590,290), (875,970), (900,1000)][0m[0m
+2000-01-01 01:21:31,832:lib.asservissement:INFO:l135:MainThread:[32m[32mAppel de la recherche de chemin basique pour le point de départ : (5.0,1465.0) et d'arrivée : (-390,1510.0)[0m[0m
+2000-01-01 01:21:31,841:lib.asservissement:INFO:l203:MainThread:[32m[32mchemin trouvé : ([(0,1490), (-390,1510.0)][0m[0m

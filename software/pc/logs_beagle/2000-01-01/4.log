@@ -1,0 +1,18 @@
+2000-01-01 01:28:22,963:__main__:INFO:l57:MainThread:[32m[32mProfil de configuration chargé : prod[0m[0m
+2000-01-01 01:28:22,965:__main__:INFO:l59:MainThread:[32m[32mInjection des données de la carte[0m[0m
+2000-01-01 01:28:27,283:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:28:27,286:lib.instance:INFO:l37:MainThread:[32m[32mInstanciation de la classe Instance[0m[0m
+2000-01-01 01:28:32,822:lib.attributions:INFO:l42:MainThread:[32m[32m['', '', '', '/dev/ttyACM4', '', ''][0m[0m
+2000-01-01 01:28:32,827:lib.robot:INFO:l70:MainThread:[32m[32mCréation du robot[0m[0m
+2000-01-01 01:28:32,829:lib.instance:ERROR:l73:MainThread:[33m[33minstance : serieAsserInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:28:32,830:lib.instance:ERROR:l83:MainThread:[33m[33minstance : serieBaliseInstance n'est pas chargé. pas de chemin trouvé.[0m[0m
+2000-01-01 01:28:32,833:lib.instance:INFO:l133:MainThread:[32m[32métablissement du graphe en fonction des robots adverses rencontrés[0m[0m
+2000-01-01 01:28:32,835:lib.recherche_chemin.thetastar:INFO:l501:MainThread:[32m[32mcalcul du graphe (initialisation, nouveau rayon ou nouveaux robots adverses[0m[0m
+2000-01-01 01:28:34,960:lib.recherche_chemin.thetastar:INFO:l549:MainThread:[32m[32mmise en cache du graphe dans les fichiers sauv_*[0m[0m
+2000-01-01 01:28:34,976:lib.asservissement:ERROR:l41:MainThread:[33m[33masservissement : ne peut importer instance.serieAsserInstance[0m[0m
+2000-01-01 01:28:34,978:lib.asservissement:ERROR:l45:MainThread:[33m[33masservissement : ne peut importer instance.asserInstanceDuree[0m[0m
+2000-01-01 01:28:35,083:lib.strategie:DEBUG:l154:MainThread:[36m[36mInitialisation des actions à faire[0m[0m
+2000-01-01 01:28:35,084:lib.strategie:INFO:l47:MainThread:[32m[32mLancement de la stratégie numéro 1[0m[0m
+2000-01-01 01:28:35,086:lib.strategie:ERROR:l66:MainThread:[33m[33mstratégie : ne peut importer instance.baliseInstance[0m[0m
+2000-01-01 01:28:35,088:lib.balise:ERROR:l32:MainThread:[33m[33mbalise : ne peut importer instance.serieBaliseInstance[0m[0m
+2000-01-01 01:28:51,711:__main__:INFO:l119:MainThread:[32m[32mChargement du fichier de lancement console[0m[0m
